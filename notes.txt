@@ -3,8 +3,6 @@ HIGH {{{
     - figure out why eclimd affects the eclipse workspace selector
 
   Features:
-    - maven: support updating classpath on pom.xml save (like ivy.xml)
-
     - :LocateFile
       - Reported to "just work" if setup through eclipse gui:
         Eclipse -> Project -> Properties -> Resource -> Resource Filters

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,17 @@ import org.eclipse.core.runtime.IPath;
 
 /**
  * Extension to {@link Dependency} which resolves the dependency artifact
- * according to the ivy cache layout.
+ * according to the maven 2 layout.
  *
  * @author Eric Van Dewoestine
  */
-public class IvyDependency
+public class MvnDependency
   extends Dependency
 {
-  private static final String JARS = "jars";
-
   /**
    * @see Dependency#Dependency(String,String,String,IPath)
    */
-  public IvyDependency(String org, String name, String version, IPath path)
+  public MvnDependency(String org, String name, String version, IPath path)
   {
     super(org, name, version, path);
   }
@@ -44,9 +42,9 @@ public class IvyDependency
   public String resolveArtifact()
   {
     StringBuffer buffer = new StringBuffer();
-    buffer.append(getOrganization()).append(SEPARATOR)
-      .append(getName()).append(SEPARATOR)
-      .append(JARS).append(SEPARATOR)
+    buffer.append(getOrganization().replace(".", SEPARATOR)).append(SEPARATOR)
+      .append(getName().replace(".", SEPARATOR)).append(SEPARATOR)
+      .append(getVersion()).append(SEPARATOR)
       .append(toString());
 
     return buffer.toString();

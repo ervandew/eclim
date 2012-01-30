@@ -211,6 +211,19 @@ users).
 
     :Maven eclipse
 
+.. _classpath-maven-pom:
+
+  For maven 2.x users, eclim also provides support for auto updating the
+  ``.classpath`` for your project every time you save your pom.xml file.  Any
+  entries found in the pom.xml that are not in the ``.classpath`` will be added,
+  any entries that differ in version will be updated, and any stale entries
+  deleted. This behavior can be disabled by adding the following setting to your
+  vimrc:
+
+  .. code-block:: vim
+
+    let g:EclimMavenPomClasspathUpdate = 0
+
 * Search Online Maven Repository
 
   Eclim also provides the command **:MvnDependencySearch**

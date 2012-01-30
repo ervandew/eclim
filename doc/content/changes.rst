@@ -29,6 +29,11 @@ Java:
   - Added project settings for specifying default jvm args for
     :ref:`:Java <:Java>` and default args for :ref:`:Javac <:Javac>`.
 
+Maven:
+  - Now when saving your pom.xml file your .classpath will be
+    :ref:`auto updated <classpath-maven-pom>` with the dependencies found in
+    your pom.xml.
+
 .. _1.7.2:
 
 1.7.2 (Sep. 10, 2011)

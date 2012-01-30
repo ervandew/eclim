@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,14 @@ package org.eclim.plugin.jdt.project.classpath;
 import org.eclipse.core.runtime.IPath;
 
 /**
- * Represents a dependecy from a build file or other external source.
+ * Represents a dependency from a build file or other external source.
  *
  * @author Eric Van Dewoestine
  */
 public class Dependency
 {
   public static final String JAR = ".jar";
+  public static final String SEPARATOR = "/";
   public static final String VERSION_SEPARATOR = "-";
 
   private String organization;
@@ -43,7 +44,7 @@ public class Dependency
    * @param path The root IPath where the dependecy is located.  Construtor
    * will call path.append() with the constructed dependency file name.
    */
-  public Dependency (String org, String name, String version, IPath path)
+  public Dependency(String org, String name, String version, IPath path)
   {
     this.organization = org;
     this.name = name;
@@ -153,7 +154,7 @@ public class Dependency
   }
 
   /**
-   * Resolves the artifact to a path relative to the dependencies root.
+   * Resolves the artifact to a path relative to the dependency's root.
    *
    * @return The resolved artifact path.
    */

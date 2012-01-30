@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.project.classpath.Dependency;
 import org.eclim.plugin.jdt.project.classpath.IvyParser;
+import org.eclim.plugin.jdt.project.classpath.MvnParser;
 import org.eclim.plugin.jdt.project.classpath.Parser;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
@@ -95,6 +96,7 @@ public class JavaProjectManager
     new HashMap<String, Parser>();
   static{
     PARSERS.put("ivy.xml", new IvyParser());
+    PARSERS.put("pom.xml", new MvnParser());
   }
 
   /**
@@ -132,7 +134,7 @@ public class JavaProjectManager
     String dotclasspath = javaProject.getProject().getFile(CLASSPATH)
       .getRawLocation().toOSString();
 
-    // ivy.xml, etc updated.
+    // ivy.xml, pom.xml, etc updated.
     if(buildfile != null){
       String filename = FileUtils.getBaseName(buildfile);
       Parser parser = PARSERS.get(filename);

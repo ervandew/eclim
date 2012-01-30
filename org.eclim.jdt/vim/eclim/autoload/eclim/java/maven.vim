@@ -23,6 +23,8 @@
 " }}}
 
 " Script Variables {{{
+  let s:update_command = '-command project_update -p "<project>" -b "<build>"'
+
   let s:command_search =
     \ '-command maven_dependency_search ' .
     \ '-p "<project>" -f "<file>" -t "<type>" -s <query>'
@@ -201,6 +203,35 @@ function eclim#java#maven#SetClasspathVariable(cmd, variable)
     endif
   endif
 
+endfunction " }}}
+
+" UpdateClasspath() {{{
+" Updates the classpath on the server w/ the changes made to the current file.
+function! eclim#java#maven#UpdateClasspath()
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  " validate the xml first
+  if eclim#xml#validate#Validate(expand('%:p'), 0)
+    return
+  endif
+
+  let name = eclim#project#util#GetCurrentProjectName()
+  let command = s:update_command
+  let command = substitute(command, '<project>', name, '')
+  let command = substitute(command, '<build>', escape(expand('%:p'), '\'), '')
+  let result = eclim#ExecuteEclim(command)
+
+  if type(result) == g:LIST_TYPE && len(result) > 0
+    let errors = eclim#util#ParseLocationEntries(
+      \ result, g:EclimValidateSortResults)
+    call eclim#util#SetLocationList(errors, 'r')
+    call eclim#util#EchoError(
+      \ "Operation contained errors.  See location list for details (:lopen).")
+  else
+    call eclim#util#ClearLocationList()
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

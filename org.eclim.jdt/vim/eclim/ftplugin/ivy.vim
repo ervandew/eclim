@@ -34,7 +34,7 @@ augroup END
 " Autocmds {{{
 augroup eclim_ivy
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#java#ant#ivy#UpdateClasspath()
+  autocmd BufWritePost <buffer> call eclim#java#maven#UpdateClasspath()
 augroup END
 " }}}
 

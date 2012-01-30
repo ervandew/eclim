@@ -25,7 +25,24 @@
 runtime ftplugin/xml.vim
 runtime indent/xml.vim
 
+" turn off xml validation
+augroup eclim_xml
+  autocmd! BufWritePost <buffer>
+augroup END
+
 " Global Variables {{{
+if !exists('g:EclimMavenPomClasspathUpdate')
+  let g:EclimMavenPomClasspathUpdate = 1
+endif
+" }}}
+
+" Autocmds {{{
+if g:EclimMavenPomClasspathUpdate
+  augroup eclim_mvn
+    autocmd! BufWritePost <buffer>
+    autocmd BufWritePost <buffer> call eclim#java#maven#UpdateClasspath()
+  augroup END
+endif
 " }}}
 
 " Command Declarations {{{
