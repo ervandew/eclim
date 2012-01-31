@@ -122,8 +122,11 @@ function! eclim#project#util#ProjectCreate(args)
   endif
 
   " execute any pre-project creation hooks
-  if !s:ProjectNatureHooks(natureIds, 'ProjectCreatePre', [folder])
+  let hook_result = s:ProjectNatureHooks(natureIds, 'ProjectCreatePre', [folder])
+  if type(hook_result) == g:NUMBER_TYPE && !hook_result
     return
+  elseif type(hook_result) == g:STRING_TYPE && len(hook_result)
+    let command .= ' -a ' . hook_result
   endif
 
   let port = eclim#client#nailgun#GetNgPort(workspace)
@@ -138,6 +141,7 @@ function! eclim#project#util#ProjectCreate(args)
 endfunction " }}}
 
 function! s:ProjectNatureHooks(natureIds, hookName, args) " {{{
+  let results = ''
   for nature in a:natureIds
     if nature == 'none'
       continue
@@ -145,15 +149,26 @@ function! s:ProjectNatureHooks(natureIds, hookName, args) " {{{
 
     exec 'runtime autoload/eclim/' . nature . '/project.vim'
     try
-      let l:ProjectPre = function('eclim#' . nature . '#project#' . a:hookName)
-      let result = call(l:ProjectPre, a:args)
-      if !result
+      let l:Hook = function('eclim#' . nature . '#project#' . a:hookName)
+      let result = call(l:Hook, a:args)
+      if type(result) == g:NUMBER_TYPE && !result
         return result
+      endif
+      if type(result) == g:STRING_TYPE
+        if len(results)
+          let results .= ' '
+        endif
+        let results .= result
       endif
     catch /E\(117\|700\):.*/
       " ignore
     endtry
   endfor
+
+  if len(results)
+    return results
+  endif
+
   return 1
 endfunction " }}}
 
@@ -610,8 +625,11 @@ function! eclim#project#util#ProjectNatureModify(command, args)
   let command = substitute(command, '<natures>', join(natures, ','), '')
 
   if a:command == 'add'
-    if !s:ProjectNatureHooks(natures, 'ProjectNatureAddPre', [project])
+    let hook_result = s:ProjectNatureHooks(natures, 'ProjectNatureAddPre', [project])
+    if type(hook_result) == g:NUMBER_TYPE && !hook_result
       return
+    elseif type(hook_result) == g:STRING_TYPE && len(hook_result)
+      let command .= ' -a ' . hook_result
     endif
   endif
 

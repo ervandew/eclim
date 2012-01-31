@@ -535,6 +535,7 @@ public class EclipsePluginsStep
     static{
       NAMES.add("featureList.jdt");
       NAMES.add("featureList.wst");
+      NAMES.add("featureList.adt");
       NAMES.add("featureList.cdt");
       NAMES.add("featureList.pdt");
       NAMES.add("featureList.python");

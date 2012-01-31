@@ -38,4 +38,10 @@
       <!--site url="http://download.eclipse.org/webtools/updates/"/-->
     </dependency>
   </feature>
+
+  <feature id="adt">
+    <dependency id="com.android.ide.eclipse.adt" version="20.0.3">
+      <site url="https://dl-ssl.google.com/android/eclipse/"/>
+    </dependency>
+  </feature>
 </dependencies>

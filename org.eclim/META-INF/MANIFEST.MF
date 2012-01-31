@@ -9,7 +9,8 @@ Bundle-Activator: org.eclim.eclipse.EclimPlugin
 Bundle-ClassPath: .,
   eclim.jar,
   ${eclim.lib.jars}
-Export-Package: org.apache.commons.collections,
+Export-Package: org.apache.commons.cli,
+  org.apache.commons.collections,
   org.apache.commons.lang,
   org.apache.commons.lang.builder,
   org.apache.commons.logging,

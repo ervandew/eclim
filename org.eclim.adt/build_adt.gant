@@ -1,0 +1,28 @@
+feature_adt = 'com.android.ide.eclipse.adt'
+
+target(name: 'org.eclim.adt.classpath.prepare'){
+  unjar(dest: 'build/temp/lib/android'){
+    fileset(dir: '${eclipse}'){
+      include(name: 'dropins/**/plugins/com.android.*.jar')
+      include(name: 'plugins/com.android.*.jar')
+    }
+    patternset{ include(name: '**/*.jar') }
+  }
+}
+
+target(name: 'org.eclim.adt.classpath'){
+  fileset(dir: '${eclipse}'){
+    include(name: 'dropins/**/plugins/com.android.*.jar')
+    include(name: 'plugins/com.android.*.jar')
+  }
+  fileset(dir: 'build/temp/lib/android'){
+    include(name: '**/*.jar')
+  }
+}
+
+target(name: 'org.eclim.adt.test'){
+  depends('test.init')
+  runTests('org.eclim.adt'){
+    //createProject('org.eclim.adt', 'eclim_unit_test_android')
+  }
+}

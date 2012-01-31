@@ -234,22 +234,11 @@ TODO {{{
   Java {{{
     Android {{{
       http://s.android.com/source/index.html
-      https://android.git.kernel.org/?p=platform/sdk.git;a=tree;f=eclipse;hb=HEAD
-      $ git clone https://android.git.kernel.org/platform/sdk.git android-sdk
-      $ cd android-sdk
+      https://android.googlesource.com/platform/sdk
+      $ git clone https://android.googlesource.com/platform/sdk android-sdk/src
+      $ cd android-sdk/src
       $ git co android_sdk-adt_<version>
       $ cd eclipse/plugins/com.android.ide.eclipse.adt/src/com/android/ide/eclipse/adt
-
-      https://dl-ssl.google.com/android/eclipse/
-      com.android.ide.eclipse.adt.feature.group
-
-      Android:R cannot be resolved
-      > My solution to the /R/ nightmare is, especially when first launching
-      > a new project, to ignore any errors, go in and clean out the
-      > suppositions that Eclipse was making (specifically the almost always
-      > misguided import of /com.android.developer.R/), and basically finish
-      > the structure of my project, in particular fussing over the /.xml/
-      > files, before giving much credence to what Eclipse says.
     }}}
 
     - refactoring

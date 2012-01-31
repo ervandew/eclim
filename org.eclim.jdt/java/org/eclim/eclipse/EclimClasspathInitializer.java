@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.eclipse;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -85,8 +86,8 @@ public class EclimClasspathInitializer
     try{
       final LinkedHashSet<String> bundleNames = new LinkedHashSet<String>();
       final ArrayList<String> jarPaths = new ArrayList<String>();
+      final String projectPath = ProjectUtils.getPath(javaProject.getProject());
 
-      String projectPath = ProjectUtils.getPath(javaProject.getProject());
       new File(projectPath).list(new FilenameFilter(){
         public boolean accept(File dir, String name)
         {
@@ -152,6 +153,25 @@ public class EclimClasspathInitializer
         }
       }
 
+      // some plugins need access to nested libraries extracted at build time,
+      // handle adding those jars to the classpath here.
+      listFiles(new File(projectPath + "/build/temp/lib"), new FileFilter(){
+        public boolean accept(File file)
+        {
+          if (file.getName().endsWith(".jar")){
+            String jar = file.getPath().replace(projectPath, "");
+            if (jar.startsWith("/")){
+              jar = jar.substring(1);
+            }
+            jarPaths.add(jar);
+          }
+          if (file.isDirectory()){
+            listFiles(file, this);
+          }
+          return false;
+        }
+      });
+
       for (String jarPath : jarPaths){
         logger.debug("adding jar to classpath: {}", jarPath);
         list.add(JavaCore.newLibraryEntry(
@@ -162,5 +182,10 @@ public class EclimClasspathInitializer
       logger.error("Failed to load eclim classpath container", e);
     }
     return (IClasspathEntry[])list.toArray(new IClasspathEntry[list.size()]);
+  }
+
+  private void listFiles(File dir, FileFilter filter)
+  {
+    dir.listFiles(filter);
   }
 }

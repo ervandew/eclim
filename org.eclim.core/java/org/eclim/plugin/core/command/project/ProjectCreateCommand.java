@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,8 @@ import org.eclim.util.file.FileUtils;
     "REQUIRED f folder ARG," +
     "OPTIONAL p name ARG," +
     "REQUIRED n natures ARG," +
-    "OPTIONAL d depends ARG"
+    "OPTIONAL d depends ARG," +
+    "OPTIONAL a args ANY"
 )
 public class ProjectCreateCommand
   extends AbstractCommand

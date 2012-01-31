@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@ public class Preferences
 
   private static final String NODE_NAME = "org.eclim";
   private static final String CORE = "core";
+  private static final String GLOBAL = "_global_";
 
   private static Preferences instance = new Preferences();
   private static Map<String, OptionHandler> optionHandlers =
@@ -150,17 +151,30 @@ public class Preferences
   /**
    * Gets a map of all options/preferences.
    *
+   * @return A map of key values.
+   */
+  public Map<String, String> getValues()
+    throws Exception
+  {
+    return getValues(null);
+  }
+
+  /**
+   * Gets a map of all options/preferences.
+   *
    * @param project The current project.
    * @return A map of key values.
    */
   public Map<String, String> getValues(IProject project)
     throws Exception
   {
+    String cacheKey = project != null ? project.getName() : GLOBAL;
+
     // eclim preferences
-    Map<String, String> prefVals = preferenceValues.get(project.getName());
+    Map<String, String> prefVals = preferenceValues.get(cacheKey);
     if(prefVals == null){
       prefVals = new HashMap<String, String>();
-      preferenceValues.put(project.getName(), prefVals);
+      preferenceValues.put(cacheKey, prefVals);
 
       IScopeContext context = InstanceScope.INSTANCE;
 
@@ -171,24 +185,32 @@ public class Preferences
         prefVals.put(key, globalPrefs.get(key, null));
       }
 
-      context = new ProjectScope(project);
-
       // project
-      IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
-      for(String key : projectPrefs.keys()){
-        prefVals.put(key, projectPrefs.get(key, null));
+      if (project != null){
+        context = new ProjectScope(project);
+        IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
+        for(String key : projectPrefs.keys()){
+          prefVals.put(key, projectPrefs.get(key, null));
+        }
       }
     }
 
     // eclipse option
-    Map<String, String> optVals = optionValues.get(project.getName());
+    Map<String, String> optVals = optionValues.get(cacheKey);
     if(optVals == null){
       optVals = new HashMap<String, String>();
-      optionValues.put(project.getName(), optVals);
+      optionValues.put(cacheKey, optVals);
       for(OptionHandler handler : optionHandlers.values()){
         String nature = handler.getNature();
-        if(CORE.equals(nature) || project.getNature(nature) != null){
-          optVals.putAll(handler.getValues(project));
+        if (CORE.equals(nature) ||
+            project == null ||
+            project.getNature(nature) != null)
+        {
+          Map<String, String> ops = project == null ?
+            handler.getValues() : handler.getValues(project);
+          if (ops != null){
+            optVals.putAll(ops);
+          }
         }
       }
     }
@@ -198,6 +220,18 @@ public class Preferences
     all.putAll(optVals);
     all.putAll(prefVals);
     return all;
+  }
+
+  /**
+   * Gets the value of an option/preference.
+   *
+   * @param name The name of the option/preference.
+   * @return The value or null if not found.
+   */
+  public String getValue(String name)
+    throws Exception
+  {
+    return getValues(null).get(name);
   }
 
   /**

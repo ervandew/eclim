@@ -36,6 +36,8 @@
   let s:c_shells = ['csh', 'tcsh']
 
   let s:show_current_error_displaying = 0
+
+  let s:command_setting = '-command setting -s <setting>'
 " }}}
 
 " Balloon(message) {{{
@@ -430,6 +432,30 @@ function! eclim#util#GetPathEntry(file)
     endif
   endfor
   return 0
+endfunction " }}}
+
+" GetSetting(setting, [workspace]) {{{
+" Gets a global setting from eclim.  Returns '' if the setting does not
+" exist, 0 if an error occurs communicating with the server.
+function! eclim#util#GetSetting(setting, ...)
+  let workspace = a:0 > 0 ? a:1 : eclim#eclipse#ChooseWorkspace()
+  if workspace == '0'
+    return
+  endif
+
+  let command = s:command_setting
+  let command = substitute(command, '<setting>', a:setting, '')
+
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+  let result = eclim#ExecuteEclim(command, port)
+  if result == '0'
+    return result
+  endif
+
+  if result == ''
+    call eclim#util#EchoWarning("Setting '" . a:setting . "' does not exist.")
+  endif
+  return result
 endfunction " }}}
 
 " GetVisualSelection(line1, line2, default) {{{
@@ -876,11 +902,83 @@ function! s:ParseLocationEntry(entry)
   return dict
 endfunction " }}}
 
-" PromptList(prompt, list, highlight) {{{
+" Prompt(prompt, [validator], [highlight]) {{{
+" Creates a prompt for the user using the supplied prompt string, validator
+" and highlight. The prompt can be either a just a string to be displayed to
+" the user or a 2 item list where the first item is the prompt and the second
+" is the defaut value. The validator may return 0 to indicate an invalid input
+" or a message indicating why the input is invalid, which will be displayed to
+" the user. The validator should return 1 or the empty string to indicate
+" valid input. Returns an empty string if the user doesn't enter a value or
+" cancels the prompt.
+function! eclim#util#Prompt(prompt, ...)
+  " for unit testing
+  if exists('g:EclimTestPromptQueue') && len(g:EclimTestPromptQueue)
+    return remove(g:EclimTestPromptQueue, 0)
+  endif
+
+  let highlight = g:EclimInfoHighlight
+  if a:0 > 0
+    if type(a:1) == g:FUNCREF_TYPE
+      let Validator = a:1
+    elseif type(a:1) == g:STRING_TYPE
+      let highlight = a:1
+    endif
+  endif
+
+  if a:0 > 1
+    if type(a:2) == g:FUNCREF_TYPE
+      let Validator = a:2
+    elseif type(a:2) == g:STRING_TYPE
+      let highlight = a:2
+    endif
+  endif
+
+  if type(a:prompt) == g:LIST_TYPE
+    let prompt = a:prompt[0]
+    let default = a:prompt[1]
+  else
+    let prompt = a:prompt
+  endif
+
+  exec "echohl " . highlight
+  try
+    if exists('l:default')
+      let result = input(prompt . ': ', default)
+    else
+      let result = input(prompt . ': ')
+    endif
+    while result != ''
+      if exists('l:Validator')
+        let valid = Validator(result)
+        if type(valid) == g:STRING_TYPE && valid != ''
+          let result = input(valid . " (Ctrl-C to cancel): ", result)
+        elseif type(valid) == g:NUMBER_TYPE && !valid
+          let result = input(prompt, result)
+        else
+          return result
+        endif
+      else
+        return result
+      endif
+    endwhile
+  finally
+    echohl None
+  endtry
+
+  return result
+endfunction " }}}
+
+" PromptList(prompt, list, [highlight]) {{{
 " Creates a prompt for the user using the supplied prompt string and list of
 " items to choose from.  Returns -1 if the list is empty or if the user
 " canceled, and 0 if the list contains only one item.
-function! eclim#util#PromptList(prompt, list, highlight)
+function! eclim#util#PromptList(prompt, list, ...)
+  " for unit testing
+  if exists('g:EclimTestPromptQueue') && len(g:EclimTestPromptQueue)
+    return remove(g:EclimTestPromptQueue, 0)
+  endif
+
   " no elements, no prompt
   if empty(a:list)
     return -1
@@ -898,7 +996,7 @@ function! eclim#util#PromptList(prompt, list, highlight)
     let index = index + 1
   endfor
 
-  exec "echohl " . a:highlight
+  exec "echohl " . (a:0 ? a:1 : g:EclimInfoHighlight)
   try
     " clear any previous messages
     redraw
@@ -923,11 +1021,17 @@ function! eclim#util#PromptList(prompt, list, highlight)
   return response
 endfunction " }}}
 
-" PromptConfirm(prompt, highlight) {{{
+" PromptConfirm(prompt, [highlight]) {{{
 " Creates a yes/no prompt for the user using the supplied prompt string.
 " Returns -1 if the user canceled, otherwise 1 for yes, and 0 for no.
-function! eclim#util#PromptConfirm(prompt, highlight)
-  exec "echohl " . a:highlight
+function! eclim#util#PromptConfirm(prompt, ...)
+  " for unit testing
+  if exists('g:EclimTestPromptQueue') && len(g:EclimTestPromptQueue)
+    let choice = remove(g:EclimTestPromptQueue, 0)
+    return choice =~ '\c\s*\(y\(es\)\?\)\s*'
+  endif
+
+  exec "echohl " . (a:0 ? a:1 : g:EclimInfoHighlight)
   try
     " clear any previous messages
     redraw
