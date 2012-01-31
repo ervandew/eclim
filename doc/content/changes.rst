@@ -16,6 +16,15 @@
 History of Changes
 ==================
 
+.. _2.2.1:
+
+2.2.1 (Aug. XX, 2012)
+----------------------
+
+Android:
+  - Eclim now has support for :ref:`creating android projects
+    <gettingstarted-android>`.
+
 .. _2.2.0:
 
 2.2.0 (Aug. 07, 2012)

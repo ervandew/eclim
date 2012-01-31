@@ -16,6 +16,7 @@
  */
 package org.eclim;
 
+import java.io.File;
 import java.io.FileInputStream;
 
 import java.util.ArrayList;
@@ -64,7 +65,22 @@ public class Eclim
    */
   public static Object execute(String[] args)
   {
-    return execute(args, -1);
+    return execute(args, -1, true);
+  }
+
+  /**
+   * Executes eclim using the supplied arguments.
+   * <p/>
+   * The "-command" argument will be prepended to the argument array you supply.
+   *
+   * @param args The arguments to pass to eclim.
+   * @param failOnError True to fail on error, false to return the output
+   * regardless of whether the command failed or not.
+   * @return The result of the command execution as a string.
+   */
+  public static Object execute(String[] args, boolean failOnError)
+  {
+    return execute(args, -1, failOnError);
   }
 
   /**
@@ -77,6 +93,22 @@ public class Eclim
    * @return The result of the command execution as a string.
    */
   public static Object execute(String[] args, long timeout)
+  {
+    return execute(args, timeout, true);
+  }
+
+  /**
+   * Executes eclim using the supplied arguments.
+   * <p/>
+   * The "-command" argument will be prepended to the argument array you supply.
+   *
+   * @param args The arguments to pass to eclim.
+   * @param timeout Timeout in milliseconds.
+   * @param failOnError True to fail on error, false to return the output
+   * regardless of whether the command failed or not.
+   * @return The result of the command execution as a string.
+   */
+  public static Object execute(String[] args, long timeout, boolean failOnError)
   {
     assertNotNull("Please configure property eclimd.port", PORT);
     assertNotNull("Please configure property eclipse.home", ECLIM);
@@ -114,21 +146,27 @@ public class Eclim
       throw new RuntimeException("Command timed out.");
     }
 
+    String result = process.getResult().trim();
+    String error = process.getErrorMessage();
     if(process.getReturnCode() != 0){
-      System.out.println("OUT: " + process.getResult());
-      System.out.println("ERR: " + process.getErrorMessage());
+      if (!failOnError){
+        System.out.println("Result: " + result);
+        if (!StringUtils.EMPTY.equals(error)){
+          System.out.println("Error: " + error);
+        }
+        return result;
+      }
+      System.out.println("OUT: " + result);
+      System.out.println("ERR: " + error);
       throw new RuntimeException("Command failed: " + process.getReturnCode());
     }
 
-    String result = process.getResult();
     System.out.println("Result: " + result);
-
-    String error = process.getErrorMessage();
     if (!StringUtils.EMPTY.equals(error)){
       System.out.println("Error: " + error);
     }
 
-    if (result.trim().equals(StringUtils.EMPTY)){
+    if (result.equals(StringUtils.EMPTY)){
       result = "\"\"";
     }
     return toType(JSON_PARSER.parse(result));
@@ -261,5 +299,26 @@ public class Eclim
     }finally{
       IOUtils.closeQuietly(fin);
     }
+  }
+
+  /**
+   * Recursively delete the supplied directory.
+   *
+   * @param dir The directory to delete.
+   */
+  public static void deleteDirectory(File dir)
+  {
+    if(!dir.exists()){
+      return;
+    }
+
+    for(File f : dir.listFiles()){
+      if(f.isDirectory()){
+        deleteDirectory(f);
+      }else{
+        f.delete();
+      }
+    }
+    dir.delete();
   }
 }

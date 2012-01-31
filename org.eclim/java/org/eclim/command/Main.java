@@ -97,9 +97,7 @@ public class Main
           try{
             results[0] = command.execute(commandLine);
           }catch(Exception e){
-            logger.debug("Command triggered exception: " +
-                Arrays.toString(context.getArgs()), e);
-            e.printStackTrace(context.err);
+            results[0] = e;
           }finally{
             command.cleanup(commandLine);
           }
@@ -108,6 +106,9 @@ public class Main
       Object result = results[0];
 
       if (result != null){
+        if (result instanceof Throwable){
+          throw (Throwable)result;
+        }
         GsonBuilder builder = new GsonBuilder();
         if (commandLine.hasOption(Options.PRETTY_OPTION)){
           builder = builder.setPrettyPrinting();
@@ -126,7 +127,7 @@ public class Main
           Services.getMessage(e.getClass().getName(), e.getMessage()));
       logger.debug("Main - exit on error");
       System.exit(1);
-    }catch(Exception e){
+    }catch(Throwable e){
       logger.debug("Command triggered exception: " +
           Arrays.toString(context.getArgs()), e);
       e.printStackTrace(context.err);

@@ -12,6 +12,8 @@
   <classpathentry kind="var" path="FORMIC_HOME/lib/miglayout-3.5.0.jar"/>
   <classpathentry kind="output" path="build/bin"/>
   <classpathentry kind="src" path="org.eclim/java"/>
+  <classpathentry kind="src" path="org.eclim.adt/java"/>
+  <classpathentry kind="src" path="org.eclim.adt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.cdt/java"/>
   <classpathentry kind="src" path="org.eclim.cdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.core/java"/>

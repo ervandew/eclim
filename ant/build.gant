@@ -85,6 +85,13 @@ target(name: 'init'){
     ))
   }
 
+  // prep plugin specific classpath additions
+  pluginNames.each(){ name ->
+    if (hasVariable("${name}.classpath.prepare")){
+      binding.getVariable("${name}.classpath.prepare")()
+    }
+  }
+
   classpaths = [getVariable('eclipse')]
   if (getVariable('eclipse') != getVariable('eclipse.local')){
     classpaths << getVariable('eclipse.local')
@@ -109,6 +116,13 @@ target(name: 'init'){
     // for gentoo
     fileset(dir: '/usr/share/', erroronmissingdir: false,
       includes: 'swt-*/lib/*.jar')
+
+    // plugin specific classpath additions
+    pluginNames.each(){ name ->
+      if (hasVariable("${name}.classpath")){
+        binding.getVariable("${name}.classpath")()
+      }
+    }
   }
 }
 
