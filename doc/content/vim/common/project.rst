@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -337,6 +337,7 @@ Vim's command line completion to complete the project name.
   - **F** -
     Prompts you for a new or existing filename to open, pre-filled with the
     directory path in the tree where this mapping was executed.
+  - **Y** - Yanks the path of the current file/directory to your clipboard.
   - **\?** - View the help buffer
 
   **Configuration**

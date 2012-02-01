@@ -256,6 +256,7 @@ function! s:Mappings()
   nnoremap <buffer> <silent> \| :call <SID>OpenFile('vsplit')<cr>
   nnoremap <buffer> <silent> T :call <SID>OpenFile('tablast \| tabnew')<cr>
   nnoremap <buffer> <silent> F :call <SID>OpenFileName()<cr>
+  nnoremap <buffer> <silent> Y :call <SID>YankFileName()<cr>
 
   " assign to buffer var to get around weird vim issue passing list containing
   " a string w/ a '<' in it on execution of mapping.
@@ -277,6 +278,7 @@ function! s:Mappings()
       \ 'K - set root to top most dir',
       \ 'F - open/create a file by name',
       \ 'D - create a new directory',
+      \ 'Y - yank current file/dir path to the clipboard',
       \ 'A - toggle hide/view hidden files',
       \ ':CD <dir> - set the root to <dir>',
     \ ]
@@ -376,8 +378,17 @@ function! s:OpenFileName()
   endif
 
   let response = input('file: ', path, 'file')
-  let actions = eclim#tree#GetFileActions(response)
-  call eclim#tree#ExecuteAction(response, actions[0].action)
+  if response != ''
+    let actions = eclim#tree#GetFileActions(response)
+    call eclim#tree#ExecuteAction(response, actions[0].action)
+  endif
+endfunction " }}}
+
+" s:YankFileName() " {{{
+function! s:YankFileName()
+  let path = eclim#tree#GetPath()
+  let [@*, @+, @"] = [path, path, path]
+  call eclim#util#Echo('Copied path to clipboard: ' . path)
 endfunction " }}}
 
 " ProjectTreeSettings() {{{
