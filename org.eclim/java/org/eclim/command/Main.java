@@ -97,7 +97,7 @@ public class Main
           try{
             results[0] = command.execute(commandLine);
           }catch(Exception e){
-            logger.info("Command triggered exception: " +
+            logger.debug("Command triggered exception: " +
                 Arrays.toString(context.getArgs()), e);
             e.printStackTrace(context.err);
           }finally{
