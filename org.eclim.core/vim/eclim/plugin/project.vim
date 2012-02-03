@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -148,9 +148,9 @@ if !exists(":ProjectCreate")
 endif
 
 if !exists(":ProjectProblems")
-  command -nargs=?
+  command -nargs=? -bang
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
-    \ ProjectProblems :call eclim#project#problems#Problems('<args>', 1)
+    \ ProjectProblems :call eclim#project#problems#Problems('<args>', 1, '<bang>')
 endif
 
 if !exists(":ProjectTree")

@@ -233,12 +233,14 @@ Vim's command line completion to complete the project name.
 
 .. _\:ProjectProblems:
 
-- **:ProjectProblems** [<project>]
+- **:ProjectProblems[!]** [<project>]
   Populates vim's quickfix with a list of all eclipse build errors and warnings
   for the current, or specific project, and all related projects.  Very
   similar to eclipse's "Problems" view.  By default, if the current quickfix
   list represents a problems list, then as you save source files this list will
   be updated accordingly.
+
+  Appending '!' limits the problem results to just errors.
 
   .. note::
 

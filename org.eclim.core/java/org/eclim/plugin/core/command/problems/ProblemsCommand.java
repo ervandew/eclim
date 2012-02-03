@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,9 @@ import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
  */
 @Command(
   name = "problems",
-  options = "REQUIRED p project ARG"
+  options =
+    "REQUIRED p project ARG," +
+    "OPTIONAL e errors NOARG"
 )
 public class ProblemsCommand
   extends AbstractCommand
@@ -88,6 +90,7 @@ public class ProblemsCommand
     waitOnBuild();
 
     String name = commandLine.getValue(Options.PROJECT_OPTION);
+    boolean errorsOnly = commandLine.hasOption(Options.ERRORS_OPTION);
     IProject project = ProjectUtils.getProject(name);
 
     ContentGeneratorDescriptor descriptor =
@@ -131,6 +134,18 @@ public class ProblemsCommand
       }
       try{
         IMarker marker = (IMarker)getMarker.invoke(markerEntry);
+        Map<String,Object> attributes = marker.getAttributes();
+        int severity = attributes.containsKey("severity") ?
+          ((Integer)attributes.get("severity")).intValue() :
+          IMarker.SEVERITY_WARNING;
+
+        // would be more correct to use eclipse marker filter groups, but
+        // setting those may be more trouble than they're worth. look into them
+        // though if this doesn't prove to be fast enough.
+        if(errorsOnly && severity != IMarker.SEVERITY_ERROR){
+          continue;
+        }
+
         IResource resource = marker.getResource();
         if (resource == null || resource.getRawLocation() == null){
           continue;
@@ -140,17 +155,13 @@ public class ProblemsCommand
           continue;
         }
 
-        Map<String,Object> attributes = marker.getAttributes();
-        String message = (String)attributes.get("message");
-        int severity = attributes.containsKey("severity") ?
-          ((Integer)attributes.get("severity")).intValue() :
-          IMarker.SEVERITY_WARNING;
         int offset = attributes.containsKey("charStart") ?
           ((Integer)attributes.get("charStart")).intValue() : 1;
         int line = attributes.containsKey("lineNumber") ?
           ((Integer)attributes.get("lineNumber")).intValue() : 1;
         int[] pos = {1, 1};
 
+        String message = (String)attributes.get("message");
         String path = resource.getRawLocation().toOSString().replace('\\', '/');
         File file = new File(path);
         if (file.isFile() && file.exists() && offset > 0){

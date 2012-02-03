@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@
   let s:problems_command = '-command problems -p "<project>"'
 " }}}
 
-" Problems(project, open) {{{
-function! eclim#project#problems#Problems(project, open)
+" Problems(project, open, bang) {{{
+function! eclim#project#problems#Problems(project, open, bang)
   let project = a:project
   if project == ''
     let project = eclim#project#util#GetCurrentProjectName()
@@ -44,6 +44,9 @@ function! eclim#project#problems#Problems(project, open)
 
   let command = s:problems_command
   let command = substitute(command, '<project>', project, '')
+  if a:bang != ""
+    let command .= ' -e'
+  endif
   let result = eclim#ExecuteEclim(command)
   let errors = []
   if type(result) == g:LIST_TYPE && len(result) > 0
@@ -57,6 +60,7 @@ function! eclim#project#problems#Problems(project, open)
   " generate a 'signature' to distinguish the problems list from other qf
   " lists.
   let s:eclim_problems_sig = s:QuickfixSignature()
+  let s:eclim_problems_bang = a:bang
 
   if a:open
     exec g:EclimProblemsQuickFixOpen
@@ -83,7 +87,8 @@ function! eclim#project#problems#ProblemsUpdate()
       let index += 1
     endwhile
 
-    call eclim#project#problems#Problems('', 0)
+    let bang = exists('s:eclim_problems_bang') ? s:eclim_problems_bang : ''
+    call eclim#project#problems#Problems('', 0, bang)
 
     " restore the cursor position
     if qf_winnr
@@ -103,6 +108,9 @@ function! eclim#project#problems#IsProblemsList()
   " :colder or :cnewer.
   if exists('s:eclim_problems_sig')
     return s:QuickfixSignature() == s:eclim_problems_sig
+  endif
+  if exists('s:eclim_problems_bang')
+    unlet s:eclim_problems_bang
   endif
   return 0
 endfunction " }}}

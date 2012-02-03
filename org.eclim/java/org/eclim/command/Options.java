@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ public class Options
   public static final String DIR_OPTION = "d";
   public static final String ENCODING_OPTION = "e";
   public static final String EXCLUDES_OPTION = "e";
+  public static final String ERRORS_OPTION = "e";
   public static final String FAMILY_OPTION = "f";
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
