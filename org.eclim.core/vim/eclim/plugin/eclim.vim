@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -100,6 +100,10 @@ endif
 
 if !exists("g:EclimDefaultFileOpenAction")
   let g:EclimDefaultFileOpenAction = 'split'
+endif
+
+if !exists("g:EclimLocationListHeight")
+  let g:EclimLocationListHeight = 10
 endif
 
 if !exists("g:EclimMakeLCD")

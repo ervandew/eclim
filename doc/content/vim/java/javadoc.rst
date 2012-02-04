@@ -98,6 +98,9 @@ Vim Variables
   - 'open' - open the result in a browser.
   - 'lopen' - open the temp window to display the result.
 
+- **g:EclimLocationListHeight** (Default: 10) -
+  Sets the height in lines of the location list window when eclim opens it to
+  display search results.
 
 .. _\:Javadoc:
 

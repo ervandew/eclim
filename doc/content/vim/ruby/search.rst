@@ -123,6 +123,10 @@ Vim Variables
   which can be set using the **g:EclimDefaultFileOpenAction** setting which
   accepts the same possible values.
 
+- **g:EclimLocationListHeight** (Default: 10) -
+  Sets the height in lines of the location list window when eclim opens it to
+  display search results.
+
 .. note::
   Search support depends on the eclipse dltk_ ruby plugin which should be
   installed for you when choosing ruby support in the eclim installer.

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ function eclim#php#search#FindInclude()
         \ (bufname(entry.bufnr), g:EclimPhpSearchSingleResult)
       call eclim#display#signs#Update()
     else
-      lopen
+      exec 'lopen ' . g:EclimLocationListHeight
     endif
   else
     call eclim#util#EchoInfo("File not found.")

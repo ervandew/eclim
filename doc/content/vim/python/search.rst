@@ -71,3 +71,7 @@ Vim Variables
   This setting overrides the global default for all supported language types
   which can be set using the **g:EclimDefaultFileOpenAction** setting which
   accepts the same possible values.
+
+- **g:EclimLocationListHeight** (Default: 10) -
+  Sets the height in lines of the location list window when eclim opens it to
+  display search results.

@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -753,7 +753,7 @@ function! eclim#project#util#Todo()
   let path = expand('%:p')
   silent! exec 'lvimgrep /' . g:EclimTodoSearchPattern . '/gj ' . path
   if !empty(getloclist(0))
-    lopen
+    exec 'lopen ' . g:EclimLocationListHeight
   else
     call eclim#util#Echo('No Results found')
   endif
@@ -776,7 +776,7 @@ function! eclim#project#util#ProjectTodo()
     endfor
 
     if !empty(getloclist(0))
-      lopen
+      exec 'lopen ' . g:EclimLocationListHeight
     else
       call eclim#util#Echo('No Results found')
     endif

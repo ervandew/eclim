@@ -194,7 +194,7 @@ function! eclim#lang#Search(command, singleResultAction, argline)
 
       call cursor(entry.lnum, entry.col)
     else
-      lopen
+      exec 'lopen ' . g:EclimLocationListHeight
     endif
     return 1
   else

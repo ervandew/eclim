@@ -236,6 +236,10 @@ Vim Variables
   which can be set using the **g:EclimDefaultFileOpenAction** setting which
   accepts the same possible values.
 
+- **g:EclimLocationListHeight** (Default: 10) -
+  Sets the height in lines of the location list window when eclim opens it to
+  display search results.
+
 .. _g\:EclimJavaSearchMapping:
 
 - **g:EclimJavaSearchMapping** (Default: 1) -

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -317,7 +317,7 @@ function! eclim#java#search#SearchAndDisplay(type, args)
         call eclim#display#signs#Update()
         call cursor(entry.lnum, entry.col)
       else
-        lopen
+        exec 'lopen ' . g:EclimLocationListHeight
       endif
     elseif a:type == 'java_docsearch'
       let window_name = "javadoc_search_results"
@@ -328,7 +328,8 @@ function! eclim#java#search#SearchAndDisplay(type, args)
         let entry = results[0]
         call <SID>ViewDoc(entry)
       else
-        call eclim#util#TempWindow(window_name, results)
+        call eclim#util#TempWindow(
+          \ window_name, results, {'height': g:EclimLocationListHeight})
 
         nnoremap <silent> <buffer> <cr> :call <SID>ViewDoc()<cr>
         augroup temp_window
