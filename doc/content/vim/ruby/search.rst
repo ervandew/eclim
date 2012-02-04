@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -116,7 +116,12 @@ Vim Variables
 
   - 'split' - open the result in a new window via "split".
   - 'edit' - open the result in the current window.
+  - 'tabnew' - open the result in a new tab.
   - 'lopen' - open the location list to display the result.
+
+  This setting overrides the global default for all supported language types
+  which can be set using the **g:EclimDefaultFileOpenAction** setting which
+  accepts the same possible values.
 
 .. note::
   Search support depends on the eclipse dltk_ ruby plugin which should be

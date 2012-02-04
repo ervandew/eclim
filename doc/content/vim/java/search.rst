@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -222,20 +222,23 @@ Vim Variables
 
 .. _g\:EclimJavaSearchSingleResult:
 
-- **g:EclimJavaSearchSingleResult** -
-  Determines what action to take when a only a single result is
-  found.
+- **g:EclimJavaSearchSingleResult** (Default: 'split') -
+  Determines what action to take when a only a single result is found.
 
   Possible values include\:
 
-    - 'split' - open the result in a new window via "split".
-    - 'edit' - open the result in the current window.
-    - 'tabnew' - open the result in a new tab.
-    - 'lopen' - open the location list to display the result.
+  - 'split' - open the result in a new window via "split".
+  - 'edit' - open the result in the current window.
+  - 'tabnew' - open the result in a new tab.
+  - 'lopen' - open the location list to display the result.
+
+  This setting overrides the global default for all supported language types
+  which can be set using the **g:EclimDefaultFileOpenAction** setting which
+  accepts the same possible values.
 
 .. _g\:EclimJavaSearchMapping:
 
-- **g:EclimJavaSearchMapping** -
+- **g:EclimJavaSearchMapping** (Default: 1) -
   When set to 1, <enter> will be mapped to the java search functionality for the
   various java related xml files (spring, hibernate, web.xml, and
   struts-config.xml).  By default this is enabled.
