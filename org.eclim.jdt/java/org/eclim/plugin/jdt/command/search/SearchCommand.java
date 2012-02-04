@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -350,13 +350,9 @@ public class SearchCommand
   {
     Class<?> theClass = element.getClass();
 
-    // type declaration
-    if(theClass.equals(org.eclipse.jdt.internal.core.SourceType.class)){
-      return IJavaSearchConstants.IMPLEMENTORS;
-    }
-
-    // field / method declaration
-    if (theClass.equals(org.eclipse.jdt.internal.core.SourceField.class) ||
+    // type / field / method declaration
+    if (theClass.equals(org.eclipse.jdt.internal.core.SourceType.class) ||
+        theClass.equals(org.eclipse.jdt.internal.core.SourceField.class) ||
         theClass.equals(org.eclipse.jdt.internal.core.SourceMethod.class))
     {
       return IJavaSearchConstants.ALL_OCCURRENCES;
