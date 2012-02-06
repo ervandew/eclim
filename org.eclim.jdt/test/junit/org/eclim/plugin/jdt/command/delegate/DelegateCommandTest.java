@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,8 +80,8 @@ public class DelegateCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public boolean add\\(Double \\w\\)\n  \\{\n  " +
-          "\treturn list.add\\(\\w\\);")
+        Pattern.compile("public boolean add\\(Double \\w\\)\\s*\\{\n  " +
+          "\\s+return list.add\\(\\w\\);")
         .matcher(contents).find());
 
     types = (List<Map<String,Object>>)result.get("superTypes");

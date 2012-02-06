@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,8 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.Signature;
+
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 /**
  * Command used to build a tree of methods that have or can be
@@ -398,6 +400,9 @@ public class ImplCommand
     String result = TemplateUtils.evaluate(resources, TEMPLATE, values);
     Position position = TypeUtils.getPosition(type,
         type.createMethod(result, sibling, false, null));
+    JavaUtils.format(
+        src, CodeFormatter.K_COMPILATION_UNIT,
+        position.getOffset(), position.getLength());
 
     return position;
   }

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -61,17 +61,17 @@ function! TestJUnitImpl4()
     \ 'Super method equals() not commented out after add.')
   bdelete
 
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod()$'),
+  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod()'),
     \ 'see testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod(String)$'),
+  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod(String)'),
     \ 'see testAMethod(String) not added.')
-  call vunit#AssertTrue(search('@Test\_s\+public void aMethod()$'),
+  call vunit#AssertTrue(search('@Test\_s\+public void aMethod()'),
     \ 'testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see java.util.Comparator#compare(String,String)$'),
+  call vunit#AssertTrue(search('* @see java.util.Comparator#compare(String,String)'),
     \ 'see compare() not added.')
-  call vunit#AssertTrue(search('@Test\_s\+public void compare()$'),
+  call vunit#AssertTrue(search('@Test\_s\+public void compare()'),
     \ 'testCompare() not added.')
-  call vunit#AssertTrue(search('@Test\_s\+public void equals()$'),
+  call vunit#AssertTrue(search('@Test\_s\+public void equals()'),
     \ 'testEquals() not added.')
 endfunction " }}}
 
@@ -109,17 +109,17 @@ function! TestJUnitImpl3()
     \ 'Super method equals() not commented out after add.')
   bdelete
 
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod()$'),
+  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod()'),
     \ 'see testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod(String)$'),
+  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod(String)'),
     \ 'see testAMethod(String) not added.')
-  call vunit#AssertTrue(search('public void testAMethod()$'),
+  call vunit#AssertTrue(search('public void testAMethod()'),
     \ 'testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see java.util.Comparator#compare(String,String)$'),
+  call vunit#AssertTrue(search('* @see java.util.Comparator#compare(String,String)'),
     \ 'see compare() not added.')
-  call vunit#AssertTrue(search('public void testCompare()$'),
+  call vunit#AssertTrue(search('public void testCompare()'),
     \ 'testCompare() not added.')
-  call vunit#AssertTrue(search('public void testEquals()$'),
+  call vunit#AssertTrue(search('public void testEquals()'),
     \ 'testEquals() not added.')
 endfunction " }}}
 

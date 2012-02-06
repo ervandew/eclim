@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,14 @@ Common:
 Java:
   - Added project settings for specifying default jvm args for
     :ref:`:Java <:Java>` and default args for :ref:`:Javac <:Javac>`.
+  - Code inserted by
+    :ref:`:JavaConstructor <:JavaConstructor>`,
+    :ref:`:JavaGetSet <:JavaGetSet>`,
+    :ref:`:JavaImpl <:JavaImpl>`,
+    :ref:`:JavaDelegate <:JavaDelegate>`, and
+    :ref:`:JUnitImpl <:JUnitImpl>`
+    is now formatted according to the eclipse code formatter settings
+    configured from the eclipse gui.
 
 Maven:
   - Now when saving your pom.xml file your .classpath will be

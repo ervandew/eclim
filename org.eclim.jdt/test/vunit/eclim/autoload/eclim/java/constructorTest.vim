@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,16 +32,16 @@ function! TestConstructor()
   edit! src/org/eclim/test/constructor/TestConstructorVUnit.java
   call vunit#PeekRedir()
 
-  call vunit#AssertFalse(search('public TestConstructorVUnit()$'),
+  call vunit#AssertFalse(search('public TestConstructorVUnit()'),
     \ 'Empty constructor already exists.')
   JavaConstructor
-  call vunit#AssertTrue(search('public TestConstructorVUnit()$'),
+  call vunit#AssertTrue(search('public TestConstructorVUnit()'),
     \ 'Empty constructor not added.')
 
-  call vunit#AssertFalse(search('public TestConstructorVUnit(int id, String name)$'),
+  call vunit#AssertFalse(search('public TestConstructorVUnit(int id, String name)'),
     \ 'Two arg constructor already exists.')
   5,6JavaConstructor
-  call vunit#AssertTrue(search('public TestConstructorVUnit(int id, String name)$'),
+  call vunit#AssertTrue(search('public TestConstructorVUnit(int id, String name)'),
     \ 'Two arg constructor not added.')
 endfunction " }}}
 

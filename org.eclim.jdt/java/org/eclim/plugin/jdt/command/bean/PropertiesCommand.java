@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,12 +41,16 @@ import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
+import org.eclim.util.file.Position;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.Signature;
+
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 /**
  * Command used to generate java bean property methods (getters / setters).
@@ -183,9 +187,6 @@ public class PropertiesCommand
 
       insertMethod(src, type, method, sibling, GETTER_TEMPLATE, values);
     }
-    if(method.exists()){
-      TypeUtils.getPosition(type, method);
-    }
 
     return method;
   }
@@ -229,9 +230,6 @@ public class PropertiesCommand
           Boolean.TRUE : Boolean.FALSE);
 
       insertMethod(src, type, method, sibling, SETTER_TEMPLATE, values);
-    }
-    if(method.exists()){
-      TypeUtils.getPosition(type, method);
     }
 
     return method;
@@ -282,7 +280,13 @@ public class PropertiesCommand
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
     String result = TemplateUtils.evaluate(resources, template, values);
-    type.createMethod(result, sibling, false, null);
+    IMethod inserted = type.createMethod(result, sibling, false, null);
+
+    // format the inserted method according to the user's preferences
+    Position position = TypeUtils.getPosition(type, inserted);
+    JavaUtils.format(
+        src, CodeFormatter.K_COMPILATION_UNIT,
+        position.getOffset(), position.getLength());
   }
 
   /**

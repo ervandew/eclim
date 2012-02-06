@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +52,8 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 /**
  * Command to handle creation of junit test stubs.
@@ -191,12 +193,12 @@ public class JUnitImplCommand
     if(baseType != null){
       IType base = type.getJavaProject().findType(baseType);
       if(base.equals(superType)){
-        return insertTestMethod(type, superTypeInfo, method, sibling);
+        return insertTestMethod(src, type, superTypeInfo, method, sibling);
       }else{
         TypeInfo[] superTypesInfo = TypeUtils.getSuperTypes(base);
         for (TypeInfo info : superTypesInfo){
           if(info.getType().equals(superType)){
-            return insertTestMethod(type, superTypeInfo, method, sibling);
+            return insertTestMethod(src, type, superTypeInfo, method, sibling);
           }
         }
       }
@@ -209,6 +211,7 @@ public class JUnitImplCommand
   /**
    * Inserts a test method stub for the supplied method.
    *
+   * @param src The compilation unit.
    * @param type The type to insert the method into.
    * @param superTypeInfo The super type the method is defined in.
    * @param method The method to insert.
@@ -217,7 +220,11 @@ public class JUnitImplCommand
    * @return The position the method was inserted at.
    */
   protected Position insertTestMethod(
-      IType type, TypeInfo superTypeInfo, IMethod method, IJavaElement sibling)
+      ICompilationUnit src,
+      IType type,
+      TypeInfo superTypeInfo,
+      IMethod method,
+      IJavaElement sibling)
     throws Exception
   {
     IProject project = type.getJavaProject().getProject();
@@ -243,6 +250,9 @@ public class JUnitImplCommand
     String result = TemplateUtils.evaluate(resources, template, values);
     Position position = TypeUtils.getPosition(type,
         type.createMethod(result, sibling, false, null));
+    JavaUtils.format(
+        src, CodeFormatter.K_COMPILATION_UNIT,
+        position.getOffset(), position.getLength());
 
     return position;
   }

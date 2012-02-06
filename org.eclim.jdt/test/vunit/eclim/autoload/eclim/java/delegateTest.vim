@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -52,10 +52,10 @@ function! TestJavaDelegate()
     \ 'Super method add() not commented out after add.')
   bdelete
 
-  call vunit#AssertTrue(search('public Iterator<Double> iterator()$'),
+  call vunit#AssertTrue(search('public Iterator<Double> iterator()'),
     \ 'iterator() not added.')
   call vunit#AssertTrue(search('return list\.iterator();$'), 'iterator() not delegating.')
-  call vunit#AssertTrue(search('public boolean add(Double \w\+)$'), 'add() not added.')
+  call vunit#AssertTrue(search('public boolean add(Double \w\+)'), 'add() not added.')
   call vunit#AssertTrue(search('return list\.add(\w\+);$'), 'add() not delegating.')
 endfunction " }}}
 

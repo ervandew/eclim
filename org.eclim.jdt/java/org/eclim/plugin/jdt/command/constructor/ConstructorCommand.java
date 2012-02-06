@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,12 +36,16 @@ import org.eclim.plugin.jdt.PluginResources;
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
+import org.eclim.util.file.Position;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.Signature;
+
+import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 /**
  * Command used to generate class constructors.
@@ -133,8 +137,11 @@ public class ConstructorCommand
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
     String constructor = TemplateUtils.evaluate(resources, TEMPLATE, values);
-    TypeUtils.getPosition(
+    Position position = TypeUtils.getPosition(
         type, type.createMethod(constructor, sibling, false, null));
+    JavaUtils.format(
+        src, CodeFormatter.K_COMPILATION_UNIT,
+        position.getOffset(), position.getLength());
 
     return null;
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,13 @@ import org.eclipse.jdt.core.Signature;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 
+import org.eclipse.jdt.core.formatter.IndentManipulation;
+
 import org.eclipse.jdt.internal.core.DocumentAdapter;
+
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
+
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 
@@ -67,7 +73,10 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.text.java.IQuickAssistProcessor;
 import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
 
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+
+import org.eclipse.text.edits.TextEdit;
 
 /**
  * Utility methods for working with java files / projects.
@@ -437,6 +446,52 @@ public class JavaUtils
       }
     }
     return false;
+  }
+
+  /**
+   * Format a region in the supplied source file.
+   *
+   * @param src The ICompilationUnit.
+   * @param kind The kind of code snippet to format.
+   * @param offset The starting offset of the region to format.
+   * @param length The length of the region to format.
+   */
+  public static void format(ICompilationUnit src, int kind, int offset, int length)
+    throws Exception
+  {
+    IBuffer buffer = src.getBuffer();
+    String contents = buffer.getContents();
+    String delimiter = StubUtility.getLineDelimiterUsed(src);
+    DefaultCodeFormatter formatter =
+      new DefaultCodeFormatter(src.getJavaProject().getOptions(true));
+
+    // when the eclipse indent settings differ from vim (tabs vs spaces) then
+    // the inserted method's indent may be a bit off. this is a workaround to
+    // force reformatting of the code from the start of the line to the start of
+    // the next set of code following the new method. Doesn't quite fix indent
+    // formatting of methods in nested classes.
+    while (offset > 0 &&
+        !IndentManipulation.isLineDelimiterChar(buffer.getChar(offset - 1)))
+    {
+      offset--;
+      length++;
+    }
+    while ((offset + length) < contents.length() &&
+        IndentManipulation.isLineDelimiterChar(buffer.getChar(offset + length + 1)))
+    {
+      length++;
+    }
+    if ((offset + length) < contents.length()){
+      length++;
+    }
+
+    TextEdit edits = formatter.format(kind, contents, offset, length, 0, delimiter);
+    if (edits != null) {
+      Document document = new Document(src.getBuffer().getContents());
+      edits.apply(document);
+      src.getBuffer().setContents(document.get());
+      src.save(null, false);
+    }
   }
 
   /**
