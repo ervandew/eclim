@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,6 +122,11 @@ public class Eclim
 
     String result = process.getResult();
     System.out.println("Result: " + result);
+
+    String error = process.getErrorMessage();
+    if (!StringUtils.EMPTY.equals(error)){
+      System.out.println("Error: " + error);
+    }
 
     if (result.trim().equals(StringUtils.EMPTY)){
       result = "\"\"";
