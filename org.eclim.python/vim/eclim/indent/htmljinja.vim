@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -57,6 +57,13 @@ function! HtmlJinjaIndentAnythingSettings()
         \ '{%-\?\s*\(' . g:HtmlJinjaIndentMidElements . '\)\(\s\+.\{-}\)\?-\?%}',
         \ '{%-\?\s*end\w\+\s*-\?%}' ],
     \ ]
+  if exists('b:jinja_line_statement_prefix')
+    call add(b:indentTrios, [
+        \ b:jinja_line_statement_prefix . '\s\+' . g:HtmlJinjaIndentOpenElements . '\>',
+        \ '',
+        \ b:jinja_line_statement_prefix . '\s\+end\w\+\>',
+      \ ])
+  endif
 endfunction " }}}
 
 let b:indent_settings = 'HtmlJinjaIndentAnythingSettings'

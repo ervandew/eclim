@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -69,6 +69,11 @@ if exists("b:match_words")
     endfor
     let pattern .= ':{%-\?\s*\<' . element[-1:][0] . '\>\s*-\?%}'
     let b:match_words .= ',' . pattern
+    if exists('b:jinja_line_statement_prefix')
+      let pattern = substitute(pattern, '{%-\\?', b:jinja_line_statement_prefix, 'g')
+      let pattern = substitute(pattern, '-\\?%}', '', 'g')
+      let b:match_words .= ',' . pattern
+    endif
   endfor
 endif
 
