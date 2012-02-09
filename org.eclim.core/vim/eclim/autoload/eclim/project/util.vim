@@ -675,12 +675,20 @@ function! eclim#project#util#ProjectGrep(command, args)
   let bufnum = bufnr('%')
   let project_dir = eclim#project#util#GetCurrentProjectRoot()
   let cwd = getcwd()
+  let acd = &autochdir
+  set noautochdir
 "  let save_opt = &eventignore
 "  set eventignore=all
   try
     silent exec 'lcd ' . escape(project_dir, ' ')
-    silent! exec a:command . ' ' . a:args
+    silent exec a:command . ' ' . a:args
+  catch /E480/
+    " no results found
+  catch /.*/
+    call eclim#util#EchoError(v:exception)
+    return
   finally
+    let &autochdir = acd
 "    let &eventignore = save_opt
     silent exec 'lcd ' . escape(cwd, ' ')
     " force quickfix / location list signs to update.
