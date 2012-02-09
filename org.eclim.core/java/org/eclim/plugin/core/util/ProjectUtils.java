@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ public class ProjectUtils
   public static String getPath(IProject project)
     throws Exception
   {
-     IPath path = project.getRawLocation();
+    IPath path = project.getRawLocation();
 
     // eclipse returns null for raw location if project is under the workspace.
     if(path == null){
@@ -160,7 +160,7 @@ public class ProjectUtils
     }
 
     IFile ifile = project.getFile(file);
-    return ifile.getRawLocation().toOSString().replace('\\', '/');
+    return ifile.getLocation().toOSString().replace('\\', '/');
   }
 
   /**

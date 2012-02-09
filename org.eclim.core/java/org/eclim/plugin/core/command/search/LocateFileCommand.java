@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -274,7 +274,7 @@ public class LocateFileCommand
         if (resource == null){
           resource = proxy.requestResource();
         }
-        IPath raw = resource.getRawLocation();
+        IPath raw = resource.getLocation();
         if (raw != null){
           String rel = resource.getFullPath().toOSString().replace('\\', '/');
           String path = raw.toOSString().replace('\\', '/');

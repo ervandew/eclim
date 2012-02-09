@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -245,7 +245,7 @@ public class CallHierarchyCommand
       IResource resource = element.getResource();
       if (resource != null){
         String file = element.getResource()
-          .getRawLocation().toOSString().replace('\\', '/');
+          .getLocation().toOSString().replace('\\', '/');
         result.put("position",
             Position.fromOffset(file, null, name.getNodeOffset(), 0));
       }
@@ -273,7 +273,7 @@ public class CallHierarchyCommand
       this.name = name;
       this.element = element;
       this.location =
-        element.getResource().getRawLocation().toOSString() +
+        element.getResource().getLocation().toOSString() +
         element.getElementName();
     }
 

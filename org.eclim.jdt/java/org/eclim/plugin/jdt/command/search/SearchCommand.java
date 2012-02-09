@@ -265,7 +265,7 @@ public class SearchCommand
       // occurs with a referenced project as a lib with no source and class
       // files that are not archived in that project
       if (resource != null && resource.getType() == IResource.FILE){
-        file = resource.getRawLocation().toOSString();
+        file = resource.getLocation().toOSString();
 
       }else{
         IPackageFragmentRoot root = (IPackageFragmentRoot)
@@ -275,7 +275,7 @@ public class SearchCommand
           if (resource.getType() == IResource.PROJECT){
             archive = ProjectUtils.getPath((IProject)resource);
           }else{
-            archive = resource.getRawLocation().toOSString();
+            archive = resource.getLocation().toOSString();
           }
         }else{
           archive = root.getPath().toOSString();

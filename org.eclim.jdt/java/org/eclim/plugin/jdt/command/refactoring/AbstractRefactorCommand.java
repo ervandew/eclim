@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ public abstract class AbstractRefactorCommand
       HashMap<String,String> result = new HashMap<String,String>();
 
       IResource resource = delta.getResource();
-      String file = resource.getRawLocation().toOSString().replace('\\', '/');
+      String file = resource.getLocation().toOSString().replace('\\', '/');
 
       if ((flags & IResourceDelta.MOVED_FROM) != 0){
         String path = ProjectUtils.getFilePath(
@@ -211,7 +211,7 @@ public abstract class AbstractRefactorCommand
         TextFileChange text = (TextFileChange)change;
         result.put("type", "diff");
         result.put("file",
-            text.getFile().getRawLocation().toOSString().replace('\\', '/'));
+            text.getFile().getLocation().toOSString().replace('\\', '/'));
       }else{
         result.put("type", "other");
         result.put("message", change.toString());
@@ -234,7 +234,7 @@ public abstract class AbstractRefactorCommand
     }else{
       if (change instanceof TextFileChange){
         TextFileChange text = (TextFileChange)change;
-        String path = text.getFile().getRawLocation()
+        String path = text.getFile().getLocation()
           .toOSString().replace('\\', '/');
         if (path.equals(file)){
           return text.getPreviewContent(new NullProgressMonitor());

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ public class SrcUpdateCommand
         List<IProblem> problems = getProblems(src);
         ArrayList<Error> errors = new ArrayList<Error>();
         String filename = src.getResource()
-          .getRawLocation().toOSString().replace('\\', '/');
+          .getLocation().toOSString().replace('\\', '/');
         FileOffsets offsets = FileOffsets.compile(filename);
         for(IProblem problem : problems){
           int[] lineColumn =

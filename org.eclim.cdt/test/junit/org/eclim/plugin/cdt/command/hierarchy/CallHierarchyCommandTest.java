@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import static org.junit.Assert.*;
 public class CallHierarchyCommandTest
 {
   private static final String TEST_FILE = "src/callhierarchy/mod2.c";
+  private static final String TEST_FILE_LINK = "src-link/link.c";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -98,5 +99,31 @@ public class CallHierarchyCommandTest
     assertEquals(path + "mod2.c", position.get("filename"));
     assertEquals(7, position.get("line"));
     assertEquals(20, position.get("column"));
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void executeLinked()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Cdt.TEST_PROJECT));
+
+    // reference to link1
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "c_callhierarchy", "-p", Cdt.TEST_PROJECT, "-f", TEST_FILE_LINK,
+        "-o", "107", "-l", "5", "-e", "utf-8"
+      });
+
+    String path = Eclim.getProjectPath(Cdt.TEST_PROJECT) + "/src-link/";
+
+    Map<String,Object> position = (Map<String,Object>)result.get("position");
+    List<Map<String,Object>> calls =
+      (List<Map<String,Object>>)result.get("calledBy");
+    assertEquals(result.get("name"), "link1(int)");
+    assertEquals(path + "link.c", position.get("filename"));
+    assertEquals(1, position.get("line"));
+    assertEquals(5, position.get("column"));
+    assertEquals(2, calls.size());
   }
 }

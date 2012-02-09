@@ -162,7 +162,7 @@ public class ProblemsCommand
         int[] pos = {1, 1};
 
         String message = (String)attributes.get("message");
-        String path = resource.getRawLocation().toOSString().replace('\\', '/');
+        String path = resource.getLocation().toOSString().replace('\\', '/');
         File file = new File(path);
         if (file.isFile() && file.exists() && offset > 0){
           pos = FileUtils.offsetToLineColumn(path, offset);
