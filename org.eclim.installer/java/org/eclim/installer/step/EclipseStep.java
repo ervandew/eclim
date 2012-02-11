@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,6 +82,7 @@ public class EclipseStep
   private static final String[] WINDOWS_ECLIPSES = {
     "C:/eclipse",
     "C:/Program Files/eclipse",
+    "C:/Program Files (x86)/eclipse",
   };
 
   private static final String[] UNIX_ECLIPSES = {
