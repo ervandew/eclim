@@ -55,31 +55,28 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
     elseif exists('g:Tlist_Use_Right_Window') && g:Tlist_Use_Right_Window
       let taglist_position = 'right'
     endif
-    " don't consider horizontal taglist, or taglist configure to display
+  endif
+  if taglist_window == -1 && exists(':TagbarOpen')
+    let taglist_window = bufwinnr('__Tagbar__')
+    let taglist_position = 'right'
+    if exists('g:tagbar_left') && g:tagbar_left
+      let taglist_position = 'left'
+    endif
+  endif
+  if taglist_window != -1
+    " don't consider horizontal taglist, or taglist configured to display
     " opposite the tool windows as a tool window member.
     if taglist_position != g:VerticalToolWindowSide
       let taglist_window = -1
     endif
   endif
 
-  let nerdtree_window = -1
-  let index = 1
-  while index <= winnr('$')
-    if getbufvar(winbufnr(index), 'NERDTreeType') == 'primary'
-      let nerdtree_window = index
-      break
-    endif
-    let index += 1
-  endwhile
 
   let relative_window = 0
   let relative_window_loc = 'below'
-  if taglist_window != -1 || nerdtree_window != -1 || len(g:VerticalToolBuffers) > 0
+  if taglist_window != -1 || len(g:VerticalToolBuffers) > 0
     if taglist_window != -1
       let relative_window = taglist_window
-    endif
-    if nerdtree_window != -1
-      let relative_window = nerdtree_window
     endif
     for toolbuf in keys(g:VerticalToolBuffers)
       exec 'let toolbuf = ' . toolbuf
@@ -137,7 +134,13 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
     augroup eclim_vertical_tool_windows_move_taglist
       autocmd!
       exec 'autocmd BufWinEnter ' . eclim#util#EscapeBufferName(g:TagList_title) .
-        \ ' call s:MoveRelativeTo(g:TagList_title)'
+        \ ' call s:MoveRelativeTo()'
+    augroup END
+  endif
+  if exists(':TagbarOpen')
+    augroup eclim_vertical_tool_windows_move_tagbar
+      autocmd!
+      autocmd BufWinEnter __Tagbar__ call s:MoveRelativeTo()
     augroup END
   endif
   augroup eclim_vertical_tool_windows_buffer
@@ -208,8 +211,7 @@ function! eclim#display#window#SetWindowOptions(winnum, options)
   endtry
 endfunction " }}}
 
-" s:CloseIfLastWindow() {{{
-function! s:CloseIfLastWindow()
+function! s:CloseIfLastWindow() " {{{
   if histget(':', -1) !~ '^bd'
     let close = 1
     for bufnr in tabpagebuflist()
@@ -219,7 +221,8 @@ function! s:CloseIfLastWindow()
       if exists('g:TagList_title') && bufname(bufnr) == g:TagList_title
         continue
       endif
-      if getbufvar(bufnr, '&buftype') == 'nofile'
+      let buftype = getbufvar(bufnr, '&buftype')
+      if buftype != '' && buftype != 'help'
         continue
       endif
 
@@ -237,8 +240,14 @@ function! s:CloseIfLastWindow()
   endif
 endfunction " }}}
 
-" s:MoveRelativeTo(name) {{{
-function! s:MoveRelativeTo(name)
+function! s:MoveRelativeTo() " {{{
+  " get the buffer that the taglist was opened from
+  let curwin = winnr()
+  let list_buffer = bufnr('%')
+  winc p
+  let orig_buffer = bufnr('%')
+  exec curwin . 'winc p'
+
   for toolbuf in keys(g:VerticalToolBuffers)
     exec 'let toolbuf = ' . toolbuf
     if bufwinnr(toolbuf) != -1
@@ -262,10 +271,14 @@ function! s:MoveRelativeTo(name)
     endif
   endwhile
   call eclim#display#window#VerticalToolWindowRestore()
+
+  " some window juggling so that winc p from taglist goes back to the original
+  " buffer
+  exec bufwinnr(orig_buffer) . 'winc w'
+  exec bufwinnr(list_buffer) . 'winc w'
 endfunction " }}}
 
-" s:PreventCloseOnBufferDelete() {{{
-function! s:PreventCloseOnBufferDelete()
+function! s:PreventCloseOnBufferDelete() " {{{
   let index = 1
   let numtoolwindows = 0
   let numtempwindows = 0
