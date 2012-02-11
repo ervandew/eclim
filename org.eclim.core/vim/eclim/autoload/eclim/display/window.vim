@@ -133,13 +133,12 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
     autocmd BufEnter * nested call s:CloseIfLastWindow()
   augroup END
   if exists('g:TagList_title') &&
-   \ !exists('g:TagListToo') &&
    \ (!exists('g:Tlist_Use_Horiz_Window') || !g:Tlist_Use_Horiz_Window)
-    augroup eclim_vertical_tool_windows_move
+    augroup eclim_vertical_tool_windows_move_taglist
       autocmd!
+      exec 'autocmd BufWinEnter ' . eclim#util#EscapeBufferName(g:TagList_title) .
+        \ ' call s:MoveRelativeTo(g:TagList_title)'
     augroup END
-    exec 'autocmd BufWinEnter ' . g:TagList_title .
-      \ ' call s:MoveRelativeTo(g:TagList_title)'
   endif
   augroup eclim_vertical_tool_windows_buffer
     exec 'autocmd BufWinLeave <buffer> ' .
