@@ -211,14 +211,23 @@ endfunction " }}}
 " s:CloseIfLastWindow() {{{
 function! s:CloseIfLastWindow()
   if histget(':', -1) !~ '^bd'
-    let numtoolwindows = 0
-    for toolbuf in keys(g:VerticalToolBuffers)
-      exec 'let toolbuf = ' . toolbuf
-      if bufwinnr(toolbuf) != -1
-        let numtoolwindows += 1
+    let close = 1
+    for bufnr in tabpagebuflist()
+      if has_key(g:VerticalToolBuffers, bufnr)
+        continue
       endif
+      if exists('g:TagList_title') && bufname(bufnr) == g:TagList_title
+        continue
+      endif
+      if getbufvar(bufnr, '&buftype') == 'nofile'
+        continue
+      endif
+
+      let close = 0
+      break
     endfor
-    if winnr('$') == numtoolwindows
+
+    if close
       if tabpagenr('$') > 1
         tabclose
       else
