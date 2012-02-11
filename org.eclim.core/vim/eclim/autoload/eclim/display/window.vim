@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -44,10 +44,22 @@ endif
 " Handles opening windows in the vertical tool window on the left (taglist,
 " project tree, etc.)
 function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
-  let taglist_window = exists('g:TagList_title') ?
-    \ bufwinnr(eclim#util#EscapeBufferName(g:TagList_title)) : -1
-  if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
-    let taglist_window = -1
+  let taglist_window = -1
+  if exists('g:TagList_title')
+    let taglist_window = bufwinnr(eclim#util#EscapeBufferName(g:TagList_title))
+    let taglist_position = 'left'
+    if exists('g:Tlist_Use_Horiz_Window') && g:Tlist_Use_Horiz_Window
+      let taglist_position = 'horizontal'
+    elseif exists('g:TaglistTooPosition')
+      let taglist_position = g:TaglistTooPosition
+    elseif exists('g:Tlist_Use_Right_Window') && g:Tlist_Use_Right_Window
+      let taglist_position = 'right'
+    endif
+    " don't consider horizontal taglist, or taglist configure to display
+    " opposite the tool windows as a tool window member.
+    if taglist_position != g:VerticalToolWindowSide
+      let taglist_window = -1
+    endif
   endif
 
   let nerdtree_window = -1
