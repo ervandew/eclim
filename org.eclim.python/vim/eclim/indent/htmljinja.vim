@@ -59,8 +59,8 @@ function! HtmlJinjaIndentAnythingSettings()
     \ ]
   if exists('b:jinja_line_statement_prefix')
     call add(b:indentTrios, [
-        \ b:jinja_line_statement_prefix . '\s\+' . g:HtmlJinjaIndentOpenElements . '\>',
-        \ '',
+        \ b:jinja_line_statement_prefix . '\s\+\(' . g:HtmlJinjaIndentOpenElements . '\)\>',
+        \ b:jinja_line_statement_prefix . '\s\+\(' . g:HtmlJinjaIndentMidElements . '\)\>',
         \ b:jinja_line_statement_prefix . '\s\+end\w\+\>',
       \ ])
   endif
