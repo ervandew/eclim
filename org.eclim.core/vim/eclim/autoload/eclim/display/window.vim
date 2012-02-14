@@ -282,18 +282,22 @@ function! s:PreventCloseOnBufferDelete() " {{{
   let index = 1
   let numtoolwindows = 0
   let numtempwindows = 0
-  let tempbuffers = []
+  let tempbuffersbot = []
   while index <= winnr('$')
     let buf = winbufnr(index)
+    let bufname = bufname(buf)
     if index(keys(g:VerticalToolBuffers), string(buf)) != -1
       let numtoolwindows += 1
     elseif getwinvar(index, '&winfixheight') || getwinvar(index, '&winfixwidth')
-      call add(tempbuffers, buf)
+      let numtempwindows += 1
+      if getwinvar(index, '&winfixheight')
+        call add(tempbuffersbot, buf)
+      endif
     endif
     let index += 1
   endwhile
 
-  if winnr('$') == (numtoolwindows + len(tempbuffers))
+  if winnr('$') == (numtoolwindows + numtempwindows)
     let toolbuf = bufnr('%')
     if g:VerticalToolWindowSide == 'right'
       vertical topleft new
@@ -301,7 +305,7 @@ function! s:PreventCloseOnBufferDelete() " {{{
       vertical botright new
     endif
     setlocal noreadonly modifiable
-    let winnum = winnr()
+    let curbuf = bufnr('%')
     exec 'let bufnr = ' . expand('<abuf>')
 
     redir => list
@@ -342,33 +346,32 @@ function! s:PreventCloseOnBufferDelete() " {{{
       doautocmd BufReadPost
     endif
 
+    " resize windows
     exec bufwinnr(toolbuf) . 'winc w'
     exec 'vertical resize ' . g:VerticalToolWindowWidth
 
     " fix the position of the temp windows
-    if len(tempbuffers) > 0
-      for buf in tempbuffers
-        " open the buffer in the temp window position
-        botright 10new
-        exec 'buffer ' . buf
-        setlocal winfixheight
+    for buf in tempbuffersbot
+      " open the buffer in the temp window position
+      botright 10new
+      exec 'buffer ' . buf
+      setlocal winfixheight
 
-        " close the old window
-        let winnr = winnr()
-        let index = 1
-        while index <= winnr('$')
-          if winbufnr(index) == buf && index != winnr
-            exec index . 'winc w'
-            close
-            winc p
-            break
-          endif
-          let index += 1
-        endwhile
-      endfor
-    endif
+      " close the old window
+      let winnr = winnr()
+      let index = 1
+      while index <= winnr('$')
+        if winbufnr(index) == buf && index != winnr
+          exec index . 'winc w'
+          close
+          winc p
+          break
+        endif
+        let index += 1
+      endwhile
+    endfor
 
-    exec winnum . 'winc w'
+    exec bufwinnr(curbuf) . 'winc w'
   endif
 endfunction " }}}
 
