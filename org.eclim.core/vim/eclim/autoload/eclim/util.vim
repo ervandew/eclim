@@ -1037,10 +1037,6 @@ function! eclim#util#ShowCurrentError()
     " remove any new lines
     let message = substitute(message, '\n', ' ', 'g')
 
-    if len(message) > (&columns - 1)
-      let message = strpart(message, 0, &columns - 4) . '...'
-    endif
-
     call eclim#util#WideMessage('echo', message)
     let s:show_current_error_displaying = 1
   else
@@ -1309,8 +1305,9 @@ function! eclim#util#WideMessage(command, message)
 
   set noruler noshowcmd
   redraw
-  if len(message) > &columns
-    let remove = len(message) - &columns
+  let vimwidth = &columns * &cmdheight
+  if len(message) > vimwidth - 1
+    let remove = len(message) - vimwidth
     let start = (len(message) / 2) - (remove / 2) - 4
     let end = start + remove + 4
     let message = substitute(message, '\%' . start . 'c.*\%' . end . 'c', '...', '')
