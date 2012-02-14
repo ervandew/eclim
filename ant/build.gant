@@ -29,6 +29,8 @@ ant.property(file: 'ant/build.properties')
 ant.defaultexcludes(add: '**/*.swp')
 ant.defaultexcludes(add: '**/*.bak')
 
+gitAvailable = getGitAvailable()
+
 eclipseHome = binding.getVariable(getEclipseHomeProp())
 if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
   ant.echo('''
@@ -49,7 +51,13 @@ pluginNames = initPlugins()
 
 target(name: 'init'){
   File dotversion = new File("${basedir}/.version")
-  if (dotversion.exists()){ // only used by source distribution (tar.gz)
+  if (!gitAvailable && !dotversion.exists()){
+    fail('''
+      Abort:
+      You must build eclim from a git checkout or a .version file
+      must exist at the eclim root containing the eclim version number.
+    ''')
+  }else if (dotversion.exists()){ // only used by source distribution (tar.gz)
     version = dotversion.getText().trim()
   }else{
     // set eclim version based on current repos state (most recent tag w/
@@ -599,8 +607,28 @@ target(name: 'patch.revert.all'){
   }
 }
 
+def getGitAvailable(){
+  if (!new File("${basedir}/.git").exists()){
+    return false
+  }
+
+  if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    syspath = binding.getVariable('env.Path')
+    ant.available(file: 'git.cmd', filepath: syspath, property: 'git.available')
+    ant.available(file: 'git.exe', filepath: syspath, property: 'git.available')
+  }else{
+    syspath = binding.getVariable('env.PATH')
+    ant.available(file: 'git', filepath: syspath, property: 'git.available')
+  }
+  return hasVariable('git.available')
+}
+
 def getEclipseHomeProp(){
-  // try bransh specific eclipse home vars
+  if (!gitAvailable){
+    return 'eclipse.home'
+  }
+
+  // try branch specific eclipse home vars
   try {
     branch = execute('git', 'rev-parse --abbrev-ref HEAD')
     eclipseHomeProp = 'eclipse.home.' + branch
