@@ -914,7 +914,12 @@ def execute(exe, args, failonerror=true, output=null, append=false){
   file.delete()
   name = file.name
 
-  values = [outputproperty: name, failonerror: failonerror, append: append]
+  values = [
+    outputproperty: name,
+    failonerror: failonerror,
+    append: append,
+    logError: true,
+  ]
   values['executable'] = Os.isFamily(Os.FAMILY_WINDOWS) ? 'cmd.exe' : exe
   if (output != null){
     values['output'] = output
