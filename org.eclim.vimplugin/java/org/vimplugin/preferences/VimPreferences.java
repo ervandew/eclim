@@ -10,12 +10,16 @@
  */
 package org.vimplugin.preferences;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
+
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+
 import org.vimplugin.VimPlugin;
 
 /**
@@ -44,10 +48,12 @@ public class VimPreferences
   @Override
   public void createFieldEditors() {
     VimPlugin plugin = VimPlugin.getDefault();
-    addField(new BooleanFieldEditor(
-          PreferenceConstants.P_EMBED,
-          plugin.getMessage("preference.embed"),
-          getFieldEditorParent()));
+    if (!Os.isFamily(Os.FAMILY_MAC)){
+      addField(new BooleanFieldEditor(
+            PreferenceConstants.P_EMBED,
+            plugin.getMessage("preference.embed"),
+            getFieldEditorParent()));
+    }
     addField(new BooleanFieldEditor(
           PreferenceConstants.P_TABBED,
           plugin.getMessage("preference.tabbed"),
