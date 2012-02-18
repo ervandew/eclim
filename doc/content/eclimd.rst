@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -161,14 +161,19 @@ must have the :ref:`eclimd view <eclimd_headed>` open.
 
 The eclim installer should take care of locating your gvim installation for use
 inside of eclipse, but in the event that it could not locate it, you can set
-the location and other settings via the vimplugin preferences located under the
-Windows menu at:
+the location and other settings via the vimplugin preferences:
 
-  Preferences -> Vimplugin
+  Window > Preferences > Vimplugin
+
+For MacVim users on OSX, the eclim installer will attempt to locate MacVim's
+mvim script on your path. If it's not found you can set the location of that
+script in the Vimplugin preferences:
+
+  Eclipse > Preferences > Vimplugin
 
 .. note::
-  If you have vimplugin installed you should remove it prior to using the eclim
-  version.
+  If you have non-eclim version of vimplugin installed you should remove it
+  prior to using the eclim version.
 
 .. note::
   Some users have reported issues with the embedded gvim's command line being
