@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 - 2010 by The Vimplugin Project.
+ * Copyright (c) 2007 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
+
+import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.logging.Logger;
 
@@ -434,6 +436,9 @@ public class VimPlugin
    */
   public String getMessage(String key, Object... args) {
     String message = messages.getString(key);
+    if (Os.isFamily(Os.FAMILY_MAC)){
+      message = message.replaceAll("\\bgvim\\b", "mvim/gvim");
+    }
     if (args != null && args.length > 0){
       return MessageFormat.format(message, args);
     }
