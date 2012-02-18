@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,6 +25,14 @@
 " Global Variables {{{
 if !exists("g:EclimShowQuickfixSigns")
   let g:EclimShowQuickfixSigns = 1
+endif
+
+if !exists("g:EclimQuickfixSignText")
+  let g:EclimQuickfixSignText = '> '
+endif
+
+if !exists("g:EclimLoclistSignText")
+  let g:EclimLoclistSignText = '>>'
 endif
 
 if !exists("g:EclimUserSignText")
@@ -270,7 +278,9 @@ function! eclim#display#signs#Update()
     \ 'bufnr("%") == v:val.bufnr')
   let loclist = filter(getloclist(0), 'bufnr("%") == v:val.bufnr')
 
-  for [list, marker, prefix] in [[qflist, '> ', 'qf_'], [loclist, '>>', '']]
+  for [list, marker, prefix] in [
+      \ [qflist, g:EclimQuickfixSignText, 'qf_'],
+      \ [loclist, g:EclimLoclistSignText, '']]
     if g:EclimSignLevel >= 4
       let info = filter(copy(list), 'v:val.type == "" || tolower(v:val.type) == "i"')
       call eclim#display#signs#Define(prefix . 'info', marker, g:EclimInfoHighlight)
