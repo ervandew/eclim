@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ public class EclipseUtils
   private static final String LAUNCHER_PREFIX = "org.eclipse.equinox.launcher_";
 
   public static String findEclipseLauncherJar()
-    throws Exception
   {
     String eclipseHome = Installer.getProject().getProperty("eclipse.home");
     if (eclipseHome == null){
@@ -38,7 +37,6 @@ public class EclipseUtils
   }
 
   public static String findEclipseLauncherJar(String eclipseHome)
-    throws Exception
   {
     // Everyone else
     String plugins = eclipseHome + "/plugins";

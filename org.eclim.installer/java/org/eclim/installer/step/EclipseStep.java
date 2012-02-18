@@ -88,7 +88,6 @@ public class EclipseStep
   private static final String[] UNIX_ECLIPSES = {
     "/opt/eclipse",
     "/usr/lib/eclipse",
-    "/usr/lib/eclipse-3.3",
     "/usr/local/eclipse",
     "/usr/share/eclipse",
     SystemUtils.USER_HOME + "/eclipse",
@@ -324,10 +323,11 @@ public class EclipseStep
       String folder = (String)value;
       if(folder != null && folder.trim().length() > 0){
         File plugins = new File(FilenameUtils.concat(folder, "plugins"));
-
-        return plugins.exists() && plugins.isDirectory();
+        if (plugins.exists() && plugins.isDirectory()){
+          return EclipseUtils.findEclipseLauncherJar(folder) != null;
+        }
       }
-      return true;
+      return false;
     }
 
     public String getErrorMessage()
