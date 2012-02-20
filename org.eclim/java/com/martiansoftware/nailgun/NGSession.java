@@ -214,7 +214,7 @@ class NGSession extends Thread {
 
           byte[] b = new byte[(int) bytesToRead];
           sockin.readFully(b);
-          String line = new String(b, "US-ASCII");
+          String line = new String(b, "UTF-8");
 
           switch(chunkType) {
 
