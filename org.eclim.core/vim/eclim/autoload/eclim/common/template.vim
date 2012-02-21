@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -68,7 +68,8 @@ endfunction " }}}
 function! s:FindTemplate()
   let templatesDir = expand(g:EclimTemplateDir)
   if !isdirectory(templatesDir)
-    call eclim#util#EchoError("No such directory: " . templatesDir)
+    call eclim#util#EchoDebug(
+      \ 'Template dir not found (g:EclimTemplateDir): ' . templatesDir)
     return ''
   endif
 
