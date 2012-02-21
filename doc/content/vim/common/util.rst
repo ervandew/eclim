@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -227,28 +227,3 @@ general purpose commands that are useful in and outside the scope of eclim.
   - **g:EclimOnlyExcludeFixed** (defaults to 1)
     When non-0 all fixed windows (ones which have 'winfixwidth' or
     'winfixheight' set) will be preserved when issuing the :Only command.
-
-.. _\:OtherWorkingCopyDiff:
-
-- **:OtherWorkingCopyDiff** <project> -
-  Diffs the current file against the same file in another project (one which
-  has the same project relative path). This is most useful if you find yourself
-  doing branch development and want to view the differences of the current file
-  against one of the other branches.  Supports command line tab completion of
-  project names which contain a file with the same relative path as the current
-  file: ``:OtherWorkingCopyDiff <tab>``.
-
-.. _\:OtherWorkingCopyEdit:
-
-- **:OtherWorkingCopyEdit** <project> -
-  Like **:OtherWorkingCopyDiff**, except open the file in the current window.
-
-.. _\:OtherWorkingCopySplit:
-
-- **:OtherWorkingCopySplit** <project> -
-  Like **:OtherWorkingCopyDiff**, except open the file in a new window.
-
-.. _\:OtherWorkingCopyTabopen:
-
-- **:OtherWorkingCopyTabopen** <project> -
-  Like **:OtherWorkingCopyDiff**, except open the file in a new tab.

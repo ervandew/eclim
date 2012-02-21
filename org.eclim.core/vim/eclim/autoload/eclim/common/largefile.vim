@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,18 +22,6 @@
 "
 " }}}
 
-if exists('g:eclim_largefile') || exists('#LargeFile') ||
-    \ (exists('g:EclimLargeFileEnabled') && !g:EclimLargeFileEnabled)
-  finish
-endif
-let g:eclim_largefile = 1
-
-" Global Settings {{{
-if !exists('g:EclimLargeFileSize')
-  let g:EclimLargeFileSize = 5
-endif
-" }}}
-
 " Script Settings {{{
 let s:file_size = g:EclimLargeFileSize * 1024 * 1024
 let s:events = [
@@ -43,15 +31,7 @@ let s:events = [
   \ ]
 " }}}
 
-" Autocommands {{{
-augroup eclim_largefile
-  autocmd!
-  autocmd BufReadPre * call <SID>InitSettings()
-augroup END
-" }}}
-
-" s:InitSettings() {{{
-function! s:InitSettings()
+function! eclim#common#largefile#InitSettings() " {{{
   let file = expand("<afile>")
   let size = getfsize(file)
   if size >= s:file_size || size == -2
@@ -64,8 +44,7 @@ function! s:InitSettings()
   endif
 endfunction " }}}
 
-" s:ApplySettings() {{{
-function! s:ApplySettings()
+function! s:ApplySettings() " {{{
   set undolevels=-1
   if !exists('b:largefile_notified')
     let b:largefile_notified = 1
@@ -73,8 +52,7 @@ function! s:ApplySettings()
   endif
 endfunction " }}}
 
-" s:RevertSettings() {{{
-function! s:RevertSettings()
+function! s:RevertSettings() " {{{
   let &undolevels=b:save_undo
   let &eventignore=b:save_events
 endfunction " }}}

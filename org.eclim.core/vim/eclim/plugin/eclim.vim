@@ -132,6 +132,18 @@ endif
 if !exists("g:EclimMenus")
   let g:EclimMenus = 1
 endif
+
+if !exists("g:EclimTemplatesDisabled")
+  " Disabled for now.
+  let g:EclimTemplatesDisabled = 1
+endif
+
+if !exists('g:EclimLargeFileEnabled')
+  let g:EclimLargeFileEnabled = 1
+endif
+if !exists('g:EclimLargeFileSize')
+  let g:EclimLargeFileSize = 5
+endif
 " }}}
 
 " Command Declarations {{{
@@ -159,9 +171,87 @@ endif
 if !exists(':EclimHelpGrep')
   command -nargs=+ EclimHelpGrep :call eclim#help#HelpGrep(<q-args>)
 endif
+
+if !exists(":Buffers")
+  command Buffers :call eclim#common#buffers#Buffers()
+  command BuffersToggle :call eclim#common#buffers#BuffersToggle()
+endif
+
+if !exists(":Only")
+  command Only :call eclim#common#buffers#Only()
+endif
+
+if !exists(":DiffLastSaved")
+  command DiffLastSaved :call eclim#common#util#DiffLastSaved()
+endif
+
+if !exists(":SwapWords")
+  command SwapWords :call eclim#common#util#SwapWords()
+endif
+if !exists(":SwapTypedArguments")
+  command SwapTypedArguments :call eclim#common#util#SwapTypedArguments()
+endif
+if !exists(":LocateFile")
+  command -nargs=? LocateFile :call eclim#common#locate#LocateFile('', '<args>')
+  command -nargs=? LocateBuffer
+    \ :call eclim#common#locate#LocateFile('', '<args>', 'buffers')
+endif
+
+if !exists(":QuickFixClear")
+  command QuickFixClear :call setqflist([]) | call eclim#display#signs#Update()
+endif
+if !exists(":LocationListClear")
+  command LocationListClear :call setloclist(0, []) | call eclim#display#signs#Update()
+endif
+
+if !exists(":Tcd")
+  command -nargs=1 -complete=dir Tcd :call eclim#common#util#Tcd('<args>')
+endif
+
+if !exists(":History")
+  command History call eclim#common#history#History()
+  command -bang HistoryClear call eclim#common#history#HistoryClear('<bang>')
+endif
+
+if has('signs')
+  if !exists(":Sign")
+    command Sign :call eclim#display#signs#Toggle('user', line('.'))
+  endif
+  if !exists(":Signs")
+    command Signs :call eclim#display#signs#ViewSigns('user')
+  endif
+  if !exists(":SignClearUser")
+    command SignClearUser :call eclim#display#signs#UnplaceAll(
+      \ eclim#display#signs#GetExisting('user'))
+  endif
+  if !exists(":SignClearAll")
+    command SignClearAll :call eclim#display#signs#UnplaceAll(
+      \ eclim#display#signs#GetExisting())
+  endif
+endif
+
+if !exists(":OpenUrl")
+  command -bang -range -nargs=? OpenUrl
+    \ :call eclim#web#OpenUrl('<args>', '<bang>', <line1>, <line2>)
+endif
+
+if !exists(":Make")
+  command -bang -nargs=* Make :call eclim#util#Make('<bang>', '<args>')
+endif
 " }}}
 
 " Auto Commands{{{
+augroup eclim_archive_read
+  autocmd!
+  silent! autocmd! archive_read
+  autocmd BufReadCmd
+    \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,
+    \tar:/*,tar:\*,tar:file:/*,tar:file:\*,
+    \tbz2:/*,tgz:\*,tbz2:file:/*,tbz2:file:\*,
+    \tgz:/*,tgz:\*,tgz:file:/*,tgz:file:\*,
+    \zip:/*,zip:\*,zip:file:/*,zip:file:\*
+    \ call eclim#common#util#ReadFile()
+augroup END
 
 if g:EclimShowCurrentError
   " forcing load of util, otherwise a bug in vim is sometimes triggered when
@@ -207,6 +297,20 @@ if has('gui_running') && g:EclimMenus
   augroup eclim_menus
     autocmd BufNewFile,BufReadPost,WinEnter * call eclim#display#menu#Generate()
     autocmd VimEnter * if expand('<amatch>')=='' | call eclim#display#menu#Generate() | endif
+  augroup END
+endif
+
+if !g:EclimTemplatesDisabled
+  augroup eclim_template
+    autocmd!
+    autocmd BufNewFile * call eclim#common#template#Template()
+  augroup END
+endif
+
+if !exists('#LargeFile') && g:EclimLargeFileEnabled
+  augroup eclim_largefile
+    autocmd!
+    autocmd BufReadPre * call eclim#common#largefile#InitSettings()
   augroup END
 endif
 " }}}

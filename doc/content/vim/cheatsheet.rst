@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -353,15 +353,6 @@ Misc. Commands
 - :ref:`:Only` -
   Closes all but the current window and any windows excluded by
   **g:EclimOnlyExclude**.
-- :ref:`:OtherWorkingCopyDiff` <project> -
-  Diffs the current file against the same file in another project (one which
-  has the same project relative path).
-- :ref:`:OtherWorkingCopyEdit` <project> -
-  Like **:OtherWorkingCopyDiff**, except open the file in the current window.
-- :ref:`:OtherWorkingCopySplit` <project> -
-  Like **:OtherWorkingCopyDiff**, except open the file in a new window.
-- :ref:`:OtherWorkingCopyTabopen` <project> -
-  Like **:OtherWorkingCopyDiff**, except open the file in a new tab.
 - :ref:`:History` -
   View the local history entries for the current file.
 - :ref:`:HistoryClear` -

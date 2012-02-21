@@ -69,63 +69,6 @@ function! eclim#common#util#FindInPath(file, path)
   return results
 endfunction " }}}
 
-" OtherWorkingCopy(project, action) {{{
-" Opens the same file from another project using the supplied action
-function! eclim#common#util#OtherWorkingCopy(project, action)
-  let path = eclim#project#util#GetProjectRelativeFilePath()
-  let project_path = s:OtherWorkingCopyPath(a:project)
-  if project_path == ''
-    return
-  endif
-  call eclim#util#GoToBufferWindowOrOpen(project_path, a:action)
-endfunction " }}}
-
-" OtherWorkingCopyDiff(project) {{{
-" Diffs the current file against the same file from another project.
-function! eclim#common#util#OtherWorkingCopyDiff(project)
-  let project_path = s:OtherWorkingCopyPath(a:project)
-  if project_path == ''
-    return
-  endif
-
-  let filename = expand('%:p')
-  diffthis
-
-  call eclim#util#GoToBufferWindowOrOpen(project_path, 'vertical split')
-  diffthis
-
-  let b:filename = filename
-  augroup other_diff
-    autocmd! BufWinLeave <buffer>
-    call eclim#util#GoToBufferWindowRegister(b:filename)
-    autocmd BufWinLeave <buffer> diffoff
-  augroup END
-endfunction " }}}
-
-" s:OtherWorkingCopyPath(project) {{{
-function! s:OtherWorkingCopyPath(project)
-  let path = eclim#project#util#GetProjectRelativeFilePath()
-
-  let project_name = a:project
-  if project_name =~ '[\\/]$'
-    let project_name = project_name[:-2]
-  endif
-
-  let project = {}
-  for p in eclim#project#util#GetProjects()
-    if p.name == project_name
-      let project = p
-      break
-    endif
-  endfor
-
-  if len(project) == 0
-    call eclim#util#EchoWarning("Project '" . project_name . "' not found.")
-    return ''
-  endif
-  return eclim#project#util#GetProjectRoot(project_name) . '/' . path
-endfunction " }}}
-
 " SwapTypedArguments() {{{
 " Swaps typed method declaration arguments.
 function! eclim#common#util#SwapTypedArguments()

@@ -570,6 +570,26 @@ function! eclim#util#ListContains(list, element)
   return 0
 endfunction " }}}
 
+" Make(bang, args) {{{
+" Executes make using the supplied arguments.
+function! eclim#util#Make(bang, args)
+  let makefile = findfile('makefile', '.;')
+  let makefile2 = findfile('Makefile', '.;')
+  if len(makefile2) > len(makefile)
+    let makefile = makefile2
+  endif
+  let cwd = getcwd()
+  let save_mlcd = g:EclimMakeLCD
+  exec 'lcd ' . fnamemodify(makefile, ':h')
+  let g:EclimMakeLCD = 0
+  try
+    call eclim#util#MakeWithCompiler('eclim_make', a:bang, a:args)
+  finally
+    exec 'lcd ' . escape(cwd, ' ')
+    let g:EclimMakeLCD = save_mlcd
+  endtry
+endfunction " }}}
+
 " MakeWithCompiler(compiler, bang, args) {{{
 " Executes :make using the supplied compiler.
 " Note: on windows the make program will be executed manually if the 'tee'
