@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ function! eclim#xml#validate#Validate(on_save, ...)
     return
   endif
 
-  if eclim#PingEclim(0)
+  if eclim#EclimAvailable()
     let project = eclim#project#util#GetCurrentProjectName()
     if project == ""
       return
@@ -72,8 +72,8 @@ function! eclim#xml#validate#Validate(on_save, ...)
       let file = substitute(expand('%:p'), '\', '/', 'g')
       call eclim#util#MakeWithCompiler('eclim_xmllint', '', file)
       call eclim#display#signs#Update()
-    else
-      call eclim#util#EchoDebug("Eclimd not running.")
+    elseif !a:on_save
+      call eclim#util#EchoWarning("eclimd not running.")
     endif
   endif
   return 0
