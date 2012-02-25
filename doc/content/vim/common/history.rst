@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,18 +19,21 @@
 Local History
 =============
 
-When editing files, vim provides great undo support.  However, the undo
-information is lost when you close a file or utilize one of the few eclim
-features that require a reload of the current file.
-
-Eclipse provides a nice feature which can help combat both of these
-deficiencies.  It includes support for a local history, which is basically a
+Eclipse provides a feature called local history, which is basically a
 simplistic version control system that is updated every time you save a file.
 Using this local history, you can view diffs against previously saved versions
 of your file or revert to one of those revisions.
 
-By default, as long as eclimd is running, any writes you make to a file inside
-of a project will automatically be saved as a local history revision.
+Eclim supports updating eclipse's local history when writing files from vim,
+but by default this feature is disabled unless gvim was started from the
+eclipse gui, in which case eclim will honor the default eclipse editor behavior
+and update the local history. You can turn this feature on in all cases by
+adding the following to your vimrc:
+
+  .. code-block:: vim
+
+    let g:EclimProjectKeepLocalHistory = 1
+
 
 .. _\:History:
 
@@ -77,6 +80,14 @@ Eclipse Settings
   And there you can edit your settings as necessary.
 
 Vim Settings
+
+.. _g\:EclimProjectKeepLocalHistory:
+
+- **g:EclimProjectKeepLocalHistory (Default: 0)** -
+  Controls whether writes in vim will update the eclipse local history. This is
+  disabled by default unless gvim was started from the eclipse gui, in which
+  case eclim will honor the default eclipse editor behavior and update the
+  local history.
 
 .. _g\:EclimHistoryDiffOrientation:
 

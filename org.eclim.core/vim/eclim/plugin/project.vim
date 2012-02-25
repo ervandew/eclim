@@ -27,7 +27,7 @@ if !exists("g:EclimProjectRefreshFiles")
 endif
 
 if !exists("g:EclimProjectKeepLocalHistory")
-  let g:EclimProjectKeepLocalHistory = 1
+  let g:EclimProjectKeepLocalHistory = exists('g:vimplugin_running')
 endif
 
 if !exists("g:EclimProjectProblemsUpdateOnSave")

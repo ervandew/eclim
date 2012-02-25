@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -79,6 +79,11 @@ function! eclim#common#history#History()
   call eclim#util#TempWindow('[History]', lines)
 
   setlocal modifiable noreadonly
+  if !g:EclimProjectKeepLocalHistory
+    call append(line('$'),
+      \ '" Note: local history is current disabled: ' .
+      \ 'g:EclimProjectKeepLocalHistory = ' . g:EclimProjectKeepLocalHistory)
+  endif
   call append(line('$'), '" use ? to view help')
   setlocal nomodifiable readonly
   syntax match Comment /^".*/

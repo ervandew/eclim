@@ -24,6 +24,9 @@ History of Changes
 Common:
   - Added :ref:`:ProjectBuild <:ProjectBuild>` to build the current or
     supplied project.
+  - Updating eclipse's :ref:`local history <vim/common/history>` when writing
+    in vim is now only enabled by default when gvim is opened from the eclipse
+    gui.
 
 Java:
   - Added project settings for specifying default jvm args for
@@ -652,10 +655,8 @@ Vcs:
 
 Vim:
   - Added :ref:`:Only` as a configurable alternative to vim's :only command.
-  - Added :ref:`:OtherWorkingCopyDiff`,
-    :ref:`:OtherWorkingCopyEdit`,
-    :ref:`:OtherWorkingCopySplit`, and
-    :ref:`:OtherWorkingCopyTabopen`.
+  - Added :OtherWorkingCopyDiff, :OtherWorkingCopyEdit,
+    :OtherWorkingCopySplit, and :OtherWorkingCopyTabopen.
 
 .. _1.3.5:
 
