@@ -66,6 +66,7 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
     return start
   else
     let offset = eclim#util#GetOffset() + len(a:base) - 1
+    let project = eclim#project#util#GetCurrentProjectName()
     let file = eclim#lang#SilentUpdate(1, 0)
     if file == ''
       return []
