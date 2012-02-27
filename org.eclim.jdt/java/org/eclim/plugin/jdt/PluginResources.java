@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -145,7 +145,7 @@ public class PluginResources
     );
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,
-      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-6]\n" +
+      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-7]\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.char (space|tab|mixed)\n" +
       "JDT org.eclipse.jdt.core.formatter.tabulation.size [1-9][0-9]*\n" +
       "JDT org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations " +
