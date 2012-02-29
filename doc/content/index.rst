@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -82,7 +82,8 @@ leveraged in three primary ways, as illustrated below.
    eclipse interface full time, but want to use gvim as an embedded eclipse
    editor. Just like the previous use case, the eclim server is run inside of
    the eclipse gui and the embedded gvim will interact with it just like
-   external vim instances would.
+   external vim instances would. This feature is only support on Windows and
+   Unix systems (where gvim is compiled with the gtk gui).
 
 ==================
 Emacs Users

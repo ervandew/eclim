@@ -60,7 +60,7 @@ public class VimPlugin
   private static final String GVIM_FEATURE_TEST =
     "redir! > <file> | silent! <command> | quit";
   private static final String FEATURES_COMMAND_UNIX =
-    "echo 'embed:' . (v:version >= 700) . " +
+    "echo 'embed:' . (v:version >= 700 && has('gui_gtk')) . " +
         "' netbeans:' . (has('netbeans_intg')) . " +
         "' netbeansDocumentListen:' . " +
             "(v:version > 702 || (v:version == 702 && has('patch359')))";

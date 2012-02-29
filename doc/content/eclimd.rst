@@ -131,6 +131,9 @@ Embedded gvim
   issues on the `eclim user`_ mailing list.
 
 .. note::
+  Embedding is only supported on Windows and Unix systems (where gvim is
+  compiled with the gtk gui).
+
   Embedding of macvim for OSX is not supported since macvim does not currently
   have the ability to be embedded like gvim. Macvim can still be used to open
   files from eclipse, but macvim will open as an external editor. Also note
