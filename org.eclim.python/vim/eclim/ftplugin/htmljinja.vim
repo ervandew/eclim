@@ -50,7 +50,7 @@ if exists('b:jinja_line_statement_prefix')
 else
   let b:endwise_addition = '{% end& %}'
 endif
-let b:endwise_words = 'block,if,while,for,macro'
+let b:endwise_words = 'block,call,if,while,filter,for,macro'
 let b:endwise_syngroups = 'jinjaStatement'
 
 " }}}
