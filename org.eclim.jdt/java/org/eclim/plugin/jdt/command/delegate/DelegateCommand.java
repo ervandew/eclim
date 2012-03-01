@@ -215,6 +215,7 @@ public class DelegateCommand
     values.put("delegate", Boolean.TRUE);
     values.put("methodSignature",
         MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
+    values.put("constructor", Boolean.FALSE);
 
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);

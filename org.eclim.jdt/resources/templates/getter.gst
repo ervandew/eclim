@@ -1,8 +1,5 @@
+<% if (!overrides && !implementof) { %>
 /**
-<% if (overrides || implementof) { %>
- * {@inheritDoc}
- * @see ${superType}#${methodSignature}
-<% } else { %>
 <% if (isBoolean) { %>
  * Determines if this instance is ${property}.
 <% } else { %>
@@ -13,9 +10,14 @@
  * @param index The index to get.
 <% } %>
  * @return The ${property}.
-<% } %>
  */
-<% if (org_eclipse_jdt_core_compiler_source == "1.5" && overrides) { %>
+<% } else if (org_eclipse_jdt_core_compiler_source < "1.5") { %>
+/**
+ * {@inheritDoc}
+ * @see ${superType}#${methodSignature}
+ */
+<% } %>
+<% if (org_eclipse_jdt_core_compiler_source >= "1.5" && (overrides || implementof)) { %>
 @Override
 <% } %>
 public ${propertyType} ${name}(<% if(array) { %>int index<% } %>)<% if(isinterface){ %>;<% } %>
