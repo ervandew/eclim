@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -212,7 +212,7 @@ public class EclipsePluginsStep
           overallLabel.setText(
             "Installing eclim installer feature (may take a few moments).");
           if (installInstallerPlugin()){
-            EclipseInfo info = new EclipseInfo(getDependencies());
+            EclipseInfo info = new EclipseInfo();
             return info;
           }
           return null;
@@ -345,56 +345,6 @@ public class EclipsePluginsStep
       command.destroy();
     }
     return true;
-  }
-
-  /**
-   * Gets a list of required dependencies based on the chosen set of eclim
-   * features to be installed.
-   *
-   * @return List of dependencies.
-   */
-  private List<Dependency> getDependencies()
-    throws Exception
-  {
-    Document document = DocumentBuilderFactory.newInstance()
-      .newDocumentBuilder().parse(
-          EclipsePluginsStep.class.getResource(DEPENDENCIES).toString());
-
-    primaryUpdateSite = document.getDocumentElement().getAttribute("primary");
-
-    // determine which dependencies are required
-    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
-    String[] features = Installer.getContext().getKeysByPrefix("featureList");
-    Arrays.sort(features, new FeatureNameComparator());
-    for (int ii = 0; ii < features.length; ii++){
-      Boolean enabled = (Boolean)Installer.getContext().getValue(features[ii]);
-      String name = features[ii].substring(features[ii].indexOf('.') + 1);
-
-      // check if the enabled eclim feature has any dependencies.
-      if(enabled.booleanValue()){
-        Element featureNode = document.getElementById(name);
-        if(featureNode != null){
-          NodeList nodes = featureNode.getElementsByTagName("dependency");
-
-          // parse out all the possible dependencies
-          for(int jj = 0; jj < nodes.getLength(); jj++){
-            Element node = (Element)nodes.item(jj);
-            ArrayList<String> sites = new ArrayList<String>();
-            NodeList siteList = node.getElementsByTagName("site");
-            for(int kk = 0; kk < siteList.getLength(); kk++){
-              Element site = (Element)siteList.item(kk);
-              sites.add(site.getAttribute("url"));
-            }
-
-            dependencies.add(new Dependency(
-                  node.getAttribute("id"),
-                  node.getAttribute("version"),
-                  sites.toArray(new String[sites.size()])));
-          }
-        }
-      }
-    }
-    return dependencies;
   }
 
   public void process(final String line)
@@ -628,15 +578,12 @@ public class EclipsePluginsStep
     /**
      * Contstruct a new EclipseInfo instance containing installed features and
      * required dependencies.
-     *
-     * @param List of dependencies.
      */
-    public EclipseInfo(List<Dependency> dependencies)
+    public EclipseInfo()
       throws Exception
     {
-      this.dependencies = dependencies;
-      this.features = new HashMap<String,Feature>();
-      this.availableFeatures = new HashMap<String,String>();
+      features = new HashMap<String,Feature>();
+      availableFeatures = new HashMap<String,String>();
 
       overallProgress.setMaximum(5);
       overallProgress.setValue(1);
@@ -673,82 +620,142 @@ public class EclipsePluginsStep
         command.destroy();
       }
 
-      // load up available features from the primary update site.
-      overallProgress.setValue(2);
-      overallLabel.setText(
-          "Loading available features from the primary update site...");
+      // find chosen features dependencies which need to be installed/upgraded.
+      dependencies = determineDependencies(features);
 
-      BufferedInputStream in = null;
-      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+      if (dependencies.size() > 0){
+        // load up available features from the primary update site.
+        overallProgress.setValue(2);
+        overallLabel.setText(
+            "Loading available features from the primary update site...");
 
-      // download compositeContent.jar to determine location on content.jar
-      final String[] location = new String[1];
-      try{
-        overallProgress.setValue(3);
-        System.out.println("Downloading compositeContent.jar");
-        taskLabel.setText("Downloading compositeContent.jar");
-        in = new BufferedInputStream(
-            new URLProgressInputStream(
-              taskProgress,
-              new URL(primaryUpdateSite + "compositeContent.jar").openConnection()));
+        BufferedInputStream in = null;
+        SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 
-        JarInputStream jin = new JarInputStream(in);
-        JarEntry entry = jin.getNextJarEntry();
-        while (!entry.getName().equals("compositeContent.xml")){
-          entry = jin.getNextJarEntry();
-        }
-        parser.parse(jin, new DefaultHandler(){
-          public void startElement(
-              String uri, String localName, String qName, Attributes attributes)
-            throws SAXException
-          {
-            if(qName.equals("child")){
-              location[0] = attributes.getValue("location");
-            }
+        // download compositeContent.jar to determine location on content.jar
+        final String[] location = new String[1];
+        try{
+          overallProgress.setValue(3);
+          System.out.println("Downloading compositeContent.jar");
+          taskLabel.setText("Downloading compositeContent.jar");
+          in = new BufferedInputStream(
+              new URLProgressInputStream(
+                taskProgress,
+                new URL(primaryUpdateSite + "compositeContent.jar").openConnection()));
+
+          JarInputStream jin = new JarInputStream(in);
+          JarEntry entry = jin.getNextJarEntry();
+          while (!entry.getName().equals("compositeContent.xml")){
+            entry = jin.getNextJarEntry();
           }
-        });
-      }finally{
-        IOUtils.closeQuietly(in);
-      }
-
-      try{
-        overallProgress.setValue(4);
-        System.out.println("Downloading " + location[0] + "/content.jar");
-        taskLabel.setText("Downloading " + location[0] + "/content.jar");
-        in = new BufferedInputStream(
-            new URLProgressInputStream(taskProgress, new URL(
-                primaryUpdateSite + location[0] + "/content.jar").openConnection()));
-
-        JarInputStream jin = new JarInputStream(in);
-        JarEntry entry = jin.getNextJarEntry();
-        while (!entry.getName().equals("content.xml")){
-          entry = jin.getNextJarEntry();
-        }
-        parser.parse(jin, new DefaultHandler(){
-          public void startElement(
-              String uri, String localName, String qName, Attributes attributes)
-            throws SAXException
-          {
-            if(qName.equals("unit")){
-              String id = attributes.getValue("id");
-              if (id.endsWith(".feature.group")){
-                String version = attributes.getValue("version");
-                String name = id.substring(0, id.length() - 14);
-                availableFeatures.put(name, version);
+          parser.parse(jin, new DefaultHandler(){
+            public void startElement(
+                String uri, String localName, String qName, Attributes attributes)
+              throws SAXException
+            {
+              if(qName.equals("child")){
+                location[0] = attributes.getValue("location");
               }
             }
-          }
-        });
-      }finally{
-        IOUtils.closeQuietly(in);
-      }
+          });
+        }finally{
+          IOUtils.closeQuietly(in);
+        }
 
+        try{
+          overallProgress.setValue(4);
+          System.out.println("Downloading " + location[0] + "/content.jar");
+          taskLabel.setText("Downloading " + location[0] + "/content.jar");
+          in = new BufferedInputStream(
+              new URLProgressInputStream(taskProgress, new URL(
+                  primaryUpdateSite + location[0] + "/content.jar").openConnection()));
+
+          JarInputStream jin = new JarInputStream(in);
+          JarEntry entry = jin.getNextJarEntry();
+          while (!entry.getName().equals("content.xml")){
+            entry = jin.getNextJarEntry();
+          }
+          parser.parse(jin, new DefaultHandler(){
+            public void startElement(
+                String uri, String localName, String qName, Attributes attributes)
+              throws SAXException
+            {
+              if(qName.equals("unit")){
+                String id = attributes.getValue("id");
+                if (id.endsWith(".feature.group")){
+                  String version = attributes.getValue("version");
+                  String name = id.substring(0, id.length() - 14);
+                  availableFeatures.put(name, version);
+                }
+              }
+            }
+          });
+        }finally{
+          IOUtils.closeQuietly(in);
+        }
+
+        filterDependencies();
+      }
       overallProgress.setValue(5);
-      filterDependencies();
     }
 
     public List<Dependency> getDependencies()
     {
+      return dependencies;
+    }
+
+    /**
+     * Gets a list of required dependencies based on the chosen set of eclim
+     * features to be installed.
+     *
+     * @return List of dependencies.
+     */
+    private List<Dependency> determineDependencies(
+        Map<String,Feature> installedFeatures)
+      throws Exception
+    {
+      Document document = DocumentBuilderFactory.newInstance()
+        .newDocumentBuilder().parse(
+            EclipsePluginsStep.class.getResource(DEPENDENCIES).toString());
+
+      primaryUpdateSite = document.getDocumentElement().getAttribute("primary");
+
+      // determine which dependencies are required
+      ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
+      String[] features = Installer.getContext().getKeysByPrefix("featureList");
+      Arrays.sort(features, new FeatureNameComparator());
+      for (int ii = 0; ii < features.length; ii++){
+        Boolean enabled = (Boolean)Installer.getContext().getValue(features[ii]);
+        String name = features[ii].substring(features[ii].indexOf('.') + 1);
+
+        // check if the enabled eclim feature has any dependencies.
+        if(enabled.booleanValue()){
+          Element featureNode = document.getElementById(name);
+          if(featureNode != null){
+            NodeList nodes = featureNode.getElementsByTagName("dependency");
+
+            // parse out all the possible dependencies
+            for(int jj = 0; jj < nodes.getLength(); jj++){
+              Element node = (Element)nodes.item(jj);
+              ArrayList<String> sites = new ArrayList<String>();
+              NodeList siteList = node.getElementsByTagName("site");
+              for(int kk = 0; kk < siteList.getLength(); kk++){
+                Element site = (Element)siteList.item(kk);
+                sites.add(site.getAttribute("url"));
+              }
+
+              Dependency dependency = new Dependency(
+                    node.getAttribute("id"),
+                    node.getAttribute("version"),
+                    sites.toArray(new String[sites.size()]),
+                    installedFeatures.get(node.getAttribute("id")));
+              if (dependency.getFeature() == null || dependency.isUpgrade()){
+                dependencies.add(dependency);
+              }
+            }
+          }
+        }
+      }
       return dependencies;
     }
 
@@ -761,8 +768,7 @@ public class EclipsePluginsStep
     {
       for (Iterator<Dependency> ii = dependencies.iterator(); ii.hasNext();){
         Dependency dependency = ii.next();
-        Feature feature = (Feature)features.get(dependency.getId());
-        boolean include = dependency.eval(feature, availableFeatures);
+        boolean include = dependency.eval(availableFeatures);
         if (!include){
           ii.remove();
         }
@@ -780,11 +786,15 @@ public class EclipsePluginsStep
     private String featureUrl;
     private String featureVersion;
 
-    public Dependency(String id, String version, String[] sites)
+    public Dependency(String id, String version, String[] sites, Feature feature)
     {
       this.id = id;
       this.version = version;
       this.sites = sites;
+      this.feature = feature;
+      if(feature != null){
+        this.upgrade = compareVersions(this.version, feature.getVersion()) < 0;
+      }
     }
 
     public String getId()
@@ -817,16 +827,11 @@ public class EclipsePluginsStep
       return featureVersion;
     }
 
-    public boolean eval(Feature feature, Map<String,String> availableFeatures)
+    public boolean eval(Map<String,String> availableFeatures)
       throws Exception
     {
-      this.feature = feature;
-      if(feature != null){
-        int result = compareVersions(this.version, feature.getVersion());
-        if (result >= 0){
-          return false;
-        }
-        this.upgrade = true;
+      if(feature != null && !isUpgrade()){
+        return false;
       }
       String[] urlVersion = findUrlVersion(availableFeatures);
       this.featureUrl = urlVersion[0];
