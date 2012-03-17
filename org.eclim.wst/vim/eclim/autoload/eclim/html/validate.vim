@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,6 +25,10 @@
 " Validate(on_save) {{{
 " Validates the current html file.
 function! eclim#html#validate#Validate(on_save)
+  if a:on_save && !g:EclimHtmlValidate
+    return
+  endif
+
   if eclim#util#WillWrittenBufferClose()
     return
   endif
@@ -39,27 +43,23 @@ function! eclim#html#validate#Validate(on_save)
   call eclim#lang#Validate('html', a:on_save)
 
   " prevent closing of sign column between validation methods
-  call eclim#display#signs#SetPlaceholder()
+  "call eclim#display#signs#SetPlaceholder()
 
-  let html_errors = getloclist(0)
-  let css_errors = []
-  let js_errors = []
+  " disabled for now since the parser will attempt to follow all style tags
+  " and interprets //domain.com/styles.css as an ftp path leading to
+  " long validation delays due to connection timeouts.
+  "let html_errors = getloclist(0)
+  "let css_errors = []
+  "if search('<style', 'cnw')
+  "  call eclim#lang#Validate('css', a:on_save)
+  "  let css_errors = getloclist(0)
+  "endif
+
+  "call eclim#util#SetLocationList(html_errors + css_errors)
 
   if search('<script', 'cnw')
     call eclim#javascript#util#UpdateSrcFile(a:on_save)
-    let js_errors = getloclist(0)
   endif
-
-  " prevent closing of sign column between validation methods
-  call eclim#display#signs#SetPlaceholder()
-
-  if search('<style', 'cnw')
-    call eclim#lang#Validate('css', a:on_save)
-    let css_errors = getloclist(0)
-  endif
-
-  call eclim#util#SetLocationList(html_errors + css_errors + js_errors)
-  call eclim#display#signs#RemovePlaceholder()
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
