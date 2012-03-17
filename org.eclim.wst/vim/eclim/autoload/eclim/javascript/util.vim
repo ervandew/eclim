@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -114,7 +114,11 @@ function! eclim#javascript#util#Jsl()
 
     call eclim#display#signs#SetPlaceholder()
     call eclim#util#ClearLocationList('jsl')
-    call eclim#util#SetLocationList(errors, 'a')
+    if &ft == 'javascript'
+      call eclim#util#SetLocationList(errors)
+    else
+      call eclim#util#SetLocationList(errors, 'a')
+    endif
     call eclim#display#signs#RemovePlaceholder()
   else
     call eclim#util#ClearLocationList('jsl')
