@@ -81,6 +81,7 @@ public class FeedKeys
       // process the actual key stroke.
       display.asyncExec(new Runnable(){
         public void run(){
+          WorkbenchKeyboard keyboard = new WorkbenchKeyboard(workbench);
           for(String sequence : sequences){
             try{
               if (sequence.equals("refocus")){
@@ -99,7 +100,6 @@ public class FeedKeys
               Event event = new Event();
               event.widget = display.getActiveShell();
 
-              WorkbenchKeyboard keyboard = new WorkbenchKeyboard(workbench);
               ArrayList<KeyStroke> keyStrokes = new ArrayList<KeyStroke>();
               keyStrokes.add(keyStroke);
               keyboard.press(keyStrokes, event);
