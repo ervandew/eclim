@@ -68,8 +68,6 @@ public class VimEditorPartListener
 
   private boolean keysDisabled = false;
   private IBindingService bindingService;
-  private final BindingManager localChangeManager =
-    new BindingManager(new ContextManager(), new CommandManager());
 
   private String[] keys = {"Ctrl+N", "Ctrl+U", "Ctrl+V", "Ctrl+W"};
 
@@ -78,22 +76,8 @@ public class VimEditorPartListener
   public VimEditorPartListener()
   {
     IWorkbench workbench = PlatformUI.getWorkbench();
-    bindingService = (IBindingService)workbench.getService(IBindingService.class);
-
-    Scheme scheme = bindingService.getScheme(
-        IBindingService.DEFAULT_DEFAULT_ACTIVE_SCHEME_ID);
-    try{
-      try{
-        localChangeManager.setActiveScheme(scheme);
-      }catch(NotDefinedException nde){
-        // KeysPreferencePage ignores this error as well... hmmm
-      }
-      localChangeManager.setLocale(bindingService.getLocale());
-      localChangeManager.setPlatform(bindingService.getPlatform());
-      localChangeManager.setBindings(bindingService.getBindings());
-    }catch(Exception e){
-      logger.error("Error initializing local binding manager.", e);
-    }
+    bindingService = (IBindingService)
+      workbench.getService(IBindingService.class);
 
     keySequences = new KeySequence[keys.length];
     for (int ii = 0; ii < keys.length; ii++){
@@ -183,12 +167,36 @@ public class VimEditorPartListener
   {
   }
 
+  private BindingManager getLocalChangeManager()
+  {
+    BindingManager manager =
+      new BindingManager(new ContextManager(), new CommandManager());
+
+    Scheme scheme = bindingService.getScheme(
+        IBindingService.DEFAULT_DEFAULT_ACTIVE_SCHEME_ID);
+    try{
+      try{
+        manager.setActiveScheme(scheme);
+      }catch(NotDefinedException nde){
+        // KeysPreferencePage ignores this error as well... hmmm
+      }
+      manager.setLocale(bindingService.getLocale());
+      manager.setPlatform(bindingService.getPlatform());
+      manager.setBindings(bindingService.getBindings());
+    }catch(Exception e){
+      logger.error("Error initializing local binding manager.", e);
+    }
+
+    return manager;
+  }
+
   private void disableKeys()
   {
     if (!keysDisabled){
       logger.debug(
           "Disabling conflicting keybindings while vim editor is focused: " +
           Arrays.toString(keys));
+      BindingManager localChangeManager = getLocalChangeManager();
       for(KeySequence keySequence : keySequences){
         localChangeManager.removeBindings(
             keySequence, SCHEME_ID, CONTEXT_ID, null, null, null, Binding.USER);
@@ -197,7 +205,7 @@ public class VimEditorPartListener
               null, null, null, Binding.USER));
       }
       keysDisabled = true;
-      saveKeyChanges();
+      saveKeyChanges(localChangeManager);
     }
   }
 
@@ -205,16 +213,17 @@ public class VimEditorPartListener
   {
     if (keysDisabled){
       logger.debug("Re-enabling conflicting keybindings.");
+      BindingManager localChangeManager = getLocalChangeManager();
       for(KeySequence keySequence : keySequences){
         localChangeManager.removeBindings(
             keySequence, SCHEME_ID, CONTEXT_ID, null, null, null, Binding.USER);
       }
       keysDisabled = false;
-      saveKeyChanges();
+      saveKeyChanges(localChangeManager);
     }
   }
 
-  private void saveKeyChanges()
+  private void saveKeyChanges(BindingManager localChangeManager)
   {
     try{
       bindingService.savePreferences(
