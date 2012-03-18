@@ -18,15 +18,23 @@ History of Changes
 
 .. _1.7.3:
 
-1.7.3 (2012)
+1.7.3 (Mar. 18, 2012)
 ----------------------
+
+Bug Fixes:
+  - Lots of various bug fixes.
 
 Common:
   - Added :ref:`:ProjectBuild <:ProjectBuild>` to build the current or
     supplied project.
+  - Updated :ref:`:ProjectProblems <:ProjectProblems>` to support optional bang
+    (`:ProjectProblems!`) to only show project errors.
   - Updating eclipse's :ref:`local history <vim/common/history>` when writing
     in vim is now only enabled by default when gvim is opened from the eclipse
     gui.
+
+C/C++:
+  - Fixed project creation issue encountered on some systems.
 
 Java:
   - Added project settings for specifying default jvm args for
@@ -44,6 +52,9 @@ Maven:
   - Now when saving your pom.xml file your .classpath will be
     :ref:`auto updated <classpath-maven-pom>` with the dependencies found in
     your pom.xml.
+
+Php:
+  - Now handles completion from within php short tags.
 
 .. _1.7.2:
 
