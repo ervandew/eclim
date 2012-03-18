@@ -368,6 +368,9 @@ TODO {{{
     http://www.aptana.org/ aptana (owners of radrails)
     http://www.eclipse.org/dltk/ dltk (experimental)
 
+    https://www.ebayopensource.org/index.php/VJET/HomePage
+      - node.js support
+
     - javascript code completion
 
     - javascript doc lookup for common libraries
@@ -671,8 +674,15 @@ NOTES {{{
     $ open MacVim/build/Release/MacVim.app/
 
     JRuby nailgun source:
-    http://jruby.org/git?p=jruby.git;a=tree;f=tool/nailgun;hb=HEAD
+    https://github.com/jruby/jruby/tree/master/tool/nailgun
   }}}
+
+  Vim Patches of note {{{
+
+    - Patch 7.3.468: QuickFixCmdPre/Post now fired for cfile, lfile, etc.
+
+  }}}
+
 
 }}}
 
