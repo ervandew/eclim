@@ -427,7 +427,7 @@ target(name: 'vimdocs'){
   mkdir(dir: 'build/doc/vimdocs')
 
   // generate site documention via sphinx
-  exec(executable: 'sphinx-build', failonerror: true, dir: '.'){
+  exec(executable: 'bin/sphinx', failonerror: true, dir: '.'){
     arg(line: '${sphinx.args} -b vimdoc doc/content build/doc/vimdocs')
   }
 
