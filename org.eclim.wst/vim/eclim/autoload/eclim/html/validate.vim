@@ -60,6 +60,7 @@ function! eclim#html#validate#Validate(on_save)
   if search('<script', 'cnw')
     call eclim#javascript#util#UpdateSrcFile(a:on_save)
   endif
+  call eclim#display#signs#RemovePlaceholder()
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
