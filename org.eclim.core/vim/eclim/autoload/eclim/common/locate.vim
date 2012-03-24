@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -239,7 +239,7 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace)
   let results_bufnum = bufnr('%')
 
   let locate_in = (a:scope == 'project' ? a:project : a:scope)
-  exec 'topleft 1split ' . escape('[Locate in ' . locate_in . ']', ' ')
+  exec 'topleft 1split ' . escape('[Locate in ' . locate_in . ']', ' -')
   setlocal modifiable
   call setline(1, '> ')
   call cursor(1, col('$'))
