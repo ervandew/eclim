@@ -66,7 +66,8 @@ import com.wcohen.ss.api.StringDistance;
     "REQUIRED p pattern ARG," +
     "REQUIRED s scope ARG," +
     "OPTIONAL n project ARG," +
-    "OPTIONAL f file ARG"
+    "OPTIONAL f file ARG," +
+    "OPTIONAL i case_insensitive NOARG"
 )
 public class LocateFileCommand
   extends AbstractCommand
@@ -107,7 +108,11 @@ public class LocateFileCommand
     BufferedReader reader = null;
     try{
       reader = new BufferedReader(new FileReader(fileName));
-      Matcher matcher = Pattern.compile(pattern).matcher("");
+      int flags = 0;
+      if (commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION)){
+        flags = Pattern.CASE_INSENSITIVE;
+      }
+      Matcher matcher = Pattern.compile(pattern, flags).matcher("");
       String line = null;
       while ((line = reader.readLine()) != null){
         if (matcher.reset(line).find()){
@@ -148,7 +153,8 @@ public class LocateFileCommand
       }
     }
 
-    FileMatcher matcher = new FileMatcher(pattern);
+    FileMatcher matcher = new FileMatcher(
+        pattern, commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION));
     for (IProject resource : projects){
       resource.accept(matcher, 0);
     }
@@ -222,9 +228,13 @@ public class LocateFileCommand
      *
      * @param pattern The pattern for this instance.
      */
-    public FileMatcher (String pattern)
+    public FileMatcher (String pattern, boolean ignoreCase)
     {
-      this.matcher = Pattern.compile(pattern).matcher("");
+      int flags = 0;
+      if (ignoreCase){
+        flags = Pattern.CASE_INSENSITIVE;
+      }
+      this.matcher = Pattern.compile(pattern, flags).matcher("");
 
       Matcher baseMatcher = FIND_BASE.matcher(pattern);
       if (baseMatcher.find()){

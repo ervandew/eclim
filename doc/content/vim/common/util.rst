@@ -105,8 +105,19 @@ general purpose commands that are useful in and outside the scope of eclim.
   .. _g\:EclimLocateFileFuzzy:
 
   - **g:EclimLocateFileFuzzy** (Default: 1) -
-    Determines whether or not 'fuzzy' searching will be used on the no arugment
+    Determines whether or not 'fuzzy' searching will be used on the no argument
     version of :LocateFile.
+
+  .. _g\:EclimLocateFileCaseInsensitive:
+
+  - **g:EclimLocateFileCaseInsensitive** (Default: 'lower') -
+    Determines when case insensitive searching is performed.
+
+    - 'lower': when the search string is all lower case the search will be case
+      insensitive, but if one or more capital letters are present, then the
+      search will be case sensitive.
+    - 'always': searching will always be case insensitive.
+    - 'never': searching will never be case insensitive.
 
 .. _\:Tcd:
 

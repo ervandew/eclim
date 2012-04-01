@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@
 "
 " }}}
 
-" TestDiffLastSaved() {{{
-function! TestDiffLastSaved()
+function! TestDiffLastSaved() " {{{
   exec 'cd ' . g:TestEclimWorkspace
   edit eclim_unit_test/test_root_file.txt
   call append(1, 'some new content')
@@ -44,8 +43,7 @@ function! TestDiffLastSaved()
   bdelete!
 endfunction " }}}
 
-" TestLocateFile() {{{
-function! TestLocateFile()
+function! TestLocateFile() " {{{
   exec 'cd ' . g:TestEclimWorkspace
   edit! eclim_unit_test/test_root_file.txt
 
@@ -100,8 +98,49 @@ function! TestLocateFile()
   exec "normal \<esc>"
 endfunction " }}}
 
-" TestSwapWords() {{{
-function! TestSwapWords()
+function! TestLocateFileCaseSensitivity() " {{{
+  exec 'cd ' . g:TestEclimWorkspace
+  edit! eclim_unit_test/test_root_file.txt
+
+  let g:EclimLocateFileCaseInsensitive = 'lower'
+  LocateFile
+  call vunit#PeekRedir()
+  call vunit#AssertEquals(expand('%'), '[Locate in eclim_unit_test]')
+  call vunit#AssertEquals(bufname(b:results_bufnum), '[Locate Results]')
+  call setline(1, "> test")
+  doautocmd CursorMovedI <buffer>
+  doautocmd CursorHoldI <buffer>
+  let results = sort(getbufline(b:results_bufnum, 1, '$'))
+  call vunit#AssertTrue(len(results) >= 5)
+  call setline(1, "> Test")
+  doautocmd CursorMovedI <buffer>
+  doautocmd CursorHoldI <buffer>
+  let results = sort(getbufline(b:results_bufnum, 1, '$'))
+  call vunit#AssertEquals(len(results), 1)
+
+  let g:EclimLocateFileCaseInsensitive = 'always'
+  call setline(1, "> Test")
+  doautocmd CursorMovedI <buffer>
+  doautocmd CursorHoldI <buffer>
+  let results = sort(getbufline(b:results_bufnum, 1, '$'))
+  call vunit#AssertTrue(len(results) >= 5)
+
+  let g:EclimLocateFileCaseInsensitive = 'lower'
+  call setline(1, "> test")
+  doautocmd CursorMovedI <buffer>
+  doautocmd CursorHoldI <buffer>
+  let results_lower = sort(getbufline(b:results_bufnum, 1, '$'))
+  let g:EclimLocateFileCaseInsensitive = 'never'
+  call setline(1, "> test")
+  doautocmd CursorMovedI <buffer>
+  doautocmd CursorHoldI <buffer>
+  let results_never = sort(getbufline(b:results_bufnum, 1, '$'))
+  call vunit#AssertTrue(len(results_lower))
+  call vunit#AssertTrue(len(results_never))
+  call vunit#AssertNotEquals(len(results_lower), len(results_never))
+endfunction " }}}
+
+function! TestSwapWords() " {{{
   call setline(1, 'one, two')
   call cursor(1, 1)
   call eclim#common#util#SwapWords()
