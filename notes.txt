@@ -504,8 +504,8 @@ NOTES {{{
     2) create sourceforge release
        - update windows and linux download pages with latest file to download.
     3) update documentation website
-    4) announce on freshmeat
-       - http://freshmeat.net/projects/eclim/
+    4) announce on freecode (the site formally know as freshmeat)
+       - http://freecode.com/projects/eclim/
   }}}
 
   Eclipse Docs {{{
