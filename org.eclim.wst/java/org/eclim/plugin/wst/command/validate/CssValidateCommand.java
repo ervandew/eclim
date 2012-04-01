@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 package org.eclim.plugin.wst.command.validate;
 
 import java.util.ArrayList;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Services;
 
@@ -72,7 +74,7 @@ public class CssValidateCommand
 
     ApplContext context = new ApplContext("en");
     // possible values: css1, css2, css21, css3, svg, svgbasic, svgtiny
-    context.setCssVersion("css21");
+    context.setCssVersion("css3");
     // possible values: all, aural, braille, embossed, handheld, print,
     // projection, screen, tty, tv, presentation
     context.setMedium("all");
@@ -84,29 +86,33 @@ public class CssValidateCommand
       css.findConflicts(context);
 
       for(CssError error : css.getErrors().getErrors()){
-        errors.add(new Error(
-              error.getException().getMessage(),
-              toFile(error.getSourceFile()),
-              error.getLine(),
-              1,
-              false
-        ));
+        if (!StringUtils.EMPTY.equals(error.getException().getMessage())) {
+          errors.add(new Error(
+                error.getException().getMessage(),
+                toFile(error.getSourceFile()),
+                error.getLine(),
+                1,
+                false
+          ));
+        }
       }
 
       for(Warning warning : css.getWarnings().getWarnings()){
-        errors.add(new Error(
-              warning.getWarningMessage(),
-              toFile(warning.getSourceFile()),
-              warning.getLine(),
-              1,
-              true
-        ));
+        if (!StringUtils.EMPTY.equals(warning.getWarningMessage())) {
+          errors.add(new Error(
+                warning.getWarningMessage(),
+                toFile(warning.getSourceFile()),
+                warning.getLine(),
+                1,
+                true
+          ));
+        }
       }
     }catch(TokenMgrError tme){
       errors.add(new Error(
             tme.getMessage(),
             super.toFile(uri), // need to use the super version
-            tme.getErrorLine(),
+            1, //tme.getErrorLine(), FIXME: parse the line/col out of the message.
             1,
             false
       ));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import static org.junit.Assert.*;
 public class CssValidateCommandTest
 {
   private static final String TEST_FILE = "css/validate.css";
-  private static final String TEST_LEXICAL_FILE = "css/lexical.css";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -66,31 +65,6 @@ public class CssValidateCommandTest
     assertTrue(((String)error.get("message"))
         .indexOf("Property fnt-size doesn't exist") != -1);
     assertEquals(error.get("line"), 6);
-    assertEquals(error.get("column"), 1);
-    assertEquals(error.get("warning"), false);
-  }
-
-  @Test
-  @SuppressWarnings("unchecked")
-  public void lexical()
-  {
-    assertTrue("Project doesn't exist.",
-        Eclim.projectExists(Wst.TEST_PROJECT));
-
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
-      Eclim.execute(new String[]{
-        "css_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_LEXICAL_FILE
-      });
-
-    assertEquals("Wrong number of errors.", 1, results.size());
-
-    String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_LEXICAL_FILE);
-
-    Map<String,Object> error = results.get(0);
-    assertEquals(error.get("filename"), file);
-    assertTrue(((String)error.get("message"))
-        .indexOf("Lexical error") != -1);
-    assertEquals(error.get("line"), 3);
     assertEquals(error.get("column"), 1);
     assertEquals(error.get("warning"), false);
   }

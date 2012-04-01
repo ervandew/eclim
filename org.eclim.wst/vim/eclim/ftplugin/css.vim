@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ setlocal completefunc=eclim#css#complete#CodeComplete
 if g:EclimCssValidate
   augroup eclim_css_validate
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#lang#Validate('css', 1)
+    autocmd BufWritePost <buffer>
+      \ call eclim#lang#Validate('css', 1, 'eclim#css#validate#Filter')
   augroup END
 endif
 
@@ -50,7 +51,8 @@ endif
 " Command Declarations {{{
 
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#lang#Validate('css', 0)
+  command -nargs=0 -buffer Validate
+    \ :call eclim#lang#Validate('css', 0, 'eclim#css#validate#Filter')
 endif
 
 " }}}

@@ -240,10 +240,10 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
   endif
 endfunction " }}}
 
-" Validate(type, on_save) {{{
+" Validate(type, on_save, [filter]) {{{
 " Validates the current file. Used by languages which are not validated via
 " UpdateSrcFile (pretty much all the xml dialects and wst langs).
-function! eclim#lang#Validate(type, on_save)
+function! eclim#lang#Validate(type, on_save, ...)
   if eclim#util#WillWrittenBufferClose()
     return
   endif
@@ -263,6 +263,9 @@ function! eclim#lang#Validate(type, on_save)
   if type(result) == g:LIST_TYPE && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(
       \ result, g:EclimValidateSortResults)
+    if a:0
+      let errors = function(a:1)(errors)
+    endif
     call eclim#util#SetLocationList(errors)
   else
     call eclim#util#ClearLocationList()
