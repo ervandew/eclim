@@ -354,8 +354,5 @@ Windows:
 
     $HOME/.eclim/resources/ext
 
-For an example of utilizing the ext dir, please take a look at the
-:ref:`VimClojure <guides/clojure/vimclojure>` guide.
-
 .. _eclim user: http://groups.google.com/group/eclim-user
 .. _vimplugin: http://vimplugin.org
