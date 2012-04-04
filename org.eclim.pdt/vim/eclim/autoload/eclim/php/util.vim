@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -57,23 +57,26 @@ function! eclim#php#util#UpdateSrcFile(validate)
       return
     endif
 
-    if (g:EclimPhpValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
+    if (g:EclimPhpHtmlValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
       " html validate
       let command = s:html_validate_command
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<file>', file, '')
-      let result += eclim#ExecuteEclim(command)
-
-      if type(result) == g:LIST_TYPE && len(result) > 0
-        let errors = eclim#util#ParseLocationEntries(
-          \ result, g:EclimValidateSortResults)
-        call eclim#util#SetLocationList(errors)
-      else
-        call eclim#util#ClearLocationList()
+      let result_html = eclim#ExecuteEclim(command)
+      if type(result_html) == g:LIST_TYPE
+        let result += result_html
       endif
-
-      call eclim#project#problems#ProblemsUpdate()
     endif
+
+    if type(result) == g:LIST_TYPE && len(result) > 0
+      let errors = eclim#util#ParseLocationEntries(
+        \ result, g:EclimValidateSortResults)
+      call eclim#util#SetLocationList(errors)
+    else
+      call eclim#util#ClearLocationList()
+    endif
+
+    call eclim#project#problems#ProblemsUpdate()
   elseif a:validate
     call eclim#project#util#IsCurrentFileInProject()
   endif

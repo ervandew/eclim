@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,6 +26,10 @@
 
 if !exists("g:EclimPhpValidate")
   let g:EclimPhpValidate = 1
+endif
+
+if !exists("g:EclimPhpHtmlValidate")
+  let g:EclimPhpHtmlValidate = g:EclimPhpValidate
 endif
 
 " }}}

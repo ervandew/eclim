@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,6 +45,9 @@ Vim Variables:
 
 - **g:EclimPhpValidate** (Default: 1) -
   If set to 0, disables source code validation.
+
+- **g:EclimPhpHtmlValidate** (Default: 1) -
+  If set to 0, disables validating html markup in the php file.
 
 - **g:EclimValidateSortResults** (Default: 'occurrence') -
   If set to 'severity', the validation results will be sorted by severity
