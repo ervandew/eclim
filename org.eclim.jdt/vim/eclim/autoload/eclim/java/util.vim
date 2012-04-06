@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -333,6 +333,11 @@ function! eclim#java#util#Java(classname, args)
       let arg = substitute(arg, '^-', '\\-', '')
       let command .= ' "' . escape(arg, '"') . '"'
     endfor
+  endif
+
+  if has('win32') || has('win64') || has('win32unix')
+    " add trailing quote for windows like we do in eclim#client#nailgun#Execute
+    let command = command . ' "'
   endif
 
   let results = split(eclim#util#Exec(command, 1), "\n")
