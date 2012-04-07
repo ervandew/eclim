@@ -17,8 +17,11 @@
 package org.eclim.plugin.jdt.command.src;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import java.lang.reflect.Method;
 
 import java.util.ArrayList;
 
@@ -32,6 +35,7 @@ import org.apache.tools.ant.taskdefs.ExecuteStreamHandler;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.taskdefs.PumpStreamHandler;
 import org.apache.tools.ant.taskdefs.Redirector;
+import org.apache.tools.ant.taskdefs.StreamPumper;
 
 import org.apache.tools.ant.types.Commandline.Argument;
 
@@ -342,7 +346,26 @@ public class JavaCommand
     public MyPumpStreamHandler()
     {
       super(new FlushingOutputStream(
-            getContext().out), getContext().err, getContext().in);
+            getContext().out), getContext().err, getContext().in, true);
+    }
+
+    protected Thread createPump(
+        InputStream is, OutputStream os,
+        boolean closeWhenExhausted, boolean nonBlockingIO)
+    {
+      Thread pump = super.createPump(is, os, closeWhenExhausted, nonBlockingIO);
+      try{
+        Method getPumper = pump.getClass().getDeclaredMethod("getPumper");
+        getPumper.setAccessible(true);
+        StreamPumper pumper = (StreamPumper)getPumper.invoke(pump);
+        Method setAutoflush = pumper.getClass()
+          .getDeclaredMethod("setAutoflush", Boolean.TYPE);
+        setAutoflush.setAccessible(true);
+        setAutoflush.invoke(pumper, Boolean.TRUE);
+      }catch(Exception e){
+        throw new RuntimeException(e);
+      }
+      return pump;
     }
   }
 
