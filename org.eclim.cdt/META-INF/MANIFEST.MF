@@ -9,7 +9,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclim.plugin.cdt.CdtPlugin
 Bundle-ClassPath: .,
   eclim.cdt.jar
-Require-Bundle: org.eclim,
+Require-Bundle: org.apache.ant,
+  org.eclim,
   org.eclim.core,
   org.eclipse.cdt.core,
   org.eclipse.cdt.managedbuilder.core,

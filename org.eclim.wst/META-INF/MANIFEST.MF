@@ -12,7 +12,8 @@ Bundle-ClassPath: .,
   ${eclim.lib.jars}
 Export-Package: org.eclim.plugin.wst.command.complete,
   org.eclim.plugin.wst.command.validate
-Require-Bundle: org.eclim,
+Require-Bundle: org.apache.ant,
+  org.eclim,
   org.eclim.core,
   org.eclipse.core.resources,
   org.eclipse.core.runtime,

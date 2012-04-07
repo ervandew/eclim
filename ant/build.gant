@@ -87,6 +87,7 @@ target(name: 'init'){
       include(name: 'startup.jar')
       include(name: 'dropins/**/plugins/org.eclipse.*.jar')
       include(name: 'plugins/org.eclipse.*.jar')
+      include(name: 'plugins/org.apache.ant_*/lib/ant.jar')
       include(name: 'plugins/com.ibm.*.jar')
     }
     dirset(dir: '${eclipse}'){
