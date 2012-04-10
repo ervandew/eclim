@@ -23,6 +23,12 @@
 "
 " }}}
 
+" Global Variables {{{
+  if !exists('g:EclimUseTempFiles')
+    let g:EclimUseTempFiles = 0
+  endif
+" }}}
+
 " Script Variables {{{
   let s:update_command = '-command <lang>_src_update -p "<project>" -f "<file>"'
   let s:validate_command = '-command <type>_validate -p "<project>" -f "<file>"'
@@ -282,7 +288,7 @@ function! eclim#lang#SilentUpdate(...)
   let file = eclim#project#util#GetProjectRelativeFilePath()
   if file != ''
     try
-      if a:0 && a:1
+      if a:0 && a:1 && g:EclimUseTempFiles
         " don't create temp files if no server is available to clean them up.
         let project = eclim#project#util#GetCurrentProjectName()
         let workspace = eclim#project#util#GetProjectWorkspace(project)
