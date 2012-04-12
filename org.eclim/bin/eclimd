@@ -123,7 +123,12 @@ if [ "$1" = "-f" ] ; then
   while getopts ":f:" opt ; do
     case "$opt" in
       f)
-        ECLIMRC="$OPTARG"
+        if [ -f "$OPTARG" ] ; then
+          ECLIMRC="$OPTARG"
+        else
+          echo "file not found: $OPTARG"
+          exit 1
+        fi
         shift
         shift
         break
