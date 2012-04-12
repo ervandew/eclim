@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -42,7 +42,8 @@
 " Handles code completion.
 function! eclim#c#complete#CodeComplete(findstart, base)
   return eclim#lang#CodeComplete(
-    \ s:complete_command, a:findstart, a:base, {'layout': g:EclimCCompleteLayout})
+    \ s:complete_command, a:findstart, a:base,
+    \ {'temp': 0, 'layout': g:EclimCCompleteLayout})
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -66,37 +66,5 @@ To find out more about Vim's insert completion execute
 
 from within Vim.
 
-Using temp files for code completion
-------------------------------------
-
-By default, when performing code completion, eclim must first save the file to
-disk so that when requesting code completion proposals from eclipse, eclipse
-can pull the current contents from the file system. The downside to this is
-that it alters vim's save state of the file.
-
-Take the scenario where you perform the following steps:
-  #. Open an existing file (vim shows that the file is unmodified)
-  #. Type some code (vim show that the file is modified)
-  #. Perform code completion.
-  #. Undo all changes.
-
-At this point vim will show the file as modified because since eclim had to save
-the file at step 3.
-
-While not much an issue this behavior can be a bit annoying for some users, so
-eclim provides optional support for saving the file contents to a temp file and
-having eclipse provide completion proposals using that file, alleviating the
-need to save your actual file to disk. To enable this simply add the following to your vimrc:
-
-.. code-block:: vim
-
-  let g:EclimUseTempFiles = 1
-
-Please note that this feature is considered beta (I haven't run into any
-problems with it, but at least one user wouldn't always get results on c++
-completion), so if you encounter problems consider disable this and reporting
-the problem to the eclim-user_ mailing list.
-
 .. _supertab: http://www.vim.org/scripts/script.php?script_id=1643
 .. _autocomplpop: http://www.vim.org/scripts/script.php?script_id=1879
-.. _eclim-user: http://groups.google.com/group/eclim-user
