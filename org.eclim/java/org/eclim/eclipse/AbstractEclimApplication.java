@@ -79,13 +79,20 @@ import com.martiansoftware.nailgun.NGServer;
 public abstract class AbstractEclimApplication
   implements IApplication, FrameworkListener
 {
+  private static String workspace = ResourcesPlugin
+      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
+  static{
+    // set on class load so that the logger can log to:
+    // ${eclimd.workspace}/eclimd.log
+    System.setProperty("eclimd.workspace", workspace);
+  }
+
   private static final Logger logger =
     Logger.getLogger(AbstractEclimApplication.class);
 
   private static final String CORE = "org.eclim.core";
   private static AbstractEclimApplication instance;
 
-  private String workspace;
   private NGServer server;
   private boolean starting;
   private boolean stopping;
@@ -98,8 +105,6 @@ public abstract class AbstractEclimApplication
   public Object start(IApplicationContext context)
     throws Exception
   {
-    workspace = ResourcesPlugin
-      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
     logger.info("Workspace: " + workspace);
 
     starting = true;
