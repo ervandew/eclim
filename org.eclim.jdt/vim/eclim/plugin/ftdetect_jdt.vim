@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ autocmd BufRead struts-config.xml
   \ call EclimSetXmlFileType({'struts-config': 'strutsconfig'})
 autocmd BufRead *.tld
   \ call EclimSetXmlFileType({'taglib': 'tld'})
-autocmd BufRead web.xml
+autocmd BufRead *web.xml
   \ call EclimSetXmlFileType({'web-app': 'webxml'})
 autocmd BufRead *.wsdl
   \ call EclimSetXmlFileType({'definitions': 'wsdl', 'wsdl:definitions': 'wsdl'})
