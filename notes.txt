@@ -12,6 +12,18 @@ HIGH {{{
       etc. (suggest default insert keybinding to get this essentially while typing)
       - open a scratch window for displaying these
 
+    - cache remote xsd/dtd, prevent validating remove xsd/dtd
+      Example of xml file (save in file test.xml to prevent being recognized as
+      a webxml file) that fetches and validate the remote xsd:
+        <?xml version="1.0" encoding="UTF-8"?>
+        <web-app xmlns="http://java.sun.com/xml/ns/javaee"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+                 version="2.5">
+            <display-name>Project</display-name>
+        </web-app>
+
   Tasks:
     - Breakout more vim plugins:
       - buffers  (common/buffers.vim)
@@ -163,6 +175,11 @@ TODO {{{
 
     - make file validation
     - make code completion
+  }}}
+
+  Clojure {{{
+    counterclockwise: http://code.google.com/p/counterclockwise/
+      Support send to repl.
   }}}
 
   Css {{{
@@ -682,7 +699,6 @@ NOTES {{{
     - Patch 7.3.468: QuickFixCmdPre/Post now fired for cfile, lfile, etc.
 
   }}}
-
 
 }}}
 
