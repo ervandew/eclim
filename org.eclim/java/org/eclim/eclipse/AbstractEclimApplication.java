@@ -84,6 +84,7 @@ public abstract class AbstractEclimApplication
   static{
     // set on class load so that the logger can log to:
     // ${eclimd.workspace}/eclimd.log
+    // Note: also set in VimPlugin
     System.setProperty("eclimd.workspace", workspace);
   }
 
