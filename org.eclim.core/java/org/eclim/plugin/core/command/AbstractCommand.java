@@ -116,18 +116,23 @@ public abstract class AbstractCommand
         if (projectName == null){
           // some commands use -n for the project name (like all the search commands)
           projectName = commandLine.getValue(Options.NAME_OPTION);
+          project = ProjectUtils.getProject(projectName);
         }else{
           // some commands use -n for the project name but also have a -p option
           // (like the search commands when searching by pattern)
-          project = ProjectUtils.getProject(projectName);
-          if (!project.exists()){
-            project = null;
-            projectName = commandLine.getValue(Options.NAME_OPTION);
+          try{
+            project = ProjectUtils.getProject(projectName);
+            if (!project.exists()){
+              project = null;
+            }
+          }catch(IllegalArgumentException iae){
+            // ignore error if the -p option isn't a valid project name
           }
-        }
 
-        if (project == null && projectName != null){
-          project = ProjectUtils.getProject(projectName);
+          if (project == null){
+            projectName = commandLine.getValue(Options.NAME_OPTION);
+            project = ProjectUtils.getProject(projectName);
+          }
         }
 
         String file = commandLine.getValue(Options.FILE_OPTION);
