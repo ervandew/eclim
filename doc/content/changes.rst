@@ -16,6 +16,21 @@
 History of Changes
 ==================
 
+.. _1.7.4:
+
+1.7.4 (Apr. 22, 2012)
+----------------------
+
+Bug Fixes:
+  - Fixed possible NPE saving eclim settings.
+  - Several other small bug fixes.
+
+C/C++:
+  - Fixed code completion by disabling the use of temp files.
+
+Java:
+  - Fixed :Java on windows as well as handling of stdin for ant 1.8.2+.
+
 .. _1.7.3:
 
 1.7.3 (Mar. 18, 2012)
