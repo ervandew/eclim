@@ -27,6 +27,10 @@ if !exists("g:EclimShowQuickfixSigns")
   let g:EclimShowQuickfixSigns = 1
 endif
 
+if !exists("g:EclimShowLoclistSigns")
+  let g:EclimShowLoclistSigns = 1
+endif
+
 if !exists("g:EclimQuickfixSignText")
   let g:EclimQuickfixSignText = '> '
 endif
@@ -276,7 +280,8 @@ function! eclim#display#signs#Update()
 
   let qflist = filter(g:EclimShowQuickfixSigns ? getqflist() : [],
     \ 'bufnr("%") == v:val.bufnr')
-  let loclist = filter(getloclist(0), 'bufnr("%") == v:val.bufnr')
+  let loclist = filter(g:EclimShowLoclistSigns ? getloclist(0) : [],
+    \ 'bufnr("%") == v:val.bufnr')
 
   for [list, marker, prefix] in [
       \ [qflist, g:EclimQuickfixSignText, 'qf_'],
