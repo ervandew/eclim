@@ -54,7 +54,11 @@ import com.google.gson.Gson;
  *
  * @author Eric Van Dewoestine
  */
-@Command(name = "javac", options = "REQUIRED p project ARG")
+@Command(
+  name = "javac",
+  options = "REQUIRED p project ARG," +
+            "OPTIONAL d debug NOARG"
+)
 public class JavacCommand
   extends AbstractCommand
 {
@@ -66,12 +70,13 @@ public class JavacCommand
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    boolean debug = commandLine.hasOption(Options.DEBUG_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
 
     Project antProject = new Project();
     BuildLogger buildLogger = new DefaultLogger();
-    buildLogger.setMessageOutputLevel(Project.MSG_INFO);
+    buildLogger.setMessageOutputLevel(debug ? Project.MSG_DEBUG : Project.MSG_INFO);
     buildLogger.setOutputPrintStream(getContext().out);
     buildLogger.setErrorPrintStream(getContext().err);
     antProject.addBuildListener(buildLogger);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,8 @@ import org.eclipse.jdt.core.IJavaProject;
   name = "javadoc",
   options =
     "REQUIRED p project ARG," +
-    "OPTIONAL f file ARG"
+    "OPTIONAL f file ARG," +
+    "OPTIONAL d debug NOARG"
 )
 public class JavadocCommand
   extends AbstractCommand
@@ -68,6 +69,7 @@ public class JavadocCommand
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String files = commandLine.getValue(Options.FILE_OPTION);
+    boolean debug = commandLine.hasOption(Options.DEBUG_OPTION);
     IProject project = ProjectUtils.getProject(projectName);
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
 
@@ -77,7 +79,7 @@ public class JavadocCommand
 
     Project antProject = new Project();
     BuildLogger buildLogger = new DefaultLogger();
-    buildLogger.setMessageOutputLevel(Project.MSG_INFO);
+    buildLogger.setMessageOutputLevel(debug ? Project.MSG_DEBUG : Project.MSG_INFO);
     buildLogger.setOutputPrintStream(getContext().out);
     buildLogger.setErrorPrintStream(getContext().err);
     antProject.addBuildListener(buildLogger);
