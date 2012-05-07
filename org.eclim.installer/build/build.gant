@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ target(name: 'installer.feature'){
   }
 
   copy(todir: '${build.installer}/eclipse/update-site'){
-    fileset(dir: 'update-site', includes: '**/*')
+    fileset(dir: 'org.eclim.installer/build/resources/update-sites/installer', includes: '**/*')
   }
   replace(dir: '${build.installer}/eclipse/update-site', includes: '*.xml'){
     replacefilter(token: '$${eclim.version}', value: '${eclim.version}')

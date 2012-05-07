@@ -15,8 +15,6 @@
 
   <plugin
       id="org.eclim.installer"
-      download-size="0"
-      install-size="0"
       version="${eclim.version}"
       unpack="false"/>
 
