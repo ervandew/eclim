@@ -30,8 +30,6 @@ import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -57,14 +55,6 @@ import org.vimplugin.preferences.PreferenceConstants;
 public class VimPlugin
   extends AbstractUIPlugin
 {
-  private static String workspace = ResourcesPlugin
-      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
-  static{
-    // set on class load so that the logger can log to:
-    // ${eclimd.workspace}/eclimd.log
-    System.setProperty("eclimd.workspace", workspace);
-  }
-
   private static final Logger logger = Logger.getLogger(VimPlugin.class);
 
   private static final String GVIM_FEATURE_TEST =

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package org.eclim.logging;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+
 /**
  * Facade over the logger used by eclim.
  *
@@ -23,6 +25,14 @@ package org.eclim.logging;
  */
 public class Logger
 {
+  private static String workspace = ResourcesPlugin
+      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
+  static{
+    // set on class load so that the logger can log to:
+    // ${eclimd.workspace}/eclimd.log
+    System.setProperty("eclimd.workspace", workspace);
+  }
+
   private org.slf4j.Logger logger;
 
   private Logger (org.slf4j.Logger logger)
