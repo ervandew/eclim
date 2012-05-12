@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,13 +35,13 @@ endif
 
 " Script Varables {{{
 let s:using = 'http://ant.apache.org/manual/using.html#<element>s'
-let s:conditions = 'http://ant.apache.org/manual/CoreTasks/conditions.html'
-let s:mappers = 'http://ant.apache.org/manual/CoreTypes/mapper.html'
+let s:conditions = 'http://ant.apache.org/manual/Tasks/conditions.html#<element>'
+let s:mappers = 'http://ant.apache.org/manual/Types/mapper.html'
 let s:paths = 'http://ant.apache.org/manual/using.html#path'
 let s:types =
-  \ 'http://ant.apache.org/manual/CoreTypes/<element>.html'
+  \ 'http://ant.apache.org/manual/Types/<element>.html'
 let s:selectors =
-  \ 'http://ant.apache.org/manual/CoreTypes/selectors.html#<element>select'
+  \ 'http://ant.apache.org/manual/Types/selectors.html#<element>select'
 let s:contrib_1 =
   \ 'http://ant-contrib.sourceforge.net/tasks/tasks/<element>.html'
 let s:contrib_2 =
