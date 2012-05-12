@@ -60,13 +60,16 @@ import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 
-import org.eclipse.core.runtime.IPath;
-
+import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageDeclaration;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -245,13 +248,21 @@ public class JavaCommand
   private String findMainClass(IJavaProject javaProject)
     throws Exception
   {
-    final String projectPath = ProjectUtils.getPath(javaProject.getProject());
+    ArrayList<IJavaElement> srcs = new ArrayList<IJavaElement>();
+    for(IClasspathEntry entry : javaProject.getResolvedClasspath(true)){
+      if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
+        for(IPackageFragmentRoot root : javaProject.findPackageFragmentRoots(entry)){
+          srcs.add(root);
+        }
+      }
+    }
+
     final ArrayList<IMethod> methods = new ArrayList<IMethod>();
     int context = IJavaSearchConstants.DECLARATIONS;
     int type = IJavaSearchConstants.METHOD;
     int matchType = SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE;
-    IJavaSearchScope scope =
-      SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
+    IJavaSearchScope scope = SearchEngine.createJavaSearchScope(
+        srcs.toArray(new IJavaElement[srcs.size()]));
     SearchPattern pattern =
       SearchPattern.createPattern("main(String[])", type, context, matchType);
     SearchRequestor requestor = new SearchRequestor(){
@@ -260,46 +271,43 @@ public class JavaCommand
           return;
         }
 
-        IPath location = match.getResource().getLocation();
-        if (location == null){
-          return;
-        }
+        try{
+          IMethod method = (IMethod)match.getElement();
+          String[] params = method.getParameterTypes();
+          if (params.length != 1){
+            return;
+          }
 
-        String path = location.toOSString().replace('\\', '/');
-        if (!path.toLowerCase().startsWith(projectPath.toLowerCase())){
-          return;
-        }
+          if (!Signature.SIG_VOID.equals(method.getReturnType())){
+            return;
+          }
 
-        IJavaElement element = (IJavaElement)match.getElement();
-        if (element.getElementType() != IJavaElement.METHOD){
-          return;
-        }
+          int flags = method.getFlags();
+          if (!Flags.isPublic(flags) || !Flags.isStatic(flags)){
+            return;
+          }
 
-        IMethod method = (IMethod)element;
-        String[] params = method.getParameterTypes();
-        if (params.length != 1){
-          return;
+          methods.add(method);
+        }catch(JavaModelException e){
+          // ignore
         }
-        methods.add(method);
       }
     };
 
-    if(pattern != null){
-      SearchEngine engine = new SearchEngine();
-      SearchParticipant[] participants =
-        new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
-      engine.search(pattern, participants, scope, requestor, null);
+    SearchEngine engine = new SearchEngine();
+    SearchParticipant[] participants =
+      new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
+    engine.search(pattern, participants, scope, requestor, null);
 
-      // if we found only 1 result, we can use it.
-      if (methods.size() == 1){
-        IMethod method = methods.get(0);
-        ICompilationUnit cu = method.getCompilationUnit();
-        IPackageDeclaration[] packages = cu.getPackageDeclarations();
-        if (packages != null && packages.length > 0){
-          return packages[0].getElementName() + "." + cu.getElementName();
-        }
-        return cu.getElementName();
+    // if we found only 1 result, we can use it.
+    if (methods.size() == 1){
+      IMethod method = methods.get(0);
+      ICompilationUnit cu = method.getCompilationUnit();
+      IPackageDeclaration[] packages = cu.getPackageDeclarations();
+      if (packages != null && packages.length > 0){
+        return packages[0].getElementName() + "." + cu.getElementName();
       }
+      return cu.getElementName();
     }
     return null;
   }
