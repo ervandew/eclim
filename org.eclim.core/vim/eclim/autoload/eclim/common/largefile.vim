@@ -24,37 +24,35 @@
 
 " Script Settings {{{
 let s:file_size = g:EclimLargeFileSize * 1024 * 1024
-let s:events = [
-    \ 'BufRead', 'BufWinEnter', 'BufWinLeave',
-    \ 'CursorHold',
-    \ 'FileType',
-  \ ]
+let s:events = ['BufRead', 'CursorHold', 'FileType']
 " }}}
 
 function! eclim#common#largefile#InitSettings() " {{{
   let file = expand("<afile>")
   let size = getfsize(file)
   if size >= s:file_size || size == -2
-    let b:save_events = &eventignore
-    let b:save_undo = &undolevels
-    let &eventignore=join(s:events, ',')
-    setlocal noswapfile nowrap bufhidden=unload
-    autocmd eclim_largefile BufEnter <buffer> call <SID>ApplySettings()
-    autocmd eclim_largefile BufLeave <buffer> call <SID>RevertSettings()
+    if !exists('b:save_events')
+      let b:save_events = &eventignore
+      call s:ApplySettings()
+      setlocal noswapfile nowrap bufhidden=unload
+      autocmd eclim_largefile BufEnter,BufWinEnter <buffer> call <SID>ApplySettings()
+      autocmd eclim_largefile BufLeave,BufWinLeave <buffer> call <SID>RevertSettings()
+    endif
   endif
 endfunction " }}}
 
 function! s:ApplySettings() " {{{
-  set undolevels=-1
+  let &eventignore=join(s:events, ',')
   if !exists('b:largefile_notified')
     let b:largefile_notified = 1
-    call eclim#util#Echo('Note: Large file settings applied.')"
+    call eclim#util#Echo('Note: Large file settings applied.')
   endif
 endfunction " }}}
 
 function! s:RevertSettings() " {{{
-  let &undolevels=b:save_undo
-  let &eventignore=b:save_events
+  if exists('b:save_events')
+    let &eventignore=b:save_events
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
