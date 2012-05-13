@@ -19,71 +19,64 @@ ant.defaultexcludes(add: '**/*.bak')
 
 target(name: 'installer.feature'){
   property(name: 'plugin', value: 'org.eclim.installer_${eclim.version}')
+  property(name: 'update-site',
+    value: 'org.eclim.installer/build/resources/update-sites/installer')
+  property(name: 'build.install-site',
+    value: '${build.installer}/eclipse/update-site')
 
-  plugin = binding.getVariable('plugin')
-  buildDir = binding.getVariable('build.installer')
-
-  mkdir(dir: "${buildDir}/eclipse/features")
-  mkdir(dir: "${buildDir}/eclipse/plugins")
-  copy(todir: "${buildDir}/eclipse/features/${plugin}"){
-    fileset(dir: "org.eclim.installer.feature", includes: '**/*')
+  mkdir(dir: '${build.installer}/eclipse/features')
+  mkdir(dir: '${build.installer}/eclipse/plugins')
+  copy(todir: '${build.install-site}'){
+    fileset(dir: '${update-site}', includes: '**/*'){
+      exclude(name: 'features/**/*')
+      exclude(name: 'plugins/**/*')
+    }
   }
-  copy(todir: "${buildDir}/eclipse/plugins/${plugin}"){
-    fileset(dir: "org.eclim.installer",
+  copy(todir: '${build.install-site}/features/${plugin}'){
+    fileset(dir: '${update-site}/features/org.eclim.installer.feature', includes: '**/*')
+  }
+  copy(todir: '${build.install-site}/plugins/${plugin}'){
+    fileset(dir: 'org.eclim.installer',
       includes: '**/*', excludes: 'build/**,java/**')
   }
-  replace(dir: "${buildDir}/eclipse"){
-    fileset(dir: '.'){
-      include(name: '*/org.eclim.installer*/*.xml')
-      include(name: '*/org.eclim.installer*/META-INF/MANIFEST.MF')
-    }
+  replace(dir: '${build.install-site}',
+      includes: '**/*.xml,**/META-INF/MANIFEST.MF'){
     replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
+    replacefilter(token: '$${timestamp}', value: System.currentTimeMillis())
   }
 
-  jar(jarfile: '${build.installer}/eclipse/plugins/${plugin}/eclim.installer.jar'){
+  jar(jarfile: '${build.install-site}/plugins/${plugin}/eclim.installer.jar'){
     fileset(dir: '${build.installer}/formic/classes',
         includes: '**/installer/eclipse/*.class')
   }
 
   // feature jar
-  mkdir(dir: "${buildDir}/eclipse/update-site/features")
-  zip(destfile: '${build.installer}/eclipse/update-site/features/${plugin}.jar'){
-    fileset(dir: '${build.installer}/eclipse/features/${plugin}', includes: '**/*')
+  mkdir(dir: '${build.install-site}/features')
+  zip(destfile: '${build.install-site}/features/${plugin}.jar'){
+    fileset(dir: '${build.install-site}/features/${plugin}', includes: '**/*')
   }
+  delete(dir: '${build.install-site}/features/${plugin}')
 
   // plugin jar
-  mkdir(dir: "${buildDir}/eclipse/update-site/plugins")
-  zip(destfile: '${build.installer}/eclipse/update-site/plugins/${plugin}.jar'){
-    fileset(dir: '${build.installer}/eclipse/plugins/${plugin}', includes: '**/*')
+  mkdir(dir: '${build.install-site}/plugins')
+  zip(destfile: '${build.install-site}/plugins/${plugin}.jar'){
+    fileset(dir: '${build.install-site}/plugins/${plugin}', includes: '**/*')
   }
-
-  copy(todir: '${build.installer}/eclipse/update-site'){
-    fileset(dir: 'org.eclim.installer/build/resources/update-sites/installer', includes: '**/*')
-  }
-  replace(dir: '${build.installer}/eclipse/update-site', includes: '*.xml'){
-    replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
-    replacefilter(token: '$${timestamp}', value: System.currentTimeMillis())
-  }
+  delete(dir: '${build.install-site}/plugins/${plugin}')
 
   // artifacts.jar
-  replace(file: '${build.installer}/eclipse/update-site/artifacts.xml'){
-    replacefilter(token: '$${eclim.installer.feature.size}',
-        value: new File("${buildDir}/eclipse/update-site/features/${plugin}.jar").length())
-    replacefilter(token: '$${eclim.installer.plugin.size}',
-        value: new File("${buildDir}/eclipse/update-site/plugins/${plugin}.jar").length())
+  zip(destfile: '${build.install-site}/artifacts.jar'){
+    fileset(dir: '${build.install-site}', includes: 'artifacts.xml')
   }
-  zip(destfile: '${build.installer}/eclipse/update-site/artifacts.jar'){
-    fileset(dir: '${build.installer}/eclipse/update-site', includes: 'artifacts.xml')
-  }
-  delete(file: '${build.installer}/eclipse/update-site/artifacts.xml')
+  delete(file: '${build.install-site}/artifacts.xml')
 
   // content.jar
-  zip(destfile: '${build.installer}/eclipse/update-site/content.jar'){
-    fileset(dir: '${build.installer}/eclipse/update-site', includes: 'content.xml')
+  zip(destfile: '${build.install-site}/content.jar'){
+    fileset(dir: '${build.install-site}', includes: 'content.xml')
   }
-  delete(file: '${build.installer}/eclipse/update-site/content.xml')
+  delete(file: '${build.install-site}/content.xml')
 
-  zip(destfile: '${build.installer}/installer-site.zip'){
-    fileset(dir: '${build.installer}/eclipse/update-site', includes: '**/*')
+  zip(destfile: '${build.installer}/installer-update-site.zip'){
+    fileset(dir: '${build.install-site}', includes: '**/*')
   }
 }

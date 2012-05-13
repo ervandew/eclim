@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,20 +26,20 @@ import org.formic.Installer;
  *
  * @author Eric Van Dewoestine
  */
-public class InstallSet
+public class FeatureSet
   extends PatternSet
 {
-  public InstallSet()
+  public FeatureSet()
   {
     super();
 
     // standard includes
-    createInclude().setName("org.eclim/**/*");
-    createInclude().setName("org.eclim_*/**/*");
-    createInclude().setName("org.eclim.core/**/*");
-    createInclude().setName("org.eclim.core_*/**/*");
-    createInclude().setName("org.eclim.vimplugin/**/*");
-    createInclude().setName("org.eclim.vimplugin_*/**/*");
+    createInclude().setName("**/org.eclim/**/*");
+    createInclude().setName("**/org.eclim_*/**/*");
+    createInclude().setName("**/org.eclim.core/**/*");
+    createInclude().setName("**/org.eclim.core_*/**/*");
+    createInclude().setName("**/org.eclim.vimplugin/**/*");
+    createInclude().setName("**/org.eclim.vimplugin_*/**/*");
 
     // feature based includes
     InstallContext context = Installer.getContext();
@@ -48,7 +48,7 @@ public class InstallSet
       String key = keys[ii];
       Boolean value = Boolean.valueOf(context.getValue(key).toString());
       if(value.booleanValue()){
-        String name = "org.eclim." + key.substring(key.indexOf('.') + 1);
+        String name = "**/org.eclim." + key.substring(key.indexOf('.') + 1);
         createInclude().setName(name + "/**/*");
         createInclude().setName(name + "_*/**/*");
       }

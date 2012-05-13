@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?metadataRepository version="1.1.0"?>
+#set($d = '$')
+<repository name="${d}{p2.metadata.repo.name}"
+    type="org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository"
+    version="1">
+  <units>
+    <!-- feature group -->
+    <unit
+        id="org.eclim.feature.group"
+        version="${eclim.version}"
+        singleton="false">
+      <update
+          id="org.eclim.feature.group"
+          range="[0.0.0,${eclim.version})"
+          severity="0"/>
+      <properties>
+        <property name="org.eclipse.equinox.p2.name" value="Eclim Plugin"/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides>
+        <provided
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.feature.group"
+            version="${eclim.version}"/>
+      </provides>
+      <requires>
+        <required
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.feature.jar"
+            range="${eclim.version}">
+          <filter>(org.eclipse.update.install.features=true)</filter>
+        </required>
+        <required
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim"
+            range="${eclim.version}"/>
+        <required
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.core"
+            range="${eclim.version}"/>
+        <required
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.vimplugin"
+            range="${eclim.version}"/>
+#foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
+  #if($installer.context.getValue("${feature}"))
+    #set($name = $feature.replace("featureList.", ""))
+
+        <required
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.$name"
+            range="${eclim.version}"/>
+  #end
+#end
+      </requires>
+      <licenses>
+        <license url="http://www.gnu.org/licenses/gpl-3.0-standalone.html">GPLv3</license>
+      </licenses>
+    </unit>
+
+    <!-- feature jar -->
+    <unit id="org.eclim.feature.jar" version="${eclim.version}">
+      <properties>
+        <property name="org.eclipse.equinox.p2.name" value="Eclim"/>
+      </properties>
+      <provides>
+        <provided
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.feature.jar"
+            version="${eclim.version}"/>
+        <provided
+            namespace="org.eclipse.equinox.p2.eclipse.type"
+            name="feature"
+            version="1.0.0"/>
+        <provided
+            namespace="org.eclipse.update.feature"
+            name="org.eclim"
+            version="${eclim.version}"/>
+      </provides>
+      <filter>(org.eclipse.update.install.features=true)</filter>
+      <artifacts>
+        <artifact
+            classifier="org.eclipse.update.feature"
+            id="org.eclim"
+            version="${eclim.version}"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData>
+        <instructions>
+          <instruction key="zipped">true</instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+
+    <!-- plugins -->
+    <unit id="org.eclim" version="${eclim.version}">
+      <update id="org.eclim" range="[0.0.0,${eclim.version})" severity="0"/>
+      <properties>
+        <property name="org.eclipse.equinox.p2.name" value="Eclim Plugin"/>
+      </properties>
+      <provides>
+        <provided
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim"
+            version="${eclim.version}"/>
+        <provided
+            namespace="osgi.bundle"
+            name="org.eclim"
+            version="${eclim.version}"/>
+        <provided
+            namespace="org.eclipse.equinox.p2.eclipse.type"
+            name="bundle"
+            version="1.0.0"/>
+      </provides>
+      <artifacts>
+        <artifact
+            classifier="osgi.bundle"
+            id="org.eclim"
+            version="${eclim.version}"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData>
+        <instructions>
+          <instruction key="zipped">true</instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+
+    <unit id="org.eclim.core" version="${eclim.version}">
+      <update id="org.eclim.core" range="[0.0.0,${eclim.version})" severity="0"/>
+      <properties>
+        <property name="org.eclipse.equinox.p2.name" value="Eclim Core Plugin"/>
+      </properties>
+      <provides>
+        <provided
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.core"
+            version="${eclim.version}"/>
+        <provided
+            namespace="osgi.bundle"
+            name="org.eclim.core"
+            version="${eclim.version}"/>
+        <provided
+            namespace="org.eclipse.equinox.p2.eclipse.type"
+            name="bundle"
+            version="1.0.0"/>
+      </provides>
+      <requires>
+        <required namespace="osgi.bundle" name="org.eclim" range="${eclim.version}"/>
+      </requires>
+      <artifacts>
+        <artifact
+            classifier="osgi.bundle"
+            id="org.eclim.core"
+            version="${eclim.version}"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+    </unit>
+
+    <unit id="org.eclim.vimplugin" version="${eclim.version}">
+      <update id="org.eclim.vimplugin" range="[0.0.0,${eclim.version})" severity="0"/>
+      <properties>
+        <property name="org.eclipse.equinox.p2.name" value="Eclim Embedded Vim Plugin"/>
+      </properties>
+      <provides>
+        <provided
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.vimplugin"
+            version="${eclim.version}"/>
+        <provided
+            namespace="osgi.bundle"
+            name="org.eclim.vimplugin"
+            version="${eclim.version}"/>
+        <provided
+            namespace="org.eclipse.equinox.p2.eclipse.type"
+            name="bundle"
+            version="1.0.0"/>
+      </provides>
+      <requires>
+        <required namespace="osgi.bundle" name="org.eclim" range="${eclim.version}"/>
+        <required namespace="osgi.bundle" name="org.eclim.core" range="${eclim.version}"/>
+      </requires>
+      <artifacts>
+        <artifact
+            classifier="osgi.bundle"
+            id="org.eclim.vimplugin"
+            version="${eclim.version}"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData>
+        <instructions>
+          <instruction key="zipped">true</instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+#foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
+  #if($installer.context.getValue("${feature}"))
+    #set($name = $feature.replace("featureList.", ""))
+
+    <unit id="org.eclim.$name" version="${eclim.version}">
+      <update id="org.eclim.$name" range="[0.0.0,${eclim.version})" severity="0"/>
+      <properties>
+        <property name="org.eclipse.equinox.p2.name" value="Eclim $name Plugin"/>
+      </properties>
+      <provides>
+        <provided
+            namespace="org.eclipse.equinox.p2.iu"
+            name="org.eclim.$name"
+            version="${eclim.version}"/>
+        <provided
+            namespace="osgi.bundle"
+            name="org.eclim.$name"
+            version="${eclim.version}"/>
+        <provided
+            namespace="org.eclipse.equinox.p2.eclipse.type"
+            name="bundle"
+            version="1.0.0"/>
+      </provides>
+      <requires>
+        <required namespace="osgi.bundle" name="org.eclim" range="${eclim.version}"/>
+        <required namespace="osgi.bundle" name="org.eclim.core" range="${eclim.version}"/>
+      </requires>
+      <artifacts>
+        <artifact
+            classifier="osgi.bundle"
+            id="org.eclim.$name"
+            version="${eclim.version}"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+    </unit>
+  #end
+#end
+
+  </units>
+</repository>

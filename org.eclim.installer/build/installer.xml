@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2011  Eric Van Dewoestine
+  Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
   <formic:property resource="/build.properties"/>
 
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+  <taskdef classname="net.sf.antcontrib.logic.ForTask" name="for"/>
 
   <!--
     - Standard target to install the app.
@@ -37,8 +38,9 @@
       <formic:path name="main">
         <formic:step name="welcome"/>
         <formic:step name="license"/>
-        <formic:step name="eclipse"/>
         <formic:step name="vim"/>
+        <formic:step name="eclipse"/>
+        <formic:step name="eclipseInfo"/>
         <formic:step name="requirements">
           <property name="provider"
               value="org.eclim.installer.step.RequirementProvider"/>
@@ -77,11 +79,13 @@
           eclipse.home:  ${eclipse.home}
           vim.files:     ${vim.files}
 
-          You may omit vim.files if you set vim.skip=false, resulting in the
+          You may omit vim.files if you set vim.skip=true, resulting in the
           vim files being excluded from the install.
         </fail>
       </then>
     </if>
+
+    <eclim:unattended/>
   </target>
 
   <!--
@@ -92,58 +96,103 @@
   <target name="install" depends="validate">
     <!-- default value of eclipse.local to that of eclipse.home -->
     <property name="eclipse.local" value="${eclipse.home}"/>
-
-    <if>
-      <os family="windows"/>
-      <then>
-        <property name="eclim.plugins" value="${eclipse.home}/plugins"/>
-      </then>
-      <else>
-        <property name="eclim.plugins" value="${eclipse.local}/plugins"/>
-      </else>
-    </if>
-
+    <property name="eclim.features" value="${eclipse.local}/features"/>
+    <property name="eclim.plugins" value="${eclipse.local}/plugins"/>
     <property name="eclim.home"
         value="${eclim.plugins}/org.eclim_${eclim.version}"/>
 
-    <!-- shutdown any running instance of eclimd -->
+    <formic:tempdir property="temp"/>
     <eclim:shutdown/>
 
-    <mkdir dir="${eclim.plugins}"/>
-
-    <!-- remove old files -->
     <antcall target="clean"/>
+    <antcall target="install.eclipse"/>
+    <antcall target="install.vim"/>
+    <antcall target="cleanup"/>
+    <property name="eclim.cleanup.finished" value="true"/>
+  </target>
 
-    <!-- install eclipse plugins -->
-    <eclim:install resource="/files/eclipse-plugins.zip" dest="${eclim.plugins}">
-      <eclim:installset/>
-    </eclim:install>
+  <!--
+    - Prepares the dynamic eclim update-site.
+    -->
+  <target name="update-site">
+    <mkdir dir="${temp}/update-site/plugins"/>
+    <mkdir dir="${temp}/update-site/features"/>
+    <eclim:unzip resource="/files/eclim-update-site.zip" dest="${temp}/update-site">
+      <eclim:featureset/>
+      <patternset includes="*.xml"/>
+    </eclim:unzip>
+
+    <formic:template
+        template="${temp}/update-site/artifacts.xml"
+        out="${temp}/update-site/artifacts.xml"/>
+    <formic:template
+        template="${temp}/update-site/content.xml"
+        out="${temp}/update-site/content.xml"/>
+    <formic:template
+        template="${temp}/update-site/features/org.eclim_${eclim.version}/feature.xml"
+        out="${temp}/update-site/features/org.eclim_${eclim.version}/feature.xml"/>
+    <path id="artifacts">
+      <fileset dir="${temp}/update-site" includes="artifacts.xml,content.xml"/>
+      <dirset dir="${temp}/update-site" includes="features/*,plugins/*"/>
+    </path>
+    <property name="artifacts" refid="artifacts"/>
+    <for param="artifact" list="${artifacts}" delimiter="${path.separator}">
+      <sequential>
+        <propertyregex
+            property="artifact" override="true" input="@{artifact}"
+            regexp="\\" replace="/" defaultValue="@{artifact}"/>
+        <propertyregex
+            property="artifact" override="true" input="${artifact}"
+            regexp=".*/update-site/" replace=""/>
+        <propertyregex
+            property="artifact.name" override="true" input="${artifact}"
+            regexp="\.xml" replace="" defaultValue="${artifact}"/>
+        <jar destfile="${temp}/update-site/${artifact.name}.jar" filesonly="true"
+            filesetmanifest="merge">
+          <fileset dir="${temp}/update-site" includes="${artifact}"/>
+          <fileset dir="${temp}/update-site/${artifact.name}" includes="**/*"
+            erroronmissingdir="false"/>
+        </jar>
+        <delete file="@{artifact}" quiet="true"/>
+        <delete dir="@{artifact}" quiet="true"/>
+      </sequential>
+    </for>
+  </target>
+
+  <!--
+    - Installs the eclipse plugins
+    -->
+  <target name="install.eclipse">
+    <antcall target="update-site"/>
+
+    <eclim:installiu repository="file://${temp}/update-site" iu="org.eclim"/>
+
     <replace
-        file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd.desktop"
+        file="${eclim.home}/bin/native/linux/eclimd.desktop"
         token="$${eclipse.home}" value="${eclipse.local}"/>
     <replace
-        file="${eclim.plugins}/org.eclim_${eclim.version}/bin/native/linux/eclimd"
+        file="${eclim.home}/bin/native/linux/eclimd"
         token="$${eclipse.home}" value="${eclipse.local}"/>
     <if>
       <os family="windows"/>
       <then>
         <move todir="${eclipse.home}">
-          <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin"
+          <fileset dir="${eclim.home}/bin"
               includes="eclim.bat,eclim.cmd,eclimd.bat,eclimd.cmd,ng.exe"/>
         </move>
       </then>
       <else>
-        <replace file="${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd"
+        <replace file="${eclim.home}/bin/eclimd"
             token="#$${eclipse.home}"
             value="ECLIM_ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
 
         <chmod perm="755">
-          <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/bin">
+          <fileset dir="${eclim.home}/bin">
             <include name="eclim"/>
             <include name="eclimd"/>
             <include name="native/**/*"/>
           </fileset>
-          <fileset dir="${eclim.plugins}/org.eclim_${eclim.version}/nailgun">
+          <fileset dir="${eclim.home}/nailgun">
             <include name="configure"/>
           </fileset>
         </chmod>
@@ -170,7 +219,7 @@
     </if>
 
     <replace
-        file="${eclim.plugins}/org.eclim_${eclim.version}/plugin.properties"
+        file="${eclim.home}/plugin.properties"
         token="$${vim.files}" value="${vim.files}"/>
 
     <!-- determine if current os supports emebedding gvim. -->
@@ -188,16 +237,20 @@
       <replacefilter token="$${eclim.gvim}" value="${eclim.gvim}"/>
       <replacefilter token="$${eclim.gvim.embed}" value="${eclim.gvim.embed}"/>
     </replace>
+  </target>
 
-    <!-- install vim plugins -->
+  <!--
+    - Installs the vim plugins
+    -->
+  <target name="install.vim">
     <if>
       <not> <istrue value="${vim.skip}"/> </not>
       <then>
-        <eclim:install resource="/files/vim-plugins.zip" dest="${vim.files}">
-          <eclim:installset/>
+        <eclim:unzip resource="/files/vim-plugins.zip" dest="${vim.files}">
+          <eclim:featureset/>
           <patternset includes="eclim/**/*"/>
           <cutdirsmapper dirs="1"/>
-        </eclim:install>
+        </eclim:unzip>
 
         <replace file="${vim.files}/eclim/plugin/eclim.vim">
           <replacefilter token="&quot;$${vim.eclim.home}&quot;"
@@ -215,17 +268,29 @@
       </then>
       <else><echo message="Skipping install of vimfiles"/></else>
     </if>
-
-    <antcall target="cleanup"/>
   </target>
 
   <!--
     - Task to remove old eclim files.
     -->
   <target name="clean">
+    <!-- if the eclim feature exists, uninstall using p2 -->
+    <if>
+      <eclim:isinstalled feature="org.eclim"/>
+      <then>
+        <eclim:uninstalliu iu="org.eclim"/>
+      </then>
+    </if>
+
     <!-- remove eclipse plugins -->
     <delete includeemptydirs="true">
+      <fileset dir="${eclim.features}"
+          includes="org.eclim*.jar" excludes="org.eclim.installer*.jar"/>
+      <fileset dir="${eclim.plugins}"
+          includes="org.eclim*.jar" excludes="org.eclim.installer*.jar"/>
+      <fileset dir="${eclim.features}" includes="org.eclim*/**/*"/>
       <fileset dir="${eclim.plugins}" includes="org.eclim*/**/*"/>
+      <dirset dir="${eclim.features}" includes="org.eclim*"/>
       <dirset dir="${eclim.plugins}" includes="org.eclim*"/>
     </delete>
     <!-- remove from old user local location -->
@@ -274,10 +339,20 @@
     -->
   <target name="cleanup">
     <if>
-      <isset property="eclim.feature.installed"/>
+      <and>
+        <isset property="eclim.installer.feature.installed"/>
+        <not> <isset property="eclim.cleanup.finished"/> </not>
+      </and>
       <then>
-        <echo>Please wait while the eclim installer feature is removed from eclipse...</echo>
-        <eclim:cleanup/>
+        <echo>
+##
+# Please wait while the eclim installer feature is removed from eclipse...
+##
+        </echo>
+        <eclim:uninstalliu
+            repository="${eclim.installer.feature.location}"
+            iu="org.eclim.installer"
+            failonerror="false"/>
       </then>
     </if>
   </target>

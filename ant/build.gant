@@ -312,9 +312,20 @@ target(name: 'dist'){
     }
   }
 
-  // eclipse plugin archives
-  zip(destfile: '${build.installer}/eclipse-plugins.zip'){
-    fileset(dir: '${build.plugins}/'){
+  copy(todir: '${build.update-site}'){
+    fileset(dir: 'org.eclim.installer/build/resources/update-sites/eclim')
+    filtermapper{
+      replacestring(from: 'org.eclim', to: 'org.eclim_${eclim.version}')
+    }
+  }
+  replace(dir: '${build.update-site}', includes: '**/*.xml'){
+    replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
+  }
+
+  // eclipse site archive
+  zip(destfile: '${build.installer}/eclim-update-site.zip'){
+    fileset(dir: '${build.update-site}', includes: '**/*')
+    zipfileset(prefix: 'plugins', dir: '${build.plugins}'){
       include(name: 'org.eclim_${eclim.version}/**/*')
       include(name: 'org.eclim.*_${eclim.version}/**/*')
       exclude(name: 'org.eclim.installer*_${eclim.version}/**/*')
@@ -653,7 +664,7 @@ def pluginInclude(name){
 def initPlugins(){
   names = []
   features = []
-  exclude = ['org.eclim.feature', 'org.eclim.installer']
+  exclude = ['org.eclim.installer']
   defaults = ['org.eclim', 'org.eclim.core', 'org.eclim.vimplugin']
   defaults.each{ name -> pluginInclude(name)}
 
@@ -747,7 +758,7 @@ def plugin(name){
   }
 
   ant.replace(dir: pluginPath,
-      includes: 'bin/**/*,about.html,plugin.properties,META-INF/MANIFEST.MF'){
+      includes: 'bin/**/*,about.html,plugin.*,META-INF/*'){
     ant.replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
   }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.installer.step.command;
+package org.eclim.installer.step;
 
-/**
- * Command to list installed features.
- *
- * @author Eric Van Dewoestine
- */
-public class ListCommand
-  extends Command
+import java.io.File;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Feature
 {
-  public ListCommand(OutputHandler handler)
-    throws Exception
+  public static final Pattern VERSION =
+    Pattern.compile("^(\\d+\\.\\d+\\.\\d+)(\\..*)?");
+
+  private String version;
+  private File site;
+
+  public Feature(String version, File site)
   {
-    super(handler, new String[]{"-list"});
+    this.site = site;
+
+    Matcher matcher = VERSION.matcher(version);
+    matcher.find();
+    this.version = matcher.group(1);
+  }
+
+  public String getVersion()
+  {
+    return version;
+  }
+
+  public File getSite()
+  {
+    return this.site;
   }
 }

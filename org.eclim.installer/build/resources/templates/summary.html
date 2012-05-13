@@ -7,16 +7,6 @@
         <td nowrap="nowrap"><b>Eclipse Home:</b></td>
         <td>$installer.context.getValue("eclipse.home")</td>
       </tr>
-      #if(!$os.isFamily("windows"))
-        #set($home = $installer.context.getValue("eclipse.home"))
-        #set($local = $installer.context.getValue("eclipse.local"))
-        #if($home != $local)
-      <tr>
-        <td nowrap="nowrap"><b>Eclipse Local:</b></td>
-        <td>$installer.context.getValue("eclipse.local")</td>
-      </tr>
-        #end
-      #end
       #if(!$installer.context.getValue("vim.skip"))
       <tr>
         <td nowrap="nowrap"><b>Vimfiles Dir:</b></td>

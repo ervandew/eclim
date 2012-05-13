@@ -3,8 +3,12 @@
  Author: Eric Van Dewoestine
 -->
 <antlib xmlns:current="ant:current">
-  <taskdef name="cleanup" classname="org.eclim.installer.ant.CleanupTask"/>
+  <taskdef name="installiu" classname="org.eclim.installer.ant.InstallIUTask"/>
+  <taskdef name="uninstalliu" classname="org.eclim.installer.ant.UninstallIUTask"/>
   <taskdef name="shutdown" classname="org.eclim.installer.ant.ShutdownTask"/>
-  <typedef name="install" classname="org.eclim.installer.ant.InstallTask"/>
-  <typedef name="installset" classname="org.eclim.installer.ant.InstallSet"/>
+  <taskdef name="unzip" classname="org.eclim.installer.ant.UnzipTask"/>
+  <taskdef name="unattended" classname="org.eclim.installer.ant.UnattendedInstallTask"/>
+
+  <typedef name="featureset" classname="org.eclim.installer.ant.FeatureSet"/>
+  <typedef name="isinstalled" classname="org.eclim.installer.ant.IsInstalled"/>
 </antlib>

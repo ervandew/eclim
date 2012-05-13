@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -142,22 +142,14 @@ daemon will depend on how you intend to use eclim.
   More info on running the eclim daemon can be found in the :ref:`eclimd
   <eclimd>` docs.
 
-If you plan on using eclim along with the eclipse gui, then:
-
-- start eclipse with the -clean option
-
-  ::
-
-    $ eclipse -clean
-
-  .. note::
-
-    You should only need to start eclipse with the -clean option the first time
-    after installing or upgrading eclim.
-
-- open the eclimd view
+If you plan on using eclim along with the eclipse gui, then simply start
+eclipse and open the eclimd view:
 
   Window -> Show View -> Other -> Eclim -> eclimd
+
+By default the eclimd view will also be auto opened when you open a file using:
+
+  Open With -> Vim
 
 If you plan on using eclim without the eclipse gui, then:
 
@@ -244,65 +236,37 @@ Unattended (automated) install
 ------------------------------
 
 As of eclim 1.5.6 the eclim installer supports the ability to run an automated
-install without launching the installer gui.
-
-.. warning::
-
-  When using this method no validation is performed to ensure that you have the
-  required third party eclipse plugin dependencies necessary for the eclim
-  features you've chosen to install.  It is the responsibility of the user, or
-  the script which launches the installer, to validate the dependencies prior
-  to installation.  This installation method is primarily provided for those
-  wishing to package eclim for inclusion in a package management system.
-
-Here is an example of installing eclim with only java and ant support using
-this method:
+install without launching the installer gui.  Simply run the installer as shown
+below, supplying the location of your vim files and your eclipse install via
+system properties:
 
 .. code-block:: bash
 
-  $ java
-    -Declipse.home=/opt/eclipse \
+  $ java \
     -Dvim.files=$HOME/.vim \
-    -DfeatureList.ant=true \
-    -DfeatureList.jdt=true \
-    -jar eclim_<version>.jar install \
+    -Declipse.home=/opt/eclipse \
+    -jar eclim_<version>.jar install
 
-As you can see by the example, the values normally obtained from the user by
-the graphical installer are supplied using java system properties.  This method
-of installation has only two required properties that must be set and various
-optional properties to enable features, etc.
+Please note that when using this install method, the installer will only
+install eclim features whose third party dependecies are already present in
+your eclipse installation.  So before installing eclim, you must make sure that
+you've already installed the necessary dependencies (for a full list of
+dependencies, you can reference eclim's `installer dependencies`_ file).
 
-**Required:**
+On exception to this is eclim's python plugin which currently does not rely
+on any eclipse features, so to enable the installation of that plugin, just add
+`-DfeatureList.python=true` to the install command above.
 
-* **eclipse.home** - The absolute path to the eclipse installation.
-* **vim.files** - The absolute path to the vim files directory.
+**Required Properties:**
 
-**Optional:**
-
-* **eclipse.local** - When installing for a single user, some eclipse
-  installations have a user local location where eclipse plugins are
-  installed.  This property can be set to that location.
-* **eclim.gvim** - The location of the gvim executable to be set as the default for
-  embedding gvim inside of eclipse.
-
-**Optional Feature Properties:** All of the following properties must have the
-value 'true' to enable the feature.  All other values, or no value at all will
-result in the exclusion of that feature.  Also, some features require that
-other features be enabled, as noted below:
-
-* **featureList.ant** (requires jdt)
-* **featureList.cdt**
-* **featureList.dltk**
-* **featureList.dltkruby** (requires dltk)
-* **featureList.jdt**
-* **featureList.maven**
-* **featureList.pdt** (requires wst and dltk)
-* **featureList.python**
-* **featureList.wst**
-
+* **eclipse.home** - The absolute path to your eclipse installation.
+* **vim.files** (or **vim.skip=true**) - The absolute path to your vim files
+  directory. Or if you want to omit the installation of the vim files
+  (emacs-eclim users for example) you can supply `-Dvim.skip=true` instead.
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
 .. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim_<version>.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
 .. _eclim user: http://groups.google.com/group/eclim-user
+.. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml

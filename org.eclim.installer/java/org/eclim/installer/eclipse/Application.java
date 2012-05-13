@@ -91,12 +91,16 @@ public class Application
   // instead of returning EXIT_ERROR on error, throw an exception instead.
   public Object run(String[] args)
   {
-    if ("-list".equals(args[0])){
+    if ("-info".equals(args[0])){
+      System.out.println("  Profile: " +
+          System.getProperty("eclipse.p2.profile"));
+      System.out.println("  Configuration: " +
+          System.getProperty("osgi.configuration.area"));
       IBundleGroupProvider[] providers = Platform.getBundleGroupProviders();
-      for(int ii = 0; ii < providers.length; ii++){
-        IBundleGroup[] groups = providers[ii].getBundleGroups();
-        for(int jj = 0; jj < groups.length; jj++){
-          FeatureEntry feature = (FeatureEntry)groups[jj];
+      for(IBundleGroupProvider provider : providers){
+        IBundleGroup[] groups = provider.getBundleGroups();
+        for(IBundleGroup group : groups){
+          FeatureEntry feature = (FeatureEntry)group;
           System.out.println("  Feature: " +
               feature.getIdentifier() + ' ' +
               feature.getVersion() + ' ' +

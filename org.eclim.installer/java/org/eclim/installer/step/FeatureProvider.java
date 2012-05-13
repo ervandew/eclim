@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.io.File;
-import java.io.FilenameFilter;
-
-import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.formic.Installer;
 
@@ -40,9 +37,6 @@ public class FeatureProvider
   public static final String[] FEATURES =
     {"jdt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python"};
 
-  private static final boolean[] FEATURES_ENABLED =
-    {true, false, false, false, false, false, false};
-
   private static final String[][] FEATURES_DEPENDS =
     {null, null, null, null, {"dltk"}, {"dltk", "wst"}, null};
 
@@ -52,38 +46,20 @@ public class FeatureProvider
    */
   public Feature[] getFeatures()
   {
-    boolean pluginsEnabled = false;
+    EclipseInfo info = (EclipseInfo)
+      Installer.getContext().getValue("eclipse.info");
+
     boolean[] enabled = new boolean[FEATURES.length];
     for (int ii = 0; ii < FEATURES.length; ii++){
-      String path = Installer.getProject().replaceProperties(
-          Os.isFamily(Os.FAMILY_WINDOWS) ?
-          "${eclipse.home}/plugins/" : "${eclipse.local}/plugins/");
-
-      final String pluginPath = "org.eclim." + FEATURES[ii] + "_";
-      String[] list = new File(path).list(new FilenameFilter(){
-        public boolean accept(File file, String name) {
-          return name.startsWith(pluginPath);
-        }
-      });
-
       enabled[ii] = false;
-      if (list != null && list.length > 0){
-        enabled[ii] = true;
-      }else if (FEATURES[ii].equals("python")){
-        path = Installer.getProject()
+
+      if (FEATURES[ii].equals("python")){
+        String path = Installer.getProject()
           .replaceProperties("${vim.files}/eclim/ftplugin/python");
-
-        if(new File(path).exists()){
-          enabled[ii] = true;
-        }
-      }
-      pluginsEnabled = enabled[ii] || pluginsEnabled;
-    }
-
-    // if no plugins were found, enable the defaults
-    if (!pluginsEnabled){
-      for (int ii = 0; ii < FEATURES.length; ii++){
-        enabled[ii] = FEATURES_ENABLED[ii];
+        enabled[ii] = new File(path).exists();
+        continue;
+      }else{
+        enabled[ii] = info.getUninstalledDependencies(FEATURES[ii]).size() == 0;
       }
     }
 

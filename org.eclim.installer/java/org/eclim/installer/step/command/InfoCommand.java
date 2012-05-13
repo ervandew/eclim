@@ -17,30 +17,16 @@
 package org.eclim.installer.step.command;
 
 /**
- * Command to uninstall a feature.
+ * Command to list installed features.
  *
  * @author Eric Van Dewoestine
  */
-public class UninstallCommand
+public class InfoCommand
   extends Command
 {
-  public UninstallCommand(OutputHandler handler, String url, String id)
+  public InfoCommand(OutputHandler handler)
     throws Exception
   {
-    this(handler, url, id, "org.eclim.installer.application");
-  }
-
-  public UninstallCommand(
-      OutputHandler handler, String url, String id, String application)
-    throws Exception
-  {
-    super(handler,
-        url != null ?
-          new String[]{
-            "-repository", url,
-            "-uninstallIU", id + ".feature.group"} :
-          new String[]{
-            "-uninstallIU", id + ".feature.group"},
-        application);
+    super(handler, new String[]{"-info"});
   }
 }

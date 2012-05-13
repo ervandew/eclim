@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,11 +32,11 @@ import org.formic.Installer;
 import org.formic.util.CommandExecutor;
 
 /**
- * Abstract class encapsulating logic to execute an eclipse feature command.
+ * Class encapsulating logic to execute an eclipse application command.
  *
  * @author Eric Van Dewoestine
  */
-public abstract class Command
+public class Command
   extends CommandExecutor
 {
   private static final String[] LAUNCHER = new String[]{
