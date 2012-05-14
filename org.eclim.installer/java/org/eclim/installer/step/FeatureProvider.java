@@ -55,7 +55,7 @@ public class FeatureProvider
 
       if (FEATURES[ii].equals("python")){
         String path = Installer.getProject()
-          .replaceProperties("${vim.files}/eclim/ftplugin/python");
+          .replaceProperties("${vim.files}/eclim/autoload/eclim/python");
         enabled[ii] = new File(path).exists();
         continue;
       }else{

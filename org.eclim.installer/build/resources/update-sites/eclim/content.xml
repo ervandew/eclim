@@ -46,11 +46,13 @@
 #foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
   #if($installer.context.getValue("${feature}"))
     #set($name = $feature.replace("featureList.", ""))
+    #if($name != 'python')
 
         <required
             namespace="org.eclipse.equinox.p2.iu"
             name="org.eclim.$name"
             range="${eclim.version}"/>
+    #end
   #end
 #end
       </requires>
@@ -197,6 +199,7 @@
 #foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
   #if($installer.context.getValue("${feature}"))
     #set($name = $feature.replace("featureList.", ""))
+    #if($name != 'python')
 
     <unit id="org.eclim.$name" version="${eclim.version}">
       <update id="org.eclim.$name" range="[0.0.0,${eclim.version})" severity="0"/>
@@ -229,6 +232,7 @@
       </artifacts>
       <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
     </unit>
+    #end
   #end
 #end
 

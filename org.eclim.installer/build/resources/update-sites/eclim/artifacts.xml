@@ -23,8 +23,10 @@
 #foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
   #if($installer.context.getValue("${feature}"))
     #set($name = $feature.replace("featureList.", ""))
+    #if($name != 'python')
 
     <artifact classifier="osgi.bundle" id="org.eclim.$name" version="${eclim.version}"/>
+    #end
   #end
 #end
 

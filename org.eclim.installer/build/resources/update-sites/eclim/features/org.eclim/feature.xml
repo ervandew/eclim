@@ -35,11 +35,13 @@
 #foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
   #if($installer.context.getValue("${feature}"))
     #set($name = $feature.replace("featureList.", ""))
+    #if($name != 'python')
 
   <plugin
       id="org.eclim.$name"
       version="${eclim.version}"
       unpack="false"/>
+    #end
   #end
 #end
 

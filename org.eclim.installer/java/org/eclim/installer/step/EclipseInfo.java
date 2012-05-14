@@ -131,7 +131,11 @@ public class EclipseInfo
 
   public List<Dependency> getDependencies(String plugin)
   {
-    return dependencies.get(plugin);
+    List<Dependency> deps = dependencies.get(plugin);
+    if (deps == null){
+      return new ArrayList<Dependency>();
+    }
+    return deps;
   }
 
   public List<Dependency> getUninstalledDependencies(String plugin)
