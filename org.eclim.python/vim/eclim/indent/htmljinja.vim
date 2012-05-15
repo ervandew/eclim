@@ -43,6 +43,8 @@ for element in g:HtmlJinjaBodyElements
     endif
     let g:HtmlJinjaIndentMidElements .= tag
   endfor
+
+  exec 'setlocal indentkeys+==end' . element[0]
 endfor
 
 " HtmlJinjaIndentAnythingSettings() {{{

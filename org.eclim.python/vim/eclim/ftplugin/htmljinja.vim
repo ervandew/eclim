@@ -40,12 +40,9 @@ endif
 " Options {{{
 
 if exists('b:jinja_line_statement_prefix')
-  " the }\<bs> is a gross hack to force reindenting of auto added closing line
-  " block statement since otherwise auto indent isn't evaluated after
-  " inserting it.
   let b:endwise_addition =
     \ '\=getline(line(".") - 1)=~"^\\s*' . b:jinja_line_statement_prefix . '" ? '.
-    \ '"' . b:jinja_line_statement_prefix . ' end" . submatch(0) . "}\<bs>" : ' .
+    \ '"' . b:jinja_line_statement_prefix . ' end" . submatch(0) : ' .
     \ '"{% end" . submatch(0) . " %}"'
 else
   let b:endwise_addition = '{% end& %}'
