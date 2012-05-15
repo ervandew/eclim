@@ -52,10 +52,10 @@ function! eclim#python#search#Find(context)
 
   if !empty(results)
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-
+    let locs = getloclist(0)
     " if only one result and it's for the current file, just jump to it.
     " note: on windows the expand result must be escaped
-    if len(results) == 1 && results[0] =~ escape(expand('%:p'), '\') . '|'
+    if len(results) == 1 && locs[0].bufnr == bufnr('%')
       if results[0] !~ '|1 col 1|'
         lfirst
       endif
