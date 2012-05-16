@@ -866,7 +866,7 @@ function! eclim#project#util#GetProjects()
     for workspace in workspaces
       let results = eclim#ExecuteEclim(
         \ s:command_projects, eclim#client#nailgun#GetNgPort(workspace))
-      if type(results) != 3
+      if type(results) != g:LIST_TYPE
         continue
       endif
       for project in results

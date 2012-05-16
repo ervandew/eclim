@@ -80,7 +80,7 @@ function! eclim#java#ant#complete#CodeComplete(findstart, base)
 
     let completions = []
     let results = eclim#ExecuteEclim(command)
-    if type(results) != 3
+    if type(results) != g:LIST_TYPE
       return
     endif
 
@@ -127,7 +127,7 @@ function! eclim#java#ant#complete#CommandCompleteTarget(argLead, cmdLine, cursor
     let command = substitute(command, '<file>', file, '')
 
     let targets = eclim#ExecuteEclim(command)
-    if type(targets) != 3
+    if type(targets) != g:LIST_TYPE
       return []
     endif
 

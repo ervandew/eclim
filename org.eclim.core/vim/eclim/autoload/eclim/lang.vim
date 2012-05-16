@@ -74,7 +74,7 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
 
     let completions = []
     let results = eclim#ExecuteEclim(command)
-    if type(results) != 3
+    if type(results) != g:LIST_TYPE
       return
     endif
 
@@ -171,7 +171,7 @@ function! eclim#lang#Search(command, singleResultAction, argline)
 
   let port = eclim#client#nailgun#GetNgPort(workspace)
   let results =  eclim#ExecuteEclim(search_cmd, port)
-  if type(results) != 3
+  if type(results) != g:LIST_TYPE
     return
   endif
 

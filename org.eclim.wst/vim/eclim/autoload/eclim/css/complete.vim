@@ -63,7 +63,7 @@ function! eclim#css#complete#CodeComplete(findstart, base)
 
     let completions = []
     let results = eclim#ExecuteEclim(command)
-    if type(results) != 3
+    if type(results) != g:LIST_TYPE
       return
     endif
 

@@ -48,7 +48,7 @@ function! eclim#java#hierarchy#Hierarchy()
   let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
   let result = eclim#ExecuteEclim(command)
-  if type(result) != 4
+  if type(result) != g:DICT_TYPE
     return
   endif
 

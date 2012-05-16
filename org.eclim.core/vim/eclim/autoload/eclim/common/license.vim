@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -71,12 +71,12 @@ function! eclim#common#license#License(pre, post, mid)
   call map(contents, "substitute(v:val, '${year}', s:year, 'g')")
 
   let author = eclim#project#util#GetProjectSetting('org.eclim.user.name')
-  if type(author) != 0 && author != ''
+  if type(author) == g:STRING_TYPE && author != ''
     call map(contents, "substitute(v:val, '${author}', author, 'g')")
   endif
 
   let email = eclim#project#util#GetProjectSetting('org.eclim.user.email')
-  if type(email) != 0 && email != ''
+  if type(email) == g:STRING_TYPE && email != ''
     call map(contents, "substitute(v:val, '${email}', email, 'g')")
   endif
   call map(contents, "substitute(v:val, '\\s\\+$', '', '')")

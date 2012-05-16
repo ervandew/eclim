@@ -295,7 +295,7 @@ function! eclim#java#search#SearchAndDisplay(type, args)
   endif
 
   let results = s:Search(a:type, argline)
-  if type(results) != 3
+  if type(results) != g:LIST_TYPE
     return
   endif
   if !empty(results)
