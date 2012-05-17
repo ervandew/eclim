@@ -19,6 +19,7 @@ package org.eclim.installer.ant;
 import java.util.HashMap;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.MagicNames;
 import org.apache.tools.ant.Task;
 
 import org.eclim.installer.step.EclipseInfo;
@@ -41,8 +42,14 @@ public class UnattendedInstallTask
   public void execute()
     throws BuildException
   {
+    boolean uninstall = false;
+
     if (Installer.getProject() == null){
       Installer.setProject(getProject());
+      String targets = getProject().getProperty(MagicNames.PROJECT_INVOKED_TARGETS);
+      uninstall = "uninstall".equals(targets);
+    }else{
+      uninstall = Installer.isUninstall();
     }
 
     EclipseInfo info = (EclipseInfo)
@@ -60,28 +67,30 @@ public class UnattendedInstallTask
         throw new BuildException(e);
       }
 
-      // determine features to enable
-      FeatureProvider provider = new FeatureProvider();
-      Feature[] features = provider.getFeatures();
-      HashMap<String,Feature> featureMap = new HashMap<String,Feature>();
-      for(Feature feature : features){
-        featureMap.put(feature.getKey(), feature);
-      }
-
-      log("Eclim features to be installed:");
-      for(Feature feature : features){
-        boolean enabled = feature.isEnabled();
-        if ("python".equals(feature.getKey())){
-          enabled = "true".equals(Installer.getContext().getValue("featureList.python"));
+      if (!uninstall){
+        // determine features to enable
+        FeatureProvider provider = new FeatureProvider();
+        Feature[] features = provider.getFeatures();
+        HashMap<String,Feature> featureMap = new HashMap<String,Feature>();
+        for(Feature feature : features){
+          featureMap.put(feature.getKey(), feature);
         }
 
-        if (enabled){
-          enabled = dependenciesEnabled(feature, featureMap);
-        }
+        log("Eclim features to be installed:");
+        for(Feature feature : features){
+          boolean enabled = feature.isEnabled();
+          if ("python".equals(feature.getKey())){
+            enabled = "true".equals(Installer.getContext().getValue("featureList.python"));
+          }
 
-        Installer.getContext().setValue("featureList." + feature.getKey(), enabled);
-        if (enabled){
-          log("  " + feature.getKey());
+          if (enabled){
+            enabled = dependenciesEnabled(feature, featureMap);
+          }
+
+          Installer.getContext().setValue("featureList." + feature.getKey(), enabled);
+          if (enabled){
+            log("  " + feature.getKey());
+          }
         }
       }
     }

@@ -223,20 +223,34 @@ public class VimStep
         if (runtimePath != null){
           for (String path : runtimePath){
             if (new File(path).canWrite()){
-              filtered.add(path);
+              if (Installer.isUninstall()){
+                File eclimDir = new File(path + "/eclim");
+                if (eclimDir.exists()){
+                  if (eclimDir.canWrite()){
+                    filtered.add(path);
+                  }else{
+                    logger.warn(
+                        path + "/eclim is not writable by the current user");
+                  }
+                }
+              }else{
+                filtered.add(path);
+              }
             }
           }
         }
         String[] rtp = filtered.toArray(new String[filtered.size()]);
 
         if(rtp == null || rtp.length == 0){
-          if(!homeVimCreatePrompted){
-            createUserVimFiles("No suitable vim files directory found.");
-          }else{
-            GuiDialogs.showWarning(
-                "Your vim install is still reporting no\n" +
-                "suitable vim files directories.\n" +
-                "You will need to manually specify one.");
+          if(!Installer.isUninstall()){
+            if(!homeVimCreatePrompted){
+              createUserVimFiles("No suitable vim files directory found.");
+            }else{
+              GuiDialogs.showWarning(
+                  "Your vim install is still reporting no\n" +
+                  "suitable vim files directories.\n" +
+                  "You will need to manually specify one.");
+            }
           }
         }else{
           if(rtp.length == 1){

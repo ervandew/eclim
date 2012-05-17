@@ -48,17 +48,18 @@ public class IsInstalled
       }
       EclipseInfo info = (EclipseInfo)
         Installer.getContext().getValue("eclipse.info");
-      if (info.hasFeature(feature)){
+      if (info != null && info.hasFeature(feature)){
         return true;
       }
 
       Project project = Installer.getProject();
-      return new File(project.replaceProperties("${eclipse.local}/features"))
+      String[] names = new File(project.replaceProperties("${eclipse.local}/features"))
         .list(new FilenameFilter(){
           public boolean accept(File dir, String name){
             return name.startsWith(feature + "_");
           }
-        }).length > 0;
+        });
+      return names != null && names.length > 0;
   }
 
   public void setFeature(String feature)

@@ -58,6 +58,37 @@
   </target>
 
   <!--
+    - Standard target to uninstall the app.
+    - Note: Must be named "uninstaller".
+    -->
+  <target name="uninstaller">
+    <formic:installer property="uninstall.complete"
+        resources="resources.uninstall" steps="resources.steps">
+      <formic:path name="main">
+        <formic:step name="welcome"/>
+        <formic:step name="vim"/>
+        <formic:step name="eclipse"/>
+        <formic:step name="eclipseInfo"/>
+        <formic:step name="summary"/>
+        <formic:step name="uninstall"/>
+        <formic:step name="finished"/>
+      </formic:path>
+    </formic:installer>
+  </target>
+
+  <!--
+    - Initialize properties from the wizard / command line.
+    -->
+  <target name="init">
+    <!-- default value of eclipse.local to that of eclipse.home -->
+    <property name="eclipse.local" value="${eclipse.home}"/>
+    <property name="eclim.features" value="${eclipse.local}/features"/>
+    <property name="eclim.plugins" value="${eclipse.local}/plugins"/>
+    <property name="eclim.home"
+        value="${eclim.plugins}/org.eclim_${eclim.version}"/>
+  </target>
+
+  <!--
     - Simple validation mostly intended as a sanity check for unattended
     - installs.
     -->
@@ -93,20 +124,24 @@
     - defined task after gathering info from the user via the wizard.
     - Note: Must be named "install".
     -->
-  <target name="install" depends="validate">
-    <!-- default value of eclipse.local to that of eclipse.home -->
-    <property name="eclipse.local" value="${eclipse.home}"/>
-    <property name="eclim.features" value="${eclipse.local}/features"/>
-    <property name="eclim.plugins" value="${eclipse.local}/plugins"/>
-    <property name="eclim.home"
-        value="${eclim.plugins}/org.eclim_${eclim.version}"/>
-
+  <target name="install" depends="init,validate">
     <formic:tempdir property="temp"/>
     <eclim:shutdown/>
-
     <antcall target="clean"/>
     <antcall target="install.eclipse"/>
     <antcall target="install.vim"/>
+    <antcall target="cleanup"/>
+    <property name="eclim.cleanup.finished" value="true"/>
+  </target>
+
+  <!--
+    - Task that will run at the end of the uninstaller wizard process.
+    - Note: Must be named "uninstall".
+    -->
+  <target name="uninstall" depends="init,validate">
+    <eclim:shutdown/>
+    <antcall target="clean"/>
+    <delete dir="${vim.files}/eclim" failonerror="false"/>
     <antcall target="cleanup"/>
     <property name="eclim.cleanup.finished" value="true"/>
   </target>
@@ -197,10 +232,6 @@
           </fileset>
         </chmod>
 
-        <!-- java symlink support sucks, especially if the link is broken -->
-        <exec executable="rm"> <arg line="'${eclipse.local}/eclim'"/> </exec>
-        <exec executable="rm"> <arg line="'${eclipse.local}/eclimd'"/> </exec>
-
         <!-- formic doesn't include optional ant tasks (symlink in this case) -->
         <exec executable="ln" dir="${eclipse.local}">
           <arg line="-s plugins/org.eclim_${eclim.version}/bin/eclim ."/>
@@ -283,6 +314,17 @@
     </if>
 
     <!-- remove eclipse plugins -->
+    <if>
+      <os family="windows"/>
+      <then>
+        <delete> <fileset dir="${eclipse.home}" includes="eclim*,ng.exe"/> </delete>
+      </then>
+      <else>
+        <!-- java symlink support sucks, especially if the link is broken -->
+        <exec executable="rm"> <arg line="'${eclipse.local}/eclim'"/> </exec>
+        <exec executable="rm"> <arg line="'${eclipse.local}/eclimd'"/> </exec>
+      </else>
+    </if>
     <delete includeemptydirs="true">
       <fileset dir="${eclim.features}"
           includes="org.eclim*.jar" excludes="org.eclim.installer*.jar"/>
@@ -314,6 +356,7 @@
       <not> <istrue value="${vim.skip}"/> </not>
       <then>
         <delete failonerror="false" includeemptydirs="true">
+          <fileset dir="${vim.files}/plugin" includes="eclim.vim"/>
           <fileset dir="${vim.files}/eclim">
             <include name="**/*"/>
             <exclude name="after/**/*"/>

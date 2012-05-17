@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,28 +18,35 @@
 Uninstalling
 ============
 
-Uninstalling eclim consists of simply removing the eclipse and vim plugins installed\:
+To uninstall eclim you can use any eclim distribution jar whose version is
+1.7.5 or greater by running it with the 'uninstaller' argument like so:
 
-- <eclipse_home>/plugins/org.eclim*
+  .. code-block:: bash
 
-  Remove all directories under plugins that start with ``org.eclim``.
+    $ java -jar eclim_<version>.jar uninstaller
 
-  - if you are using a package manager installed version of eclipse, then the
-    plugins directory where eclim is installed may be under
-    ``~/.eclipse/org.eclipse.platform_<version>/configuration/eclipse/plugins``
+That will open a graphical wizard much like the install wizard which will ask
+you again for the location of your vimfiles and eclipse home where you've
+installed eclim and will then remove the eclim installation accordingly.
 
-  - On Windows systems you can also remove all the eclim* files and ng.exe from
-    your eclipse home directory.
-  - On Linux, BSD, OSX, etc., you can remove the symlinks created to eclim and
-    eclimd found in your eclipse home directory.
+.. _uninstall-automated:
 
-- <vimfiles>/eclim
+Unattended (automated) uninstall
+--------------------------------
 
-  Remove the eclim directory under your vimfiles dir.
+Like the installer, the uninstaller also supports an unattended uninstall. You
+just need to supply your vim files and eclipse paths as system properties:
 
-  - on unix based systems, this should be ``~/.vim/eclim``
-  - on Windows systems, this should be ``%HOME%/vimfiles``
+.. code-block:: bash
 
-- <vimfiles>/plugin/eclim.vim
+  $ java \
+    -Dvim.files=$HOME/.vim \
+    -Declipse.home=/opt/eclipse \
+    -jar eclim_<version>.jar uninstall
 
-  Lastly remove eclim.vim from your vim plugin directory.
+**Required Properties:**
+
+* **eclipse.home** - The absolute path to your eclipse installation.
+* **vim.files** (or **vim.skip=true**) - The absolute path to your vim files
+  directory. Or if you never installed the vim files (emacs-eclim users for
+  example) you can supply `-Dvim.skip=true` instead.
