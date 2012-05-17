@@ -34,6 +34,7 @@ endif
 " }}}
 
 " Script Varables {{{
+let s:targets = 'http://ant.apache.org/manual/targets.html'
 let s:using = 'http://ant.apache.org/manual/using.html#<element>s'
 let s:conditions = 'http://ant.apache.org/manual/Tasks/conditions.html#<element>'
 let s:mappers = 'http://ant.apache.org/manual/Types/mapper.html'
@@ -48,6 +49,7 @@ let s:contrib_2 =
   \ 'http://ant-contrib.sourceforge.net/tasks/tasks/<element>_task.html'
 let s:element_docs = {
     \  'project'           : s:using,
+    \  'target'            : s:targets,
     \  'and'               : s:conditions,
     \  'checksum'          : s:conditions,
     \  'checs'             : s:conditions,
