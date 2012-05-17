@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,18 +22,16 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_c'
 endfunction " }}}
 
 " TestUpdateSrcFile() {{{
-function! TestUpdateSrcFile()
+function! TestUpdateSrcFile() " {{{
   edit! src/test_src_vunit.c
   call vunit#PeekRedir()
 
-  call histadd('cmd', 'w') " mimic user calling write
-  write
+  call histadd('cmd', 'write') | write
   call vunit#PeekRedir()
 
   let results = getloclist(0)

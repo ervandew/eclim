@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,13 +22,11 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestFileExists() {{{
-function! TestFileExists()
+function! TestFileExists() " {{{
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call vunit#PeekRedir()
 
@@ -38,8 +36,7 @@ function! TestFileExists()
     \ 'TestBlah.java found?')
 endfunction " }}}
 
-" TestGetClassname() {{{
-function! TestGetClassname()
+function! TestGetClassname() " {{{
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call vunit#PeekRedir()
 
@@ -49,16 +46,14 @@ function! TestGetClassname()
     \   fnamemodify('src/org/eclim/test/bean/TestBeanVUnit.java', ':p')))
 endfunction " }}}
 
-" TestGetClassDeclarationPosition() {{{
-function! TestGetClassDeclarationPosition()
+function! TestGetClassDeclarationPosition() " {{{
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call vunit#PeekRedir()
 
   call vunit#AssertEquals(3, eclim#java#util#GetClassDeclarationPosition(0))
 endfunction " }}}
 
-" TestGetFullyQualifiedClassname() {{{
-function! TestGetFullyQualifiedClassname()
+function! TestGetFullyQualifiedClassname() " {{{
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call vunit#PeekRedir()
 
@@ -69,8 +64,7 @@ function! TestGetFullyQualifiedClassname()
     \   fnamemodify('src/org/eclim/test/bean/TestBeanVUnit.java', ':p')))
 endfunction " }}}
 
-" TestGetPackage() {{{
-function! TestGetPackage()
+function! TestGetPackage() " {{{
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call vunit#PeekRedir()
 
@@ -79,8 +73,7 @@ function! TestGetPackage()
     \ eclim#java#util#GetPackage(fnamemodify('src/org/eclim/test/bean/TestBeanVUnit.java', ':p')))
 endfunction " }}}
 
-" TestGetPackageFromImport() {{{
-function! TestGetPackageFromImport()
+function! TestGetPackageFromImport() " {{{
   edit! src/org/eclim/test/impl/TestImplVUnit.java
   call vunit#PeekRedir()
 
@@ -88,8 +81,7 @@ function! TestGetPackageFromImport()
   call vunit#AssertEquals('', eclim#java#util#GetPackageFromImport('Blah'))
 endfunction " }}}
 
-" TestGetSelectedFields() {{{
-function! TestGetSelectedFields()
+function! TestGetSelectedFields() " {{{
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call vunit#PeekRedir()
 
@@ -97,8 +89,7 @@ function! TestGetSelectedFields()
   call vunit#AssertEquals(['description', 'date', 'valid'], fields)
 endfunction " }}}
 
-" TestIsImported() {{{
-function! TestIsImported()
+function! TestIsImported() " {{{
   edit! src/org/eclim/test/impl/TestImplVUnit.java
   call vunit#PeekRedir()
 
@@ -110,8 +101,7 @@ function! TestIsImported()
     \ 'File imported.')
 endfunction " }}}
 
-" TestJavac() {{{
-function! TestJavac()
+function! TestJavac() " {{{
   edit! src-javac/org/eclim/test/Test.java
   call vunit#PeekRedir()
 
@@ -130,12 +120,11 @@ function! TestJavac()
     \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
 endfunction " }}}
 
-" TestValidate() {{{
-function! TestValidate()
+function! TestValidate() " {{{
   edit! src/org/eclim/test/src/TestSrcVUnit.java
   call vunit#PeekRedir()
 
-  write
+  call histadd('cmd', 'write') | write
   call vunit#PeekRedir()
 
   let results = getloclist(0)

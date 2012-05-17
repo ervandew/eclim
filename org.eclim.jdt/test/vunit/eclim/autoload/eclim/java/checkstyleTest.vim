@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,13 +22,11 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestManual() {{{
-function! TestManual()
+function! TestManual() " {{{
   let g:EclimJavaCheckstyleOnSave = 0
   edit! src/org/eclim/test/checkstyle/TestCheckstyleVUnit.java
   call vunit#PeekRedir()
@@ -48,14 +46,15 @@ function! TestManual()
   call vunit#AssertEquals(len(results), 0)
 endfunction " }}}
 
-" TestAuto() {{{
-function! TestAuto()
+function! TestAuto() " {{{
+  let g:EclimLogLevel = 10
   let g:EclimJavaCheckstyleOnSave = 1
   edit! src/org/eclim/test/checkstyle/TestCheckstyleVUnit.java
   call vunit#PeekRedir()
 
-  write
+  call histadd('cmd', 'write') | write
   call vunit#PeekRedir()
+  let g:EclimLogLevel = 4
 
   let results = getloclist(0)
   call vunit#AssertEquals(len(results), 3)
