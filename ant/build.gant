@@ -554,7 +554,7 @@ target(name: 'eclipse.src'){
   }
 }
 
-target(name: 'patch.all'){
+target(name: 'patch'){
   depends(init)
 
   patchPlugins(){ plugin ->
@@ -594,7 +594,7 @@ target(name: 'patch.all'){
   }
 }
 
-target(name: 'patch.revert.all'){
+target(name: 'patch.revert'){
   patchPlugins(){ plugin ->
     path = new File(patchPluginResolve(plugin))
 
@@ -1035,11 +1035,15 @@ def insertIntoFile(file, text, blockStart, afterStart){
 
 def patchPlugins(closure){
   def plugins = []
-  new File('patch').eachDir(){ dir ->
-    plugins.add(dir.name)
-  }
-  if (plugins.size() == 0){
-    fail(message: 'No plugin patch directories found.')
+  if (hasVariable('plugin')){
+    plugins.add(getVariable('plugin'))
+  }else{
+    new File('patch').eachDir(){ dir ->
+      plugins.add(dir.name)
+    }
+    if (plugins.size() == 0){
+      fail(message: 'No plugin patch directories found.')
+    }
   }
   plugins.each(closure)
 }

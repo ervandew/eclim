@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2011  Eric Van Dewoestine
+  Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -109,12 +109,12 @@
     <antcall target="gant"> <param name="target" value="eclipse.src"/> </antcall>
   </target>
 
-  <target name="patch.all">
-    <antcall target="gant"> <param name="target" value="patch.all"/> </antcall>
+  <target name="patch">
+    <antcall target="gant"> <param name="target" value="patch"/> </antcall>
   </target>
 
-  <target name="patch.revert.all">
-    <antcall target="gant"> <param name="target" value="patch.revert.all"/> </antcall>
+  <target name="patch.revert">
+    <antcall target="gant"> <param name="target" value="patch.revert"/> </antcall>
   </target>
 
   <target name="gant">
