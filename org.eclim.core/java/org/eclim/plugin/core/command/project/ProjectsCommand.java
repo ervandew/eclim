@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
+import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 
 import org.eclipse.core.internal.resources.LinkDescription;
@@ -45,8 +46,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
-
-import org.eclipse.ui.internal.ide.dialogs.IDEResourceInfoUtils;
 
 /**
  * Command which obtains a list of projects and project paths for use by clients
@@ -105,8 +104,7 @@ public class ProjectsCommand
               for (IPath path : linfo.keySet()){
                 LinkDescription link = linfo.get(path);
                 IResource member = project.findMember(link.getProjectRelativePath());
-                IFileStore store = IDEResourceInfoUtils.getFileStore(
-                    member.getLocationURI());
+                IFileStore store = EFS.getStore(member.getLocationURI());
                 String resolvedPath = store != null ?
                   store.toString() : link.getLocationURI().getPath();
                 links.put(path.toString(), resolvedPath);
