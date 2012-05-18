@@ -153,6 +153,7 @@ target(name: 'deploy'){
 target(name: 'deploy.eclipse'){
   depends('build')
 
+  mkdir(dir: '${eclim.features}')
   mkdir(dir: '${eclim.plugins}')
 
   // if the eclim version has changed, stop eclimd before deploying
