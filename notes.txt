@@ -128,6 +128,13 @@ TODO {{{
   }}}
 
   Vimplugin {{{
+    - setting to force eclipse to not make gvim the default editor for each
+      file opened via gvim.
+    - add an "Open With Gvim" command that can be bound to an eclipse key binding.
+      - Find the eclipse "Open Declaration" command for an example:
+        Command:  Open Declaration
+        When:     In Windows
+        Category: Navigate
     - toggle between using embedded gvim and standard eclipse editor
       - can we swap editors on the existing tab?
   }}}
