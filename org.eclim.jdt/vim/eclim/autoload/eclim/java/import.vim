@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,10 +41,10 @@ let s:command_import_order = '-command java_import_order -p "<project>"'
 let s:import_regex = '^\s*import\s\+\(static\s\+\)\?\(.\{-}\)\s*;\s*'
 " }}}
 
-" Import() {{{
+" Import([classname]) {{{
 " Import the element under the cursor.
-function! eclim#java#import#Import()
-  let classname = expand('<cword>')
+function! eclim#java#import#Import(...)
+  let classname = a:0 ? a:1 : expand('<cword>')
 
   if !eclim#project#util#IsCurrentFileInProject()
     return
@@ -107,6 +107,7 @@ function! eclim#java#import#Import()
 
   if class != '0' && eclim#java#import#InsertImports([class])
     call eclim#util#EchoInfo("Imported '" . class . "'.")
+    return 1
   endif
 endfunction " }}}
 

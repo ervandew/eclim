@@ -129,9 +129,16 @@ function! s:EchoLevel(message, level, highlight)
   if a:message != "0" && g:EclimLogLevel >= a:level
     exec "echohl " . a:highlight
     redraw
-    for line in split(a:message, '\n')
-      echom line
-    endfor
+    if mode() == 'n'
+      for line in split(a:message, '\n')
+        echom line
+      endfor
+    else
+      " if we aren't in normal mode then use regular 'echo' since echom
+      " messages won't be displayed while the current mode is displayed in
+      " vim's command line.
+      echo a:message . "\n"
+    endif
     echohl None
   endif
 endfunction " }}}

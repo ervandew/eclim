@@ -16,4 +16,15 @@ public class TestCompletion
     List list = new ArrayList();
     list.a();
   }
+
+  public void testMissingImport ()
+  {
+    List list = new ArrayList();
+    ((Map)list.get(0)).p
+  }
+
+  public void testMissingImportStatic ()
+  {
+    Component.
+  }
 }

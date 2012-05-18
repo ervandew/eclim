@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,7 +90,9 @@ public class CodeCompleteCommand
     if(COMPACT.equals(layout) && results.size() > 0){
       results = compact(results);
     }
-    return results;
+
+    return new CodeCompleteResponse(
+        results, collector.getError(), collector.getPossibleMissingImport());
   }
 
   /**

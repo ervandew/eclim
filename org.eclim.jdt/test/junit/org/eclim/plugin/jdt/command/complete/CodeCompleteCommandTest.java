@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,27 +39,29 @@ public class CodeCompleteCommandTest
 
   @Test
   @SuppressWarnings("unchecked")
-  public void completion1()
+  public void completionAllMembers()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    Map<String,Object> results = (Map<String,Object>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
         "-o", "184", "-e", "utf-8", "-l", "standard"
       });
+    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+      results.get("completions");
 
-    assertTrue("Wrong number of results.", results.size() > 30);
+    assertTrue("Wrong number of completions.", completions.size() > 30);
 
-    Map<String,Object> result = results.get(0);
+    Map<String,Object> result = completions.get(0);
     assertEquals(result.get("completion"), "add(");
     assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");
     assertEquals(result.get("type"), "f");
 
-    result = results.get(results.size() - 1);
+    result = completions.get(completions.size() - 1);
     assertEquals(result.get("completion"), "wait()");
     assertEquals(result.get("menu"), "wait() : void - Object");
     assertEquals(result.get("info"), "wait() : void - Object");
@@ -68,30 +70,82 @@ public class CodeCompleteCommandTest
 
   @Test
   @SuppressWarnings("unchecked")
-  public void completion2()
+  public void completionByPrefix()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    Map<String,Object> results = (Map<String,Object>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
         "-o", "266", "-e", "utf-8", "-l", "standard"
       });
+    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+      results.get("completions");
 
-    assertEquals("Wrong number of results.", 4, results.size());
+    assertEquals("Wrong number of completions.", 4, completions.size());
 
-    Map<String,Object> result = results.get(0);
+    Map<String,Object> result = completions.get(0);
     assertEquals(result.get("completion"), "add(");
     assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");
     assertEquals(result.get("type"), "f");
 
-    result = results.get(results.size() - 1);
+    result = completions.get(completions.size() - 1);
     assertEquals(result.get("completion"), "addAll(");
     assertEquals(result.get("menu"), "addAll(Collection c) : boolean - List");
     assertEquals(result.get("info"), "addAll(Collection c) : boolean - List");
     assertEquals(result.get("type"), "f");
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void completionMissingImport()
+  {
+    Map<String,Object> results = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_complete", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "371", "-e", "utf-8", "-l", "standard"
+      });
+    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+      results.get("completions");
+
+    assertEquals("Wrong number of completions.", 0, completions.size());
+    assertTrue("Missing key 'possibleMissingImport'",
+        results.containsKey("possibleMissingImport"));
+    assertEquals("Wrong possibleMissingImport",
+        "Map", results.get("possibleMissingImport"));
+
+    assertTrue("Missing key 'error'", results.containsKey("error"));
+    Map<String,Object> error = (Map<String,Object>)results.get("error");
+    assertEquals("Wrong error message",
+        "Map cannot be resolved to a type", error.get("message"));
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void completionMissingImportStatic()
+  {
+    Map<String,Object> results = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_complete", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "436", "-e", "utf-8", "-l", "standard"
+      });
+    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+      results.get("completions");
+
+    assertEquals("Wrong number of completions.", 0, completions.size());
+    assertTrue("Missing key 'possibleMissingImport'",
+        results.containsKey("possibleMissingImport"));
+    assertEquals("Wrong possibleMissingImport",
+        "Component", results.get("possibleMissingImport"));
+
+    assertTrue("Missing key 'error'", results.containsKey("error"));
+    Map<String,Object> error = (Map<String,Object>)results.get("error");
+    assertEquals("Wrong error message",
+        "Component cannot be resolved to a variable", error.get("message"));
   }
 }

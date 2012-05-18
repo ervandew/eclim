@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,29 @@ package org.eclim.plugin.jdt.command.complete;
 
 import java.util.ArrayList;
 
+import org.eclim.command.Error;
+
+import org.eclim.plugin.jdt.command.search.SearchRequestor;
+
+import org.eclim.util.file.FileOffsets;
+
+import org.eclipse.core.resources.IResource;
+
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+
+import org.eclipse.jdt.core.compiler.IProblem;
+
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.core.search.SearchParticipant;
+import org.eclipse.jdt.core.search.SearchPattern;
 
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 
@@ -37,6 +55,8 @@ public class CompletionProposalCollector
 {
   private ArrayList<CompletionProposal> proposals =
     new ArrayList<CompletionProposal>();
+  private String possibleMissingImport;
+  private Error error;
 
   public CompletionProposalCollector (ICompilationUnit cu)
   {
@@ -86,5 +106,62 @@ public class CompletionProposalCollector
   public CompletionProposal getProposal(int index)
   {
     return (CompletionProposal)proposals.get(index);
+  }
+
+  public void completionFailure(IProblem problem)
+  {
+    if (problem.getID() == IProblem.UndefinedType){
+      possibleMissingImport = problem.getArguments()[0];
+    }else if (problem.getID() == IProblem.UnresolvedVariable){
+      // attempting to complete static members of an unimported type will
+      // trigger an unresolved variable error, so to disambiguate this case from
+      // other unresolved variable errors, we'll search for the var name to see
+      // if it is actually a type name.
+      try{
+        SearchPattern pattern =
+          SearchPattern.createPattern(problem.getArguments()[0],
+              IJavaSearchConstants.TYPE,
+              IJavaSearchConstants.DECLARATIONS,
+              SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
+        IJavaSearchScope scope =
+          SearchEngine.createJavaSearchScope(
+              new IJavaElement[]{getCompilationUnit().getJavaProject()});
+        SearchRequestor requestor = new SearchRequestor();
+        SearchEngine engine = new SearchEngine();
+        SearchParticipant[] participants =
+          new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
+        engine.search(pattern, participants, scope, requestor, null);
+        if (requestor.getMatches().size() > 0){
+          possibleMissingImport = problem.getArguments()[0];
+        }
+      }catch(CoreException e){
+        throw new RuntimeException(e);
+      }
+    }
+
+    IResource resource = getCompilationUnit().getResource();
+    String relativeName = resource.getProjectRelativePath().toString();
+    if (new String(problem.getOriginatingFileName()).endsWith(relativeName)){
+      String filename = resource.getLocation().toString();
+      FileOffsets offsets = FileOffsets.compile(filename);
+      int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
+
+      error = new Error(
+          problem.getMessage(),
+          filename.replace("__eclim_temp_", ""),
+          lineColumn[0],
+          lineColumn[1],
+          problem.isWarning());
+    }
+  }
+
+  public String getPossibleMissingImport()
+  {
+    return possibleMissingImport;
+  }
+
+  public Error getError()
+  {
+    return error;
   }
 }
