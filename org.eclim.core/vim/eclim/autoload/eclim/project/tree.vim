@@ -97,8 +97,20 @@ function! eclim#project#tree#ProjectTree(...)
   call eclim#project#tree#ProjectTreeOpen(names, dirs)
 endfunction " }}}
 
-" ProjectTreeOpen(names, dirs, [title]) " {{{
-function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
+function! eclim#project#tree#ProjectTreeToggle() " {{{
+  let title = s:GetTreeTitle()
+  let bufnum = bufnr(title)
+  let winnum = bufwinnr(title)
+  if bufnum == -1 || winnum == -1
+    call eclim#project#tree#ProjectTree()
+  else
+    exec winnum . 'winc w'
+    close
+    winc p
+  endif
+endfunction " }}}
+
+function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...) " {{{
   let expandDir = ''
   if g:EclimProjectTreeExpandPathOnOpen
     let expandDir = substitute(expand('%:p:h'), '\', '/', 'g')
@@ -183,8 +195,7 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...)
   setlocal nomodifiable
 endfunction " }}}
 
-" ProjectTreeClose() " {{{
-function! eclim#project#tree#ProjectTreeClose()
+function! eclim#project#tree#ProjectTreeClose() " {{{
   if exists('t:project_tree_name') || exists('t:project_tree_id')
     let winnr = bufwinnr(s:GetTreeTitle())
     if winnr != -1
@@ -194,8 +205,7 @@ function! eclim#project#tree#ProjectTreeClose()
   endif
 endfunction " }}}
 
-" Restore() " {{{
-function! eclim#project#tree#Restore()
+function! eclim#project#tree#Restore() " {{{
   if exists('t:project_tree_restoring')
     return
   endif
@@ -224,8 +234,7 @@ function! eclim#project#tree#Restore()
   endif
 endfunction " }}}
 
-" s:GetTreeTitle() {{{
-function! s:GetTreeTitle()
+function! s:GetTreeTitle() " {{{
   " support a custom name from an external plugin
   if exists('t:project_tree_name')
     return t:project_tree_name
@@ -238,8 +247,7 @@ function! s:GetTreeTitle()
   return g:EclimProjectTreeTitle . t:project_tree_id
 endfunction " }}}
 
-" s:GetSharedTreeBuffer(names) {{{
-function! s:GetSharedTreeBuffer(names)
+function! s:GetSharedTreeBuffer(names) " {{{
   let instance_names = join(a:names, '_')
   let instance_names = substitute(instance_names, '\W', '_', 'g')
   if g:EclimProjectTreeSharedInstance &&
@@ -249,8 +257,7 @@ function! s:GetSharedTreeBuffer(names)
   return -1
 endfunction " }}}
 
-" s:Mappings() " {{{
-function! s:Mappings()
+function! s:Mappings() " {{{
   nnoremap <buffer> <silent> E :call <SID>OpenFile('edit')<cr>
   nnoremap <buffer> <silent> S :call <SID>OpenFile('split')<cr>
   nnoremap <buffer> <silent> \| :call <SID>OpenFile('vsplit')<cr>
@@ -286,8 +293,7 @@ function! s:Mappings()
     \ :call eclim#help#BufferHelp(b:project_tree_help, 'horizontal', 10)<cr>
 endfunction " }}}
 
-" s:InfoLine() {{{
-function! s:InfoLine()
+function! s:InfoLine() " {{{
   setlocal modifiable
   let pos = getpos('.')
   if len(b:roots) == 1
@@ -341,8 +347,7 @@ function! s:InfoLine()
   setlocal nomodifiable
 endfunction " }}}
 
-" s:PathEcho() {{{
-function! s:PathEcho()
+function! s:PathEcho() " {{{
   if mode() != 'n'
     return
   endif
@@ -356,8 +361,7 @@ function! s:PathEcho()
   endif
 endfunction " }}}
 
-" s:OpenFile(action) " {{{
-function! s:OpenFile(action)
+function! s:OpenFile(action) " {{{
   let path = eclim#tree#GetPath()
   if path !~ '/$'
     if !filereadable(path)
@@ -370,8 +374,7 @@ function! s:OpenFile(action)
   endif
 endfunction " }}}
 
-" s:OpenFileName() " {{{
-function! s:OpenFileName()
+function! s:OpenFileName() " {{{
   let path = eclim#tree#GetPath()
   if !isdirectory(path)
     let path = fnamemodify(path, ':h') . '/'
@@ -384,15 +387,13 @@ function! s:OpenFileName()
   endif
 endfunction " }}}
 
-" s:YankFileName() " {{{
-function! s:YankFileName()
+function! s:YankFileName() " {{{
   let path = eclim#tree#GetPath()
   let [@*, @+, @"] = [path, path, path]
   call eclim#util#Echo('Copied path to clipboard: ' . path)
 endfunction " }}}
 
-" ProjectTreeSettings() {{{
-function! eclim#project#tree#ProjectTreeSettings()
+function! eclim#project#tree#ProjectTreeSettings() " {{{
   for action in g:EclimProjectTreeActions
     call eclim#tree#RegisterFileAction(action.pattern, action.name,
       \ "call eclim#project#tree#OpenProjectFile('" .
@@ -443,8 +444,7 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   endtry
 endfunction " }}}
 
-" InjectLinkedResources(dir, contents) {{{
-function! eclim#project#tree#InjectLinkedResources(dir, contents)
+function! eclim#project#tree#InjectLinkedResources(dir, contents) " {{{
   let project = eclim#project#util#GetProject(a:dir)
   if len(project) == 0
     return

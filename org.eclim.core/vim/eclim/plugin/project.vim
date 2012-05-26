@@ -157,6 +157,7 @@ if !exists(":ProjectTree")
   command -nargs=*
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectTree :call eclim#project#tree#ProjectTree(<f-args>)
+  command -nargs=0 ProjectTreeToggle :call eclim#project#tree#ProjectTreeToggle()
   command -nargs=0 ProjectsTree
     \ :call eclim#project#tree#ProjectTree(eclim#project#util#GetProjectNames())
   command -nargs=1

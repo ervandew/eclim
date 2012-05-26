@@ -408,6 +408,12 @@ Vim's command line completion to complete the project name.
     matching those patterns from the tree. The 'A' mapping will toggle the
     display of those files along with other hidden files and directories.
 
+.. _\:ProjectTreeToggle:
+
+- **:ProjectTreeToggle**
+
+  Toggles (opens/closes) the project tree for the current project.
+
 .. _\:ProjectsTree:
 
 - **:ProjectsTree**
