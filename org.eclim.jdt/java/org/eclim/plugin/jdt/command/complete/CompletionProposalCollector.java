@@ -55,7 +55,7 @@ public class CompletionProposalCollector
 {
   private ArrayList<CompletionProposal> proposals =
     new ArrayList<CompletionProposal>();
-  private String possibleMissingImport;
+  private String missingImport;
   private Error error;
 
   public CompletionProposalCollector (ICompilationUnit cu)
@@ -110,13 +110,11 @@ public class CompletionProposalCollector
 
   public void completionFailure(IProblem problem)
   {
-    if (problem.getID() == IProblem.UndefinedType){
-      possibleMissingImport = problem.getArguments()[0];
-    }else if (problem.getID() == IProblem.UnresolvedVariable){
-      // attempting to complete static members of an unimported type will
-      // trigger an unresolved variable error, so to disambiguate this case from
-      // other unresolved variable errors, we'll search for the var name to see
-      // if it is actually a type name.
+    // undefined type or attempting to complete static members of an unimported
+    // type
+    if (problem.getID() == IProblem.UndefinedType ||
+        problem.getID() == IProblem.UnresolvedVariable)
+    {
       try{
         SearchPattern pattern =
           SearchPattern.createPattern(problem.getArguments()[0],
@@ -132,7 +130,7 @@ public class CompletionProposalCollector
           new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
         engine.search(pattern, participants, scope, requestor, null);
         if (requestor.getMatches().size() > 0){
-          possibleMissingImport = problem.getArguments()[0];
+          missingImport = problem.getArguments()[0];
         }
       }catch(CoreException e){
         throw new RuntimeException(e);
@@ -155,9 +153,9 @@ public class CompletionProposalCollector
     }
   }
 
-  public String getPossibleMissingImport()
+  public String getMissingImport()
   {
-    return possibleMissingImport;
+    return missingImport;
   }
 
   public Error getError()

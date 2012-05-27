@@ -113,10 +113,10 @@ public class CodeCompleteCommandTest
       results.get("completions");
 
     assertEquals("Wrong number of completions.", 0, completions.size());
-    assertTrue("Missing key 'possibleMissingImport'",
-        results.containsKey("possibleMissingImport"));
-    assertEquals("Wrong possibleMissingImport",
-        "Map", results.get("possibleMissingImport"));
+    assertTrue("Missing key 'missingImport'",
+        results.containsKey("missingImport"));
+    assertEquals("Wrong missingImport",
+        "Map", results.get("missingImport"));
 
     assertTrue("Missing key 'error'", results.containsKey("error"));
     Map<String,Object> error = (Map<String,Object>)results.get("error");
@@ -138,10 +138,10 @@ public class CodeCompleteCommandTest
       results.get("completions");
 
     assertEquals("Wrong number of completions.", 0, completions.size());
-    assertTrue("Missing key 'possibleMissingImport'",
-        results.containsKey("possibleMissingImport"));
-    assertEquals("Wrong possibleMissingImport",
-        "Component", results.get("possibleMissingImport"));
+    assertTrue("Missing key 'missingImport'",
+        results.containsKey("missingImport"));
+    assertEquals("Wrong missingImport",
+        "Component", results.get("missingImport"));
 
     assertTrue("Missing key 'error'", results.containsKey("error"));
     Map<String,Object> error = (Map<String,Object>)results.get("error");

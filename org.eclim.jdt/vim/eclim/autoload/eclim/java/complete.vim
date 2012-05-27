@@ -87,9 +87,9 @@ function! eclim#java#complete#CodeComplete(findstart, base)
       return
     endif
 
-    if has_key(response, 'possibleMissingImport') &&
-     \ response.possibleMissingImport != ""
-      let classname = response.possibleMissingImport
+    if has_key(response, 'missingImport') &&
+     \ response.missingImport != ""
+      let classname = response.missingImport
       let func = "eclim#java#complete#ImportThenComplete('" . classname  ."')"
       call feedkeys("\<c-r>=" . func . "\<cr>", 'n')
       " prevents supertab's completion chain from attempting the next
@@ -166,8 +166,7 @@ function! eclim#java#complete#CodeComplete(findstart, base)
 endfunction " }}}
 
 " ImportThenComplete {{{
-" Called by CodeComplete when the completion depends on a possibly missing
-" import.
+" Called by CodeComplete when the completion depends on a missing import.
 function! eclim#java#complete#ImportThenComplete(classname)
   if eclim#java#import#Import(a:classname)
     call feedkeys("\<c-x>\<c-u>", 'tn')

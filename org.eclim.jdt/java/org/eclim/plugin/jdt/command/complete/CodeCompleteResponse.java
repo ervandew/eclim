@@ -26,12 +26,12 @@ public class CodeCompleteResponse
 {
   private List<CodeCompleteResult> completions;
   private Error error;
-  private String possibleMissingImport;
+  private String missingImport;
 
   public CodeCompleteResponse(List<CodeCompleteResult> completions,
-      Error error, String possibleMissingImport) {
+      Error error, String missingImport) {
     this.completions = completions;
     this.error = error;
-    this.possibleMissingImport = possibleMissingImport;
+    this.missingImport = missingImport;
   }
 }

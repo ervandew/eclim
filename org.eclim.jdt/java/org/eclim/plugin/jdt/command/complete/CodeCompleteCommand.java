@@ -92,7 +92,7 @@ public class CodeCompleteCommand
     }
 
     return new CodeCompleteResponse(
-        results, collector.getError(), collector.getPossibleMissingImport());
+        results, collector.getError(), collector.getMissingImport());
   }
 
   /**
