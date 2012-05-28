@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,13 +58,9 @@ public class VimEditorPartListener
   private static final Logger logger =
     Logger.getLogger(VimEditorPartListener.class);
 
-    // "In Windows"
+  // "In Windows"
   private static final String CONTEXT_ID =
     KeySequenceBinding.DEFAULT_CONTEXT_ID;
-
-    // "Default"
-  private static final String SCHEME_ID =
-    IBindingService.DEFAULT_DEFAULT_ACTIVE_SCHEME_ID;
 
   private boolean keysDisabled = false;
   private IBindingService bindingService;
@@ -172,8 +168,7 @@ public class VimEditorPartListener
     BindingManager manager =
       new BindingManager(new ContextManager(), new CommandManager());
 
-    Scheme scheme = bindingService.getScheme(
-        IBindingService.DEFAULT_DEFAULT_ACTIVE_SCHEME_ID);
+    Scheme scheme = bindingService.getActiveScheme();
     try{
       try{
         manager.setActiveScheme(scheme);
@@ -197,11 +192,12 @@ public class VimEditorPartListener
           "Disabling conflicting keybindings while vim editor is focused: " +
           Arrays.toString(keys));
       BindingManager localChangeManager = getLocalChangeManager();
+      String schemeId = localChangeManager.getActiveScheme().getId();
       for(KeySequence keySequence : keySequences){
         localChangeManager.removeBindings(
-            keySequence, SCHEME_ID, CONTEXT_ID, null, null, null, Binding.USER);
+            keySequence, schemeId, CONTEXT_ID, null, null, null, Binding.USER);
         localChangeManager.addBinding(new KeyBinding(
-              keySequence, null, SCHEME_ID, CONTEXT_ID,
+              keySequence, null, schemeId, CONTEXT_ID,
               null, null, null, Binding.USER));
       }
       keysDisabled = true;
@@ -214,9 +210,10 @@ public class VimEditorPartListener
     if (keysDisabled){
       logger.debug("Re-enabling conflicting keybindings.");
       BindingManager localChangeManager = getLocalChangeManager();
+      String schemeId = localChangeManager.getActiveScheme().getId();
       for(KeySequence keySequence : keySequences){
         localChangeManager.removeBindings(
-            keySequence, SCHEME_ID, CONTEXT_ID, null, null, null, Binding.USER);
+            keySequence, schemeId, CONTEXT_ID, null, null, null, Binding.USER);
       }
       keysDisabled = false;
       saveKeyChanges(localChangeManager);
