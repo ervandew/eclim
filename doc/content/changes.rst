@@ -16,6 +16,33 @@
 History of Changes
 ==================
 
+.. _1.7.5:
+
+1.7.5 (Jun. 03, 2012)
+----------------------
+
+.. note::
+
+  This release is not compatible with Eclipse Juno (4.2). The next major
+  release of eclim (2.2.0) will be built for Juno.
+
+Installer:
+  - Added :ref:`uninstall <guides/uninstall>` support to the eclim installer.
+  - Updated the installer to fully embrace eclipse's provisioning framework
+    (p2).
+
+Common:
+  - Added :ref:`:ProjectTreeToggle <:ProjectTreeToggle>`.
+
+Vimplugin
+  - Fixed key binding conflict handling to not inadvertently switch your key
+    binding scheme back to the default scheme.
+
+Java:
+  - Added support for importing the necessary type during code completion.
+  - Improved location of a project's main class for the :ref:`:Java <:Java>`
+    command, when not explicitly set.
+
 .. _1.7.4:
 
 1.7.4 (Apr. 22, 2012)

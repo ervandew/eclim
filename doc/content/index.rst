@@ -106,6 +106,14 @@ News
 ==================
 
 -----------
+2012-06-03
+-----------
+
+| :ref:`Eclim 1.7.5 <1.7.5>` is now available.
+| This is a minor release with an improved installer, some bug fixes, and a few
+  minor enhancements.
+
+-----------
 2012-04-22
 -----------
 
