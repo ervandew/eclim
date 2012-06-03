@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,24 +65,7 @@ public class PingCommand
 
   private String getVersion()
   {
-    // I can't find a way to get a definitive eclipse version number, so try
-    // comparing the version numbers of some bundles and take the highest one as
-    // the current version.
-    ArrayList<String> versions = new ArrayList<String>();
-    String[] names = {"org.eclipse.osgi", "org.eclipse.swt"};
-    for (String name : names){
-      String version = getVersion(name);
-      if(version != null){
-        versions.add(version);
-      }
-    }
-    Collections.sort(versions);
-    return versions.get(versions.size() - 1);
-  }
-
-  private String getVersion(String bundleName)
-  {
-    Bundle bundle = Platform.getBundle(bundleName);
+    Bundle bundle = Platform.getBundle("org.eclipse.platform");
     if(bundle != null){
       String eclipse_version = (String)bundle.getHeaders().get("Bundle-Version");
       if (eclipse_version != null){
