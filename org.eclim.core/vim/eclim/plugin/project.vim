@@ -36,7 +36,7 @@ endif
 
 let g:EclimProjectTreeTitle = 'ProjectTree_'
 
-if !exists('g:EclimProjectTreeAutoOpen')
+if !exists('g:EclimProjectTreeAutoOpen') || exists('g:vimplugin_running')
   let g:EclimProjectTreeAutoOpen = 0
 endif
 
