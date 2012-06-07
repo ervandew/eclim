@@ -292,7 +292,10 @@ function! eclim#lang#SilentUpdate(...)
           let file = fnamemodify(file, ':h') . '/' . prefix . fnamemodify(file, ':t')
           let tempfile = expand('%:p:h') . '/' . prefix . expand('%:t')
           if a:0 < 2 || a:2
+            let savepatchmode = &patchmode
+            set patchmode=
             exec 'silent noautocmd write! ' . escape(tempfile, ' ')
+            let &patchmode = savepatchmode
           endif
         endif
       else
