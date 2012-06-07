@@ -16,6 +16,18 @@
 History of Changes
 ==================
 
+.. _1.7.6:
+
+1.7.6 (Jun. 07, 2012)
+----------------------
+
+Bug Fixes:
+  - Couple other minor bug fixes.
+
+Installer:
+  - Fixed install location of eclim's vim help files (broken in the previous
+    release).
+
 .. _1.7.5:
 
 1.7.5 (Jun. 03, 2012)
