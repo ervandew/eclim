@@ -340,7 +340,8 @@ target(name: 'dist'){
   // vim plugins jar
   zip(destfile: '${build.installer}/vim-plugins.zip'){
     fileset(dir: '${build.vimfiles}', includes: '**/*')
-    zipfileset(dir: 'build/doc/vimdocs', prefix: 'eclim/doc', includes: '**/*.txt')
+    zipfileset(dir: 'build/doc/vimdocs', includes: '**/*.txt',
+      prefix: 'org.eclim.core/eclim/doc')
   }
 
   installer()
