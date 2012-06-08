@@ -29,6 +29,11 @@ That will open a graphical wizard much like the install wizard which will ask
 you again for the location of your vimfiles and eclipse home where you've
 installed eclim and will then remove the eclim installation accordingly.
 
+.. note::
+
+  The uninstaller is backwards compatible and can be used to uninstall older
+  versions of eclim.
+
 .. _uninstall-automated:
 
 Unattended (automated) uninstall
