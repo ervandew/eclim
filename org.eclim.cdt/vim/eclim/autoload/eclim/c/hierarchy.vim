@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -68,6 +68,10 @@ function! eclim#c#hierarchy#CallHierarchy()
 
   call eclim#util#TempWindow('[Call Hierarchy]', lines)
   set ft=c
+  " fold function calls into their parent
+  setlocal foldmethod=expr
+  setlocal foldexpr='>'.len(substitute(getline(v:lnum),'^\\(\\s*\\).*','\\1',''))/2
+  setlocal foldtext=substitute(getline(v:foldstart),'^\\(\\s*\\)\\s\\s','\\1+\ ','').':\ '.(v:foldend-v:foldstart).'\ lines'
 
   setlocal modifiable noreadonly
   call append(line('$'), ['', '" use ? to view help'])
