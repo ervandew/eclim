@@ -71,7 +71,7 @@ function! eclim#c#hierarchy#CallHierarchy()
   " fold function calls into their parent
   setlocal foldmethod=expr
   setlocal foldexpr='>'.len(substitute(getline(v:lnum),'^\\(\\s*\\).*','\\1',''))/2
-  setlocal foldtext=substitute(getline(v:foldstart),'^\\(\\s*\\)\\s\\s','\\1+\ ','').':\ '.(v:foldend-v:foldstart).'\ lines'
+  setlocal foldtext=substitute(getline(v:foldstart),'^\\(\\s*\\)\\s\\s','\\1+\ ','').':\ '.(v:foldend-v:foldstart+1).'\ lines'
 
   setlocal modifiable noreadonly
   call append(line('$'), ['', '" use ? to view help'])
