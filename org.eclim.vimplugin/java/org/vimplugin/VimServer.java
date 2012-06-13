@@ -154,7 +154,7 @@ public class VimServer
       args[1] = "--servername";
       args[2] = String.valueOf(ID);
       args[3] = "--remote-send";
-      args[4] = ":tabnew<cr>:Tcd " + workingDir.replace(" ", "\\ ") + "<cr>";
+      args[4] = "<esc>:tabnew<cr>:Tcd " + workingDir.replace(" ", "\\ ") + "<cr>";
       System.arraycopy(addopts, 0, args, 5, addopts.length);
 
       start(workingDir, false, (tabbed && !first), args);
