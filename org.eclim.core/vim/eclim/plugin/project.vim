@@ -57,8 +57,7 @@ endif
 
 " w/ external vim refresh is optional, w/ embedded gvim it is mandatory
 " disabling at all though is discouraged.
-if g:EclimProjectRefreshFiles ||
-\ (has('netbeans_enabled') && exists('g:vimplugin_running'))
+if g:EclimProjectRefreshFiles || exists('g:vimplugin_running')
   augroup eclim_refresh_files
     autocmd!
     autocmd BufWritePre * call eclim#project#util#RefreshFileBootstrap()

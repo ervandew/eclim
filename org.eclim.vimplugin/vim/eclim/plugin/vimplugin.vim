@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2011  Eric Van Dewoestine
+" Copyright (C) 2011 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 " }}}
 
 " Auto Commands{{{
-if has('netbeans_enabled') && exists('g:vimplugin_running')
+if exists('g:vimplugin_running')
   augroup eclim_vimplugin
     " autocommands used to work around the fact that the "unmodified" event in
     " vim's netbean support is commentted out for some reason.
