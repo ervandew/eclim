@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 - 2011 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2012 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -478,7 +478,7 @@ public class VimEditor
         args[1] = "--servername";
         args[2] = String.valueOf(server.getID());
         args[3] = "--remote-send";
-        args[4] = ":redraw!<cr>";
+        args[4] = "<esc>:redraw!<cr>";
         try{
           CommandExecutor.execute(args, 1000);
         }catch(Exception e){
@@ -828,7 +828,7 @@ public class VimEditor
         }
 
         if (isDirty()){
-          vc.remotesend(":saveas! " + newFilePath.replace(" ", "\\ ") + "<cr>");
+          vc.remotesend("<esc>:saveas! " + newFilePath.replace(" ", "\\ ") + "<cr>");
         }else{
           vc.command(bufferID, "editFile", "\"" + newFilePath + "\"");
         }
