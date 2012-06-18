@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -136,6 +136,11 @@ function! eclim#java#correct#CorrectApply()
       1,$delete _
       call append(1, content)
       1,1delete _
+      if &ff == 'dos'
+        let save_search = @/
+        exec "%s/\<c-m>$//g"
+        let @/ = save_search
+      endif
 
       call setpos('.', pos)
       update
