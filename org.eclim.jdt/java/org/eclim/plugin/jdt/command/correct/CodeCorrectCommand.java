@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,7 +165,7 @@ public class CodeCorrectCommand
   {
     ArrayList<IJavaCompletionProposal> results =
       new ArrayList<IJavaCompletionProposal>();
-    int length = problem.getSourceEnd() - problem.getSourceStart();
+    int length = (problem.getSourceEnd() + 1) - problem.getSourceStart();
     AssistContext context = new AssistContext(
         src, problem.getSourceStart(), length);
 
