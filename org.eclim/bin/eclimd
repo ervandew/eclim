@@ -106,15 +106,21 @@ build_vmargs(){
     ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
   fi
 
-  # check if attempting to use 64bit jvm to run 32bit eclipse
-  JVM64=`java -version 2>&1 | grep "64-Bit"`
+  # ensure that the correct jvm environment is used.
   SWT=`ls $ECLIM_ECLIPSE_HOME/plugins/org.eclipse.swt.*.jar 2> /dev/null`
-  if [ -n "$SWT" ] ; then
-    SWT64=`echo $SWT | grep "x86_64"`
-    if [ -n "$JVM64" -a -z "$SWT64" ] ; then
-      ECLIM_VMARGS="-d32 $ECLIM_VMARGS"
-    fi
+  if `echo "$SWT" | grep -q "x86_64"` ; then
+    ARCH=-d64
+  else
+    ARCH=-d32
   fi
+
+  if ! `java $ARCH -version 2> /dev/null` ; then
+    echo "Your jvm does not support the architecture required " \
+      "for the version of eclipse you have installed: $ARCH"
+    exit 1;
+  fi
+
+  ECLIM_VMARGS="$ARCH $ECLIM_VMARGS"
 }
 
 ECLIMRC=$HOME/.eclimrc
