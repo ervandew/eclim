@@ -46,6 +46,11 @@ endif
 
 let g:eclim_locate_default_updatetime = &updatetime
 
+" disable autocomplpop in the locate prompt
+if exists('g:acp_behavior')
+  let g:acp_behavior['locate_prompt'] = []
+endif
+
 " }}}
 
 " Script Variables {{{
