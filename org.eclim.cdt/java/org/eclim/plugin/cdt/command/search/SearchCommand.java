@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,11 +61,11 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 
 import org.eclipse.cdt.internal.ui.search.CSearchMessages;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchElement;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchMatch;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchPatternQuery;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchQuery;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchResult;
+import org.eclipse.cdt.internal.ui.search.CSearchElement;
+import org.eclipse.cdt.internal.ui.search.CSearchMatch;
+import org.eclipse.cdt.internal.ui.search.CSearchPatternQuery;
+import org.eclipse.cdt.internal.ui.search.CSearchQuery;
+import org.eclipse.cdt.internal.ui.search.CSearchResult;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -213,15 +213,15 @@ public class SearchCommand
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
     boolean caseSensitive =
       !commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION);
-    PDOMSearchQuery query = new PDOMSearchPatternQuery(
+    CSearchQuery query = new CSearchPatternQuery(
         scope, scopeDesc, pattern, caseSensitive, type | context);
 
     ArrayList<Position> results = new ArrayList<Position>();
     if (query != null){
       query.run(new NullProgressMonitor());
-      PDOMSearchResult result = (PDOMSearchResult)query.getSearchResult();
+      CSearchResult result = (CSearchResult)query.getSearchResult();
       for (Object e : result.getElements()){
-        Method method = PDOMSearchElement.class.getDeclaredMethod("getLocation");
+        Method method = CSearchElement.class.getDeclaredMethod("getLocation");
         method.setAccessible(true);
         IIndexFileLocation location = (IIndexFileLocation)method.invoke(e);
         String filename = location.getURI().getPath();
@@ -229,7 +229,7 @@ public class SearchCommand
           filename = filename.substring(1);
         }
         for (Match m : result.getMatches(e)){
-          PDOMSearchMatch match = (PDOMSearchMatch)m;
+          CSearchMatch match = (CSearchMatch)m;
           results.add(
               Position.fromOffset(filename, null, match.getOffset(), 0));
         }
@@ -267,15 +267,15 @@ public class SearchCommand
             flags |= (name.isDefinition() ?
                 IIndex.FIND_DECLARATIONS : IIndex.FIND_DEFINITIONS);
           }
-        } else if (context == PDOMSearchQuery.FIND_ALL_OCCURRENCES){
+        } else if (context == CSearchQuery.FIND_ALL_OCCURRENCES){
           flags |= IIndex.FIND_ALL_OCCURRENCES;
-        } else if (context == PDOMSearchQuery.FIND_REFERENCES){
+        } else if (context == CSearchQuery.FIND_REFERENCES){
           flags |= IIndex.FIND_REFERENCES;
-        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS) {
+        } else if (context == CSearchQuery.FIND_DECLARATIONS_DEFINITIONS) {
           flags |= IIndex.FIND_DECLARATIONS_DEFINITIONS;
-        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS) {
+        } else if (context == CSearchQuery.FIND_DECLARATIONS) {
           flags |= IIndex.FIND_DECLARATIONS;
-        } else if (context == PDOMSearchQuery.FIND_DEFINITIONS) {
+        } else if (context == CSearchQuery.FIND_DEFINITIONS) {
           flags |= IIndex.FIND_DEFINITIONS;
         }
 
@@ -360,7 +360,7 @@ public class SearchCommand
    */
   protected int getContext(String context)
   {
-    return getContext(context, PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS);
+    return getContext(context, CSearchQuery.FIND_DECLARATIONS_DEFINITIONS);
   }
 
   /**
@@ -377,17 +377,17 @@ public class SearchCommand
     }
 
     if(CONTEXT_ALL.equals(context)){
-      return PDOMSearchQuery.FIND_ALL_OCCURRENCES;
+      return CSearchQuery.FIND_ALL_OCCURRENCES;
     }else if(CONTEXT_CONTEXT.equals(context)){
       return FIND_CONTEXT;
     }else if(CONTEXT_REFERENCES.equals(context)){
-      return PDOMSearchQuery.FIND_REFERENCES;
+      return CSearchQuery.FIND_REFERENCES;
     }else if(CONTEXT_DECLARATIONS.equals(context)){
-      return PDOMSearchQuery.FIND_DECLARATIONS;
+      return CSearchQuery.FIND_DECLARATIONS;
     }else if(CONTEXT_DEFINITIONS.equals(context)){
-      return PDOMSearchQuery.FIND_DEFINITIONS;
+      return CSearchQuery.FIND_DEFINITIONS;
     }
-    return PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS;
+    return CSearchQuery.FIND_DECLARATIONS_DEFINITIONS;
   }
 
   /**
@@ -399,28 +399,28 @@ public class SearchCommand
   protected int getType(String type)
   {
     if(TYPE_CLASS_STRUCT.equals(type)){
-      return PDOMSearchPatternQuery.FIND_CLASS_STRUCT;
+      return CSearchPatternQuery.FIND_CLASS_STRUCT;
     }else if(TYPE_FUNCTION.equals(type)){
-      return PDOMSearchPatternQuery.FIND_FUNCTION;
+      return CSearchPatternQuery.FIND_FUNCTION;
     }else if(TYPE_VARIABLE.equals(type)){
-      return PDOMSearchPatternQuery.FIND_VARIABLE;
+      return CSearchPatternQuery.FIND_VARIABLE;
     }else if(TYPE_UNION.equals(type)){
-      return PDOMSearchPatternQuery.FIND_UNION;
+      return CSearchPatternQuery.FIND_UNION;
     }else if(TYPE_METHOD.equals(type)){
-      return PDOMSearchPatternQuery.FIND_METHOD;
+      return CSearchPatternQuery.FIND_METHOD;
     }else if(TYPE_FIELD.equals(type)){
-      return PDOMSearchPatternQuery.FIND_FIELD;
+      return CSearchPatternQuery.FIND_FIELD;
     }else if(TYPE_ENUM.equals(type)){
-      return PDOMSearchPatternQuery.FIND_ENUM;
+      return CSearchPatternQuery.FIND_ENUM;
     }else if(TYPE_ENUMERATOR.equals(type)){
-      return PDOMSearchPatternQuery.FIND_ENUMERATOR;
+      return CSearchPatternQuery.FIND_ENUMERATOR;
     }else if(TYPE_NAMESPACE.equals(type)){
-      return PDOMSearchPatternQuery.FIND_NAMESPACE;
+      return CSearchPatternQuery.FIND_NAMESPACE;
     }else if(TYPE_TYPEDEF.equals(type)){
-      return PDOMSearchPatternQuery.FIND_TYPEDEF;
+      return CSearchPatternQuery.FIND_TYPEDEF;
     }else if(TYPE_MACRO.equals(type)){
-      return PDOMSearchPatternQuery.FIND_MACRO;
+      return CSearchPatternQuery.FIND_MACRO;
     }
-    return PDOMSearchPatternQuery.FIND_ALL_TYPES;
+    return CSearchPatternQuery.FIND_ALL_TYPES;
   }
 }
