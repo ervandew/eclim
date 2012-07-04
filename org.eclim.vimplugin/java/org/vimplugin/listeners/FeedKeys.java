@@ -20,7 +20,10 @@ import org.eclipse.ui.PlatformUI;
 
 import org.eclipse.ui.internal.Workbench;
 
+import org.eclipse.ui.internal.keys.BindingService;
 import org.eclipse.ui.internal.keys.WorkbenchKeyboard;
+
+import org.eclipse.ui.keys.IBindingService;
 
 import org.vimplugin.DisplayUtils;
 import org.vimplugin.VimEvent;
@@ -81,7 +84,9 @@ public class FeedKeys
       // process the actual key stroke.
       display.asyncExec(new Runnable(){
         public void run(){
-          WorkbenchKeyboard keyboard = new WorkbenchKeyboard(workbench);
+          BindingService bindingService = (BindingService)
+            PlatformUI.getWorkbench().getAdapter(IBindingService.class);
+          WorkbenchKeyboard keyboard = bindingService.getKeyboard();
           for(String sequence : sequences){
             try{
               if (sequence.equals("refocus")){
