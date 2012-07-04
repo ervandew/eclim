@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,13 +97,7 @@ public class CUtils
   public static ITranslationUnit getTranslationUnit(String project, String file)
     throws Exception
   {
-    ICProject cproject = getCProject(project);
-    ITranslationUnit src = getTranslationUnit(cproject, file);
-    if(src == null || !src.exists()){
-      throw new IllegalArgumentException(
-          Services.getMessage("cdt.src.file.not.found", file));
-    }
-    return src;
+    return getTranslationUnit(getCProject(project), file);
   }
 
   /**
@@ -124,6 +118,11 @@ public class CUtils
       throw new IllegalArgumentException(
           Services.getMessage("cdt.src.file.not.found", file));
     }
+
+    // force sync w/ file on disk
+    src.close();
+    src.open(null);
+
     return src;
   }
 }
