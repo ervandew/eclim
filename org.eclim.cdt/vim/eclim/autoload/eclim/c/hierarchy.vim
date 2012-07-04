@@ -40,6 +40,8 @@ function! eclim#c#hierarchy#CallHierarchy()
     return
   endif
 
+  call eclim#lang#SilentUpdate()
+
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()
   let position = eclim#util#GetCurrentElementPosition()

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -64,6 +64,19 @@ function! TestCallHierarchy()
   call vunit#AssertEquals('src/callhierarchy/main.c', name, 'Wrong window (main.c)')
   call vunit#AssertEquals(6, line('.'), 'Wrong line (main.c')
   call vunit#AssertEquals(28, col('.'), 'Wrong column (main.c')
+
+  " test that the source isn't cached.
+  edit! src/callhierarchy/mod2.c
+  call vunit#PeekRedir()
+
+  call cursor(6, 3)
+  normal yyp
+  call cursor(7, 3)
+  :CCallHierarchy
+  call vunit#PeekRedir()
+
+  call vunit#AssertEquals('[Call Hierarchy]', expand('%'), 'No results on update call')
+  call vunit#AssertEquals(9, line('$'), 'Wrong number of lines on update call')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

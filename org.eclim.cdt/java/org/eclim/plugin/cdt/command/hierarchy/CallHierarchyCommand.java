@@ -55,7 +55,6 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.IFunction;
 import org.eclipse.cdt.core.model.IFunctionDeclaration;
-import org.eclipse.cdt.core.model.IProblemRequestor;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
 
@@ -115,7 +114,10 @@ public class CallHierarchyCommand
 
     CUIPlugin cuiPlugin = CUIPlugin.getDefault();
     ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
-    src = src.getSharedWorkingCopy(null, (IProblemRequestor)null);
+    CCorePlugin.getIndexManager().update(
+        new ICElement[]{src}, IIndexManager.UPDATE_ALL);
+    CCorePlugin.getIndexManager().joinIndexer(3000, null);
+    src = src.getWorkingCopy();
 
     IEditorInput input = new FileEditorInput((IFile)src.getResource());
 
@@ -127,8 +129,6 @@ public class CallHierarchyCommand
 
     HashMap<String,Object> result = new HashMap<String,Object>();
     try{
-      src.open(null);
-
       // more hacks to got get around gui dependency
       ASTProvider provider = ASTProvider.getASTProvider();
       Field astCache = ASTProvider.class.getDeclaredField("fCache");
