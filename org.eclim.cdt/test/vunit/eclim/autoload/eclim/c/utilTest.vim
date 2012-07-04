@@ -26,9 +26,8 @@ function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_c'
 endfunction " }}}
 
-" TestUpdateSrcFile() {{{
-function! TestUpdateSrcFile() " {{{
-  edit! src/test_src_vunit.c
+function! TestUpdateCSrcFile() " {{{
+  edit! src/test_src.c
   call vunit#PeekRedir()
 
   call histadd('cmd', 'write') | write

@@ -35,7 +35,7 @@ endfunction " }}}
 
 " TestCComplete() {{{
 function! TestCComplete()
-  edit! src/test_complete_vunit.c
+  edit! src/test_complete.c
   call vunit#PeekRedir()
 
   call cursor(11, 6)
