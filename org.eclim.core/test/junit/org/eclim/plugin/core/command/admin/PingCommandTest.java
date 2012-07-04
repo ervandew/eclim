@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,6 @@ public class PingCommandTest
         Eclim.execute(new String[]{"ping"});
     assertEquals("Unexpected result",
         System.getProperty("eclim.version"), result.get("eclim"));
-    assertTrue("Unexpected result", result.get("eclipse").startsWith("3."));
+    assertTrue("Unexpected result", result.get("eclipse").startsWith("4."));
   }
 }
