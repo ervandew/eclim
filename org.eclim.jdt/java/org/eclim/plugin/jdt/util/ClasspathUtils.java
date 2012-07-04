@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,10 +96,10 @@ public class ClasspathUtils
 
     try{
       IPath out = javaProject.getOutputLocation();
-      out = out.addTrailingSeparator();
-      String path = ProjectUtils.getFilePath(
-          javaProject.getProject(), out.toOSString());
-      paths.add(path);
+      paths.add(
+          ProjectUtils.getFilePath(
+            javaProject.getProject(),
+            out.addTrailingSeparator().toOSString()));
     }catch(JavaModelException ignore){
       // ignore... just signals that no output dir was configured.
     }
@@ -113,7 +113,7 @@ public class ClasspathUtils
     }catch(JavaModelException jme){
       // this may or may not be a problem.
       logger.warn(
-          "Unable to retreive resolved classpath for project: " + name, jme);
+          "Unable to retrieve resolved classpath for project: " + name, jme);
       return;
     }
 
@@ -135,6 +135,15 @@ public class ClasspathUtils
             if (javaProject != null){
               collect(javaProject, paths, visited, false);
             }
+          }
+          break;
+        case IClasspathEntry.CPE_SOURCE :
+          IPath out = entry.getOutputLocation();
+          if (out != null){
+            paths.add(
+                ProjectUtils.getFilePath(
+                  javaProject.getProject(),
+                  out.addTrailingSeparator().toOSString()));
           }
           break;
       }
