@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,11 +46,10 @@ public class EclimWorkbenchWindow
 {
   private IWorkbenchPage page;
   private Composite composite;
-  private MenuManager manager;
 
   public EclimWorkbenchWindow()
   {
-    super(1);
+    super(null, null);
   }
 
   /**
@@ -79,20 +78,6 @@ public class EclimWorkbenchWindow
     return EclimPlugin.getShell();
   }
 
-
-  /**
-   * {@inheritDoc}
-   * @see WorkbenchWindow#getMenuManager()
-   */
-  @Override
-  public MenuManager getMenuManager()
-  {
-    if (manager == null){
-      manager = super.createMenuManager();
-    }
-    return manager;
-  }
-
   /**
    * {@inheritDoc}
    * @see org.eclipse.ui.IWorkbenchWindow#run(boolean,boolean,IRunnableWithProgress)
@@ -119,12 +104,12 @@ public class EclimWorkbenchWindow
    * {@inheritDoc}
    * @see WorkbenchWindow#getPageComposite()
    */
-  @Override
+  /*@Override
   protected Composite getPageComposite()
   {
     if(composite == null){
       composite = new EclimComposite(getShell(), SWT.NONE);
     }
     return composite;
-  }
+  }*/
 }
