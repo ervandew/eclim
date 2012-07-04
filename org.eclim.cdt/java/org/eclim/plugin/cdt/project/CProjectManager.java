@@ -45,6 +45,8 @@ import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.cdt.core.CCorePlugin;
 
+import org.eclipse.cdt.core.index.IIndexManager;
+
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICModelStatus;
 import org.eclipse.cdt.core.model.ICProject;
@@ -230,6 +232,7 @@ public class CProjectManager
   {
     ICProject cproject = CUtils.getCProject(project);
     CCorePlugin.getIndexManager().reindex(cproject);
+    CCorePlugin.getIndexManager().joinIndexer(IIndexManager.FOREVER, null);
   }
 
   /**
