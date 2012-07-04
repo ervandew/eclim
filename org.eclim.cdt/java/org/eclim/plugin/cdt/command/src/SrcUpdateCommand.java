@@ -37,7 +37,19 @@ import org.eclim.util.file.FileOffsets;
 
 import org.eclipse.cdt.core.CCorePlugin;
 
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroExpansion;
+import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IProblemBinding;
+
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexManager;
@@ -103,9 +115,7 @@ public class SrcUpdateCommand
           .getLocation().toOSString().replace('\\', '/');
         FileOffsets offsets = FileOffsets.compile(filename);
         for(IProblem problem : problems){
-          int[] lineColumn =
-            offsets.offsetToLineColumn(problem.getSourceStart());
-
+          int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
           errors.add(new Error(
               problem.getMessage(),
               filename,
@@ -138,11 +148,187 @@ public class SrcUpdateCommand
       ArrayList<IProblem> problems = new ArrayList<IProblem>();
       CollectionUtils.addAll(problems, ast.getPreprocessorProblems());
       CollectionUtils.addAll(problems, CPPVisitor.getProblems(ast));
+
+      ProblemCollector collector = new ProblemCollector(problems);
+      ast.accept(collector);
+
       return problems;
     } finally {
       if (index != null){
         index.releaseReadLock();
       }
+    }
+  }
+
+  private class SemanticProblem
+    implements IProblem
+  {
+    private IASTNode node;
+    private IProblemBinding binding;
+
+    public SemanticProblem(IASTNode node, IProblemBinding binding)
+    {
+      this.node = node;
+      this.binding = binding;
+    }
+
+    public int getID()
+    {
+      return binding.getID();
+    }
+
+    public String getMessage()
+    {
+      return binding.getMessage();
+    }
+
+    public String getMessageWithLocation()
+    {
+      return null;
+    }
+
+    public String[] getArguments()
+    {
+      return null;
+    }
+
+    public char[] getOriginatingFileName()
+    {
+      return null;
+    }
+
+    public int getSourceStart()
+    {
+      return node.getFileLocation().getNodeOffset();
+    }
+
+    public int getSourceEnd()
+    {
+      return getSourceStart() + node.getFileLocation().getNodeLength();
+    }
+
+    public int getSourceLineNumber()
+    {
+      return binding.getLineNumber();
+    }
+
+    public boolean isError()
+    {
+      return true;
+    }
+
+    public boolean isWarning()
+    {
+      return !isError();
+    }
+
+    public boolean checkCategory(int cat)
+    {
+      return false;
+    }
+  }
+
+  private class ProblemCollector
+      extends ASTVisitor
+  {
+    private List<IProblem> problems;
+
+    public ProblemCollector(List<IProblem> problems)
+    {
+      this.problems = problems;
+
+      shouldVisitTranslationUnit= true;
+      shouldVisitNames= true;
+      shouldVisitDeclarations= true;
+      shouldVisitExpressions= true;
+      shouldVisitStatements= true;
+      shouldVisitDeclarators= true;
+      shouldVisitNamespaces= true;
+      shouldVisitImplicitNames = true;
+      shouldVisitImplicitNameAlternates = true;
+    }
+
+    @Override
+    public int visit(IASTTranslationUnit tu)
+    {
+      // visit macro definitions
+      for (IASTPreprocessorMacroDefinition macroDef : tu.getMacroDefinitions()) {
+        if (macroDef.isPartOfTranslationUnitFile()) {
+          visitNode(macroDef.getName());
+        }
+      }
+
+      // visit macro expansions
+      for (IASTPreprocessorMacroExpansion macroExp : tu.getMacroExpansions()) {
+        if (macroExp.isPartOfTranslationUnitFile()) {
+          IASTName macroRef= macroExp.getMacroReference();
+          visitNode(macroRef);
+          IASTName[] nestedMacroRefs= macroExp.getNestedMacroReferences();
+          for (IASTName nestedMacroRef : nestedMacroRefs) {
+            visitNode(nestedMacroRef);
+          }
+        }
+      }
+
+      // visit ordinary code
+      return super.visit(tu);
+    }
+
+    @Override
+    public int visit(IASTDeclaration declaration)
+    {
+      if (!declaration.isPartOfTranslationUnitFile()) {
+        return PROCESS_SKIP;
+      }
+      return PROCESS_CONTINUE;
+    }
+
+    @Override
+    public int leave(IASTDeclaration declaration)
+    {
+      return PROCESS_CONTINUE;
+    }
+
+    @Override
+    public int visit(ICPPASTNamespaceDefinition namespace)
+    {
+      if (!namespace.isPartOfTranslationUnitFile()) {
+        return PROCESS_SKIP;
+      }
+      return PROCESS_CONTINUE;
+    }
+
+    @Override
+    public int visit(IASTDeclarator declarator)
+    {
+      return PROCESS_CONTINUE;
+    }
+
+    @Override
+    public int visit(IASTStatement statement)
+    {
+      return PROCESS_CONTINUE;
+    }
+
+    @Override
+    public int visit(IASTName name)
+    {
+      if (visitNode(name)) {
+        return PROCESS_SKIP;
+      }
+      return PROCESS_CONTINUE;
+    }
+
+    private boolean visitNode(IASTNode node)
+    {
+      if (node instanceof IASTName){
+        IBinding binding = ((IASTName)node).resolveBinding();
+        if (binding instanceof IProblemBinding){
+          node.getFileLocation().getNodeOffset();
+          problems.add(new SemanticProblem(node, (IProblemBinding)binding));
+        }
+      }
+      return false;
     }
   }
 }

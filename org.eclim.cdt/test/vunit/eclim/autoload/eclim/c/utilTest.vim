@@ -46,4 +46,25 @@ function! TestUpdateCSrcFile() " {{{
   call vunit#AssertEquals(results[1].text, 'Syntax error', 'Wrong error msg.')
 endfunction " }}}
 
+function! TestUpdateCPPSrcFile() " {{{
+  edit! src/test_src.cpp
+  call vunit#PeekRedir()
+
+  call histadd('cmd', 'write') | write
+  call vunit#PeekRedir()
+
+  let results = getloclist(0)
+  echo string(results)
+  call vunit#AssertEquals(2, len(results), 'Wrong number of results.')
+  call vunit#AssertEquals(results[0].lnum, 3, 'Wrong lnum.')
+  call vunit#AssertEquals(results[0].col, 7, 'Wrong lnum.')
+  call vunit#AssertEquals(
+    \ results[0].text, 'Invalid redeclaration of the name arg', 'Wrong error msg.')
+
+  call vunit#AssertEquals(results[1].lnum, 4, 'Wrong lnum.')
+  call vunit#AssertEquals(results[1].col, 3, 'Wrong lnum.')
+  call vunit#AssertEquals(
+    \ results[1].text, 'Attempt to use symbol failed: foo', 'Wrong error msg.')
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker
