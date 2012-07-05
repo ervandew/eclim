@@ -960,11 +960,10 @@ function! eclim#project#util#GetProjectNatureAliases(...)
   if a:0 > 0 && a:1 != ''
     let command = s:command_natures . ' -p "' . a:1 . '"'
     let result = eclim#ExecuteEclim(command)
-    if result == '0'
+    if type(result) != g:LIST_TYPE || len(result) == 0
       return []
     endif
-    let aliases = split(substitute(result, '.\{-}\s-\s', '', ''), ' ')
-    return aliases
+    return result[0]['natures']
   endif
 
   let aliases = eclim#ExecuteEclim(s:command_nature_aliases)
