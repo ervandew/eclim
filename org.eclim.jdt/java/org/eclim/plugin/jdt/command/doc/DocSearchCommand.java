@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,13 +72,15 @@ public class DocSearchCommand
     new HashMap<String, String>();
   static{
     JRE_DOCS.put(JavaCore.VERSION_1_3,
-        "http://java.sun.com/j2se/1.3/docs/api/");
+        "http://docs.oracle.com/javase/1.3.1/docs/api/");
     JRE_DOCS.put(JavaCore.VERSION_1_4,
-        "http://java.sun.com/j2se/1.4.2/docs/api/");
+        "http://docs.oracle.com/javase/1.4.2/docs/api/");
     JRE_DOCS.put(JavaCore.VERSION_1_5,
-        "http://java.sun.com/j2se/1.5.0/docs/api/");
+        "http://docs.oracle.com/javase/1.5.0/docs/api/");
     JRE_DOCS.put(JavaCore.VERSION_1_6,
-        "http://java.sun.com/javase/6/docs/api/");
+        "http://docs.oracle.com/javase/6/docs/api/");
+    JRE_DOCS.put(JavaCore.VERSION_1_7,
+        "http://docs.oracle.com/javase/7/docs/api/");
   }
 
   /**

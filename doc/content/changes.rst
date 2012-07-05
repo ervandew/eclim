@@ -16,6 +16,14 @@
 History of Changes
 ==================
 
+.. _2.2.0:
+
+2.2.0 ()
+----------------------
+
+Eclipse:
+  - Eclim now requires Java 6 or later.
+
 .. _1.7.7:
 
 1.7.7 (Aug. 07, 2012)

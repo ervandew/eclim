@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,4 +47,4 @@ Example content:
 - Lines 33 - 35 is a folded block which contains a list of all the arguments
   passed to the JVM.
 
-.. _online documentation: http://java.sun.com/j2se/1.5.0/docs/tooldocs/index.html#manage
+.. _online documentation: http://docs.oracle.com/javase/1.5.0/docs/tooldocs/index.html#manage

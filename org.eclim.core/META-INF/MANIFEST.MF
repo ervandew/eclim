@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Vendor: eclim.org
 Bundle-SymbolicName: org.eclim.core; singleton:=true
 Bundle-Version: ${eclim.version}
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclim.plugin.core.CorePlugin

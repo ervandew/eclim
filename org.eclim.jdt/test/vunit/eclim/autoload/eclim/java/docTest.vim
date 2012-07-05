@@ -68,7 +68,7 @@ function! TestSearch()
   call vunit#AssertEquals('javadoc_search_results', bufname('%'),
     \ 'Search results window not opened.')
   call vunit#AssertEquals(1, line('$'), 'Wrong number of results.')
-  call vunit#AssertEquals('http://java.sun.com/j2se/1.5.0/docs/api/java/awt/List.html',
+  call vunit#AssertEquals('http://docs.oracle.com/javase/1.5.0/docs/api/java/awt/List.html',
     \ line('1'), 'Wrong result.')
 endfunction " }}}
 
