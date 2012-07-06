@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,12 +99,14 @@ public class InterpretersCommand
       IInterpreterInstall deflt =
         ScriptRuntime.getDefaultInterpreterInstall(
             new ScriptRuntime.DefaultInterpreterEntry(natureId, env.getId()));
-      HashMap<String,Object> defaultInt = new HashMap<String,Object>();
-      defaultInt.put("nature", ProjectNatureFactory.getAliasForNature(natureId));
-      defaultInt.put("name", deflt.getName());
-      defaultInt.put("path", deflt.getInstallLocation().getPath().toOSString());
-      defaultInt.put("default", true);
-      interpreters.add(defaultInt);
+      if (deflt != null){
+        HashMap<String,Object> defaultInt = new HashMap<String,Object>();
+        defaultInt.put("nature", ProjectNatureFactory.getAliasForNature(natureId));
+        defaultInt.put("name", deflt.getName());
+        defaultInt.put("path", deflt.getInstallLocation().getPath().toOSString());
+        defaultInt.put("default", true);
+        interpreters.add(defaultInt);
+      }
 
       IInterpreterInstallType[] types =
         ScriptRuntime.getInterpreterInstallTypes(natureId);
