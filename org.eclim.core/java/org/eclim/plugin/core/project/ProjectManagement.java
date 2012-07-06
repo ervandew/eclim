@@ -45,6 +45,8 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 import org.eclim.plugin.core.util.ProjectUtils;
 import org.eclim.plugin.core.util.XmlUtils;
 
+import org.eclim.util.CollectionUtils;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -52,6 +54,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 import org.w3c.dom.Document;
@@ -240,6 +243,23 @@ public class ProjectManagement
         throw new IllegalArgumentException(Services.getMessage(
             "project.name.exists", name, path.toString()));
       }*/
+
+    // project exists, so just add any missing requested natures
+    }else{
+      IProjectDescription desc = project.getDescription();
+      String[] natureIds = desc.getNatureIds();
+      ArrayList<String> modified = new ArrayList<String>();
+      ArrayList<String> newNatures = new ArrayList<String>();
+      CollectionUtils.addAll(modified, natureIds);
+      for(String natureId : natures){
+        if (!modified.contains(natureId)){
+          modified.add(natureId);
+          newNatures.add(natureId);
+        }
+      }
+
+      desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
+      project.setDescription(desc, new NullProgressMonitor());
     }
 
     return project;
