@@ -45,6 +45,9 @@ if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
   ant.property(name: 'eclipse', value: eclipseHome)
   ant.property(name: 'eclipse.local', value: eclipseHome)
   ant.echo('$${eclipse}: ${eclipse}')
+  if (binding.getVariable('eclipse') != binding.getVariable('eclipse.local')){
+    ant.echo('$${eclipse.local}: ${eclipse.local}')
+  }
 }
 
 pluginNames = initPlugins()
@@ -82,18 +85,24 @@ target(name: 'init'){
     ))
   }
 
+  classpaths = [getVariable('eclipse')]
+  if (getVariable('eclipse') != getVariable('eclipse.local')){
+    classpaths << getVariable('eclipse.local')
+  }
   path(id: 'classpath'){
     fileset(dir: '.', includes: '**/lib/*.jar')
-    fileset(dir: '${eclipse}'){
-      include(name: 'startup.jar')
-      include(name: 'dropins/**/plugins/org.eclipse.*.jar')
-      include(name: 'plugins/org.eclipse.*.jar')
-      include(name: 'plugins/org.apache.ant_*/lib/ant.jar')
-      include(name: 'plugins/com.ibm.*.jar')
-    }
-    dirset(dir: '${eclipse}'){
-      include(name: 'dropins/**/plugins/org.eclipse.*')
-      include(name: 'plugins/org.eclipse.*')
+    for (path in classpaths){
+      fileset(dir: path){
+        include(name: 'startup.jar')
+        include(name: 'dropins/**/plugins/org.eclipse.*.jar')
+        include(name: 'plugins/org.eclipse.*.jar')
+        include(name: 'plugins/org.apache.ant_*/lib/ant.jar')
+        include(name: 'plugins/com.ibm.*.jar')
+      }
+      dirset(dir: path){
+        include(name: 'dropins/**/plugins/org.eclipse.*')
+        include(name: 'plugins/org.eclipse.*')
+      }
     }
     // for gentoo
     fileset(dir: '/usr/share/', erroronmissingdir: false,
