@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ function! TestValidate()
   edit! php/src/test.php
   call vunit#PeekRedir()
 
-  call eclim#php#util#UpdateSrcFile(1)
+  call histadd('cmd', 'write') | write
   call vunit#PeekRedir()
 
   let results = getloclist(0)

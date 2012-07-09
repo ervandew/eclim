@@ -116,7 +116,7 @@ public class CodeCompleteCommandTest
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "regular");
     assertEquals(result.get("menu"), "$regular: mixed");
-    assertEquals(result.get("info"), "$regular regular read/write propertyType:  mixed");
+    assertEquals(result.get("info"), "$regular regular read/write property<br/>Type:  mixed");
   }
 
   /**
