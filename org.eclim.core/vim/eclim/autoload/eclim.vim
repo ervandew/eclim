@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -91,7 +91,11 @@ function! eclim#ExecuteEclim(command, ...)
   let error = ''
   if result =~ '^[^\n]*Exception:\?[^\n]*\n\s\+\<at\> ' ||
    \ result =~ '^[^\n]*ResourceException(.\{-})\[[0-9]\+\]:[^\n]*\n\s\+\<at\> '
-    let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
+    if g:EclimLogLevel < 10
+      let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
+    else
+      let error = result
+    endif
   elseif retcode
     let error = result
   endif

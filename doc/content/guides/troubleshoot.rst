@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -136,48 +136,14 @@ like a NullPointerException or some other exception which doesn't include a
 helpful message, then you may have encountered a bug.
 
 Once you've encountered this type of issue, the first step it to get more
-details.  To do so you will need to obtain the command that was being issued by
-eclim and run it on the command line where the full stack trace will be
-emitted.  To gather these details you will need to:
+details which you can do by enabling eclim debugging in vim:
 
-1. run :messages which will print all the messages for your current vim session
-   and find the last executed command which will look like:
+  .. code-block:: vim
 
-   ::
+    :let g:EclimLogLevel = 10
 
-     while executing command: -command ...
-
-   If there are a lot of messages, you may have to page through them to the
-   end to find the most recent command.  Once you've found the command, copy
-   the command text from "-command" to the end of the command arguments.
-
-2. The next step is to run the command on a command line.
-
-   - Linux / Mac / BSD:
-
-     - open a shell and start by typing the location of your eclim script and
-       then append the command you copied.:
-
-       ::
-
-         $ /opt/eclipse/eclim -command ...
-
-       Run that and you should see the entire stack trace for the error.
-
-
-   - Windows:
-
-     - open a dos prompt and make sure you are on the same drive as your
-       eclipse installation (if it's on your D: drive, then type "D:" at the
-       prompt and hit enter.
-     - Then type out the path to your eclim script and append the command you
-       copied:
-
-       ::
-
-         > "C:\Program Files\eclipse\eclim" -command ...
-
-       Run that and you should see the entire stack trace for the error.
+Then you can perform the same action that triggered the error again. This time
+you should receive the full stack trace of the error.
 
 Once you've obtained the stack trace, the next step it to send it to the
 eclim-user_ mailing list along with a description of what you were doing when
