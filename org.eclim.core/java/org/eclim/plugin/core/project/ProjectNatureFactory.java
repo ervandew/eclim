@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.project;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +39,8 @@ public class ProjectNatureFactory
 
   public static String NONE = "none";
 
-  private static Map<String, String> natureAliases =
-    new HashMap<String, String>();
+  private static Map<String,String> natureAliases =
+    new HashMap<String,String>();
 
   /**
    * Registers a project nature.
@@ -60,6 +61,16 @@ public class ProjectNatureFactory
   public static String[] getNatureAliases()
   {
     return natureAliases.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+  }
+
+  /**
+   * Gets the map of natures aliases to ids.
+   *
+   * @return Map of aliases.
+   */
+  public static Map<String,String> getNatureAliasesMap()
+  {
+    return Collections.unmodifiableMap(natureAliases);
   }
 
   /**

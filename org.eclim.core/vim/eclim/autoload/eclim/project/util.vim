@@ -122,17 +122,9 @@ function! eclim#project#util#ProjectCreate(args)
   endif
 
   " execute any pre-project creation hooks
-  for nature in natureIds
-    exec 'runtime autoload/eclim/' . nature . '/project.vim'
-    try
-      let l:ProjectPre = function('eclim#' . nature . '#project#ProjectCreatePre')
-      if !l:ProjectPre(folder)
-        return
-      endif
-    catch /E\(117\|700\):.*/
-      " ignore
-    endtry
-  endfor
+  if !s:ProjectNatureHooks(natureIds, 'ProjectCreatePre', [folder])
+    return
+  endif
 
   let port = eclim#client#nailgun#GetNgPort(workspace)
   let result = eclim#ExecuteEclim(command, port)
@@ -142,14 +134,27 @@ function! eclim#project#util#ProjectCreate(args)
   endif
 
   " execute any post-project creation hooks
-  for nature in natureIds
+  call s:ProjectNatureHooks(natureIds, 'ProjectCreatePost', [folder])
+endfunction " }}}
+
+function! s:ProjectNatureHooks(natureIds, hookName, args) " {{{
+  for nature in a:natureIds
+    if nature == 'none'
+      continue
+    endif
+
+    exec 'runtime autoload/eclim/' . nature . '/project.vim'
     try
-      let l:ProjectPost = function('eclim#' . nature . '#project#ProjectCreatePost')
-      call l:ProjectPost(folder)
+      let l:ProjectPre = function('eclim#' . nature . '#project#' . a:hookName)
+      let result = call(l:ProjectPre, a:args)
+      if !result
+        return result
+      endif
     catch /E\(117\|700\):.*/
       " ignore
     endtry
   endfor
+  return 1
 endfunction " }}}
 
 " ProjectImport(arg) {{{
@@ -162,6 +167,27 @@ function! eclim#project#util#ProjectImport(arg)
   endif
   let command = substitute(s:command_import, '<folder>', folder, '')
 
+  let naturesDict = {}
+  for [key, value] in items(eclim#project#util#GetNatureAliasesDict())
+    let naturesDict[value] = key
+  endfor
+
+  let natureIds = []
+  let dotproject = folder . '/' . '.project'
+  if filereadable(dotproject)
+    for line in readfile(dotproject)
+      if line =~ '^\s*<nature>'
+        let id = substitute(line, '.*\<nature>\(.*\)</nature>.*', '\1', '')
+        if has_key(naturesDict, id)
+          call add(natureIds, naturesDict[id])
+        endif
+      endif
+    endfor
+    if !s:ProjectNatureHooks(natureIds, 'ProjectImportPre', [folder])
+      return
+    endif
+  endif
+
   let workspace = eclim#eclipse#ChooseWorkspace(folder)
   if workspace == '0'
     return
@@ -170,6 +196,11 @@ function! eclim#project#util#ProjectImport(arg)
 
   let result = eclim#ExecuteEclim(command, port)
   if result != '0'
+    let project = eclim#project#util#GetProject(folder)
+    if !len(natureIds)
+      let natureIds = eclim#project#util#GetProjectNatureAliases(project)
+    endif
+    call s:ProjectNatureHooks(natureIds, 'ProjectImportPost', [project])
     call eclim#util#Echo(result)
     call eclim#project#util#ClearProjectsCache()
   endif
@@ -254,8 +285,7 @@ function! eclim#project#util#ProjectMove(args)
   endif
 endfunction " }}}
 
-" s:ProjectMove(oldname, newname, command) {{{
-function! s:ProjectMove(oldname, newname, command)
+function! s:ProjectMove(oldname, newname, command) " {{{
   let cwd = substitute(getcwd(), '\', '/', 'g')
   let cwd_return = 1
   let oldpath = eclim#project#util#GetProjectRoot(a:oldname)
@@ -574,14 +604,23 @@ function! eclim#project#util#ProjectNatureModify(command, args)
   let args = eclim#util#ParseCmdLine(a:args)
 
   let project = args[0]
-  let natures = join(args[1:], ',')
+  let natures = args[1:]
   let command = a:command == 'add' ? s:command_nature_add : s:command_nature_remove
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<natures>', natures, '')
+  let command = substitute(command, '<natures>', join(natures, ','), '')
+
+  if a:command == 'add'
+    if !s:ProjectNatureHooks(natures, 'ProjectNatureAddPre', [project])
+      return
+    endif
+  endif
 
   let port = eclim#project#util#GetProjectPort(project)
   let result = eclim#ExecuteEclim(command, port)
   if result != '0'
+    if a:command == 'add'
+      call s:ProjectNatureHooks(natures, 'ProjectNatureAddPost', [project])
+    endif
     call eclim#util#Echo(result)
   endif
 endfunction " }}}
@@ -791,8 +830,7 @@ function! eclim#project#util#ProjectTodo()
   endif
 endfunction " }}}
 
-" s:SaveSettings() {{{
-function! s:SaveSettings()
+function! s:SaveSettings() " {{{
   call eclim#SaveSettings(s:command_update, b:project)
 endfunction " }}}
 
@@ -887,10 +925,9 @@ function! eclim#project#util#GetProjects()
   return all
 endfunction " }}}
 
-" GetProject(file) {{{
-function! eclim#project#util#GetProject(file)
-  let path = substitute(fnamemodify(a:file, ':p'), '\', '/', 'g')
-  let dir = fnamemodify(path, ':h')
+" GetProject(path) {{{
+function! eclim#project#util#GetProject(path)
+  let path = substitute(fnamemodify(a:path, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'
   if has('win32') || has('win64')
     let pattern .= '\c'
@@ -902,13 +939,13 @@ function! eclim#project#util#GetProject(file)
   call sort(projects, 's:ProjectSortPathDepth')
 
   for project in projects
-    if dir =~ '^' . project.path . pattern
+    if path =~ '^' . project.path . pattern
       return project
     endif
 
     " check linked folders
     for name in keys(get(project, 'links', {}))
-      if dir =~ '^' . project.links[name] . pattern
+      if path =~ '^' . project.links[name] . pattern
         return project
       endif
     endfor
@@ -916,8 +953,7 @@ function! eclim#project#util#GetProject(file)
   return {}
 endfunction " }}}
 
-" s:ProjectSortPathDepth(p1, p2) {{{
-function! s:ProjectSortPathDepth(p1, p2)
+function! s:ProjectSortPathDepth(p1, p2) " {{{
   return len(a:p2.path) - len(a:p1.path)
 endfunction " }}}
 
@@ -969,6 +1005,18 @@ function! eclim#project#util#GetProjectNatureAliases(...)
   let aliases = eclim#ExecuteEclim(s:command_nature_aliases)
   if type(aliases) != g:LIST_TYPE
     return []
+  endif
+
+  return aliases
+endfunction " }}}
+
+" GetNatureAliasesDict() {{{
+" Gets a dict of all natures aliases where the alias is the key and the nature
+" id is the value.
+function! eclim#project#util#GetNatureAliasesDict()
+  let aliases = eclim#ExecuteEclim(s:command_nature_aliases . ' -m')
+  if type(aliases) != g:DICT_TYPE
+    return {}
   endif
 
   return aliases

@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,8 +27,19 @@ else
   finish
 endif
 
-" ProjectPre(folder) {{{
-function eclim#ruby#project#ProjectCreatePre(folder)
+function eclim#ruby#project#ProjectCreatePre(folder) " {{{
+  return s:InitInterpreters()
+endfunction " }}}
+
+function eclim#ruby#project#ProjectImportPre(folder) " {{{
+  return s:InitInterpreters()
+endfunction " }}}
+
+function eclim#ruby#project#ProjectNatureAddPre(project) " {{{
+  return s:InitInterpreters()
+endfunction " }}}
+
+function s:InitInterpreters() " {{{
   let interpreters = eclim#dltk#interpreter#GetInterpreters('ruby')
   if len(interpreters) == 0
     let path = ''
