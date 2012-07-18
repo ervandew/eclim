@@ -107,9 +107,7 @@ public class Main
       });
       Object result = results[0];
 
-      if (result == null){
-        context.out.println(StringUtils.EMPTY);
-      }else{
+      if (result != null){
         GsonBuilder builder = new GsonBuilder();
         if (commandLine.hasOption(Options.PRETTY_OPTION)){
           builder = builder.setPrettyPrinting();
