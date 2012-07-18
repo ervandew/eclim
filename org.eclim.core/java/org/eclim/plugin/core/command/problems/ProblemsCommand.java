@@ -116,8 +116,9 @@ public class ProblemsCommand
     gatherMarkers.invoke(generator,
         generator.getTypes(), true, markers, new NullProgressMonitor());
 
+    ArrayList<Error> problems = new ArrayList<Error>();
     if (markers.size() == 0){
-      return null;
+      return problems;
     }
 
     ArrayList<IProject> projects = new ArrayList<IProject>();
@@ -125,7 +126,6 @@ public class ProblemsCommand
     CollectionUtils.addAll(projects, project.getReferencedProjects());
     CollectionUtils.addAll(projects, project.getReferencingProjects());
 
-    ArrayList<Error> problems = new ArrayList<Error>();
     Method getMarker = null;
     for (Object markerEntry : markers){
       if (getMarker == null){
