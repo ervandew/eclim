@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,8 +140,9 @@ public class SearchCommandTest
     }else{
       assertEquals(result.get("filename"), "/usr/include/stdlib.h");
       assertEquals(result.get("message"), "");
-      assertEquals(result.get("line"), 135);
       assertEquals(result.get("column"), 9);
+      int line = ((Integer)result.get("line")).intValue();
+      assertTrue(line > 130 && line < 140);
     }
   }
 
@@ -189,8 +190,9 @@ public class SearchCommandTest
     }else{
       assertEquals(result.get("filename"), "/usr/include/stdlib.h");
       assertEquals(result.get("message"), "");
-      assertEquals(result.get("line"), 134);
       assertEquals(result.get("column"), 9);
+      int line = ((Integer)result.get("line")).intValue();
+      assertTrue(line > 130 && line < 140);
     }
   }
 
