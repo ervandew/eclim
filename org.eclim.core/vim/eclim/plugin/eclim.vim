@@ -139,7 +139,7 @@ if !exists("g:EclimTemplatesDisabled")
 endif
 
 if !exists('g:EclimLargeFileEnabled')
-  let g:EclimLargeFileEnabled = 1
+  let g:EclimLargeFileEnabled = 0
 endif
 if !exists('g:EclimLargeFileSize')
   let g:EclimLargeFileSize = 5
