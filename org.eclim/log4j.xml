@@ -46,7 +46,7 @@
     - Eclimd view appender.
     -->
   <appender name="view" class="org.eclim.logging.log4j.ViewAppender">
-    <param name="View" value="org.eclim.eclipse.headed.EclimdView"/>
+    <param name="View" value="org.eclim.eclipse.ui.EclimdView"/>
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
     </layout>
@@ -56,7 +56,7 @@
     - Vimplugin debug view appender.
     -->
   <appender name="vimplugin_console" class="org.eclim.logging.log4j.ViewAppender">
-    <param name="View" value="org.eclim.eclipse.headed.VimpluginDebugView"/>
+    <param name="View" value="org.eclim.eclipse.ui.VimpluginDebugView"/>
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
     </layout>

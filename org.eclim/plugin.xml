@@ -17,17 +17,21 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <plugin id="org.eclim" name="Eclim" version="${eclim.version}">
-  <extension id="application_headless"
+  <extension id="application"
       point="org.eclipse.core.runtime.applications">
     <application>
-      <run class="org.eclim.eclipse.EclimApplicationHeadless"/>
+      <run class="org.eclim.eclipse.EclimApplication"/>
     </application>
+  </extension>
+
+  <extension point="org.eclipse.ui.startup">
+    <startup class="org.eclim.eclipse.EclimStartup"/>
   </extension>
 
   <extension point="org.eclipse.ui.views">
     <category id="org.eclim.category" name="Eclim"/>
-    <view id="org.eclim.eclipse.headed.EclimdView"
-        class="org.eclim.eclipse.headed.EclimdView"
+    <view id="org.eclim.eclipse.ui.EclimdView"
+        class="org.eclim.eclipse.ui.EclimdView"
         icon="resources/images/vim.gif"
         category="org.eclim.category"
         name="eclimd"
@@ -37,10 +41,10 @@
         Starts the eclim daemon and displays its logging output.
       </description>
     </view>
-    <view id="org.eclim.eclipse.headed.VimpluginDebugView"
+    <view id="org.eclim.eclipse.ui.VimpluginDebugView"
         allowMultiple="false"
         category="org.eclim.category"
-        class="org.eclim.eclipse.headed.VimpluginDebugView"
+        class="org.eclim.eclipse.ui.VimpluginDebugView"
         icon="resources/images/vim.gif"
         name="Vimplugin Debug Console">
       <description>

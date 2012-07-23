@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,8 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
-import org.eclim.eclipse.AbstractEclimApplication;
+import org.eclim.eclipse.EclimApplication;
+import org.eclim.eclipse.EclimDaemon;
 
 import org.eclim.logging.Logger;
 
@@ -44,12 +45,12 @@ public class ShutdownCommand
     throws Exception
   {
     try{
-      AbstractEclimApplication app = AbstractEclimApplication.getInstance();
-      if (app != null){
-        app.stop();
-      }
+      EclimDaemon.getInstance().stop();
     }catch(Exception e){
       logger.error("Error shutting down eclim:", e);
+    }
+    if (EclimApplication.isEnabled()){
+      EclimApplication.shutdown();
     }
     return null;
   }

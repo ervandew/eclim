@@ -154,7 +154,7 @@ resolve_eclim_home
 resolve_eclipse_launcher
 build_vmargs
 
-ECLIPSE_ARGS="-debug -clean -refresh -application org.eclim.application_headless"
+ECLIPSE_ARGS="-debug -clean -refresh -application org.eclim.application"
 
 if [ "$1" = "start" ]; then
   shift

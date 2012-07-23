@@ -1,3 +1,9 @@
+Juno:
+  - Hide progress window on headless shutdown.
+  - EclimComposite
+    - no longer needed?
+    - need to test on windows where it was used to fix a deadlock
+
 HIGH {{{
   Bugs:
     - figure out why eclimd affects the eclipse workspace selector
@@ -583,7 +589,7 @@ NOTES {{{
                -jar plugins/org.eclipse.equinox.launcher_<version>.jar
                -debug -consolelog -clean -refresh
                -data @user.home/workspace.test
-               -application org.eclim.application_headless
+               -application org.eclim.application
 
     Minimum execution of vim w/ eclim support:
       $ vim -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin indent on | ru plugin/eclim.vim"

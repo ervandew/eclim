@@ -6,7 +6,7 @@ Bundle-Version: ${eclim.version}
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclim.plugin.cdt.CdtPlugin
+Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.cdt.jar
 Require-Bundle: org.apache.ant,

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@ import java.util.Set;
 import org.eclim.Services;
 
 import org.eclim.command.Command;
-
-import org.eclim.eclipse.AbstractEclimApplication;
 
 import org.eclim.logging.Logger;
 
@@ -99,19 +97,6 @@ public class Plugin
     String name = context.getBundle().getSymbolicName();
     logger.debug("{}: activate", name);
 
-    // handle case where eclipse starts this bundle from some saved state.
-    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
-    if (app == null){
-      logger.debug("{}: eclim app not found, stopping bundle", name);
-      try{
-        this.getBundle().stop();
-      }catch(Exception e){
-        logger.error(
-            "Error stopping core plugin when eclim application not found.", e);
-      }
-      return;
-    }
-
     logger.debug("{}: loading plugin.properties", name);
     Properties properties = new Properties();
     InputStream in = null;
@@ -150,12 +135,6 @@ public class Plugin
     throws Exception
   {
     super.stop(context);
-
-    // handle stop call from activate method above.
-    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
-    if (app == null){
-      return;
-    }
 
     PluginResources resources = Services.removePluginResources(
         Services.getPluginResources(context.getBundle().getSymbolicName()));

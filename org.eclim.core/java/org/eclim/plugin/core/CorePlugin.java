@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import java.io.FilenameFilter;
 
 import org.eclim.Services;
 
-import org.eclim.eclipse.AbstractEclimApplication;
+import org.eclim.eclipse.EclimDaemon;
 import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.logging.Logger;
@@ -77,12 +77,6 @@ public class CorePlugin
   {
     super.activate(context);
 
-    // handle case where eclipse starts this bundle from some saved state.
-    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
-    if (app == null){
-      return;
-    }
-
     logger.info("Loading eclim plugins...");
     String pluginsDir =
       System.getProperty("eclim.home") + File.separator + ".." + File.separator;
@@ -118,7 +112,7 @@ public class CorePlugin
         //throw new RuntimeException(message);
       }else{
         try{
-          bundle.start();
+          bundle.start(Bundle.START_TRANSIENT);
         }catch(BundleException be){
           logger.error("Failed to load plugin: " + bundle.getSymbolicName(), be);
         }
@@ -129,7 +123,7 @@ public class CorePlugin
         this, IResourceChangeEvent.PRE_BUILD | IResourceChangeEvent.POST_BUILD);
 
     logger.info("Plugins loaded.");
-    AbstractEclimApplication.getInstance().frameworkEvent(
+    EclimDaemon.getInstance().frameworkEvent(
         new FrameworkEvent(FrameworkEvent.INFO, getBundle(), null));
   }
 
@@ -141,12 +135,6 @@ public class CorePlugin
     throws Exception
   {
     super.stop(context);
-
-    // handle stop on eclipse starting from saved state.
-    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
-    if (app == null){
-      return;
-    }
 
     for(String plugin : plugins){
       logger.info("Stopping plugin " + plugin);

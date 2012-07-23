@@ -22,14 +22,8 @@ import org.eclim.eclipse.EclimPlugin;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
-import org.eclipse.jface.action.MenuManager;
-
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-import org.eclipse.swt.SWT;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.EclimComposite;
 import org.eclipse.swt.widgets.Shell;
 
 import org.eclipse.ui.IWorkbenchPage;
@@ -45,7 +39,6 @@ public class EclimWorkbenchWindow
   extends WorkbenchWindow
 {
   private IWorkbenchPage page;
-  private Composite composite;
 
   public EclimWorkbenchWindow()
   {
@@ -99,17 +92,4 @@ public class EclimWorkbenchWindow
   {
     // no-op, needed for running inside of headed eclipse.
   }
-
-  /**
-   * {@inheritDoc}
-   * @see WorkbenchWindow#getPageComposite()
-   */
-  /*@Override
-  protected Composite getPageComposite()
-  {
-    if(composite == null){
-      composite = new EclimComposite(getShell(), SWT.NONE);
-    }
-    return composite;
-  }*/
 }

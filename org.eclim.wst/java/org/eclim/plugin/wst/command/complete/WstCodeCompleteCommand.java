@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import org.apache.tools.ant.taskdefs.condition.Os;
-
 import org.eclim.command.CommandLine;
 
-import org.eclim.eclipse.AbstractEclimApplication;
 import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
@@ -32,8 +29,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.swt.graphics.Point;
-
-import org.eclipse.swt.widgets.Composite;
 
 import org.eclipse.wst.sse.core.StructuredModelManager;
 
@@ -81,15 +76,6 @@ public abstract class WstCodeCompleteCommand
         public void setSelectedRange(int x, int y)
         {
           point = new Point(x, y);
-        }
-        protected void createControl(Composite parent, int styles)
-        {
-          // no-op on headless windows to prevent possible deadlock in native
-          // method.
-          AbstractEclimApplication app = AbstractEclimApplication.getInstance();
-          if (!Os.isFamily("windows") || app.isHeaded()){
-            super.createControl(parent, styles);
-          }
         }
       };
     }

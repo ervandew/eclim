@@ -89,8 +89,7 @@ public class VimEditor
 {
   private static final Logger logger = Logger.getLogger(VimEditor.class);
 
-  private static final String ECLIMD_VIEW_ID =
-    "org.eclim.eclipse.headed.EclimdView";
+  private static final String ECLIMD_VIEW_ID = "org.eclim.eclipse.ui.EclimdView";
 
   /** ID of the VimServer. */
   private int serverID;

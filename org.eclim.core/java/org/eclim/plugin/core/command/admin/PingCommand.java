@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.core.command.admin;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import org.eclim.Services;

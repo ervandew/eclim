@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,9 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import org.apache.tools.ant.taskdefs.condition.Os;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-
-import org.eclim.eclipse.AbstractEclimApplication;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
@@ -53,12 +49,6 @@ public class HtmlCodeCompleteCommand
       CommandLine commandLine, String project, String file)
     throws Exception
   {
-    AbstractEclimApplication app = AbstractEclimApplication.getInstance();
-    if (Os.isFamily("windows") && !app.isHeaded()){
-      throw new RuntimeException(
-          "Html completion disabled in headless eclimd on windows due " +
-          "to an issue with a native windows call blocking indefinitely.");
-    }
     return new HTMLContentAssistProcessor();
   }
 
