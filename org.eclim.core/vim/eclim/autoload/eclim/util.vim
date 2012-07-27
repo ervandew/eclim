@@ -512,7 +512,7 @@ endfunction " }}}
 " none, opens the file using the supplied command.
 function! eclim#util#GoToBufferWindowOrOpen(name, cmd)
   let name = eclim#util#EscapeBufferName(a:name)
-  let winnr = bufwinnr(bufnr('^' . name))
+  let winnr = bufwinnr(bufnr('^' . name . '$'))
   if winnr != -1
     exec winnr . "winc w"
     call eclim#util#DelayedCommand('doautocmd WinEnter')
