@@ -426,10 +426,10 @@ function! s:LocateFileChangeScope() " {{{
   setlocal noswapfile nobuflisted
   setlocal buftype=nofile bufhidden=delete
 
-  nmap <buffer> <silent> <cr> :call <SID>ChooseScope()<cr>
-  nmap <buffer> <silent> q :call <SID>CloseScopeChooser()<cr>
-  nmap <buffer> <silent> <c-c> :call <SID>CloseScopeChooser()<cr>
-  nmap <buffer> <silent> <c-l> :call <SID>CloseScopeChooser()<cr>
+  nnoremap <buffer> <silent> <cr> :call <SID>ChooseScope()<cr>
+  nnoremap <buffer> <silent> q :call <SID>CloseScopeChooser()<cr>
+  nnoremap <buffer> <silent> <c-c> :call <SID>CloseScopeChooser()<cr>
+  nnoremap <buffer> <silent> <c-l> :call <SID>CloseScopeChooser()<cr>
 
   autocmd BufLeave <buffer> call <SID>CloseScopeChooser()
 

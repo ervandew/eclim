@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -1143,9 +1143,9 @@ function! eclim#tree#DisplayActionChooser(file, actions, executeFunc)
     call append(line('$'), action.name)
   endfor
 
-  exec 'nmap <buffer> <silent> <cr> ' .
+  exec 'nnoremap <buffer> <silent> <cr> ' .
     \ ':call eclim#tree#ActionExecute("' . a:executeFunc . '")<cr>'
-  nmap <buffer> q :q<cr>
+  nnoremap <buffer> q :q<cr>
 
   exec "hi link TreeAction " . g:TreeActionHighlight
   syntax match TreeAction /.*/
@@ -1175,35 +1175,35 @@ endfunction "}}}
 
 " s:Mappings() {{{
 function! s:Mappings()
-  nmap <buffer> <silent> <cr> :call eclim#tree#Execute(0)<cr>
-  nmap <buffer> <silent> o    :call eclim#tree#Execute(1)<cr>
+  nnoremap <buffer> <silent> <cr> :call eclim#tree#Execute(0)<cr>
+  nnoremap <buffer> <silent> o    :call eclim#tree#Execute(1)<cr>
 
-  nmap <buffer> <silent> i    :call eclim#util#Echo(
+  nnoremap <buffer> <silent> i    :call eclim#util#Echo(
     \ eclim#tree#GetFileInfo(eclim#tree#GetPath()))<cr>
-  nmap <buffer> <silent> I    :call eclim#util#Echo(
+  nnoremap <buffer> <silent> I    :call eclim#util#Echo(
     \ eclim#tree#GetFileInfo(eclim#tree#GetPath()))<cr>
 
-  nmap <buffer> <silent> s    :call eclim#tree#Shell(0)<cr>
-  nmap <buffer> <silent> S    :call eclim#tree#Shell(1)<cr>
+  nnoremap <buffer> <silent> s    :call eclim#tree#Shell(0)<cr>
+  nnoremap <buffer> <silent> S    :call eclim#tree#Shell(1)<cr>
 
-  nmap <buffer> <silent> R    :call eclim#tree#Refresh()<cr>
+  nnoremap <buffer> <silent> R    :call eclim#tree#Refresh()<cr>
 
-  nmap <buffer> <silent> A    :call eclim#tree#ToggleViewHidden()<cr>
+  nnoremap <buffer> <silent> A    :call eclim#tree#ToggleViewHidden()<cr>
 
-  nmap <buffer> <silent> ~    :call eclim#tree#SetRoot(eclim#UserHome())<cr>
-  nmap <buffer> <silent> C    :call eclim#tree#SetRoot(eclim#tree#GetPath())<cr>
-  nmap <buffer> <silent> K    :call eclim#tree#SetRoot(substitute(
+  nnoremap <buffer> <silent> ~    :call eclim#tree#SetRoot(eclim#UserHome())<cr>
+  nnoremap <buffer> <silent> C    :call eclim#tree#SetRoot(eclim#tree#GetPath())<cr>
+  nnoremap <buffer> <silent> K    :call eclim#tree#SetRoot(substitute(
     \ <SID>PathToAlias(eclim#tree#GetRoot()),
     \ '^\([^/]*/\).*', '\1', ''))<cr>
-  nmap <buffer> <silent> B    :call eclim#tree#SetRoot(
+  nnoremap <buffer> <silent> B    :call eclim#tree#SetRoot(
     \ fnamemodify(eclim#tree#GetRoot(), ':h:h'))<cr>
 
-  nmap <buffer> <silent> j    :TreeNextPrevLine j<cr>
-  nmap <buffer> <silent> k    :TreeNextPrevLine k<cr>
-  nmap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
-  nmap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
+  nnoremap <buffer> <silent> j    :TreeNextPrevLine j<cr>
+  nnoremap <buffer> <silent> k    :TreeNextPrevLine k<cr>
+  nnoremap <buffer> <silent> p    :call eclim#tree#MoveToParent()<cr>
+  nnoremap <buffer> <silent> P    :call eclim#tree#MoveToLastChild()<cr>
 
-  nmap <buffer> <silent> D    :call eclim#tree#Mkdir()<cr>
+  nnoremap <buffer> <silent> D    :call eclim#tree#Mkdir()<cr>
 
   let ctrl_l = escape(maparg('<c-l>'), '|')
   exec 'nnoremap <buffer> <silent> <c-l> :silent doautocmd eclim_tree User <buffer><cr>' . ctrl_l
