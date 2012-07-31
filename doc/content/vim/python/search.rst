@@ -25,7 +25,7 @@ Element Search
 
 Element searching allows you to place the cursor over just about any element in
 a source file (method call, class name, constant) and perform a search for that
-element by issuing the command **:PhpFindDefinition**.
+element by issuing the command **:PythonFindDefinition**.
 
 If only one result is found and that result is in the current source file, the
 cursor will be moved to the element found.  Otherwise, on single result
