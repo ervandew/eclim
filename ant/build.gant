@@ -688,6 +688,7 @@ def initPlugins(){
   if (dropins.exists()){
     dropins.eachDir{ dropin ->
       featurePaths << new File(dropin.getAbsolutePath() + '/eclipse/features')
+      featurePaths << new File(dropin.getAbsolutePath() + '/features')
     }
   }
   if (getVariable('eclipse') != getVariable('eclipse.local')){
