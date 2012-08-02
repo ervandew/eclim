@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ if &indentexpr =~ 'EclimGetCssIndent' ||
   finish
 endif
 
-runtime indent/indentanything.vim
+runtime eclim/indent/indentanything.vim
 
 setlocal indentexpr=EclimGetCssIndent(v:lnum)
 setlocal indentkeys=0{,0},!^F,o,O
