@@ -35,7 +35,7 @@
 
 " load any xml related functionality
 runtime! ftplugin/xml.vim
-runtime indent/xml.vim
+runtime! indent/xml.vim
 
 augroup eclim_xml
   autocmd! BufWritePost <buffer>

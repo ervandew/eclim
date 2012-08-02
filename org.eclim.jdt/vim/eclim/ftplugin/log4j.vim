@@ -23,7 +23,7 @@
 " }}}
 
 runtime! ftplugin/xml.vim
-runtime indent/xml.vim
+runtime! indent/xml.vim
 runtime eclim/ftplugin/java.vim
 
 " Global Variables {{{

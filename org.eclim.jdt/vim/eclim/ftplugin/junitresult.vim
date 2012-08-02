@@ -22,7 +22,7 @@
 " }}}
 
 runtime! ftplugin/xml.vim
-runtime indent/xml.vim
+runtime! indent/xml.vim
 
 if !exists("g:tlist_junitresult_settings")
   let g:tlist_junitresult_settings = {

@@ -22,7 +22,7 @@
 " }}}
 
 runtime! ftplugin/xml.vim
-runtime indent/xml.vim
+runtime! indent/xml.vim
 runtime eclim/ftplugin/java.vim
 
 if !exists("g:tlist_webxml_settings")
