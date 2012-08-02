@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ let g:tlist_eclipse_cproject_settings = {
 " }}}
 
 " load any xml related functionality
-runtime ftplugin/xml.vim
+runtime! ftplugin/xml.vim
 runtime indent/xml.vim
 
 augroup eclim_xml

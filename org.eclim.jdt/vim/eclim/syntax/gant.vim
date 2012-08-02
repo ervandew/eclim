@@ -26,7 +26,7 @@
 " displaying as an error.
 let groovy_allow_cpp_keywords = 1
 
-runtime syntax/groovy.vim
+runtime! syntax/groovy.vim
 
 hi link groovyUserLabel Normal
 

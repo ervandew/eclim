@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 "
 " }}}
 
-runtime ftplugin/groovy*.vim
-runtime ftplugin/groovy/*.vim
+runtime! ftplugin/groovy*.vim
+runtime! ftplugin/groovy/*.vim
 
 if !exists('g:tlist_gant_settings')
   let g:tlist_gant_settings = {
