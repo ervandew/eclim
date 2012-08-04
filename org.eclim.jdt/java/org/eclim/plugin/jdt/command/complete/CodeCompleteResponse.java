@@ -22,6 +22,7 @@ import org.eclim.command.Error;
 
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
+@SuppressWarnings("unused")
 public class CodeCompleteResponse
 {
   private List<CodeCompleteResult> completions;
