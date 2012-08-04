@@ -92,7 +92,7 @@ git and build it:
   If you want to build in support for one or more eclim plugins for which the
   required dependency is not installed in your eclipse distribution, you can
   install the dependency using eclipse's p2 command line client.  Make sure the
-  command references the correct repository for your eclipse install (indigo
+  command references the correct repository for your eclipse install (juno
   in this example) and that you have Xvfb running as described in the next step
   of this guide:
 
@@ -100,7 +100,7 @@ git and build it:
 
     DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
       -application org.eclipse.equinox.p2.director
-      -repository http://download.eclipse.org/releases/indigo
+      -repository http://download.eclipse.org/releases/juno
       -installIU org.eclipse.wst.web_ui.feature.feature.group
 
   For a list of eclim plugins and which eclipse features they require, please

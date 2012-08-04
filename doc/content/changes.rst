@@ -23,6 +23,7 @@ History of Changes
 
 Eclipse:
   - Eclim now requires Java 6 or later.
+  - Eclim now requires the latest version of eclipse (Juno, 4.2).
 
 .. _1.7.7:
 

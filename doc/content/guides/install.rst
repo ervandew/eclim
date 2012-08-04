@@ -25,7 +25,7 @@ Before beginning the installation, first confirm that you have met the
 following requirements.
 
 - `Java Development Kit`_ 1.6 or greater
-- `Eclipse 3.7.x (Indigo)`_
+- `Eclipse 4.2.x (Juno)`_
 - `Vim 7.1.x`_
 - Mac and Linux users must also have make and gcc installed.
 
@@ -265,7 +265,7 @@ on any eclipse features, so to enable the installation of that plugin, just add
   (emacs-eclim users for example) you can supply `-Dvim.skip=true` instead.
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
-.. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/index.php
+.. _eclipse 4.2.x (juno): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim_<version>.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
 .. _eclim user: http://groups.google.com/group/eclim-user

@@ -128,10 +128,10 @@ public class RequirementProvider
       int minor = Integer.parseInt(parts[1]);
       int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 
-      if(major != 3 || minor < 7 || patch < 0){
+      if(major != 4 || minor < 2 || patch < 0){
         return new Status(FAIL,
             Installer.getString(
-              "eclipse.version.invalid", version, "3.7.x (Indigo)"));
+              "eclipse.version.invalid", version, "4.2.x (Juno)"));
       }
 
       return OK_STATUS;
@@ -162,7 +162,7 @@ public class RequirementProvider
 
     public String versionFromPlugins(String eclipseHome)
     {
-      final String[] plugins = {"org.eclipse.osgi", "org.eclipse.swt"};
+      final String[] plugins = {"org.eclipse.platform"};
       File file = new File(eclipseHome + "/plugins");
       String[] names = file.list(new FilenameFilter(){
         public boolean accept(File dir, String name){
