@@ -48,6 +48,7 @@ import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.RefactoringStatusEntry;
 import org.eclipse.ltk.core.refactoring.TextFileChange;
 
 /**
@@ -83,6 +84,7 @@ public abstract class AbstractRefactorCommand
       }
     }
 
+    List<String> errors = new ArrayList<String>();
     try{
       NullProgressMonitor monitor = new NullProgressMonitor();
       Refactoring refactoring = createRefactoring(commandLine);
@@ -91,7 +93,17 @@ public abstract class AbstractRefactorCommand
           new SubProgressMonitor(monitor, 4));
       int stopSeverity = RefactoringCore.getConditionCheckingFailedSeverity();
       if (status.getSeverity() >= stopSeverity) {
-        return status.getEntryWithHighestSeverity().getMessage();
+        for (RefactoringStatusEntry entry : status.getEntries()){
+          String message = entry.getMessage();
+          if (!errors.contains(message) &&
+              !message.startsWith("Found potential matches"))
+          {
+            errors.add(message);
+          }
+        }
+        HashMap<String,List<String>> result = new HashMap<String,List<String>>();
+        result.put("errors", errors);
+        return result;
       }
 
       Change change = refactoring.createChange(new SubProgressMonitor(monitor, 2));
@@ -144,7 +156,10 @@ public abstract class AbstractRefactorCommand
         workspace.removeResourceChangeListener(rcl);
       }
     }catch(RefactorException re){
-      return re.getMessage();
+      HashMap<String,List<String>> result = new HashMap<String,List<String>>();
+      errors.add(re.getMessage());
+      result.put("errors", errors);
+      return result;
     }
   }
 

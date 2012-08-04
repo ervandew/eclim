@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -136,12 +136,13 @@ endfunction " }}}
 " s:Preview(command) {{{
 function s:Preview(command)
   let result = eclim#ExecuteEclim(a:command)
-  if type(result) != g:DICT_TYPE && type(result) != g:STRING_TYPE
+  if type(result) != g:DICT_TYPE
     return
   endif
 
-  if type(result) == g:STRING_TYPE
-    call eclim#util#Echo(result)
+  " error occurred
+  if has_key(result, 'errors')
+    call eclim#util#EchoError(result.errors)
     return
   endif
 
@@ -258,12 +259,13 @@ function s:Refactor(command)
     exec 'cd ' . escape(eclim#project#util#GetCurrentProjectRoot(), ' ')
 
     let result = eclim#ExecuteEclim(a:command)
-    if type(result) != g:LIST_TYPE && type(result) != g:STRING_TYPE
+    if type(result) != g:DICT_TYPE
       return
     endif
 
-    if type(result) == g:STRING_TYPE
-      call eclim#util#Echo(result)
+    " error occurred
+    if has_key(result, 'errors')
+      call eclim#util#EchoError(result.errors)
       return
     endif
 
