@@ -125,22 +125,34 @@ endfunction " }}}
 " Echos the supplied message at the supplied level with the specified
 " highlight.
 function! s:EchoLevel(message, level, highlight)
-  " only echo if the result is not 0, which signals that ExecuteEclim failed.
-  if a:message != "0" && g:EclimLogLevel >= a:level
-    exec "echohl " . a:highlight
-    redraw
-    if mode() == 'n'
-      for line in split(a:message, '\n')
-        echom line
-      endfor
-    else
-      " if we aren't in normal mode then use regular 'echo' since echom
-      " messages won't be displayed while the current mode is displayed in
-      " vim's command line.
-      echo a:message . "\n"
-    endif
-    echohl None
+  " don't echo if the message is 0, which signals an ExecuteEclim failure.
+  if type(a:message) == g:NUMBER_TYPE && a:message == 0
+    return
   endif
+
+  if g:EclimLogLevel < a:level
+    return
+  endif
+
+  if type(a:message) == g:LIST_TYPE
+    let messages = a:message
+  else
+    let messages = split(a:message, '\n')
+  endif
+
+  exec "echohl " . a:highlight
+  redraw
+  if mode() == 'n'
+    for line in messages
+      echom line
+    endfor
+  else
+    " if we aren't in normal mode then use regular 'echo' since echom
+    " messages won't be displayed while the current mode is displayed in
+    " vim's command line.
+    echo join(messages, "\n") . "\n"
+  endif
+  echohl None
 endfunction " }}}
 
 " Echo(message) {{{
