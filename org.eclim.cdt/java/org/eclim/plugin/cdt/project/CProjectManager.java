@@ -126,11 +126,11 @@ public class CProjectManager
 
     MBSWizardHandler handler = null;
 
+    toolchainLoop:
     for (IBuildPropertyValue value : vs){
       final IToolChain[] toolChains = ManagedBuildManager
         .getExtensionsToolChains(MBSWizardHandler.ARTIFACT, value.getId(), false);
       if (toolChains != null && toolChains.length > 0){
-        toolchainLoop:
         for (IToolChain tc : toolChains){
           if (!tc.isAbstract() &&
               !tc.isSystemObject() &&
