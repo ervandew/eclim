@@ -48,13 +48,11 @@ public class Command
   private OutputHandler handler;
 
   public Command(OutputHandler handler, String[] cmd)
-    throws Exception
   {
     this(handler, cmd, "org.eclim.installer.application");
   }
 
   public Command(OutputHandler handler, String[] cmd, String application)
-    throws Exception
   {
     String[] jargs = {"java", "-Xmx256M"};
     String[] vmargs = getJvmArgs();

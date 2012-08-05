@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,14 +25,12 @@ public class InstallCommand
   extends Command
 {
   public InstallCommand(OutputHandler handler, String url, String id)
-    throws Exception
   {
     this(handler, url, id, "org.eclim.installer.application");
   }
 
   public InstallCommand(
       OutputHandler handler, String url, String id, String application)
-    throws Exception
   {
     super(handler, new String[]{
       "-repository", url,

@@ -25,14 +25,12 @@ public class UninstallCommand
   extends Command
 {
   public UninstallCommand(OutputHandler handler, String url, String id)
-    throws Exception
   {
     this(handler, url, id, "org.eclim.installer.application");
   }
 
   public UninstallCommand(
       OutputHandler handler, String url, String id, String application)
-    throws Exception
   {
     super(handler,
         url != null ?

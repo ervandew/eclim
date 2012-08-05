@@ -25,7 +25,6 @@ public class InfoCommand
   extends Command
 {
   public InfoCommand(OutputHandler handler)
-    throws Exception
   {
     super(handler, new String[]{"-info"});
   }
