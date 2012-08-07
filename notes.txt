@@ -533,6 +533,10 @@ NOTES {{{
   }}}
 
   Eclipse Docs {{{
+
+    Forcing system wide eclipse install to create user local configuration dirs:
+      $ eclipse -initialize
+
     p2
       http://wiki.eclipse.org/Equinox_p2_Getting_Started
       http://wiki.eclipse.org/Equinox_p2_Admin_UI_Users_Guide
@@ -704,6 +708,7 @@ NOTES {{{
   Vim Patches of note {{{
 
     - Patch 7.3.468: QuickFixCmdPre/Post now fired for cfile, lfile, etc.
+    - Patch 7.3.598: new autocmd: CompleteDone
 
   }}}
 
