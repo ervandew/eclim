@@ -35,6 +35,8 @@ import org.eclipse.equinox.internal.p2.director.ProfileChangeRequest;
 
 import org.eclipse.equinox.internal.p2.director.app.Messages;
 
+//import org.eclipse.equinox.internal.p2.ui.ProvUI;
+
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -49,6 +51,14 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
 
 import org.eclipse.equinox.p2.planner.IPlanner;
+
+/*import org.eclipse.equinox.p2.repository.IRepositoryManager;
+
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+
+import org.eclipse.equinox.p2.ui.ProvisioningUI;*/
 
 import org.eclipse.osgi.util.NLS;
 
@@ -91,6 +101,10 @@ public class Application
   // instead of returning EXIT_ERROR on error, throw an exception instead.
   public Object run(String[] args)
   {
+    // get eclipse information:
+    //   - profile name
+    //   - configuration location (user local dir for root installed eclipse)
+    //   - least of installed features
     if ("-info".equals(args[0])){
       System.out.println("  Profile: " +
           System.getProperty("eclipse.p2.profile"));
@@ -109,6 +123,38 @@ public class Application
       }
       return IApplication.EXIT_OK;
     }
+
+    // remove temp p2 repositories
+    // FIXME: after removing the repositories the changes don't seem to be
+    // committed. Either some event listener is registered or the application
+    // exists before the changes can be committed. Need to find out how to wait
+    // or force a synchronous saving of the changes. Also, the
+    // getKnownRepositories seems to not return the uri of the current update
+    // site, perhaps making this those block moot.
+    /*if ("-removeRepos".equals(args[0])){
+      // see
+      //   org.eclipse.equinox.p2.ui.RepositoryManipulationPage
+      //   org.eclipse.equinox.internal.p2.ui.model.ElementUtils
+
+      ProvisioningUI ui = ProvisioningUI.getDefaultUI();
+      ui.signalRepositoryOperationStart();
+      IMetadataRepositoryManager metaManager =
+        ProvUI.getMetadataRepositoryManager(ui.getSession());
+      IArtifactRepositoryManager artManager =
+        ProvUI.getArtifactRepositoryManager(ui.getSession());
+      URI[] repos = metaManager.getKnownRepositories(
+          IRepositoryManager.REPOSITORIES_ALL);
+      for (URI repo : repos){
+        if (repo.toString().indexOf("formic_") != -1){
+          System.out.println("Remove repository: " + repo);
+          metaManager.removeRepository(repo);
+          artManager.removeRepository(repo);
+        }
+      }
+      ui.signalRepositoryOperationComplete(null, true);
+
+      return IApplication.EXIT_OK;
+    }*/
 
     long time = System.currentTimeMillis();
 

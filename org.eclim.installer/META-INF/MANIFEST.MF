@@ -17,5 +17,8 @@ Require-Bundle: org.eclipse.core.resources,
   org.eclipse.equinox.p2.director.app,
   org.eclipse.equinox.p2.engine,
   org.eclipse.equinox.p2.metadata,
+  org.eclipse.equinox.p2.operations,
+  org.eclipse.equinox.p2.repository,
+  org.eclipse.equinox.p2.ui,
   org.eclipse.osgi,
   org.eclipse.update.configurator
