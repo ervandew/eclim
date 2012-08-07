@@ -89,7 +89,6 @@ public class EclipseInfoStep
     }finally{
       setValid(info != null);
       setBusy(false);
-      setPreviousEnabled(true);
       taskProgress.setIndeterminate(false);
     }
   }
