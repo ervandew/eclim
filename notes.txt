@@ -1,9 +1,3 @@
-Juno:
-  - Hide progress window on headless shutdown.
-  - EclimComposite
-    - no longer needed?
-    - need to test on windows where it was used to fix a deadlock
-
 HIGH {{{
   Bugs:
     - figure out why eclimd affects the eclipse workspace selector
