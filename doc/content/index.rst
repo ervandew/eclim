@@ -109,8 +109,12 @@ News
 2012-08-07
 -----------
 
-| :ref:`Eclim 1.7.7 <1.7.7>` is now available.
-| This is a bug fix release.
+Two new versions of eclim have been released, one for the latest Eclipse
+version, Juno, the other a bug fix release for the previous version of Eclipse,
+Indigo.
+
+- :ref:`Eclim 2.2.0 <2.2.0>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.7 <1.7.7>` for Eclipse 3.7 (Indigo).
 
 -----------
 2012-06-07
