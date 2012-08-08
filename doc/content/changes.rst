@@ -16,6 +16,42 @@
 History of Changes
 ==================
 
+.. _1.7.7:
+
+1.7.7 (Aug. 07, 2012)
+----------------------
+
+Eclimd:
+  - Updated eclimd script to always set the jvm architecture argument,
+    preventing possible issue starting eclimd on OSX if the default
+    architecture order of the java executable doesn't match the eclipse
+    architecture.
+
+C/C++:
+  - Semantic errors are now included in the validation results.
+  - Added folding support to C/C++ call hierarchy buffer.
+  - :ref:`:ProjectRefresh <:ProjectRefresh>` now waits on the C/C++ indexer to
+    finish before returning focus to the user.
+  - Fixed auto selecting of the tool chain when creating C/C++ projects from
+    eclim.
+  - Fixed :ref:`:CCallHierarchy <:CCallHierarchy>` from possibly using a cached
+    version of the file resulting in incorrect or no results.
+
+Java:
+  - Fixed inserted code from :ref:`:JavaCorrect <:JavaCorrect>` when file
+    format is 'dos'.
+  - Fixed off by one issue prevent several code correction suggestions from
+    being suggested.
+
+Ruby:
+  - Fixed to prompt for the path to the ruby interpreter if necessary when
+    importing a ruby project or adding the ruby nature to an existing project.
+
+Vimplugin:
+  - Fixed executing of some operations when vim is currently in insert mode
+    (opening new file from eclipse in a new external vim tab, using "Save As"
+    from eclipse, and jumping to a line number from the project tree etc.)
+
 .. _1.7.6:
 
 1.7.6 (Jun. 07, 2012)
