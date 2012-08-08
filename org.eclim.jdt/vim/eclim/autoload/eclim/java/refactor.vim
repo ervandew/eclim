@@ -259,12 +259,12 @@ function s:Refactor(command)
     exec 'cd ' . escape(eclim#project#util#GetCurrentProjectRoot(), ' ')
 
     let result = eclim#ExecuteEclim(a:command)
-    if type(result) != g:DICT_TYPE
+    if type(result) != g:LIST_TYPE && type(result) != g:DICT_TYPE
       return
     endif
 
     " error occurred
-    if has_key(result, 'errors')
+    if type(result) == g:DICT_TYPE && has_key(result, 'errors')
       call eclim#util#EchoError(result.errors)
       return
     endif
