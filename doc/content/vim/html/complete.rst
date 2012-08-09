@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,10 +40,3 @@ Html code completion uses the standard
     <head>
       <link type
   ...
-
-
-.. warning::
-
-  Html completion has been disabled on Windows when using the headless version
-  of eclim because of a native call which blocks indefinitely.  Hopefully in
-  the future this issue will be resolved or a work around found.
