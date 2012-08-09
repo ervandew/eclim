@@ -27,6 +27,8 @@ import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
@@ -327,6 +329,16 @@ public class SearchCommand
           FileObject fileObject = fsManager.resolveFile(srcFile);
           if(fileObject.exists()){
             file = srcFile;
+
+          // jdk sources on osx are under a "src/" dir in the jar
+          }else if (Os.isFamily(Os.FAMILY_MAC)){
+            srcFile = FileUtils.toUrl(
+                rootPath + File.separator + "src" +
+                File.separator + classFile + ".java");
+            fileObject = fsManager.resolveFile(srcFile);
+            if(fileObject.exists()){
+              file = srcFile;
+            }
           }
         }
       }
