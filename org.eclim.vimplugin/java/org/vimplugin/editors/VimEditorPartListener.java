@@ -34,12 +34,12 @@ import org.eclipse.jface.bindings.keys.KeyBinding;
 import org.eclipse.jface.bindings.keys.KeySequence;
 import org.eclipse.jface.bindings.keys.ParseException;
 
+import org.eclipse.jface.contexts.IContextIds;
+
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-
-import org.eclipse.ui.internal.keys.KeySequenceBinding;
 
 import org.eclipse.ui.keys.IBindingService;
 
@@ -58,9 +58,10 @@ public class VimEditorPartListener
   private static final Logger logger =
     Logger.getLogger(VimEditorPartListener.class);
 
-  // "In Windows"
-  private static final String CONTEXT_ID =
-    KeySequenceBinding.DEFAULT_CONTEXT_ID;
+  private static final String[] CONTEXT_IDS = new String[]{
+    IContextIds.CONTEXT_ID_WINDOW,
+    IContextIds.CONTEXT_ID_DIALOG_AND_WINDOW,
+  };
 
   private boolean keysDisabled = false;
   private IBindingService bindingService;
@@ -194,11 +195,13 @@ public class VimEditorPartListener
       BindingManager localChangeManager = getLocalChangeManager();
       String schemeId = localChangeManager.getActiveScheme().getId();
       for(KeySequence keySequence : keySequences){
-        localChangeManager.removeBindings(
-            keySequence, schemeId, CONTEXT_ID, null, null, null, Binding.USER);
-        localChangeManager.addBinding(new KeyBinding(
-              keySequence, null, schemeId, CONTEXT_ID,
-              null, null, null, Binding.USER));
+        for (String contextId : CONTEXT_IDS){
+          localChangeManager.removeBindings(
+              keySequence, schemeId, contextId, null, null, null, Binding.USER);
+          localChangeManager.addBinding(new KeyBinding(
+                keySequence, null, schemeId, contextId,
+                null, null, null, Binding.USER));
+        }
       }
       keysDisabled = true;
       saveKeyChanges(localChangeManager);
@@ -212,8 +215,10 @@ public class VimEditorPartListener
       BindingManager localChangeManager = getLocalChangeManager();
       String schemeId = localChangeManager.getActiveScheme().getId();
       for(KeySequence keySequence : keySequences){
-        localChangeManager.removeBindings(
-            keySequence, schemeId, CONTEXT_ID, null, null, null, Binding.USER);
+        for (String contextId : CONTEXT_IDS){
+          localChangeManager.removeBindings(
+              keySequence, schemeId, contextId, null, null, null, Binding.USER);
+        }
       }
       keysDisabled = false;
       saveKeyChanges(localChangeManager);
