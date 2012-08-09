@@ -88,6 +88,7 @@ public class PluginResources
   private static final String[] SRC_LOCATIONS = {
     "src.zip",
     "share/src.zip",
+    SystemUtils.JAVA_HOME.replace('\\', '/') + "/src.jar",
     SystemUtils.JAVA_HOME.replace('\\', '/') + "/src.zip",
     SystemUtils.JAVA_HOME.replace('\\', '/') + "/share/src.zip",
     SystemUtils.JAVA_HOME.replace('\\', '/') + "/../src.zip",
@@ -185,6 +186,7 @@ public class PluginResources
    */
   protected void initializeJreSrc()
   {
+    String jarName = Os.isFamily(Os.FAMILY_MAC) ? "classes.jar" : "rt.jar";
     // doing a straight JavaCore.setClasspathVariable() doesn't work, so we need
     // to modify the library path of the default vm install.
     try{
@@ -195,7 +197,7 @@ public class PluginResources
         IPath libraryPath = locations[ii].getSystemLibraryPath();
 
         // eclipse didn't find src.zip, so search other known locations.
-        if (libraryPath.lastSegment().equals("rt.jar") &&
+        if (libraryPath.lastSegment().equals(jarName) &&
             (locations[ii].getSystemLibrarySourcePath().isEmpty() ||
              !locations[ii].getSystemLibrarySourcePath().toFile().exists()))
         {
