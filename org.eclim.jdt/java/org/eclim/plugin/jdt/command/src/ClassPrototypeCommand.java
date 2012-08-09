@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -601,14 +601,15 @@ public class ClassPrototypeCommand
     {
       if (desc != null){
         // genrics
-        int index = desc.indexOf('<');
-        if (index != -1){
-          String outer = desc.substring(0, index);
-          String inner = desc.substring(index + 1, desc.lastIndexOf('>'));
+        int indexStart = desc.indexOf('<');
+        int indexEnd = desc.lastIndexOf('>');
+        if (indexStart != -1 && indexEnd != -1){
+          String outer = desc.substring(0, indexStart);
+          String inner = desc.substring(indexStart + 1, indexEnd);
           return getDescName(outer) + '<' + getDescName(inner) + '>';
         }
 
-        index = desc.lastIndexOf('/');
+        int index = desc.lastIndexOf('/');
         if (index != -1){
           String name = desc.substring(index + 1);
           if(name.endsWith(";")){
