@@ -16,88 +16,89 @@
  */
 package org.eclim.installer.step;
 
-import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 
 public class Dependency
 {
   private String id;
-  private String[] sites;
+  private String site;
   private boolean upgrade;
   private Feature feature;
-  private String version;
-  private String featureUrl;
-  private String featureVersion;
-  private String primaryUpdateSite;
+  private String requiredVersion;
 
   public Dependency(
       String id,
-      String version,
-      String[] sites,
-      Feature feature,
-      String primaryUpdateSite)
+      String site,
+      String requiredVersion,
+      Feature feature)
   {
     this.id = id;
-    this.version = version;
-    this.sites = sites;
+    this.site = site;
+    this.requiredVersion = requiredVersion;
     this.feature = feature;
     if(feature != null){
-      this.upgrade = compareVersions(this.version, feature.getVersion()) < 0;
+      this.upgrade = compareVersions(this.requiredVersion, feature.getVersion()) < 0;
     }
-    this.primaryUpdateSite = primaryUpdateSite;
   }
 
+  /**
+   * Gets the id of this dependency.
+   *
+   * @return The id string.
+   */
   public String getId()
   {
     return id;
   }
 
-  public String getVersion()
+  /**
+   * Gets the required version of this dependency.
+   *
+   * @return The version string.
+   */
+  public String getRequiredVersion()
   {
-    return version;
+    return requiredVersion;
   }
 
+  /**
+   * Determines if this dependency is currently installed.
+   *
+   * @return true if installed, false otherwise.
+   */
   public boolean isInstalled()
   {
     return feature != null;
   }
 
+  /**
+   * Determines if this dependency needs to be upgraded.
+   *
+   * @return true if an upgrade is necessary, false otherwise.
+   */
   public boolean isUpgrade()
   {
     return upgrade;
   }
 
-  public String[] getSites()
-  {
-    return this.sites;
-  }
-
+  /**
+   * Gets the currently installed feature info.
+   *
+   * @return A Feature instance.
+   */
   public Feature getFeature()
   {
     return feature;
   }
 
-  public String getFeatureUrl()
+  /**
+   * Gets the site to install/upgrade the dependency from.
+   *
+   * @return The url of the dependency site.
+   */
+  public String getSite()
   {
-    return featureUrl;
-  }
-
-  public String getFeatureVersion()
-  {
-    return featureVersion;
-  }
-
-  public boolean eval(Map<String,String> availableFeatures)
-    throws Exception
-  {
-    if(feature != null && !isUpgrade()){
-      return false;
-    }
-    String[] urlVersion = findUrlVersion(availableFeatures);
-    this.featureUrl = urlVersion[0];
-    this.featureVersion = urlVersion[1];
-    return true;
+    return this.site;
   }
 
   private int compareVersions(String v1, String v2)
@@ -112,19 +113,5 @@ public class Dependency
       }
     }
     return 0;
-  }
-
-  private String[] findUrlVersion(Map<String,String> availableFeatures)
-    throws Exception
-  {
-    for(int ii = 0; ii < sites.length; ii++){
-      if(sites[ii].equals(primaryUpdateSite)){
-        if(availableFeatures.containsKey(this.id)){
-          String version = (String)availableFeatures.get(this.id);
-          return new String[]{primaryUpdateSite, version};
-        }
-      }
-    }
-    return new String[]{null, null};
   }
 }

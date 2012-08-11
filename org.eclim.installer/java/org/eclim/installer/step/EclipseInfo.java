@@ -62,7 +62,6 @@ public class EclipseInfo
   private Map<String,List<Dependency>> dependencies =
     new HashMap<String,List<Dependency>>();
 
-  private String primaryUpdateSite;
   private String profileName;
   private String localPath;
 
@@ -84,7 +83,6 @@ public class EclipseInfo
       .newDocumentBuilder().parse(
           EclipseInfo.class.getResource(DEPENDENCIES).toString());
     Element root = document.getDocumentElement();
-    this.primaryUpdateSite = root.getAttribute("primary");
     NodeList features = root.getElementsByTagName("feature");
     for(int i = 0; i < features.getLength(); i++){
       Element feature = (Element)features.item(i);
@@ -92,18 +90,12 @@ public class EclipseInfo
       NodeList deps = feature.getElementsByTagName("dependency");
       for(int j = 0; j < deps.getLength(); j++){
         Element node = (Element)deps.item(j);
-        ArrayList<String> sites = new ArrayList<String>();
-        NodeList siteList = node.getElementsByTagName("site");
-        for(int k = 0; k < siteList.getLength(); k++){
-          Element site = (Element)siteList.item(k);
-          sites.add(site.getAttribute("url"));
-        }
+        Element site = (Element)node.getElementsByTagName("site").item(0);
         dependencies.add(new Dependency(
               node.getAttribute("id"),
+              site.getAttribute("url"),
               node.getAttribute("version"),
-              sites.toArray(new String[sites.size()]),
-              this.installedFeatures.get(node.getAttribute("id")),
-              this.primaryUpdateSite));
+              this.installedFeatures.get(node.getAttribute("id"))));
       }
       this.dependencies.put(feature.getAttribute("id"), dependencies);
     }
@@ -117,11 +109,6 @@ public class EclipseInfo
   public String getLocalPath()
   {
     return localPath;
-  }
-
-  public String getPrimaryUpdateSite()
-  {
-    return primaryUpdateSite;
   }
 
   public boolean hasFeature(String name)
