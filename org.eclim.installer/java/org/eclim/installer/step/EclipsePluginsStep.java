@@ -98,6 +98,7 @@ public class EclipsePluginsStep
   private ImageIcon errorIcon;
   private DefaultTableModel tableModel;
   private List<Dependency> dependencies;
+  private Map<String,String> availableFeatures;
   private PlasticTheme theme;
   private int overallProgressStep;
 
@@ -171,18 +172,6 @@ public class EclipsePluginsStep
       // find chosen features dependencies which need to be installed/upgraded.
       dependencies = unsatisfiedDependencies(info);
 
-      if (dependencies.size() > 0){
-        Map<String,String> availableFeatures =
-          loadAvailableFeatures(info.getPrimaryUpdateSite());
-
-        // filter out dependencies that aren't avaliable from the update site
-        for (Iterator<Dependency> ii = dependencies.iterator(); ii.hasNext();){
-          if (!ii.next().eval(availableFeatures)){
-            ii.remove();
-          }
-        }
-      }
-
       if(dependencies.size() == 0){
         overallProgress.setMaximum(1);
         overallProgress.setValue(1);
@@ -210,12 +199,13 @@ public class EclipsePluginsStep
         JScrollPane scrollPane = new JScrollPane(container);
         scrollPane.setAlignmentX(0.0f);
 
+        availableFeatures = loadAvailableFeatures();
         for (Dependency dependency : dependencies){
-          String version = dependency.getFeatureVersion();
+          String version = availableFeatures.get(dependency.getId());
           String manual = "";
           if (version == null){
             manual = " (Manual)";
-            version = dependency.getVersion();
+            version = dependency.getRequiredVersion();
           }
           tableModel.addRow(new Object[]{
             dependency.getId(),
@@ -298,7 +288,7 @@ public class EclipsePluginsStep
   }
 
   @SuppressWarnings("unchecked")
-  private Map<String,String> loadAvailableFeatures(final String updateSite)
+  private Map<String,String> loadAvailableFeatures()
     throws Exception
   {
     // load up available features from update sites.
@@ -311,10 +301,8 @@ public class EclipsePluginsStep
       {
         ArrayList<String> sites = new ArrayList<String>();
         for (Dependency dependency : dependencies){
-          for (String site : dependency.getSites()){
-            if(!sites.contains(site)){
-              sites.add(site);
-            }
+          if(!sites.contains(dependency.getSite())){
+            sites.add(dependency.getSite());
           }
         }
 
@@ -392,13 +380,14 @@ public class EclipsePluginsStep
             int removeIndex = 0;
             for (Iterator<Dependency> ii = dependencies.iterator(); ii.hasNext();){
               Dependency dependency = ii.next();
-              if (dependency.getFeatureUrl() != null){
+              String version = availableFeatures.get(dependency.getId());
+              if (version != null){
                 if(!dependency.isUpgrade()){
                   overallLabel.setText("Installing feature: " +
-                      dependency.getId() + '-' + dependency.getVersion());
+                      dependency.getId() + '-' + version);
                 }else{
                   overallLabel.setText("Updating feature: " +
-                      dependency.getId() + '-' + dependency.getVersion());
+                      dependency.getId() + '-' + version);
                 }
 
                 taskProgress.setValue(0);
@@ -406,7 +395,7 @@ public class EclipsePluginsStep
 
                 Command command = new InstallCommand(
                     EclipsePluginsStep.this,
-                    dependency.getFeatureUrl(),
+                    dependency.getSite(),
                     dependency.getId());
                 try{
                   command.start();
@@ -545,8 +534,6 @@ public class EclipsePluginsStep
     private static ArrayList<String> NAMES = new ArrayList<String>();
     static{
       NAMES.add("featureList.jdt");
-      NAMES.add("featureList.ant");
-      NAMES.add("featureList.maven");
       NAMES.add("featureList.wst");
       NAMES.add("featureList.cdt");
       NAMES.add("featureList.pdt");
