@@ -366,7 +366,7 @@ endfunction " }}}
 
 " ExecuteAction(file, command) {{{
 function! eclim#tree#ExecuteAction(file, command)
-  let file = a:file
+  let file = eclim#util#Simplify(a:file)
   let file = escape(file, ' &()')
   let file = escape(file, ' &()') " need to double escape
   let file = escape(file, '&') " '&' needs to be escaped 3 times.
