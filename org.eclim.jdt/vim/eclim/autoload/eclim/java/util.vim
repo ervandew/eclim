@@ -137,9 +137,11 @@ function! eclim#java#util#GetSelectedFields(first, last) range
     " ignore comment lines
     if line =~ '^\s*/\*'
       let blockcomment = 1
-    elseif blockcomment && line =~ '\*/\s*$'
+    endif
+    if blockcomment && line =~ '\*/\s*$'
       let blockcomment = 0
-    elseif line !~ '^\s*//' && !blockcomment
+    endif
+    if line !~ '^\s*//' && !blockcomment
       " remove quoted values.
       let line = substitute(line, '".\{-}"', '', 'g')
       " strip off trailing comments
