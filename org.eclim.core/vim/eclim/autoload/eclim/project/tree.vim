@@ -370,7 +370,7 @@ function! s:OpenFile(action) " {{{
     endif
 
     call eclim#tree#ExecuteAction(path,
-      \ "call eclim#project#tree#OpenProjectFile('" . a:action . "', '<cwd>', '<file>')")
+      \ "call eclim#project#tree#OpenProjectFile('" . a:action . "', '<file>')")
   endif
 endfunction " }}}
 
@@ -396,8 +396,7 @@ endfunction " }}}
 function! eclim#project#tree#ProjectTreeSettings() " {{{
   for action in g:EclimProjectTreeActions
     call eclim#tree#RegisterFileAction(action.pattern, action.name,
-      \ "call eclim#project#tree#OpenProjectFile('" .
-      \   action.action . "', '<cwd>', '<file>')")
+      \ "call eclim#project#tree#OpenProjectFile('" . action.action . "', '<file>')")
   endfor
 
   call eclim#tree#RegisterDirAction(function('eclim#project#tree#InjectLinkedResources'))
@@ -415,19 +414,14 @@ function! eclim#project#tree#ProjectTreeSettings() " {{{
   augroup END
 endfunction " }}}
 
-" OpenProjectFile(cmd, cwd, file) {{{
+" OpenProjectFile(cmd, file) {{{
 " Execute the supplied command in one of the main content windows.
-function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
+function! eclim#project#tree#OpenProjectFile(cmd, file)
   let cmd = a:cmd
-  let cwd = substitute(getcwd(), '\', '/', 'g')
-  let cwd = escape(cwd, ' &')
 
-  "exec 'cd ' . escape(a:cwd, ' ')
   exec g:EclimProjectTreeContentWincmd
 
-  let file = cwd . '/' . a:file
-
-  if eclim#util#GoToBufferWindow(file)
+  if eclim#util#GoToBufferWindow(a:file)
     return
   endif
 
@@ -438,9 +432,9 @@ function! eclim#project#tree#OpenProjectFile(cmd, cwd, file)
   endif
 
   try
-    exec cmd . ' ' file
+    exec cmd . ' ' a:file
   catch /E325/
-    " ignore attention error since the use should be prompted to handle it.
+    " ignore attention error since the user should be prompted to handle it.
   endtry
 endfunction " }}}
 
