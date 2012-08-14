@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,6 +102,9 @@ public class FormatCommand
     Document document = new Document(src.getBuffer().getContents());
     edits.apply(document);
     src.getBuffer().setContents(document.get());
+    if (src.isWorkingCopy()) {
+        src.commitWorkingCopy(false, null);
+    }
     src.save(null, false);
 
     return null;
