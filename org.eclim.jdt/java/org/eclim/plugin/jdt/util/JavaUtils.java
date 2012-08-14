@@ -490,6 +490,9 @@ public class JavaUtils
       Document document = new Document(src.getBuffer().getContents());
       edits.apply(document);
       src.getBuffer().setContents(document.get());
+      if (src.isWorkingCopy()) {
+          src.commitWorkingCopy(false, null);
+      }
       src.save(null, false);
     }
   }
