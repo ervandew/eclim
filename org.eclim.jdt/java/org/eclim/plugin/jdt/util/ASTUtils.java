@@ -104,6 +104,9 @@ public class ASTUtils
         document, src.getJavaProject().getOptions(true));
     edits.apply(document);
     src.getBuffer().setContents(document.get());
+    if (src.isWorkingCopy()) {
+        src.commitWorkingCopy(false, null);
+    }
     src.save(null, false);
   }
 
