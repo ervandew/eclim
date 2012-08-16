@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ public class ImportCommand
     List<SearchMatch> matches = super.search(searchPattern, scope);
     for(SearchMatch match : matches){
       if(match.getAccuracy() == SearchMatch.A_ACCURATE){
-        Position result = createPosition(match);
+        Position result = createPosition(project.getProject(), match);
         IType element = (IType)match.getElement();
         if(Flags.isPublic(element.getFlags())){
           String imprt = result.getMessage().replace('$', '.');
