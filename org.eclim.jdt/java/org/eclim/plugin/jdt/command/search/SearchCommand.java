@@ -21,6 +21,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
@@ -105,6 +107,11 @@ public class SearchCommand
   public static final String TYPE_PACKAGE = "package";
   public static final String TYPE_TYPE = "type";
 
+  protected static final String ANDROID_NATURE =
+    "com.android.ide.eclipse.adt.AndroidNature";
+  private static final Pattern ANDROID_JDK_URL =
+    Pattern.compile(".*android\\.jar!java.*");
+
   /**
    * {@inheritDoc}
    */
@@ -112,15 +119,19 @@ public class SearchCommand
     throws Exception
   {
     List<SearchMatch> matches = executeSearch(commandLine);
+    String projectName = commandLine.getValue(Options.NAME_OPTION);
+    IProject project = projectName != null ?
+      ProjectUtils.getProject(projectName) : null;
 
     ArrayList<Position> results = new ArrayList<Position>();
     for(SearchMatch match : matches){
-      if (match.getElement() != null){
-        int elementType = ((IJavaElement)match.getElement()).getElementType();
+      IJavaElement element = (IJavaElement)match.getElement();
+      if (element != null){
+        int elementType = element.getElementType();
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
             elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
         {
-          Position result = createPosition(match);
+          Position result = createPosition(project, match);
           if(result != null){
             results.add(result);
           }
@@ -250,10 +261,11 @@ public class SearchCommand
   /**
    * Creates a Position from the supplied SearchMatch.
    *
+   * @param project The project searching from.
    * @param match The SearchMatch.
    * @return The Position.
    */
-  protected Position createPosition(SearchMatch match)
+  protected Position createPosition(IProject project, SearchMatch match)
     throws Exception
   {
     IJavaElement element = (IJavaElement)match.getElement();
@@ -285,6 +297,14 @@ public class SearchCommand
 
         String classFile = elementName.replace('.', File.separatorChar);
         file = "jar:file://" + archive + '!' + classFile + ".class";
+
+        // android injects its jdk classes, so filter those out if the project
+        // doesn't have the android nature.
+        if (ANDROID_JDK_URL.matcher(file).matches() &&
+            project != null && !project.hasNature(ANDROID_NATURE))
+        {
+          return null;
+        }
 
         // if a source path attachment exists, use it.
         IPath srcPath = root.getSourceAttachmentPath();

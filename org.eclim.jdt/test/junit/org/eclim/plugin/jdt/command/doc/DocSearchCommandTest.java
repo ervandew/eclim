@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ public class DocSearchCommandTest
 
     normalize(results);
     assertEquals(results.get(0),
-        "http://download.oracle.com/javase/${version}/docs/api/" + 
+        "http://download.oracle.com/javase/${version}/docs/api/" +
         "java/util/ArrayList.html");
     assertEquals(results.get(1),
         "http://download.oracle.com/javase/${version}/docs/api/" +

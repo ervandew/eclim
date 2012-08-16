@@ -25,10 +25,15 @@ import java.util.regex.Pattern;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
+
+import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.jdt.command.search.SearchCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathContainer;
@@ -83,6 +88,9 @@ public class DocSearchCommand
         "http://docs.oracle.com/javase/7/docs/api/");
   }
 
+  private static final Pattern ANDROID_JDK_URL = Pattern.compile(
+      ".*android.*?/docs/reference/java.*", Pattern.CASE_INSENSITIVE);
+
   /**
    * {@inheritDoc}
    */
@@ -90,6 +98,8 @@ public class DocSearchCommand
     throws Exception
   {
     List<SearchMatch> matches = executeSearch(commandLine);
+    String projectName = commandLine.getValue(Options.NAME_OPTION);
+    IProject project = ProjectUtils.getProject(projectName);
 
     ArrayList<String> results = new ArrayList<String>();
     for(SearchMatch match : matches){
@@ -98,7 +108,7 @@ public class DocSearchCommand
         if (elementType != IJavaElement.PACKAGE_FRAGMENT &&
             elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
         {
-          String result = createDocSearchResult(match);
+          String result = createDocSearchResult(project, match);
           if(result != null){
             results.add(result);
           }
@@ -111,10 +121,11 @@ public class DocSearchCommand
   /**
    * Creates a javadoc url from the supplied SearchMatch.
    *
+   * @param project The project we are searching from.
    * @param match The SearchMatch.
    * @return The javadoc url.
    */
-  private String createDocSearchResult(SearchMatch match)
+  private String createDocSearchResult(IProject project, SearchMatch match)
     throws Exception
   {
     IJavaElement element = (IJavaElement)match.getElement();
@@ -137,7 +148,7 @@ public class DocSearchCommand
       for(int ii = 0; ii < attributes.length; ii++){
         String name = attributes[ii].getName();
         if(IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME.equals(name)){
-          return buildUrl(attributes[ii].getValue(), element);
+          return buildUrl(project, attributes[ii].getValue(), element);
         }
       }
     }
@@ -156,7 +167,7 @@ public class DocSearchCommand
             element.getJavaProject());
         String url = (String)JRE_DOCS.get(version);
         if(url != null){
-          return buildUrl(url, element);
+          return buildUrl(project, url, element);
         }
       }
     }
@@ -164,7 +175,7 @@ public class DocSearchCommand
     return null;
   }
 
-  private String buildUrl(String baseUrl, IJavaElement element)
+  private String buildUrl(IProject project, String baseUrl, IJavaElement element)
     throws Exception
   {
     String qualifiedName = JavaUtils.getFullyQualifiedName(element);
@@ -196,6 +207,16 @@ public class DocSearchCommand
     }*/
 
     url.append(childElement);
-    return url.toString();
+    String result = url.toString();
+
+    // android injects its own docs, so filter those out if the project doesn't
+    // have the android nature.
+    if (ANDROID_JDK_URL.matcher(result).matches() &&
+        !project.hasNature(ANDROID_NATURE))
+    {
+      return null;
+    }
+
+    return result;
   }
 }
