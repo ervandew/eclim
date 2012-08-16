@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,10 +51,7 @@ Checking out the code and building it.
 
       > ant "-Declipse.home=C:/Program Files/eclipse"
 
-  This will build and deploy eclim to your eclipse and vim directories.  If you
-  don't want to supply the eclipse home directory every time, you can set the
-  environment variable ECLIM_ECLIPSE_HOME which the build script will then
-  utilize.
+  This will build and deploy eclim to your eclipse and vim directories.
 
   .. note::
 
@@ -64,6 +61,17 @@ Checking out the code and building it.
       ::
 
         $ ant -Dvim.files=<your vimfiles dir>
+
+  If you don't want to supply the eclipse home directory, or any other
+  properties, on the command line every time you build eclim, you can create a
+  `user.properties` file at the eclim source root and put all your properties
+  in there:
+
+    ::
+
+      $ vim user.properties
+      eclipse.home=/opt/eclipse
+      vim.files=${user.home}/.vim/bundle/eclim
 
 .. _development-patches:
 
