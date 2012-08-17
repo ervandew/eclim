@@ -223,7 +223,9 @@ function! s:CloseIfLastWindow() " {{{
       endif
       let buftype = getbufvar(bufnr, '&buftype')
       if buftype != '' && buftype != 'help'
-        continue
+        if !exists('g:BufExplorer_title') || bufname(bufnr) != "[BufExplorer]"
+          continue
+	     	endif
       endif
 
       let close = 0
