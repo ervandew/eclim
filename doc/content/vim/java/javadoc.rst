@@ -70,19 +70,6 @@ points to the base url of the javadoc (http, file, etc).
     </attributes>
   </classpath>
 
-.. warning::
-
-  Searching for classes in the jdk requires the JRE_CONTAINER entry in your
-  .classpath file.  Some third party plugins may create java projects with this
-  entry ommitted (like android projects created by the Android Development
-  Tools).  In these cases you can manually add the following to your project's
-  .classpath file:
-
-  .. code-block:: xml
-
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-
-
 Configuration
 -------------
 
