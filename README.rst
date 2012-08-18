@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ Eclim is released under the GPLv3_.
 .. _eclim user mailing list: http://groups.google.com/group/eclim-user
 .. _issue: http://github.com/ervandew/eclim/issues
 .. _eclipse: http://eclipse.org
-.. _vim: http://vim.org
+.. _vim: http://www.vim.org
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
 .. _Emacs client: http://github.com/senny/emacs-eclim
 .. _TextMate client: http://github.com/JulianEberius/Eclim.tmbundle

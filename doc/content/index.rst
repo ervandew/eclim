@@ -17,25 +17,18 @@ Welcome to Eclim
 ==================
 
 .. toctree::
+   :hidden:
 
    download
-   features
-
-.. toctree::
-
    gettingstarted
+   gettinghelp
+   guides/index
+   documentation
+   development/index
+   features
    changes
    contribute
-
-.. toctree::
-
-   documentation
-   guides/index
-   translations/index
-   development/index
-
-.. toctree::
-   irc
+   relatedprojects
 
 .. _overview:
 
@@ -161,7 +154,7 @@ Indigo.
 | This version fixes running the installer with java 7 as well as several other
   small bug fixes and improvements.
 
-I'd also like to announce the :ref:`#eclim <irc>` channel on freenode.
+I'd also like to announce the #eclim channel on freenode.
 
 -----------
 2011-07-02
@@ -437,7 +430,7 @@ projects in the future.
 
 
 .. _eclipse: http://eclipse.org
-.. _vim: http://vim.org
+.. _vim: http://www.vim.org
 .. _nailgun: http://www.martiansoftware.com/nailgun/
 .. _formic: http://github.com/ervandew/formic/
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html

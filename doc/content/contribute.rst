@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,6 @@ are several ways in which you can contribute:
     - Point out areas of the documentation that are vague and could use
       elaboration.
     - Write new guides to be included in the "Guides" section of the site.
-    - Write translations.  Eclim gets visitors from all over the world and it
-      would be nice to be able to provide localized documentation for them.
 
 #.  **Bug Reports**: Some people are a bit shy about speaking up and reporting
     bugs.  I want to urge people not to be.  If something doesn't work, report

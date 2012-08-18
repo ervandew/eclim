@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2011  Eric Van Dewoestine
+# Copyright (C) 2005 - 2012  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,12 +17,17 @@
 
 BASEDIR=`dirname $(dirname $(which $0))`
 
-if [ -z "$PYTHON" ] ; then
-  PYTHON=`which python2`
+if [ -z "$SPHINXBUILD" ] ; then
+  SPHINXBUILD=`which sphinx-build2`
 fi
 
-if [ -z "$PYTHON" ] ; then
-  PYTHON=python
+if [ -z "$SPHINXBUILD" ] ; then
+  SPHINXBUILD=`which sphinx-build`
 fi
 
-PYTHONPATH=$BASEDIR/doc/extension $PYTHON doc/extension/eclim/sphinx "$@"
+if [ -z "$SPHINXBUILD" ] ; then
+  echo "sphinx-build not found."
+  exit 1
+fi
+
+$SPHINXBUILD "$@"
