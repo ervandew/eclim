@@ -1,0 +1,3 @@
+[submodule "doc/theme"]
+	path = doc/theme
+	url = git@github.com:ervandew/sphinx-bootstrap-theme.git

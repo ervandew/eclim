@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,28 +19,29 @@ Documentation
 =============
 
 .. toctree::
+   :hidden:
 
-  vim/index
-  eclimd
-  vim/settings
-  vim/issues
-  vim/code_completion
-  vim/mappings
-  vim/cheatsheet
-  vim/faq
-  vim/common/index
-  vim/c/index
-  vim/css/index
-  vim/dltk/index
-  vim/dtd/index
-  vim/html/index
-  vim/java/index
-  vim/javascript/index
-  vim/php/index
-  vim/python/index
-  vim/ruby/index
-  vim/xml/index
-  vim/xsd/index
+   vim/index
+   eclimd
+   vim/settings
+   vim/issues
+   vim/code_completion
+   vim/mappings
+   vim/cheatsheet
+   vim/faq
+   vim/common/index
+   vim/c/index
+   vim/css/index
+   vim/dltk/index
+   vim/dtd/index
+   vim/html/index
+   vim/java/index
+   vim/javascript/index
+   vim/php/index
+   vim/python/index
+   vim/ruby/index
+   vim/xml/index
+   vim/xsd/index
 
 - :ref:`vim/index`
 - :ref:`eclimd`

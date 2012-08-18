@@ -431,7 +431,7 @@ target(name: 'docs'){
 
   // generate site documention via sphinx
   exec(executable: 'bin/sphinx', failonerror: true, dir: '.'){
-    arg(line: '${sphinx.args} -b eclim doc/content build/doc/site')
+    arg(line: '${sphinx.args} -b html doc/content build/doc/site')
   }
 
   // copy over any images that sphinx neglects to

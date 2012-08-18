@@ -19,6 +19,7 @@ Guides
 ==========
 
 .. toctree::
+   :hidden:
 
    install
    uninstall
