@@ -27,11 +27,6 @@ The most mature usage scenario that eclim provides, is the running of a
 headless eclipse server and communicating with that server inside of vim.
 Starting and stopping of the headless eclipse instance is detailed below.
 
-.. warning::
-  While the headless server is running, opening an eclipse gui is **strongly**
-  discouraged.  Doing so has the potential to corrupt eclipse's persisted
-  state, leading to errors on the next headless startup.
-
 **Starting eclimd**
 
 **Linux / Mac / BSD (and other unix based systems)**:
