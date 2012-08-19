@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _guides/headless:
-
 Eclim Headless Server Guide
 ===========================
 
@@ -35,72 +33,45 @@ server.
 The first step is to install the packages that are required to run eclipse and
 eclim:
 
-- Install a sun jdk:
+- Install a java jdk, xvfb, and the necessary build tools to compile eclim's
+  nailgun client during installation (make, gcc, etc).
 
   ::
 
-    $ sudo apt-get install sun-java6-jdk
+    $ sudo apt-get install openjdk-6-jdk xvfb build-essential
 
-- Install Xvfb and some other gui related dependencies:
+Then you'll need to install eclipse. You may do so by installing it from your
+distro's package manager or using a version found on `eclipse.org`_. If you
+choose to install a version from you package manager, make sure that the
+version to be installed is compatible with eclim since the package manager
+version can often be out of date. If you choose to install an `eclipse.org`_
+version, you can do so by first downloading eclipse using either a console
+based browser like elinks, or you can navigate to the download page on your
+desktop and copy the download url and use wget to download the eclipse archive.
+Once downloaded, you can then extract the archive in the directory of your
+choice.
 
-  ::
+::
 
-    $ sudo apt-get install xvfb libgtk-directfb-2.0-dev x11-xkb-utils libgl1-mesa-dri
+  $ wget <eclipse_mirror>/eclipse-<version>-linux-gtk.tar.gz
+  $ tar -zxf eclipse-<version>-linux-gtk.tar.gz
 
-The next step is to install eclipse.  Usually the eclipse version found in your
-distro's package manager repository is behind the latest versions found on
-eclipse.org and may not be supported by eclim any longer.  So, the recommended
-means of installing eclipse is to download a version from `eclipse.org`_.  You
-can either use a console based browser like elinks, or you can navigate to the
-download page on your desktop and copy the download url and use wget to
-download the eclipse archive.  Once downloaded you can then extract the archive
-in the directory of your choice.
+.. note::
 
-  ::
-
-    $ wget <eclipse_mirror>/eclipse-<version>-linux-gtk.tar.gz
-    $ tar -zxvf eclipse-<version>-linux-gtk.tar.gz
-
-Once eclipse is installed, you can then install eclim.  Since the eclim
-installer does not yet support console installs, you can checkout the code from
-git and build it:
-
-- Install the necessary packages to build eclim:
-
-  ::
-
-    $ sudo apt-get install build-essential git-core
-    $ sudo apt-get --no-install-recommends install ant ant-optional
-
-- Clone eclim from the git repository and optionally checkout the version of
-  eclim you wish to build (1.5.2 in this case):
-
-  ::
-
-    $ git clone git://github.com/ervandew/eclim.git
-    $ cd eclim
-    $ git checkout 1.5.2
-
-- Then you can build eclim (see the
-  :ref:`developers guide <guides/development>` for more info on building
-  eclim).
-
-  ::
-
-    $ ant -Declipse.home=/home/ervandew/eclipse
-
-  If you want to build in support for one or more eclim plugins for which the
-  required dependency is not installed in your eclipse distribution, you can
-  install the dependency using eclipse's p2 command line client.  Make sure the
-  command references the correct repository for your eclipse install (indigo
-  in this example) and that you have Xvfb running as described in the next step
-  of this guide:
+  Depending on what distribution of eclipse you installed and what eclim
+  features you would like to be installed, you may need to install additional
+  eclipse features.  If you installed eclipse from your package manager then
+  your package manager may also have the required dependency (eclipse-cdt for
+  C/C++ support for example). If not, you can install the required dependency
+  using eclipse's p2 command line client. Make sure the command references the
+  correct repository for your eclipse install (juno in this example) and that
+  you have Xvfb running as described in the last step of this guide:
 
   ::
 
     DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
       -application org.eclipse.equinox.p2.director
-      -repository http://download.eclipse.org/releases/indigo
+      -repository http://download.eclipse.org/releases/juno
       -installIU org.eclipse.wst.web_ui.feature.feature.group
 
   For a list of eclim plugins and which eclipse features they require, please
@@ -108,20 +79,31 @@ git and build it:
   must be added to the dependency id found in that file when supplying it to
   the '-installIU' arg of the above command.
 
+Once eclipse is installed, you can then install eclim utilizing the eclim
+installer's automated install option (see the :ref:`install-automated` guide
+for additional details):
+
+.. code-block:: bash
+
+  $ java \
+    -Dvim.files=$HOME/.vim \
+    -Declipse.home=/opt/eclipse \
+    -jar eclim_eclim_release.jar install
+
 The last step is to start Xvfb followed by eclimd:
 
-  ::
+::
 
-    $ Xvfb :1 -screen 0 1024x768x24 &
-    $ DISPLAY=:1 ./eclipse/eclimd start
+  $ Xvfb :1 -screen 0 1024x768x24 &
+  $ DISPLAY=:1 ./eclipse/eclimd start
 
-  When starting Xvfb you may receive some errors regarding font paths and
-  possibly dbus and hal, but as long as Xvfb continues to run, you should be
-  able to ignore these errors.
+When starting Xvfb you may receive some errors regarding font paths and
+possibly dbus and hal, but as long as Xvfb continues to run, you should be
+able to ignore these errors.
 
-  The first time you start eclimd you may want to omit the 'start' argument so
-  that you can see the output on the console to ensure that eclimd starts
-  correctly.
+The first time you start eclimd you may want to omit the 'start' argument so
+that you can see the output on the console to ensure that eclimd starts
+correctly.
 
 .. _eclipse.org: http://eclipse.org/downloads/
 .. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml

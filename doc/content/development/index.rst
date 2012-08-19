@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _development/index:
-
 Development Docs
 ================
 
@@ -27,8 +25,7 @@ Development Docs
    unittests
    installer
 
-:ref:`development/architecture`
-
+:doc:`/development/architecture`
   Explains the underlying architecture that eclim utilizes including an
   overview of the call sequence from vim to eclipse.
 

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/index:
-
 Introduction
 =============
 
@@ -25,13 +23,13 @@ functionality that eclim provides.
 .. note::
 
   For installation instructions please see the
-  :ref:`install guide <guides/install>`.
+  :doc:`install guide </guides/install>`.
 
 The eclim documentation is broken up into two parts.  The first is the
 comprehensive documentation which details the usage and purpose of every
 command and setting.  This portion is found under the "Documentation" sub-menu
 on the left.  Here you will find configuration information
-(:ref:`settings <vim/settings>`, :ref:`suggested mappings <vim/mappings>`,
+(:doc:`settings </vim/settings>`, :doc:`suggested mappings </vim/mappings>`,
 etc.), and the detailed functionality documentation which is broken up into
 categories (common functionality, java development functionality, etc.).
 
@@ -41,7 +39,7 @@ written to help you perform specific tasks.  These guides are located under the
 
 Before diving in, you should first familiarize yourself with the following
 commands.  After that, take a look at the docs for
-:ref:`managing projects <vim/common/project>`.  Then feel free to move on to
+:doc:`managing projects </vim/project>`.  Then feel free to move on to
 the other categories.
 
 .. _\:PingEclim:
@@ -57,9 +55,9 @@ the other categories.
 .. _\:EclimSettings:
 
 - **:EclimSettings** -
-  Allows you to view / edit the global :ref:`settings <vim/settings>`.
+  Allows you to view / edit the global :doc:`settings </vim/settings>`.
   For project level settings see the :ref:`:ProjectSettings` command on the
-  :ref:`project documentation page <vim/common/project>`.
+  :doc:`project documentation page </vim/project>`.
 
 .. _\:EclimDisable:
 

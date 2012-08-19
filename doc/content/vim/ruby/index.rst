@@ -13,26 +13,12 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/ruby/index:
-
 Ruby
 =====
 
 .. toctree::
-   :hidden:
 
    buildpath
    complete
    validate
    search
-
-- :ref:`vim/ruby/buildpath`
-- :ref:`vim/ruby/complete`
-- :ref:`vim/ruby/validate`
-- :ref:`vim/ruby/search`
-
-.. note::
-  These features depends on the eclipse dltk_ ruby plugin which should be
-  installed for you when choosing ruby support in the eclim installer.
-
-.. _dltk: http://eclipse.org/dltk

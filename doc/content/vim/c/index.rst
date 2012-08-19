@@ -13,28 +13,14 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/c/index:
-
 C/C++
 =====
 
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
    project
    complete
    validate
    search
    hierarchy
-
-- :ref:`vim/c/project`
-- :ref:`vim/c/complete`
-- :ref:`vim/c/validate`
-- :ref:`vim/c/search`
-- :ref:`vim/c/hierarchy`
-
-.. note::
-  These features depends on the eclipse cdt_ which should be installed for you
-  when choosing c/c++ support in the eclim installer.
-
-.. _cdt: http://eclipse.org/cdt

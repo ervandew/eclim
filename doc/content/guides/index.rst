@@ -31,13 +31,13 @@ Guides
 
 Installing, Upgrading, Troubleshooting, etc.
 --------------------------------------------
-- :ref:`guides/install`
-- :ref:`guides/uninstall`
-- :ref:`guides/troubleshoot`
-- :ref:`guides/headless`
-- :ref:`guides/multi_workspace`
+- :doc:`/guides/install`
+- :doc:`/guides/uninstall`
+- :doc:`/guides/troubleshoot`
+- :doc:`/guides/headless`
+- :doc:`/guides/multi_workspace`
 
 
 Eclim Developers
 ----------------
-- :ref:`guides/development`
+- :doc:`/guides/development`

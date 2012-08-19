@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _guides/troubleshoot:
-
 Troubleshooting
 ===============
 
@@ -28,9 +26,9 @@ echoed as errors to the user. Instead these errors are logged and only
 displayed if your eclim log level is set to a relevant level.  You can set the
 log level at any time by running:
 
-  .. code-block:: vim
+.. code-block:: vim
 
-    :let g:EclimLogLevel = 10
+  :let g:EclimLogLevel = 10
 
 in vim, which in this case sets the logging to verbose (the default log level
 is 4).  After setting the log level any external commands that are run or
@@ -41,7 +39,7 @@ Below are a series of sections broken up by the behavior (or lack of)
 experienced and the steps for diagnosing the cause of that behavior.
 
 If you can't find the answer to your question here, be sure to take a look at
-the :ref:`faq <vim/faq>` to see if your question is answered there.
+the :doc:`faq </vim/faq>` to see if your question is answered there.
 
 
 .. _ts_workspace:
@@ -100,16 +98,16 @@ I'm editing a [java, python, php, etc] file and none of the file type commands e
 This usually indicates that you don't have file type plugins enabled in vim.
 To check you can run:
 
-  ::
+::
 
-    :EclimValidate
+  :EclimValidate
 
 If it complains about filetype plugin support not being found, then follow its
 directions on adding the following to your vimrc:
 
-  .. code-block:: vim
+.. code-block:: vim
 
-    filetype plugin indent on
+  filetype plugin indent on
 
 
 .. _ts_signs_misplaced:
@@ -138,9 +136,9 @@ helpful message, then you may have encountered a bug.
 Once you've encountered this type of issue, the first step it to get more
 details which you can do by enabling eclim debugging in vim:
 
-  .. code-block:: vim
+.. code-block:: vim
 
-    :let g:EclimLogLevel = 10
+  :let g:EclimLogLevel = 10
 
 Then you can perform the same action that triggered the error again. This time
 you should receive the full stack trace of the error.

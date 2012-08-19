@@ -13,18 +13,12 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/index:
-
 Java
 ======
 
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
-   ant/index
-   maven/index
-   log4j/index
-   webxml/index
    classpath
    validate
    search
@@ -46,55 +40,10 @@ Java
    logging
    tools
 
+.. toctree::
+   :maxdepth: 1
 
-Ant
----
-
-- :ref:`vim/java/ant/execute`
-- :ref:`vim/java/ant/complete`
-- :ref:`vim/java/ant/validate`
-- :ref:`vim/java/ant/doc`
-
-
-Maven
------
-
-- :ref:`vim/java/maven/execute`
-- :ref:`vim/java/maven/dependencies`
-
-
-Log4j
------
-
-- :ref:`vim/java/log4j/validate`
-
-
-web.xml
--------
-
-- :ref:`vim/java/webxml/validate`
-
-
-Java
--------
-
-- :ref:`vim/java/classpath`
-- :ref:`vim/java/validate`
-- :ref:`vim/java/search`
-- :ref:`vim/java/java`
-- :ref:`vim/java/javadoc`
-- :ref:`vim/java/import`
-- :ref:`vim/java/complete`
-- :ref:`vim/java/correct`
-- :ref:`vim/java/constructor`
-- :ref:`vim/java/impl`
-- :ref:`vim/java/delegate`
-- :ref:`vim/java/bean`
-- :ref:`vim/java/hierarchy`
-- :ref:`vim/java/format`
-- :ref:`vim/java/refactor`
-- :ref:`vim/java/checkstyle`
-- :ref:`vim/java/junit`
-- :ref:`vim/java/testng`
-- :ref:`vim/java/logging`
-- :ref:`vim/java/tools`
+   ant
+   maven
+   log4j
+   webxml

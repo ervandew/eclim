@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,17 +13,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/maven/execute:
-
-Maven Execution
-===============
+Maven
+======
 
 .. _\:Maven:
 
 .. _\:Mvn:
 
-Much like the provided :ref:`ant <vim/java/ant/execute>` execution
-functionality, eclim also provides commands for running maven 1.x or 2.x.
+Running
+-------
+
+Much like the provided :doc:`ant </vim/java/ant>` execution functionality,
+eclim also provides commands for running maven 1.x or 2.x.
 
 Eclim provides the following commands\:
 
@@ -59,3 +60,31 @@ longer has support for the ``--find`` option.
 
   Both **:Maven** and **:Mvn** also supports use of '!' (:Maven!) just like
   :make does, which tells Vim not to jump to the first error if one exists.
+
+.. _\:MavenDependencySearch:
+
+.. _\:MvnDependencySearch:
+
+Dependency Search
+-----------------
+
+Maven provides online repositories where it will download dependencies from at
+build time.  One problem is that finding all your dependencies and then adding
+them to your pom file can become labor intensive.  To help alleviate this, eclim
+provides commands for searching via the web service provided by
+jarvana.com_.
+
+- **:MavenDependencySearch** <artifact> -
+  Available when editing a maven 1.x ``project.xml`` file.
+- **:MvnDependencySearch** <artifact> -
+  Available when editing a maven 2.x ``pom.xml`` file.
+
+These two commands will search for the specified artifact and open a window
+containing the results.  You can then add one of the results as a dependency to
+your pom file by simply hitting <enter> on it.
+
+Example when calling ``:MvnDependencySearch junit``
+
+.. image:: ../../images/screenshots/java/maven/dependency_search.png
+
+.. _jarvana.com: http://www.jarvana.com/jarvana/

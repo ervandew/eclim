@@ -13,18 +13,73 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/html/index:
-
 Html
 ======
 
-.. toctree::
-   :hidden:
+Code Completion
+---------------
 
-   complete
-   validate
-   util
+Html code completion uses the standard
+:doc:`Vim code completion mechanism </vim/code_completion>` like so\:
 
-- :ref:`vim/html/complete`
-- :ref:`vim/html/validate`
-- :ref:`vim/html/util`
+::
+
+  <ht<Ctrl-X><Ctrl-U>
+
+  <html>
+    <he<Ctrl-X><Ctrl-U>
+
+  <html>
+    <head>
+      <lin<Ctrl-X><Ctrl-U>
+
+  <html>
+    <head>
+      <link ty<Ctrl-X><Ctrl-U>
+
+  <html>
+    <head>
+      <link type
+  ...
+
+File Validation
+---------------
+
+When editing a html file eclim will default to validating the file when it is
+written. Any errors will be added to the current window's location list (:help
+location-list) and their corresponding line number noted via Vim's sign
+functionality.
+
+If you do not want your html files validated automatically when saved, you can
+set the :ref:`g:EclimHtmlValidate` variable described in the configuration
+section below.
+
+.. _\:Validate_html:
+
+Whether or not auto validation has been enabled, eclim also exposes
+the command **:Validate** to manually execute the validation of the
+file.
+
+Utils
+-----
+
+When editing html files eclim provides some utilility commands for your
+convience.
+
+.. _\:BrowserOpen:
+
+**:BrowserOpen** - Opens the current html file in your configured browser.
+
+Configuration
+-------------
+
+Vim Variables
+
+.. _g\:EclimHtmlValidate:
+
+- **g:EclimHtmlValidate** (Default: 1) -
+  If set to 0, disables validation when saving the file.
+
+- **g:EclimValidateSortResults** (Default: 'occurrence') -
+  If set to 'severity', the validation results will be sorted by severity
+  (errors > warnings > info > etc.)

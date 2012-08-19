@@ -13,20 +13,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _gettingstarted:
-
 Getting Started
 ===============
 
 The first step to getting started with eclim is to install it.  If you haven't
-already done so, please see the :ref:`install guide <guides/install>` for
+already done so, please see the :doc:`install guide </guides/install>` for
 instructions on how to install eclim.
 
 If you've already installed eclim, then the next step is to create your first
 project after which you can then start writing code and familiarizing yourself
 with eclim's features.
 
-First make sure eclimd is running (see the :ref:`eclimd docs <eclimd>` if you
+First make sure eclimd is running (see the :doc:`eclimd docs </eclimd>` if you
 are unsure how to start eclimd).
 
 .. _gettingstarted-create:
@@ -75,11 +73,11 @@ third party libraries your project uses reside.  The name of this file will
 vary depending on your project's nature, but in all cases eclim will provide
 you with commands to manage this file:
 
-* java, android - :ref:`.classpath file <vim/java/classpath>`
-* php, ruby - :ref:`.buildpath file <vim/dltk/buildpath>`
+* java, android - :doc:`.classpath file </vim/java/classpath>`
+* php, ruby - :doc:`.buildpath file </vim/dltk/buildpath>`
 * c, c++ - ``.cproject``, managed via the :ref:`:CProjectConfigs
   <:CProjectConfigs>` command
-* python - ``.ropeproject`` (see the :ref:`rope docs <vim/python/rope>`)
+* python - ``.ropeproject`` (see the :ref:`rope docs <python-rope>`)
 
 Once you've created your project you can use the **:ProjectList** command to
 list the available projects and you should see your newly created one in the
@@ -106,10 +104,10 @@ We will use a java project in this example but the steps for other languages
 are very similar.  Please see the relevant docs for your language for more
 details:
 
-* :ref:`java and android <vim/java/classpath>`
-* :ref:`php and ruby <vim/dltk/buildpath>`
+* :doc:`java and android </vim/java/classpath>`
+* :doc:`php and ruby </vim/dltk/buildpath>`
 * :ref:`c and c++ <:CProjectConfigs>`
-* :ref:`python <vim/python/rope>`
+* :ref:`python <python-rope>`
 
 For the purpose of this example we will assume that you will store your source
 files at\:
@@ -144,7 +142,7 @@ contents of this file should now look something like this\:
   </classpath>
 
 Now that your source directory is setup, you can proceed to edit java files in
-that directory and make use of the :ref:`java functionality <vim/java/index>`
+that directory and make use of the :doc:`java functionality </vim/java/index>`
 provided by eclim.
 
 
@@ -158,45 +156,45 @@ features that eclim provides.
 
 .. note::
 
-  Below we'll walk through a trivial java example, but some of the steps apply to
-  all the languages that eclim supports, although the command names may differ a
-  bit.  For additional docs on working with the language of your choice, please
-  see the relevant section of the docs:
+   Below we'll walk through a trivial java example, but some of the steps apply to
+   all the languages that eclim supports, although the command names may differ a
+   bit.  For additional docs on working with the language of your choice, please
+   see the relevant section of the docs:
 
-    - :ref:`c/c++ <vim/c/index>`
-    - :ref:`java <vim/java/index>`
-    - :ref:`php <vim/php/index>`
-    - :ref:`python <vim/python/index>`
-    - :ref:`ruby <vim/ruby/index>`
-    - :ref:`etc. <documentation>`
+   - :doc:`c/c++ </vim/c/index>`
+   - :doc:`java </vim/java/index>`
+   - :doc:`php </vim/php/index>`
+   - :doc:`python </vim/python/index>`
+   - :doc:`ruby </vim/ruby/index>`
+   - :doc:`etc. <documentation>`
 
 Lets get started writing our first java application using eclim.
 
 1. First, navigate to your new project's source directory (src/java in this
    example) and create any necessary package directories:
 
-  ::
+   ::
 
-    $ cd /path/to/my_project/src/java
-    $ mkdir -p org/test/
+     $ cd /path/to/my_project/src/java
+     $ mkdir -p org/test/
 
 2. Then start editing your first java source file:
 
-  ::
+   ::
 
-    $ vim org/test/TestMain.java
+     $ vim org/test/TestMain.java
 
-  .. code-block:: java
+   .. code-block:: java
 
-    package org.test;
+     package org.test;
 
-    public class TestMain
-    {
-      public static final void main(String[] args)
-      {
+     public class TestMain
+     {
+       public static final void main(String[] args)
+       {
 
-      }
-    }
+       }
+     }
 
 3. You can start to use some of the core features now.  For example, lets add
    the following code to the main method so we can test eclim's source code
@@ -214,29 +212,29 @@ Lets get started writing our first java application using eclim.
 4. Now lets try out code completion.  Place your cursor on the '.' of 'System.'
    and start insert mode in vim use 'a', then follow the example below:
 
-  .. code-block:: java
+   .. code-block:: java
 
-    System.<ctrl-x><ctrl-u>             // starts the completion mode
-    System.<ctrl-n>                     // cycle through the completion suggestions
-    System.out                          // assuming you chose the 'out' suggestion
-    System.out.p<ctrl-x><ctrl-u>        // now start completion again
-    System.out.p<ctrl-n>                // hit <ctrl-n> until you get 'println'
-    System.out.println(
-    System.out.println("Hello World");  // finish up the example code.
+     System.<ctrl-x><ctrl-u>             // starts the completion mode
+     System.<ctrl-n>                     // cycle through the completion suggestions
+     System.out                          // assuming you chose the 'out' suggestion
+     System.out.p<ctrl-x><ctrl-u>        // now start completion again
+     System.out.p<ctrl-n>                // hit <ctrl-n> until you get 'println'
+     System.out.println(
+     System.out.println("Hello World");  // finish up the example code.
 
 5. After saving the file you should have no more validation errors, so now we
    can compile the code and run it like so:
 
-  ::
+   ::
 
-    :Javac
-    :Java
+     :Javac
+     :Java
 
-  After running the :Java command in vim you should now see your output in a
-  new split window.
+   After running the :Java command in vim you should now see your output in a
+   new split window.
 
-This only scratches the surface on the number of :ref:`java features
-<vim/java/index>` that eclim provides, but hopefully this example was enough to
+This only scratches the surface on the number of :doc:`java features
+</vim/java/index>` that eclim provides, but hopefully this example was enough to
 get you started.
 
 
@@ -302,8 +300,8 @@ creation.
 
 Once you've finished supplying the necessary information, your android project
 will be created. An android project is simply a specialized java project, so
-you can now leverage all the eclim provided :ref:`java functionality
-<vim/java/index>` while developing your app.
+you can now leverage all the eclim provided :doc:`java functionality
+</vim/java/index>` while developing your app.
 
 .. _gettingstarted-maven:
 
@@ -316,27 +314,27 @@ features to get your project started.
 
 1. Run maven's generate archetype to create the project directory and samples:
 
-  .. code-block:: bash
+   .. code-block:: bash
 
-    $ mvn archetype:generate
+     $ mvn archetype:generate
 
 2. Once you've created the initial project directory, cd into that directory
    and run the following command to generate the necessary eclipse files:
 
-  .. code-block:: bash
+   .. code-block:: bash
 
-    $ cd <project_dir>
-    $ mvn eclipse:eclipse
+     $ cd <project_dir>
+     $ mvn eclipse:eclipse
 
 3. Now you can start an instance of vim at the project's root directory and run
    the following commands to:
 
-      - set the necessary eclipse classpath variable to point to your maven
-        repository.
-      - import your new project into eclipse.
+   - set the necessary eclipse classpath variable to point to your maven
+     repository.
+   - import your new project into eclipse.
 
-  .. code-block:: bash
+   .. code-block:: bash
 
-    $ vim
-    :MvnRepos
-    :ProjectImport /path/to/new/project
+     $ vim
+     :MvnRepos
+     :ProjectImport /path/to/new/project

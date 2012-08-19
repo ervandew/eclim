@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/classpath:
-
 Eclipse Classpath Editing
 =========================
 
@@ -134,14 +132,14 @@ that entry's source code and javadocs, like the example below, allowing you to
 of classes, etc found in that library. Note that the javadoc location must be a
 url, whether it be on the local file system (file:) or remote (http:).
 
-  .. code-block:: xml
+.. code-block:: xml
 
-    <classpathentry exported="true" kind="lib" path="lib/hibernate-4.0.jar"
-        sourcepath="<path>">
-      <attributes>
-        <attribute value="file:<javadoc>" name="javadoc_location"/>
-      </attributes>
-    </classpath>
+  <classpathentry exported="true" kind="lib" path="lib/hibernate-4.0.jar"
+      sourcepath="<path>">
+    <attributes>
+      <attribute value="file:<javadoc>" name="javadoc_location"/>
+    </attributes>
+  </classpath>
 
 .. _classpath-maven:
 
@@ -211,7 +209,7 @@ users).
 
     :Maven eclipse
 
-.. _classpath-maven-pom:
+  .. _classpath-maven-pom:
 
   For maven 2.x users, eclim also provides support for auto updating the
   ``.classpath`` for your project every time you save your pom.xml file.  Any
@@ -229,7 +227,7 @@ users).
   Eclim also provides the command **:MvnDependencySearch**
   (**:MavenDependencySearch** for 1.x) which allows you to
   search for dependencies in the online maven repository as described in the
-  :ref:`maven documentation <vim/java/maven/dependencies>`.
+  :ref:`maven documentation <:MvnDependencySearch>`.
 
 .. _classpath-ivy:
 
@@ -287,14 +285,13 @@ differ in version will be updated, and any stale entries deleted.
       </attributes>
     </classpathentry>
 
-
 .. _\:IvyDependencySearch:
 
 * Search Online Maven Repository
 
   Eclim also provides the command **:IvyDependencySearch** which allows you to
   search for dependencies in the online maven repository as described in the
-  :ref:`maven documentation <vim/java/maven/dependencies>`.
+  :ref:`maven documentation <:MvnDependencySearch>`.
 
 .. _ivy: http://jayasoft.org/ivy
 .. _maven: http://maven.apache.org

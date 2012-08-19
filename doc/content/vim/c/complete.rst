@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,13 +13,11 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/c/complete:
-
 C/C++ Code Completion
 =====================
 
 C/C++ code completion uses the standard
-:ref:`Vim code completion mechanism <vim/code_completion>` like so\:
+:doc:`Vim code completion mechanism </vim/code_completion>` like so\:
 
 .. code-block:: c
 
@@ -33,15 +31,3 @@ C/C++ code completion uses the standard
     return EX<C-X><C-U>
     return EXIT_SUCCESS;
   }
-
-.. note::
-  This feature depends on the eclipse cdt_ which should be installed for you
-  when choosing c/c++ support in the eclim installer.
-
-.. warning::
-
-  C/C++ completion has been disabled on Windows when using the headless version
-  of eclim because of a native call which blocks indefinitely.  Hopefully in
-  the future this issue will be resolved or a work around found.
-
-.. _cdt: http://eclipse.org/cdt

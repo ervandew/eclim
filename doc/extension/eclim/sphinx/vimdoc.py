@@ -14,13 +14,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+import os
 import re
 
 from docutils import nodes
 
 from sphinx.builders.text import TextBuilder
+from sphinx.roles import XRefRole
 from sphinx.util.nodes import make_refnode
-from sphinx.writers.text import TextTranslator, TextWriter
+from sphinx.writers import text
 
 class VimdocBuilder(TextBuilder):
   name = 'vimdoc'
@@ -32,7 +34,12 @@ class VimdocBuilder(TextBuilder):
     """
     self.writer = VimdocWriter(self)
 
-class VimdocWriter(TextWriter):
+  def get_target_uri(self, docname, typ=None):
+    path = os.path.normpath(os.path.join(self.config.path, docname))
+    relpath = os.path.relpath(path, self.config.path)
+    return relpath.replace(os.path.sep, '-')
+
+class VimdocWriter(text.TextWriter):
 
   def translate(self):
     """
@@ -43,31 +50,49 @@ class VimdocWriter(TextWriter):
     self.document.walkabout(visitor)
     self.output = visitor.body
 
-# EV: add vim modline
-    self.output = self.output.strip() + '\n\nvim:ft=eclimhelp'
+    # add page tag and vim modline
+    page = os.path.relpath(
+      self.document.settings._source,
+      self.builder.config.path
+    ).replace(self.builder.config.source_suffix, '')
+
+    self.output = '*%s*\n\n%s\n\nvim:ft=eclimhelp' % (
+      page.replace(os.path.sep, '-'),
+      self.output.strip(),
+    )
+
+# only wrap on whitespace and don't break long words since it can break long
+# links
+text.TextWrapper.wordsep_re = re.compile(r'(\s+)')
+def my_wrap(txt, width=text.MAXWIDTH, **kwargs):
+    w = text.TextWrapper(width=width, break_long_words=False, **kwargs)
+    return w.wrap(txt)
+text.my_wrap = my_wrap
 
 
-# EV: don't wrap on '-' so we don't break some vimdoc links
-import textwrap
-new_wordsep_re = re.compile(
-        r'(\s+|'                                  # any whitespace
-        r'(?<=\s)(?::[a-z-]+:)?`\S+|'             # interpreted text start
-#        r'[^\s\w]*\w+[a-zA-Z]-(?=\w+[a-zA-Z])|'   # hyphenated words
-        r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')   # em-dash
-textwrap.TextWrapper.wordsep_re = new_wordsep_re
-
-
-class VimdocTranslator(TextTranslator):
+class VimdocTranslator(text.TextTranslator):
 
   TARGET = re.compile(r'(^\.\.\s+_|\\|:$)')
+  RELEASE = re.compile(r'^Eclim (\d+\.\d+\.\d+)$')
 
   def _toRefUri(self, value):
     """
-    EV: Helper function which emulates the docutils conversion of a string to a
-    refuri.
+    Emulates the docutils conversion of a string to a refuri.
     """
     value = value.lower()
     value = value.replace(':', '')
+    return value
+
+  def _idToRefUri(self, value):
+    """
+    Translate some auto generate #id\d uris to the original target.
+    """
+
+    # The only real eclim specific bit, to deal with release links from the
+    # index page.
+    match = VimdocTranslator.RELEASE.match(value)
+    if match:
+      return match.group(1)
     return value
 
   def depart_image(self, node):
@@ -94,18 +119,15 @@ class VimdocTranslator(TextTranslator):
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
       value = unicode(em.children[0])
-      refuri = node.attributes.get('refuri')
-      if refuri and refuri.startswith('#'):
-        refuri = refuri[1:]
-      if (
-        not refuri or
-        refuri == self._toRefUri(value) or
-        re.search(r'id\d+', refuri)
-      ) and (
-        value.startswith(':') or
-        value.startswith('g:') or
-        value.startswith('org.')
-      ):
+      refuri = node.get('refuri')
+
+      # attempt to translate #id\d+ into the original names
+      if refuri and re.search(r'#id\d+', refuri):
+        refuri = self._idToRefUri(value)
+
+      # the link target and text are the same, link the text
+      if (not refuri or refuri == self._toRefUri(value)) and \
+         re.search(r'^(:|g:|org\.)', value):
         self.add_text('|')
 
   def depart_reference(self, node):
@@ -113,38 +135,42 @@ class VimdocTranslator(TextTranslator):
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
       value = unicode(em.children[0])
-      refuri = node.attributes.get('refuri')
-      if refuri and refuri.startswith('#'):
-        refuri = refuri[1:]
-      if (
-        not refuri or
-        refuri == self._toRefUri(value) or
-        re.search(r'id\d+', refuri)
-      ) and (
-        value.startswith(':') or
-        value.startswith('g:') or
-        value.startswith('org.')
-      ):
+      refuri = node.get('refuri')
+
+      # attempt to translate #id\d+ into the original names
+      if refuri and re.search(r'id\d+', refuri):
+        refuri = self._idToRefUri(value)
+
+      # handle anchors into the document (don't break vim autoload function
+      # references!)
+      elif refuri and re.search(r'\b(?<!eclim)#', refuri):
+        refuri = refuri.split('#', 1)[1]
+
+      # the link target and text are the same, so link the text
+      if (not refuri or refuri == self._toRefUri(value)) and \
+         re.search(r'^(:|g:|org\.)', value):
         # lame edge case
         if value.startswith(':Validate'):
-          self.add_text('_' + node.attributes.get('refuri').rsplit('-', 1)[-1])
+          self.add_text('_' + node.get('refuri').rsplit('-', 1)[-1])
         self.add_text('|')
+
+      # the link target and text differ
       elif refuri:
         self.add_text(' (|%s|)' % refuri)
 
     # external references
     elif 'refuri' in node:
-      self.add_text(' (%s)' % node.attributes.get('refuri'))
+      self.add_text(' (%s)' % node.get('refuri'))
 
   def visit_target(self, node):
-    refid = node.attributes.get('refid')
+    refid = node.get('refid')
     if refid:
       value = VimdocTranslator.TARGET.sub('', node.rawsource)
       value = value.replace('/', '-')
       self.add_text('*%s' % value)
 
   def depart_target(self, node):
-    refid = node.attributes.get('refid')
+    refid = node.get('refid')
     if refid:
       self.add_text('* ')
 
@@ -194,20 +220,24 @@ class VimdocTranslator(TextTranslator):
   def depart_literal(self, node):
     pass
 
-
-# EV: Custom missing_reference event listener to handle:
-#     - references like> :ref:`:ProjectCreate`
+# Custom missing_reference event listener to handle:
+#   - references like> :ref:`:ProjectCreate`
+#   - not tranlateing references from> g:EclimMakeLCD to g-eclimmakelcd
 def missing_reference(app, env, node, contnode):
   if 'refdomain' in node and node['refdomain']:
     domain = env.domains[node['refdomain']]
     if node['reftype'] == 'ref':
-        docname, labelid = domain.data['anonlabels'].get(node['reftarget'], ('',''))
+        docname, _ = domain.data['anonlabels'].get(node['reftarget'].lower(), ('',''))
         if docname:
           return make_refnode(
-            app.builder, node['refdoc'], docname, labelid, contnode)
+            app.builder, node['refdoc'], docname, node['reftarget'], contnode)
 #    print (domain, node['reftype'], node['refdoc'], node['reftarget'])
-
 
 def setup(sphinx):
   sphinx.add_builder(VimdocBuilder)
   sphinx.connect('missing-reference', missing_reference)
+  sphinx.add_config_value('path', '', 'vimdoc')
+  # prevent sphinx from lower casing the references so we can display then as
+  # intended with some help from missing_reference above.
+  sphinx.add_role_to_domain(
+    'std', 'ref', XRefRole(innernodeclass=nodes.emphasis, warn_dangling=True))

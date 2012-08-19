@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/php/validate:
-
 .. _\:Validate_php:
 
 Php Validation
@@ -30,10 +28,6 @@ Automatic validation of php source files can be disabled via the
 **g:EclimPhpValidate** variable (described below).  If you choose to disable
 automatic validation, you can still use the **:Validate** command to manually
 validate the current file.
-
-.. note::
-  This feature depends on the eclipse pdt_ which should be installed for you
-  when choosing php support in the eclim installer.
 
 
 Configuration
@@ -52,5 +46,3 @@ Vim Variables:
 - **g:EclimValidateSortResults** (Default: 'occurrence') -
   If set to 'severity', the validation results will be sorted by severity
   (errors > warnings > info > etc.)
-
-.. _pdt: http://eclipse.org/pdt

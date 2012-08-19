@@ -13,25 +13,17 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/python/index:
-
 Python
 ======
 
 .. toctree::
-   :hidden:
 
    validate
    complete
    search
    django
 
-- :ref:`vim/python/validate`
-- :ref:`vim/python/complete`
-- :ref:`vim/python/search`
-- :ref:`vim/python/django`
-
-.. _vim/python/rope:
+.. _python-rope:
 
 Rope
 ----
@@ -59,8 +51,8 @@ solutions, which then lead to the eventual choice: rope_
 
 
 **Functionality Utilizing Rope**
-  - :ref:`code completion <vim/python/complete>`
-  - :ref:`find element definition <vim/python/search>`
+  - :doc:`code completion </vim/python/complete>`
+  - :doc:`find element definition </vim/python/search>`
   - :ref:`:PyLint`
 
 **Configuration**

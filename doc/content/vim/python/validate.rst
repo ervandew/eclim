@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,8 +12,6 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-.. _vim/python/validate:
 
 Python Validation
 =================
@@ -47,9 +45,9 @@ support.
 
   When running **:PyLint**, determining additional directories to be include on
   the path for pylint_ is provided via eclim's integration with
-  :ref:`rope <vim/python/rope>`.
+  :ref:`rope <python-rope>`.
 
-  Please see the :ref:`rope <vim/python/rope>` docs for more information.
+  Please see the :ref:`rope <python-rope>` docs for more information.
 
 
 Configuration

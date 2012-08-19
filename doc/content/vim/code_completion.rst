@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/code_completion:
-
 Code Completion
 ===============
 
@@ -60,11 +58,12 @@ dot, but you can tweak this to your tastes):
       \ }]
     \ }
 
-To find out more about Vim's insert completion execute
+To find out more about Vim's insert completion execute the following from
+within Vim:
 
-  **:h ins-completion**
+::
 
-from within Vim.
+  :h ins-completion
 
 .. _supertab: http://www.vim.org/scripts/script.php?script_id=1643
 .. _autocomplpop: http://www.vim.org/scripts/script.php?script_id=1879

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@ Features
 
 The following is a partial list of eclim features with much more still to
 come.  For more details please see the detailed
-:ref:`documentation <vim/index>`.  For a more comprehensive list you can also
-visit the :ref:`cheatsheet <vim/cheatsheet>`.
+:doc:`documentation </vim/index>`.  For a more comprehensive list you can also
+visit the :doc:`cheatsheet </vim/cheatsheet>`.
 
 Eclipse Projects
 -------------------------
@@ -27,35 +27,23 @@ Eclipse Projects
 - Easily manage Eclipse .classpath files (support for maven and ivy).
 - Quickly and easily manage settings globally or on a project basis.
 
-Ant Integration
--------------------------
-- Ant execution from any file.
-- Context sensitive code completion when editing build files.
-- Automatic validation of build files (w/ visual marking of errors and
-  warnings).
-- Quick access to ant documentation.
-
-C/C++ Integration
+C/C++
 -------------------------
 - Context sensitive code completion.
 - Searching.
 - Source code validation.
 
-Css Integration
+Css
 -------------------------
 - Context sensitive code completion.
 - Source code validation.
 
-Dtd Integration
--------------------------
-- Automatic validation (w/ visual marking of errors and warnings).
-
-Html Integration
+Html
 -------------------------
 - Context sensitive code completion.
 - Automatic validation (w/ visual marking of errors and warnings).
 
-Java Integration
+Java
 -------------------------
 - Automatic source code validation (w/ visual marking of errors and
   warnings).
@@ -73,27 +61,36 @@ Java Integration
 - Javadoc generation for package, class, field, method, etc.
 - Java regular expression testing.
 - Support for Checkstyle.
-
-JavaScript Integration
--------------------------
-- File validation using jsl_.
-
-Log4j Integration
--------------------------
 - Validation of log4j xml files.
 
-Maven Integration
--------------------------
+Android
+^^^^^^^
+- Support for creating android projects from vim.
+
+Ant
+^^^^^^^
+- Ant execution from any file.
+- Context sensitive code completion when editing build files.
+- Automatic validation of build files (w/ visual marking of errors and
+  warnings).
+- Quick access to ant documentation.
+
+Maven
+^^^^^^^
 - Maven execution from any file.
 - Maven repository searching and ability to add results to pom file.
 
-Php Integration
+JavaScript
+-------------------------
+- File validation using jsl_.
+
+Php
 -------------------------
 - Code completion.
 - Searching.
 - Source code validation.
 
-Python Integration
+Python
 -------------------------
 - Context sensitive code completion.
 - Find element definition support.
@@ -101,27 +98,24 @@ Python Integration
 - Django functionality.
 - Validation via python compiler, pyflakes_, and pylint_.
 
-Ruby Integration
+Ruby
 -------------------------
 - Context sensitive code completion.
 - Searching.
 - Source code validation.
 
-Vim Script Integration
+Vim Script
 -------------------------
 - Find user defined command, function, or global variable declarations /
   references.
 - Quickly lookup help topic for a keyword, functions, command, etc.
 
-Xml Integration
+
+Xml / Dtd / Xsd
 -------------------------
 - Automatic validation (w/ visual marking of errors and warnings).
 - Quickly look up element definition from the current xml file's dtd or xsd.
 - Context sensitive code completion.
-
-Xsd Integration
--------------------------
-- Automatic validation (w/ visual marking of errors and warnings).
 
 Common Vim Functionality
 -------------------------

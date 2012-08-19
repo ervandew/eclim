@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,21 +13,10 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/c/project:
-
 .. _\:CProjectConfigs:
 
 C/C++ Project Configuration
 ===========================
-
-.. note::
-  This feature is currently considered alpha.  If you have any issues or
-  suggestions please submit them to the `eclim user`_ mailing list.
-
-  Also, please note that should you need access to the full set of cdt
-  configuration options, you can always open the eclipse gui (after stopping
-  any headless eclimd instance you may have running) and access those options
-  via the standard cdt project dialogs.
 
 The eclipse cdt provides a large set of configuration support for your c/c++
 projects.  Eclim exposes a subset of these to you using the

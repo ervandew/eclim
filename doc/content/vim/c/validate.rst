@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,8 +12,6 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-.. _vim/c/validate:
 
 .. _\:Validate_c:
 
@@ -31,10 +29,6 @@ Automatic validation of c/c++ source files can be disabled via the
 automatic validation, you can still use the **:Validate** command to manually
 validate the current file.
 
-.. note::
-  This feature depends on the eclipse cdt_ which should be installed for you
-  when choosing c/c++ support in the eclim installer.
-
 
 Configuration
 -------------
@@ -49,5 +43,3 @@ Vim Variables:
 - **g:EclimValidateSortResults** (Default: 'occurrence') -
   If set to 'severity', the validation results will be sorted by severity
   (errors > warnings > info > etc.)
-
-.. _cdt: http://eclipse.org/cdt

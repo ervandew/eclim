@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/correct:
-
 Java Code Correction
 ====================
 
@@ -22,7 +20,7 @@ Java Code Correction
 
 Code correction in eclim is equivalent to the quick fix functionality of
 Eclipse. When you save a java source file, eclim
-:ref:`validates <vim/java/validate>` the file and notes which lines contain
+:doc:`validates </vim/java/validate>` the file and notes which lines contain
 errors.  To have eclim suggest possible corrections for an error, you simply
 place the cursor on the error line and issue **:JavaCorrect**.
 
@@ -52,4 +50,4 @@ To apply the above change you would hit <enter> on the line\:
 .. note::
 
   The code correction is done externally with Eclipse and with that comes a
-  couple :ref:`caveats <vim/issues>`.
+  couple :doc:`caveats </vim/gotchas>`.

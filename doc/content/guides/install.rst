@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _guides/install:
-
 Installing / Upgrading
 ======================
 
@@ -67,13 +65,13 @@ Step 1: Download and run the installer.
   If you have eclipse running, please close it prior to starting the
   installation procedure.
 
-- **First download the installer:**  `eclim_<version>.jar`_
+- **First download the installer:**  :eclimdist:`jar`
 
 - **Next run the installer:**
 
   .. code-block:: bash
 
-    $ java -jar eclim_<version>.jar
+    $ java -jar eclim_eclim_release.jar
 
   Windows and OSX users should be able to simply double click on the jar file
   to start the installer.
@@ -85,7 +83,7 @@ Step 1: Download and run the installer.
 
     .. code-block:: bash
 
-      $ java -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080 -jar eclim_<version>.jar
+      $ java -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080 -jar eclim_eclim_release.jar
 
     If your proxy requires authentication, you'll need to supply the
     ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
@@ -94,7 +92,7 @@ Step 1: Download and run the installer.
 
     .. code-block:: bash
 
-      $ java -Djava.net.useSystemProxies=true -jar eclim_<version>.jar
+      $ java -Djava.net.useSystemProxies=true -jar eclim_eclim_release.jar
 
 After the installer starts up, simply follow the steps in the wizard
 to install the application.
@@ -128,7 +126,7 @@ to install the application.
 
     ::
 
-      $ java -Djava.ext.dirs -jar eclim_<version>.jar
+      $ java -Djava.ext.dirs -jar eclim_eclim_release.jar
 
 
 Step 2: Testing the installation
@@ -139,17 +137,17 @@ daemon will depend on how you intend to use eclim.
 
 .. note::
 
-  More info on running the eclim daemon can be found in the :ref:`eclimd
-  <eclimd>` docs.
+  More info on running the eclim daemon can be found in the :doc:`eclimd
+  </eclimd>` docs.
 
 If you plan on using eclim along with the eclipse gui, then simply start
 eclipse and open the eclimd view:
 
-  Window -> Show View -> Other -> Eclim -> eclimd
+:menuselection:`Window --> Show View --> Other --> Eclim --> eclimd`
 
 By default the eclimd view will also be auto opened when you open a file using:
 
-  Open With -> Vim
+:menuselection:`Open With --> Vim`
 
 If you plan on using eclim without the eclipse gui, then:
 
@@ -178,16 +176,16 @@ eclim:
   to it.  If you receive this or any other errors you can start by first
   examining the eclimd output to see if it gives any info as to what went
   wrong.  If at this point you are unsure how to proceed you can view the
-  :ref:`troubleshooting guide <guides/troubleshoot>` or feel free to post your
+  :doc:`troubleshooting guide </guides/troubleshoot>` or feel free to post your
   issue on the `eclim user`_ mailing list.
 
-    Example of a successful ping:
+  Example of a successful ping:
 
-    .. image:: ../images/screenshots/ping_success.png
+  .. image:: ../images/screenshots/ping_success.png
 
-    Example of a failed ping:
+  Example of a failed ping:
 
-    .. image:: ../images/screenshots/ping_failed.png
+  .. image:: ../images/screenshots/ping_failed.png
 
 - Regardless of the ping result, you can also verify your vim settings
   using the command **:EclimValidate**.  This will check
@@ -204,10 +202,10 @@ What's Next
 
 Now that you have eclim installed, the next step is to familiarize yourself
 with at least the core set of commands that eclim provides, all of which are
-found at the index of the eclim :ref:`documentation <vim/index>`.
+found at the index of the eclim :doc:`documentation </vim/index>`.
 
-After doing that you can then proceed to :ref:`getting started guide
-<gettingstarted>`.
+After doing that you can then proceed to :doc:`getting started guide
+</gettingstarted>`.
 
 
 Upgrading
@@ -245,7 +243,7 @@ system properties:
   $ java \
     -Dvim.files=$HOME/.vim \
     -Declipse.home=/opt/eclipse \
-    -jar eclim_<version>.jar install
+    -jar eclim_eclim_release.jar install
 
 Please note that when using this install method, the installer will only
 install eclim features whose third party dependecies are already present in
@@ -255,18 +253,17 @@ dependencies, you can reference eclim's `installer dependencies`_ file).
 
 On exception to this is eclim's python plugin which currently does not rely
 on any eclipse features, so to enable the installation of that plugin, just add
-`-DfeatureList.python=true` to the install command above.
+``-DfeatureList.python=true`` to the install command above.
 
 **Required Properties:**
 
 * **eclipse.home** - The absolute path to your eclipse installation.
 * **vim.files** (or **vim.skip=true**) - The absolute path to your vim files
   directory. Or if you want to omit the installation of the vim files
-  (emacs-eclim users for example) you can supply `-Dvim.skip=true` instead.
+  (emacs-eclim users for example) you can supply ``-Dvim.skip=true`` instead.
 
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
 .. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
-.. _eclim_<version>.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869
 .. _eclim user: http://groups.google.com/group/eclim-user
 .. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml

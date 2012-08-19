@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,36 +13,35 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/css/validate:
+WEB-INF/web.xml
+===============
 
-Css Validation
-==============
+Validation
+----------
 
-When editing a css file eclim will default to validating the file when it is
+When editing a web.xml file eclim will default to validating the file when it is
 written.  Any errors will be added to the current window's location list (:help
 location-list) and their corresponding line number noted via Vim's sign
 functionality.
 
-If you do not want your css files validated automatically when saved, you can
-set the :ref:`g:EclimCssValidate` variable described in the configuration
-section below.
+Eclim also combines the above validation with :ref:`xml validation
+<xml-validation>` to validate that the file is well formed.
 
-.. _\:Validate_css:
+If you do not want your web.xml files validated automatically when saved, you
+can set the :ref:`g:EclimWebXmlValidate` variable described in the
+configuration section below.
 
-Whether or not auto validation has been enabled, eclim also exposes
-the command **:Validate** to manually execute the validation of the
-file.
+.. _\:Validate_webxml:
+
+Whether or not auto validation has been enabled, eclim also exposes the command
+**:Validate** to manually execute the validation of the file.
 
 Configuration
 -------------
 
 Vim Variables
 
-.. _g\:EclimCssValidate:
+.. _g\:EclimWebXmlValidate:
 
-- **g:EclimCssValidate** (Default: 1) -
+- **g:EclimWebXmlValidate** (Default: 1) -
   If set to 0, disables validation when saving the file.
-
-- **g:EclimValidateSortResults** (Default: 'occurrence') -
-  If set to 'severity', the validation results will be sorted by severity
-  (errors > warnings > info > etc.)

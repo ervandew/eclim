@@ -13,10 +13,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/common/project:
-
-Eclipse Projects
-================
+Eclipse Project Management
+==========================
 
 The core concept in most IDEs is the that of a project, and Eclipse is no
 different.  Since a project must exist before you can perform any of the more
@@ -102,7 +100,7 @@ Vim's command line completion to complete the project name.
   simply writing the file in the usual Vim manner (:w). The format of the
   buffer is in the standard properties file format as supported by java, so all
   the same rules apply when editing. You can refer to the
-  :ref:`settings <vim/settings>` documentation for a description of the
+  :doc:`settings </vim/settings>` documentation for a description of the
   available settings.
 
 .. _\:ProjectDelete:
@@ -149,7 +147,7 @@ Vim's command line completion to complete the project name.
     **:ProjectRename**, eclim will reload those files in the current session, but
     it must do so via an :edit, which means that vim's undo tree will be lost.
     However, you will still have access to the eclipse
-    :ref:`history <vim/common/history>`.
+    :doc:`history </vim/history>`.
 
 .. _\:ProjectRefresh:
 

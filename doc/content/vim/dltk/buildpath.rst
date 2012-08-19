@@ -1,4 +1,6 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+:orphan:
+
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,15 +15,12 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/dltk/buildpath:
-
-Dltk Build Path
-================
+.. begin-buildpath
 
 Source code completion, searching, and other features make use of the
 `eclipse dltk's <http://eclipse.org/dltk/>`_ .buildpath to locate resources.
-When you first create a dltk project (currently :ref:`php <vim/php/index>` or
-:ref:`ruby <vim/ruby/index>`), a ``.buildpath`` file is created in the
+When you first create a dltk project (currently :doc:`php </vim/php/index>` or
+:doc:`ruby </vim/ruby/index>`), a ``.buildpath`` file is created in the
 project's root directory.  If your project depends on any source files located
 outside your project or in another project, then you'll need to edit your
 .buildpath accordingly.
@@ -106,3 +105,5 @@ The following is a list of commands that eclim provides while editing your
 
     - **:VariableDelete** <name> -
       Deletes the variable with the supplied name.
+
+.. end-buildpath

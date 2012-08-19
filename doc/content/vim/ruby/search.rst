@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/ruby/search:
-
 Ruby Search
 ===========
 
@@ -26,7 +24,7 @@ Pattern Search
 Pattern searching provides a means to widen a search beyond a single
 element.  A pattern search can be executed using the command
 
-  **:RubySearch** -p <pattern> [-t <type> -s <scope> -i]
+**:RubySearch** -p <pattern> [-t <type> -s <scope> -i]
 
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.
@@ -47,10 +45,10 @@ of the pattern to search for.
 
   Ex.
 
+  ::
+
     MyClass
-
     myFunction
-
     my*
 
 - -t <type> (Default: all): The type of element to search for where possible
@@ -126,9 +124,3 @@ Vim Variables
 - **g:EclimLocationListHeight** (Default: 10) -
   Sets the height in lines of the location list window when eclim opens it to
   display search results.
-
-.. note::
-  Search support depends on the eclipse dltk_ ruby plugin which should be
-  installed for you when choosing ruby support in the eclim installer.
-
-.. _dltk: http://eclipse.org/dltk

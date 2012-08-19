@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/search:
-
 Java Search
 ===========
 
@@ -26,7 +24,7 @@ Pattern Search
 Pattern searching provides a means to widen a search beyond a single element.  A
 pattern search can be executed using the command
 
-  **:JavaSearch** -p <pattern> [-t <type> -x <context> -s <scope> -i]
+**:JavaSearch** -p <pattern> [-t <type> -x <context> -s <scope> -i]
 
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.

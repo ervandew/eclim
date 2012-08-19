@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/python/search:
-
 Python Search
 =============
 
@@ -32,13 +30,6 @@ cursor will be moved to the element found.  Otherwise, on single result
 matches, the value of :ref:`g:EclimPythonSearchSingleResult` will be consulted
 for the action to take.  If there are multiple results, the location list will
 be opened with the list of results.
-
-.. note::
-
-  Searching support is provided via eclim's integration with
-  :ref:`rope <vim/python/rope>`.
-
-  Please see the :ref:`rope <vim/python/rope>` docs for more information.
 
 .. _\:PythonSearchContext:
 
