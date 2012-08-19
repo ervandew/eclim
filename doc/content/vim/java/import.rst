@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/import:
-
 Automated Imports
 =================
 
@@ -23,7 +21,7 @@ Automated Imports
 The automated import functionality is pretty straightforward.  Simply
 place the cursor over the element to import and issue the command:
 
-  **:JavaImport**
+**:JavaImport**
 
 and one of the following events will occur:
 
@@ -39,7 +37,7 @@ and one of the following events will occur:
 
 If you have numerous elements that you wish to import, you can also use:
 
-  **:JavaImportMissing**
+**:JavaImportMissing**
 
 which will look for all undefined types and attempt to find possible imports
 for them.  If there is a single result then that result will be imported.  In

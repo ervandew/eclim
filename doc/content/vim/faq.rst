@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/faq:
-
 FAQ
 ====
 
@@ -25,9 +23,9 @@ How do I tell eclim which eclipse workspace to use?
 
 To configure the workspace you can start eclimd like so:
 
-  ::
+::
 
-    $ eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+  $ eclimd -Dosgi.instance.area.default=@user.home/another_workspace
 
 Note the system property ``osgi.instance.area.default``, which is used to
 specify the location of your workspace.  Also note the variable
@@ -37,36 +35,35 @@ If you are running a unix variant (linux, mac osx, bsd, etc.) then you
 can specify the above system property in the .eclimrc file in your home
 directory.
 
-  ::
+::
 
-    $ echo "osgi.instance.area.default=@user.home/another_workspace" >> ~/.eclimrc
+  $ echo "osgi.instance.area.default=@user.home/another_workspace" >> ~/.eclimrc
 
 .. _eclimd_options_windows:
 
 For Windows users there are a couple alternatives to the unsupported
 .eclimrc:
 
-  1. Your first option is to add a new environment variable:
+1. Your first option is to add a new environment variable:
 
-     - | Windows 2000: Control Panel > System > Advanced > Environment Variables
-       | Windows XP: Control Panel > Performance And Maintenance > System >
-         Advanced > Environment Variables
-     - | Under "User variables..." click "New..."
-       | Variable Name: ECLIMD_OPTS
-       | Variable Value: -Dosgi.instance.area.default=\@user.home/another_workspace
+   - | Windows 2000: :menuselection:`Control Panel --> System --> Advanced --> Environment Variables`
+     | Windows XP: :menuselection:`Control Panel --> Performance And Maintenance --> System --> Advanced --> Environment Variables`
+   - | Under "User variables..." click "New..."
+     | Variable Name: ECLIMD_OPTS
+     | Variable Value: -Dosgi.instance.area.default=\@user.home/another_workspace
 
-     - Then you can start eclimd as normal (via the eclimd.bat file).
+   - Then you can start eclimd as normal (via the eclimd.bat file).
 
-  2. The second option is to create a shortcut to the eclimd.bat file:
+2. The second option is to create a shortcut to the eclimd.bat file:
 
-     - In Windows Explorer, open your eclipse folder.
-     - Hold down the right mouse button and drag the eclimd.bat file to where
-       you want the shortcut to exist (like your desktop) and release the
-       right mouse button.
-     - Choose "Create Shortcut(s) Here"
-     - Right click the shortcut and choose "Properties"
-     - | On the "Shortcut" tab edit the "Target:" field and append:
-       | -Dosgi.instance.area.default=\@user.home/another_workspace
+   - In Windows Explorer, open your eclipse folder.
+   - Hold down the right mouse button and drag the eclimd.bat file to where
+     you want the shortcut to exist (like your desktop) and release the
+     right mouse button.
+   - Choose "Create Shortcut(s) Here"
+   - Right click the shortcut and choose "Properties"
+   - | On the "Shortcut" tab edit the "Target:" field and append:
+     | -Dosgi.instance.area.default=\@user.home/another_workspace
 
 .. _eclim_proxy:
 
@@ -78,17 +75,17 @@ For example, xml validation may require validating the file against a dtd or
 xsd located remotely.  If you are behind a proxy then you may need to provide
 eclim with the necessary proxy settings.
 
-  ::
+::
 
-    $ eclimd -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
+  $ eclimd -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
 
 If you are running a unix variant (linux, mac osx, bsd, etc.) then you
 can specify the above system property in the .eclimrc file in your home
 directory.
 
-  ::
+::
 
-    $ echo -e "http.proxyHost=my.proxy\nhttp.proxyPort=8080" >> ~/.eclimrc
+  $ echo -e "http.proxyHost=my.proxy\nhttp.proxyPort=8080" >> ~/.eclimrc
 
 If your proxy requires authentication, you'll need to supply the
 ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
@@ -138,14 +135,14 @@ How do I troubleshoot features not functioning, or errors encountered?
 ----------------------------------------------------------------------
 
 For troubleshooting eclim, please see the dedicated
-:ref:`troubleshooting guide <guides/troubleshoot>`.
+:doc:`troubleshooting guide </guides/troubleshoot>`.
 
 .. _eclim_full_headless:
 
 How can I run eclimd on a truly headless server?
 ------------------------------------------------
 
-Please see the :ref:`headless guide <guides/headless>`.
+Please see the :doc:`headless guide </guides/headless>`.
 
 .. _eclim_encoding:
 
@@ -173,12 +170,12 @@ according to your setup:
    install's root directory. Be sure to add the property on a new line after
    the ``-vmargs`` line:
 
-    ::
+   ::
 
-      ...
-      -vmargs
-      ...
-      -Dfile.encoding=utf-8
+     ...
+     -vmargs
+     ...
+     -Dfile.encoding=utf-8
 
    You can read more about the eclipse.ini file on the `eclipse wiki`_.
 

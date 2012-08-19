@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,8 +12,6 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-.. _vim/c/hierarchy:
 
 .. _\:CCallHierarchy:
 
@@ -36,12 +34,12 @@ the requested function or method.
 While you are in the hierarchy tree buffer, you can jump to the call under the
 cursor using one of the following key bindings:
 
-  - <cr> - open the type using the
-    (:ref:`default action <g:EclimCHierarchyDefaultAction>`).
-  - E - open the type via :edit
-  - S - open the type via :split
-  - T - open the type via :tabnew
-  - ? - view help buffer
+- <cr> - open the type using the
+  (:ref:`default action <g:EclimCHierarchyDefaultAction>`).
+- E - open the type via :edit
+- S - open the type via :split
+- T - open the type via :tabnew
+- ? - view help buffer
 
 
 Configuration

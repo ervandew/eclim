@@ -13,26 +13,43 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _documentation:
-
 Documentation
 =============
 
+Basic Info
+----------
+
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
    vim/index
    eclimd
    vim/settings
-   vim/issues
+   vim/gotchas
    vim/code_completion
    vim/mappings
    vim/cheatsheet
    vim/faq
-   vim/common/index
+
+Common Functionality
+--------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   vim/project
+   vim/history
+   vim/locate
+   vim/util
+
+Supported Languages
+-------------------
+
+.. toctree::
+   :maxdepth: 1
+
    vim/c/index
    vim/css/index
-   vim/dltk/index
    vim/dtd/index
    vim/html/index
    vim/java/index
@@ -42,25 +59,3 @@ Documentation
    vim/ruby/index
    vim/xml/index
    vim/xsd/index
-
-- :ref:`vim/index`
-- :ref:`eclimd`
-- :ref:`vim/settings`
-- :ref:`vim/issues`
-- :ref:`vim/code_completion`
-- :ref:`vim/mappings`
-- :ref:`vim/cheatsheet`
-- :ref:`vim/faq`
-- :ref:`vim/common/index`
-- :ref:`vim/c/index`
-- :ref:`vim/css/index`
-- :ref:`vim/dltk/index`
-- :ref:`vim/dtd/index`
-- :ref:`vim/html/index`
-- :ref:`vim/java/index`
-- :ref:`vim/javascript/index`
-- :ref:`vim/php/index`
-- :ref:`vim/python/index`
-- :ref:`vim/ruby/index`
-- :ref:`vim/xml/index`
-- :ref:`vim/xsd/index`

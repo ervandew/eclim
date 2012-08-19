@@ -13,26 +13,12 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/php/index:
-
 Php
 =====
 
 .. toctree::
-   :hidden:
 
    buildpath
    complete
    validate
    search
-
-- :ref:`vim/php/buildpath`
-- :ref:`vim/php/complete`
-- :ref:`vim/php/validate`
-- :ref:`vim/php/search`
-
-.. note::
-  These features depends on the eclipse pdt_ which should be installed for you
-  when choosing php support in the eclim installer.
-
-.. _pdt: http://eclipse.org/pdt

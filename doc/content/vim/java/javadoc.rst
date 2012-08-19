@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/java/javadoc:
-
 Javadoc Support
 ===============
 
@@ -29,7 +27,7 @@ javadoc comments for the element under the cursor.
 .. note::
 
   The insertion of javadoc comments is done externally with Eclipse and with
-  that comes a couple :ref:`caveats <vim/issues>`.
+  that comes a couple :doc:`caveats </vim/gotchas>`.
 
 
 Configuration
@@ -39,9 +37,9 @@ Eclim Settings
 
 
 - **org.eclim.user.name** - Used as the name portion of the author tag.
-  Consult the :ref:`settings page <vim/settings>` for more info.
+  Consult the :doc:`settings page </vim/settings>` for more info.
 - **org.eclim.user.email** - Used as the email portion of the author tag.
-  Consult the :ref:`settings page <vim/settings>` for more info.
+  Consult the :doc:`settings page </vim/settings>` for more info.
 
 
 .. _\:JavaDocSearch:
@@ -50,7 +48,7 @@ Searching
 ---------
 
 Eclim supports searching of javadocs just like you would
-:ref:`search the source code <vim/java/search>`.
+:doc:`search the source code </vim/java/search>`.
 
 The only difference is that you use **:JavaDocSearch** instead of
 **:JavaSearch**.

@@ -13,14 +13,37 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/xsd/index:
-
 Xsd
 ======
 
-.. toctree::
-   :hidden:
+Validation
+----------
 
-   validate
+When editing a xsd file eclim will default to validating the file when it is
+written.  Any errors will be added to the current window's location list (:help
+location-list) and their corresponding line number noted via Vim's sign
+functionality.
 
-- :ref:`vim/xsd/validate`
+If you do not want your xsd files validated automatically when saved, you can
+set the :ref:`g:EclimXsdValidate` variable described in the configuration
+section below.
+
+.. _\:Validate_xsd:
+
+Whether or not auto validation has been enabled, eclim also exposes
+the command **:Validate** to manually execute the validation of the
+file.
+
+Configuration
+--------------
+
+Vim Variables
+
+.. _g\:EclimXsdValidate:
+
+- **g:EclimXsdValidate** (Default: 1) -
+  If set to 0, disables validation when saving the file.
+
+- **g:EclimValidateSortResults** (Default: 'occurrence') -
+  If set to 'severity', the validation results will be sorted by severity
+  (errors > warnings > info > etc.)

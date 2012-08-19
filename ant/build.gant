@@ -62,6 +62,7 @@ target(name: 'init'){
     ''')
   }else if (dotversion.exists()){ // only used by source distribution (tar.gz)
     version = dotversion.getText().trim()
+    release = version
   }else{
     // set eclim version based on current repos state (most recent tag w/
     // possible suffix including number of revisions since that tag + last commit
@@ -69,9 +70,13 @@ target(name: 'init'){
     version = execute('git', 'describe')
     // ensure version is a valid osgi version
     version = version.replaceFirst(/^(\d+\.\d+\.\d+)-(\d+-\w+)$/, '$1.$2')
+
+    release = execute('git', 'describe --abbrev=0')
   }
   property(name: 'eclim.version', value: version)
+  property(name: 'eclim.release', value: release)
   echo('eclim.version: ${eclim.version}')
+  echo('eclim.release: ${eclim.release}')
 
   property(name: 'eclim.features', value: '${eclipse.local}/features')
   property(name: 'eclim.plugins', value: '${eclipse.local}/plugins')
@@ -425,6 +430,8 @@ target(name: 'javadoc'){
 }
 
 target(name: 'docs'){
+  depends('init')
+
   property(name: 'sphinx.args', value: '')
   mkdir(dir: 'build/doc/site')
 
@@ -442,7 +449,7 @@ target(name: 'docs'){
       'google-site-verification: google4c368e38cc6ac62e.html')
 
   replace(dir: 'build/doc/site', includes: '**/*.html'){
-    replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
+    replacefilter(token: 'eclim_release', value: '${eclim.release}')
   }
 
   // support for google sitemap
@@ -471,6 +478,10 @@ target(name: 'vimdocs'){
   // generate site documention via sphinx
   exec(executable: 'bin/sphinx', failonerror: true, dir: '.'){
     arg(line: '${sphinx.args} -b vimdoc doc/content build/doc/vimdocs')
+  }
+
+  replace(dir: 'build/doc/vimdocs', includes: '**/*.txt'){
+    replacefilter(token: 'eclim_release', value: '${eclim.release}')
   }
 
   delete(dir: '${vim.files}/eclim/doc')

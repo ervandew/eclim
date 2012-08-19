@@ -13,22 +13,20 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/common/util:
+.. _\:LocateFile:
 
-Utility Commands
+Locate File
 ================
 
-The following is a list of utility commands provided by eclim.  These are
-general purpose commands that are useful in and outside the scope of eclim.
-
-.. _\:LocateFile:
+Eclim provides the **:LocateFile** command to allow you to quickly find and
+open files or buffers.
 
 - **:LocateFile** [file_pattern] -
   Attempts to locate the supplied file pattern or if no argument is supplied,
   opens a temporary window where the text you type is turned into a pattern and
   search results are presented as you type.
 
-  .. image:: ../../images/screenshots/locate.png
+  .. image:: ../images/screenshots/locate.png
 
   While in this completion mode the following key bindings are available:
     - <esc> - close the search window without selecting a file
@@ -67,9 +65,9 @@ general purpose commands that are useful in and outside the scope of eclim.
   In addition to the 'project' and 'workspace' scopes, **:LocateFile** also
   supports the following scopes:
 
-    - buffers: search listed buffers
-    - quickfix: search the quickfix results
-    - vcsmodified: search files reported by your vcs as modified or untracked.
+  - buffers: search listed buffers
+  - quickfix: search the quickfix results
+  - vcsmodified: search files reported by your vcs as modified or untracked.
 
   .. note::
 
@@ -118,123 +116,3 @@ general purpose commands that are useful in and outside the scope of eclim.
       search will be case sensitive.
     - 'always': searching will always be case insensitive.
     - 'never': searching will never be case insensitive.
-
-.. _\:Tcd:
-
-- **:Tcd** dir -
-  Mimics vim's :lcd command but sets the current working directory local to the
-  current tab instead of just the current window.
-
-.. _\:DiffLastSaved:
-
-- **:DiffLastSaved** -
-  Performs a diffsplit with the last saved version of the currently modifed
-  file.
-
-.. _\:SwapWords:
-
-- **:SwapWords** -
-  Swaps two words (with cursor placed on the first word).  Supports swapping
-  around non-word characters like commas, periods, etc.
-
-.. _\:Sign:
-
-- **:Sign** -
-  Toggles adding or removing a vim sign on the current line.
-
-.. _\:Signs:
-
-- **:Signs** -
-  Opens a new window containing a list of signs for the current buffer.  Hitting
-  <enter> on one of the signs in the list will take you to that sign in the
-  corresponding buffer.
-
-.. _\:SignClearUser:
-
-- **:SignClearUser** -
-  Removes all vim signs added via :Sign.
-
-.. _\:SignClearAll:
-
-- **:SignClearAll** -
-  Removes all vim signs.
-
-.. _\:QuickFixClear:
-
-- **:QuickFixClear** -
-  Removes all entries from the quick fix window.
-
-.. _\:LocationListClear:
-
-- **:LocationListClear** -
-  Removes all entries from the location list window.
-
-.. _\:Buffers:
-
-- **:Buffers** -
-  Opens a temporary window with a list of all the currently listed buffers in
-  vim (like :buffers).  From this list you can open any of the files using one
-  of the following shortcuts\:
-
-  - **E** (shift-e) - Open the file with 'edit'.
-  - **S** (shift-s) - Open the file with 'split'.
-  - **T** (shift-t) - Open the file with 'tabnew'.
-  - **D** (shift-d) - Deletes the buffer and removes it from the list.
-  - **\?** - View the help buffer.
-
-  In addition to the above mappings you can also use <return> to execute the
-  configured default action on the buffer under the cursor.
-
-  To configure the default action you can set the following variable\:
-
-  **g:EclimBuffersDefaultAction** (defaults to 'split')
-
-  By default entries will be sorted by path name, but you may change the
-  sorting via these two variables\:
-
-  **Configuration**
-
-  Vim Settings
-
-  .. _g\:EclimBuffersSort:
-
-  - **g:EclimBuffersSort** (defaults to 'path')  Supports one
-    of 'path', 'status' (active or hidden), 'bufnr'.
-
-  .. _g\:EclimBuffersSortDirection:
-
-  - **g:EclimBuffersSortDirection** (defaults to 'asc')
-    Supports one of 'asc' or 'desc'.
-
-.. _\:BuffersToggle:
-
-- **:BuffersToggle** -
-  A convenience command which opens the buffers window if not open, otherwise
-  closes it.  Useful for creating a key mapping to quickly open/close the
-  buffers window.
-
-.. _\:Only:
-
-- **:Only** -
-  Alternative for vim's :only command.  The purpose of this command and the
-  original vim version is to close all but the current window.  Unfortunately
-  there is no way to tell the vim version to exclude some windows you may wish
-  to keep open (taglist, quickfix, etc.).  The eclim version provides that
-  ability via the **g:EclimOnlyExclude** and **g:EclimOnlyExcludeFixed**
-  variables.
-
-  **Configuration**
-
-  Vim Settings
-
-  .. _g\:EclimOnlyExclude:
-
-  - **g:EclimOnlyExclude** (defaults to '^NONE$') -
-    Regex used to match buffer names for windows that should not be closed when
-    issuing the :Only command.
-
-  .. _g\:EclimOnlyExcludeFixed:
-
-  - **g:EclimOnlyExcludeFixed** (defaults to 1)
-    When non-0 all fixed windows (ones which have 'winfixwidth' or
-    'winfixheight' set) will be preserved when issuing the :Only command.

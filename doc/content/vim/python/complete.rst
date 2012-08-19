@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,13 +13,11 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/python/complete:
-
 Python Code Completion
 ======================
 
 Python code completion uses the standard
-:ref:`Vim code completion mechanism <vim/code_completion>` like so\:
+:doc:`Vim code completion mechanism </vim/code_completion>` like so\:
 
 .. code-block:: python
 
@@ -30,10 +28,3 @@ Python code completion uses the standard
   t = Test()
   t.te<C-X><C-U>
   t.testMethod
-
-.. note::
-
-  Code completion support is provided via eclim's integration with
-  :ref:`rope <vim/python/rope>`.
-
-  Please see the :ref:`rope <vim/python/rope>` docs for more information.

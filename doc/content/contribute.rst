@@ -61,7 +61,7 @@ are several ways in which you can contribute:
     same feature.  The list would also afford me the ability to contact you
     should a change to eclim possibly affect what you are working on.  If you
     plan on making any code contributes, please read the
-    :ref:`developer guide <guides/development>` first.
+    :doc:`developer guide </guides/development>` first.
 
 #.  **Monetary Contributions**: I am not currently accepting any donations.  My
     day job pays well, and I work on eclim for the love of it.  If you have

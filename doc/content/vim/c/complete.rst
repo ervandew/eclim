@@ -13,13 +13,11 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/c/complete:
-
 C/C++ Code Completion
 =====================
 
 C/C++ code completion uses the standard
-:ref:`Vim code completion mechanism <vim/code_completion>` like so\:
+:doc:`Vim code completion mechanism </vim/code_completion>` like so\:
 
 .. code-block:: c
 
@@ -33,9 +31,3 @@ C/C++ code completion uses the standard
     return EX<C-X><C-U>
     return EXIT_SUCCESS;
   }
-
-.. note::
-  This feature depends on the eclipse cdt_ which should be installed for you
-  when choosing c/c++ support in the eclim installer.
-
-.. _cdt: http://eclipse.org/cdt

@@ -13,10 +13,10 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _gettinghelp:
-
 Getting Help
 ============
+
+.. begin-help
 
 Mailing Lists
 -------------
@@ -39,6 +39,13 @@ in California, so if you are in Europe, Asia, or some other timezone whose
 normal waking hours don't overlap well with mine, then you may be better off
 getting help using one of the mailing lists above.
 
+.. _eclim-dev: http://groups.google.com/group/eclim-dev
+.. _eclim-user: http://groups.google.com/group/eclim-user
+
+.. end-help
+
+.. begin-report-bug
+
 Reporting Bugs
 --------------
 
@@ -58,6 +65,6 @@ When reporting a bug, please include the following information:
     distribution of eclipse you are using ("Eclipse Classic", "Eclipse IDE for
     C/C++ Developers", some other eclipse bundle).
 
-.. _eclim-dev: http://groups.google.com/group/eclim-dev
-.. _eclim-user: http://groups.google.com/group/eclim-user
 .. _issue tracker: http://github.com/ervandew/eclim/issues
+
+.. end-report-bug

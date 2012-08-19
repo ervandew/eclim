@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,14 +13,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/ruby/buildpath:
-
 Ruby Build Path
 ================
 
-The ruby build path is used by eclipse to determine the location of your
-project's source files, external libraries, etc.  Management of your build path
-is provided by the eclim dltk plugin.
-
-Please see the :ref:`dltk buildpath <vim/dltk/buildpath>` docs for information
-on editing and maintaining your project's build path file.
+.. include:: /vim/dltk/buildpath.rst
+   :start-after: begin-buildpath
+   :end-before: end-buildpath

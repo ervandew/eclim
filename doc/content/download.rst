@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,18 +13,22 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _download:
-
 Download
 ========
+
+.. begin-installer
 
 Official Installer
 ------------------
 
-You can find the official eclim installer for on eclim's sourceforge downloads_
-page:
+You can find the official eclim installer on eclim's sourceforge `downloads
+page`_:
 
-- `eclim_version.jar`_
+- :eclimdist:`jar`
+
+.. _downloads page: http://sourceforge.net/project/showfiles.php?group_id=145869
+
+.. end-installer
 
 Third Party Packages
 --------------------
@@ -34,6 +38,3 @@ maintained by third parties for some popular linux distributions:
 
 - **Arch:** `aur (eclim) <http://aur.archlinux.org/packages.php?ID=7291>`_,
   `aur (eclim-git) <http://aur.archlinux.org/packages.php?ID=33120>`_
-
-.. _downloads: http://sourceforge.net/project/showfiles.php?group_id=145869
-.. _eclim_version.jar: http://sourceforge.net/project/platformdownload.php?group_id=145869

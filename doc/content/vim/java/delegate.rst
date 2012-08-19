@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,8 +12,6 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-.. _vim/java/delegate:
 
 Delegate Methods
 ================
@@ -77,7 +75,7 @@ delegate methods will be created for each method in that interface or class.
 .. note::
 
   The insertion of method stubs is done externally with Eclipse and with
-  that comes a couple :ref:`caveats <vim/issues>`.
+  that comes a couple :doc:`caveats </vim/gotchas>`.
 
 This functionality is currently supported for both outer and inner classes, but
 not for anonymous inner classes.

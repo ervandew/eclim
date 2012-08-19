@@ -13,10 +13,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _eclimd:
-
-Eclimd
-======
+The Eclim Daemon
+================
 
 .. _eclimd_headless:
 
@@ -44,7 +42,7 @@ the eclimd.bat file found in your eclipse root directory:
 .. note::
   Even though an eclipse gui is not started in eclim's headless mode, eclipse
   still requires a running X server to function.  To run eclimd on a truely
-  headless server, please see the :ref:`headless guide <guides/headless>`.
+  headless server, please see the :doc:`headless guide </guides/headless>`.
 
 **Stopping eclimd**
 
@@ -92,7 +90,7 @@ running the eclim server inside of a headed eclipse instance.
 The eclim daemon inside of eclipse is implemented as an eclipse view.  To open
 the view, go to the Window menu and select:
 
-  Show View -> Other -> Eclim -> eclimd
+:menuselection:`Show View --> Other --> Eclim --> eclimd`
 
 The view will be opened in a new tab in the same pane as the "Problems" tab, as
 shown below.
@@ -122,10 +120,6 @@ Embedded gvim
 -------------
 
 .. note::
-  Please note that this feature is currently considered alpha.  Please post any
-  issues on the `eclim user`_ mailing list.
-
-.. note::
   Embedding is only supported on Windows and Unix systems (where gvim is
   compiled with the gtk gui).
 
@@ -143,7 +137,7 @@ provided by an eclim local fork of `vimplugin`_.  The feature adds a new editor
 to eclipse which allows you to open files in gvim by right clicking the file
 name in the eclipse tree and then selecting:
 
-  Open With -> Vim
+:menuselection:`Open With --> Vim`
 
 .. image:: images/screenshots/eclipse/gvim_eclim_view.png
 
@@ -155,19 +149,19 @@ must have the :ref:`eclimd view <eclimd_headed>` open.
   If you'd like to have the embedded gvim editor as the default for one or more
   file types, you can configure it to be in your eclipse preferences:
 
-    Window > Preferences > General > Editors > File Associations
+  :menuselection:`Window --> Preferences --> General --> Editors --> File Associations`
 
 The eclim installer should take care of locating your gvim installation for use
 inside of eclipse, but in the event that it could not locate it, you can set
 the location and other settings via the vimplugin preferences:
 
-  Window > Preferences > Vimplugin
+:menuselection:`Window --> Preferences --> Vimplugin`
 
 For MacVim users on OSX, the eclim installer will attempt to locate MacVim's
 mvim script on your path. If it's not found you can set the location of that
 script in the Vimplugin preferences:
 
-  Eclipse > Preferences > Vimplugin
+:menuselection:`Eclipse --> Preferences --> Vimplugin`
 
 .. note::
   If you have non-eclim version of vimplugin installed you should remove it
@@ -200,72 +194,70 @@ you will fall into one of two groups:
 1. In the first group of users, all key presses are received by eclipse prior
    to sending them to gvim.
 
-  For this group, when typing a possible key shortcut (ctrl-n for example),
-  eclipse will first evaluate that key stroke to see if there are any eclipse
-  key bindings registered.  If there are, then eclipse will run the associated
-  command and the key stroke is never sent to gvim.  If no key binding is
-  found, then eclipse will pass the key stroke through to gvim.  What this
-  means for you is that for any gvim key mappings that you use that have an
-  eclipse key binding, they will not be evaluated inside of gvim.  So, if you
-  encounter this issue, you'll need to remap the keys in vim or eclipse.  To
-  remove the key binding from the eclipse side, simply open the "Keys"
-  preferences page:
+   For this group, when typing a possible key shortcut (ctrl-n for example),
+   eclipse will first evaluate that key stroke to see if there are any eclipse
+   key bindings registered.  If there are, then eclipse will run the associated
+   command and the key stroke is never sent to gvim.  If no key binding is
+   found, then eclipse will pass the key stroke through to gvim.  What this
+   means for you is that for any gvim key mappings that you use that have an
+   eclipse key binding, they will not be evaluated inside of gvim.  So, if you
+   encounter this issue, you'll need to remap the keys in vim or eclipse.  To
+   remove the key binding from the eclipse side, simply open the "Keys"
+   preferences page:
 
-  ::
+   :menuselection:`Window --> Preferences --> General --> Keys`
 
-    Window -> Preferences -> General -> Keys
+   Then find the entry in the list that corresponds with the key binding you
+   want to remove, select it, and hit the "Unbind Command" button.
 
-  Then find the entry in the list that corresponds with the key binding you
-  want to remove, select it, and hit the "Unbind Command" button.
+   .. note::
+     By default eclim will auto-remove a couple of the standard eclipse
+     bindings whenever an embedded gvim editor has focus and then restore them
+     with a non-gvim editor gains focus:
 
-  .. note::
-    By default eclim will auto-remove a couple of the standard eclipse
-    bindings whenever an embedded gvim editor has focus and then restore them
-    with a non-gvim editor gains focus:
-
-    - Ctrl+U: in eclipse this runs "Execute", but in gvim this is needed to
-      run code completion (ex. ctrl-x ctrl-u).
-    - Ctrl+N: in eclipse this runs the "New" wizard, but in gvim this is also
-      needed as a part of code completion, to scroll through the results.
-    - Ctrl+V: in eclipse this pastes text from the clipboard (though not into
-      gvim), but in gvim this is needed for column wise visual selections.
-    - Ctrl+W: in eclipse this closes a tab, but in gvim this is needed to
-      switch windows (ex. ctrl-w j).
+     - Ctrl+U: in eclipse this runs "Execute", but in gvim this is needed to
+       run code completion (ex. ctrl-x ctrl-u).
+     - Ctrl+N: in eclipse this runs the "New" wizard, but in gvim this is also
+       needed as a part of code completion, to scroll through the results.
+     - Ctrl+V: in eclipse this pastes text from the clipboard (though not into
+       gvim), but in gvim this is needed for column wise visual selections.
+     - Ctrl+W: in eclipse this closes a tab, but in gvim this is needed to
+       switch windows (ex. ctrl-w j).
 
 .. _FeedKeys:
 
 2. In the second group, all key presses are received by gvim and not evaluated
    at all by eclipse.
 
-  For this group of users, you may have an eclipse key shortcut that you like
-  to use (Shift+Ctrl+R for example), but when you hit that key combination, it
-  will be evaluated by gvim instead of eclipse.  To remedy this situation,
-  eclim provides a means to map eclipse shortcuts inside of gvim.  To register
-  a shortcut, simply add your mappings to your vimrc, gvimrc, or other standard
-  gvim file like so:
+   For this group of users, you may have an eclipse key shortcut that you like
+   to use (Shift+Ctrl+R for example), but when you hit that key combination, it
+   will be evaluated by gvim instead of eclipse.  To remedy this situation,
+   eclim provides a means to map eclipse shortcuts inside of gvim.  To register
+   a shortcut, simply add your mappings to your vimrc, gvimrc, or other standard
+   gvim file like so:
 
-    .. code-block:: vim
+   .. code-block:: vim
 
-      " maps Ctrl-F6 to eclipse's Ctrl-F6 key binding (switch editors)
-      nmap <silent> <c-f6> :call eclim#vimplugin#FeedKeys('Ctrl+F6')<cr>
+     " maps Ctrl-F6 to eclipse's Ctrl-F6 key binding (switch editors)
+     nmap <silent> <c-f6> :call eclim#vimplugin#FeedKeys('Ctrl+F6')<cr>
 
-      " maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
-      nmap <silent> <c-f7> :call eclim#vimplugin#FeedKeys('Ctrl+F7')<cr>
+     " maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
+     nmap <silent> <c-f7> :call eclim#vimplugin#FeedKeys('Ctrl+F7')<cr>
 
-      " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
-      nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
+     " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
+     nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
 
-      " maps Ctrl-M to eclipse's Ctrl-M binding to maximize the editor
-      nmap <silent> <c-m> :call eclim#vimplugin#FeedKeys('Ctrl+M', 1)<cr>
+     " maps Ctrl-M to eclipse's Ctrl-M binding to maximize the editor
+     nmap <silent> <c-m> :call eclim#vimplugin#FeedKeys('Ctrl+M', 1)<cr>
 
-  The value supplied to the `FeedKeys` function must be an eclipse compatible key
-  binding string as found in:
+   The value supplied to the `FeedKeys` function must be an eclipse compatible key
+   binding string as found in:
 
-    Windows -> Preferences -> General -> Keys
+   :menuselection:`Windows --> Preferences --> General --> Keys`
 
-  Be sure to notice the extra argument to the FeedKeys function in the last
-  mapping. Supplying 1 as the arg will result in the refocusing of gvim after
-  the eclipse key binding has been executed.
+   Be sure to notice the extra argument to the FeedKeys function in the last
+   mapping. Supplying 1 as the arg will result in the refocusing of gvim after
+   the eclipse key binding has been executed.
 
 
 ~/.eclimrc
@@ -339,15 +331,15 @@ The ext dir that eclim reads from is located in your vim files directory:
 
 Linux / BSD / OSX:
 
-  ::
+::
 
-    ~/.eclim/resources/ext
+  ~/.eclim/resources/ext
 
 Windows:
 
-  ::
+::
 
-    $HOME/.eclim/resources/ext
+  $HOME/.eclim/resources/ext
 
 .. _eclim user: http://groups.google.com/group/eclim-user
 .. _vimplugin: http://vimplugin.org

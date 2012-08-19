@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,8 +12,6 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-.. _vim/java/junit:
 
 JUnit
 ======
@@ -118,7 +116,7 @@ Generating test method stubs.
 -----------------------------
 
 While editing junit files, eclim provides functionality to generate test method
-stubs similar to the :ref:`method override / impl <vim/java/impl>`
+stubs similar to the :doc:`method override / impl </vim/java/impl>`
 functionality provided for non-test-case classes.  The only difference is that
 instead of **:JavaImpl**, you use **:JUnitImpl** to open the window of possible
 methods to implement.
@@ -141,7 +139,7 @@ stub will be inserted, otherwise a regular overriding stub will be generated.
 .. note::
 
   The insertion of methods is done externally with Eclipse and with that
-  comes a couple :ref:`caveats <vim/issues>`.
+  comes a couple :doc:`caveats </vim/gotchas>`.
 
 .. note::
 

@@ -13,17 +13,15 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _guides/uninstall:
-
 Uninstalling
 ============
 
 To uninstall eclim you can use any eclim distribution jar whose version is
 1.7.5 or greater by running it with the 'uninstaller' argument like so:
 
-  .. code-block:: bash
+.. code-block:: bash
 
-    $ java -jar eclim_<version>.jar uninstaller
+  $ java -jar eclim_eclim_release.jar uninstaller
 
 That will open a graphical wizard much like the install wizard which will ask
 you again for the location of your vimfiles and eclipse home where you've
@@ -47,7 +45,7 @@ just need to supply your vim files and eclipse paths as system properties:
   $ java \
     -Dvim.files=$HOME/.vim \
     -Declipse.home=/opt/eclipse \
-    -jar eclim_<version>.jar uninstall
+    -jar eclim_eclim_release.jar uninstall
 
 **Required Properties:**
 

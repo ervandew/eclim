@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _guides/headless:
-
 Eclim Headless Server Guide
 ===========================
 
@@ -53,10 +51,10 @@ desktop and copy the download url and use wget to download the eclipse archive.
 Once downloaded, you can then extract the archive in the directory of your
 choice.
 
-  ::
+::
 
-    $ wget <eclipse_mirror>/eclipse-<version>-linux-gtk.tar.gz
-    $ tar -zxf eclipse-<version>-linux-gtk.tar.gz
+  $ wget <eclipse_mirror>/eclipse-<version>-linux-gtk.tar.gz
+  $ tar -zxf eclipse-<version>-linux-gtk.tar.gz
 
 .. note::
 
@@ -69,12 +67,12 @@ choice.
   correct repository for your eclipse install (juno in this example) and that
   you have Xvfb running as described in the last step of this guide:
 
-    ::
+  ::
 
-      DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
-        -application org.eclipse.equinox.p2.director
-        -repository http://download.eclipse.org/releases/juno
-        -installIU org.eclipse.wst.web_ui.feature.feature.group
+    DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
+      -application org.eclipse.equinox.p2.director
+      -repository http://download.eclipse.org/releases/juno
+      -installIU org.eclipse.wst.web_ui.feature.feature.group
 
   For a list of eclim plugins and which eclipse features they require, please
   see the `installer dependencies`_.  Note that the suffix '.feature.group'
@@ -85,27 +83,27 @@ Once eclipse is installed, you can then install eclim utilizing the eclim
 installer's automated install option (see the :ref:`install-automated` guide
 for additional details):
 
-  .. code-block:: bash
+.. code-block:: bash
 
-    $ java \
-      -Dvim.files=$HOME/.vim \
-      -Declipse.home=/opt/eclipse \
-      -jar eclim_<version>.jar install
+  $ java \
+    -Dvim.files=$HOME/.vim \
+    -Declipse.home=/opt/eclipse \
+    -jar eclim_eclim_release.jar install
 
 The last step is to start Xvfb followed by eclimd:
 
-  ::
+::
 
-    $ Xvfb :1 -screen 0 1024x768x24 &
-    $ DISPLAY=:1 ./eclipse/eclimd start
+  $ Xvfb :1 -screen 0 1024x768x24 &
+  $ DISPLAY=:1 ./eclipse/eclimd start
 
-  When starting Xvfb you may receive some errors regarding font paths and
-  possibly dbus and hal, but as long as Xvfb continues to run, you should be
-  able to ignore these errors.
+When starting Xvfb you may receive some errors regarding font paths and
+possibly dbus and hal, but as long as Xvfb continues to run, you should be
+able to ignore these errors.
 
-  The first time you start eclimd you may want to omit the 'start' argument so
-  that you can see the output on the console to ensure that eclimd starts
-  correctly.
+The first time you start eclimd you may want to omit the 'start' argument so
+that you can see the output on the console to ensure that eclimd starts
+correctly.
 
 .. _eclipse.org: http://eclipse.org/downloads/
 .. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml

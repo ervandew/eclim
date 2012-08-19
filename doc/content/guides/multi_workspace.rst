@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -12,8 +12,6 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-.. _guides/multi_workspace:
 
 Multiple Workspace Guide
 ========================
@@ -31,39 +29,39 @@ Below are some different ways in which you can configure your eclimd instances:
 1. All Users: Supply the nailgun port and eclipse workspace path when starting
    eclimd:
 
-  ::
+   ::
 
-    $ eclimd -Dosgi.instance.area.default=@user.home/workspace1 -Dnailgun.server.port=9091
-    $ eclimd -Dosgi.instance.area.default=@user.home/workspace2 -Dnailgun.server.port=9092
+     $ eclimd -Dosgi.instance.area.default=@user.home/workspace1 -Dnailgun.server.port=9091
+     $ eclimd -Dosgi.instance.area.default=@user.home/workspace2 -Dnailgun.server.port=9092
 
-  If you are using the eclimd view in the eclipse gui, then you can start the
-  eclipse gui with the desired nailgun server port (note that you must place
-  the -vmargs option before the list of jvm arguments):
+   If you are using the eclimd view in the eclipse gui, then you can start the
+   eclipse gui with the desired nailgun server port (note that you must place
+   the -vmargs option before the list of jvm arguments):
 
-  ::
+   ::
 
-    $ eclipse -vmargs -Dnailgun.server.port=9092
+     $ eclipse -vmargs -Dnailgun.server.port=9092
 
 2. Linux, OSX, BSD Users: Specify the port and workspace in eclimrc files and
    start eclimd with the -f argument:
 
-  ::
+   ::
 
-    $ vim ~/.eclimrc1
-    osgi.instance.area.default=@user.home/workspace1
-    nailgun.server.port=9091
+     $ vim ~/.eclimrc1
+     osgi.instance.area.default=@user.home/workspace1
+     nailgun.server.port=9091
 
-    $ vim ~/.eclimrc2
-    osgi.instance.area.default=@user.home/workspace2
-    nailgun.server.port=9092
+     $ vim ~/.eclimrc2
+     osgi.instance.area.default=@user.home/workspace2
+     nailgun.server.port=9092
 
-    $ eclimd -f ~/.eclimrc1
-    $ eclimd -f ~/.eclimrc2
+     $ eclimd -f ~/.eclimrc1
+     $ eclimd -f ~/.eclimrc2
 
-  .. note::
+   .. note::
 
-    The -f argument is not supported by eclipse so the above option is only
-    available when using a headless eclimd instance.
+     The -f argument is not supported by eclipse so the above option is only
+     available when using a headless eclimd instance.
 
 3. Windows Users: Create Windows shortcuts:
 

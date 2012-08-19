@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,10 +13,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/issues:
-
-Issues / Quirks
-===============
+Gotchas / Quirks
+================
 
 Some portions of eclim make use of the editing APIs provided by Eclipse.  While
 this makes for much cleaner code and far fewer chances of errors while trying
@@ -38,7 +36,7 @@ drawbacks:
     undo info.  Needed for when an external tool changes the file.
 
   Until that change is made to vim, you can still revert your file using the
-  :ref:`local history <vim/common/history>` support.
+  :doc:`local history </vim/history>` support.
 
 
 - **Formatting (tabs vs. spaces):**

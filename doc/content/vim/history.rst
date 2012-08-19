@@ -13,11 +13,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _vim/common/history:
-
-
-Local History
-=============
+Eclipse Local History
+=====================
 
 Eclipse provides a feature called local history, which is basically a
 simplistic version control system that is updated every time you save a file.
@@ -30,9 +27,9 @@ eclipse gui, in which case eclim will honor the default eclipse editor behavior
 and update the local history. You can turn this feature on in all cases by
 adding the following to your vimrc:
 
-  .. code-block:: vim
+.. code-block:: vim
 
-    let g:EclimProjectKeepLocalHistory = 1
+  let g:EclimProjectKeepLocalHistory = 1
 
 
 .. _\:History:
@@ -73,9 +70,7 @@ Eclipse Settings
   you are running a headless version, then open the eclipse gui and navigate
   to:
 
-  ::
-
-    Window > Preferences > General > Workspace > Local History
+  :menuselection:`Window --> Preferences --> General --> Workspace --> Local History`
 
   And there you can edit your settings as necessary.
 

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,11 +30,11 @@
 function! eclim#help#Help(tag, link)
   if !filereadable(substitute(g:EclimHelpDir, '\\\s', ' ', 'g') . '/tags')
     call eclim#util#Echo('indexing eclim help files...')
-    silent! exec 'helptags ' . g:EclimHelpDir
+    exec 'helptags ' . g:EclimHelpDir
     let paths = split(glob(g:EclimHelpDir . '/**/*'), '\n')
     call filter(paths, 'isdirectory(v:val)')
     for path in paths
-      silent! exec 'helptags ' . path
+      exec 'helptags ' . path
     endfor
     call eclim#util#Echo('eclim help files indexed')
   endif
@@ -44,7 +44,7 @@ function! eclim#help#Help(tag, link)
   try
     let tag = a:tag
     if tag == '' && !a:link
-      let tag = 'vim-index'
+      let tag = 'index'
     elseif tag ==''
       let line = getline('.')
       let tag = substitute(
