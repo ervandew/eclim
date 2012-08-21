@@ -221,11 +221,14 @@ function! s:CloseIfLastWindow() " {{{
       if exists('g:TagList_title') && bufname(bufnr) == g:TagList_title
         continue
       endif
+      if exists('g:BufExplorer_title') && bufname(bufnr) == '[BufExplorer]'
+        let close = 0
+        break
+      endif
+
       let buftype = getbufvar(bufnr, '&buftype')
       if buftype != '' && buftype != 'help'
-        if !exists('g:BufExplorer_title') || bufname(bufnr) != "[BufExplorer]"
-          continue
-	     	endif
+        continue
       endif
 
       let close = 0
