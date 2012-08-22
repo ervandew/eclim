@@ -30,8 +30,11 @@ sys.path.append(os.path.abspath('../theme'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
   'sphinx.ext.extlinks',
+  'sphinxcontrib.plantuml',
   'eclim.sphinx.vimdoc',
 ]
+
+plantuml = 'java -jar %s/extension/plantuml.jar' % os.path.dirname(path)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['../template']

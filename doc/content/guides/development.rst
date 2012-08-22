@@ -101,20 +101,11 @@ should the need arise here are the instructions for doing so.
 To build the installer you first need a couple external tools installed:
 
 * sphinx_: Sphinx is used to build the eclim documentation which is included in
-  the installer.  Please note however that eclim includes extensions to sphinx
-  which target a specific version, so you should install the version that those
-  extensions were built for.  The most reliable way to determine the proper
-  version is to view the git log for eclim's sphinx extensions, typically the
-  most recent log entry will note the proper sphinx version:
+  the installer.
 
-  ::
-
-    $ git log -1 src/doc/extension/
-    commit df2e9f250b2ccdf53ed7932018acec808ae4538f
-    Author: ervandew <ervandew@gmail.com>
-    Date:   Sun Nov 1 20:27:45 2009 -0800
-
-        update to sphinx 0.6.3
+* graphviz_:  The docs include a few uml diagrams which are generated using
+  plantuml_ (included in the eclim source tree) which in turn requires
+  graphviz_.
 
 * formic_: The eclim installer has been developed using the formic framework,
   and requires it to build the installer distributables.  Formic doesn't
@@ -162,4 +153,6 @@ All of that and more can be found in the
 .. _guide to forking: http://help.github.com/forking/
 .. _git-format-patch: http://www.kernel.org/pub/software/scm/git/docs/git-format-patch.html
 .. _sphinx: http://sphinx.pocoo.org
+.. _plantuml: http://plantuml.sourceforge.net/
+.. _graphviz: http://www.graphviz.org/
 .. _formic: http://github.com/ervandew/formic

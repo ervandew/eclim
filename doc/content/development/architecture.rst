@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2011  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,41 @@ command implementation is then located and executed.
 
 Here is a diagram showing the sequence in a bit more detail:
 
-.. image:: ../images/diagrams/command_sequence.png
+.. uml::
+
+   skinparam monochrome true
+   hide footbox
+   box "Vim"
+     participant "<command>.vim"
+     participant eclim.vim
+   end box
+   participant nailgun
+   box "Eclipse / Eclimd"
+     participant Main
+     participant Services
+     participant "<Command>"
+   end box
+
+   "<command>.vim" -> eclim.vim : eclim#ExecuteEclim
+   activate eclim.vim
+
+   eclim.vim -> nailgun
+   activate nailgun
+
+   eclim.vim -> Main : main
+   activate Main
+
+   Main -> Services : getCommand
+   Services --> Main
+   Main -> "<Command>" : execute
+   "<Command>" --> Main
+   Main --> nailgun
+   nailgun --> eclim.vim
+   eclim.vim --> "<command>.vim"
+
+   deactivate Main
+   deactivate nailgun
+   deactivate eclim.vim
 
 
 The commands which are executed on the eclimd side are also fairly simply.
@@ -31,7 +65,24 @@ eclimd invocation and then return an object (String, Collection, etc) which is
 converted to a json response.  Below is a simple class diagram showing the
 hierarchy of a couple typical commands.
 
-.. image:: ../images/diagrams/command_class.png
+.. uml::
+
+   skinparam monochrome true
+   skinparam circled {
+     CharacterFontSize 0
+     CharacterRadius 0
+   }
+
+   Command <|.. AbstractCommand
+   AbstractCommand <|-- PingCommand
+   AbstractCommand <|-- ShutdownCommand
+
+   class Command <<Interface>> {
+     Object execute(CommandLine)
+   }
+   AbstractCommand : Preferences getPreferences()
+   PingCommand : Object execute(CommandLine)
+   ShutdownCommand : Object execute(CommandLine)
 
 
 Another important aspect of eclim's architecture is support for plugins.
@@ -45,7 +96,29 @@ provider and invoke its initialize method which will then inject its resources
 
 Here is graphical representation of this process:
 
-.. image:: ../images/diagrams/load_plugin_sequence.png
+.. uml::
 
+   skinparam monochrome true
+   hide footbox
+
+   participant "<Eclipse>"
+   participant EclimApplication
+   participant PluginResources
+   participant Services
+
+   "<Eclipse>" -> EclimApplication : start
+   activate EclimApplication
+   EclimApplication -> EclimApplication : loadPlugins
+   activate EclimApplication
+   EclimApplication -> PluginResources : initialize
+   activate PluginResources
+   PluginResources -> Services : addPluginResources
+   PluginResources -> Services : registerCommand
+   PluginResources --> EclimApplication
+   deactivate PluginResources
+
+   deactivate EclimApplication
+   deactivate EclimApplication
+   EclimApplication --> "<Eclipse>"
 
 .. _nailgun: http://www.martiansoftware.com/nailgun/
