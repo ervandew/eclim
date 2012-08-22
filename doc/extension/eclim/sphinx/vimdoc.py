@@ -220,6 +220,12 @@ class VimdocTranslator(text.TextTranslator):
   def depart_literal(self, node):
     pass
 
+  def visit_plantuml(self, node):
+    self.add_text('[diagram]')
+
+  def depart_plantuml(self, node):
+    pass
+
 # Custom missing_reference event listener to handle:
 #   - references like> :ref:`:ProjectCreate`
 #   - not tranlateing references from> g:EclimMakeLCD to g-eclimmakelcd

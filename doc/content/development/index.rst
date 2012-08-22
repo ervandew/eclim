@@ -25,6 +25,9 @@ Development Docs
    unittests
    installer
 
+:doc:`/guides/development`
+  Documents the eclim build process.
+
 :doc:`/development/architecture`
   Explains the underlying architecture that eclim utilizes including an
   overview of the call sequence from vim to eclipse.
