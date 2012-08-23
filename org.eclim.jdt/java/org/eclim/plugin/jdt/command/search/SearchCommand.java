@@ -19,8 +19,10 @@ package org.eclim.plugin.jdt.command.search;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.vfs.FileObject;
@@ -107,6 +109,9 @@ public class SearchCommand
   public static final String TYPE_PACKAGE = "package";
   public static final String TYPE_TYPE = "type";
 
+  private static final Pattern INNER_CLASS =
+    Pattern.compile("(.*?)(\\w+\\$)(\\w.*)");
+
   protected static final String ANDROID_NATURE =
     "com.android.ide.eclipse.adt.AndroidNature";
   private static final Pattern ANDROID_JDK_URL =
@@ -162,6 +167,8 @@ public class SearchCommand
     String pat = commandLine.getValue(Options.PATTERN_OPTION);
 
     SearchPattern pattern = null;
+    IJavaProject javaProject = project != null ?
+      JavaUtils.getJavaProject(project) : null;
 
     // element search
     if(file != null && offset != null && length != null){
@@ -201,6 +208,34 @@ public class SearchCommand
 
       int type = getType(commandLine.getValue(Options.TYPE_OPTION));
 
+      // hack for inner classes
+      Matcher matcher = INNER_CLASS.matcher(pat);
+      if (matcher.matches()){
+        // pattern search doesn't support org.test.Type$Inner or
+        // org.test.Type.Inner, so convert it to org.test.*Inner, then filter
+        // the results.
+        pattern = SearchPattern.createPattern(
+            matcher.replaceFirst("$1*$3"), type, context, matchType);
+        Pattern toMatch = Pattern.compile(pat
+          .replace(".", "\\.")
+          .replace("$", "\\$")
+          .replace("(", "\\(")
+          .replace(")", "\\)")
+          .replace("*", ".*")
+          .replace("?", "."));
+        List<SearchMatch> matches = search(pattern, getScope(scope, javaProject));
+        Iterator<SearchMatch> iterator = matches.iterator();
+        while (iterator.hasNext()){
+          SearchMatch match = iterator.next();
+          String name = JavaUtils.getFullyQualifiedName(
+              (IJavaElement)match.getElement()).replace("#", ".");
+          if (!toMatch.matcher(name).matches()){
+            iterator.remove();
+          }
+        }
+        return matches;
+      }
+
       pattern = SearchPattern.createPattern(pat, type, context, matchType);
 
     // bad search request
@@ -209,8 +244,6 @@ public class SearchCommand
           Services.getMessage("java_search.indeterminate"));
     }
 
-    IJavaProject javaProject = project != null ?
-      JavaUtils.getJavaProject(project) : null;
     List<SearchMatch> matches = search(pattern, getScope(scope, javaProject));
     return matches;
   }
