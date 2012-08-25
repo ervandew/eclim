@@ -417,13 +417,15 @@ endfunction " }}}
 " OpenProjectFile(cmd, file) {{{
 " Execute the supplied command in one of the main content windows.
 function! eclim#project#tree#OpenProjectFile(cmd, file)
-  let cmd = a:cmd
-
-  exec g:EclimProjectTreeContentWincmd
-
   if eclim#util#GoToBufferWindow(a:file)
     return
   endif
+
+  let file = a:file
+  let cmd = a:cmd
+  let cwd = getcwd()
+
+  exec g:EclimProjectTreeContentWincmd
 
   " if the buffer is a no name and action is split, use edit instead.
   if cmd =~ 'split' && expand('%') == '' &&
@@ -431,10 +433,20 @@ function! eclim#project#tree#OpenProjectFile(cmd, file)
     let cmd = 'edit'
   endif
 
+  " current file doesn't share same cwd as the project tree
+  let lcwd = getcwd()
+  if lcwd != cwd && !filereadable(file)
+    let file = escape(substitute(cwd, '\', '/', 'g'), ' &') . '/' . file
+  endif
+
   try
-    exec cmd . ' ' a:file
+    exec cmd . ' ' file
   catch /E325/
     " ignore attention error since the user should be prompted to handle it.
+  finally
+    if lcwd != cwd
+      exec 'lcd ' . escape(cwd, ' ')
+    endif
   endtry
 endfunction " }}}
 
