@@ -76,58 +76,14 @@ Step 1: Download and run the installer.
   Windows and OSX users should be able to simply double click on the jar file
   to start the installer.
 
-  .. note::
+  After the installer starts up, simply follow the steps in the wizard
+  to install eclim.
 
-    If you are behind a proxy, you may need to run the installer like so (be sure
-    to take a look at the related :ref:`faq <eclim_proxy>` as well):
+  If your machine is behind a proxy, take a look at the instructions for
+  :ref:`running the installer behind a proxy <installer-proxy>`.
 
-    .. code-block:: bash
-
-      $ java -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080 -jar eclim_eclim_release.jar
-
-    If your proxy requires authentication, you'll need to supply the
-    ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
-
-    You can also try the following which may be able to use your system proxy settings:
-
-    .. code-block:: bash
-
-      $ java -Djava.net.useSystemProxies=true -jar eclim_eclim_release.jar
-
-After the installer starts up, simply follow the steps in the wizard
-to install the application.
-
-.. note::
-
-  In some rare cases you might encounter one of the following errors\:
-
-  1. Any exception which denotes usage of gcj.
-     ::
-
-       java.lang.NullPointerException
-         at org.pietschy.wizard.HTMLPane.updateEditorColor(Unknown Source)
-         at org.pietschy.wizard.HTMLPane.setEditorKit(Unknown Source)
-         at javax.swing.JEditorPane.getEditorKit(libgcj.so.90)
-         ...
-
-     Gcj (GNU Compile for Java), is not currently supported.  If you receive any
-     error which references libgcj, then gcj is your current default jvm. So,
-     you'll need to install a sun jvm to resolve the installation error.
-
-  2.
-    ::
-
-      java.lang.IncompatibleClassChangeError
-        at org.formic.ant.logger.Log4jLogger.printMessage(Log4jLogger.java:51)
-        ...
-
-    This is most likely caused by an incompatible version of log4j installed in
-    your jave ext.dirs.  To combat this you can run the installer like so\:
-
-    ::
-
-      $ java -Djava.ext.dirs -jar eclim_eclim_release.jar
-
+  If you encounter an error running the installer, then consult the known
+  :ref:`potential <installer-issues>` issues below.
 
 Step 2: Testing the installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -163,7 +119,10 @@ If you plan on using eclim without the eclipse gui, then:
 
   - **Windows**: The easiest way to start eclimd in windows is to double
     click on the eclimd.bat file found in your eclipse root directory:
-    %ECLIPSE_HOME%/eclimd.bat
+
+    ::
+
+      %ECLIPSE_HOME%/eclimd.bat
 
 Once you have the eclim daemon (headed or headless) running, you can then test
 eclim:
@@ -177,7 +136,7 @@ eclim:
   examining the eclimd output to see if it gives any info as to what went
   wrong.  If at this point you are unsure how to proceed you can view the
   :doc:`troubleshooting guide </guides/troubleshoot>` or feel free to post your
-  issue on the `eclim user`_ mailing list.
+  issue on the `eclim-user`_ mailing list.
 
   Example of a successful ping:
 
@@ -190,11 +149,69 @@ eclim:
 - Regardless of the ping result, you can also verify your vim settings
   using the command **:EclimValidate**.  This will check
   various settings and options and report any problems. If all is ok
-  you will receive the following message\:
+  you will receive the following message:
 
   ::
 
     Result: OK, required settings are valid.
+
+.. _installer-proxy:
+
+Running The Installer Behind a Proxy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are behind a proxy, you may need to run the installer like so (be sure
+to take a look at the related :ref:`faq <eclim_proxy>` as well):
+
+.. code-block:: bash
+
+  $ java -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080 -jar eclim_eclim_release.jar
+
+If your proxy requires authentication, you'll need to supply the
+``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
+
+You can also try the following which may be able to use your system proxy settings:
+
+.. code-block:: bash
+
+  $ java -Djava.net.useSystemProxies=true -jar eclim_eclim_release.jar
+
+.. _installer-issues:
+
+Potential Installation Issues
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In some rare cases you might encounter one of the following errors:
+
+1. Any exception which denotes usage of gcj.
+   ::
+
+     java.lang.NullPointerException
+       at org.pietschy.wizard.HTMLPane.updateEditorColor(Unknown Source)
+       at org.pietschy.wizard.HTMLPane.setEditorKit(Unknown Source)
+       at javax.swing.JEditorPane.getEditorKit(libgcj.so.90)
+       ...
+
+   Gcj (GNU Compile for Java), is not currently supported.  If you receive
+   any error which references libgcj, then gcj is your current default jvm.
+   So, you'll need to install the openjdk or a jdk from oracle to resolve the
+   installation error.
+
+2. ::
+
+    java.lang.IncompatibleClassChangeError
+      at org.formic.ant.logger.Log4jLogger.printMessage(Log4jLogger.java:51)
+      ...
+
+   This is most likely caused by an incompatible version of log4j installed in
+   your jave ext.dirs.  To combat this you can run the installer like so\:
+
+   ::
+
+     $ java -Djava.ext.dirs -jar eclim_eclim_release.jar
+
+If you encounter an error not covered here, then please report it to the
+eclim-user_ mailing list.
 
 
 What's Next
@@ -265,5 +282,5 @@ on any eclipse features, so to enable the installation of that plugin, just add
 .. _java development kit: http://java.sun.com/javase/downloads/index.html
 .. _eclipse 4.2.x (juno): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
-.. _eclim user: http://groups.google.com/group/eclim-user
+.. _eclim-user: http://groups.google.com/group/eclim-user
 .. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml
