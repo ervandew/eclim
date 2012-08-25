@@ -251,7 +251,7 @@ Vim's command line completion to complete the project name.
 
   **Configuration**
 
-  Vim Settings
+  :doc:`Vim Settings </vim/settings>`
 
   .. _g\:EclimProblemsQuickFixOpen:
 
@@ -342,7 +342,7 @@ Vim's command line completion to complete the project name.
 
   **Configuration**
 
-  Vim Settings
+  :doc:`Vim Settings </vim/settings>`
 
   .. _g\:EclimProjectTreeAutoOpen:
 
@@ -477,7 +477,7 @@ Vim's command line completion to complete the project name.
 
   **Configuration**
 
-  Vim Settings
+  :doc:`Vim Settings </vim/settings>`
 
   .. _g\:EclimTodoSearchPattern:
 

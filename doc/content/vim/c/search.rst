@@ -115,7 +115,7 @@ on the context of the element under the cursor.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimCSearchSingleResult:
 

@@ -65,7 +65,7 @@ commands:
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimJavaImportExclude:
 
@@ -98,7 +98,7 @@ Vim Variables
 
       let g:EclimJavaImportPackageSeparationLevel = 2
 
-Eclim Settings
+:doc:`Eclim Settings </vim/settings>`
 
 .. _org.eclipse.jdt.ui.importorder:
 

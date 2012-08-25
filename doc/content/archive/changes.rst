@@ -505,7 +505,7 @@ Bug Fixes:
   - Various bug fixes.
 
 Java:
-  - :doc:`:Checkstyle </vim/java/checkstyle>` command now creates a project
+  - :ref:`:Checkstyle <:Checkstyle>` command now creates a project
     classloader giving checkstyle access to any classes reachable via your
     project's .classpath file.
 
@@ -878,16 +878,11 @@ Eclim:
 
 Java:
   - Maven dependency searching now expanded to ivy files via
-    <a href="guides/java/ivy/ivy_classpath.html#IvyDependencySearch">
-    **:IvyDependencySearch**
-    </a>.
-  - Fixed <a href="vim/java/junit.html">junit support</a> to handle
-    execution via maven 1.x and 2.x.
+    :ref:`:IvyDependencySearch <:IvyDependencySearch>`.
+  - Fixed junit support to handle execution via maven 1.x and 2.x.
 
 Xml:
-  - Added command
-    <a href="vim/xml/format.html">**:XmlFormat**</a> to
-    reformat a xml file.
+  - Added command :ref:`:XmlFormat <:XmlFormat>` to reformat a xml file.
 
 .. _1.2.2:
 
@@ -919,45 +914,32 @@ Ant:
   - Made some improvements to ant code completion.
 
 Eclim:
-  - Added support for <a href="eclimd.html#eclimrc">~/.eclimrc</a> on unix
-    platforms.
+  - Added support for :ref:`~/.eclimrc <eclimrc>` on unix platforms.
 
 Java:
-  - Added <a href="vim/java/classpath.html#VariableList">**:VariableList**</a>,
-    <a href="vim/java/classpath.html#VariableCreate">**:VariableCreate**</a> and
-    <a href="vim/java/classpath.html#VariableDelete">**:VariableDelete**</a>.
+  - Added :ref:`:VariableList <:VariableList>`,
+    :ref:`:VariableCreate <:VariableCreate>` and
+    :ref:`:VariableDelete <:VariableDelete>`.
   - | Added camel case searching support\:
-    | :<a href="vim/java/search.html">**JavaSearch**</a> NPE
+    | :ref:`JavaSearch <:JavaSearch>` NPE
   - Removed the preference <code>org.eclim.java.library.root</code>.
-  - Updated <a href="guides/java/ivy/ivy_classpath.html">ivy support</a>
-    to behave more like maven.
+  - Updated :ref:`ivy support <classpath-ivy>` to behave more like maven.
   - Added commands to ease setting of classpath repo variables for
-    <a href="guides/java/maven/maven_classpath.html">maven's</a> and
-    <a href="guides/java/maven/mvn_classpath.html">mvn's</a>
-    eclipse support.
-  - Added <a href="vim/java/testng.html">TestNG support</a> to ant
-    compiler's error format.
-  - Added
-    <a href="vim/java/junit.html#JUnitExecute">**:JUnitExecute**</a> and
-    <a href="vim/java/junit.html#JUnitResult">**:JUnitResult**</a>.
+    :ref:`maven's <classpath-maven>` and :ref:`mvn's <classpath-maven>` eclipse
+    support.
+  - Added TestNG to ant compiler's error format.
+  - Added :ref:`:JUnitExecute <:JUnitExecute>` and
+    :ref:`:JUnitResult <:JUnitResult>`.
 
 Xml:
-  - Added
-    <a href="vim/xml/definition.html#DtdDefinition">**:DtdDefinition**</a> and
-    <a href="vim/xml/definition.html#XsdDefinition">**:XsdDefinition**</a>.
+  - Added :ref:`:DtdDefinition <:DtdDefinition>` and
+    :ref:`:XsdDefinition <:XsdDefinition>`.
 
 Vim:
-  - Added
-    <a href="vim/vim/find.html#FindCommandDef">**:FindCommandDef**</a> and
-    <a href="vim/vim/find.html#FindCommandRef">**:FindCommandRef**</a>.
-  - Changed **:FindFunctionVariableContext** to
-    <a href="vim/vim/find.html#FindByContext">**:FindByContext**</a>.
-  - Added
-    <a href="vim/common/util.html#Tabnew">**:Tabnew**</a> and
-    <a href="vim/common/util.html#TabnewRelative">**:TabnewRelative**</a>.
-  - <a href="vim/common/util.html#Split">**:Split**</a> and
-    <a href="vim/common/util.html#SplitRelative">**:SplitRelative**</a>
-    now support '*' and '**' wildcards.
+  - Added **:FindCommandDef** and **:FindCommandRef**.
+  - Changed **:FindFunctionVariableContext** to **:FindByContext**.
+  - Added **:Tabnew** and **:TabnewRelative**.
+  - **:Split** and **:SplitRelative** now support '*' and '**' wildcards.
 
 .. _1.2.0:
 
@@ -979,50 +961,28 @@ Eclipse:
   - Eclim now works with and depends on eclipse 3.2.
 
 Eclim:
-  - Added
-    <a href="vim/common/project.html#ProjectRefresh">**:ProjectRefresh**</a>.
-  - Added
-    <a href="vim/common/project.html#ProjectOpen">**:ProjectOpen**</a>,
-    <a href="vim/common/project.html#ProjectClose">**:ProjectClose**</a>,
-    and updated
-    <a href="vim/common/project.html#ProjectList">**:ProjectList**</a>
-    to show the current status of each project.
-  - Added
-    <a href="vim/common/project.html#ProjectTree">**:ProjectTree**</a> and
-    <a href="vim/common/project.html#ProjectsTree">**:ProjectsTree**</a>.
-  - Added
-    <a href="vim/common/project.html#ProjectCD">**:ProjectCD**</a> and
-    <a href="vim/common/project.html#ProjectLCD">**:ProjectLCD**</a>.
-  - Added <a href="vim/java/search.html#JavaSearchContext">**:JavaSearchContext**</a>.
-  - Added means to
-    <a href="vim/java/classpath.html#preserve">
-    preserve manually added classpath entries
-    </a>
-    when utilizing eclim's
-    <a href="vim/java/classpath.html#buildfile">
-    integration with ivy or maven dependency files
-    </a>.
-  - Updated <a href="vim/java/search.html#JavaSearch">**:JavaSearch**</a>
+  - Added :ref:`:ProjectRefresh <:ProjectRefresh>`.
+  - Added :ref:`:ProjectOpen <:ProjectOpen>`, :ref:`:ProjectClose
+    <:ProjectClose>`, and updated :ref:`:ProjectList <:ProjectList>` to show
+    the current status of each project.
+  - Added :ref:`:ProjectTree <:ProjectTree>` and
+    :ref:`:ProjectsTree <:ProjectsTree>`.
+  - Added :ref:`:ProjectCD <:ProjectCD>` and :ref:`:ProjectLCD <:ProjectLCD>`.
+  - Added :ref:`:JavaSearchContext <:JavaSearchContext>`.
+  - Added means to preserve manually added classpath entries when utilizing
+    eclim's integration with ivy or maven dependency files.
+  - Updated :ref:`:JavaSearch <:JavaSearch>`
     to provide sensible defaults if command ommits various arguments. Also
     added support for supplying only a pattern to the
     **:JavaSearch** command which will result in a search for
     all types (classes, enums, interfaces) that match that pattern.
-  - Added <a href="vim/java/tools.html#Jps">**:Jps**</a> for viewing java process
-    info.
+  - Added :ref:`:Jps <:Jps>` for viewing java process info.
   - Removed support for auto update of .classpath upon writing of maven
-    project.xml in favor of new
-    <a href="guides/java/maven/maven_classpath.html">maven support</a>.
-  - Added
-    <a href="vim/java/maven/run.html#Maven">**:Maven**</a>
-    and
-    <a href="vim/java/maven/run.html#Mvn">**:Mvn**</a>
-    commands for
-    executing maven 1.x and 2.x.
-  - Added
-    <a href="vim/java/maven/dependency.html#MavenDependencySearch">
-    **:MavenDependencySearch** </a> and
-    <a href="vim/java/maven/dependency.html#MvnDependencySearch">
-    **:MvnDependencySearch** </a>
+    project.xml in favor of new maven support.
+  - Added :ref:`:Maven <:Maven>` and :ref:`:Mvn <:Mvn>` commands for executing
+    maven 1.x and 2.x.
+  - Added :ref:`:MavenDependencySearch <:MavenDependencySearch>` and
+    :ref:`:MvnDependencySearch <:MvnDependencySearch>`
     for searching for and adding dependencies to your maven pom file.
   - <anchor id="upgrade_1.2.0"/>
     Re-organized eclim files within the vim runtime path.
@@ -1058,18 +1018,10 @@ Eclim:
       help ease future upgrades.
 
 Vim:
-  - Added <a href="vim/vim/find.html#FindFunctionVariableContext">
-    **:FindFunctionVariableContext** </a>
-    to perform context sensitive searching for vim functions or global
-    variables.
-  - Added
-    **<a href="vim/common/util.html#Split::Split</a>**,
-    **<a href="vim/common/util.html#SplitRelative::SplitRelative</a>**,
-    **<a href="vim/common/util.html#EditRelative::EditRelative</a>**,
-    **<a href="vim/common/util.html#LocateFileEdit::LocateFileEdit</a>**,
-    **<a href="vim/common/util.html#LocateFileSplit::LocateFileSplit</a>**,
-    and
-    **<a href="vim/common/util.html#LocateFileTab::LocateFileTab</a>**,
+  - Added **:FindFunctionVariableContext** to perform context sensitive
+    searching for vim functions or global variables.
+  - Added **:Split**, **:SplitRelative**, **:EditRelative**,
+    **:LocateFileEdit**, **:LocateFileSplit**, and **:LocateFileTab**.
 
 .. _1.1.2:
 
@@ -1088,8 +1040,7 @@ Bug Fixes:
 
     .. note::
 
-      The original implementation of
-      <a href="vim/java/import.html#JavaImportClean">**:JavaImportClean**</a>
+      The original implementation of :ref:`:JavaImportClean <:JavaImportClean>`
       was written entirely in vim (didn't require eclim server).  To
       properly handle ignoring comments when determining what imports are
       unused, this functionality had to be reimplemented with server side
@@ -1099,49 +1050,40 @@ Bug Fixes:
   - Other various bug fixes.
 
 Ant:
-  - Added <a href="vim/java/ant/run.html">**:Ant**</a> command
+  - Added :ref:`:Ant <:Ant>` command
     to allow execution of ant from any file.
-  - Added <a href="vim/java/ant/complete.html">ant code completion</a>.
-  - Added <a href="vim/java/ant/validate.html">ant file validation</a>.
-  - Added <a href="vim/java/ant/doc.html">**:AntDoc**</a>
-    command to quickly find ant type / task documentation.
+  - Added :doc:`ant code completion </vim/java/ant>`.
+  - Added :doc:`ant file validation </vim/java/ant>`.
+  - Added :ref:`:AntDoc <:AntDoc>` command to quickly find ant type / task
+    documentation.
 
 Java:
   - Utilizing vim's new dictionary based completion results.
-  - Added
-    <a href="vim/java/constructor.html">**:JavaConstructor**</a>.
-  - <a href="vim/java/impl.html#JavaImpl">**:JavaImpl**</a>
-    now supports overriding constructors.
-  - Added <a href="vim/java/doc.html">**:JavaDocComment**</a>
+  - Added :ref:`:JavaConstructor <:JavaConstructor>`.
+  - :ref:`:JavaImpl <:JavaImpl>` now supports overriding constructors.
+  - Added :ref:`:JavaDocComment <:JavaDocComment>`
     command to add or update javadocs comment for the element under the
     cursor.
-  - Added <a href="vim/java/regex.html">**:JavaRegex**</a>
-    for testing java regular expressions.
+  - Added **:JavaRegex** for testing java regular expressions.
   - JDT classpath_variables.properties no longer requires system property
     placeholder to use '_' instead of '.'.
   - Velocity templates broken up into more logical templates to ease
     customization.
-  - <a href="vim/java/bean.html">**:JavaGetSet**</a>
-    now has variable to determine whether or not to add indexed getters and
-    setters.
+  - :ref:`:JavaGetSet <:JavaGetSet>` now has variable to determine whether or
+    not to add indexed getters and setters.
   - Removed preference org.eclim.java.validation.ignore.warnings in favor of
-    new <a href="vim/index.html#EclimSignLevel:g:EclimSignLevel</a>.
+    new :ref:`g:EclimSignLevel <g:EclimSignLevel>`.
 
 Vim:
-  - Added couple miscellaneous
-    <a href="vim/common/util.html">vim commands</a> for use in or outside of
-    eclim context.
-  - Added
-    <a href="vim/common/taglist.html">
-    groovy script based ctags implementation
-    </a>
-    for use with the vim taglist plugin.
+  - Added couple miscellaneous vim commands for use in or outside of eclim
+    context.
+  - Added groovy script based ctags implementation for use with the vim taglist
+    plugin.
   - All of the functionality that previously placed results / errors into
     the quickfix window, now utilizes vim's new location list functionality.
-  - Added <a href="vim/common/web.html">web lookup commands</a>.
-  - Added <a href="vim/vim/find.html">
-    vim script function / global variable searching</a>.
-  - Added <a href="vim/vim/doc.html">vim doc lookup</a>.
+  - Added web lookup commands.
+  - Added vim script function / global variable searching.
+  - Added vim doc lookup.
   - Various improvements to 'sign' support for marking errors, warnings,
     etc.
 
@@ -1169,22 +1111,17 @@ Bug Fixes:
   - Fixed logging template code for slf4j.
   - Fixed possible error when removing signs for marking errors / warnings
     for the current file.
-  - Fixed
-    <a href="vim/java/import.html#JavaImport">**:JavaImport**</a>
-    to not import classes that are in the same package as the current file.
+  - Fixed :ref:`:JavaImport <:JavaImport>` to not import classes that are in
+    the same package as the current file.
   - Fixed java source validation to clear out the quickfix results when all
     errors have been fixed.
-  - Fixed
-    <a href="vim/java/impl.html#JavaImpl">**:JavaImpl**</a>
-    to get the interfaces of superclass lineage in addition to directly
-    implemented interfaces of the current class.
-  - When adding methods from the resulting buffer of
-    <a href="vim/java/impl.html#JavaImpl">**:JavaImpl**</a>
-    or
-    <a href="vim/java/junit.html#JUnitImpl">**:JUnitImpl**</a>,
-    if the target
-    class was an inner class of the src file, then the methods were being
-    added to the outer class instead of the inner class.
+  - Fixed :ref:`:JavaImpl <:JavaImpl>` to get the interfaces of superclass
+    lineage in addition to directly implemented interfaces of the current
+    class.
+  - When adding methods from the resulting buffer of :ref:`:JavaImpl
+    <:JavaImpl>` or :ref:`:JUnitImpl <:JUnitImpl>`, if the target class was an
+    inner class of the src file, then the methods were being added to the outer
+    class instead of the inner class.
   - Fixed javadoc search results to restore <enter> as mapping to open
     result in a browser after the quickfix window is closed and then opened
     again.
@@ -1196,30 +1133,26 @@ Eclipse:
 
 Eclim:
   - Added support for global settings/preferences via new
-    <a href="vim/index.html#EclimSettings">**:EclimSettings**</a>
-    command.
+    :ref:`:EclimSettings <:EclimSettings>` command.
 
 Java:
-  - <a href="vim/java/delegate.html">Delegate method creation</a>.
+  - Delegate method creation.
   - Added g:EclimJavaSearchSingleResult setting to determine action to take
-    when only a singe result is returned using the
-    <a href="vim/java/search.html">java source code searching</a>.
+    when only a singe result is returned using the java source code searching.
     Based on suggestion by Ivo Danihelka.
   - Added g:EclimJavaDocSearchSingleResult setting to determine action to take
-    when only a singe result is returned using the
-    <a href="vim/java/doc.html">javadoc searching</a>.
-    Based on suggestion by Ivo Danihelka.
-  - Added <a href="vim/settings.html">preference</a> to suppress
-    warnings when using java source code validation.
+    when only a singe result is returned using the javadoc searching.  Based on
+    suggestion by Ivo Danihelka.
+  - Added preference to suppress warnings when using java source code
+    validation.
 
 Vim:
   - Added CursorHold autocommand that shows the current error, if any, on
     the current cursor line.
   - Removed global variables g:EclimDebug and g:EclimEchoHighlight in favor
-    of new <a href="vim/index.html#EclimLogLevel:g:EclimLogLevel</a>
-    and the corresponding highlight varibles.
-  - Removed all default key mappings.  See the
-    <a href="vim/mappings.html">suggested set of mappings</a>.
+    of new :ref:`g:EclimLogLevel <g:EclimLogLevel>` and the corresponding
+    highlight varibles.
+  - Removed all default key mappings. See the suggested set of mappings.
   - Now utilizing vim's autoload functionality to load functions on demand.
 
     One vim file was moved as a result, so you should delete the old file
@@ -1239,20 +1172,20 @@ Bug Fixes:
   - Several other minor fixes and enhancements.
 
 Java:
-  - <a href="vim/java/source.html">Source validation</a>.
-  - <a href="vim/java/doc.html">Javadoc</a> viewing.
-  - <a href="vim/java/impl.html">Override/Impl</a> stub generation.
-  - <a href="vim/java/bean.html">Bean getter/setter</a> generation.
-  - <a href="vim/java/junit.html">JUnit</a> test method stub generation.
-  - <a href="vim/java/search.html#alternate">Alternate searching</a>
-    in code bases outside of an eclipse project.
-  - <a href="vim/java/correct.html">Code correction</a> via eclipse
+  - :doc:`Source validation</vim/java/validate>`.
+  - :doc:`Javadoc </vim/java/javadoc>` viewing.
+  - :ref:`Override/Impl <:JavaImpl>` stub generation.
+  - :ref:`Bean getter/setter <:JavaGetSet>` generation.
+  - :doc:`Junit </vim/java/unittests>` test method stub generation.
+  - :doc:`Alternate searching </vim/java/search>` in code bases outside of an
+    eclipse project.
+  - :ref:`Code correction <:JavaCorrect>` via eclipse
     quickfix functionality.
   - Support for viewing source files located in archives (zip, jar) when
     searching.
   - Support for generating a source prototype when viewing search results
     that do not have a corresponding source file attached.
-  - Added some handy <a href="vim/java/abbreviations.html">abbreviations</a>.
+  - Added some handy abbreviations.
   - Added validation of the .classpath file when saving.  Errors are then
     reported via vim's quickfix.
 
@@ -1277,7 +1210,7 @@ Vim:
       </ul>
 
 Xml:
-  - <a href="vim/xml/validate.html">Xml validation</a>.
+  - :ref:`Xml validation <xml-validation>`.
 
 .. _1.0.0:
 

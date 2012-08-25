@@ -45,7 +45,7 @@ cursor using one of the following key bindings:
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimCHierarchyDefaultAction:
 

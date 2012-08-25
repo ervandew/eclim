@@ -24,12 +24,7 @@ Basic Info
 
    vim/index
    eclimd
-   vim/settings
-   vim/gotchas
-   vim/code_completion
-   vim/mappings
    vim/cheatsheet
-   vim/faq
 
 Common Functionality
 --------------------

@@ -39,7 +39,7 @@ Whether or not auto validation has been enabled, eclim also exposes the command
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimLog4jValidate:
 

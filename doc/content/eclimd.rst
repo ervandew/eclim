@@ -259,6 +259,7 @@ you will fall into one of two groups:
    mapping. Supplying 1 as the arg will result in the refocusing of gvim after
    the eclipse key binding has been executed.
 
+.. _eclimrc:
 
 ~/.eclimrc
 ----------

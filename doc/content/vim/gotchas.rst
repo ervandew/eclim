@@ -1,3 +1,5 @@
+:orphan:
+
 .. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify

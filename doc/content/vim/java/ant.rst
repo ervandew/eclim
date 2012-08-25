@@ -28,17 +28,17 @@ functionality from any file without any of the setup required by Vim.
 
 .. _\:Ant:
 
-Eclim provides the following command\:
+Eclim provides the following command:
 
 **:Ant** [<target> ...]
 
-which performs the following steps\:
+which performs the following steps:
 
 - Saves any previous 'makeprg' and 'errorformat' option settings so that you can
   define your own settings for the :make command.
 - Sets 'makeprg' to execute ant with the -find option so that it will search for
   your build.xml file in the current directory or in a parent directory.
-- Sets 'errorformat' to recognize the following errors\:
+- Sets 'errorformat' to recognize the following errors:
 
   - javac errors.
   - javadoc errors.
@@ -76,7 +76,7 @@ Code Completion
 ---------------
 
 Ant code completion uses the standard
-:doc:`Vim code completion mechanism </vim/code_completion>` like so\:
+:doc:`Vim code completion mechanism </vim/code_completion>` like so:
 
 ::
 
@@ -86,7 +86,7 @@ Ant code completion uses the standard
   <jar destfile="${basdir
   ...
 
-Screenshot of completion in action\:
+Screenshot of completion in action:
 
 .. image:: ../../images/screenshots/java/ant/completion.png
 
@@ -106,7 +106,7 @@ functionality.
 
 Currently the Eclipse ant file validation isn't as robust as one might hope.  It
 doesn't validate that element attributes are correct, that child elements are
-valid, etc., but it does perform the following\:
+valid, etc., but it does perform the following:
 
 - If a default target is specified, validate that it exists and that the target
   dependencies exist.
@@ -166,7 +166,7 @@ The following is an example which adds the tasks from the apache cactus project.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimAntCompilerAdditionalErrorFormat:
 
@@ -203,5 +203,19 @@ Vim Variables
 
 - **g:EclimAntValidate** (Default: 1) -
   If set to 0, disables ant xml validation when saving the file.
+
+Suggested Mappings
+------------------
+
+Here are some mappings for the ant funtionality provided by eclim.  To make use
+of these mappings, simply create a ftplugin file for ant and place your mappings
+there (:help ftplugin-name).
+
+- Lookup and open the documentation for the ant element under the cursor with
+  <enter>.
+
+  .. code-block:: vim
+
+    noremap <silent> <buffer> <cr> :AntDoc<cr>
 
 .. _antcontrib: http://ant-contrib.sourceforge.net
