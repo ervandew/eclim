@@ -75,14 +75,6 @@ class VimdocTranslator(text.TextTranslator):
   TARGET = re.compile(r'(^\.\.\s+_|\\|:$)')
   RELEASE = re.compile(r'^Eclim (\d+\.\d+\.\d+)$')
 
-  def _toRefUri(self, value):
-    """
-    Emulates the docutils conversion of a string to a refuri.
-    """
-    value = value.lower()
-    value = value.replace(':', '')
-    return value
-
   def _idToRefUri(self, value):
     """
     Translate some auto generate #id\d uris to the original target.
@@ -125,8 +117,13 @@ class VimdocTranslator(text.TextTranslator):
       if refuri and re.search(r'#id\d+', refuri):
         refuri = self._idToRefUri(value)
 
+      # handle anchors into the document (don't break vim autoload function
+      # references!)
+      elif refuri and re.search(r'\b(?<!eclim)#', refuri):
+        refuri = refuri.split('#', 1)[1]
+
       # the link target and text are the same, link the text
-      if (not refuri or refuri == self._toRefUri(value)) and \
+      if (not refuri or refuri == value) and \
          re.search(r'^(:|g:|org\.)', value):
         self.add_text('|')
 
@@ -147,7 +144,7 @@ class VimdocTranslator(text.TextTranslator):
         refuri = refuri.split('#', 1)[1]
 
       # the link target and text are the same, so link the text
-      if (not refuri or refuri == self._toRefUri(value)) and \
+      if (not refuri or refuri == value) and \
          re.search(r'^(:|g:|org\.)', value):
         # lame edge case
         if value.startswith(':Validate'):
