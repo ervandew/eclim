@@ -123,7 +123,6 @@ on the context of the element.
   all references to the element.
 - Otherwise, it will search for the declaration of the element.
 
-
 Alternate Searching
 -------------------
 
@@ -204,7 +203,7 @@ suggestions.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimJavaSearchSingleResult:
 

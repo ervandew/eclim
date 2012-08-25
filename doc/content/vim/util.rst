@@ -94,7 +94,7 @@ general purpose commands that are useful in and outside the scope of eclim.
 
   **Configuration**
 
-  Vim Settings
+  :doc:`Vim Settings </vim/settings>`
 
   .. _g\:EclimBuffersSort:
 
@@ -125,7 +125,7 @@ general purpose commands that are useful in and outside the scope of eclim.
 
   **Configuration**
 
-  Vim Settings
+  :doc:`Vim Settings </vim/settings>`
 
   .. _g\:EclimOnlyExclude:
 
@@ -175,7 +175,7 @@ general purpose commands that are useful in and outside the scope of eclim.
 
   **Configuration**
 
-  Vim Variables
+  :doc:`Vim Settings </vim/settings>`
 
   .. _g\:EclimOpenUrlInVimPatterns:
 

@@ -114,7 +114,7 @@ Executing **:XmlFormat** will reformat the current xml file like so\:
 Configuration
 --------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimXmlValidate:
 

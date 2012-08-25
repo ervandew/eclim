@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2010  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,14 +45,14 @@ code will be inserted after your class definition.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimLoggingDisabled:
 
 - **g:EclimLoggingDisabled** (Default: 0) -
   If set to a value greater than 0, then this plugin will be disabled.
 
-Eclim Settings
+:doc:`Eclim Settings </vim/settings>`
 
 .. _org.eclim.java.logging.impl:
 

@@ -33,7 +33,7 @@ validate the current file.
 Configuration
 -------------
 
-Vim Variables:
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimCValidate:
 

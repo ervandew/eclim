@@ -45,7 +45,7 @@ depending on the context of the element.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimPythonSearchSingleResult:
 

@@ -80,7 +80,7 @@ open files or buffers.
 
   **Configuration**
 
-  Vim Settings
+  :doc:`Vim Settings </vim/settings>`
 
   .. _g\:EclimLocateFileDefaultAction:
 

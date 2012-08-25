@@ -32,7 +32,7 @@ Screenshot of completion in action\:
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimJavaCompleteCaseSensitive:
 

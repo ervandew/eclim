@@ -16,9 +16,26 @@
 Php
 =====
 
+Features
+--------
+
 .. toctree::
 
    buildpath
    complete
    validate
    search
+
+Suggested Mappings
+------------------
+
+Here are some mappings for the php funtionality provided by eclim.  To make use
+of these mappings, simply create a ftplugin file for php and place your mappings
+there (:help ftplugin-name).
+
+- The following mapping allows you to simply hit <enter> on an element to
+  perform a search to find it.
+
+  .. code-block:: vim
+
+    nnoremap <silent> <buffer> <cr> :PhpSearchContext<cr>

@@ -16,6 +16,9 @@
 Java
 ======
 
+Features
+--------
+
 .. toctree::
    :maxdepth: 1
 
@@ -26,19 +29,12 @@ Java
    javadoc
    import
    complete
-   correct
-   constructor
-   impl
-   delegate
-   bean
+   methods
    hierarchy
    format
    refactor
-   checkstyle
-   junit
-   testng
+   unittests
    logging
-   tools
 
 .. toctree::
    :maxdepth: 1
@@ -47,3 +43,30 @@ Java
    maven
    log4j
    webxml
+
+Suggested Mappings
+------------------
+
+Here are some mappings for the java funtionality provided by eclim.  To make use
+of these mappings, simply create a ftplugin file for java and place your
+mappings there (:help ftplugin-name).
+
+- Import the class under the cursor with <leader>i (:h mapleader):
+
+  .. code-block:: vim
+
+    nnoremap <silent> <buffer> <leader>i :JavaImport<cr>
+
+- Search for the javadocs of the element under the cursor with
+  <leader>d.
+
+  .. code-block:: vim
+
+    nnoremap <silent> <buffer> <leader>d :JavaDocSearch -x declarations<cr>
+
+- Perform a context sensitive search of the element under the cursor with
+  <enter>.
+
+  .. code-block:: vim
+
+    nnoremap <silent> <buffer> <cr> :JavaSearchContext<cr>

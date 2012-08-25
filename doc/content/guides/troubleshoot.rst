@@ -39,7 +39,7 @@ Below are a series of sections broken up by the behavior (or lack of)
 experienced and the steps for diagnosing the cause of that behavior.
 
 If you can't find the answer to your question here, be sure to take a look at
-the :doc:`faq </vim/faq>` to see if your question is answered there.
+the :doc:`faq </faq>` to see if your question is answered there.
 
 
 .. _ts_workspace:

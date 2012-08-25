@@ -40,7 +40,7 @@ resulting output and set the proper file type.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimPythonInterpreter:
 
@@ -193,7 +193,7 @@ attempt to locate the relevant resource depending on what is under the cursor.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:HtmlDjangoUserBodyElements:
 

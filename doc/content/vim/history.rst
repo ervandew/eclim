@@ -74,7 +74,7 @@ Eclipse Settings
 
   And there you can edit your settings as necessary.
 
-Vim Settings
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimProjectKeepLocalHistory:
 

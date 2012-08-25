@@ -29,19 +29,6 @@ javadoc comments for the element under the cursor.
   The insertion of javadoc comments is done externally with Eclipse and with
   that comes a couple :doc:`caveats </vim/gotchas>`.
 
-
-Configuration
--------------
-
-Eclim Settings
-
-
-- **org.eclim.user.name** - Used as the name portion of the author tag.
-  Consult the :doc:`settings page </vim/settings>` for more info.
-- **org.eclim.user.email** - Used as the email portion of the author tag.
-  Consult the :doc:`settings page </vim/settings>` for more info.
-
-
 .. _\:JavaDocSearch:
 
 Searching
@@ -68,25 +55,6 @@ points to the base url of the javadoc (http, file, etc).
     </attributes>
   </classpath>
 
-Configuration
--------------
-
-Vim Variables
-
-.. _g\:EclimJavaDocSearchSingleResult:
-
-- **g:EclimJavaDocSearchSingleResult** (Default: 'open') -
-  Determines what action to take when only a singe result is found.
-
-  Possible values include\:
-
-  - 'open' - open the result in a browser.
-  - 'lopen' - open the temp window to display the result.
-
-- **g:EclimLocationListHeight** (Default: 10) -
-  Sets the height in lines of the location list window when eclim opens it to
-  display search results.
-
 .. _\:Javadoc:
 
 Executing javadoc
@@ -109,8 +77,28 @@ files will be used.
 Configuration
 -------------
 
-Eclim Settings
+:doc:`Vim Settings </vim/settings>`
 
+.. _g\:EclimJavaDocSearchSingleResult:
+
+- **g:EclimJavaDocSearchSingleResult** (Default: 'open') -
+  Determines what action to take when only a singe result is found.
+
+  Possible values include\:
+
+  - 'open' - open the result in a browser.
+  - 'lopen' - open the temp window to display the result.
+
+- **g:EclimLocationListHeight** (Default: 10) -
+  Sets the height in lines of the location list window when eclim opens it to
+  display search results.
+
+:doc:`Eclim Settings </vim/settings>`
+
+- **org.eclim.user.name** - Used as the name portion of the author tag.
+  Consult the :doc:`settings page </vim/settings>` for more info.
+- **org.eclim.user.email** - Used as the email portion of the author tag.
+  Consult the :doc:`settings page </vim/settings>` for more info.
 - **org.eclim.java.doc.dest** (Default: doc) -
   The project relative directory where the javadocs with be written to.
 - **org.eclim.java.doc.packagenames** -

@@ -148,7 +148,7 @@ commands which provide the redo counterpart to the undo commands.
 Configuration
 -------------
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimRefactorDiffOrientation:
 

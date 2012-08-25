@@ -26,6 +26,7 @@ The power of Eclipse in your favorite editor.
    download
    gettingstarted
    gettinghelp
+   faq
    guides/index
    documentation
    development/index

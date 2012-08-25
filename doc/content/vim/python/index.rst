@@ -16,6 +16,9 @@
 Python
 ======
 
+Features
+--------
+
 .. toctree::
 
    validate
@@ -49,7 +52,6 @@ solutions, which then lead to the eventual choice: rope_
       for you.  Here are is one such site providing binaries for python 2.5 and
       2.6: gooli.org_
 
-
 **Functionality Utilizing Rope**
   - :doc:`code completion </vim/python/complete>`
   - :doc:`find element definition </vim/python/search>`
@@ -72,6 +74,36 @@ to the rope 'python_path'.  You can then add your project like so:
 .. code-block:: python
 
   prefs.add('python_path', '~/myotherproject')
+
+Suggested Mappings
+------------------
+
+Here are some mappings for the python funtionality provided by eclim.  To make
+use of these mappings, simply create a ftplugin file for python and place your
+mappings there (:help ftplugin-name).
+
+- The following mapping allows you to simply hit <enter> on an element to
+  perform a search to find its definition or occurrences depending on the
+  context.
+
+  .. code-block:: vim
+
+    nnoremap <silent> <buffer> <cr> :PythonSearchContext<cr>
+
+- If you are doing django development you may want to use the following mapping
+  which will execute **:DjangoViewOpen**, or **:DjangoTemplateOpen** depending
+  on the context of the text under the cursor and if no results were found from
+  either of those, it will issue **:PythonFindDefinition**.
+
+  .. code-block:: vim
+
+    function! s:MyFind ()
+      let found = eclim#python#django#find#ContextFind()
+      if !found
+        PythonFindDefinition
+      endif
+    endfunction
+    nnoremap <silent> <buffer> <cr> :call <SID>MyFind()<cr>
 
 .. _rope: http://rope.sourceforge.net/
 .. _gooli.org: http://www.gooli.org/blog/gvim-72-with-python-2526-support-windows-binaries/

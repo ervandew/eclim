@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,8 +15,11 @@
 
 .. _\:Validate_java:
 
-Java Validation
-===============
+Java Validation / Correction
+============================
+
+Validation
+----------
 
 When saving a java source file that resides in a project, eclim will update that
 source file in Eclipse and will report any validation errors found.  Any errors
@@ -29,11 +32,10 @@ Automatic validation of java source files can be disabled via the
 automatic validation, you can still use the **:Validate** command to manually
 validate the current file.
 
-
 Configuration
--------------
+^^^^^^^^^^^^^
 
-Vim Variables
+:doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimJavaSrcValidate:
 
@@ -55,3 +57,90 @@ Eclim settings
 
 - **org.eclim.java.validation.ignore.warnings** -
   Determines if warnings are suppressed.
+
+.. _\:JavaCorrect:
+
+Code Correction
+---------------
+
+Code correction in eclim is equivalent to the quick fix functionality of
+Eclipse. When you save a java source file, eclim
+:doc:`validates </vim/java/validate>` the file and notes which lines contain
+errors.  To have eclim suggest possible corrections for an error, you simply
+place the cursor on the error line and issue **:JavaCorrect**.
+
+The result will be a small window opened at the bottom of Vim where any
+correction proposals will be noted. To apply a suggested change, simply move the
+cursor to the line describing the modification and hit <enter>. Upon doing so,
+the change will be applied to the source file.
+
+Example output of **:JavaCorrect**.
+
+::
+
+  The serializable class Foo does not declare a static final serialVersionUID field of type long
+  0.1227:  Add @SuppressWarnings 'serial' to 'Foo'
+    ...
+    @SuppressWarnings("serial")
+    public class Foo
+    implements Serializable
+  ...
+
+To apply the above change you would hit <enter> on the line\:
+
+::
+
+  0.1227:  Add @SuppressWarnings 'serial' to 'Foo'
+
+.. note::
+
+  The code correction is done externally with Eclipse and with that comes a
+  couple :doc:`caveats </vim/gotchas>`.
+
+.. _\:Checkstyle:
+
+Checkstyle
+----------
+
+When editing a java source file, eclim provides the command **:Checkstyle**
+which will invoke `checkstyle`_ on the current file.
+
+Additionally, you can configure vim to execute checkstyle automatically when
+you save a java source file.  Simply set the vim variable
+**g:EclimJavaCheckstyleOnSave** to 1 in your vimrc or java ftplugin.
+
+.. code-block:: vim
+
+  let g:EclimJavaCheckstyleOnSave = 1
+
+Please note that both methods of invoking checkstyle require that you first
+configure the location of your checkstyle config file using the eclim setting
+**org.eclim.java.checkstyle.config**, described in the configuration section
+below.
+
+Configuration
+^^^^^^^^^^^^^
+
+:doc:`Vim Settings </vim/settings>`
+
+.. _g\:EclimJavaCheckstyleOnSave:
+
+- **g:EclimJavaCheckstyleOnSave** (Default: 0) -
+  When non-zero, enables running of checkstyle automatially upon saving of a
+  java source file.
+
+:doc:`Eclim Settings </vim/settings>`
+
+.. _org.eclim.java.checkstyle.config:
+
+- **org.eclim.java.checkstyle.config** -
+  Defines the location (project relative or absolute) or your checkstyle config
+  file.
+
+.. _org.eclim.java.checkstyle.properties:
+
+- **org.eclim.java.checkstyle.properties** -
+  Defines the location (project relative or absolute) or your checkstyle
+  properties file.
+
+.. _checkstyle: http://checkstyle.sourceforge.net/

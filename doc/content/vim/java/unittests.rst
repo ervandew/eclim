@@ -13,15 +13,18 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+Unit Tests
+==========
+
 JUnit
-======
+-----
 
 .. _\:JUnitExecute:
 
 .. _\:JUnitResult:
 
 Executing test cases and viewing the results.
----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When editing java source files eclim exposes a couple commands which allow you
 to easily execute junit test cases and view the results.  First, please note
@@ -42,10 +45,46 @@ supplied as an argument.
   as long as the settings defined below are defined properly.
 
 
-Configuration
--------------
+.. _\:JUnitImpl:
 
-Eclim Settings
+Generating test method stubs.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While editing junit files, eclim provides functionality to generate test method
+stubs similar to the :ref:`method override / impl <:JavaImpl>`
+functionality provided for non-test-case classes.  The only difference is that
+instead of **:JavaImpl**, you use **:JUnitImpl** to open the window of possible
+methods to implement.
+
+To determine what class the current test case is for, eclim expects that the
+standard naming convention for test cases is followed, where the test case has
+the same fully qualified class name as the target class with a 'Test' suffix.
+
+For a class ``org.foo.bar.Baz``, the exepected test case would be named
+``org.foo.bar.BazTest``.
+
+So when invoking **:JUnitImpl** from within ``org.foo.bar.BazTest``, eclim would
+look for the class ``org.foo.bar.Baz`` and generate a list of methods to test
+from it.
+
+When you hit <enter> on the method to add, if that method belongs to a type in
+the hierarchy for the class being tested, then the corresponding test method
+stub will be inserted, otherwise a regular overriding stub will be generated.
+
+.. note::
+
+  The insertion of methods is done externally with Eclipse and with that
+  comes a couple :doc:`caveats </vim/gotchas>`.
+
+.. note::
+
+  The junit.jar file must be in your project's classpath for eclim to
+  display possible methods to override in the junit test-case hierarchy.
+
+Configuration
+^^^^^^^^^^^^^
+
+:doc:`Eclim Settings </vim/settings>`
 
 .. _org.eclim.java.junit.src_dir:
 
@@ -109,51 +148,45 @@ Eclim Settings
     # Maven 1.x using built in test plugin.
     org.eclim.java.junit.command=Maven -Dtestcase=<testcase_class> test:single
 
-
-.. _\:JUnitImpl:
-
-Generating test method stubs.
------------------------------
-
-While editing junit files, eclim provides functionality to generate test method
-stubs similar to the :doc:`method override / impl </vim/java/impl>`
-functionality provided for non-test-case classes.  The only difference is that
-instead of **:JavaImpl**, you use **:JUnitImpl** to open the window of possible
-methods to implement.
-
-To determine what class the current test case is for, eclim expects that the
-standard naming convention for test cases is followed, where the test case has
-the same fully qualified class name as the target class with a 'Test' suffix.
-
-For a class ``org.foo.bar.Baz``, the exepected test case would be named
-``org.foo.bar.BazTest``.
-
-So when invoking **:JUnitImpl** from within ``org.foo.bar.BazTest``, eclim would
-look for the class ``org.foo.bar.Baz`` and generate a list of methods to test
-from it.
-
-When you hit <enter> on the method to add, if that method belongs to a type in
-the hierarchy for the class being tested, then the corresponding test method
-stub will be inserted, otherwise a regular overriding stub will be generated.
-
-.. note::
-
-  The insertion of methods is done externally with Eclipse and with that
-  comes a couple :doc:`caveats </vim/gotchas>`.
-
-.. note::
-
-  The junit.jar file must be in your project's classpath for eclim to
-  display possible methods to override in the junit test-case hierarchy.
-
-
-Configuration
--------------
-
-Eclim Settings
-
 .. _org.eclim.java.junit.version:
 
 - **org.eclim.java.junit.version** (Default: 4) -
   Specifies the primary junit version being used, which determines which junit
   test method template will be used to generated the test method stubs.
+
+TestNG
+------
+
+Currently eclim's support for TestNG_ is limited to supporting Vim's :make in
+conjunction with ant to populate vim's quickfix results with failed test cases.
+
+By default TestNG's output to the console is very terse.  So in order to support
+monitoring of failed test cases via vim's error format, eclim provides a custom
+TestNG listener which must be installed into your build environment.
+
+#.  The first step is to place the ``eclim-testng.jar`` file in your TestNG
+    classpath you have configured for ant.  You can find this jar file in your
+    $ECLIPSE_HOME/plugins/org.eclim.jdt_version/ directory.
+#.  The second step is to add the ``listener`` attribute to your
+    testng task which references the required eclim testng listener\:
+
+    ::
+
+        ...
+      <testng ... listener="org.eclim.testng.TestNgListener">
+        ...
+
+    See the `testng ant task docs`_ for more information.
+
+Once you have completed that setup, you should then be able to run your ant
+target from vim and (as long as eclim is running) all failed test cases will be
+added to your vim quickfix results.
+
+Ex. Assuming your ant task is named 'test':
+
+.. code-block:: vim
+
+  :Ant test
+
+.. _testng: http://testng.org/doc
+.. _testng ant task docs: http://testng.org/doc/ant.html
