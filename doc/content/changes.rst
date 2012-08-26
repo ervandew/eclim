@@ -93,7 +93,7 @@ Installer:
   release of eclim (2.2.0) will be built for Juno.
 
 Installer:
-  - Added :doc:`uninstall </guides/uninstall>` support to the eclim installer.
+  - Added :ref:`uninstall <uninstall>` support to the eclim installer.
   - Updated the installer to fully embrace eclipse's provisioning framework
     (p2).
 
@@ -137,7 +137,7 @@ Common:
     supplied project.
   - Updated :ref:`:ProjectProblems <:ProjectProblems>` to support optional bang
     (`:ProjectProblems!`) to only show project errors.
-  - Updating eclipse's :doc:`local history </vim/history>` when writing
+  - Updating eclipse's :doc:`local history </vim/core/history>` when writing
     in vim is now only enabled by default when gvim is opened from the eclipse
     gui.
 

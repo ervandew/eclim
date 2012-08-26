@@ -16,7 +16,7 @@
 The Eclim Daemon
 ================
 
-.. _eclimd_headless:
+.. _eclimd-headless:
 
 Headless eclipse server
 -----------------------
@@ -42,7 +42,7 @@ the eclimd.bat file found in your eclipse root directory:
 .. note::
   Even though an eclipse gui is not started in eclim's headless mode, eclipse
   still requires a running X server to function.  To run eclimd on a truely
-  headless server, please see the :doc:`headless guide </guides/headless>`.
+  headless server, please see the :ref:`headless guide <install-headless>`.
 
 **Stopping eclimd**
 
@@ -76,7 +76,7 @@ To cleanly shutdown eclim use any one of the following.
   terminated underneath it.  This is nothing to be alarmed about.
 
 
-.. _eclimd_headed:
+.. _eclimd-headed:
 
 Headed eclipse server
 ---------------------
@@ -114,7 +114,7 @@ words, the daemon will not start until the eclimd tab is the active tab in that
 group.
 
 
-.. _gvim_embedded:
+.. _gvim-embedded:
 
 Embedded gvim
 -------------
@@ -143,7 +143,7 @@ name in the eclipse tree and then selecting:
 
 Please note that if you want to use supported eclipse features (code
 completion, validation, searching, etc.) from the embedded gvim editor, you
-must have the :ref:`eclimd view <eclimd_headed>` open.
+must have the :ref:`eclimd view <eclimd-headed>` open.
 
 .. note::
   If you'd like to have the embedded gvim editor as the default for one or more
@@ -250,8 +250,8 @@ you will fall into one of two groups:
      " maps Ctrl-M to eclipse's Ctrl-M binding to maximize the editor
      nmap <silent> <c-m> :call eclim#vimplugin#FeedKeys('Ctrl+M', 1)<cr>
 
-   The value supplied to the `FeedKeys` function must be an eclipse compatible key
-   binding string as found in:
+   The value supplied to the ``FeedKeys`` function must be an eclipse
+   compatible key binding string as found in:
 
    :menuselection:`Windows --> Preferences --> General --> Keys`
 
@@ -307,7 +307,6 @@ specify an alternate location for your .eclimrc:
   $ eclimd -f ~/.my_eclimrc
   $ eclim -f ~/.my_eclimrc -command ping
 
-
 eclimd logging
 --------------
 
@@ -317,7 +316,71 @@ configured via the $ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
 By default, eclimd writes all logging info to both the console and to a log
 file in your workspace: <workspace>/.metadata/.log.eclimd
 
-.. _eclimd_extdir:
+.. _eclimd-multiworkspace:
+
+Multiple Workspaces
+-------------------
+
+Running eclim against more than one eclipse workspace can be accomplished by
+running multiple eclimd instances. You must configure each instance to run
+nailgun on a unique port and supply the path to the workspace you which that
+instance to use. Once your eclimd instances are up and running the vim client
+will automatically determine which server to send requests to based on your
+context. In some cases you may be prompted for which workspace to use if one
+cannot be determined for you.
+
+Below are some different ways in which you can configure your eclimd instances:
+
+1. All Users: Supply the nailgun port and eclipse workspace path when starting
+   eclimd:
+
+   ::
+
+     $ eclimd -Dosgi.instance.area.default=@user.home/workspace1 -Dnailgun.server.port=9091
+     $ eclimd -Dosgi.instance.area.default=@user.home/workspace2 -Dnailgun.server.port=9092
+
+   If you are using the eclimd view in the eclipse gui, then you can start the
+   eclipse gui with the desired nailgun server port (note that you must place
+   the -vmargs option before the list of jvm arguments):
+
+   ::
+
+     $ eclipse -vmargs -Dnailgun.server.port=9092
+
+2. Linux, OSX, BSD Users: Specify the port and workspace in eclimrc files and
+   start eclimd with the -f argument:
+
+   ::
+
+     $ vim ~/.eclimrc1
+     osgi.instance.area.default=@user.home/workspace1
+     nailgun.server.port=9091
+
+     $ vim ~/.eclimrc2
+     osgi.instance.area.default=@user.home/workspace2
+     nailgun.server.port=9092
+
+     $ eclimd -f ~/.eclimrc1
+     $ eclimd -f ~/.eclimrc2
+
+   .. note::
+
+     The -f argument is not supported by eclipse so the above option is only
+     available when using a headless eclimd instance.
+
+3. Windows Users: Create Windows shortcuts:
+
+   - In Windows Explorer, open your eclipse folder.
+   - Hold down the right mouse button and drag the eclimd.bat file to where
+     you want the shortcut to exist (like your desktop) and release the
+     right mouse button.
+   - Choose "Create Shortcut(s) Here"
+   - Right click the shortcut and choose "Properties"
+   - | On the "Shortcut" tab edit the "Target:" field and append:
+     | -Dosgi.instance.area.default=\@user.home/workspace1 -Dnailgun.server.port=9091
+   - Repeat this process for your other workspaces.
+
+.. _eclimd-extdir:
 
 Hosting third party nailgun apps in eclimd
 -------------------------------------------

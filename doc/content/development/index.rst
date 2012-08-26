@@ -19,14 +19,14 @@ Development Docs
 .. toctree::
    :hidden:
 
+   gettingstarted
    architecture
 ..   commands
    plugins
    unittests
    installer
 
-:doc:`/guides/development`
-  Documents the eclim build process.
+:doc:`/development/gettingstarted`
 
 :doc:`/development/architecture`
   Explains the underlying architecture that eclim utilizes including an

@@ -15,8 +15,11 @@
 
 .. _\:CCallHierarchy:
 
+C/C++ Code Inspection
+=====================
+
 Call Hierarchy
-==============
+--------------
 
 When viewing a c or c++ source file you can view the call hierarchy of a
 function or method by issuing the command **:CCallHierarchy**.  This will open
@@ -41,9 +44,8 @@ cursor using one of the following key bindings:
 - T - open the type via :tabnew
 - ? - view help buffer
 
-
 Configuration
--------------
+^^^^^^^^^^^^^
 
 :doc:`Vim Settings </vim/settings>`
 

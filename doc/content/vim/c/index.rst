@@ -26,7 +26,7 @@ Features
    complete
    validate
    search
-   hierarchy
+   inspection
 
 Suggested Mappings
 ------------------

@@ -231,7 +231,7 @@ Common:
     git.
 
 Install:
-  - Added support for :ref:`automated installs <install-automated>`.
+  - Added support for :ref:`automated installs <installer-automated>`.
 
 Eclim:
   - Added initial support for using eclim via vim in cygwin.
@@ -287,12 +287,12 @@ Install:
   - Fixed issues properly detecting write permissions on Windows machines.
 
 Docs:
-  - Added a guide on :doc:`running eclim on a headless server
-    </guides/headless>`.
+  - Added a guide on :ref:`running eclim on a headless server
+    <install-headless>`.
 
 Common:
-  - Added full support for :doc:`running multiple eclimd instances
-    </guides/multi_workspace>`, each backed by a separate eclipse workspace.
+  - Added full support for :ref:`running multiple eclimd instances
+    <eclimd-multiworkspace>`, each backed by a separate eclipse workspace.
   - Added 'K' mapping to :ref:`:ProjectTree <:ProjectTree>` to set the tree
     root the either the project root of file system root depending on the
     context.  Added 'D' mapping to create a new directory and 'F' to open a new
@@ -340,7 +340,7 @@ Eclim:
   - Abbreviation support removed in favor of any one of the third party
     snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).
   - Added support for hosting third party nailgun apps in eclim via an
-    :ref:`ext dir <eclimd_extdir>`.
+    :ref:`ext dir <eclimd-extdir>`.
 
 Java:
   - Updated :ref:`:JavaImpl`, :ref:`:JavaDelegate`, and
@@ -490,7 +490,7 @@ Bug Fixes:
 
 Eclim:
   - Added integration with eclipse's
-    :doc:`local history </vim/history>` support.
+    :doc:`local history </vim/core/history>` support.
 
 Java:
   - Added command to view :ref:`type hierarchy <:JavaHierarchy>`.
@@ -510,11 +510,11 @@ Java:
     project's .classpath file.
 
 Eclim:
-  - Added the ability to run :ref:`eclimd inside of eclipse <eclimd_headed>`.
-  - Added support for :ref:`embedding gvim inside of eclipse <gvim_embedded>`.
+  - Added the ability to run :ref:`eclimd inside of eclipse <eclimd-headed>`.
+  - Added support for :ref:`embedding gvim inside of eclipse <gvim-embedded>`.
   - eclimd start scripts now available in the eclipse home.
   - Consolidated the various **:LocateFile\*** commands into a single
-    :doc:`:LocateFile </vim/util>` command with a new setting to specify
+    :doc:`:LocateFile </vim/core/locate>` command with a new setting to specify
     the default means to open a result and various key bindings for opening via
     other means.
 
@@ -540,7 +540,7 @@ Installer:
   - Updated to make use of the new ganymede p2 provisioning system.
 
 Eclim:
-  - Rewrote :doc:`:LocateFile* </vim/util>` commands to provide
+  - Rewrote :doc:`:LocateFile* </vim/core/locate>` commands to provide
     functionality similar to eclipse's "Open Resource" command or Textmate's
     "Find in Project".
 
@@ -703,7 +703,7 @@ Eclim:
     :ref:`:ProjectNatureRemove`.
 
 Css:
-  - Added :doc:`css validation </vim/css/index>`.
+  - Added :ref:`css validation <css>`.
 
 Html:
   - Added :ref:`:BrowserOpen`
@@ -806,12 +806,11 @@ Eclim:
         \ ]
 
 Css:
-  - Added :doc:`css code completion </vim/css/index>`.  Requires the
-    `eclipse wst`_ plugin.
+  - Added :ref:`css code completion <css>`.  Requires the `eclipse wst`_
+    plugin.
 
 Dtd:
-  - Added :doc:`dtd validation </vim/dtd/index>`.  Requires the
-    `eclipse wst`_ plugin.
+  - Added :ref:`dtd validation <dtd>`.  Requires the `eclipse wst`_ plugin.
 
 Html:
   - Added :doc:`html code completion </vim/html/index>`.  Requires the
@@ -820,7 +819,7 @@ Html:
     `eclipse wst`_ plugin.
 
 Log4j:
-  - Added :doc:`log4j xml file validation </vim/java/log4j>`.
+  - Added :ref:`log4j xml file validation <log4j>`.
 
 Python:
   - Added support for testing regular expressions.
@@ -851,7 +850,7 @@ Wsdl:
   - Added wsdl validation.  Requires the `eclipse wst`_ plugin.
 
 Xsd:
-  - Added :doc:`xsd validation </vim/xsd/index>`.  Requires the
+  - Added :ref:`xsd validation <xsd>`.  Requires the
     `eclipse wst`_ plugin.
 
 Xml:
