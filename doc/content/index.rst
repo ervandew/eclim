@@ -23,14 +23,14 @@ The power of Eclipse in your favorite editor.
 .. toctree::
    :hidden:
 
-   download
+   install
    gettingstarted
    gettinghelp
-   faq
-   guides/index
-   documentation
+   vim/index
    development/index
+   faq
    features
+   cheatsheet
    changes
    contribute
    relatedprojects
@@ -50,18 +50,18 @@ There are three primary usage scenarios in which eclim is designed to be used:
 
 .. image:: images/diagrams/use_cases.png
 
-#. The :ref:`first scenario <eclimd_headless>` is for those for which vim is
+#. The :ref:`first scenario <eclimd-headless>` is for those for which vim is
    their primary editing interface.  In this scenario you run a headless
    instance of eclipse which all vim instances can then communicate with to
    provide the various eclipse features.
 
-#. The :ref:`second scenario <eclimd_headed>` is for those who prefer using vim
+#. The :ref:`second scenario <eclimd-headed>` is for those who prefer using vim
    as their main interface, but frequently end up jumping back to eclipse for
    any features not provided by eclim.  In this case you can run the eclim
    server inside of the eclipse gui and then interact with it via external vim
    instances just like the first scenario.
 
-#. The :ref:`last scenario <gvim_embedded>` is for those who wish to use the
+#. The :ref:`last scenario <gvim-embedded>` is for those who wish to use the
    eclipse interface full time, but want to use gvim as an embedded eclipse
    editor. Just like the previous use case, the eclim server is run inside of
    the eclipse gui and the embedded gvim will interact with it just like
@@ -74,15 +74,8 @@ Eclim is released under the GPLv3_.
 How do I get/install it?
 ========================
 
-.. include:: /download.rst
-   :start-after: begin-installer
-   :end-before: end-installer
-
-Installing
-----------
-
-Once you've downloaded the installer, you can follow the :doc:`eclim install
-guide </guides/install>`.
+You can follow the :doc:`eclim install guide </install>` which will walk you
+through downloading and installing eclim..
 
 ================
 How do I use it?
@@ -113,32 +106,32 @@ What's New?
 ===========
 
 2012-08-07
------------
+----------
 
 | :ref:`Eclim 1.7.7 <1.7.7>` is now available.
 | This is a bug fix release.
 
 2012-06-07
------------
+----------
 
 | :ref:`Eclim 1.7.6 <1.7.6>` is now available.
 | This is a minor bug fix release.
 
 2012-06-03
------------
+----------
 
 | :ref:`Eclim 1.7.5 <1.7.5>` is now available.
 | This is a minor release with an improved installer, some bug fixes, and a few
   minor enhancements.
 
 2012-04-22
------------
+----------
 
 | :ref:`Eclim 1.7.4 <1.7.4>` is now available.
 | This is a bug fix release.
 
 2012-03-18
------------
+----------
 
 | :ref:`Eclim 1.7.3 <1.7.3>` is now available.
 | This version fixes numerious small bugs and adds a handful of small features.

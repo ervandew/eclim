@@ -13,8 +13,12 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Logging
-=======
+====================
+Logging (log4j, etc)
+====================
+
+Auto import / initialize
+=========================
 
 While editing a java source file, if you start to create a logging statement
 (``log.`` or ``logger.``), the logging plugin will attempt to perform the
@@ -41,7 +45,6 @@ After performing the necessary variable substitution, eclim will take any
 imports and insert them amongst your existing import statements.  The remaining
 code will be inserted after your class definition.
 
-
 Configuration
 -------------
 
@@ -67,3 +70,38 @@ Configuration
 - **org.eclim.java.logging.template** (Default: 'logger.gst') -
   Determines the name of the template to use for the custom logger.  The name
   must be a file name relative to ~/.eclim/resources/jdt/templates/.
+
+.. _log4j:
+
+Log4j
+======
+
+Validation
+----------
+
+When editing a log4j xml file eclim will default to validating the file when it
+is written. Any errors will be added to the current window's location list
+(:help location-list) and their corresponding line number noted via Vim's sign
+functionality.
+
+Eclim also combines the above validation with :ref:`xml validation
+<xml-validation>` to validate that the file is well formed.
+
+If you do not want your log4j files validated automatically when saved, you can
+set the :ref:`g:EclimLog4jValidate` variable described in the configuration
+section below.
+
+.. _\:Validate_log4j:
+
+Whether or not auto validation has been enabled, eclim also exposes the command
+**:Validate** to manually execute the validation of the file.
+
+Configuration
+-------------
+
+:doc:`Vim Settings </vim/settings>`
+
+.. _g\:EclimLog4jValidate:
+
+- **g:EclimLog4jValidate** (Default: 1) -
+  If set to 0, disables validation when saving the file.

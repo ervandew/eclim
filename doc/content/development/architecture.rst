@@ -13,8 +13,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Eclim Architecture
-==================
+Architecture
+============
 
 The eclim architecture is pretty straight forward.  Commands issued by a user
 in vim are relayed via nailgun_ to the running eclim daemon and the proper

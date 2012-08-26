@@ -13,65 +13,63 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Eclim Developers Guide
-======================
+Developers Guide
+================
 
-This guide is intended mostly for those who wish to contribute to eclim by
-fixing bugs or adding new functionality, but the first section is also useful
-for users who would like to use the latest development version of eclim.
-
-.. _development-build:
+This guide is intended for those who wish to contribute to eclim by
+fixing bugs or adding new functionality.
 
 Checking out the code and building it.
 --------------------------------------
 
+.. begin-build
+
 1. Check out the code:
+^^^^^^^^^^^^^^^^^^^^^^
 
-   ::
+::
 
-     $ git clone git://github.com/ervandew/eclim.git
-
-   Once you have a local git repository you can utilize the extensive local git
-   functionality allowing you to commit code locally, create local branches,
-   etc.  For guidelines on managing patches and submitting them, please see the
-   :ref:`patch guide <development-patches>` below.
+  $ git clone git://github.com/ervandew/eclim.git
 
 2. Build eclim:
+^^^^^^^^^^^^^^^
 
-   ::
+::
 
-     $ cd eclim
-     $ ant -Declipse.home=/your/eclipse/home/dir
+  $ cd eclim
+  $ ant -Declipse.home=/your/eclipse/home/dir
 
-   .. note::
+.. note::
 
-     If your eclipse home path contains a space, be sure to quote it:
+  If your eclipse home path contains a space, be sure to quote it:
 
-     ::
+  ::
 
-       > ant "-Declipse.home=C:/Program Files/eclipse"
+    > ant "-Declipse.home=C:/Program Files/eclipse"
 
-   This will build and deploy eclim to your eclipse and vim directories.
+This will build and deploy eclim to your eclipse and vim directories.
 
-   .. note::
+.. note::
 
-     If your vimfiles directory is not located at the default location for your
-     OS, then you can specify the location using the "vim.files" property:
+  If your vimfiles directory is not located at the default location for your
+  OS, then you can specify the location using the "vim.files" property:
 
-     ::
+  ::
 
-       $ ant -Dvim.files=<your vimfiles dir>
+    $ ant -Dvim.files=<your vimfiles dir>
 
-   If you don't want to supply the eclipse home directory, or any other
-   properties, on the command line every time you build eclim, you can create a
-   `user.properties` file at the eclim source root and put all your properties
-   in there:
+If you don't want to supply the eclipse home directory, or any other
+properties, on the command line every time you build eclim, you can create a
+``user.properties`` file at the eclim source root and put all your properties
+in there:
 
-   ::
+::
 
-     $ vim user.properties
-     eclipse.home=/opt/eclipse
-     vim.files=${user.home}/.vim/bundle/eclim
+  $ vim user.properties
+  eclipse.home=/opt/eclipse
+  vim.files=${user.home}/.vim/bundle/eclim
+
+.. end-build
 
 .. _development-patches:
 
@@ -91,7 +89,6 @@ patches via email using git's format-patch command:
 Running the above command will generate a series of patch files which can be
 submitted to the `eclim development group`_.
 
-
 Building the eclim installer
 ----------------------------
 
@@ -102,6 +99,15 @@ To build the installer you first need a couple external tools installed:
 
 * sphinx_: Sphinx is used to build the eclim documentation which is included in
   the installer.
+
+  Eclim also uses a custom sphinx theme which is included in eclim as a git
+  submodule. So before you can build the installer you will need to initialize
+  the submodule:
+
+  ::
+
+    $ git submodule init
+    $ git submodule update
 
 * graphviz_:  The docs include a few uml diagrams which are generated using
   plantuml_ (included in the eclim source tree) which in turn requires
@@ -136,6 +142,13 @@ installer with the following command.
 
   $ ant -Dformic.home=/your/formic/install/dir dist
 
+In lieu of supplying the formic home on the command line, you can instead put
+it in a ``user.properties`` file at the eclim source root:
+
+::
+
+  $ vim user.properties
+  formic.home=/your/formic/install/dir
 
 What's Next
 ------------

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,31 +13,14 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-.. _guides:
-
-Guides
-==========
+Core Functionality
+==================
 
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
-   install
-   uninstall
-   troubleshoot
-   headless
-   multi_workspace
-   development
-
-
-Installing, Upgrading, Troubleshooting, etc.
---------------------------------------------
-- :doc:`/guides/install`
-- :doc:`/guides/uninstall`
-- :doc:`/guides/troubleshoot`
-- :doc:`/guides/headless`
-- :doc:`/guides/multi_workspace`
-
-
-Eclim Developers
-----------------
-- :doc:`/guides/development`
+   eclim
+   project
+   history
+   locate
+   util

@@ -16,13 +16,9 @@
 Getting Started
 ===============
 
-The first step to getting started with eclim is to install it.  If you haven't
-already done so, please see the :doc:`install guide </guides/install>` for
-instructions on how to install eclim.
-
-If you've already installed eclim, then the next step is to create your first
-project after which you can then start writing code and familiarizing yourself
-with eclim's features.
+Once you've :doc:`installed </install>` eclim, the next step is to create
+your first project after which you can then start writing code and
+familiarizing yourself with eclim's features.
 
 First make sure eclimd is running (see the :doc:`eclimd docs </eclimd>` if you
 are unsure how to start eclimd).
@@ -166,7 +162,7 @@ features that eclim provides.
    - :doc:`php </vim/php/index>`
    - :doc:`python </vim/python/index>`
    - :doc:`ruby </vim/ruby/index>`
-   - :doc:`etc. <documentation>`
+   - :doc:`etc. <vim/index>`
 
 Lets get started writing our first java application using eclim.
 
@@ -237,42 +233,13 @@ This only scratches the surface on the number of :doc:`java features
 </vim/java/index>` that eclim provides, but hopefully this example was enough to
 get you started.
 
-
-.. _gettingstarted-projectsettings:
-
-Editing your project's settings
--------------------------------
-
-Several of eclim's features are configurable via project settings which you can
-modify using the :ref:`:ProjectSettings` command.  If your current Vim window's
-working directory is at or under the project's root directory then you can
-execute the **:ProjectSettings** with no arguments, otherwise you will need to
-supply the project name.
-
-.. code-block:: vim
-
-  :ProjectSettings projectName
-
-After your first time editing your project's settings, a .settings directory
-will be created in the project's root directory.  In there are the project's
-preferences files.  You should avoid editing these files directly and stick to
-using **:ProjectSettings** to update them.
-
-.. note::
-
-  If you have only one project or many projects that share the same settings
-  you can use the :ref:`:EclimSettings` command instead to edit the global
-  settings.  These global settings will apply to any project that has not
-  overridden them with values via **:ProjectSettings**.
-
-
 .. _gettingstarted-android:
 
 Android Users
 -------------
 
 Creating an android project is the same as creating a regular java project, but
-you use the `android` nature instead:
+you use the ``android`` nature instead:
 
 ::
 

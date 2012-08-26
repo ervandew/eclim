@@ -147,7 +147,7 @@ Vim's command line completion to complete the project name.
     **:ProjectRename**, eclim will reload those files in the current session, but
     it must do so via an :edit, which means that vim's undo tree will be lost.
     However, you will still have access to the eclipse
-    :doc:`history </vim/history>`.
+    :doc:`history </vim/core/history>`.
 
 .. _\:ProjectRefresh:
 

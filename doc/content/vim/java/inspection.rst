@@ -13,10 +13,13 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Class / Interface Hierarchy
-===========================
+Java Code Inspetion
+===================
 
 .. _\:JavaHierarchy:
+
+Class / Interface Hierarchy
+---------------------------
 
 When viewing a java class or interface you can view the type hierarchy by
 issuing the command **:JavaHierarchy**.  This will open a temporary buffer with
@@ -44,9 +47,8 @@ cursor using one of the following key bindings:
 - T - open the type via :tabnew
 - ? - view help buffer
 
-
 Configuration
--------------
+^^^^^^^^^^^^^
 
 :doc:`Vim Settings </vim/settings>`
 

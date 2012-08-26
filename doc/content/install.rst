@@ -13,11 +13,12 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Installing / Upgrading
-======================
+==================
+Download / Install
+==================
 
 Requirements
-------------
+============
 
 Before beginning the installation, first confirm that you have met the
 following requirements.
@@ -52,13 +53,43 @@ following requirements.
     Which should output 'filetype detection:ON  plugin:ON indent:ON', showing
     at least 'ON' for 'detection' and 'plugin'.
 
+Download
+========
+
+You can find the official eclim installer on eclim's sourceforge `downloads
+page`_:
+
+- :eclimdist:`jar`
+
+.. _downloads page: http://sourceforge.net/project/showfiles.php?group_id=145869
+
+Third Party Packages
+--------------------
+
+As an alternative to the official installer, there are also some packages
+maintained by third parties:
+
+- **Arch:** `aur (eclim) <http://aur.archlinux.org/packages.php?ID=7291>`_,
+  `aur (eclim-git) <http://aur.archlinux.org/packages.php?ID=33120>`_
+
+Installing / Upgrading
+======================
+
+Eclim can be installed a few different ways depending on your preference and
+environment:
+
+- :ref:`Graphical Installer <installer>`
+- :ref:`Unattended (automated) Installer <installer-automated>`
+- :ref:`Build from source <install-source>`
+- :ref:`Install on a headless server <install-headless>`
+
 .. _installer:
 
-Eclim Graphical Installer
--------------------------
+Graphical Installer
+-------------------
 
-Step 1: Download and run the installer.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 1: Run the installer
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
 
@@ -85,8 +116,8 @@ Step 1: Download and run the installer.
   If you encounter an error running the installer, then consult the known
   :ref:`potential <installer-issues>` issues below.
 
-Step 2: Testing the installation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 2: Test the installation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To test eclim you first need to start the eclim daemon.  How you start the
 daemon will depend on how you intend to use eclim.
@@ -135,16 +166,16 @@ eclim:
   to it.  If you receive this or any other errors you can start by first
   examining the eclimd output to see if it gives any info as to what went
   wrong.  If at this point you are unsure how to proceed you can view the
-  :doc:`troubleshooting guide </guides/troubleshoot>` or feel free to post your
+  :ref:`troubleshooting guide <troubleshooting>` or feel free to post your
   issue on the `eclim-user`_ mailing list.
 
   Example of a successful ping:
 
-  .. image:: ../images/screenshots/ping_success.png
+  .. image:: images/screenshots/ping_success.png
 
   Example of a failed ping:
 
-  .. image:: ../images/screenshots/ping_failed.png
+  .. image:: images/screenshots/ping_failed.png
 
 - Regardless of the ping result, you can also verify your vim settings
   using the command **:EclimValidate**.  This will check
@@ -213,39 +244,7 @@ In some rare cases you might encounter one of the following errors:
 If you encounter an error not covered here, then please report it to the
 eclim-user_ mailing list.
 
-
-What's Next
------------
-
-Now that you have eclim installed, the next step is to familiarize yourself
-with at least the core set of commands that eclim provides, all of which are
-found at the index of the eclim :doc:`documentation </vim/index>`.
-
-After doing that you can then proceed to :doc:`getting started guide
-</gettingstarted>`.
-
-
-Upgrading
----------
-
-The upgrading procedure is the same as the installation procedure but please be
-aware that the installer will remove the previous version of eclim prior to
-installing the new one.  The installer will delete all the files in the eclim
-eclipse plugins and the files eclim adds to your .vim or vimfiles directory.
-So if you made any alterations to any of these files, be sure to back them up
-prior to upgrading.
-
-
-Building from source
---------------------
-
-If you would like to use the bleeding edge development version of eclim or you
-would like to contribute code, then you can checkout and build eclim from
-source.  Instructions on doing so can be found in the
-:ref:`developers guide <development-build>`.
-
-
-.. _install-automated:
+.. _installer-automated:
 
 Unattended (automated) install
 ------------------------------
@@ -279,7 +278,164 @@ on any eclipse features, so to enable the installation of that plugin, just add
   directory. Or if you want to omit the installation of the vim files
   (emacs-eclim users for example) you can supply ``-Dvim.skip=true`` instead.
 
-.. _java development kit: http://java.sun.com/javase/downloads/index.html
+.. _install-source:
+
+Building from source
+--------------------
+
+.. include:: /development/gettingstarted.rst
+   :start-after: begin-build
+   :end-before: end-build
+
+.. _install-headless:
+
+Installing on a headless server
+-------------------------------
+
+The eclim daemon supports running both inside of the eclipse gui and as a
+"headless" non-gui server. However, even in the headless mode, eclipse still
+requires a running X server to function. If you are running eclim on a desktop
+then this isn't a problem, but some users would like to run the eclim daemon on
+a truly headless server. To achieve this, you can make use of X.Org's Xvfb
+server.
+
+.. note::
+
+  This guide uses the Ubuntu server distribution to illustrate the process of
+  setting up a headless server, but you should be able to run Xvfb on the
+  distro of your choice by translating the package names used here to your
+  distro's equivalents.
+
+The first step is to install the packages that are required to run eclipse and
+eclim:
+
+- Install a java jdk, xvfb, and the necessary build tools to compile eclim's
+  nailgun client during installation (make, gcc, etc).
+
+  ::
+
+    $ sudo apt-get install openjdk-6-jdk xvfb build-essential
+
+Then you'll need to install eclipse. You may do so by installing it from your
+distro's package manager or using a version found on `eclipse.org`_. If you
+choose to install a version from you package manager, make sure that the
+version to be installed is compatible with eclim since the package manager
+version can often be out of date. If you choose to install an `eclipse.org`_
+version, you can do so by first downloading eclipse using either a console
+based browser like elinks, or you can navigate to the download page on your
+desktop and copy the download url and use wget to download the eclipse archive.
+Once downloaded, you can then extract the archive in the directory of your
+choice.
+
+::
+
+  $ wget <eclipse_mirror>/eclipse-<version>-linux-gtk.tar.gz
+  $ tar -zxf eclipse-<version>-linux-gtk.tar.gz
+
+.. note::
+
+  Depending on what distribution of eclipse you installed and what eclim
+  features you would like to be installed, you may need to install additional
+  eclipse features.  If you installed eclipse from your package manager then
+  your package manager may also have the required dependency (eclipse-cdt for
+  C/C++ support for example). If not, you can install the required dependency
+  using eclipse's p2 command line client. Make sure the command references the
+  correct repository for your eclipse install (juno in this example) and that
+  you have Xvfb running as described in the last step of this guide:
+
+  ::
+
+    DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
+      -application org.eclipse.equinox.p2.director
+      -repository http://download.eclipse.org/releases/juno
+      -installIU org.eclipse.wst.web_ui.feature.feature.group
+
+  For a list of eclim plugins and which eclipse features they require, please
+  see the `installer dependencies`_.  Note that the suffix '.feature.group'
+  must be added to the dependency id found in that file when supplying it to
+  the '-installIU' arg of the above command.
+
+Once eclipse is installed, you can then install eclim utilizing the eclim
+installer's automated install option (see the :ref:`installer-automated`
+section for additional details):
+
+.. code-block:: bash
+
+  $ java \
+    -Dvim.files=$HOME/.vim \
+    -Declipse.home=/opt/eclipse \
+    -jar eclim_eclim_release.jar install
+
+The last step is to start Xvfb followed by eclimd:
+
+::
+
+  $ Xvfb :1 -screen 0 1024x768x24 &
+  $ DISPLAY=:1 ./eclipse/eclimd start
+
+When starting Xvfb you may receive some errors regarding font paths and
+possibly dbus and hal, but as long as Xvfb continues to run, you should be
+able to ignore these errors.
+
+The first time you start eclimd you may want to omit the 'start' argument so
+that you can see the output on the console to ensure that eclimd starts
+correctly.
+
+Upgrading
+---------
+
+The upgrading procedure is the same as the installation procedure but please be
+aware that the installer will remove the previous version of eclim prior to
+installing the new one.  The installer will delete all the files in the eclim
+eclipse plugins and the files eclim adds to your .vim or vimfiles directory.
+So if you made any alterations to any of these files, be sure to back them up
+prior to upgrading.
+
+.. _uninstall:
+
+Uninstall
+=========
+
+To uninstall eclim you can use any eclim distribution jar whose version is
+1.7.5 or greater by running it with the 'uninstaller' argument like so:
+
+.. code-block:: bash
+
+  $ java -jar eclim_eclim_release.jar uninstaller
+
+That will open a graphical wizard much like the install wizard which will ask
+you again for the location of your vimfiles and eclipse home where you've
+installed eclim and will then remove the eclim installation accordingly.
+
+.. note::
+
+  The uninstaller is backwards compatible and can be used to uninstall older
+  versions of eclim.
+
+.. _uninstall-automated:
+
+Unattended (automated) uninstall
+--------------------------------
+
+Like the installer, the uninstaller also supports an unattended uninstall. You
+just need to supply your vim files and eclipse paths as system properties:
+
+.. code-block:: bash
+
+  $ java \
+    -Dvim.files=$HOME/.vim \
+    -Declipse.home=/opt/eclipse \
+    -jar eclim_eclim_release.jar uninstall
+
+**Required Properties:**
+
+* **eclipse.home** - The absolute path to your eclipse installation.
+* **vim.files** (or **vim.skip=true**) - The absolute path to your vim files
+  directory. Or if you never installed the vim files (emacs-eclim users for
+  example) you can supply ``-Dvim.skip=true`` instead.
+
+.. _java development kit: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+.. _eclipse.org: http://eclipse.org/downloads/
 .. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/index.php
 .. _vim 7.1.x: http://www.vim.org/download.php
 .. _eclim-user: http://groups.google.com/group/eclim-user

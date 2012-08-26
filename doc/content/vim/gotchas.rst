@@ -38,7 +38,7 @@ drawbacks:
     undo info.  Needed for when an external tool changes the file.
 
   Until that change is made to vim, you can still revert your file using the
-  :doc:`local history </vim/history>` support.
+  :doc:`local history </vim/core/history>` support.
 
 
 - **Formatting (tabs vs. spaces):**

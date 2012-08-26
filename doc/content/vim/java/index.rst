@@ -24,15 +24,15 @@ Features
 
    classpath
    validate
+   complete
    search
    java
    javadoc
-   import
-   complete
-   methods
-   hierarchy
    format
    refactor
+   inspection
+   import
+   methods
    unittests
    logging
 
@@ -41,7 +41,6 @@ Features
 
    ant
    maven
-   log4j
    webxml
 
 Suggested Mappings
