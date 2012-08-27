@@ -141,6 +141,15 @@ public class CompletionProposalCollector
     String relativeName = resource.getProjectRelativePath().toString();
     if (new String(problem.getOriginatingFileName()).endsWith(relativeName)){
       String filename = resource.getLocation().toString();
+
+      // ignore the problem if a temp file is being used and the problem is that
+      // the type needs to be defined in its own file.
+      if (problem.getID() == IProblem.PublicClassMustMatchFileName &&
+          filename.indexOf("__eclim_temp_") != -1)
+      {
+        return;
+      }
+
       FileOffsets offsets = FileOffsets.compile(filename);
       int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
 
