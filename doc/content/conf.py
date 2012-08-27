@@ -117,6 +117,8 @@ html_translator_class = 'bootstrap.HTMLTranslator'
 # documentation.
 html_theme_options = {
   'global_toc_maxdepth': -1,
+  'show_bootstrap': True,
+  'sourcelink_position': 'footer',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -173,10 +175,10 @@ html_last_updated_fmt = '%b %d, %Y'
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-html_show_sourcelink = False
+#html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-html_show_sphinx = False
+#html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 #html_show_copyright = True
