@@ -26,7 +26,7 @@ open files or buffers.
   opens a temporary window where the text you type is turned into a pattern and
   search results are presented as you type.
 
-  .. image:: ../../images/screenshots/locate.png
+  .. image:: ../../images/screencasts/locate.gif
 
   While in this completion mode the following key bindings are available:
     - <esc> - close the search window without selecting a file

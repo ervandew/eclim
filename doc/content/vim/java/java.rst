@@ -137,11 +137,11 @@ Example content:
 
 - Line 1 consists of the process id followed by either the class name the
   process was started with or the path to the jar file.
-- Lines 2 - 4 contains links that when you hit <enter> on, will open another
+- Lines 2 - 5 contains links that when you hit <enter> on, will open another
   window displaying the requested additional info.
-- Lines 6 - 31 is a folded block which contains a list of all the arguments
+- Lines 7 - 13 is a foldable block which contains a list of all the arguments
   passed to the main method of the process.
-- Lines 33 - 35 is a folded block which contains a list of all the arguments
+- Lines 15 - 21 is a foldable block which contains a list of all the arguments
   passed to the JVM.
 
 .. _online documentation: http://docs.oracle.com/javase/6/docs/technotes/tools/#monitor
