@@ -221,7 +221,8 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
     let command = substitute(command, '<file>', file, '')
     if a:validate && !eclim#util#WillWrittenBufferClose()
       let command = command . ' -v'
-      if eclim#project#problems#IsProblemsList()
+      if eclim#project#problems#IsProblemsList() &&
+       \ g:EclimProjectProblemsUpdateOnSave
         let command = command . ' -b'
       endif
     endif
