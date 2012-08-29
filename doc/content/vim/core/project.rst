@@ -268,6 +268,12 @@ Vim's command line completion to complete the project name.
     source files, but only if the quickfix list currently represents a problems
     list.
 
+  - **g:EclimProjectProblemsUpdateOnBuild** (Default: 1)
+
+    When non 0, indicates that the problems list should be updated after a
+    :ProjectBuild, but only if the quickfix list currently represents a
+    problems list.
+
 .. _\:ProjectCD:
 
 - **:ProjectCD**

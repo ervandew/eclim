@@ -31,8 +31,7 @@
   let s:problems_command = '-command problems -p "<project>"'
 " }}}
 
-" Problems(project, open, bang) {{{
-function! eclim#project#problems#Problems(project, open, bang)
+function! eclim#project#problems#Problems(project, open, bang) " {{{
   let project = a:project
   if project == ''
     let project = eclim#project#util#GetCurrentProjectName()
@@ -67,42 +66,48 @@ function! eclim#project#problems#Problems(project, open, bang)
   endif
 endfunction " }}}
 
-" ProblemsUpdate() {{{
-function! eclim#project#problems#ProblemsUpdate()
-  if g:EclimProjectProblemsUpdateOnSave &&
-   \ eclim#project#problems#IsProblemsList()
+function! eclim#project#problems#ProblemsUpdate(action) " {{{
+  if a:action == 'save' && !g:EclimProjectProblemsUpdateOnSave
+    return
+  endif
 
-    " preserve the cursor position in the quickfix window
-    let qf_winnr = 0
-    let index = 1
-    while index <= winnr('$')
-      if getbufvar(winbufnr(index), '&ft') == 'qf'
-        let cur = winnr()
-        let qf_winnr = index
-        exec qf_winnr . 'winc w'
-        let pos = getpos('.')
-        exec cur . 'winc w'
-        break
-      endif
-      let index += 1
-    endwhile
+  if a:action == 'build' && !g:EclimProjectProblemsUpdateOnBuild
+    return
+  endif
 
-    let bang = exists('s:eclim_problems_bang') ? s:eclim_problems_bang : ''
-    call eclim#project#problems#Problems('', 0, bang)
+  if !eclim#project#problems#IsProblemsList()
+    return
+  endif
 
-    " restore the cursor position
-    if qf_winnr
+  " preserve the cursor position in the quickfix window
+  let qf_winnr = 0
+  let index = 1
+  while index <= winnr('$')
+    if getbufvar(winbufnr(index), '&ft') == 'qf'
       let cur = winnr()
+      let qf_winnr = index
       exec qf_winnr . 'winc w'
-      call setpos('.', pos)
-      redraw
+      let pos = getpos('.')
       exec cur . 'winc w'
+      break
     endif
+    let index += 1
+  endwhile
+
+  let bang = exists('s:eclim_problems_bang') ? s:eclim_problems_bang : ''
+  call eclim#project#problems#Problems('', 0, bang)
+
+  " restore the cursor position
+  if qf_winnr
+    let cur = winnr()
+    exec qf_winnr . 'winc w'
+    call setpos('.', pos)
+    redraw
+    exec cur . 'winc w'
   endif
 endfunction " }}}
 
-" IsProblemsList() {{{
-function! eclim#project#problems#IsProblemsList()
+function! eclim#project#problems#IsProblemsList() " {{{
   " if available, compare the problems signature against the signature of
   " the current list to see if we are now on the problems list, probably via
   " :colder or :cnewer.
@@ -115,8 +120,7 @@ function! eclim#project#problems#IsProblemsList()
   return 0
 endfunction " }}}
 
-" s:QuickfixSignature() {{{
-function! s:QuickfixSignature()
+function! s:QuickfixSignature() " {{{
   let qflist = getqflist()
   let len = len(qflist)
   return {
