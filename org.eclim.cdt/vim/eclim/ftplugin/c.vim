@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ setlocal completefunc=eclim#c#complete#CodeComplete
 " Autocmds {{{
 
 augroup eclim_c
-  autocmd!
+  autocmd! BufWritePost <buffer>
   autocmd BufWritePost <buffer>
     \ call eclim#lang#UpdateSrcFile('c', g:EclimCValidate)
 augroup END
