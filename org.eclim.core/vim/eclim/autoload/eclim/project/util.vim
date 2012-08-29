@@ -433,7 +433,9 @@ function! eclim#project#util#ProjectBuild(...)
   call eclim#util#Echo("Building project '" . project . "'...")
   let command = substitute(s:command_build, '<project>', project, '')
   let port = eclim#project#util#GetProjectPort(project)
-  call eclim#util#Echo(eclim#ExecuteEclim(command, port))
+  let result = eclim#ExecuteEclim(command, port)
+  call eclim#project#problems#ProblemsUpdate('build')
+  call eclim#util#Echo(result)
 endfunction " }}}
 
 " ProjectInfo(project) {{{

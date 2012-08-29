@@ -34,6 +34,10 @@ if !exists("g:EclimProjectProblemsUpdateOnSave")
   let g:EclimProjectProblemsUpdateOnSave = 1
 endif
 
+if !exists("g:EclimProjectProblemsUpdateOnBuild")
+  let g:EclimProjectProblemsUpdateOnBuild = 1
+endif
+
 let g:EclimProjectTreeTitle = 'ProjectTree_'
 
 if !exists('g:EclimProjectTreeAutoOpen') || exists('g:vimplugin_running')

@@ -236,7 +236,7 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
       call eclim#util#ClearLocationList('global')
     endif
 
-    call eclim#project#problems#ProblemsUpdate()
+    call eclim#project#problems#ProblemsUpdate('save')
   elseif a:validate && expand('<amatch>') == ''
     call eclim#project#util#IsCurrentFileInProject()
   endif
