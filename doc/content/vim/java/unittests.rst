@@ -73,11 +73,6 @@ stub will be inserted, otherwise a regular overriding stub will be generated.
 
 .. note::
 
-  The insertion of methods is done externally with Eclipse and with that
-  comes a couple :doc:`caveats </vim/gotchas>`.
-
-.. note::
-
   The junit.jar file must be in your project's classpath for eclim to
   display possible methods to override in the junit test-case hierarchy.
 

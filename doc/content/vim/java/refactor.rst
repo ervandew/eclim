@@ -16,14 +16,6 @@
 Java Refactoring
 ================
 
-.. note::
-
-  All the refactorings are performed externally with Eclipse and with
-  that comes a couple :doc:`caveats </vim/gotchas>`.  In the event that you need
-  to undo a refactoring, please see
-  the :ref:`:JavaRefactorUndo <:JavaRefactorUndo>` and :ref:`:History`
-  commands.
-
 .. _\:JavaRename:
 
 Rename

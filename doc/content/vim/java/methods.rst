@@ -16,11 +16,6 @@
 Method Generation
 =================
 
-.. note::
-
-  The insertion of generated methods is done externally with Eclipse and with
-  that comes a couple :doc:`caveats </vim/gotchas>`.
-
 .. _\:JavaConstructor:
 
 Constructors
@@ -173,11 +168,6 @@ simply hitting <enter> with the cursor over the method signature.
 If you would like to generate stubs for all methods in an interface or class,
 then simply hit <enter> with the cursor over the class name and stub methods
 will be created for each method in that class or interface.
-
-.. note::
-
-  The insertion of method stubs is done externally with Eclipse and with
-  that comes a couple :doc:`caveats </vim/gotchas>`.
 
 This functionality is currently supported for both outer and inner classes, but
 not for anonymous inner classes.  To view the list of methods to override for an
