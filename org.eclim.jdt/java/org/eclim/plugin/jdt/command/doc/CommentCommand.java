@@ -66,6 +66,8 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TextElement;
 
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+
 /**
  * Handles requests to add javadoc comments to an element.
  *
@@ -110,9 +112,20 @@ public class CommentCommand
 
     if(node != null){
       comment(src, node, element);
-    }
 
-    ASTUtils.commitCompilationUnit(src, cu);
+      ASTUtils.commitCompilationUnit(src, cu);
+
+      // re-grab the compilation unit + node so we can get the javadoc node w/
+      // its position and length set.
+      cu = ASTUtils.getCompilationUnit(src, true);
+      node = ASTUtils.findNode(cu, offset, element);
+      Javadoc javadoc = (node instanceof PackageDeclaration) ?
+        ((PackageDeclaration)node).getJavadoc() :
+        ((BodyDeclaration)node).getJavadoc();
+      JavaUtils.format(
+          src, CodeFormatter.K_COMPILATION_UNIT,
+          javadoc.getStartPosition(), javadoc.getLength());
+    }
 
     return null;
   }

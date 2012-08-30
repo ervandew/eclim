@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.jdt.command.doc;
+
+import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
 
@@ -34,22 +36,22 @@ public class CommentCommandTest
   private static final String TEST_FILE =
     "src/org/eclim/test/doc/TestComment.java";
 
-  private static final String COMMENT_1 =
-    "  /**\n" +
-    "   * {@inheritDoc}\n" +
-    "   * @see Object#equals(Object)\n" +
-    "   */";
+  private static final Pattern COMMENT_1 = Pattern.compile(
+    "\\s+/\\*\\*\n" +
+    "\\s+ \\* \\{@inheritDoc\\}\n" +
+    "\\s+ \\* @see Object#equals\\(Object\\)\n" +
+    "\\s+ \\*/");
 
-  private static final String COMMENT_2 =
-    "  /**\n" +
-    "   * \n" +
-    "   * \n" +
-    "   * @param _id\n" +
-    "   * @param _name\n" +
-    "   * @return\n" +
-    "   * \n" +
-    "   * @throws IOException\n" +
-    "   */";
+  private static final Pattern COMMENT_2 = Pattern.compile(
+    "\\s+/\\*\\*\n" +
+    "\\s+ \\* \n" +
+    "\\s+ \\* \n" +
+    "\\s+ \\* @param _id\n" +
+    "\\s+ \\* @param _name\n" +
+    "\\s+ \\* @return\n" +
+    "\\s+ \\* \n" +
+    "\\s+ \\* @throws IOException\n" +
+    "\\s+ \\*/");
 
   @Test
   public void method1()
@@ -63,7 +65,7 @@ public class CommentCommandTest
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    assertTrue("Incorrect comment generated.", contents.indexOf(COMMENT_1) != -1);
+    assertTrue("Incorrect comment generated.", COMMENT_1.matcher(contents).find());
   }
 
   @Test
@@ -80,24 +82,6 @@ public class CommentCommandTest
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     System.out.println("'" + COMMENT_2 + "'");
     System.out.println("'" + contents.substring(56, 158) + "'");
-/*char[] c1 = COMMENT_2.toCharArray();
-char[] c2 = contents.substring(56, 158).toCharArray();
-for(int ii = 0; ii < c1.length; ii++){
-  System.out.println("" + ii + " " +
-      getChar(c1[ii]) + "=" + getChar(c2[ii]) +
-      " : " + (c1[ii] == c2[ii]));
-}*/
-    assertTrue("Incorrect comment generated.", contents.indexOf(COMMENT_2) != -1);
+    assertTrue("Incorrect comment generated.", COMMENT_2.matcher(contents).find());
   }
-
-  /*private String getChar (char _char)
-  {
-    if(_char == '\n')
-      return "\\n";
-
-    if(_char == '\t')
-      return "\\t";
-
-    return "" + _char;
-  }*/
 }
