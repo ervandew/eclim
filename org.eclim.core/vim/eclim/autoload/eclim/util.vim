@@ -1051,21 +1051,16 @@ function! eclim#util#PromptConfirm(prompt, ...)
   return response =~ '\c\s*\(y\(es\)\?\)\s*'
 endfunction " }}}
 
-" RefreshFile() {{{
-function! eclim#util#RefreshFile()
-  "FIXME: doing an :edit clears the undo tree, but the code commented out below
-  "       causes a user prompt on the write.  Need to pose this senario on the
-  "       vim mailing lists.
+" ReloadRetab() {{{
+" Reload the current file using ':edit' and retab.
+" Takes care of preserving &expandtab before executing the edit to keep indent
+" detection plugins from always setting it to 0 if eclipse inserts some tabbed
+" code that the indent detection plugin uses for its calculations.
+function! eclim#util#ReloadRetab()
+  let save_expandtab = &expandtab
   edit!
-  "autocmd FileChangedShell nested <buffer> echom " ### file changed ### "
-  "checktime
-  "autocmd! FileChangedShell <buffer>
-
-  "1,$delete _
-  "silent exec "read " . expand('%:p')
-  "1delete _
-
-  silent write!
+  let &expandtab = save_expandtab
+  retab
 endfunction " }}}
 
 " SetLocationList(list, [action]) {{{
