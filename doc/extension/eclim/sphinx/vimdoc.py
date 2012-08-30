@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import os
 import re
+import sys
 
 from docutils import nodes
 
@@ -35,8 +36,8 @@ class VimdocBuilder(TextBuilder):
     self.writer = VimdocWriter(self)
 
   def get_target_uri(self, docname, typ=None):
-    path = os.path.normpath(os.path.join(self.config.path, docname))
-    relpath = os.path.relpath(path, self.config.path)
+    path = os.path.normpath(os.path.join(self.env.srcdir, docname))
+    relpath = os.path.relpath(path, self.env.srcdir)
     return relpath.replace(os.path.sep, '-')
 
 class VimdocWriter(text.TextWriter):
@@ -53,7 +54,7 @@ class VimdocWriter(text.TextWriter):
     # add page tag and vim modline
     page = os.path.relpath(
       self.document.settings._source,
-      self.builder.config.path
+      self.builder.env.srcdir
     ).replace(self.builder.config.source_suffix, '')
 
     self.output = '*%s*\n\n%s\n\nvim:ft=eclimhelp' % (
@@ -223,10 +224,22 @@ class VimdocTranslator(text.TextTranslator):
   def depart_plantuml(self, node):
     pass
 
-# Custom missing_reference event listener to handle:
+# Custom missing_reference event listeners to handle:
 #   - references like> :ref:`:ProjectCreate`
 #   - not tranlateing references from> g:EclimMakeLCD to g-eclimmakelcd
-def missing_reference(app, env, node, contnode):
+
+# for html docs
+def missing_reference_html(app, env, node, contnode):
+  if 'refdomain' in node and node['refdomain']:
+    domain = env.domains[node['refdomain']]
+    if node['reftype'] == 'ref':
+        docname, labelid = domain.data['anonlabels'].get(node['reftarget'], ('',''))
+        if docname:
+          return make_refnode(
+            app.builder, node['refdoc'], docname, labelid, contnode)
+
+# for vimdocs
+def missing_reference_vimdoc(app, env, node, contnode):
   if 'refdomain' in node and node['refdomain']:
     domain = env.domains[node['refdomain']]
     if node['reftype'] == 'ref':
@@ -234,13 +247,15 @@ def missing_reference(app, env, node, contnode):
         if docname:
           return make_refnode(
             app.builder, node['refdoc'], docname, node['reftarget'], contnode)
-#    print (domain, node['reftype'], node['refdoc'], node['reftarget'])
 
 def setup(sphinx):
-  sphinx.add_builder(VimdocBuilder)
-  sphinx.connect('missing-reference', missing_reference)
-  sphinx.add_config_value('path', '', 'vimdoc')
-  # prevent sphinx from lower casing the references so we can display then as
-  # intended with some help from missing_reference above.
-  sphinx.add_role_to_domain(
-    'std', 'ref', XRefRole(innernodeclass=nodes.emphasis, warn_dangling=True))
+  if VimdocBuilder.name in sys.argv:
+    sphinx.add_builder(VimdocBuilder)
+    sphinx.connect('missing-reference', missing_reference_vimdoc)
+    # prevent sphinx from lower casing the references so we can display then as
+    # intended with some help from missing_reference above.
+    sphinx.add_role_to_domain(
+      'std', 'ref', XRefRole(innernodeclass=nodes.emphasis, warn_dangling=True))
+
+  else:
+    sphinx.connect('missing-reference', missing_reference_html)
