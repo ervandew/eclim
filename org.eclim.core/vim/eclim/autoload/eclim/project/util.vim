@@ -785,9 +785,9 @@ function! eclim#project#util#ProjectTab(project)
   call eclim#project#tree#ProjectTree(a:project)
 endfunction " }}}
 
-" TreeTab(title, dir) {{{
+" TreeTab(dir) {{{
 " Like ProjectTab, but opens for an arbitrary directory.
-function! eclim#project#util#TreeTab(title, dir)
+function! eclim#project#util#TreeTab(dir)
   let dir = fnamemodify(a:dir, ':p')
   let dir = substitute(dir, '/$', '', '')
   if !isdirectory(dir)
@@ -803,11 +803,13 @@ function! eclim#project#util#TreeTab(title, dir)
     endif
   endif
   let name = dir
+  let display = name
   if len(name) > 30
-    let name = fnamemodify(dir, ':t') . ': ' . dir
+    let display = fnamemodify(dir, ':t')
+    let name = display . ': ' . dir
   endif
   call eclim#common#util#Tcd(dir)
-  call eclim#project#tree#ProjectTreeOpen([name], [dir], a:title)
+  call eclim#project#tree#ProjectTreeOpen('Tree: ' . display, [name], [dir])
 endfunction " }}}
 
 " Todo() {{{

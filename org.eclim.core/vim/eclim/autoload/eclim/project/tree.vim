@@ -93,8 +93,12 @@ function! eclim#project#tree#ProjectTree(...)
   " for session reload
   let g:Eclim_project_tree_names = join(names, '|')
 
+  let display = len(names) == 1 ?
+    \ 'Project: ' . names[0] :
+    \ 'Projects: ' . join(names, ', ')
+
   call eclim#project#tree#ProjectTreeClose()
-  call eclim#project#tree#ProjectTreeOpen(names, dirs)
+  call eclim#project#tree#ProjectTreeOpen(display, names, dirs)
 endfunction " }}}
 
 function! eclim#project#tree#ProjectTreeToggle() " {{{
@@ -110,15 +114,10 @@ function! eclim#project#tree#ProjectTreeToggle() " {{{
   endif
 endfunction " }}}
 
-function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...) " {{{
+function! eclim#project#tree#ProjectTreeOpen(display, names, dirs) " {{{
   let expandDir = ''
   if g:EclimProjectTreeExpandPathOnOpen
     let expandDir = substitute(expand('%:p:h'), '\', '/', 'g')
-  endif
-
-  " support supplied tree name
-  if a:0 > 0 && a:1 != ''
-    let t:project_tree_name = a:1
   endif
 
   " see if we should just use a shared tree
@@ -171,6 +170,7 @@ function! eclim#project#tree#ProjectTreeOpen(names, dirs, ...) " {{{
   endtry
 
   setlocal bufhidden=hide
+  exec 'setlocal statusline=' . escape(a:display, ' ')
 
   if expand && expandDir != ''
     call eclim#util#DelayedCommand(

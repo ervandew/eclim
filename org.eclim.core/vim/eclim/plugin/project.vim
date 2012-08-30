@@ -167,7 +167,7 @@ if !exists(":ProjectTree")
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectTab :call eclim#project#util#ProjectTab('<args>')
   command! -nargs=1 -complete=dir TreeTab
-    \ :call eclim#project#util#TreeTab('', expand('<args>', ':p'))
+    \ :call eclim#project#util#TreeTab(expand('<args>', ':p'))
 endif
 
 if !exists(":ProjectCD")
