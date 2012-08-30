@@ -1,0 +1,6 @@
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} !^eclim.org$ [NC]
+RewriteRule ^(.*)$ http://eclim.org/$1 [L,R=301]

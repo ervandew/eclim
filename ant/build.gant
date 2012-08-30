@@ -445,6 +445,8 @@ target(name: 'docs'){
     fileset(dir: 'doc/content/images', includes: '**/*')
   }
 
+  copy(todir: 'build/doc/site', file: 'doc/content/.htaccess')
+
   echo(file: 'build/doc/site/google4c368e38cc6ac62e.html',
       'google-site-verification: google4c368e38cc6ac62e.html')
 
