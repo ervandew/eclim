@@ -267,7 +267,7 @@ function! eclim#java#util#UpdateSrcFile(validate)
         call eclim#display#signs#RemovePlaceholder()
       endif
 
-      call eclim#project#problems#ProblemsUpdate()
+      call eclim#project#problems#ProblemsUpdate('save')
     endif
   elseif a:validate
     call eclim#project#util#IsCurrentFileInProject()
