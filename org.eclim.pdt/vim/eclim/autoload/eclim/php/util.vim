@@ -76,7 +76,7 @@ function! eclim#php#util#UpdateSrcFile(validate)
       call eclim#util#ClearLocationList()
     endif
 
-    call eclim#project#problems#ProblemsUpdate()
+    call eclim#project#problems#ProblemsUpdate('save')
   elseif a:validate
     call eclim#project#util#IsCurrentFileInProject()
   endif
