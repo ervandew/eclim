@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,6 +30,9 @@ endfunction " }}}
 " TestComment() {{{
 function! TestComment()
   edit! src/org/eclim/test/doc/TestCommentVUnit.java
+  set shiftwidth=2
+  set tabstop=2
+  set expandtab
   call vunit#PeekRedir()
 
   call cursor(11, 3)
