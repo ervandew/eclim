@@ -92,11 +92,6 @@ To apply the above change you would hit <enter> on the line\:
 
   0.1227:  Add @SuppressWarnings 'serial' to 'Foo'
 
-.. note::
-
-  The code correction is done externally with Eclipse and with that comes a
-  couple :doc:`caveats </vim/gotchas>`.
-
 .. _\:Checkstyle:
 
 Checkstyle

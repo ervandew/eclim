@@ -69,12 +69,6 @@ settings.
     return abstractService;
   }
 
-.. note::
-
-  The formatting of the code is done externally with Eclipse and with
-  that comes a couple of :doc:`caveats </vim/gotchas>`.
-
-
 Configuration
 -------------
 

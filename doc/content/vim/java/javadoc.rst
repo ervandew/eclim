@@ -24,11 +24,6 @@ Commenting
 Eclim provides the **:JavaDocComment** command which will add or update the
 javadoc comments for the element under the cursor.
 
-.. note::
-
-  The insertion of javadoc comments is done externally with Eclipse and with
-  that comes a couple :doc:`caveats </vim/gotchas>`.
-
 .. _\:JavaDocSearch:
 
 Searching
