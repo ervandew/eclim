@@ -50,8 +50,8 @@ function! eclim#java#format#Format(first, last, typeDummy)
 
   let result = eclim#ExecuteEclim(command)
   if result != "0"
-    call eclim#util#RefreshFile()
-    silent retab
+    call eclim#util#ReloadRetab()
+    write
   endif
 endfunction " }}}
 

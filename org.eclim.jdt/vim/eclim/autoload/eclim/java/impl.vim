@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -231,11 +231,10 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
 
   call a:function(command)
 
-  exec winnr . "winc w"
-  call eclim#util#RefreshFile()
-  silent retab
-
-  exec impl_winnr . "winc w"
+  noautocmd exec winnr . "winc w"
+  call eclim#util#ReloadRetab()
+  write
+  noautocmd exec impl_winnr . "winc w"
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

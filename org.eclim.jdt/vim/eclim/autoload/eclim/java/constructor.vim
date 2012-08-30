@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -51,8 +51,8 @@ function! eclim#java#constructor#Constructor(first, last)
 
   let result = eclim#ExecuteEclim(command)
   if result != "0"
-    call eclim#util#RefreshFile()
-    silent retab
+    call eclim#util#ReloadRetab()
+    write
   endif
 endfunction " }}}
 
