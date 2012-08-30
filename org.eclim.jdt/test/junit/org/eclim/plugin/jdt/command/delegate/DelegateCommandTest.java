@@ -80,7 +80,7 @@ public class DelegateCommandTest
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public boolean add\\(Double \\w\\)\\s*\\{\n  " +
+        Pattern.compile("public boolean add\\(Double \\w\\)\\s*\\{\n" +
           "\\s+return list.add\\(\\w\\);")
         .matcher(contents).find());
 
