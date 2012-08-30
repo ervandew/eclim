@@ -16,11 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.correct;
 
-import java.text.Collator;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +39,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 
 import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
 
+import org.eclipse.jdt.ui.text.java.CompletionProposalComparator;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jdt.ui.text.java.IProblemLocation;
 import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
@@ -210,22 +208,8 @@ public class CodeCorrectCommand
         }
       }
     }
-    final Collator collator = Collator.getInstance();
-    Collections.sort(results, new Comparator<IJavaCompletionProposal>(){
-      public int compare(IJavaCompletionProposal p1, IJavaCompletionProposal p2){
-        int r1 = p1.getRelevance();
-        int r2 = p2.getRelevance();
-        if (r1 == r2){
-          // used as a determanistic tie breaker.
-          return collator.compare(p1.getDisplayString(), p2.getDisplayString());
-        }
-        // higher number is more relavant.
-        return r2 - r1;
-      }
-      public boolean equals(Object obj){
-        return false;
-      }
-    });
+
+    Collections.sort(results, new CompletionProposalComparator());
     return results;
   }
 
