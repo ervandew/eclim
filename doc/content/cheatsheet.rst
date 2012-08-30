@@ -23,69 +23,73 @@ reference.
 Global Commands
 ---------------
 
-- :ref:`:PingEclim` - Pings eclimd server.
-- :ref:`:ShutdownEclim` - Shuts down eclimd server.
-- :ref:`:EclimSettings` - View / edit global settings.
-- :ref:`:EclimDisable` - Temporarily disables communication with eclimd.
-- :ref:`:EclimEnable` - Re-enables communication with eclimd.
-- :ref:`:EclimHelp` [helptopic] - View eclim documentation in vim.
-- :ref:`:EclimHelpGrep` /regex/ - Search the eclim documentation in vim.
+- :ref:`:PingEclim <:PingEclim>` - Pings eclimd server.
+- :ref:`:ShutdownEclim <:ShutdownEclim>` - Shuts down eclimd server.
+- :ref:`:EclimSettings <:EclimSettings>` - View / edit global settings.
+- :ref:`:EclimDisable <:EclimDisable>` -
+  Temporarily disables communication with eclimd.
+- :ref:`:EclimEnable <:EclimEnable>` - Re-enables communication with eclimd.
+- :ref:`:EclimHelp <:EclimHelp>` [helptopic] - View eclim documentation in vim.
+- :ref:`:EclimHelpGrep <:EclimHelpGrep>` /regex/ -
+  Search the eclim documentation in vim.
 
 
 Project Commands
 ----------------
 
-- :ref:`:ProjectCreate`
+- :ref:`:ProjectCreate <:ProjectCreate>`
   <folder> [-p <project_name>] -n <nature> ... [-d <project_dependency> ...] -
   Create a new project.
-- :ref:`:ProjectImport` <folder> -
+- :ref:`:ProjectImport <:ProjectImport>` <folder> -
   Import a project from an existing eclipse project folder.
-- :ref:`:ProjectList` - List current projects.
-- :ref:`:ProjectSettings` [<project>] - View / edit project settings.
-- :ref:`:ProjectDelete` <project> - Delete a project.
-- :ref:`:ProjectRename` [<project>] <name> - Rename a project.
-- :ref:`:ProjectMove` [<project>] <dir> - Move a project.
-- :ref:`:ProjectRefresh` [<project> <project> ...] -
+- :ref:`:ProjectList <:ProjectList>` - List current projects.
+- :ref:`:ProjectSettings <:ProjectSettings>` [<project>] -
+  View / edit project settings.
+- :ref:`:ProjectDelete <:ProjectDelete>` <project> - Delete a project.
+- :ref:`:ProjectRename <:ProjectRename>` [<project>] <name> - Rename a project.
+- :ref:`:ProjectMove <:ProjectMove>` [<project>] <dir> - Move a project.
+- :ref:`:ProjectRefresh <:ProjectRefresh>` [<project> <project> ...] -
   Refresh supplied list of projects against the current files on disk.  If
   no project names supplied, refresh the current project.
-- :ref:`:ProjectRefreshAll` - Refresh all projects.
-- :ref:`:ProjectBuild` [<project>] - Build the current or supplied project.
-- :ref:`:ProjectInfo` [<project>] -
+- :ref:`:ProjectRefreshAll <:ProjectRefreshAll>` - Refresh all projects.
+- :ref:`:ProjectBuild <:ProjectBuild>` [<project>] -
+  Build the current or supplied project.
+- :ref:`:ProjectInfo <:ProjectInfo>` [<project>] -
   Echos info for the current or supplied project.
-- :ref:`:ProjectOpen` [<project>] - Opens a project.
-- :ref:`:ProjectClose` [<project>] - Closes a project.
-- :ref:`:ProjectNatures` [<project>] -
+- :ref:`:ProjectOpen <:ProjectOpen>` [<project>] - Opens a project.
+- :ref:`:ProjectClose <:ProjectClose>` [<project>] - Closes a project.
+- :ref:`:ProjectNatures <:ProjectNatures>` [<project>] -
   View the configured natures for one or all projects.
-- :ref:`:ProjectNatureAdd` <project> [<nature> ...] -
+- :ref:`:ProjectNatureAdd <:ProjectNatureAdd>` <project> [<nature> ...] -
   Add one or more natures to a project.
-- :ref:`:ProjectNatureRemove` <project> [<nature> ...] -
+- :ref:`:ProjectNatureRemove <:ProjectNatureRemove>` <project> [<nature> ...] -
   Remove one or more natures from a project.
-- :ref:`:ProjectProblems` [<project>] -
+- :ref:`:ProjectProblems <:ProjectProblems>` [<project>] -
   Populates vim's quickfix with all eclipse build errors and warnings for the
   current, or specified project, and all related projects.
-- :ref:`:ProjectCD` -
+- :ref:`:ProjectCD <:ProjectCD>` -
   Changes the global current working directory to the root directory of the
   current file's project (executes a :cd).
-- :ref:`:ProjectLCD` -
+- :ref:`:ProjectLCD <:ProjectLCD>` -
   Changes the current working directory of the current window to the root
   directory of the current file's project (executes a :lcd).
-- :ref:`:ProjectTree` [<project> <project> ...] -
+- :ref:`:ProjectTree <:ProjectTree>` [<project> <project> ...] -
   Opens navigable a tree for one or more projects.
-- :ref:`:ProjectsTree` - Opens a tree containing all projects.
-- :ref:`:ProjectTab` <project> - Opens a new tab containing the project tree
+- :ref:`:ProjectsTree <:ProjectsTree>` - Opens a tree containing all projects.
+- :ref:`:ProjectTab <:ProjectTab>` <project> - Opens a new tab containing the project tree
   and the tab local working directory set to the supplied project's root.
-- :ref:`:ProjectGrep` /<pattern>/ file_pattern [file_pattern ...] -
+- :ref:`:ProjectGrep <:ProjectGrep>` /<pattern>/ file_pattern [file_pattern ...] -
   Issues a vimgrep starting at the root of the current project.
-- :ref:`:ProjectGrepAdd` /<pattern>/ file_pattern [file_pattern ...] -
+- :ref:`:ProjectGrepAdd <:ProjectGrepAdd>` /<pattern>/ file_pattern [file_pattern ...] -
   Issues a vimgrepadd starting at the root of the current project.
-- :ref:`:ProjectLGrep` /<pattern>/ file_pattern [file_pattern ...] -
+- :ref:`:ProjectLGrep <:ProjectLGrep>` /<pattern>/ file_pattern [file_pattern ...] -
   Issues a lvimgrep starting at the root of the current project.
-- :ref:`:ProjectLGrepAdd` /<pattern>/ file_pattern [file_pattern ...] -
+- :ref:`:ProjectLGrepAdd <:ProjectLGrepAdd>` /<pattern>/ file_pattern [file_pattern ...] -
   Issues a lvimgrepadd starting at the root of the current project.
-- :ref:`:ProjectTodo` -
+- :ref:`:ProjectTodo <:ProjectTodo>` -
   Searches project files for todo / fixme patterns and adds them to the
   location list.
-- :ref:`:Todo` -
+- :ref:`:Todo <:Todo>` -
   Searches the current file for todo / fixme patterns and adds them to the
   location list.
 
@@ -103,8 +107,8 @@ Android Commands
 Ant Commands
 ------------
 
-- :ref:`:Ant` [<target> ...] - Execute ant from the current project.
-- :ref:`:AntDoc` [<element>] -
+- :ref:`:Ant <:Ant>` [<target> ...] - Execute ant from the current project.
+- :ref:`:AntDoc <:AntDoc>` [<element>] -
   Find and open the documentation for the element under the cursor or the
   element supplied as an argument.
 - :ref:`:Validate <:Validate_ant>` - Validate the current ant build file.
@@ -116,7 +120,7 @@ C/C++ Commands
 - :ref:`:Validate <:Validate_c>` - Validate the current file.
 - :ref:`:CSearch <:CSearch>` [-p <pattern> -t <type> -s <scope> -x <context>] -
   Search for classes, functions, methods, macros, etc.
-- :ref:`:CSearchContext` -
+- :ref:`:CSearchContext <:CSearchContext>` -
   Find the element under the cursor based on its context.
 - :ref:`:CProjectConfigs <:CProjectConfigs>` [project] -
   Open a temp buffer to view/modify the current projects cdt configurations.
@@ -140,7 +144,8 @@ Html Commands
 -----------------
 
 - :ref:`:Validate <:Validate_html>` - Validate the current file.
-- :ref:`:BrowserOpen` - Opens the current file in your configured browser.
+- :ref:`:BrowserOpen <:BrowserOpen>` -
+  Opens the current file in your configured browser.
 
 
 Ivy Commands
@@ -158,16 +163,17 @@ Ivy Commands
 Java Commands
 -----------------
 
-- :ref:`:JavaGet` - Create a java bean getter method.
-- :ref:`:JavaSet` - Create a java bean setter method.
-- :ref:`:JavaGetSet` - Create both a java bean getter and setter method.
-- :ref:`:JavaConstructor` -
+- :ref:`:JavaGet <:JavaGet>` - Create a java bean getter method.
+- :ref:`:JavaSet <:JavaSet>` - Create a java bean setter method.
+- :ref:`:JavaGetSet <:JavaGetSet>` -
+  Create both a java bean getter and setter method.
+- :ref:`:JavaConstructor <:JavaConstructor>` -
   Creates class constructor, either empty or based on selected class fields.
-- :ref:`:JavaHierarchy` - View the type hierarchy tree.
-- :ref:`:JavaImpl` -
+- :ref:`:JavaHierarchy <:JavaHierarchy>` - View the type hierarchy tree.
+- :ref:`:JavaImpl <:JavaImpl>` -
   View implementable / overridable methods from super classes and implemented
   interfaces.
-- :ref:`:JavaDelegate` -
+- :ref:`:JavaDelegate <:JavaDelegate>` -
   View list of methods that delegate to the field under the cursor.
 - :ref:`:JUnitImpl <:JUnitImpl>` -
   Similar to **:JavaImpl**, but creates test methods.
@@ -175,15 +181,16 @@ Java Commands
   Allows you to execute test cases in your favorite build tool.
 - :ref:`:JUnitResult <:JUnitResult>` [testcase] -
   Allows you to view the results of a test case.
-- :ref:`:JavaImport` - Import the class under the cursor.
-- :ref:`:JavaImportMissing` - Import all undefined types.
+- :ref:`:JavaImport <:JavaImport>` - Import the class under the cursor.
+- :ref:`:JavaImportMissing <:JavaImportMissing>` - Import all undefined types.
 - :ref:`:JavaSearch <:JavaSearch>`
   [-p <pattern>] [-t <type>] [-x <context>] [-s <scope>] -
   Search for classes, methods, fields, etc.  (With pattern supplied, searches
   for the element under the cursor).
-- :ref:`:JavaSearchContext` -
+- :ref:`:JavaSearchContext <:JavaSearchContext>` -
   Perform a context sensitive search for the element under the cursor.
-- :ref:`:JavaCorrect` - Suggest possible corrections for a source error.
+- :ref:`:JavaCorrect <:JavaCorrect>` -
+  Suggest possible corrections for a source error.
 - :ref:`:JavaDocSearch <:JavaDocSearch>` -
   Search for javadocs.  Same usage as **:JavaSearch**.
 - :ref:`:JavaDocComment <:JavaDocComment>` -
@@ -200,9 +207,9 @@ Java Commands
 - :ref:`:Javadoc <:Javadoc>` [file, file, ...] -
   Executes the javadoc utility against all or just the supplied source files.
 - :ref:`:JavaListInstalls <:JavaListInstalls>` - List known JDK/JRE installs.
-- :ref:`:JavaFormat` - Formats java source code.
-- :ref:`:Checkstyle` - Invokes checkstyle on the current file.
-- :ref:`:Jps` -
+- :ref:`:JavaFormat <:JavaFormat>` - Formats java source code.
+- :ref:`:Checkstyle <:Checkstyle>` - Invokes checkstyle on the current file.
+- :ref:`:Jps <:Jps>` -
   Opens window with information about the currently running java processes.
 - :ref:`:Validate <:Validate_java>` - Manually runs source code validation.
 
@@ -210,15 +217,18 @@ Java Commands
 Java .classpath Commands
 ------------------------
 
-- :ref:`:NewSrcEntry` <dir> [<dir> ...] - Add a new source dir entry.
-- :ref:`:NewProjectEntry` <project> [<project> ...] - Add a new project entry.
-- :ref:`:NewJarEntry` <file> [<file> ...] - Add a jar entry.
-- :ref:`:NewVarEntry` <VAR/file> [<VAR/file> ...] - Add a new var entry.
-- :ref:`:VariableList`
+- :ref:`:NewSrcEntry <:NewSrcEntry>` <dir> [<dir> ...] -
+  Add a new source dir entry.
+- :ref:`:NewProjectEntry <:NewProjectEntry>` <project> [<project> ...] -
+  Add a new project entry.
+- :ref:`:NewJarEntry <:NewJarEntry>` <file> [<file> ...] - Add a jar entry.
+- :ref:`:NewVarEntry <:NewVarEntry>` <VAR/file> [<VAR/file> ...] -
+  Add a new var entry.
+- :ref:`:VariableList <:VariableList>`
   List available classpath variables and their corresponding values.
-- :ref:`:VariableCreate` <name> <path> -
+- :ref:`:VariableCreate <:VariableCreate>` <name> <path> -
   Creates or updates the variable with the supplied name.
-- :ref:`:VariableDelete` <name> -
+- :ref:`:VariableDelete <:VariableDelete>` <name> -
   Deletes the variable with the supplied name.
 
 
@@ -238,19 +248,20 @@ Log4j Commands
 Maven Commands
 -----------------
 
-- :ref:`:Maven` [<goal> ...] - Execute maven 1.x from the current project.
-- :ref:`:Mvn` [<goal> ...] - Execute maven 2.x from the current project.
+- :ref:`:Maven <:Maven>` [<goal> ...] -
+  Execute maven 1.x from the current project.
+- :ref:`:Mvn <:Mvn>` [<goal> ...] - Execute maven 2.x from the current project.
 - :ref:`:MavenRepo <:MavenRepo>` -
   Sets the necessary MAVEN_REPO classpath variable for maven's (1.x) eclipse
   support.
 - :ref:`:MvnRepo <:MvnRepo>` -
   Sets the necessary M2_REPO classpath variable for maven's (2.x) eclipse
   support.
-- :ref:`:MavenDependencySearch` <artifact> -
+- :ref:`:MavenDependencySearch <:MavenDependencySearch>` <artifact> -
   Searches online repository and opens a window with results that can be
   added to the current project file by hitting <Enter> on a result.
   Available when editing a maven 1.x ``project.xml`` file.
-- :ref:`:MvnDependencySearch` <artifact> -
+- :ref:`:MvnDependencySearch <:MvnDependencySearch>` <artifact> -
   Searches online repository and opens a window with results that can be
   added to the current pom file by hitting <Enter> on a result.
   Available when editing a maven 2.x ``pom.xml`` file.
@@ -262,7 +273,7 @@ Php Commands
 - :ref:`:PhpSearch <:PhpSearch>`
   [-p <pattern> -t <type> -s <scope> -x <context>] -
   Search for classes, methods, and constants.
-- :ref:`:PhpSearchContext` -
+- :ref:`:PhpSearchContext <:PhpSearchContext>` -
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_php>` - Manually runs source code validation.
 
@@ -272,23 +283,23 @@ Python Commands
 
 - :ref:`:PythonFindDefinition <:PythonFindDefinition>` -
   Find the element under the cursor.
-- :ref:`:PythonSearchContext` -
+- :ref:`:PythonSearchContext <:PythonSearchContext>` -
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_python>` - Validates the current file using pyflakes_.
-- :ref:`:PyLint` - Runs pylint_ on the current file.
+- :ref:`:PyLint <:PyLint>` - Runs pylint_ on the current file.
 - :ref:`:DjangoManage <:DjangoManage>` -
   Invokes django's manage.py from any file in the same directory as your
   manage.py or in any of the child directories.
-- :ref:`:DjangoFind` -
+- :ref:`:DjangoFind <:DjangoFind>` -
   Available when editing a django html template file.  Finds tag/filter
   definition, other template files, and static files.
-- :ref:`:DjangoTemplateOpen` -
+- :ref:`:DjangoTemplateOpen <:DjangoTemplateOpen>` -
   Available when editing a python file.  Finds the template referenced under
   the cursor.
-- :ref:`:DjangoViewOpen` -
+- :ref:`:DjangoViewOpen <:DjangoViewOpen>` -
   Available when editing a python file.  When within a django url patterns
   definition, finds the view referenced under the cursor.
-- :ref:`:DjangoContextOpen` -
+- :ref:`:DjangoContextOpen <:DjangoContextOpen>` -
   Available when editing a python file.  Executes **:DjangoViewOpen**,
   **:DjangoTemplateOpen**, or **:PythonSearchContext** depending on the
   context of the text under the cursor.
@@ -300,7 +311,7 @@ Ruby Commands
 - :ref:`:RubySearch <:RubySearch>`
   [-p <pattern> -t <type> -s <scope> -x <context>] -
   Search for modules, classes, methods, etc.
-- :ref:`:RubySearchContext` -
+- :ref:`:RubySearchContext <:RubySearchContext>` -
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_ruby>` - Manually runs source code validation.
 
@@ -314,10 +325,10 @@ WebXml Commands
 Xml Commands
 -----------------
 
-- :ref:`:DtdDefinition` [<element>] -
+- :ref:`:DtdDefinition <:DtdDefinition>` [<element>] -
   Open the current xml file's dtd and jump to the element definition if
   supplied.
-- :ref:`:XsdDefinition` [<element>] -
+- :ref:`:XsdDefinition <:XsdDefinition>` [<element>] -
   Open the current xml file's xsd and jump to the element definition if
   supplied.
 - :ref:`:Validate <:Validate_xml>` [<file>] -
@@ -334,40 +345,42 @@ Xsd Commands
 Misc. Commands
 -----------------
 
-- :ref:`:LocateFile` [file] -
+- :ref:`:LocateFile <:LocateFile>` [file] -
   Locates a relative file and opens it.
-- :ref:`:Tcd` dir -
+- :ref:`:Tcd <:Tcd>` dir -
   Like :lcd but sets the tab's local working directory.
-- :ref:`:DiffLastSaved` -
+- :ref:`:DiffLastSaved <:DiffLastSaved>` -
   Performs a diffsplit with the last saved version of the currently modifed
   file.
-- :ref:`:SwapWords` -
-  Swaps two words (with cursor placed on the first word).  Supports swapping
+- :ref:`:SwapWords <:SwapWords>` -
+  Swaps two words (with cursor placed on the first word). Supports swapping
   around non-word characters like commas, periods, etc.
-- :ref:`:Sign` - Toggles adding or removing a vim sign on the current line.
-- :ref:`:Signs` -
+- :ref:`:Sign <:Sign>` -
+  Toggles adding or removing a vim sign on the current line.
+- :ref:`:Signs <:Signs>` -
   Opens a new window containing a list of signs for the current buffer.
-- :ref:`:SignClearUser` - Removes all vim signs added via :Sign.
-- :ref:`:SignClearAll` - Removes all vim signs.
-- :ref:`:QuickFixClear` -
+- :ref:`:SignClearUser <:SignClearUser>` -
+  Removes all vim signs added via :Sign.
+- :ref:`:SignClearAll <:SignClearAll>` - Removes all vim signs.
+- :ref:`:QuickFixClear <:QuickFixClear>` -
   Removes all entries from the quick fix window.
-- :ref:`:LocationListClear` -
+- :ref:`:LocationListClear <:LocationListClear>` -
   Removes all entries from the location list window.
-- :ref:`:Buffers` -
+- :ref:`:Buffers <:Buffers>` -
   Opens a temporary window with a list of all the currently listed
   buffers, allowing you to open or remove them.
-- :ref:`:BuffersToggle` -
+- :ref:`:BuffersToggle <:BuffersToggle>` -
   Opens the buffers window if not open, otherwise closes it.
-- :ref:`:Only` -
+- :ref:`:Only <:Only>` -
   Closes all but the current window and any windows excluded by
   **g:EclimOnlyExclude**.
-- :ref:`:History` -
+- :ref:`:History <:History>` -
   View the local history entries for the current file.
-- :ref:`:HistoryClear` -
+- :ref:`:HistoryClear <:HistoryClear>` -
   Clear the local history entries for the current file.
-- :ref:`:HistoryDiffNext` -
+- :ref:`:HistoryDiffNext <:HistoryDiffNext>` -
   Diff the current file against the next entry in the history stack.
-- :ref:`:HistoryDiffPrev` -
+- :ref:`:HistoryDiffPrev <:HistoryDiffPrev>` -
   Diff the current file against the previous entry in the history stack.
 - :ref:`:OpenUrl <:OpenUrl>` [url] - Opens a url in your configured web browser.
 
