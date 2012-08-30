@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ import org.eclim.util.IOUtils;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
@@ -298,11 +299,23 @@ public class CommentCommand
     @SuppressWarnings("unchecked")
     List<TagElement> tags = javadoc.tags();
     IMethod method = (IMethod)element;
+    IType type = method.getDeclaringType();
+
+    boolean hasOverride = false;
+    IAnnotation[] annotations = method.getAnnotations();
+    for (IAnnotation annotation : annotations){
+      for (String[] result : type.resolveType(annotation.getElementName())){
+        if (result[0].equals("java.lang") && result[1].equals("Override")){
+          hasOverride = true;
+          break;
+        }
+      }
+    }
 
     if(isNew){
       // see if method is overriding / implementing method from superclass
       IType parentType = null;
-      TypeInfo[] types = TypeUtils.getSuperTypes(method.getDeclaringType());
+      TypeInfo[] types = TypeUtils.getSuperTypes(type);
       for (TypeInfo info : types){
         if(MethodUtils.containsMethod(info, method)){
           parentType = info.getType();
@@ -312,16 +325,17 @@ public class CommentCommand
 
       // if an inherited method, add inheritDoc and @see
       if(parentType != null){
-        addTag(javadoc, tags.size(), null, INHERIT_DOC);
+        if (!hasOverride){
+          addTag(javadoc, tags.size(), null, INHERIT_DOC);
 
-        String typeName =
-          JavaUtils.getCompilationUnitRelativeTypeName(src, parentType);
+          String typeName =
+            JavaUtils.getCompilationUnitRelativeTypeName(src, parentType);
 
-        StringBuffer signature = new StringBuffer();
-        signature.append(typeName)
-          .append('#').append(MethodUtils.getMinimalMethodSignature(method, null));
-        addTag(javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
-        return;
+          StringBuffer signature = new StringBuffer();
+          signature.append(typeName)
+            .append('#').append(MethodUtils.getMinimalMethodSignature(method, null));
+          addTag(javadoc, tags.size(), TagElement.TAG_SEE, signature.toString());
+        }
       }else{
         addTag(javadoc, tags.size(), null, null);
         addTag(javadoc, tags.size(), null, null);
@@ -332,8 +346,7 @@ public class CommentCommand
     boolean update = true;
     for (TagElement tag : tags){
       if(tag.getTagName() == null && tag.fragments().size() > 0){
-        String text = ((TextElement)tag.fragments().get(0)).getText();
-        if(INHERIT_DOC.equals(text)){
+        if(INHERIT_DOC.equals(tag.fragments().get(0).toString())){
           update = false;
           break;
         }
