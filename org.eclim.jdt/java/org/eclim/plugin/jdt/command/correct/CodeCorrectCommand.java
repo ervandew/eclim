@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.jdt.command.correct;
 
-import java.lang.reflect.Field;
-
 import java.text.Collator;
 
 import java.util.ArrayList;
@@ -45,17 +43,10 @@ import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
 
 import org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal;
-import org.eclipse.jdt.internal.ui.text.correction.proposals.CorrectPackageDeclarationProposal;
 
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jdt.ui.text.java.IProblemLocation;
 import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
-
-import org.eclipse.ltk.core.refactoring.TextChange;
-
-import org.eclipse.text.edits.MultiTextEdit;
-import org.eclipse.text.edits.ReplaceEdit;
-import org.eclipse.text.edits.TextEdit;
 
 /**
  * Handles requests for code correction.
@@ -214,24 +205,6 @@ public class CodeCorrectCommand
               continue;
             }
 
-            // hack to fix off by one issue w/ package correction proposal
-            if (cuProposal instanceof CorrectPackageDeclarationProposal){
-              TextChange change = cuProposal.getTextChange();
-              TextEdit edit = change.getEdit();
-              if (edit instanceof MultiTextEdit){
-                Field fChildren = TextEdit.class.getDeclaredField("fChildren");
-                fChildren.setAccessible(true);
-                @SuppressWarnings("unchecked")
-                List<TextEdit> children = (List<TextEdit>)fChildren.get(edit);
-                edit = children.get(children.size() - 1);
-              }
-              // the InsertEdit version is fine, the ReplaceEdit is off by one.
-              if (edit instanceof ReplaceEdit){
-                Field flength = TextEdit.class.getDeclaredField("fLength");
-                flength.setAccessible(true);
-                flength.setInt(edit, edit.getLength() + 1);
-              }
-            }
             results.add(cuProposal);
           }
         }
