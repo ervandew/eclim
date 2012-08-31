@@ -24,10 +24,6 @@ import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
 
-import java.io.BufferedInputStream;
-
-import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -36,9 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -58,18 +51,14 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
-
-import org.eclim.installer.URLProgressInputStream;
 
 import org.eclim.installer.step.command.Command;
 import org.eclim.installer.step.command.InstallCommand;
+import org.eclim.installer.step.command.ListCommand;
 import org.eclim.installer.step.command.OutputHandler;
 
 import org.eclim.installer.theme.DesertBlue;
@@ -79,11 +68,6 @@ import org.formic.Installer;
 import org.formic.util.dialog.gui.GuiDialogs;
 
 import org.formic.wizard.step.gui.InstallStep;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import org.xml.sax.helpers.DefaultHandler;
 
 import com.jgoodies.looks.plastic.PlasticTheme;
 
@@ -188,11 +172,6 @@ public class EclipsePluginsStep
       dependencies = unsatisfiedDependencies(info);
 
       if (dependencies.size() > 0){
-        // load up available features from the primary update site.
-        overallProgress.setMaximum(2);
-        overallLabel.setText(
-            "Loading available features from the primary update site...");
-
         Map<String,String> availableFeatures =
           loadAvailableFeatures(info.getPrimaryUpdateSite());
 
@@ -318,77 +297,49 @@ public class EclipsePluginsStep
     return deps;
   }
 
+  @SuppressWarnings("unchecked")
   private Map<String,String> loadAvailableFeatures(final String updateSite)
     throws Exception
   {
+    // load up available features from update sites.
+    overallProgress.setMaximum(1);
+    overallLabel.setText("Loading available features from update sites...");
+
     return (Map<String,String>)Worker.post(new foxtrot.Task(){
       public Object run()
         throws Exception
       {
-        final Map<String,String> availableFeatures = new HashMap<String,String>();
-        BufferedInputStream in = null;
-        SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-
-        // download compositeContent.jar to determine location on content.jar
-        final String[] location = new String[1];
-        try{
-          overallProgress.setValue(0);
-          System.out.println("Downloading compositeContent.jar");
-          taskLabel.setText("Downloading compositeContent.jar");
-          in = new BufferedInputStream(
-              new URLProgressInputStream(
-                taskProgress,
-                new URL(updateSite + "compositeContent.jar").openConnection()));
-
-          JarInputStream jin = new JarInputStream(in);
-          JarEntry entry = jin.getNextJarEntry();
-          while (!entry.getName().equals("compositeContent.xml")){
-            entry = jin.getNextJarEntry();
-          }
-          parser.parse(jin, new DefaultHandler(){
-            public void startElement(
-                String uri, String localName, String qName, Attributes attributes)
-              throws SAXException
-            {
-              if(qName.equals("child")){
-                location[0] = attributes.getValue("location");
-              }
+        ArrayList<String> sites = new ArrayList<String>();
+        for (Dependency dependency : dependencies){
+          for (String site : dependency.getSites()){
+            if(!sites.contains(site)){
+              sites.add(site);
             }
-          });
-        }finally{
-          IOUtils.closeQuietly(in);
+          }
         }
 
-        try{
-          overallProgress.setValue(1);
-          System.out.println("Downloading " + location[0] + "/content.jar");
-          taskLabel.setText("Downloading " + location[0] + "/content.jar");
-          in = new BufferedInputStream(
-              new URLProgressInputStream(taskProgress, new URL(
-                  updateSite + location[0] + "/content.jar").openConnection()));
-
-          JarInputStream jin = new JarInputStream(in);
-          JarEntry entry = jin.getNextJarEntry();
-          while (!entry.getName().equals("content.xml")){
-            entry = jin.getNextJarEntry();
-          }
-          parser.parse(jin, new DefaultHandler(){
-            public void startElement(
-                String uri, String localName, String qName, Attributes attributes)
-              throws SAXException
-            {
-              if(qName.equals("unit")){
-                String id = attributes.getValue("id");
-                if (id.endsWith(".feature.group")){
-                  String version = attributes.getValue("version");
-                  String name = id.substring(0, id.length() - 14);
-                  availableFeatures.put(name, version);
-                }
-              }
+        final Map<String,String> availableFeatures = new HashMap<String,String>();
+        OutputHandler handler = new OutputHandler(){
+          public void process(String line){
+            String[] parts = StringUtils.split(line, "=");
+            if (parts.length == 2 && parts[0].endsWith(".feature.group")){
+              availableFeatures.put(
+                parts[0].replace(".feature.group", ""), parts[1]);
             }
-          });
+          }
+        };
+        Command command = new ListCommand(
+          handler, sites.toArray(new String[sites.size()]));
+        try{
+          command.start();
+          command.join();
+          if(command.getReturnCode() != 0){
+            throw new RuntimeException(
+                "error: " + command.getErrorMessage() +
+                " out: " + command.getResult());
+          }
         }finally{
-          IOUtils.closeQuietly(in);
+          command.destroy();
         }
         return availableFeatures;
       }

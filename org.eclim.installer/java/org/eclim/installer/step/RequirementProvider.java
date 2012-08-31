@@ -162,7 +162,7 @@ public class RequirementProvider
 
     public String versionFromPlugins(String eclipseHome)
     {
-      final String[] plugins = {"org.eclipse.osgi", "org.eclipse.swt"};
+      final String[] plugins = {"org.eclipse.platform"};
       File file = new File(eclipseHome + "/plugins");
       String[] names = file.list(new FilenameFilter(){
         public boolean accept(File dir, String name){

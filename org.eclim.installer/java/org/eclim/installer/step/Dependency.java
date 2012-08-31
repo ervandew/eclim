@@ -16,24 +16,9 @@
  */
 package org.eclim.installer.step;
 
-import java.io.BufferedInputStream;
-
-import java.net.URL;
-
 import java.util.Map;
 
-import java.util.regex.Matcher;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.commons.io.IOUtils;
-
 import org.apache.commons.lang.StringUtils;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public class Dependency
 {
@@ -83,6 +68,11 @@ public class Dependency
     return upgrade;
   }
 
+  public String[] getSites()
+  {
+    return this.sites;
+  }
+
   public Feature getFeature()
   {
     return feature;
@@ -127,50 +117,12 @@ public class Dependency
   private String[] findUrlVersion(Map<String,String> availableFeatures)
     throws Exception
   {
-    DocumentBuilder builder =
-      DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    String resolvedUrl = null;
-    String resolvedVersion = null;
     for(int ii = 0; ii < sites.length; ii++){
       if(sites[ii].equals(primaryUpdateSite)){
         if(availableFeatures.containsKey(this.id)){
           String version = (String)availableFeatures.get(this.id);
           return new String[]{primaryUpdateSite, version};
         }
-      }
-
-      BufferedInputStream in = null;
-      try{
-        in = new BufferedInputStream(
-            new URL(sites[ii] + "site.xml").openStream());
-        Document document = builder.parse(in);
-        NodeList nodes = document.getElementsByTagName("feature");
-        for(int jj = 0; jj < nodes.getLength(); jj++){
-          Element feature = (Element)nodes.item(jj);
-          if (this.id.equals(feature.getAttribute("id"))){
-            String fv = feature.getAttribute("version");
-            Matcher matcher = Feature.VERSION.matcher(fv);
-            matcher.find();
-            fv = matcher.group(1);
-
-            int result = -1;
-            if(resolvedVersion == null){
-              result = compareVersions(this.version, fv);
-            }else{
-              result = compareVersions(resolvedVersion, fv);
-            }
-            if (result >= 0){
-              resolvedUrl = sites[ii];
-              resolvedVersion = feature.getAttribute("version");
-            }
-          }
-        }
-
-        if(resolvedUrl != null){
-          return new String[]{resolvedUrl, resolvedVersion};
-        }
-      }finally{
-        IOUtils.closeQuietly(in);
       }
     }
     return new String[]{null, null};
