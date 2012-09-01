@@ -17,27 +17,43 @@ History of Changes
 ==================
 
 .. _2.2.1:
+.. _1.7.8:
 
-2.2.1 (Aug. XX, 2012)
-----------------------
+2.2.1 / 1.7.8 (Sep. 01, 2012)
+-----------------------------
+
+Documentation:
+  - Redesigned the eclim website using the
+    `sphinx bootstrap theme <https://github.com/ervandew/sphinx-bootstrap-theme>`_.
+  - Reorganized many of the docs to consolidate similar features to hopefully
+    make them easier to find and make the docs less sprawling.
+  - Improved the translation of the docs to vim help files.
 
 Android:
   - Eclim now has support for :ref:`creating android projects
     <gettingstarted-android>`.
 
+Java:
+  - Fixed searching for JDK classes on OSX.
+  - Added support for searching for inner classes and their methods.
+  - Fixed remaining tab vs spaces indenting related issues with code added via
+    eclipse.
+
+Vimplugin:
+  - Fixed disabling of conflicting Eclipse keybindings on Juno while the
+    embedded vim has focus (fixes usage of Ctrl+V for blockwise visual
+    selections).
+
 .. _2.2.0:
-
-2.2.0 (Aug. 07, 2012)
-----------------------
-
-Eclipse:
-  - Eclim now requires Java 6 or later.
-  - Eclim now requires the latest version of eclipse (Juno, 4.2).
-
 .. _1.7.7:
 
-1.7.7 (Aug. 07, 2012)
-----------------------
+2.2.0 / 1.7.7 (Aug. 07, 2012)
+-----------------------------
+
+Eclipse:
+  - Eclim 2.2.0 and above now requires Java 6 or later.
+  - Eclim 2.2.0 and above now requires the latest version of eclipse (Juno,
+    4.2).
 
 Eclimd:
   - Updated eclimd script to always set the jvm architecture argument,

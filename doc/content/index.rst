@@ -105,6 +105,19 @@ How do I report a bug?
 What's New?
 ===========
 
+2012-09-01
+----------
+
+Another set of releases are now available for both Juno and Indigo. These both
+include several bug fixes along with new support for creating android projects.
+
+- :ref:`Eclim 2.2.1 <2.2.1>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.8 <1.7.8>` for Eclipse 3.7 (Indigo).
+
+Eclim also has a newly redesigned site using the
+`sphinx bootstrap theme <https://github.com/ervandew/sphinx-bootstrap-theme>`_.
+
+
 2012-08-07
 ----------
 
