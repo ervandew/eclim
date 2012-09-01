@@ -178,7 +178,7 @@ function! eclim#display#window#GetWindowOptions(winnum)
 
   let list = substitute(list, '---.\{-}---', '', '')
   let winopts = {}
-  for wopt in split(list, '\_s\+')[1:]
+  for wopt in split(list, '\(\n\|\s\s\+\)')[1:]
     if wopt =~ '^[a-z]'
       if wopt =~ '='
         let key = substitute(wopt, '\(.\{-}\)=.*', '\1', '')
@@ -203,7 +203,7 @@ function! eclim#display#window#SetWindowOptions(winnum, options)
       if key =~ '^no'
         silent! exec 'setlocal ' . key
       else
-        silent! exec 'setlocal ' . key . '=' . a:options[key]
+        silent! exec 'setlocal ' . key . '=' . escape(a:options[key], ' ')
       endif
     endfor
   finally
