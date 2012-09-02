@@ -1,5 +1,9 @@
 {% extends "!layout.html" %}
 
+{% block extrahead %}
+  <link rel="stylesheet" type="text/css" href="{{ pathto('_static/docs.css', 1) }}" />
+{% endblock %}
+
 {% block header %}
   {{ super() }}
   <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>

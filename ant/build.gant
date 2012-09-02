@@ -445,6 +445,10 @@ target(name: 'docs'){
   copy(todir: 'build/doc/site/_images'){
     fileset(dir: 'doc/content/images', includes: '**/*')
   }
+  // copy over any statics that sphinx neglects to
+  copy(todir: 'build/doc/site/_static'){
+    fileset(dir: 'doc/content/static', includes: '**/*')
+  }
 
   copy(todir: 'build/doc/site', file: 'doc/content/.htaccess')
 
