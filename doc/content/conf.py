@@ -32,9 +32,11 @@ extensions = [
   'sphinx.ext.extlinks',
   'sphinxcontrib.plantuml',
   'eclim.sphinx.vimdoc',
+  'eclim.sphinx.rss',
 ]
 
 plantuml = 'java -jar %s/extension/plantuml.jar' % os.path.dirname(path)
+rss_baseurl = 'http://eclim.org'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['../template']
@@ -143,7 +145,7 @@ html_title = 'eclim (eclipse + vim)'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-#html_style = 'eclimdoc.css'
+#html_style = 'basic.css'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

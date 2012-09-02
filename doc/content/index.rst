@@ -105,6 +105,15 @@ How do I report a bug?
 What's New?
 ===========
 
+.. image:: images/rss.png
+   :target: index.rss
+   :alt: Rss Feed for What's New
+
+.. rss::
+   :title: Eclim: What's New
+   :description: Latest news for eclim (eclipse + vim).
+   :end-before: end-rss
+
 2012-09-01
 ----------
 
@@ -160,6 +169,8 @@ Indigo.
    old format isn't going to work. So if you are installing eclim for use with
    a client other than vim, then be sure to check with the client project to
    see if it has been updated for eclim 1.7.3 or later.
+
+.. end-rss
 
 :doc:`/archive/news`
 
