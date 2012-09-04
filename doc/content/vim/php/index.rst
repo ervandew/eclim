@@ -20,6 +20,7 @@ Features
 --------
 
 .. toctree::
+   :maxdepth: 1
 
    buildpath
    complete

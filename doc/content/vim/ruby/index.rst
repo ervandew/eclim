@@ -17,6 +17,7 @@ Ruby
 =====
 
 .. toctree::
+   :maxdepth: 1
 
    buildpath
    complete
