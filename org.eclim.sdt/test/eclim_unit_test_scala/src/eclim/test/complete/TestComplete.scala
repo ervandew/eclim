@@ -1,4 +1,4 @@
-package eclim.test
+package eclim.test.complete
 
 import eclim.test.{TestJava, TestScala}
 

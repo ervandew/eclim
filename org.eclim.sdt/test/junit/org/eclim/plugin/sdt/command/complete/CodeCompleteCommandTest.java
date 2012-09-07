@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ public class CodeCompleteCommandTest
       Eclim.execute(new String[]{
         "scala_complete", "-p", Sdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "141", "-e", "utf-8", "-l", "standard"
+        "-o", "150", "-e", "utf-8", "-l", "standard"
       });
 
     assertTrue("Wrong number of results.", results.size() > 3);
@@ -85,7 +85,7 @@ public class CodeCompleteCommandTest
       Eclim.execute(new String[]{
         "scala_complete", "-p", Sdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "204", "-e", "utf-8", "-l", "standard"
+        "-o", "213", "-e", "utf-8", "-l", "standard"
       });
 
     assertEquals("Wrong number of results.", 3, results.size());

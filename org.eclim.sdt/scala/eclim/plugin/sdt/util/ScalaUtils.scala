@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2012 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.sdt.util;
+package eclim.plugin.sdt.util
 
-import org.apache.commons.lang.StringUtils;
+import org.eclim.plugin.jdt.util.JavaUtils
 
-import org.eclim.plugin.jdt.util.JavaUtils;
-
-import org.eclipse.jdt.core.BufferChangedEvent;
-
-import scala.tools.eclipse.javaelements.ScalaSourceFile;
+import scala.tools.eclipse.javaelements.ScalaSourceFile
 
 /**
  * Utility methods for working with scala files / projects.
  *
  * @author Eric Van Dewoestine
  */
-public class ScalaUtils
+object ScalaUtils
 {
   /**
    * Gets a scala source file from the specified project.
@@ -38,26 +34,20 @@ public class ScalaUtils
    * @param file The file to find.
    * @return A ScalaSourceFile instance
    */
-  public static ScalaSourceFile getSourceFile(String project, String file)
-    throws Exception
-  {
-    ScalaSourceFile src = (ScalaSourceFile)
-      JavaUtils.getCompilationUnit(project, file);
-    refreshSourceFile(src);
-    return src;
+  def getSourceFile(project : String, file : String) : ScalaSourceFile = {
+    val cu = JavaUtils.getCompilationUnit(project, file)
+    cu match {
+      case src: ScalaSourceFile => refreshSourceFile(src)
+    }
   }
 
-  public static void refreshSourceFile(ScalaSourceFile src)
-    throws Exception
-  {
-    if (src == null){
-      return;
+  /**
+   * Refresh the given source file.
+   */
+  def refreshSourceFile(src : ScalaSourceFile) : ScalaSourceFile = {
+    if (src != null){
+      src.project.doWithPresentationCompiler(_.askReload(src, src.getContents))
     }
-
-    // without writing scala code, this is the easiest way to force the source
-    // file to be run through the scala compiler.
-    // TODO: implement this in scala to permit a more direct parsing of the file.
-    src.bufferChanged(new BufferChangedEvent(
-          src.getBuffer(), 1, 0, StringUtils.EMPTY));
+    src
   }
 }

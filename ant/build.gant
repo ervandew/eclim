@@ -788,22 +788,29 @@ def plugin(name){
   pluginPath = "${pluginsDir}/${name}_${version}"
   ant.mkdir(dir: pluginPath)
 
-  compile("${name}/java", '${build.classes}/' + name, failonerror=true){
-    include(name: "**/*.java")
-    classpath{fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')}
+  if (new File("${name}/java").exists()){
+    compile("${name}/java", '${build.classes}/' + name, failonerror=true){
+      include(name: "**/*.java")
+      classpath{fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')}
+    }
+  }
+
+  // run plugin specific gant target
+  if (hasVariable("${name}.plugin.compile")){
+    binding.getVariable("${name}.plugin.compile")()
   }
 
   jarName = name.replaceFirst('^org\\.', '')
   ant.jar(jarfile: "${pluginPath}/${jarName}.jar"){
     ant.fileset(dir: '${build.classes}/' + name,
-      includes: "org/eclim/**,org/eclipse/**")
-    ant.fileset(dir: "${name}/java",
+      includes: "eclim/**,org/eclim/**,org/eclipse/**")
+    ant.fileset(dir: "${name}/java", erroronmissingdir: false,
         includes: "org/eclim/**", excludes: '**/package.html,**/*.java')
   }
 
   ant.copy(todir: pluginPath){
     ant.fileset(dir: "${name}",
-        includes: '**/*', excludes: '*.gant,java/**,vim/**,test/**')
+        includes: '**/*', excludes: '*.gant,java/**,scala/**,vim/**,test/**')
   }
 
   ant.replace(dir: pluginPath,

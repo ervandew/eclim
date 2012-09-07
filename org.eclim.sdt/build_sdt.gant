@@ -20,6 +20,34 @@ target(name: 'org.eclim.sdt.classpath'){
   }
 }
 
+target(name: 'org.eclim.sdt.plugin.compile'){
+  taskdef(resource: 'scala/tools/ant/antlib.xml'){
+    classpath{
+      fileset(dir: 'build/temp/lib/scala', erroronmissingdir: false){
+        include(name: '**/*.jar')
+      }
+    }
+  }
+
+  mkdir(dir: '${build.classes}/org.eclim.sdt')
+  scalac(
+      srcdir: 'org.eclim.sdt/scala',
+      destdir: '${build.classes}/org.eclim.sdt',
+      classpathref: 'classpath',
+      deprecation: true)
+  {
+    include(name: '**/*.scala')
+    classpath{fileset(dir: '${build.classes}/org.eclim.sdt', includes: 'org.eclim/**')}
+    classpath{
+      pathelement(path: '${build.classes}/org.eclim.sdt')
+      fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')
+    }
+  }
+  copy(todir: '${build.classes}/org.eclim.sdt'){
+    fileset(dir: "org.eclim.sdt/scala", includes: "eclim/**", excludes: '**/*.scala')
+  }
+}
+
 target(name: 'org.eclim.sdt.test'){
   depends('test.init')
   runTests('org.eclim.sdt'){
