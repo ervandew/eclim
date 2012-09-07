@@ -69,6 +69,12 @@ exec 'CompilerSet errorformat=' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
   \ '\%.%#[checkstyle]\ %f:%l:%c:\ %m,' .
   \ '\%.%#[checkstyle]\ %f:%l:\ %m,' .
+  \ '\%E%.%#[scalac]\ %f:%l:\ error:\ %m,' .
+  \ '\%-Z%.%#[scalac]\ %p^,' .
+  \ '\%W%.%#[scalac]\ %f:%l:\ warning:\ %m,' .
+  \ '\%-Z%.%#[scalac]\ %p^,' .
+  \ '\%A%.%#[scalac]\ %f:%l:\ %m,' .
+  \ '\%-Z%.%#[scalac]\ %p^,' .
   \ '\%+A%.%#eclim\ testng:\ %f:%m,' .
   \ '\%.%#\ ERROR\ %.%#\ line\ %l\ in\ file:\ %.%f%.:\ %m,' .
   \ g:EclimAntCompilerAdditionalErrorFormat .
