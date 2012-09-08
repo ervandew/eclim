@@ -59,7 +59,7 @@ class CodeCompleteCommand
   private val COMPLETIONS = new ScalaCompletions()
   private val COLLATOR = Collator.getInstance(Locale.US)
 
-  override def execute(commandLine: CommandLine) : Object = {
+  override def execute(commandLine: CommandLine): Object = {
     val project = commandLine.getValue(Options.PROJECT_OPTION)
     val file = commandLine.getValue(Options.FILE_OPTION)
     val offset = getOffset(commandLine)
@@ -67,12 +67,12 @@ class CodeCompleteCommand
 
     val chars = ProjectUtils.getDocument(project, file).get.toCharArray
     val region = ScalaWordFinder.findCompletionPoint(chars, offset)
-    val empty : List[CompletionProposal] = List()
+    val empty: List[CompletionProposal] = List()
     val proposals = src.withSourceFile {
       COMPLETIONS.findCompletions(region)(offset, src)
     }(empty)
 
-    val results : ListBuffer[CodeCompleteResult] = ListBuffer()
+    val results: ListBuffer[CodeCompleteResult] = ListBuffer()
     for (proposal <- proposals.sortBy(p => (-p.relevance, p.completion))){
       var completion = proposal.completion
       val description = proposal.display

@@ -52,7 +52,7 @@ class SrcUpdateCommand
   extends AbstractCommand
 {
   override
-  def execute(commandLine : CommandLine) : Object = {
+  def execute(commandLine: CommandLine): Object = {
     val file = commandLine.getValue(Options.FILE_OPTION)
     val projectName = commandLine.getValue(Options.PROJECT_OPTION)
     val project = ProjectUtils.getProject(projectName)
@@ -68,7 +68,7 @@ class SrcUpdateCommand
 
       val problems = src.getProblems()
 
-      val errors : ListBuffer[Error] = ListBuffer()
+      val errors: ListBuffer[Error] = ListBuffer()
       if (problems != null){
         val path = ProjectUtils.getFilePath(project, file)
         val offsets = FileOffsets.compile(path)
@@ -82,7 +82,7 @@ class SrcUpdateCommand
               problem.isWarning)
         }
       }
-      JavaConversions.asList(errors)
+      JavaConversions.bufferAsJavaList(errors)
     }else{
       StringUtils.EMPTY
     }

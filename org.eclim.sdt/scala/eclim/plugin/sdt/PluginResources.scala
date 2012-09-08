@@ -38,7 +38,7 @@ class PluginResources
   import PluginResources._
 
   override
-  def initialize(name : String)
+  def initialize(name: String)
   {
     super.initialize(name)
 

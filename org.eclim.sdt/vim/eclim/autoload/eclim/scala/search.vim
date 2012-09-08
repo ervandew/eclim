@@ -1,11 +1,11 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.org/vim/scala/index.html
+"   see http://eclim.org/vim/scala/search.html
 "
 " License:
 "
-" Copyright (C) 2011 - 2012  Eric Van Dewoestine
+" Copyright (C) 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,39 +22,20 @@
 "
 " }}}
 
-" Global Variables {{{
-
-if !exists("g:EclimScalaValidate")
-  let g:EclimScalaValidate = 1
-endif
-
+" Global Varables {{{
+  if !exists("g:EclimScalaSearchSingleResult")
+    " possible values ('split', 'edit', 'lopen')
+    let g:EclimScalaSearchSingleResult = g:EclimDefaultFileOpenAction
+  endif
 " }}}
 
-" Options {{{
-
-setlocal completefunc=eclim#scala#complete#CodeComplete
-
+" Script Varables {{{
+  let s:search = '-command scala_search'
 " }}}
 
-" Autocmds {{{
-
-augroup eclim_scala
-  autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer>
-    \ call eclim#lang#UpdateSrcFile('scala', g:EclimScalaValidate)
-augroup END
-
-" }}}
-
-" Command Declarations {{{
-
-command! -nargs=0 -buffer Validate :call eclim#lang#UpdateSrcFile('scala', 1)
-
-if !exists(":ScalaSearch")
-  command -buffer -nargs=0
-    \ ScalaSearch :call eclim#scala#search#Search('<args>')
-endif
-
-" }}}
+function! eclim#scala#search#Search(argline) " {{{
+  return eclim#lang#Search(
+    \ s:search, g:EclimScalaSearchSingleResult, a:argline)
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker

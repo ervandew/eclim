@@ -34,7 +34,7 @@ object ScalaUtils
    * @param file The file to find.
    * @return A ScalaSourceFile instance
    */
-  def getSourceFile(project : String, file : String) : ScalaSourceFile = {
+  def getSourceFile(project: String, file: String): ScalaSourceFile = {
     val cu = JavaUtils.getCompilationUnit(project, file)
     cu match {
       case src: ScalaSourceFile => refreshSourceFile(src)
@@ -44,7 +44,7 @@ object ScalaUtils
   /**
    * Refresh the given source file.
    */
-  def refreshSourceFile(src : ScalaSourceFile) : ScalaSourceFile = {
+  def refreshSourceFile(src: ScalaSourceFile): ScalaSourceFile = {
     if (src != null){
       src.project.doWithPresentationCompiler(_.askReload(src, src.getContents))
     }

@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.jdt.core.IBuffer;
+import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IImportDeclaration;
@@ -56,11 +57,18 @@ import org.eclipse.jdt.core.Signature;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Javadoc;
+
 import org.eclipse.jdt.core.formatter.IndentManipulation;
 
 import org.eclipse.jdt.internal.core.DocumentAdapter;
 
 import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
+
+import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 
@@ -286,6 +294,46 @@ public class JavaUtils
       parent = parent.getParent();
     }
     return parent;
+  }
+
+  /**
+   * Get the offset of the supplied element within the source.
+   *
+   * @param element The element
+   * @return The offset or -1 if it could not be determined.
+   */
+  public static int getElementOffset(IJavaElement element)
+    throws Exception
+  {
+    IJavaElement parent = getPrimaryElement(element);
+    CompilationUnit cu = null;
+    switch(parent.getElementType()){
+      case IJavaElement.COMPILATION_UNIT:
+        cu = ASTUtils.getCompilationUnit((ICompilationUnit)parent);
+        break;
+      case IJavaElement.CLASS_FILE:
+        try{
+          cu = ASTUtils.getCompilationUnit((IClassFile)parent);
+        }catch(IllegalStateException ise){
+          // no source attachement
+        }
+        break;
+    }
+
+    if (cu != null) {
+      ASTNode[] nodes = ASTNodeSearchUtil.getDeclarationNodes(element, cu);
+      if (nodes != null && nodes.length > 0){
+        int offset = nodes[0].getStartPosition();
+        if (nodes[0] instanceof BodyDeclaration){
+          Javadoc docs = ((BodyDeclaration)nodes[0]).getJavadoc();
+          if (docs != null){
+            offset += docs.getLength() + 1;
+          }
+        }
+        return offset;
+      }
+    }
+    return -1;
   }
 
   /**

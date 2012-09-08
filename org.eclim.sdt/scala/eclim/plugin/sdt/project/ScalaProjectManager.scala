@@ -46,7 +46,7 @@ class ScalaProjectManager
   extends JavaProjectManager
 {
   override
-  protected def create(project : IProject, depends : String) {
+  protected def create(project: IProject, depends: String) {
     super.create(project, depends)
 
     val desc = project.getDescription
@@ -64,7 +64,7 @@ class ScalaProjectManager
   }
 
   override
-  def refresh(project : IProject, commandLine : CommandLine) {
+  def refresh(project: IProject, commandLine: CommandLine) {
     super.refresh(project, commandLine)
 
     // is there an easier way to force re-parsing of all files?

@@ -23,11 +23,9 @@ Scala code completion uses the standard
 
    package eclim.test
 
-   import java.util.ArrayList
-
-   class TestComplete {
+   class Test {
      def test(){
-       val list = new ArrayList
-       list.a<C-X><C-U>
+       val list = List("foo", "bar", "baz")
+       list.s<C-X><C-U>
      }
    }

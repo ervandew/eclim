@@ -21,3 +21,4 @@ Scala
 
    complete
    validate
+   search
