@@ -54,7 +54,7 @@ function! eclim#ExecuteEclim(command, ...)
   endif
 
   " eclimd appears to be down, so exit early if in an autocmd
-  if !g:eclimd_running && expand('<amatch>') != ''
+  if !g:eclimd_running && expand('<abuf>') != ''
     " check for file created by eclimd to signal that it is running.
     if !eclim#EclimAvailable()
       return
@@ -108,7 +108,7 @@ function! eclim#ExecuteEclim(command, ...)
 
         " if we are not in an autocmd or the autocmd is for an acwrite buffer,
         " alert the user that eclimd is not running.
-        if expand('<amatch>') == '' || &buftype == 'acwrite'
+        if expand('<abuf>') == '' || &buftype == 'acwrite'
           call eclim#util#EchoWarning(
             \ "unable to connect to eclimd (port: " . port . ") - " . error)
         endif
@@ -117,7 +117,7 @@ function! eclim#ExecuteEclim(command, ...)
           \ 'while executing command (port: ' . port . '): ' . command
         " if we are not in an autocmd or in a autocmd for an acwrite buffer,
         " echo the error, otherwise just log it.
-        if expand('<amatch>') == '' || &buftype == 'acwrite'
+        if expand('<abuf>') == '' || &buftype == 'acwrite'
           call eclim#util#EchoError(error)
         else
           call eclim#util#EchoDebug(error)
