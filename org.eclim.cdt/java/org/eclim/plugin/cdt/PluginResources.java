@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,18 +45,20 @@ public class PluginResources
   public static final String NATURE_C = CProjectNature.C_NATURE_ID;
   public static final String NATURE_CPP = CCProjectNature.CC_NATURE_ID;
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#initialize(String)
-   */
   @Override
   public void initialize(String name)
   {
     super.initialize(name);
 
     ProjectNatureFactory.addNature("c", CProjectNature.C_NATURE_ID);
-    ProjectNatureFactory.addNature("c++", CCProjectNature.CC_NATURE_ID);
-    ProjectNatureFactory.addNature("cpp", CCProjectNature.CC_NATURE_ID);
+    ProjectNatureFactory.addNature("c++", new String[]{
+      CProjectNature.C_NATURE_ID,
+      CCProjectNature.CC_NATURE_ID,
+    });
+    ProjectNatureFactory.addNature("cpp", new String[]{
+      CProjectNature.C_NATURE_ID,
+      CCProjectNature.CC_NATURE_ID,
+    });
 
     ProjectManagement.addProjectManager(
         CProjectNature.C_NATURE_ID, new CProjectManager());
@@ -64,10 +66,7 @@ public class PluginResources
         CCProjectNature.CC_NATURE_ID, new CProjectManager());
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#getBundleBaseName()
-   */
+  @Override
   protected String getBundleBaseName()
   {
     return "org/eclim/plugin/cdt/messages";
