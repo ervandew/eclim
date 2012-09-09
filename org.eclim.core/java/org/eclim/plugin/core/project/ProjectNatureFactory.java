@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.project;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,18 +40,31 @@ public class ProjectNatureFactory
 
   public static String NONE = "none";
 
-  private static Map<String,String> natureAliases =
-    new HashMap<String,String>();
+  private static Map<String,String[]> natureAliases =
+    new HashMap<String,String[]>();
 
   /**
    * Registers a project nature.
+   *
    * @param alias The nature alias for users.
-   * @param nature The actual nature name the alias maps to.
+   * @param nature The actual nature id the alias maps to.
    */
   public static void addNature(String alias, String nature)
   {
     logger.debug("add nature alias: {}={}", alias, nature);
-    natureAliases.put(alias, nature);
+    natureAliases.put(alias, new String[]{nature});
+  }
+
+  /**
+   * Registers a nature alias to an array of project nature ids.
+   *
+   * @param alias The nature alias for users.
+   * @param natures The array of actual nature ids the alias maps to.
+   */
+  public static void addNature(String alias, String[] natures)
+  {
+    logger.debug("add nature alias: {}={}", alias, Arrays.toString(natures));
+    natureAliases.put(alias, natures);
   }
 
   /**
@@ -68,18 +82,30 @@ public class ProjectNatureFactory
    *
    * @return Map of aliases.
    */
-  public static Map<String,String> getNatureAliasesMap()
+  public static Map<String,String[]> getNatureAliasesMap()
   {
     return Collections.unmodifiableMap(natureAliases);
   }
 
   /**
-   * Gets the nature string for the supplied alias.
+   * Gets the nature id for the supplied alias.
    *
    * @param alias The nature alias.
    * @return The nature or null if not found.
    */
   public static String getNatureForAlias(String alias)
+  {
+    String[] natures = natureAliases.get(alias);
+    return natures != null ? natures[natures.length - 1] : null;
+  }
+
+  /**
+   * Gets the array of nature ids the supplied alias maps to.
+   *
+   * @param alias The nature alias.
+   * @return Array of nature ids or null if not found.
+   */
+  public static String[] getNaturesForAlias(String alias)
   {
     return natureAliases.get(alias);
   }
@@ -93,7 +119,7 @@ public class ProjectNatureFactory
   public static String getAliasForNature(String natureId)
   {
     for(String key : natureAliases.keySet()){
-      if(natureId.equals(natureAliases.get(key))){
+      if(natureId.equals(getNatureForAlias(key))){
         return key;
       }
     }
@@ -112,7 +138,7 @@ public class ProjectNatureFactory
   {
     ArrayList<String> aliases = new ArrayList<String>();
     for(String key : natureAliases.keySet()){
-      if(project.hasNature(natureAliases.get(key))){
+      if(project.hasNature(getNatureForAlias(key))){
         aliases.add(key);
       }
     }
@@ -131,9 +157,11 @@ public class ProjectNatureFactory
   {
     ArrayList<String> natures = new ArrayList<String>();
     for(String key : natureAliases.keySet()){
-      String nature = natureAliases.get(key);
-      if(project.hasNature(nature)){
-        natures.add(nature);
+      String[] ids = natureAliases.get(key);
+      for (String id : ids){
+        if(project.hasNature(id)){
+          natures.add(id);
+        }
       }
     }
 

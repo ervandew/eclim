@@ -184,7 +184,7 @@ function! eclim#project#util#ProjectImport(arg)
 
   let naturesDict = {}
   for [key, value] in items(eclim#project#util#GetNatureAliasesDict())
-    let naturesDict[value] = key
+    let naturesDict[value[-1]] = key
   endfor
 
   let natureIds = []
