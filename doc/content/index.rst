@@ -114,6 +114,17 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+2012-09-09
+----------
+
+| :ref:`Eclim 1.7.9 <1.7.9>` for Eclipse 3.7 (Indigo) is now available.
+| This release adds initial support for :doc:`scala </vim/scala/index>`.
+
+Please note that the `Scala IDE <http://scala-ide.org>`_ , which eclim uses to
+provide scala support, is not yet available for Eclipse 4.2 (Juno), so eclim's
+scala support will not be available for the eclim 2.2.x releases until sometime
+after the Scala IDE has been updated for Juno.
+
 2012-09-01
 ----------
 

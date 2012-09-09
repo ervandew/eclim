@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,34 +13,23 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Documentation
-=============
+Scala Code Completion
+=====================
 
-Core Functionality
---------------------
+.. include:: /vim/scala/index.rst
+   :start-after: begin-scala-note
+   :end-before: end-scala-note
 
-.. toctree::
-   :maxdepth: 1
+Scala code completion uses the standard
+:doc:`Vim code completion mechanism </vim/code_completion>` like so:
 
-   ../eclimd
+.. code-block:: scala
 
-.. toctree::
-   :maxdepth: 2
+   package eclim.test
 
-   core/index
-
-Supported Languages
--------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   c/index
-   html/index
-   java/index
-   javascript/index
-   php/index
-   python/index
-   ruby/index
-   scala/index
-   xml/index
+   class Test {
+     def test(){
+       val list = List("foo", "bar", "baz")
+       list.s<C-X><C-U>
+     }
+   }

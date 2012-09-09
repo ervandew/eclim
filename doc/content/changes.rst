@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _1.7.9:
+
+1.7.9 (Sep. 09, 2012)
+---------------------
+
+Scala:
+  - Add support for scala :doc:`code completion </vim/scala/complete>`,
+    :doc:`code validation </vim/scala/validate>`, and :doc:`element definition
+    searches </vim/scala/search>`.
+
 .. _2.2.1:
 .. _1.7.8:
 

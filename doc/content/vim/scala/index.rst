@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2012  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,34 +13,24 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Documentation
-=============
+Scala
+=====
 
-Core Functionality
---------------------
+.. begin-scala-note
 
-.. toctree::
-   :maxdepth: 1
+.. note::
 
-   ../eclimd
+   Eclim's scala support is currently only available for Eclipse 3.7 (Indigo)
+   using eclim 1.7.x. Eclim 2.2.x will be updated to include scala support
+   sometime after the `Scala IDE`_ is updated to support Eclipse 4.2 (Juno).
 
-.. toctree::
-   :maxdepth: 2
+.. _scala ide: http://scala-ide.org
 
-   core/index
-
-Supported Languages
--------------------
+.. end-scala-note
 
 .. toctree::
    :maxdepth: 1
 
-   c/index
-   html/index
-   java/index
-   javascript/index
-   php/index
-   python/index
-   ruby/index
-   scala/index
-   xml/index
+   complete
+   validate
+   search
