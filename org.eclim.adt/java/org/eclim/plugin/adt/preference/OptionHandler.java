@@ -57,14 +57,22 @@ public class OptionHandler
     return getValues();
   }
 
-
   @Override
   public void setOption(String name, String value)
     throws Exception
   {
+    AdtPrefs prefs = AdtPrefs.getPrefs();
     if (AdtPrefs.PREFS_SDK_DIR.equals(name)){
-      AdtPrefs.getPrefs().setSdkLocation(new File(value));
+      prefs.setSdkLocation(new File(value));
     }
+
+    // force adt prefs to reload.
+    // When setting the sdk dir, File.getPath doesn't include the trailing slash
+    // and AdtPrefs.setSdkLocation will not add it if necessary. Apparently the
+    // gui relies on a property change event to handle that, so we'll mimic that
+    // by calling loadValue here to handle that edge case and any others handled
+    // in loadValues.
+    prefs.loadValues(null);
   }
 
   @Override
