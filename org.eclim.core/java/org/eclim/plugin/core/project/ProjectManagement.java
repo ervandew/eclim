@@ -140,9 +140,11 @@ public class ProjectManagement
     ArrayList<String> natures = new ArrayList<String>();
     for (int ii = 0; ii < aliases.length; ii++){
       if(!ProjectNatureFactory.NONE.equals(aliases[ii])){
-        String nature = ProjectNatureFactory.getNatureForAlias(aliases[ii]);
-        if (nature != null){
-          natures.add(nature);
+        String[] ids = ProjectNatureFactory.getNaturesForAlias(aliases[ii]);
+        if (ids != null){
+          for (String id : ids){
+            natures.add(id);
+          }
         }else{
           String[] registered = ProjectNatureFactory.getNatureAliases();
           StringBuffer supported = new StringBuffer();
