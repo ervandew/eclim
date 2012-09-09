@@ -18,6 +18,10 @@
 Scala Search
 ============
 
+.. include:: /vim/scala/index.rst
+   :start-after: begin-scala-note
+   :end-before: end-scala-note
+
 Eclim's scala searching currently supports searching for the definition of the
 element under the cursor. Simply place the cursor on the element you wish to
 search for and run **:ScalaSearch**. If the definition of the element is found,

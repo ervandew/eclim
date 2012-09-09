@@ -18,6 +18,10 @@
 Scala Validation
 ================
 
+.. include:: /vim/scala/index.rst
+   :start-after: begin-scala-note
+   :end-before: end-scala-note
+
 When saving a scala source file that resides in a project, eclim will update
 that source file in Eclipse and will report any validation errors found. Any
 errors will be placed in the current window's location list (:help

@@ -16,6 +16,10 @@
 Scala Code Completion
 =====================
 
+.. include:: /vim/scala/index.rst
+   :start-after: begin-scala-note
+   :end-before: end-scala-note
+
 Scala code completion uses the standard
 :doc:`Vim code completion mechanism </vim/code_completion>` like so:
 
