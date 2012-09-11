@@ -87,11 +87,14 @@ function! eclim#java#complete#CodeComplete(findstart, base)
       return
     endif
 
-    if has_key(response, 'missingImport') &&
-     \ response.missingImport != ""
-      let classname = response.missingImport
-      let func = "eclim#java#complete#ImportThenComplete('" . classname  ."')"
-      call feedkeys("\<c-r>=" . func . "\<cr>", 'n')
+    if has_key(response, 'imports') && len(response.imports)
+      let imports = response.imports
+      if exists('g:TestEclimWorkspace') " allow this to be tested somewhat
+        call eclim#java#complete#ImportThenComplete(imports)
+      else
+        let func = "eclim#java#complete#ImportThenComplete(" . string(imports) . ")"
+        call feedkeys("\<c-e>\<c-r>=" . func . "\<cr>", 'n')
+      endif
       " prevents supertab's completion chain from attempting the next
       " completion in the chain.
       return -1
@@ -167,8 +170,16 @@ endfunction " }}}
 
 " ImportThenComplete {{{
 " Called by CodeComplete when the completion depends on a missing import.
-function! eclim#java#complete#ImportThenComplete(classname)
-  if eclim#java#import#Import(a:classname)
+function! eclim#java#complete#ImportThenComplete(choices)
+  let choice = ''
+  if len(a:choices) > 1
+    let choice = eclim#java#import#ImportPrompt(a:choices)
+  elseif len(a:choices)
+    let choice = a:choices[0]
+  endif
+
+  if choice != ''
+    call eclim#java#import#Import(choice)
     call feedkeys("\<c-x>\<c-u>", 'tn')
   endif
   return ''

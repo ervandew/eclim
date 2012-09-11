@@ -22,14 +22,31 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
   set completeopt-=preview
 endfunction " }}}
 
-" TestCodeComplete() {{{
-function! TestCodeComplete()
+function! TestCodeCompleteMissingImport() " {{{
+  edit! src/org/eclim/test/complete/TestCompletionVUnit.java
+  call vunit#PeekRedir()
+
+  call vunit#AssertFalse(search('^import java\.util\.List;', 'n'),
+    \ 'List already imported.')
+
+  call cursor(10, 11)
+  let start = eclim#java#complete#CodeComplete(1, '')
+  call vunit#AssertEquals(9, start, 'Wrong starting column.')
+  let g:EclimTestPromptQueue = [1] " choose java.util.List
+  let result = eclim#java#complete#CodeComplete(0, '')
+  call vunit#AssertTrue(result, -1, 'Wrong completion result.')
+  call vunit#AssertTrue(search('^import java\.util\.List;', 'n'),
+    \ 'List not imported.')
+  call vunit#AssertEquals(line('.'), 11, 'Wrong line number after import.')
+  call vunit#AssertEquals(col('.'), 11, 'Wrong col number after import.')
+endfunction " }}}
+
+function! TestCodeComplete() " {{{
   edit! src/org/eclim/test/complete/TestCompletionVUnit.java
   call vunit#PeekRedir()
 
@@ -71,8 +88,7 @@ function! TestCodeComplete()
   endfor
 endfunction " }}}
 
-" TestCodeCompleteUnicode() {{{
-function! TestCodeCompleteUnicode()
+function! TestCodeCompleteUnicode() " {{{
   edit! src/org/eclim/test/complete/TestUnicode.java
   call vunit#PeekRedir()
 
@@ -108,8 +124,7 @@ function! TestCodeCompleteUnicode()
     \ 'Results contains print()')
 endfunction " }}}
 
-" TestCodeCompleteLinkedResource() {{{
-function! TestCodeCompleteLinkedResource()
+function! TestCodeCompleteLinkedResource() " {{{
   edit! ../eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java
   call vunit#PeekRedir()
 

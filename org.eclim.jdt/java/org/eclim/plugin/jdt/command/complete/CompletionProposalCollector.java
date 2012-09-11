@@ -17,28 +17,35 @@
 package org.eclim.plugin.jdt.command.complete;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclim.command.Error;
+
+import org.eclim.plugin.jdt.command.include.ImportUtils;
 
 import org.eclim.plugin.jdt.command.search.SearchRequestor;
 
 import org.eclim.util.file.FileOffsets;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.eclipse.jdt.core.CompletionProposal;
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 
@@ -55,7 +62,7 @@ public class CompletionProposalCollector
 {
   private ArrayList<CompletionProposal> proposals =
     new ArrayList<CompletionProposal>();
-  private String missingImport;
+  private ArrayList<String> imports;
   private Error error;
 
   public CompletionProposalCollector (ICompilationUnit cu)
@@ -110,6 +117,10 @@ public class CompletionProposalCollector
 
   public void completionFailure(IProblem problem)
   {
+    ICompilationUnit src = getCompilationUnit();
+    IJavaProject javaProject = src.getJavaProject();
+    IProject project = javaProject.getProject();
+
     // undefined type or attempting to complete static members of an unimported
     // type
     if (problem.getID() == IProblem.UndefinedType ||
@@ -122,22 +133,47 @@ public class CompletionProposalCollector
               IJavaSearchConstants.DECLARATIONS,
               SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
         IJavaSearchScope scope =
-          SearchEngine.createJavaSearchScope(
-              new IJavaElement[]{getCompilationUnit().getJavaProject()});
+          SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
         SearchRequestor requestor = new SearchRequestor();
         SearchEngine engine = new SearchEngine();
         SearchParticipant[] participants =
           new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
         engine.search(pattern, participants, scope, requestor, null);
         if (requestor.getMatches().size() > 0){
-          missingImport = problem.getArguments()[0];
+          imports = new ArrayList<String>();
+          for (SearchMatch match : requestor.getMatches()){
+            if(match.getAccuracy() != SearchMatch.A_ACCURATE){
+              continue;
+            }
+            IJavaElement element = (IJavaElement)match.getElement();
+            String name = null;
+            switch(element.getElementType()){
+              case IJavaElement.TYPE:
+                IType type = (IType)element;
+                if(Flags.isPublic(type.getFlags())){
+                  name = type.getFullyQualifiedName();
+                }
+                break;
+              case IJavaElement.METHOD:
+              case IJavaElement.FIELD:
+                name = ((IType)element.getParent()).getFullyQualifiedName() +
+                  '.' + element.getElementName();
+                break;
+            }
+            if (name != null){
+              name = name.replace('$', '.');
+              if (!ImportUtils.isImportExcluded(project, name)){
+                imports.add(name);
+              }
+            }
+          }
         }
-      }catch(CoreException e){
+      }catch(Exception e){
         throw new RuntimeException(e);
       }
     }
 
-    IResource resource = getCompilationUnit().getResource();
+    IResource resource = src.getResource();
     String relativeName = resource.getProjectRelativePath().toString();
     if (new String(problem.getOriginatingFileName()).endsWith(relativeName)){
       String filename = resource.getLocation().toString();
@@ -162,9 +198,9 @@ public class CompletionProposalCollector
     }
   }
 
-  public String getMissingImport()
+  public List<String> getImports()
   {
-    return missingImport;
+    return imports;
   }
 
   public Error getError()

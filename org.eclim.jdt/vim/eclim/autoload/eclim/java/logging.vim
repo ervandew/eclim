@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ function! eclim#java#logging#LoggingInit(var)
       call append(position, lines)
       call cursor(line + offset, col)
       for import in s:logger_imports
-        call eclim#java#import#InsertImports([import])
+        call eclim#java#import#Import(import)
       endfor
     endif
   endif

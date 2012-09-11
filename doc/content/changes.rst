@@ -16,6 +16,22 @@
 History of Changes
 ==================
 
+.. _2.2.2:
+.. _1.7.10:
+
+2.2.2 / 1.7.10 (Sep. xx, 2012)
+------------------------------
+
+Java:
+  - :JavaImportSort, :JavaImportClean, and :JavaImportMissing all removed in
+    favor of a new command which performs the functionality of all three:
+    :ref:`:JavaImportOrganize <:JavaImportOrganize>`
+  - The vim option g:EclimJavaImportExclude has been replaced with the eclim
+    setting :ref:`org.eclim.java.import.exclude <org.eclim.java.import.exclude>`.
+  - The vim option g:EclimJavaImportPackageSeparationLevel has been replaced
+    with the eclim setting :ref:`org.eclim.java.import.package_separation_level
+    <org.eclim.java.import.package_separation_level>`.
+
 .. _1.7.9:
 
 1.7.9 (Sep. 09, 2012)

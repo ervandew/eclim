@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -113,10 +114,10 @@ public class CodeCompleteCommandTest
       results.get("completions");
 
     assertEquals("Wrong number of completions.", 0, completions.size());
-    assertTrue("Missing key 'missingImport'",
-        results.containsKey("missingImport"));
-    assertEquals("Wrong missingImport",
-        "Map", results.get("missingImport"));
+    assertTrue("Missing key 'imports'", results.containsKey("imports"));
+    ArrayList<String> imports = new ArrayList<String>();
+    imports.add("java.util.Map");
+    assertEquals("Wrong imports", imports, results.get("imports"));
 
     assertTrue("Missing key 'error'", results.containsKey("error"));
     Map<String,Object> error = (Map<String,Object>)results.get("error");
@@ -138,10 +139,10 @@ public class CodeCompleteCommandTest
       results.get("completions");
 
     assertEquals("Wrong number of completions.", 0, completions.size());
-    assertTrue("Missing key 'missingImport'",
-        results.containsKey("missingImport"));
-    assertEquals("Wrong missingImport",
-        "Component", results.get("missingImport"));
+    assertTrue("Missing key 'imports'", results.containsKey("imports"));
+    ArrayList<String> imports = new ArrayList<String>();
+    imports.add("java.awt.Component");
+    assertEquals("Wrong imports", imports, results.get("imports"));
 
     assertTrue("Missing key 'error'", results.containsKey("error"));
     Map<String,Object> error = (Map<String,Object>)results.get("error");

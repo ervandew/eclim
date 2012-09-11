@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -137,14 +137,8 @@ endif
 if !exists(":JavaImport")
   command -buffer JavaImport :call eclim#java#import#Import()
 endif
-if !exists(":JavaImportSort")
-  command -buffer JavaImportSort :call eclim#java#import#SortImports()
-endif
-if !exists(":JavaImportClean")
-  command -buffer JavaImportClean :call eclim#java#import#CleanImports()
-endif
-if !exists(":JavaImportMissing")
-  command -buffer JavaImportMissing :call eclim#java#import#ImportMissing()
+if !exists(":JavaImportOrganize")
+  command -buffer JavaImportOrganize :call eclim#java#import#OrganizeImports()
 endif
 
 if !exists(":JavaDocComment")

@@ -95,10 +95,6 @@ public class PluginResources
     SystemUtils.JAVA_HOME.replace('\\', '/') + "/../share/src.zip",
   };
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#initialize(String)
-   */
   @Override
   public void initialize(String name)
   {
@@ -110,17 +106,6 @@ public class PluginResources
     initializeJreSrc();
     initializeVars(VARIABLES);
 
-    /*java.util.Hashtable options = JavaCore.getOptions();
-    options.put(
-      DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR,
-      JavaCore.SPACE);
-    options.put(
-      DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "2");
-    options.put(
-      DefaultCodeFormatterConstants.FORMATTER_USE_TABS_ONLY_FOR_LEADING_INDENTATIONS,
-      DefaultCodeFormatterConstants.FALSE);
-    JavaCore.setOptions(options);*/
-
     Preferences.addOptionHandler("org.eclipse.jdt", new OptionHandler());
     ProjectNatureFactory.addNature("java", NATURE);
     ProjectManagement.addProjectManager(NATURE, new JavaProjectManager());
@@ -130,6 +115,7 @@ public class PluginResources
       "JDT org.eclim.java.logging.impl commons-logging " +
         "(commons-logging|log4j|slf4j|jdk|custom)\n" +
       "JDT org.eclim.java.logging.template logger.gst\n" +
+      "JDT org.eclim.java.import.package_separation_level 1 (-1|\\d+)\n" +
       "JDT org.eclim.java.validation.ignore.warnings false (true|false)\n" +
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
@@ -162,15 +148,20 @@ public class PluginResources
     javacArgsPref.setNature(NATURE);
     javacArgsPref.setPath("JDT");
     javacArgsPref.setName("org.eclim.java.compile.args");
-    jvmArgsPref.setValidator(
+    javacArgsPref.setValidator(
         new JsonValidator(String[].class, new RegexValidator("^-.*")));
     preferences.addPreference(javacArgsPref);
+
+    Preference javaImportExclude = new Preference();
+    javaImportExclude.setNature(NATURE);
+    javaImportExclude.setPath("JDT");
+    javaImportExclude.setName("org.eclim.java.import.exclude");
+    javaImportExclude.setValidator(new JsonValidator(String[].class, null));
+    javaImportExclude.setDefaultValue("[\"^com\\.sun\\..*\", \"^sunw\\?\\..*\"]");
+    preferences.addPreference(javaImportExclude);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#getBundleBaseName()
-   */
+  @Override
   protected String getBundleBaseName()
   {
     return "org/eclim/plugin/jdt/messages";

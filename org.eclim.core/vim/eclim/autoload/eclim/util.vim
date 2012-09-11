@@ -1000,10 +1000,14 @@ function! eclim#util#PromptList(prompt, list, ...)
   try
     " clear any previous messages
     redraw
-    " echoing the list prompt vs. using it in the input() avoids apparent vim
-    " bug that causes "Internal error: get_tv_string_buf()".
-    echo prompt . "\n"
-    let response = input(a:prompt . ": ")
+    try
+      let response = input(prompt . "\n" . a:prompt . ": ")
+    catch
+      " echoing the list prompt vs. using it in the input() avoids apparent vim
+      " bug that causes "Internal error: get_tv_string_buf()".
+      echo prompt . "\n"
+      let response = input(a:prompt . ": ")
+    endtry
     while response !~ '\(^$\|^[0-9]\+$\)' ||
         \ response < 0 ||
         \ response > (len(a:list) - 1)

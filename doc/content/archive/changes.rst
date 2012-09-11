@@ -347,7 +347,7 @@ Java:
     :ref:`:JUnitImpl <:JUnitImpl>` to better support generics.
   - Updated :ref:`:JUnitImpl <:JUnitImpl>` to support junit 4 method
     signatures.
-  - Updated :ref:`:JavaImport` and :ref:`:JavaImportSort` to honor eclipse's
+  - Updated :ref:`:JavaImport` and :JavaImportSort to honor eclipse's
     import order preference and added the ability to edit that preference via
     :ref:`:ProjectSettings` and :ref:`:EclimSettings`.
   - Added initial :doc:`refactoring </vim/java/refactor>` support.
@@ -494,7 +494,7 @@ Eclim:
 
 Java:
   - Added command to view :ref:`type hierarchy <:JavaHierarchy>`.
-  - Added command to :ref:`import all undefined types <:JavaImportMissing>`.
+  - Added command to import all undefined types.
 
 .. _1.4.4:
 
@@ -1039,12 +1039,12 @@ Bug Fixes:
 
     .. note::
 
-      The original implementation of :ref:`:JavaImportClean <:JavaImportClean>`
-      was written entirely in vim (didn't require eclim server).  To
-      properly handle ignoring comments when determining what imports are
-      unused, this functionality had to be reimplemented with server side
-      help.  However, the vim only version is preserved and will be invoked
-      if the current file is not in an eclipse project.
+      The original implementation of :JavaImportClean was written entirely in
+      vim (didn't require eclim server).  To properly handle ignoring comments
+      when determining what imports are unused, this functionality had to be
+      reimplemented with server side help.  However, the vim only version is
+      preserved and will be invoked if the current file is not in an eclipse
+      project.
 
   - Other various bug fixes.
 
