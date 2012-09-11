@@ -182,7 +182,8 @@ Java Commands
 - :ref:`:JUnitResult <:JUnitResult>` [testcase] -
   Allows you to view the results of a test case.
 - :ref:`:JavaImport <:JavaImport>` - Import the class under the cursor.
-- :ref:`:JavaImportMissing <:JavaImportMissing>` - Import all undefined types.
+- :ref:`:JavaImportOrganize <:JavaImportOrganize>` -
+  Import undefined types, remove unused imports, sort and format imports.
 - :ref:`:JavaSearch <:JavaSearch>`
   [-p <pattern>] [-t <type>] [-x <context>] [-s <scope>] -
   Search for classes, methods, fields, etc.  (With pattern supplied, searches

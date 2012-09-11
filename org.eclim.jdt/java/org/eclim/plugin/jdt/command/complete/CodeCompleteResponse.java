@@ -27,12 +27,13 @@ public class CodeCompleteResponse
 {
   private List<CodeCompleteResult> completions;
   private Error error;
-  private String missingImport;
+  private List<String> imports;
 
-  public CodeCompleteResponse(List<CodeCompleteResult> completions,
-      Error error, String missingImport) {
+  public CodeCompleteResponse(
+      List<CodeCompleteResult> completions, Error error, List<String> imports)
+  {
     this.completions = completions;
     this.error = error;
-    this.missingImport = missingImport;
+    this.imports = imports;
   }
 }

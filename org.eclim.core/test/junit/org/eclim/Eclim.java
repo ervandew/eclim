@@ -255,6 +255,34 @@ public class Eclim
   }
 
   /**
+   * Gets the value of a project setting.
+   *
+   * @param project The project name.
+   * @param name The setting name.
+   * @return The setting value.
+   */
+  public static String getProjectSetting(String project, String name)
+  {
+    return (String)execute(new String[]{
+      "project_setting", "-p", project, "-s", name,
+    });
+  }
+
+  /**
+   * Sets the value of a project setting.
+   *
+   * @param project The project name.
+   * @param name The setting name.
+   * @param value The setting value.
+   */
+  public static void setProjectSetting(String project, String name, String value)
+  {
+    execute(new String[]{
+      "project_setting", "-p", project, "-s", name, "-v", value,
+    });
+  }
+
+  /**
    * Constructs a full path for the given project relative file.
    *
    * @param file The project relative file path.

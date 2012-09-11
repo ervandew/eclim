@@ -1,8 +1,8 @@
 package org.eclim.test.include;
 
-public class TestImportVUnit
+public class TestImport
 {
-  private String string
   private List list = new ArrayList();
   private Pattern pattern;
+  private File file;
 }

@@ -1,7 +1,6 @@
 package org.eclim.test.complete;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TestCompletionVUnit
 {
