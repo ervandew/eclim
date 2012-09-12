@@ -172,6 +172,13 @@ if !exists(':EclimHelpGrep')
   command -nargs=+ EclimHelpGrep :call eclim#help#HelpGrep(<q-args>)
 endif
 
+if !exists(":RefactorUndo")
+  command RefactorUndo :call eclim#lang#UndoRedo('undo', 0)
+  command RefactorRedo :call eclim#lang#UndoRedo('redo', 0)
+  command RefactorUndoPeek :call eclim#lang#UndoRedo('undo', 1)
+  command RefactorRedoPeek :call eclim#lang#UndoRedo('redo', 1)
+endif
+
 if !exists(":Buffers")
   command Buffers :call eclim#common#buffers#Buffers()
   command BuffersToggle :call eclim#common#buffers#BuffersToggle()

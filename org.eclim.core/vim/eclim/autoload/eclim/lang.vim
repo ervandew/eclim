@@ -23,9 +23,16 @@
 "
 " }}}
 
+" Global Varables {{{
+  if !exists('g:EclimRefactorDiffOrientation')
+    let g:EclimRefactorDiffOrientation = 'vertical'
+  endif
+" }}}
+
 " Script Variables {{{
   let s:update_command = '-command <lang>_src_update -p "<project>" -f "<file>"'
   let s:validate_command = '-command <type>_validate -p "<project>" -f "<file>"'
+  let s:undoredo_command = '-command refactor_<operation>'
 " }}}
 
 " CodeComplete(command, findstart, base, [options]) {{{
@@ -309,6 +316,278 @@ function! eclim#lang#SilentUpdate(...)
     endtry
   endif
   return file
+endfunction " }}}
+
+" Refactor(command) {{{
+" Executes the supplied refactoring command handle error response and
+" reloading files that have changed.
+function! eclim#lang#Refactor(command)
+  let cwd = substitute(getcwd(), '\', '/', 'g')
+  let cwd_return = 1
+
+  try
+    " turn off swap files temporarily to avoid issues with folder/file
+    " renaming.
+    let bufend = bufnr('$')
+    let bufnum = 1
+    while bufnum <= bufend
+      if bufexists(bufnum)
+        call setbufvar(bufnum, 'save_swapfile', getbufvar(bufnum, '&swapfile'))
+        call setbufvar(bufnum, '&swapfile', 0)
+      endif
+      let bufnum = bufnum + 1
+    endwhile
+
+    " cd to the project root to avoid folder renaming issues on windows.
+    exec 'cd ' . escape(eclim#project#util#GetCurrentProjectRoot(), ' ')
+
+    let result = eclim#ExecuteEclim(a:command)
+    if type(result) != g:LIST_TYPE && type(result) != g:DICT_TYPE
+      return
+    endif
+
+    " error occurred
+    if type(result) == g:DICT_TYPE && has_key(result, 'errors')
+      call eclim#util#EchoError(result.errors)
+      return
+    endif
+
+    " reload affected files.
+    let curwin = winnr()
+    try
+      for info in result
+        let newfile = ''
+        " handle file renames
+        if has_key(info, 'to')
+          let file = info.from
+          let newfile = info.to
+          if has('win32unix')
+            let newfile = eclim#cygwin#CygwinPath(newfile)
+          endif
+        else
+          let file = info.file
+        endif
+
+        if has('win32unix')
+          let file = eclim#cygwin#CygwinPath(file)
+        endif
+
+        " ignore unchanged directories
+        if isdirectory(file)
+          continue
+        endif
+
+        " handle current working directory moved.
+        if newfile != '' && isdirectory(newfile)
+          if file =~ '^' . cwd . '\(/\|$\)'
+            while cwd !~ '^' . file . '\(/\|$\)'
+              let file = fnamemodify(file, ':h')
+              let newfile = fnamemodify(newfile, ':h')
+            endwhile
+          endif
+
+          if cwd =~ '^' . file . '\(/\|$\)'
+            let dir = substitute(cwd, file, newfile, '')
+            exec 'cd ' . escape(dir, ' ')
+            let cwd_return = 0
+          endif
+          continue
+        endif
+
+        let winnr = bufwinnr(file)
+        if winnr > -1
+          exec winnr . 'winc w'
+          if newfile != ''
+            let bufnr = bufnr('%')
+            enew
+            exec 'bdelete ' . bufnr
+            exec 'edit ' . escape(eclim#util#Simplify(newfile), ' ')
+          else
+            call eclim#util#ReloadRetab()
+          endif
+        endif
+      endfor
+    finally
+      exec curwin . 'winc w'
+      if cwd_return
+        exec 'cd ' . escape(cwd, ' ')
+      endif
+    endtry
+  finally
+    " re-enable swap files
+    let bufnum = 1
+    while bufnum <= bufend
+      if bufexists(bufnum)
+        let save_swapfile = getbufvar(bufnum, 'save_swapfile')
+        if save_swapfile != ''
+          call setbufvar(bufnum, '&swapfile', save_swapfile)
+        endif
+      endif
+      let bufnum = bufnum + 1
+    endwhile
+  endtry
+endfunction " }}}
+
+" RefactorPreview(command) {{{
+" Executes the supplied refactor preview command and opens a corresponding
+" window to view that preview.
+function! eclim#lang#RefactorPreview(command)
+  let result = eclim#ExecuteEclim(a:command)
+  if type(result) != g:DICT_TYPE
+    return
+  endif
+
+  " error occurred
+  if has_key(result, 'errors')
+    call eclim#util#EchoError(result.errors)
+    return
+  endif
+
+  let lines = []
+  for change in result.changes
+    if change.type == 'diff'
+      call add(lines, '|diff|: ' . change.file)
+    else
+      call add(lines, change.type . ': ' . change.message)
+    endif
+  endfor
+
+  call add(lines, '')
+  call add(lines, '|Execute Refactoring|')
+  call eclim#util#TempWindow('[Refactor Preview]', lines)
+  let b:refactor_command = result.apply
+
+  set ft=refactor_preview
+  hi link RefactorLabel Identifier
+  hi link RefactorLink Label
+  syntax match RefactorLabel /^\s*\w\+:/
+  syntax match RefactorLink /|\S.\{-}\S|/
+
+  nnoremap <silent> <buffer> <cr> :call eclim#lang#RefactorPreviewLink()<cr>
+endfunction " }}}
+
+" RefactorPreviewLink() {{{
+" Called when a user hits <cr> on a link in the refactor preview window,
+" issuing a diff for that file.
+function! eclim#lang#RefactorPreviewLink()
+  let line = getline('.')
+  if line =~ '^|'
+    let command = b:refactor_command
+
+    let winend = winnr('$')
+    let winnum = 1
+    while winnum <= winend
+      let bufnr = winbufnr(winnum)
+      if getbufvar(bufnr, 'refactor_preview_diff') != ''
+        exec bufnr . 'bd'
+        continue
+      endif
+      let winnum += 1
+    endwhile
+
+    if line == '|Execute Refactoring|'
+      call eclim#lang#Refactor(command)
+      let winnr = b:winnr
+      close
+      " the filename might change, so we have to use the winnr to get back to
+      " where we were.
+      exec winnr . 'winc w'
+
+    elseif line =~ '^|diff|'
+      let file = substitute(line, '^|diff|:\s*', '', '')
+      let command .= ' -v -d "' . file . '"'
+
+      let diff = eclim#ExecuteEclim(command)
+      if type(diff) != g:STRING_TYPE
+        return
+      endif
+
+      " split relative to the original window
+      exec b:winnr . 'winc w'
+
+      if has('win32unix')
+        let file = eclim#cygwin#CygwinPath(file)
+      endif
+      let name = fnamemodify(file, ':t:r')
+      let ext = fnamemodify(file, ':e')
+      exec printf('silent below new %s.current.%s', name, ext)
+      silent 1,$delete _ " counter-act any templating plugin
+      exec 'read ' . escape(file, ' ')
+      silent 1,1delete _
+      let winnr = winnr()
+      let b:refactor_preview_diff = 1
+      setlocal readonly nomodifiable
+      setlocal noswapfile nobuflisted
+      setlocal buftype=nofile bufhidden=delete
+      diffthis
+
+      let orien = g:EclimRefactorDiffOrientation == 'horizontal' ? '' : 'vertical'
+      exec printf('silent below %s split %s.new.%s', orien, name, ext)
+      silent 1,$delete _ " counter-act any templating plugin
+      call append(1, split(diff, "\n"))
+      let b:refactor_preview_diff = 1
+      silent 1,1delete _
+      setlocal readonly nomodifiable
+      setlocal noswapfile nobuflisted
+      setlocal buftype=nofile bufhidden=delete
+      diffthis
+      exec winnr . 'winc w'
+    endif
+  endif
+endfunction " }}}
+
+" RefactorPrompt(prompt) {{{
+" Issues the standard prompt for language refactorings.
+function! eclim#lang#RefactorPrompt(prompt)
+  exec "echohl " . g:EclimInfoHighlight
+  try
+    " clear any previous messages
+    redraw
+    echo a:prompt . "\n"
+    let response = input("([e]xecute / [p]review / [c]ancel): ")
+    while response != '' &&
+        \ response !~ '^\c\s*\(e\(xecute\)\?\|p\(review\)\?\|c\(ancel\)\?\)\s*$'
+      let response = input("You must choose either e, p, or c. (Ctrl-C to cancel): ")
+    endwhile
+  finally
+    echohl None
+  endtry
+
+  if response == ''
+    return -1
+  endif
+
+  if response =~ '\c\s*\(c\(ancel\)\?\)\s*'
+    return 0
+  endif
+
+  return response =~ '\c\s*\(e\(execute\)\?\)\s*' ? 1 : 2 " preview
+endfunction " }}}
+
+" UndoRedo(operation, peek) {{{
+" Performs an undo or redo (operation  = 'undo' or 'redo') for the last
+" executed refactoring.
+function! eclim#lang#UndoRedo(operation, peek)
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  " update the file before vim makes any changes.
+  call eclim#lang#SilentUpdate()
+  wall
+
+  let command = s:undoredo_command
+  let command = substitute(command, '<operation>', a:operation, '')
+  if a:peek
+    let command .= ' -p'
+    let result = eclim#ExecuteEclim(command)
+    if type(result) == g:STRING_TYPE
+      call eclim#util#Echo(result)
+    endif
+    return
+  endif
+
+  call eclim#lang#Refactor(command)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

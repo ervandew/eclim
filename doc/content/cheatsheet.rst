@@ -379,10 +379,15 @@ Misc. Commands
   View the local history entries for the current file.
 - :ref:`:HistoryClear <:HistoryClear>` -
   Clear the local history entries for the current file.
-- :ref:`:HistoryDiffNext <:HistoryDiffNext>` -
-  Diff the current file against the next entry in the history stack.
-- :ref:`:HistoryDiffPrev <:HistoryDiffPrev>` -
-  Diff the current file against the previous entry in the history stack.
+- :ref:`:HistoryDiffNext <:HistoryDiffNext>` /
+  :ref:`:HistoryDiffPrev <:HistoryDiffPrev>` -
+  Diff the current file against the next/previous entry in the history stack.
+- :ref:`:RefactorUndo <:RefactorUndo>` /
+  :ref:`:RefactorRedo <:RefactorRedo>` -
+  Undo / Redo the last refactoring.
+- :ref:`:RefactorUndoPeek <:RefactorUndoPeek>` /
+  :ref:`:RefactorRedoPeek <:RefactorRedoPeek>` -
+  Display a short description of the refactoring to be undone / redone.
 - :ref:`:OpenUrl <:OpenUrl>` [url] - Opens a url in your configured web browser.
 
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes

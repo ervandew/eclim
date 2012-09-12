@@ -119,34 +119,12 @@ package would be moved to the same level as 'org' and then renamed.
   you will have to do so manually.  A best practice would be to close any other
   vim sessions that might be affected by the renaming of a package.
 
-.. _\:JavaRefactorUndo:
-.. _\:JavaRefactorRedo:
+.. include:: /vim/refactoring.rst
+   :start-after: begin-refactor-undo-redo
+   :end-before: end-refactor-undo-redo
 
-Refactor Undo/Redo
-------------------
-
-In the event that you need to undo a refactoring, eclim provides the
-**:JavaRefactorUndo** command.  When executed, the last refactoring will be
-reverted.  If you are unsure what the last refactoring was, the
-**:JavaRefactorUndoPeek** command will provide a hint of the top most
-refactoring on the undo stack.  Unfortunately the hint doesn't provide details
-beyond the type of refactoring that will be undone, but it can still be helpful
-at times.
-
-Eclim also provides the **:JavaRefactorRedo** and **:JavaRefactorRedoPeek**
-commands which provide the redo counterpart to the undo commands.
-
-
-Configuration
--------------
-
-:doc:`Vim Settings </vim/settings>`
-
-.. _g\:EclimRefactorDiffOrientation:
-
-- **g:EclimRefactorDiffOrientation** (Default: 'vertical') -
-  Specifies the orientation used when previewing a refactoring and performing a
-  diff split between the current file contents and the changes to be performed
-  by the refactoring.  Possible values include 'vertical' or 'horizontal'.
+.. include:: /vim/refactoring.rst
+   :start-after: begin-refactor-config
+   :end-before: end-refactor-config
 
 .. _eclim-user: http://groups.google.com/group/eclim-user

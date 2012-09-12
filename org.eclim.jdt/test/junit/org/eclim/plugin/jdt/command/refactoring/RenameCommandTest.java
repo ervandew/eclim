@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,21 +98,10 @@ public class RenameCommandTest
         "-n", "BAR", "-o", "98", "-l", "3", "-e", "utf-8",
       });
 
-    assertEquals(p + "src", result.get(0).get("file"));
-    assertEquals(p + "src/org", result.get(1).get("file"));
-    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
-    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename",
-        result.get(5).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
-        result.get(6).get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
-        result.get(7).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
-        result.get(8).get("file"));
+        result.get(0).get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        result.get(9).get("file"));
+        result.get(1).get("file"));
 
     String tn1NewContents = Eclim.fileToString(
         Jdt.TEST_PROJECT,
@@ -187,21 +176,10 @@ public class RenameCommandTest
         "-n", "testRename", "-o", "310", "-l", "10", "-e", "utf-8",
       });
 
-    assertEquals(p + "src", result.get(0).get("file"));
-    assertEquals(p + "src/org", result.get(1).get("file"));
-    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
-    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename",
-        result.get(5).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
-        result.get(6).get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
-        result.get(7).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
-        result.get(8).get("file"));
+        result.get(0).get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        result.get(9).get("file"));
+        result.get(1).get("file"));
 
     String tn1NewContents = Eclim.fileToString(
         Jdt.TEST_PROJECT,
@@ -276,23 +254,12 @@ public class RenameCommandTest
         "-n", "TestR1", "-o", "60", "-l", "6", "-e", "utf-8",
       });
 
-    assertEquals(p + "src", result.get(0).get("file"));
-    assertEquals(p + "src/org", result.get(1).get("file"));
-    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
-    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename",
-        result.get(5).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
-        result.get(6).get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
-        result.get(7).get("from"));
+        result.get(0).get("from"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestR1.java",
-        result.get(7).get("to"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
-        result.get(8).get("file"));
+        result.get(0).get("to"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        result.get(9).get("file"));
+        result.get(1).get("file"));
 
     assertFalse(new File(Eclim.resolveFile(
             Jdt.TEST_PROJECT,
@@ -375,29 +342,18 @@ public class RenameCommandTest
         "-o", "42", "-l", "2", "-e", "utf-8",
       });
 
-    assertEquals(p + "src", result.get(0).get("file"));
-    assertEquals(p + "src/org", result.get(1).get("file"));
-    assertEquals(p + "src/org/eclim", result.get(2).get("file"));
-    assertEquals(p + "src/org/eclim/test", result.get(3).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring", result.get(4).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename",
-        result.get(5).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1",
-        result.get(6).get("file"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/r1",
-        result.get(7).get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestR1.java",
-        result.get(8).get("from"));
+        result.get(0).get("from"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/TestR1.java",
-        result.get(8).get("to"));
+        result.get(0).get("to"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
-        result.get(9).get("from"));
+        result.get(1).get("from"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/n2",
-        result.get(9).get("to"));
+        result.get(1).get("to"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        result.get(10).get("from"));
+        result.get(2).get("from"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/n2/TestN2.java",
-        result.get(10).get("to"));
+        result.get(2).get("to"));
 
     assertFalse(new File(Eclim.resolveFile(
             Jdt.TEST_PROJECT,

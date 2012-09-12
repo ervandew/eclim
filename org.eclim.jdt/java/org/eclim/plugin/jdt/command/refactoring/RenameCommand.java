@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,10 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
+
+import org.eclim.plugin.core.command.refactoring.AbstractRefactorCommand;
+import org.eclim.plugin.core.command.refactoring.Refactor;
+import org.eclim.plugin.core.command.refactoring.RefactorException;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
@@ -81,11 +85,8 @@ import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
 public class RenameCommand
   extends AbstractRefactorCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see AbstractRefactorCommand#createRefactoring(CommandLine)
-   */
-  public Refactoring createRefactoring(CommandLine commandLine)
+  @Override
+  public Refactor createRefactoring(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
@@ -114,7 +115,13 @@ public class RenameCommand
     }
 
     JavaRenameProcessor processor = getProcessor(element, name, flags);
-    return new RenameRefactoring(processor);
+    Refactoring refactoring = new RenameRefactoring(processor);
+
+    // create a more descriptive name than the default.
+    String desc = refactoring.getName() +
+      " (" + element.getElementName() + " -> " + name + ')';
+
+    return new Refactor(desc, refactoring);
   }
 
   /**
