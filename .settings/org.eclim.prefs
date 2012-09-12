@@ -1,7 +1,8 @@
-#Fri Sep 30 07:07:16 PDT 2011
 eclipse.preferences.version=1
 org.eclim.java.checkstyle.config=ant/checkstyle.xml
 org.eclim.java.doc.packagenames=org.eclim
+org.eclim.java.import.exclude=["^com.sun..*", "^sunw?..*", "^antlr..*"]
+org.eclim.java.import.package_separation_level=-1
 org.eclim.java.junit.command=Ant -Dtest.include\=<testcase> test
 org.eclim.java.junit.output_dir=<project>/build/test/junit/results
 org.eclim.java.logging.impl=custom
