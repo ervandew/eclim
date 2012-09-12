@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.refactoring;
+package org.eclim.plugin.core.command.refactoring;
 
 /**
- * Exception used to bread out of a refactoring during initialization and return
+ * Exception used to break out of a refactoring during initialization and return
  * a message.
  *
  * @author Eric Van Dewoestine

@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.refactoring;
+package org.eclim.plugin.core.command.refactoring;
+
+import java.lang.reflect.Field;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,15 +32,9 @@ import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
@@ -62,13 +58,7 @@ public abstract class AbstractRefactorCommand
   private static final String PREVIEW_OPTION = "v";
   private static final String DIFF_OPTION = "d";
 
-  protected ThreadLocal<ResourceChangeListener> listener =
-    new ThreadLocal<ResourceChangeListener>();
-
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -87,7 +77,8 @@ public abstract class AbstractRefactorCommand
     List<String> errors = new ArrayList<String>();
     try{
       NullProgressMonitor monitor = new NullProgressMonitor();
-      Refactoring refactoring = createRefactoring(commandLine);
+      Refactor refactor = createRefactoring(commandLine);
+      Refactoring refactoring = refactor.refactoring;
 
       RefactoringStatus status = refactoring.checkAllConditions(
           new SubProgressMonitor(monitor, 4));
@@ -143,15 +134,28 @@ public abstract class AbstractRefactorCommand
 
       IWorkspace workspace = ResourcesPlugin.getWorkspace();
       ResourceChangeListener rcl = new ResourceChangeListener();
-      listener.set(rcl);
       workspace.addResourceChangeListener(rcl);
       try{
         PerformChangeOperation changeOperation = new PerformChangeOperation(change);
+        // passing in refactor.name to the change op doesn't seem to do the
+        // trick, so lets force our name on the change since the undo manager
+        // will use the change's name if label is null (which it shouldn't be,
+        // but is, hence this hack).
+        if (change instanceof CompositeChange){
+          try{
+            Field fName = CompositeChange.class.getDeclaredField("fName");
+            fName.setAccessible(true);
+            fName.set(change, refactor.name);
+          }catch(NoSuchFieldException nsfe){
+            // change doesn't have the expected fName field.
+          }
+        }
+
         changeOperation.setUndoManager(
-            RefactoringCore.getUndoManager(), refactoring.getName());
+            RefactoringCore.getUndoManager(), change.getName());
 
         changeOperation.run(new SubProgressMonitor(monitor, 4));
-        return getChangedFiles();
+        return rcl.getChangedFiles();
       }finally{
         workspace.removeResourceChangeListener(rcl);
       }
@@ -170,45 +174,8 @@ public abstract class AbstractRefactorCommand
    * @param commandLine The original command line.
    * @return The refactoring change.
    */
-  public abstract Refactoring createRefactoring(CommandLine commandLine)
+  public abstract Refactor createRefactoring(CommandLine commandLine)
     throws Exception;
-
-  /**
-   * Builds a list of changed files.
-   *
-   * @return The list of changed files.
-   */
-  protected ArrayList<HashMap<String,String>> getChangedFiles()
-    throws Exception
-  {
-    ArrayList<HashMap<String,String>> results =
-      new ArrayList<HashMap<String,String>>();
-
-    for (IResourceDelta delta : listener.get().getResourceDeltas()){
-      int flags = delta.getFlags();
-      // the moved_from entry should handle this
-      if ((flags & IResourceDelta.MOVED_TO) != 0){
-        continue;
-      }
-
-      HashMap<String,String> result = new HashMap<String,String>();
-
-      IResource resource = delta.getResource();
-      String file = resource.getLocation().toOSString().replace('\\', '/');
-
-      if ((flags & IResourceDelta.MOVED_FROM) != 0){
-        String path = ProjectUtils.getFilePath(
-            resource.getProject(),
-            delta.getMovedFromPath().toOSString());
-        result.put("from", path);
-        result.put("to", file);
-      }else{
-        result.put("file", file);
-      }
-      results.add(result);
-    }
-    return results;
-  }
 
   private ArrayList<HashMap<String,String>> previewChanges(Change change)
     throws Exception
@@ -259,52 +226,4 @@ public abstract class AbstractRefactorCommand
     return null;
   }
 
-  /**
-   * Resource change listener use to collect a list of relevant resource deltas.
-   */
-  protected class ResourceChangeListener
-    implements IResourceChangeListener, IResourceDeltaVisitor
-  {
-    private List<IResourceDelta> deltas = new ArrayList<IResourceDelta>();
-
-    /**
-     * {@inheritDoc}
-     * @see IResourceChangeListener#resourceChanged(IResourceChangeEvent)
-     */
-    public void resourceChanged(IResourceChangeEvent event)
-    {
-      try{
-        event.getDelta().accept(this);
-      }catch(CoreException ce){
-        throw new RuntimeException(ce);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see IResourceDeltaVisitor#visit(IResourceDelta)
-     */
-    public boolean visit(IResourceDelta delta)
-      throws CoreException
-    {
-      IResource resource = delta.getResource();
-      if (delta.getKind() != IResourceDelta.NO_CHANGE && (
-            resource.getType() == IResource.FILE ||
-            resource.getType() == IResource.FOLDER))
-      {
-        deltas.add(delta);
-      }
-      return true;
-    }
-
-    /**
-     * Gets a list of relevant leaf node resource deltas.
-     *
-     * @return list of IResourceDelta.
-     */
-    public List<IResourceDelta> getResourceDeltas()
-    {
-      return deltas;
-    }
-  }
 }

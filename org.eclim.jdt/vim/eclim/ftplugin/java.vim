@@ -210,14 +210,6 @@ endif
 if !exists(":JavaRename")
   command -nargs=1 -buffer JavaRename :call eclim#java#refactor#Rename('<args>')
 endif
-if !exists(":JavaRefactorUndo")
-  command -buffer JavaRefactorUndo :call eclim#java#refactor#UndoRedo('undo', 0)
-  command -buffer JavaRefactorRedo :call eclim#java#refactor#UndoRedo('redo', 0)
-  command -buffer JavaRefactorUndoPeek
-    \ :call eclim#java#refactor#UndoRedo('undo', 1)
-  command -buffer JavaRefactorRedoPeek
-    \ :call eclim#java#refactor#UndoRedo('redo', 1)
-endif
 
 if !exists(":JavaLoggingInit")
   command -buffer JavaLoggingInit :call eclim#java#logging#LoggingInit()
