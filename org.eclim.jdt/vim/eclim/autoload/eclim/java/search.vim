@@ -37,6 +37,7 @@
 " Script Varables {{{
   let s:search_src = "java_search"
   let s:search_doc = "java_docsearch"
+  let s:open_doc = "-command java_doc_url_open -u '<url>'"
   let s:search_element =
     \ '-command <search> -n "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <length> <args>'
@@ -327,7 +328,7 @@ function! eclim#java#search#SearchAndDisplay(type, args)
 
       if len(results) == 1 && g:EclimJavaDocSearchSingleResult == "open"
         let entry = results[0]
-        call <SID>ViewDoc(entry)
+        call s:ViewDoc(entry)
       else
         call eclim#util#TempWindow(
           \ window_name, results, {'height': g:EclimLocationListHeight})
@@ -361,44 +362,12 @@ endfunction " }}}
 function! s:ViewDoc(...)
   let url = a:0 > 0 ? a:1 : substitute(getline('.'), '\(.\{-}\)|.*', '\1', '')
 
-  " handle javadocs inside of a jar (like those from maven dependencies)
+  " handle javadocs inside of a jar
   if url =~ '^jar:file:.*!'
-    let jarpath = substitute(url, 'jar:file:\(.\{-}\)!.*', '\1', '')
-    let filepath = substitute(url, 'jar:file:.\{-}!\(.*\)', '\1', '')
-    let tempdir = g:EclimTempDir . '/' . fnamemodify(jarpath, ':t')
-    if !isdirectory(tempdir)
-      call mkdir(tempdir)
-    endif
-    if !filereadable(tempdir . filepath)
-      call eclim#util#Echo('Extracting javadocs to temp dir...')
-      let result = ''
-      if executable('unzip')
-        let result = eclim#util#System('unzip -q -d "' . tempdir . '" "' . jarpath . '"')
-      elseif executable('jar')
-        let cwd = getcwd()
-        exec 'cd ' . escape(tempdir, ' ')
-        try
-          let result = eclim#util#System('jar -xf "' . jarpath . '"')
-        finally
-          exec 'cd ' . escape(cwd, ' ')
-        endtry
-      else
-        let result = eclim#util#EchoError("Unable to find 'jar' or 'unzip' in the system path.")
-        return
-      endif
-      if v:shell_error
-        call eclim#util#EchoError('Error extracting jar file: ' . result)
-        return
-      endif
-    endif
-    let path = tempdir . filepath
-    if has('win32unix')
-      let path = eclim#cygwin#WindowsPath(path)
-    endif
-    let url = 'file://' . path
+    call eclim#ExecuteEclim(substitute(s:open_doc, '<url>', url, ''))
+  else
+    call eclim#web#OpenUrl(url)
   endif
-
-  call eclim#web#OpenUrl(url)
 endfunction " }}}
 
 " CommandCompleteJavaSearch(argLead, cmdLine, cursorPos) {{{
