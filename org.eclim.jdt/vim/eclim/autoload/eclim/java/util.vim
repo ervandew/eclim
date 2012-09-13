@@ -223,16 +223,17 @@ function! eclim#java#util#IsValidIdentifier(word)
   return 1
 endfunction " }}}
 
-" UpdateSrcFile(validate) {{{
+" UpdateSrcFile(validate, [force]) {{{
 " Updates the src file on the server w/ the changes made to the current file.
-function! eclim#java#util#UpdateSrcFile(validate)
+function! eclim#java#util#UpdateSrcFile(validate, ...)
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
     let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:update_command
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
-    if (g:EclimJavaSrcValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
+    if (g:EclimJavaSrcValidate || a:validate) &&
+     \ (a:0 || !eclim#util#WillWrittenBufferClose())
       let command = command . ' -v'
       if eclim#project#problems#IsProblemsList()
         let command = command . ' -b'
@@ -240,7 +241,8 @@ function! eclim#java#util#UpdateSrcFile(validate)
     endif
 
     let result = eclim#ExecuteEclim(command)
-    if (g:EclimJavaSrcValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
+    if (g:EclimJavaSrcValidate || a:validate) &&
+     \ (a:0 || !eclim#util#WillWrittenBufferClose())
       if type(result) == g:LIST_TYPE && len(result) > 0
         let errors = eclim#util#ParseLocationEntries(
           \ result, g:EclimValidateSortResults)
