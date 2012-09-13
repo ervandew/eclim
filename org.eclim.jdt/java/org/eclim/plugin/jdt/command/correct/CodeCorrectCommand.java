@@ -19,7 +19,6 @@ package org.eclim.plugin.jdt.command.correct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.Services;
@@ -31,20 +30,49 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.command.refactoring.ResourceChangeListener;
+
+import org.eclim.plugin.jdt.command.include.ImportUtils;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 
+import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+
+import org.eclipse.jdt.core.refactoring.CompilationUnitChange;
+
 import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
+import org.eclipse.jdt.internal.ui.text.correction.ReorgCorrectionsSubProcessor.ClasspathFixCorrectionProposal;
+
+import org.eclipse.jdt.internal.ui.text.correction.proposals.NewCUUsingWizardProposal;
 
 import org.eclipse.jdt.ui.text.java.CompletionProposalComparator;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jdt.ui.text.java.IProblemLocation;
 import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
 
-import org.eclipse.jdt.ui.text.java.correction.CUCorrectionProposal;
+import org.eclipse.jdt.ui.text.java.correction.ASTRewriteCorrectionProposal;
+import org.eclipse.jdt.ui.text.java.correction.ChangeCorrectionProposal;
+
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
+import org.eclipse.ltk.core.refactoring.RefactoringCore;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.RefactoringStatusEntry;
+import org.eclipse.ltk.core.refactoring.TextFileChange;
+
+import org.eclipse.text.edits.TextEdit;
 
 /**
  * Handles requests for code correction.
@@ -64,9 +92,7 @@ import org.eclipse.jdt.ui.text.java.correction.CUCorrectionProposal;
 public class CodeCorrectCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -87,15 +113,11 @@ public class CodeCorrectCommand
       return message;
     }
 
-    List<IJavaCompletionProposal> proposals = getProposals(src, problem);
+    List<ChangeCorrectionProposal> proposals = getProposals(src, problem);
     if(commandLine.hasOption(Options.APPLY_OPTION)){
-      IJavaCompletionProposal proposal = (IJavaCompletionProposal)
+      ChangeCorrectionProposal proposal =
         proposals.get(commandLine.getIntValue(Options.APPLY_OPTION));
-
-      // does not work since it is so deeply tied to the ui (grabbing the
-      // editor, opening dialogs, etc.).
-      //proposal.apply(JavaUtils.getDocument(src));
-      return proposal.toString();
+      return apply(src, proposal);
     }
 
     HashMap<String,Object> result = new HashMap<String,Object>();
@@ -113,7 +135,7 @@ public class CodeCorrectCommand
    * @param offset The offset of the error.
    * @return The IProblem or null if none found.
    */
-  protected IProblem getProblem(ICompilationUnit src, int line, int offset)
+  private IProblem getProblem(ICompilationUnit src, int line, int offset)
     throws Exception
   {
     IProblem[] problems = JavaUtils.getProblems(src);
@@ -146,14 +168,16 @@ public class CodeCorrectCommand
    *
    * @param src The src file.
    * @param problem The problem.
-   * @return Returns a List of IJavaCompletionProposal.
+   * @return Returns a List of ChangeCorrectionProposal.
    */
-  protected List<IJavaCompletionProposal> getProposals(
+  private List<ChangeCorrectionProposal> getProposals(
       ICompilationUnit src, IProblem problem)
     throws Exception
   {
-    ArrayList<IJavaCompletionProposal> results =
-      new ArrayList<IJavaCompletionProposal>();
+    IProject project = src.getJavaProject().getProject();
+
+    ArrayList<ChangeCorrectionProposal> results =
+      new ArrayList<ChangeCorrectionProposal>();
     int length = (problem.getSourceEnd() + 1) - problem.getSourceStart();
     AssistContext context = new AssistContext(
         src, problem.getSourceStart(), length);
@@ -178,32 +202,43 @@ public class CodeCorrectCommand
           processors[ii].getCorrections(context, locations);
         if(proposals != null){
           for (IJavaCompletionProposal proposal : proposals){
-            if (!(proposal instanceof CUCorrectionProposal)){
+            if (!(proposal instanceof ChangeCorrectionProposal)){
               continue;
             }
 
-            CUCorrectionProposal cuProposal = (CUCorrectionProposal)proposal;
-
-            // for now we aren't going to support changes to files other than the
-            // current one.
-            if (!src.equals(cuProposal.getCompilationUnit())){
-              continue;
-            }
-
-            // filter out corrections that have no preview, since they can't be
-            // applied in the same fashion as those that have previews.
-            String preview = proposal.getAdditionalProposalInfo();
-            if (preview == null ||
-                preview.trim().equals("") ||
-                preview.trim().startsWith("Start the") ||
-                preview.trim().startsWith("Opens") ||
-                preview.trim().startsWith("Evaluates") ||
-                preview.trim().startsWith("<p>Move"))
+            // skip proposal requiring gui dialogs
+            if (proposal instanceof NewCUUsingWizardProposal ||
+                proposal instanceof ClasspathFixCorrectionProposal)
             {
               continue;
             }
 
-            results.add(cuProposal);
+            // honor the user's import exclusions
+            if (proposal instanceof ASTRewriteCorrectionProposal){
+              ImportRewrite rewrite =
+                ((ASTRewriteCorrectionProposal)proposal).getImportRewrite();
+              if (rewrite != null){
+                boolean exclude = true;
+                for(String fqn : rewrite.getAddedImports()){
+                  if (!ImportUtils.isImportExcluded(project, fqn)){
+                    exclude = false;
+                    break;
+                  }
+                }
+                for(String fqn : rewrite.getAddedStaticImports()){
+                  if (!ImportUtils.isImportExcluded(project, fqn)){
+                    exclude = false;
+                    break;
+                  }
+                }
+
+                if (exclude){
+                  continue;
+                }
+              }
+            }
+
+            results.add((ChangeCorrectionProposal)proposal);
           }
         }
       }
@@ -220,27 +255,90 @@ public class CodeCorrectCommand
    * @param proposals List of IJavaCompletionProposal.
    * @return Array of CodeCorrectResult.
    */
-  protected List<CodeCorrectResult> getCorrections(
-      List<IJavaCompletionProposal> proposals)
+  private List<CodeCorrectResult> getCorrections(
+      List<ChangeCorrectionProposal> proposals)
     throws Exception
   {
     ArrayList<CodeCorrectResult> corrections = new ArrayList<CodeCorrectResult>();
-    Iterator<IJavaCompletionProposal> iterator = proposals.iterator();
-    for(int ii = 0; iterator.hasNext(); ii++){
-      IJavaCompletionProposal proposal = iterator.next();
-      String preview = null;
-      /*if (proposal instanceof CorrectPackageDeclarationProposal){
-        preview = getAdditionalProposalInfo((CUCorrectionProposal)proposal);
-      }else{*/
-        preview = proposal.getAdditionalProposalInfo();
-      //}
-
-      preview = preview
-        .replaceAll("<br>", "\n")
-        .replaceAll("<.+?>", "");
+    int index = 0;
+    for(ChangeCorrectionProposal proposal : proposals){
+      String preview = proposal.getAdditionalProposalInfo();
+      if (preview != null){
+        preview = preview
+          .replaceAll("<br>", "\n")
+          .replaceAll("<.+?>", "");
+      }
       corrections.add(new CodeCorrectResult(
-            ii, proposal.getDisplayString(), preview));
+            index, proposal.getDisplayString(), preview));
+      index++;
     }
     return corrections;
+  }
+
+  /**
+   * Apply the supplied correction proposal.
+   *
+   * @param src The ICompilationUnit where the change is initiated from.
+   * @param proposal The ChangeCorrectionProposal to apply.
+   * @return A list of changed files or a map containing a list of errors.
+   */
+  private Object apply(ICompilationUnit src, ChangeCorrectionProposal proposal)
+    throws Exception
+  {
+    Change change = null;
+    try {
+      NullProgressMonitor monitor = new NullProgressMonitor();
+      change = proposal.getChange();
+      change.initializeValidationData(monitor);
+      RefactoringStatus status = change.isValid(monitor);
+      if (status.hasFatalError()){
+        List<String> errors = new ArrayList<String>();
+        for (RefactoringStatusEntry entry : status.getEntries()){
+          String message = entry.getMessage();
+          if (!errors.contains(message) &&
+              !message.startsWith("Found potential matches"))
+          {
+            errors.add(message);
+          }
+        }
+        HashMap<String,List<String>> result = new HashMap<String,List<String>>();
+        result.put("errors", errors);
+        return result;
+      }
+
+      ResourceChangeListener rcl = new ResourceChangeListener();
+      IWorkspace workspace = ResourcesPlugin.getWorkspace();
+      workspace.addResourceChangeListener(rcl);
+      try{
+        TextEdit edit = null;
+        if (change instanceof TextFileChange){
+          TextFileChange fileChange = (TextFileChange)change;
+          fileChange.setSaveMode(TextFileChange.FORCE_SAVE);
+          edit = fileChange.getEdit();
+        }
+        PerformChangeOperation changeOperation = new PerformChangeOperation(change);
+        changeOperation.setUndoManager(
+            RefactoringCore.getUndoManager(), proposal.getName());
+        changeOperation.run(monitor);
+
+        if (edit != null &&
+            change instanceof CompilationUnitChange &&
+            src.equals(((CompilationUnitChange)change).getCompilationUnit()))
+        {
+          JavaUtils.format(
+              src, CodeFormatter.K_COMPILATION_UNIT,
+              edit.getOffset(),
+              edit.getLength());
+        }
+
+        return rcl.getChangedFiles();
+      }finally{
+        workspace.removeResourceChangeListener(rcl);
+      }
+    }finally{
+      if (change != null) {
+        change.dispose();
+      }
+    }
   }
 }
