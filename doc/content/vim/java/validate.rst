@@ -66,7 +66,7 @@ Code Correction
 Code correction in eclim is equivalent to the quick fix functionality of
 Eclipse. When you save a java source file, eclim
 :doc:`validates </vim/java/validate>` the file and notes which lines contain
-errors.  To have eclim suggest possible corrections for an error, you simply
+errors. To have eclim suggest possible corrections for an error, you simply
 place the cursor on the error line and issue **:JavaCorrect**.
 
 The result will be a small window opened at the bottom of Vim where any
@@ -91,6 +91,13 @@ To apply the above change you would hit <enter> on the line\:
 ::
 
   0.1227:  Add @SuppressWarnings 'serial' to 'Foo'
+
+.. note::
+
+   Java code corrections are handled just like a :doc:`refactoring
+   </vim/java/refactor>` so the :ref:`RefactorUndo <:RefactorUndo>` and
+   :ref:`RefactorRedo <:RefactorRedo>` commands can be used to undo/redo
+   corrections that can't be handled by vim's undo (like file moves).
 
 .. _\:Checkstyle:
 

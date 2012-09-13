@@ -125,25 +125,8 @@ function! eclim#java#correct#CorrectApply()
       let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
       let command = substitute(command, '<apply>', index, '')
 
-      let content = split(eclim#ExecuteEclim(command), '\n')
-
-      if len(content) == 1 && content[0] == '0'
-        return
-      endif
-
-      let pos = getpos('.')
-
-      1,$delete _
-      call append(1, content)
-      1,1delete _
-      if &ff == 'dos'
-        let save_search = @/
-        exec "%s/\<c-m>$//g"
-        let @/ = save_search
-      endif
-
-      call setpos('.', pos)
-      update
+      call eclim#lang#Refactor(command)
+      call eclim#java#util#UpdateSrcFile(1, 1)
 
       exec winnr . "winc w"
       close

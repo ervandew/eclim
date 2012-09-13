@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,14 +92,21 @@ public class CorrectCommandTest
     }
     assertTrue("Missing expected suggestion.", apply > -1);
 
-    String applied = (String)Eclim.execute(new String[]{
-      "java_correct", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE,
-      "-l", "5", "-o", "74", "-e", "utf-8", "-a", String.valueOf(apply)
-    });
+    List<Map<String,String>> changes = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_correct", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-l", "5", "-o", "74", "-e", "utf-8", "-a", String.valueOf(apply)
+      });
 
+    assertEquals(1, changes.size());
+    assertEquals(
+        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE),
+        changes.get(0).get("file"));
+
+    String file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Import not found.",
-        Pattern.compile("import java\\.").matcher(applied).find());
+        Pattern.compile("import java\\.").matcher(file).find());
   }
 
   @Test
@@ -125,25 +132,33 @@ public class CorrectCommandTest
       (List<Map<String,Object>>)result.get("corrections");
     assertEquals(
         "Change package declaration to 'org.eclim.test.correct'",
-        results.get(0).get("description"));
+        results.get(1).get("description"));
     assertEquals(
         "...\npackage org.eclim.test.correct;\n...\n",
-        results.get(0).get("preview"));
+        results.get(1).get("preview"));
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void applyPackage()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String result = (String)Eclim.execute(new String[]{
-      "java_correct", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE_PACKAGE,
-      "-l", "1", "-o", "0", "-e", "utf-8", "-a", "0"
-    });
+    List<Map<String,String>> changes = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_correct", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE_PACKAGE,
+        "-l", "1", "-o", "0", "-e", "utf-8", "-a", "1"
+      });
 
-    String[] results = StringUtils.split(result, '\n');
-    assertEquals("Incorrect package", "package org.eclim.test.correct;", results[0]);
+    assertEquals(1, changes.size());
+    assertEquals(
+        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_PACKAGE),
+        changes.get(0).get("file"));
+
+    String file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE_PACKAGE);
+    String[] lines = StringUtils.split(file, '\n');
+    assertEquals("Incorrect package", "package org.eclim.test.correct;", lines[0]);
   }
 }
