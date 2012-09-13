@@ -937,6 +937,7 @@ function! eclim#project#util#GetProjects()
         endif
       endfor
       let s:workspace_projects[workspace] = results
+      unlet results
     endfor
   endif
 
