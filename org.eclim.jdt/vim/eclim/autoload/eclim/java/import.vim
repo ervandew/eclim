@@ -63,6 +63,7 @@ function! eclim#java#import#Import(...) " {{{
 
   if type(result) == g:DICT_TYPE
     edit!
+    call eclim#java#util#UpdateSrcFile(1, 1)
     call cursor(result.line, result.column)
     if result.offset != offset
       call eclim#util#Echo('Imported ' . (a:0 ? a:1 : ''))
@@ -105,6 +106,7 @@ function! eclim#java#import#OrganizeImports(...) " {{{
 
   if type(result) == g:DICT_TYPE
     edit!
+    call eclim#java#util#UpdateSrcFile(1, 1)
     call cursor(result.line, result.column)
     return
   endif
