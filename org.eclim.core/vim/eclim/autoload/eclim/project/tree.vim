@@ -457,7 +457,8 @@ function! eclim#project#tree#InjectLinkedResources(dir, contents) " {{{
   endif
 
   " listing the project root, so inject our project links
-  if len(project.links) && substitute(a:dir, '/$', '', '') == project.path
+  if len(get(project, 'links', {})) &&
+   \ substitute(a:dir, '/$', '', '') == project.path
     if !exists('b:links')
       let b:links = {}
     endif

@@ -901,7 +901,7 @@ function! eclim#project#util#GetProjectRelativeFilePath(...)
 
   " handle file in linked folder
   if result == file
-    for name in keys(project.links)
+    for name in keys(get(project, 'links', {}))
       if file =~ '^' . project.links[name] . pattern
         let result = substitute(file, project.links[name], name, '')
       endif
@@ -933,7 +933,9 @@ function! eclim#project#util#GetProjects()
         let project['workspace'] = workspace
         if has('win32unix')
           let project['path'] = eclim#cygwin#CygwinPath(project['path'])
-          call map(project['links'], 'eclim#cygwin#CygwinPath(v:val)')
+          if has_key(project, 'links')
+            call map(project['links'], 'eclim#cygwin#CygwinPath(v:val)')
+          endif
         endif
       endfor
       let s:workspace_projects[workspace] = results
