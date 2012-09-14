@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2005 - 2012  Eric Van Dewoestine
 #
@@ -121,6 +121,58 @@ build_vmargs(){
   fi
 
   ECLIM_VMARGS="$ARCH $ECLIM_VMARGS"
+
+  ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/eclipse.ini"
+  if `uname -a | grep -iq "darwin"` ; then
+    ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/Eclipse.app/Contents/MacOS/eclipse.ini"
+  fi
+
+  # add any eclipse vmargs not present
+  PERMGEN_SIZE="-XX:MaxPermSize=128m"
+  if [ -f "$ECLIPSE_INI" -a -n "$PERL" ] ; then
+    CONTENTS=$(cat "$ECLIPSE_INI" | perl -pe 's|\n| |g')
+    if [ "$(echo "$CONTENTS" | grep -- "--launcher.XXMaxPermSize" 2> /dev/null)" ] ; then
+      PERMGEN_SIZE=$(
+        echo "$CONTENTS" | perl -pe '
+          s|^.*--launcher.(XX)(MaxPermSize) (\w+).*|-\1:\2=\3|s
+        '
+      )
+    fi
+    ECLIPSE_VMARGS=$(
+      echo "$CONTENTS" | perl -pe '
+        # remove everthing up to the -vmargs
+        s|^.*-vmargs||s
+      '
+    )
+    for vmarg in $ECLIPSE_VMARGS ; do
+      arg=$(echo "$vmarg" | perl -pe 's|\d+.*||')
+      # ignore dock icon since it's probably on OSX and relative to
+      # Eclipse.app/Contents
+      if [[ "$vmarg" == *-Xdock:icon* ]] ; then
+        continue
+      fi
+      if [[ "$ECLIM_VMARGS" != *"$arg"* ]] ; then
+        ECLIM_VMARGS="$ECLIM_VMARGS $vmarg"
+      fi
+    done
+  fi
+
+  # set a default perm gen size if one isn't set
+  if [[ "$ECLIM_VMARGS" != *-XX:MaxPermSize* ]]; then
+    ECLIM_VMARGS="$ECLIM_VMARGS $PERMGEN_SIZE"
+  fi
+
+  # same deal for max heap space
+  if [[ "$ECLIM_VMARGS" != *-Xmx* ]]; then
+    ECLIM_VMARGS="$ECLIM_VMARGS -Xmx256m"
+  fi
+
+  # for osx
+  if `uname -a | grep -iq "darwin"` ; then
+    if [[ "$ECLIM_VMARGS" != *-XstartOnFirstThread* ]]; then
+      ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
+    fi
+  fi
 }
 
 ECLIMRC=$HOME/.eclimrc
