@@ -72,6 +72,19 @@ public class ProjectUtils
   public static String getPath(IProject project)
     throws Exception
   {
+    IPath path = getIPath(project);
+    return path != null ? path.toOSString().replace('\\', '/') : null;
+  }
+
+  /**
+   * Gets the path on disk to the directory of the supplied project.
+   *
+   * @param project The project.
+   * @return The path or null if not found.
+   */
+  public static IPath getIPath(IProject project)
+    throws Exception
+  {
     IPath path = project.getRawLocation();
 
     // eclipse returns null for raw location if project is under the workspace.
@@ -81,7 +94,7 @@ public class ProjectUtils
       path = path.append(name);
     }
 
-    return path != null ? path.toOSString().replace('\\', '/') : null;
+    return path;
   }
 
   /**
