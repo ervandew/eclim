@@ -117,9 +117,7 @@ public class SearchCommand
   private static final Pattern ANDROID_JDK_URL =
     Pattern.compile(".*android\\.jar!java.*");
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -292,6 +290,19 @@ public class SearchCommand
   }
 
   /**
+   * Determines if the supplied path is a jar compatible path that can be
+   * converted to a jar: url.
+   *
+   * @param path The IPath.
+   * @return True if a jar or zip, false otherwise.
+   */
+  protected boolean isJarArchive(IPath path)
+  {
+    String ext = path.getFileExtension();
+    return ext != null && ext.toLowerCase().matches("^(jar|zip)$");
+  }
+
+  /**
    * Creates a Position from the supplied SearchMatch.
    *
    * @param project The project searching from.
@@ -304,32 +315,39 @@ public class SearchCommand
     IJavaElement element = (IJavaElement)match.getElement();
     IJavaElement parent = JavaUtils.getPrimaryElement(element);
 
-    String archive = null;
     String file = null;
     String elementName = JavaUtils.getFullyQualifiedName(parent);
     if(parent.getElementType() == IJavaElement.CLASS_FILE){
       IResource resource = parent.getResource();
       // occurs with a referenced project as a lib with no source and class
       // files that are not archived in that project
-      if (resource != null && resource.getType() == IResource.FILE){
+      if (resource != null &&
+          resource.getType() == IResource.FILE &&
+          !isJarArchive(resource.getLocation()))
+      {
         file = resource.getLocation().toOSString();
 
       }else{
+        IPath path = null;
         IPackageFragmentRoot root = (IPackageFragmentRoot)
           parent.getParent().getParent();
         resource = root.getResource();
         if (resource != null){
           if (resource.getType() == IResource.PROJECT){
-            archive = ProjectUtils.getPath((IProject)resource);
+            path = ProjectUtils.getIPath((IProject)resource);
           }else{
-            archive = resource.getLocation().toOSString();
+            path = resource.getLocation();
           }
         }else{
-          archive = root.getPath().toOSString();
+          path = root.getPath();
         }
 
         String classFile = elementName.replace('.', File.separatorChar);
-        file = "jar:file://" + archive + '!' + classFile + ".class";
+        if (isJarArchive(path)){
+          file = "jar:file://" + path.toOSString() + '!' + classFile + ".class";
+        }else{
+          file = path.toOSString() + '/' + classFile + ".class";
+        }
 
         // android injects its jdk classes, so filter those out if the project
         // doesn't have the android nature.
