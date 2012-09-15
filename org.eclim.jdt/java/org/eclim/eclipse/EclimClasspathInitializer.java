@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.util.ProjectUtils;
@@ -134,8 +136,9 @@ public class EclimClasspathInitializer
         URL swt = source.getLocation();
         if (swt != null){
           logger.debug("adding swt to classpath: {}", swt.getPath());
+          Path path = new Path(swt.getPath());
           list.add(JavaCore.newLibraryEntry(
-                new Path(swt.getPath()), null, null, null, null, false));
+                path, sourcePath(path), null, null, null, false));
         }
       }
 
@@ -144,9 +147,10 @@ public class EclimClasspathInitializer
         try{
           Bundle bundle = Platform.getBundle(name);
           if (bundle != null){
-            String path = FileLocator.getBundleFile(bundle).getPath();
+            String pathName = FileLocator.getBundleFile(bundle).getPath();
+            Path path = new Path(pathName);
             list.add(JavaCore.newLibraryEntry(
-                  new Path(path), null, null, null, null, false));
+                  path, sourcePath(path), null, null, null, false));
           }
         }catch(IOException ioe){
           logger.error("Failed to locate bundle: " + name, ioe);
@@ -187,5 +191,29 @@ public class EclimClasspathInitializer
   private void listFiles(File dir, FileFilter filter)
   {
     dir.listFiles(filter);
+  }
+
+  private Path sourcePath(Path path)
+  {
+    Path sourcePath = null;
+
+    // handle native bundles (swt)
+    if (path.lastSegment().indexOf(".x86_64_") != -1){
+      sourcePath = new Path(
+          path.uptoSegment(path.segmentCount() - 1).toString() +
+          File.separator +
+          path.lastSegment().replace(".x86_64_", ".x86_64.source_"));
+
+    // all other bundles
+    }else{
+      String[] parts = StringUtils.split(path.lastSegment(), "_", 2);
+      sourcePath = parts.length == 2 ?
+        new Path(
+            path.uptoSegment(path.segmentCount() - 1).toString() +
+            File.separator + parts[0] + ".source_" + parts[1]) :
+        null;
+    }
+
+    return sourcePath != null && sourcePath.toFile().exists() ? sourcePath : null;
   }
 }
