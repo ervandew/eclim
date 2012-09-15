@@ -17,13 +17,9 @@
 package org.eclim.plugin.jdt.command.bean;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-
-import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
@@ -32,13 +28,9 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.util.TemplateUtils;
-
-import org.eclim.plugin.jdt.PluginResources;
-
+import org.eclim.plugin.jdt.util.ASTUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
-import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclim.util.file.Position;
@@ -50,7 +42,17 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.Signature;
 
+import org.eclipse.jdt.core.dom.Modifier;
+
 import org.eclipse.jdt.core.formatter.CodeFormatter;
+
+import org.eclipse.jdt.internal.corext.codemanipulation.AddGetterSetterOperation;
+import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationSettings;
+import org.eclipse.jdt.internal.corext.codemanipulation.GetterSetterUtil;
+
+import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesSettings;
+
+import org.eclipse.text.edits.TextEdit;
 
 /**
  * Command used to generate java bean property methods (getters / setters).
@@ -63,7 +65,7 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
     "REQUIRED o offset ARG," +
-    "OPTIONAL e encoding ARG," +
+    "REQUIRED e encoding ARG," +
     "REQUIRED r properties ARG," +
     "REQUIRED t type ARG," +
     "OPTIONAL i indexed NOARG"
@@ -71,9 +73,6 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 public class PropertiesCommand
   extends AbstractCommand
 {
-  private static final String GETTER_TEMPLATE = "getter.gst";
-  private static final String SETTER_TEMPLATE = "setter.gst";
-
   private static final String GETTER = "getter";
   private static final String SETTER = "setter";
 
@@ -86,9 +85,9 @@ public class PropertiesCommand
     Signature.createTypeSignature("int", true);
   private static final String[] INT_ARG = new String[]{INT_SIG};
 
-  /**
-   * {@inheritDoc}
-   */
+  private static final IField[] NO_FIELDS = new IField[0];
+
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -104,37 +103,30 @@ public class PropertiesCommand
     IType type = TypeUtils.getType(src, offset);
     List<IField> fields = Arrays.asList(type.getFields());
 
-    IJavaElement sibling = null;
-    // insert in reverse order since eclipse IType only has an insert before,
-    // no insert after.
-    for(int ii = properties.length - 1; ii >= 0; ii--){
-      IField field = type.getField(properties[ii]);
+    CodeGenerationSettings settings =
+        JavaPreferencesSettings.getCodeGenerationSettings(src.getJavaProject());
+    settings.createComments = true;
+
+    for(String property : properties){
+      IField field = type.getField(property);
       if(field != null){
-        boolean array = false;
-        if(Signature.getArrayCount(field.getTypeSignature()) > 0){
-          array = true;
-        }
+        boolean isArray = Signature.getArrayCount(field.getTypeSignature()) > 0;
 
-        if(methods.indexOf(SETTER) != -1){
-          // index setter
-          if(array && indexed){
-            sibling = getSibling(type, fields, field, sibling, TYPE_SET_INDEX);
-            sibling = insertSetter(src, type, sibling, field, true);
-          }
-          // setter
-          sibling = getSibling(type, fields, field, sibling, TYPE_SET);
-          sibling = insertSetter(src, type, sibling, field, false);
+        IField getter = methods.indexOf(GETTER) != -1 ? field : null;
+        IField setter = methods.indexOf(SETTER) != -1 ? field : null;
+        int methodType = getter != null ? TYPE_GET : TYPE_SET;
+        // edge case to prevent insert setter before getter if getter already
+        // exists.
+        if (getter != null && setter != null &&
+            GetterSetterUtil.getGetter(field) != null)
+        {
+          methodType = TYPE_SET;
         }
+        IJavaElement sibling = getSibling(type, fields, field, methodType);
+        insertMethods(src, type, sibling, settings, getter, setter);
 
-        if(methods.indexOf(GETTER) != -1){
-          // index getter
-          if(array && indexed){
-            sibling = getSibling(type, fields, field, sibling, TYPE_GET_INDEX);
-            sibling = insertGetter(src, type, sibling, field, true);
-          }
-          // getter
-          sibling = getSibling(type, fields, field, sibling, TYPE_GET);
-          sibling = insertGetter(src, type, sibling, field, false);
+        if (isArray && indexed){
+          insertIndexMethods(src, type, fields, settings, getter, setter);
         }
       }
     }
@@ -142,266 +134,185 @@ public class PropertiesCommand
     return null;
   }
 
-  /**
-   * Insert a getter for the supplied property.
-   *
-   * @param src The src file.
-   * @param type The type to insert into.
-   * @param sibling The element to insert before.
-   * @param field The field.
-   * @param array true if inserting the array version.
-   * @return The method element.
-   */
-  protected IJavaElement insertGetter(
+  private void insertMethods(
       ICompilationUnit src,
       IType type,
       IJavaElement sibling,
-      IField field,
-      boolean array)
+      CodeGenerationSettings settings,
+      IField getter,
+      IField setter)
     throws Exception
   {
-    String propertyType =
-      Signature.getSignatureSimpleName(field.getTypeSignature());
-    String methodName = StringUtils.capitalize(field.getElementName());
-    boolean isBoolean = propertyType.equals("boolean");
-    if(isBoolean){
-      methodName = "is" + methodName;
-    }else{
-      methodName = "get" + methodName;
-    }
+    AddGetterSetterOperation op = new AddGetterSetterOperation(
+        type,
+        getter != null ? new IField[]{getter} : NO_FIELDS,
+        setter != null ? new IField[]{setter} : NO_FIELDS,
+        NO_FIELDS,
+        ASTUtils.getCompilationUnit(src), null, sibling, settings, true, true);
+    op.run(null);
 
-    String[] args = null;
-    if(array){
-      propertyType = Signature.getSignatureSimpleName(
-          Signature.getElementType(field.getTypeSignature()));
-      args = INT_ARG;
+    TextEdit edit = op.getResultingEdit();
+    if (edit != null){
+      JavaUtils.format(
+          src, CodeFormatter.K_COMPILATION_UNIT,
+          edit.getOffset(), edit.getLength());
     }
-    IMethod method = type.getMethod(methodName, args);
-    if(!method.exists()){
-      HashMap<String, Object> values = new HashMap<String, Object>();
-      values.put("propertyType", propertyType);
-      values.put("name", methodName);
-      values.put("property", field.getElementName());
-      values.put("array", array ? Boolean.TRUE : Boolean.FALSE);
-      values.put("isBoolean", isBoolean ? Boolean.TRUE : Boolean.FALSE);
-
-      insertMethod(src, type, method, sibling, GETTER_TEMPLATE, values);
-    }
-
-    return method;
   }
 
-  /**
-   * Insert a setter for the supplied property.
-   *
-   * @param src The src file.
-   * @param type The type to insert into.
-   * @param sibling The element to insert before.
-   * @param field The property.
-   * @param array true if inserting the array version.
-   * @return The method element.
-   */
-  protected IJavaElement insertSetter(
+  private void insertIndexMethods(
       ICompilationUnit src,
       IType type,
-      IJavaElement sibling,
-      IField field,
-      boolean array)
+      List<IField> fields,
+      CodeGenerationSettings settings,
+      IField getter,
+      IField setter)
     throws Exception
   {
-    String methodName = "set" + StringUtils.capitalize(field.getElementName());
-    String propertyType =
-      Signature.getSignatureSimpleName(field.getTypeSignature());
-    String[] args = new String[]{field.getTypeSignature()};
-    if(array){
-      propertyType = Signature.getSignatureSimpleName(
-          Signature.getElementType(field.getTypeSignature()));
-      String elementType = Signature.getElementType(field.getTypeSignature());
-      args = new String[]{INT_SIG, elementType};
-    }
-    IMethod method = type.getMethod(methodName, args);
-    if(!method.exists()){
-      HashMap<String, Object> values = new HashMap<String, Object>();
-      values.put("name", methodName);
-      values.put("property", field.getElementName());
-      values.put("propertyType", propertyType);
-      values.put("array", array ? Boolean.TRUE : Boolean.FALSE);
-      values.put("isBoolean", propertyType.equals("boolean") ?
-          Boolean.TRUE : Boolean.FALSE);
+    // eclipse doesn't natively support indexed accessors, so this method runs
+    // some regexes on the getter/setter stubs to generate indexed versions.
+    if (getter != null){
+      IMethod existing = getBeanMethod(type, getter, TYPE_GET_INDEX);
+      if (existing == null) {
+        IJavaElement sibling = getSibling(type, fields, getter, TYPE_GET_INDEX);
+        String name = GetterSetterUtil.getGetterName(getter, null);
+        String stub = GetterSetterUtil.getGetterStub(
+            getter, name, settings.createComments, Modifier.PUBLIC);
+        stub = stub.replaceFirst(
+            "\n(\\s*\\*\\s*@return)",
+            "\n * @param index the index to get\n$1");
+        stub = stub.replaceFirst("\\[\\]\\s*(" + name + "\\s*\\()\\)", " $1int index)");
+        stub = stub.replaceFirst("(return\\s+\\w+)(.*?;)", "$1[index]$2");
 
-      insertMethod(src, type, method, sibling, SETTER_TEMPLATE, values);
+        IMethod inserted = type.createMethod(stub, sibling, false, null);
+        // format the inserted method according to the user's preferences
+        Position position = TypeUtils.getPosition(type, inserted);
+        JavaUtils.format(
+            src, CodeFormatter.K_COMPILATION_UNIT,
+            position.getOffset(), position.getLength());
+      }
     }
 
-    return method;
+    if (setter != null){
+      IMethod existing = getBeanMethod(type, setter, TYPE_SET_INDEX);
+      if (existing == null) {
+        IJavaElement sibling = getSibling(type, fields, setter, TYPE_SET_INDEX);
+        String name = GetterSetterUtil.getSetterName(setter, null);
+        String stub = GetterSetterUtil.getSetterStub(
+            setter, name, settings.createComments, Modifier.PUBLIC);
+        stub = stub.replaceFirst(
+            "\n(\\s*\\*\\s*@param)",
+            "\n * @param index the index to set\n$1");
+        stub = stub.replaceFirst(
+            "(" + name + "\\s*\\()(.*?)\\[\\](\\s*.*?)\\)",
+            "$1int index, $2$3)");
+        stub = stub.replaceFirst("(\\w+)(\\s*=\\s*)", "$1[index]$2");
+
+        IMethod inserted = type.createMethod(stub, sibling, false, null);
+        // format the inserted method according to the user's preferences
+        Position position = TypeUtils.getPosition(type, inserted);
+        JavaUtils.format(
+            src, CodeFormatter.K_COMPILATION_UNIT,
+            position.getOffset(), position.getLength());
+      }
+    }
   }
 
-  /**
-   * Inserts a method using the supplied values.
-   *
-   * @param src The src file.
-   * @param type The type to insert into.
-   * @param method The method to be created.
-   * @param sibling The element to insert before.
-   * @param template The template to use.
-   * @param values The values.
-   */
-  protected void insertMethod(
-      ICompilationUnit src,
-      IType type,
-      IMethod method,
-      IJavaElement sibling,
-      String template,
-      Map<String, Object> values)
-    throws Exception
-  {
-    JavaUtils.loadPreferencesForTemplate(
-        type.getJavaProject().getProject(), getPreferences(), values);
-
-    TypeInfo superTypeInfo =
-      TypeUtils.getSuperTypeContainingMethod(type, method);
-    if(superTypeInfo != null){
-      IType superType = superTypeInfo.getType();
-      values.put("superType",
-        JavaUtils.getCompilationUnitRelativeTypeName(src, superType));
-      values.put("overrides",
-          superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
-      values.put("implementof",
-          superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
-      values.put("methodSignature",
-          MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
-    }else{
-      values.put("superType", null);
-      values.put("overrides", null);
-      values.put("implementof", null);
-      values.put("methodSignature", null);
-    }
-    values.put("isinterface", type.isInterface() ? Boolean.TRUE : Boolean.FALSE);
-
-    PluginResources resources = (PluginResources)
-      Services.getPluginResources(PluginResources.NAME);
-    String result = TemplateUtils.evaluate(resources, template, values);
-    IMethod inserted = type.createMethod(result, sibling, false, null);
-
-    // format the inserted method according to the user's preferences
-    Position position = TypeUtils.getPosition(type, inserted);
-    JavaUtils.format(
-        src, CodeFormatter.K_COMPILATION_UNIT,
-        position.getOffset(), position.getLength());
-  }
-
-  /**
-   * Determines the sibling to insert relative to for the next property.
-   *
-   * @param type The parent type.
-   * @param fields List of all the fields.
-   * @param field The resolved field.
-   * @param lastSibling The last sibling.
-   * @param methodType The type of the method to be inserted.
-   *
-   * @return The relative sibling to use.
-   */
-  protected IJavaElement getSibling(
+  private IJavaElement getSibling(
       IType type,
       List<IField> fields,
       IField field,
-      IJavaElement lastSibling,
       int methodType)
     throws Exception
   {
-    // first run through
-    if(lastSibling == null || !lastSibling.exists()){
-      // first try other methods for the same field.
-      for(int ii = TYPE_GET; ii <= TYPE_SET_INDEX; ii++){
-        if(ii != methodType){
-          IMethod method = getBeanMethod(type, field, ii);
-          if(method != null){
-            if(ii < methodType){
-              method = MethodUtils.getMethodAfter(type, method);
-            }
-            if(method != null){
-              return method;
-            }else{
-              return getFirstInnerType(type);
-            }
-          }
-        }
+    IMethod siblingMethod = null;
+    int siblingType = TYPE_GET;
+    // first try other methods for the same field.
+    for(int ii = TYPE_GET; ii <= TYPE_SET_INDEX; ii++){
+      IMethod method = getBeanMethod(type, field, ii);
+      if(method != null){
+        siblingMethod = method;
+        siblingType = ii;
       }
+    }
+    if (siblingMethod != null){
+      if(siblingType < methodType){
+        siblingMethod = MethodUtils.getMethodAfter(type, siblingMethod);
+      }
+      if(siblingMethod != null){
+        return siblingMethod;
+      }
+      return getFirstInnerType(type);
+    }
 
-      int index = fields.indexOf(field);
+    int index = fields.indexOf(field);
 
-      // insert before the next property's bean methods, if there are other
-      // properties.
-      if(fields.size() > 1 && (index + 1) < fields.size()){
-        IMethod method = null;
-        for(int ii = index + 1; method == null && ii < fields.size(); ii++){
-          IField property = (IField)fields.get(ii);
-          method = getBeanMethod(type, property, false);
-        }
+    // insert before the next property's bean methods, if there are other
+    // properties.
+    if(fields.size() > 1 && (index + 1) < fields.size()){
+      IMethod method = null;
+      for(int ii = index + 1; method == null && ii < fields.size(); ii++){
+        IField property = (IField)fields.get(ii);
+        method = getBeanMethod(type, property, false);
+      }
+      if(method != null){
+        return method;
+      }
+    }
+
+    // insert after previous property's bean methods, if there are other
+    // properties.
+    if(fields.size() > 1 && index > 0){
+      IMethod method = null;
+      for(int ii = index - 1; method == null && ii >= 0; ii--){
+        IField property = (IField)fields.get(ii);
+        method = getBeanMethod(type, property, true);
+      }
+      if(method != null){
+        method = MethodUtils.getMethodAfter(type, method);
         if(method != null){
           return method;
         }
       }
-
-      // insert after previous property's bean methods, if there are other
-      // properties.
-      if(fields.size() > 1 && index > 0){
-        IMethod method = null;
-        for(int ii = index - 1; method == null && ii >= 0; ii--){
-          IField property = (IField)fields.get(ii);
-          method = getBeanMethod(type, property, true);
-        }
-        if(method != null){
-          method = MethodUtils.getMethodAfter(type, method);
-          if(method != null){
-            return method;
-          }
-        }
-      }
-
-      return getFirstInnerType(type);
     }
-    if(lastSibling != null && lastSibling.exists()){
-      return lastSibling;
+
+    return getFirstInnerType(type);
+  }
+
+  private IType getFirstInnerType(IType type)
+    throws Exception
+  {
+    // insert before inner classes.
+    IType[] types = type.getTypes();
+    // find the first non-enum type.
+    for (int ii = 0; ii < types.length; ii++){
+      if(!types[ii].isEnum()){
+        return types[ii];
+      }
     }
     return null;
   }
 
-  /**
-   * Attempts to get the method of the supplied type for the specified field.
-   *
-   * @param type The parent type.
-   * @param field The field to retrieve the method for.
-   * @param methodType The method type.
-   * first.
-   * @return The method or null if not round.
-   */
-  protected IMethod getBeanMethod(IType type, IField field, int methodType)
+  private IMethod getBeanMethod(IType type, IField field, int methodType)
     throws Exception
   {
-    String propertyName = StringUtils.capitalize(field.getElementName());
     String name = Signature.getSignatureSimpleName(field.getTypeSignature());
-    boolean isBoolean = Signature.getSignatureSimpleName(
-        field.getTypeSignature()).equals("boolean");
+    boolean isArray = Signature.getArrayCount(field.getTypeSignature()) > 0;
 
     String signature = null;
     switch(methodType){
       case TYPE_GET:
-        if(isBoolean){
-          signature = "is" + propertyName + "()";
-        }else{
-          signature = " get" + propertyName + "()";
-        }
-        break;
+        return GetterSetterUtil.getGetter(field);
       case TYPE_GET_INDEX:
-        if(!isBoolean){
-          signature = " get" + propertyName + "(int)";
+        if(isArray){
+          signature = GetterSetterUtil.getGetterName(field, null) + "(int)";
         }
         break;
       case TYPE_SET:
-        signature =  "set" + propertyName + '(' + name + ')';
+        return GetterSetterUtil.getSetter(field);
       case TYPE_SET_INDEX:
-        if(!isBoolean){
-          signature = "set" + propertyName + "(int, " + name + ')';
+        if(isArray){
+          signature = GetterSetterUtil.getSetterName(field, null) +
+            "(int, " + name + ')';
         }
     }
 
@@ -415,66 +326,26 @@ public class PropertiesCommand
       }
     }
     return null;
-
-    // Weird Eclipse bug: too many calls to IType.getMethod() and createMethod()
-    // calls will fail later.
-    /*switch(methodType){
-      case TYPE_GET:
-        if(isBoolean){
-          return type.getMethod("is" + propertyName, null);
-        }else{
-          return type.getMethod("get" + propertyName, null);
-        }
-      case TYPE_GET_INDEX:
-        if(!isBoolean){
-          return type.getMethod("get" + propertyName, INT_ARG);
-        }
-      case TYPE_SET:
-        return type.getMethod("set" + propertyName,
-            new String[]{field.getTypeSignature()});
-      case TYPE_SET_INDEX:
-        if(!isBoolean){
-          return type.getMethod("set" + propertyName, new String[]{
-            INT_SIG, Signature.getElementType(field.getTypeSignature())});
-        }
-      default:
-        return null;
-    }*/
   }
 
-  /**
-   * Gets either the first or last occurring bean method for the supplied field.
-   *
-   * @param field The field to retrieve the method for.
-   * @param last true to return the last declared bean method, false for the
-   * first.
-   * @return The method or null if not round.
-   */
-  protected IMethod getBeanMethod(IType type, IField field, boolean last)
+  private IMethod getBeanMethod(IType type, IField field, boolean last)
     throws Exception
   {
-    boolean isBoolean = Signature.getSignatureSimpleName(
-        field.getTypeSignature()).equals("boolean");
-
     IMethod result = null;
+    boolean isArray = Signature.getArrayCount(field.getTypeSignature()) > 0;
 
-    String nextProperty = StringUtils.capitalize(field.getElementName());
     // regular getter
-    IMethod method = null;
-    if(isBoolean){
-      method = type.getMethod("is" + nextProperty, null);
-    }else{
-      method = type.getMethod("get" + nextProperty, null);
-    }
-    if(method.exists() && !last){
+    IMethod method = GetterSetterUtil.getGetter(field);
+    if(method != null && method.exists() && !last){
       return method;
-    }else if(method.exists()){
+    }else if(method != null && method.exists()){
       result = method;
     }
 
     // index getter
-    if(!isBoolean){
-      method = type.getMethod("get" + nextProperty, INT_ARG);
+    if(isArray){
+      method = type.getMethod(
+          GetterSetterUtil.getGetterName(field, null), INT_ARG);
       if(method.exists() && !last){
         return method;
       }else if(method.exists()){
@@ -483,44 +354,24 @@ public class PropertiesCommand
     }
 
     // regular setter
-    method = type.getMethod("set" + nextProperty,
-        new String[]{field.getTypeSignature()});
-    if(method.exists() && !last){
+    method = GetterSetterUtil.getSetter(field);
+    if(method != null && method.exists() && !last){
       return method;
-    }else if(method.exists()){
+    }else if(method != null && method.exists()){
       result = method;
     }
 
     // index setter
-    if(!isBoolean){
+    if(!isArray){
       String elementType = Signature.getElementType(field.getTypeSignature());
       method = type.getMethod(
-          "set" + nextProperty, new String[]{INT_SIG, elementType});
+          GetterSetterUtil.getSetterName(field, null),
+          new String[]{INT_SIG, elementType});
       if(method.exists()){
         result = method;
       }
     }
 
     return result;
-  }
-
-  /**
-   * Gets the first non-enum inner type.
-   *
-   * @param type The parent type.
-   * @return The inner type.
-   */
-  protected IType getFirstInnerType(IType type)
-    throws Exception
-  {
-    // insert before inner classes.
-    IType[] types = type.getTypes();
-    // find the first non-enum type.
-    for (int ii = 0; ii < types.length; ii++){
-      if(!types[ii].isEnum()){
-        return types[ii];
-      }
-    }
-    return null;
   }
 }

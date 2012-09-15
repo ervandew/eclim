@@ -31,6 +31,8 @@ Java:
   - The vim option g:EclimJavaImportPackageSeparationLevel has been replaced
     with the eclim setting :ref:`org.eclim.java.import.package_separation_level
     <org.eclim.java.import.package_separation_level>`.
+  - g:EclimJavaBeanInsertIndexed vim variable removed in favor of suffixing
+    :JavaGetSet methods with '!'.
 
 .. _1.7.9:
 

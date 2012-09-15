@@ -9,6 +9,7 @@ public class TestBeanVUnit
   private Date date;
   private boolean valid;
   private boolean enabled;
+  private int[] ids;
 
   private class SomeClass
   {

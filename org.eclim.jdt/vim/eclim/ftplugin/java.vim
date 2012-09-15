@@ -169,16 +169,16 @@ if !exists(":JavaConstructor")
 endif
 
 if !exists(":JavaGet")
-  command -buffer -range JavaGet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, "getter")
+  command -buffer -range -bang JavaGet
+    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, '<bang>', 'getter')
 endif
 if !exists(":JavaSet")
-  command -buffer -range JavaSet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, "setter")
+  command -buffer -range -bang JavaSet
+    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, '<bang>', 'setter')
 endif
 if !exists(":JavaGetSet")
-  command -buffer -range JavaGetSet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, "getter_setter")
+  command -buffer -range -bang JavaGetSet
+    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, '<bang>', 'getter_setter')
 endif
 
 if !exists(":JavaImpl")

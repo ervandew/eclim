@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/bean.html
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
@@ -22,12 +19,6 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists("g:EclimJavaBeanInsertIndexed")
-  let g:EclimJavaBeanInsertIndexed = 1
-endif
-" }}}
-
 " Script Variables {{{
 let s:command_properties =
   \ '-command java_bean_properties -p "<project>" -f "<file>" ' .
@@ -38,8 +29,7 @@ let s:no_properties =
   \ 'Not on a field declaration or possible java syntax error.'
 " }}}
 
-" GetterSetter(first, last, type) {{{
-function! eclim#java#bean#GetterSetter(first, last, type)
+function! eclim#java#bean#GetterSetter(first, last, bang, type) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -55,7 +45,7 @@ function! eclim#java#bean#GetterSetter(first, last, type)
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()
-  let indexed = g:EclimJavaBeanInsertIndexed ? '-i' : ''
+  let indexed = a:bang != '' ? '-i' : ''
 
   let command = s:command_properties
   let command = substitute(command, '<project>', project, '')
