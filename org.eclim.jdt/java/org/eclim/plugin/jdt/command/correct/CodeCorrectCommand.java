@@ -266,7 +266,9 @@ public class CodeCorrectCommand
       if (preview != null){
         preview = preview
           .replaceAll("<br>", "\n")
-          .replaceAll("<.+?>", "");
+          .replaceAll("<.+?>", "")
+          .replaceAll("&lt;", "<")
+          .replaceAll("&gt;", ">");
       }
       corrections.add(new CodeCorrectResult(
             index, proposal.getDisplayString(), preview));
