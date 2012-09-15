@@ -81,7 +81,17 @@ Getters / Setters
   Generates setters for the field under the cursor or for all fields in
   the specified range.
 
-Given the following file\:
+.. note::
+
+   If you would like to generate the indexed getter or setter then you can
+   suffix the appropriate command above with '!' and if the property is an
+   array, an indexed accessor will be created.
+
+   .. code-block:: vim
+
+      :JavaGetSet!
+
+Given the following file:
 
 .. code-block:: java
 
@@ -95,17 +105,6 @@ You can place the cursor on one of the fields and execute **:JavaGetSet** to
 generate the getters and setters for the field.  All of the above commands
 support ranges as well, so you can use a visual selection or a numbered range to
 generate methods for a set of fields.
-
-Configuration
-^^^^^^^^^^^^^
-
-:doc:`Vim Settings </vim/settings>`
-
-.. _g\:EclimJavaBeanInsertIndexed:
-
-- **g:EclimJavaBeanInsertIndexed** (Default: 1) -
-  When set to a value greater than 0, eclim will insert indexed getters and
-  setters for array properties.
 
 .. _\:JavaImpl:
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,6 +88,31 @@ public class PropertiesCommandTest
         Pattern.compile("public boolean isValid\\(\\)").matcher(contents).find());
     assertTrue("Setter not found.",
         Pattern.compile("public void setValid\\(boolean valid\\)")
+        .matcher(contents).find());
+  }
+
+  @Test
+  public void executeGetSetIndex()
+  {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    Eclim.execute(new String[]{
+      "java_bean_properties", "-p", Jdt.TEST_PROJECT,
+      "-f", TEST_FILE,
+      "-o", "1", "-e", "utf-8", "-t", "getter_setter", "-r", "ids", "-i"
+    });
+
+    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    assertTrue("Getter not found.",
+        Pattern.compile("public int\\[\\] getIds\\(\\)").matcher(contents).find());
+    assertTrue("Getter index not found.",
+        Pattern.compile("public int getIds\\(int index\\)").matcher(contents).find());
+    assertTrue("Setter not found.",
+        Pattern.compile("public void setIds\\(int\\[\\] ids\\)")
+        .matcher(contents).find());
+    assertTrue("Setter index not found.",
+        Pattern.compile("public void setIds\\(int index, int ids\\)")
         .matcher(contents).find());
   }
 }

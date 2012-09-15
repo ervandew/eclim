@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,8 +27,7 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestJavaGet() {{{
-function! TestJavaGet()
+function! TestJavaGet() " {{{
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call vunit#PeekRedir()
 
@@ -54,8 +53,7 @@ function! TestJavaGet()
   call vunit#AssertTrue(dateLine < enabledLine, 'getDate() not before isEnabled().')
 endfunction " }}}
 
-" TestJavaSet() {{{
-function! TestJavaSet()
+function! TestJavaSet() " {{{
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call vunit#PeekRedir()
 
@@ -87,8 +85,7 @@ function! TestJavaSet()
   call vunit#AssertTrue(setValidLine < isEnabledLine, 'setValid() not before isEnabled().')
 endfunction " }}}
 
-" TestJavaGetSet() {{{
-function! TestJavaGetSet()
+function! TestJavaGetSet() " {{{
   edit! src/org/eclim/test/bean/TestBeanVUnit.java
   call vunit#PeekRedir()
 
@@ -139,6 +136,31 @@ function! TestJavaGetSet()
   let innerClassLine = search('private class SomeClass', 'wc')
   call vunit#AssertTrue(setEnabledLine < innerClassLine,
     \ 'setEnabled() not before inner class.')
+endfunction " }}}
+
+function! TestJavaGetSetIndex() " {{{
+  edit! src/org/eclim/test/bean/TestBeanVUnit.java
+  call vunit#PeekRedir()
+
+  call cursor(1, 1)
+  call search('private int\[\] ids')
+  JavaGetSet!
+  call vunit#PeekRedir()
+
+  " validate
+  let getIdsLine = search('public int\[\] getIds()', 'wc')
+  let getIdsIndexLine = search('public int getIds(int index)', 'wc')
+  let setIdsLine = search('public void setIds(int\[\] ids)', 'wc')
+  let setIdsIndexLine = search('public void setIds(int index, int ids)', 'wc')
+
+  call vunit#AssertTrue(getIdsLine > 0, 'getIds() not found.')
+  call vunit#AssertTrue(getIdsIndexLine > 0, 'getIds(int) not found.')
+  call vunit#AssertTrue(setIdsLine > 0, 'setIds(int[]) not found.')
+  call vunit#AssertTrue(setIdsIndexLine > 0, 'setIds(int,int) not found.')
+
+  call vunit#AssertTrue(getIdsLine < getIdsIndexLine, 'getIds() not before getIds(int).')
+  call vunit#AssertTrue(getIdsIndexLine < setIdsLine, 'getIds(int) not before setIds(int[]).')
+  call vunit#AssertTrue(setIdsLine < setIdsIndexLine, 'setIds(int[]) not before setIds(int,int).')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
