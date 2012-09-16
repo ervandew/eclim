@@ -22,13 +22,11 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestJUnitImpl4() {{{
-function! TestJUnitImpl4()
+function! TestJUnitImpl4() " {{{
   call s:InitFile('4')
 
   call cursor(3, 1)
@@ -36,47 +34,32 @@ function! TestJUnitImpl4()
   call vunit#AssertTrue(bufname('%') =~ 'SomeClassTestVUnit.java_impl$',
     \ 'JUnit impl window not opened.')
   call vunit#AssertEquals('org.eclim.test.junit.SomeClassTestVUnit', getline(1),
-    \ 'Wrong type in junit imple window.')
+    \ 'Wrong type in junit impl window.')
 
   call vunit#AssertTrue(search('^\s*public void aMethod()'),
     \ 'Super method aMethod() not found')
-  call vunit#AssertTrue(search('^\s*public void aMethod(String name)'),
+  call vunit#AssertTrue(search('^\s*public void aMethod(String)'),
     \ 'Super method aMethod(String) not found')
-  call vunit#AssertTrue(search('^\s*public abstract int compare(String \w\+, String \w\+)'),
-    \ 'Super method compare() not found')
-
-  call cursor(6, 1)
   exec "normal \<cr>"
+  call vunit#AssertEquals(search('^\s*public void aMethod()'), 0,
+    \ 'Super method aMethod() still present after add.')
+  call vunit#AssertEquals(search('^\s*public void aMethod(String)'), 0,
+    \ 'Super method aMethod(String) still resent after add.')
 
-  call cursor(12, 1)
-  exec "normal Vj\<cr>"
-
-  call vunit#AssertTrue(search('^\s*//public void aMethod()'),
-    \ 'Super method aMethod() not commented out after add.')
-  call vunit#AssertTrue(search('^\s*//public void aMethod(String name)'),
-    \ 'Super method aMethod(String) not commented out after add.')
-  call vunit#AssertTrue(search('^\s*//public abstract int compare(String \w\+, String \w\+)'),
-    \ 'Super method compare() not commented out after add.')
-  call vunit#AssertTrue(search('^\s*//public abstract boolean equals(Object \w\+)'),
-    \ 'Super method equals() not commented out after add.')
+  call vunit#AssertTrue(search('^\s*public boolean equals(Object)'),
+    \ 'Super method equals() not found')
+  exec "normal \<cr>"
+  call vunit#AssertEquals(search('^\s*public abstract boolean equals(Object)'), 0,
+    \ 'Super method equals() still present after add.')
   bdelete
 
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod()'),
-    \ 'see testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod(String)'),
-    \ 'see testAMethod(String) not added.')
   call vunit#AssertTrue(search('@Test\_s\+public void aMethod()'),
     \ 'testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see java.util.Comparator#compare(String,String)'),
-    \ 'see compare() not added.')
-  call vunit#AssertTrue(search('@Test\_s\+public void compare()'),
-    \ 'testCompare() not added.')
   call vunit#AssertTrue(search('@Test\_s\+public void equals()'),
     \ 'testEquals() not added.')
 endfunction " }}}
 
-" TestJUnitImpl3() {{{
-function! TestJUnitImpl3()
+function! TestJUnitImpl3() " {{{
   call s:InitFile('3')
 
   call cursor(3, 1)
@@ -84,47 +67,32 @@ function! TestJUnitImpl3()
   call vunit#AssertTrue(bufname('%') =~ 'SomeClassTestVUnit.java_impl$',
     \ 'JUnit impl window not opened.')
   call vunit#AssertEquals('org.eclim.test.junit.SomeClassTestVUnit', getline(1),
-    \ 'Wrong type in junit imple window.')
+    \ 'Wrong type in junit impl window.')
 
   call vunit#AssertTrue(search('^\s*public void aMethod()'),
     \ 'Super method aMethod() not found')
-  call vunit#AssertTrue(search('^\s*public void aMethod(String name)'),
+  call vunit#AssertTrue(search('^\s*public void aMethod(String)'),
     \ 'Super method aMethod(String) not found')
-  call vunit#AssertTrue(search('^\s*public abstract int compare(String \w\+, String \w\+)'),
-    \ 'Super method compare() not found')
-
-  call cursor(6, 1)
   exec "normal \<cr>"
+  call vunit#AssertEquals(search('^\s*public void aMethod()'), 0,
+    \ 'Super method aMethod() still present after add.')
+  call vunit#AssertEquals(search('^\s*public void aMethod(String)'), 0,
+    \ 'Super method aMethod(String) still resent after add.')
 
-  call cursor(12, 1)
-  exec "normal Vj\<cr>"
-
-  call vunit#AssertTrue(search('^\s*//public void aMethod()'),
-    \ 'Super method aMethod() not commented out after add.')
-  call vunit#AssertTrue(search('^\s*//public void aMethod(String name)'),
-    \ 'Super method aMethod(String) not commented out after add.')
-  call vunit#AssertTrue(search('^\s*//public abstract int compare(String \w\+, String \w\+)'),
-    \ 'Super method compare() not commented out after add.')
-  call vunit#AssertTrue(search('^\s*//public abstract boolean equals(Object \w\+)'),
-    \ 'Super method equals() not commented out after add.')
+  call vunit#AssertTrue(search('^\s*public boolean equals(Object)'),
+    \ 'Super method equals() not found')
+  exec "normal \<cr>"
+  call vunit#AssertEquals(search('^\s*public abstract boolean equals(Object)'), 0,
+    \ 'Super method equals() still present after add.')
   bdelete
 
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod()'),
-    \ 'see testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see org.eclim.test.junit.SomeClassVUnit#aMethod(String)'),
-    \ 'see testAMethod(String) not added.')
   call vunit#AssertTrue(search('public void testAMethod()'),
     \ 'testAMethod() not added.')
-  call vunit#AssertTrue(search('* @see java.util.Comparator#compare(String,String)'),
-    \ 'see compare() not added.')
-  call vunit#AssertTrue(search('public void testCompare()'),
-    \ 'testCompare() not added.')
   call vunit#AssertTrue(search('public void testEquals()'),
     \ 'testEquals() not added.')
 endfunction " }}}
 
-" s:InitFile(version) {{{
-function s:InitFile(version)
+function s:InitFile(version) " {{{
   edit! src/org/eclim/test/junit/SomeClassTestVUnit.java
   call vunit#PeekRedir()
 
@@ -143,14 +111,8 @@ function s:InitFile(version)
   write
   call vunit#PeekRedir()
 
-  ProjectSettings
-
-  call search('junit\.version=', 'w')
-  let setting = getline('.')
-  let setting = substitute(setting, '\(.*junit\.version=\).*', '\1' . a:version, '')
-  call setline(line('.'), setting)
-  write
-  bdelete
+  call eclim#project#util#SetProjectSetting(
+    \ "org.eclim.java.junit.version", a:version)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

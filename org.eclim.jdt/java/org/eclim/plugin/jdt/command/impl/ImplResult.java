@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import java.util.List;
  *
  * @author Eric Van Dewoestine
  */
+@SuppressWarnings("unused")
 public class ImplResult
 {
   private String type;
@@ -35,25 +36,5 @@ public class ImplResult
   {
     this.type = type;
     this.superTypes = superTypes;
-  }
-
-  /**
-   * Gets the type these results are for.
-   *
-   * @return The type.
-   */
-  public String getType()
-  {
-    return type;
-  }
-
-  /**
-   * Gets the super type results.
-   *
-   * @return The results.
-   */
-  public List<ImplType> getSuperTypes()
-  {
-    return superTypes;
   }
 }

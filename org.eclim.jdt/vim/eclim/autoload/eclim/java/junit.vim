@@ -108,10 +108,7 @@ function! eclim#java#junit#JUnitResult(test)
   call eclim#util#Echo("Test result file not found for: " . fnamemodify(file, ':r'))
 endfunction " }}}
 
-" JUnitImpl() {{{
-" Opens a window that allows the user to choose methods to implement tests
-" for.
-function! eclim#java#junit#JUnitImpl()
+function! eclim#java#junit#JUnitImpl() " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -139,57 +136,14 @@ function! eclim#java#junit#JUnitImpl()
   let b:base = base
 endfunction " }}}
 
-" JUnitImplWindow(command) {{{
-function! eclim#java#junit#JUnitImplWindow(command)
-  let name = eclim#project#util#GetProjectRelativeFilePath() . "_impl"
-  let project = eclim#project#util#GetCurrentProjectName()
-  let workspace = eclim#project#util#GetProjectWorkspace(project)
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-
-  let result = eclim#ExecuteEclim(a:command, port)
-  if type(result) != g:DICT_TYPE
-    return
+function! eclim#java#junit#JUnitImplWindow(command) " {{{
+  if (eclim#java#impl#Window(a:command, "impl"))
+    nnoremap <silent> <buffer> <cr> :call <SID>AddTestImpl(0)<cr>
+    vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddTestImpl(1)<cr>
   endif
-
-  let content = [result.type]
-  let notfound = []
-  for super in result.superTypes
-    if !super.exists
-      call add(notfound, super)
-      continue
-    endif
-
-    call add(content, '')
-    call add(content, 'package ' . super.packageName . ';')
-    call add(content, super.signature . ' {')
-    for method in super.methods
-      if method.implemented
-        let method.signature = '//' . method.signature
-      endif
-      call add(content, "\t" . method.signature)
-    endfor
-    call add(content, '}')
-  endfor
-
-  if len(notfound)
-    call add(content, '')
-    call add(content, '// The following types were not found, either because they were not')
-    call add(content, '// imported or they were not found in the classpath:')
-  endif
-  for super in notfound
-    call add(content, '// ' . super.signature)
-  endfor
-
-  call eclim#util#TempWindow(name, content, {'preserveCursor': 1})
-  setlocal ft=java
-  call eclim#java#impl#ImplWindowFolding()
-
-  nnoremap <silent> <buffer> <cr> :call <SID>AddTestImpl(0)<cr>
-  vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddTestImpl(1)<cr>
 endfunction " }}}
 
-" AddTestImpl(visual) {{{
-function! s:AddTestImpl(visual)
+function! s:AddTestImpl(visual) " {{{
   let command = s:command_insert
   if b:base != ""
     let command = substitute(command, '<base>', '-b ' . b:base, '')
@@ -197,12 +151,11 @@ function! s:AddTestImpl(visual)
     let command = substitute(command, '<base>', '', '')
   endif
 
-  call eclim#java#impl#ImplAdd
+  call eclim#java#impl#Add
     \ (command, function("eclim#java#junit#JUnitImplWindow"), a:visual)
 endfunction " }}}
 
-" GetResultsDir() {{{
-function! s:GetResultsDir()
+function! s:GetResultsDir() " {{{
   let path = eclim#project#util#GetProjectSetting("org.eclim.java.junit.output_dir")
   if type(path) == g:NUMBER_TYPE
     return

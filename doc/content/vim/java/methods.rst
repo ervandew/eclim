@@ -45,13 +45,10 @@ If you were to select the range containing the 'id' and 'name' fields and issue
     private String name;
 
     /**
-     * Constructs a new instance.
-     *
-     * @param id The id for this instance.
-     * @param name The name for this instance.
+     * @param id
+     * @param name
      */
-    public Foo (int id, String name)
-    {
+    public Foo(int id, String name) {
       this.id = id;
       this.name = name;
     }
@@ -59,6 +56,18 @@ If you were to select the range containing the 'id' and 'name' fields and issue
 
 If you issue the command with no fields selected, then a default empty
 constructor is created.
+
+When attempting to create an empty constructor, if the super class doesn't
+define a default constructor, but instead has one or more constructors which
+takes arguments, then calling **:JavaConstructor** without a range will result
+in the creation of a constructor which overrides the super class constructor
+containing the least number of arguments. Although an empty constructor won't
+pass code validation, you can force the creation of one in this case by
+suffixing the command with a '!':
+
+.. code-block:: vim
+
+  :JavaConstructor!
 
 .. _\:JavaGetSet:
 
@@ -128,38 +137,24 @@ Here is some example content from a class that extends java.io.InputStream\:
   com.test.TestStream
 
   package java.io;
-  public class InputStream
-    public int read ()
-      throws IOException
-    public int read (byte[] b)
-      throws IOException
-    public int read (byte[] b, int off, int len)
-      throws IOException
-    public long skip (long n)
-      throws IOException
-    public int available ()
-      throws IOException
-    public void close ()
-      throws IOException
-    public void mark (int readlimit)
-    public void reset ()
-      throws IOException
+  class InputStream
+    public int read()
+    public int read(byte[])
+    public int read(byte[], int, int)
+    public long skip(long)
+    public int available()
+    public void close()
+    public void mark(int)
+    public void reset()
     public boolean markSupported ()
 
-  package java.io;
-  public interface Closeable
-    public void close ()
-      throws IOException
-
   package java.lang;
-  public class Object
-    public int hashCode ()
-    public boolean equals (Object obj)
-    protected Object clone ()
-      throws CloneNotSupportedException
-    public String toString ()
-    protected void finalize ()
-      throws Throwable
+  class Object
+    public int hashCode()
+    public boolean equals(Object)
+    protected Object clone()
+    public String toString()
+    protected void finalize()
 
 From the newly opened window you can select a method to generate a stub for by
 simply hitting <enter> with the cursor over the method signature.
@@ -203,14 +198,14 @@ of type java.util.List like the one above.
 
 .. code-block:: java
 
-  com.test.TestList
+  com.test.TestList.myList
 
   package java.util;
-  public interface List
-    public abstract int size ()
-    public abstract boolean isEmpty ()
-    public abstract boolean contains (Object o)
-    public abstract Object[] toArray ()
+  interface List
+    public abstract int size()
+    public abstract boolean isEmpty()
+    public abstract boolean contains(Object)
+    public abstract Object[] toArray()
     ...
 
 From this newly opened window you can select a method by simply hitting <enter>

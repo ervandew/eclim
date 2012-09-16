@@ -67,6 +67,11 @@ public abstract class AbstractCommand
   public int getOffset(CommandLine commandLine)
     throws Exception
   {
+    int offset = commandLine.getIntValue(Options.OFFSET_OPTION);
+    if (offset == -1){
+      return offset;
+    }
+
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     if (project == null){
       // some commands use -n for the project name (like all the search commands)
@@ -74,8 +79,6 @@ public abstract class AbstractCommand
     }
     String file = commandLine.getValue(Options.FILE_OPTION);
     String encoding = commandLine.getValue(Options.ENCODING_OPTION);
-    int offset = Integer.parseInt(
-        commandLine.getValue(Options.OFFSET_OPTION));
     file = ProjectUtils.getFilePath(project, file);
 
     return FileUtils.byteOffsetToCharOffset(file, offset, encoding);

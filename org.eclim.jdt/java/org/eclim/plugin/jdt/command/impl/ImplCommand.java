@@ -17,8 +17,9 @@
 package org.eclim.plugin.jdt.command.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -29,30 +30,40 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.logging.Logger;
-
 import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclim.plugin.core.util.TemplateUtils;
-
-import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.MethodUtils;
-import org.eclim.plugin.jdt.util.TypeInfo;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
-import org.eclim.util.file.Position;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.ISourceRange;
+import org.eclipse.jdt.core.ISourceReference;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeParameter;
-import org.eclipse.jdt.core.Signature;
+
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.IPackageBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 
 import org.eclipse.jdt.core.formatter.CodeFormatter;
+
+import org.eclipse.jdt.internal.corext.codemanipulation.AddUnimplementedMethodsOperation;
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2;
+
+import org.eclipse.jdt.internal.corext.dom.ASTNodes;
+import org.eclipse.jdt.internal.corext.dom.Bindings;
+
+import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
+
+import org.eclipse.jdt.internal.ui.javaeditor.ASTProvider;
+
+import com.google.gson.Gson;
 
 /**
  * Command used to build a tree of methods that have or can be
@@ -75,478 +86,317 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 public class ImplCommand
   extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(ImplCommand.class);
-
-  private static final String TEMPLATE = "method.gst";
-
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
-    String superTypeName = commandLine.getValue(Options.SUPERTYPE_OPTION);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    IType type = getType(src, commandLine);
 
-    IType type = null;
-    if(superTypeName != null){
-      type = src.getJavaProject().findType(
-          commandLine.getValue(Options.TYPE_OPTION).replace('$', '.'));
-
-      int index = superTypeName.indexOf('<');
-      String[] typeArgs = null;
-      if (index != -1){
-        String superTypeArgs = superTypeName.substring(index);
-        superTypeName = superTypeName.substring(0, index);
-        ArrayList<String> args = new ArrayList<String>();
-        char[] argsArray = superTypeArgs
-          .substring(1, superTypeArgs.length() - 1).toCharArray();
-        int typeDepth = 0;
-        StringBuffer arg = new StringBuffer();
-        for (char c : argsArray){
-          if (c == '<'){
-            typeDepth++;
-            arg.append(c);
-          }else if (c == '>'){
-            typeDepth--;
-            arg.append(c);
-          }else if (c == ',' && typeDepth == 0){
-            args.add(arg.toString());
-            arg = new StringBuffer();
-          }else{
-            arg.append(c);
-          }
-        }
-        if (arg.length() > 0){
-          args.add(arg.toString());
-        }
-        typeArgs = args.toArray(new String[args.size()]);
-      }
-
-      IType superType = type.getJavaProject().findType(superTypeName);
-      ITypeParameter[] params = superType.getTypeParameters();
-      String[] typeParams = new String[params.length];
-      for (int ii = 0; ii < params.length; ii++){
-        typeParams[ii] = params[ii].getElementName();
-      }
-      TypeInfo superTypeInfo = new TypeInfo(superType, typeParams, typeArgs);
-
-      String methodsOption = commandLine.getValue(Options.METHOD_OPTION);
-
-      String[] methods = null;
-      if(methodsOption != null){
-        methods = StringUtils.splitByWholeSeparator(methodsOption, ",,");
-      }else{
-        methods = getUnimplementedMethods(type, superTypeInfo);
-      }
-
-      for(int ii = 0; ii < methods.length; ii++){
-        executeInsertMethod(commandLine, src, type, superTypeInfo, methods[ii]);
-      }
+    // if a supertype option is supplied, then add methods as necessary.
+    if (commandLine.hasOption(Options.SUPERTYPE_OPTION)){
+      insertMethods(src, type, commandLine);
     }
 
-    if(type == null){
-      int offset = commandLine.getIntValue(Options.OFFSET_OPTION);
-      if (offset != -1){
-        offset = getOffset(commandLine);
-      }
-      type = TypeUtils.getType(src, offset);
-    }
-
-    return executeGetMethods(commandLine, type);
+    return getImplResult(src, type);
   }
 
   /**
-   * Gets all the methods of the supertypes for the supplied type.
+   * Gets the type to be edited.
    *
-   * @param commandLine The original command line.
-   * @param type The type.
-   * @return ImplResult
+   * @param src The ICompilationUnit of the source file to edit.
+   * @param commandLine The command line.
+   * @return The IType to be edited.
    */
-  protected ImplResult executeGetMethods(CommandLine commandLine, IType type)
+  protected IType getType(ICompilationUnit src, CommandLine commandLine)
     throws Exception
   {
-    ArrayList<ImplType> results = new ArrayList<ImplType>();
-    if(isValidType(type)){
-      Map<String, IMethod> implementedMethods = getImplementedMethods(type);
-
-      TypeInfo[] types = getSuperTypes(commandLine, type);
-      for(TypeInfo info : types){
-        IType superType = info.getType();
-        ImplType implType = new ImplType();
-        implType.setPackage(superType.getPackageFragment().getElementName());
-        implType.setExists(superType.exists());
-        if(superType.exists()){
-          implType.setSignature(TypeUtils.getTypeSignature(info));
-          implType.setMethods(getMethods(type, implementedMethods, info));
-        }else{
-          implType.setSignature(superType.getElementName());
-        }
-
-        results.add(implType);
-      }
-    }else{
-      throw new IllegalArgumentException(
-          Services.getMessage("type.not.a.class",
-            type.getFullyQualifiedName()));
-    }
-    return new ImplResult(type.getFullyQualifiedName(), results);
+    // get the type to be modified by name or its offset in the file.
+    return commandLine.hasOption(Options.TYPE_OPTION) ?
+      src.getJavaProject().findType(
+          commandLine.getValue(Options.TYPE_OPTION).replace('$', '.')) :
+      TypeUtils.getType(src, getOffset(commandLine));
   }
 
   /**
-   * Inserts a stub for the supplied method or for all methods in the supplied
-   * super type if no method supplied.
+   * Get the operation used to add the requested methods.
    *
-   * @param commandLine The original command line.
-   * @param src The compilation unit.
-   * @param type The type to insert the method(s) into.
-   * @param superTypeInfo The super type to insert methods from.
-   * @param methodName The super type to insert methods from.
+   * @param src The ICompilationUnit of the source file to edit.
+   * @param type The IType of the type in the source to edit.
+   * @param chosen A set containing method signatures to add or null to add all
+   *   methods from the chosen super type.
+   * @param sibling The sibling to insert the methods before.
+   * @param pos The position of the sibling.
+   * @param commandLine The command line.
    *
-   * @return The Position where the method(s) where inserted.
+   * @return An IWorkspaceRunnable
    */
-  protected Object executeInsertMethod(
-      CommandLine commandLine,
+  protected IWorkspaceRunnable getImplOperation(
       ICompilationUnit src,
       IType type,
-      TypeInfo superTypeInfo,
-      String methodName)
+      Set<String> chosen,
+      IJavaElement sibling,
+      int pos,
+      CommandLine commandLine)
     throws Exception
   {
-    IType superType = superTypeInfo.getType();
-    IMethod[] methods = superType.getMethods();
-    Map<String, IMethod> implementedMethods = getImplementedMethods(type);
+    RefactoringASTParser parser = new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+    CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
+    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
 
-    IMethod method = null;
-    for(int ii = 0; ii < methods.length; ii++){
-      String sig =
-        MethodUtils.getMinimalMethodSignature(methods[ii], superTypeInfo);
-      if(sig.equals(methodName)){
-        method = methods[ii];
-        break;
+    String superType = commandLine.getValue(Options.SUPERTYPE_OPTION);
+    List<IMethodBinding> overridable = getOverridableMethods(cu, typeBinding);
+    List<IMethodBinding> override = new ArrayList<IMethodBinding>();
+    for (IMethodBinding binding : overridable){
+      ITypeBinding declBinding = binding.getDeclaringClass();
+      String fqn = declBinding.getQualifiedName().replaceAll("<.*?>", "");
+      if (fqn.equals(superType) && isChosen(chosen, binding)){
+        override.add(binding);
       }
     }
 
-    if(method == null){
-      logger.warn(Services.getMessage("method.not.found",
-          superType.getFullyQualifiedName(), methodName));
-      return null;
+    if (override.size() > 0){
+      return new AddUnimplementedMethodsOperation(
+          cu, typeBinding,
+          override.toArray(new IMethodBinding[override.size()]),
+          pos, true, true, true);
     }
-    if(getImplemented(type, implementedMethods, superTypeInfo, method) != null){
-      logger.warn(Services.getMessage("method.already.implemented",
-            type.getFullyQualifiedName(),
-            superType.getFullyQualifiedName(),
-            methodName
-      ));
-      return null;
-    }
-
-    IJavaElement sibling =
-      getSibling(type, implementedMethods, superTypeInfo, methods, method);
-    insertMethod(commandLine, src, type, superTypeInfo, method, sibling);
-
     return null;
   }
 
   /**
-   * Gets the names of the unimplemented methods from the super type.
+   * Checks if the supplied IMethodBinding is in the set of chosen methods to
+   * insert.
    *
-   * @param type The type to add the methods to.
-   * @param superTypeInfo The super type to add methods from.
-   * @return Array of minimal method signatures.
+   * @param chosen The set of chosen method signatures.
+   * @param methodBinding The IMethodBinding to check.
+   * @return True if the method is in the chosen set, false otherwise.
    */
-  protected String[] getUnimplementedMethods(IType type, TypeInfo superTypeInfo)
-    throws Exception
+  protected boolean isChosen(Set<String> chosen, IMethodBinding methodBinding)
   {
-    ArrayList<String> names = new ArrayList<String>();
-
-    IType superType = superTypeInfo.getType();
-    IMethod[] methods = superType.getMethods();
-    Map<String, IMethod> implementedMethods = getImplementedMethods(type);
-
-    for(int ii = 0; ii < methods.length; ii++){
-      int flags = methods[ii].getFlags();
-      IMethod implemented =
-        getImplemented(type, implementedMethods, superTypeInfo, methods[ii]);
-      if (!Flags.isStatic(flags) &&
-          !Flags.isFinal(flags) &&
-          !Flags.isPrivate(flags) &&
-          !methods[ii].isConstructor() &&
-          implemented == null)
-      {
-        String sig =
-          MethodUtils.getMinimalMethodSignature(methods[ii], superTypeInfo);
-        names.add(sig);
-      }
-    }
-
-    return (String[])names.toArray(new String[names.size()]);
+    return chosen == null ||
+      chosen.contains(getMethodBindingShortCallSignature(methodBinding));
   }
 
   /**
-   * Gets all the super types for the supplied type.
+   * Get the ImplResult containing super types and their methods that can be
+   * added to the supplied source.
    *
-   * @param commandLine The original command line.
-   * @param type The type.
-   * @return The super types.
+   * @param src The ICompilationUnit of the source file.
+   * @param type The IType of the type in the source that methods would be
+   *   modified.
+   * @return An ImplResult
    */
-  protected TypeInfo[] getSuperTypes(CommandLine commandLine, IType type)
+  protected ImplResult getImplResult(ICompilationUnit src, IType type)
     throws Exception
   {
-    return TypeUtils.getSuperTypes(type, true);
+    List<IMethodBinding> overridable = getOverridableMethods(src, type);
+    return getImplResult(type.getFullyQualifiedName(), overridable);
   }
 
   /**
-   * Gets a map of minimal method signatures and methods implemented by the
-   * supplied type.
+   * Get the ImplResult containing super types and their methods that can be
+   * added to the supplied source.
    *
-   * @param type The type.
-   * @return Map of minimal method signatures and the corresponding methods.
+   * @param name The name of the type in the source that methods would be
+   *   added to.
+   * @param methods List of IMethodBinding representing the available methods.
+   * @return An ImplResult
    */
-  protected Map<String, IMethod> getImplementedMethods(IType type)
-    throws Exception
+  protected ImplResult getImplResult(String name, List<IMethodBinding> methods)
   {
-    TypeInfo typeInfo = new TypeInfo(type, null, null);
-    HashMap<String, IMethod> implementedMethods = new HashMap<String, IMethod>();
-    IMethod[] methods = type.getMethods();
-    for(int ii = 0; ii < methods.length; ii++){
-      int flags = methods[ii].getFlags();
-      if (!Flags.isStatic(flags) &&
-          !Flags.isFinal(flags) &&
-          !Flags.isPrivate(flags))
-      {
-        implementedMethods.put(
-            MethodUtils.getMinimalMethodSignature(methods[ii], typeInfo),
-            methods[ii]);
-      }
-    }
-    return implementedMethods;
-  }
-
-  /**
-   * Inserts the supplied method into the specified source type.
-   *
-   * @param commandLine The original command line.
-   * @param src The compilation unit.
-   * @param type The type to insert the method into.
-   * @param superTypeInfo The super type the method is defined in.
-   * @param method The method to insert.
-   * @param sibling The element to insert the new method before, or null to
-   *  append to the end.
-   * @return The position the method was inserted at.
-   */
-  protected Position insertMethod(
-      CommandLine commandLine,
-      ICompilationUnit src,
-      IType type,
-      TypeInfo superTypeInfo,
-      IMethod method,
-      IJavaElement sibling)
-    throws Exception
-  {
-    HashMap<String, Object> values = new HashMap<String, Object>();
-    JavaUtils.loadPreferencesForTemplate(
-        type.getJavaProject().getProject(), getPreferences(), values);
-
-    if(!method.isConstructor()){
-      String rtype = Signature.getSignatureSimpleName(method.getReturnType());
-      values.put("constructor", Boolean.FALSE);
-      values.put("name", method.getElementName());
-      values.put("returnType",
-          TypeUtils.replaceTypeParams(rtype, superTypeInfo));
-      values.put("methodBody", null);
-    }else{
-      values.put("constructor", Boolean.TRUE);
-      values.put("name", type.getElementName());
-      StringBuffer buffer = new StringBuffer("super(");
-      String[] paramNames = method.getParameterNames();
-      for(int ii = 0; ii < paramNames.length; ii++){
-        if(ii != 0){
-          buffer.append(", ");
+    ArrayList<ImplType> results = new ArrayList<ImplType>();
+    ArrayList<String> overrideMethods = null;
+    ITypeBinding curTypeBinding = null;
+    for (IMethodBinding methodBinding : methods) {
+      ITypeBinding typeBinding = methodBinding.getDeclaringClass();
+      if (typeBinding != curTypeBinding){
+        if (overrideMethods != null && overrideMethods.size() > 0){
+          results.add(createImplType(curTypeBinding, overrideMethods));
         }
-        buffer.append(paramNames[ii]);
+        overrideMethods = new ArrayList<String>();
       }
-      buffer.append(");");
-      values.put("methodBody", buffer.toString());
-      values.put("returnType", null);
+      curTypeBinding = typeBinding;
+      overrideMethods.add(getMethodBindingSignature(methodBinding));
+    }
+    if (overrideMethods != null && overrideMethods.size() > 0){
+      results.add(createImplType(curTypeBinding, overrideMethods));
     }
 
-    IType superType = superTypeInfo.getType();
-    if(superType.isInterface()){
-      values.put("modifier", "public");
-    }else{
-      values.put("modifier",
-          Flags.isPublic(method.getFlags()) ? "public" : "protected");
-    }
-    values.put("superType",
-      JavaUtils.getCompilationUnitRelativeTypeName(src, superType));
-    values.put("params",
-        MethodUtils.getMethodParameters(method, superTypeInfo, true));
-    values.put("overrides",
-        superType.isClass() ? Boolean.TRUE : Boolean.FALSE);
-    values.put("implementof",
-        superType.isClass() ? Boolean.FALSE : Boolean.TRUE);
-    values.put("methodSignature",
-        MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
-    String thrown = MethodUtils.getMethodThrows(method);
-    values.put("throwsType", thrown != null ? thrown : null);
-    values.put("delegate", Boolean.FALSE);
-
-    PluginResources resources = (PluginResources)
-      Services.getPluginResources(PluginResources.NAME);
-    String result = TemplateUtils.evaluate(resources, TEMPLATE, values);
-    Position position = TypeUtils.getPosition(type,
-        type.createMethod(result, sibling, false, null));
-    JavaUtils.format(
-        src, CodeFormatter.K_COMPILATION_UNIT,
-        position.getOffset(), position.getLength());
-
-    return position;
+    return new ImplResult(name, results);
   }
 
   /**
-   * Gets the methods from the super type.
+   * Gets a list of overridable IMethodBindings.
    *
-   * @param type The type to be modified.
-   * @param baseMethods The base methods from the base type.
-   * @param superTypeInfo The super type info.
-   *
-   * @return Array of methods.
+   * @param src The source file.
+   * @param type The type within the source file.
+   * @return List of IMethodBinding.
    */
-  protected ImplMethod[] getMethods(
-      IType type, Map<String, IMethod> baseMethods, TypeInfo superTypeInfo)
+  protected List<IMethodBinding> getOverridableMethods(
+      ICompilationUnit src, IType type)
     throws Exception
   {
-    ArrayList<ImplMethod> results = new ArrayList<ImplMethod>();
-    IMethod[] methods = superTypeInfo.getType().getMethods();
-    for(int ii = 0; ii < methods.length; ii++){
-      IMethod method = methods[ii];
-      if(isValidMethod(method)){
-        String signature = MethodUtils.getMethodSignature(method, superTypeInfo);
-        ImplMethod implMethod = new ImplMethod();
-        implMethod.setSignature(signature);
-        implMethod.setImplemented(
-            getImplemented(type, baseMethods, superTypeInfo, method) != null);
+    RefactoringASTParser parser = new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+    CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
+    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
+    return getOverridableMethods(cu, typeBinding);
+  }
 
-        results.add(implMethod);
+  /**
+   * Gets a list of overridable IMethodBindings.
+   *
+   * @param cu AST CompilationUnit.
+   * @param typeBinding The binding of the type with the CompilationUnit.
+   * @return List of IMethodBinding.
+   */
+  protected List<IMethodBinding> getOverridableMethods(
+      CompilationUnit cu, ITypeBinding typeBinding)
+    throws Exception
+  {
+    if(!typeBinding.isClass()){
+      throw new IllegalArgumentException(
+          Services.getMessage("type.not.a.class", typeBinding.getQualifiedName()));
+    }
+
+    IPackageBinding packageBinding = typeBinding.getPackage();
+    IMethodBinding[] methods =
+      StubUtility2.getOverridableMethods(cu.getAST(), typeBinding, false);
+    ArrayList<IMethodBinding> overridable = new ArrayList<IMethodBinding>();
+    for (IMethodBinding methodBinding : methods) {
+      if (Bindings.isVisibleInHierarchy(methodBinding, packageBinding)){
+        overridable.add(methodBinding);
       }
     }
-
-    return (ImplMethod[])results.toArray(new ImplMethod[results.size()]);
+    return overridable;
   }
 
-  /**
-   * Determine if the supplied method should be included in list of
-   * overridable / implmentable methods.
-   *
-   * @param method The method.
-   * @return true is should be included, false otherwise.
-   */
-  protected boolean isValidMethod(IMethod method)
-    throws Exception
+  private ImplType createImplType(
+      ITypeBinding typeBinding, List<String> overridable)
   {
-    int flags = method.getFlags();
-    return (!Flags.isStatic(flags) &&
-        !Flags.isFinal(flags) &&
-        !Flags.isPrivate(flags));
+    String signature =
+      (typeBinding.isInterface() ? "interface " : "class ") +
+      typeBinding.getName().replaceAll("#RAW", "");
+    return new ImplType(
+        typeBinding.getPackage().getName(),
+        signature,
+        overridable.toArray(new String[overridable.size()]));
   }
 
-  /**
-   * Determines if the supplied type is valid for overriding / implementing
-   * methods.
-   *
-   * @param type The type.
-   * @return true if valid, false otherwise.
-   */
-  protected boolean isValidType(IType type)
+  private void insertMethods(
+      ICompilationUnit src, IType type, CommandLine commandLine)
     throws Exception
   {
-    return type.isClass();
-  }
-
-  /**
-   * Gets the implemented version of the supplied method.
-   *
-   * @param type The type to be modified.
-   * @param baseMethods The list of methods defined in the base.
-   * @param method The method to test for.
-   * @return The implemented method or null if none.
-   */
-  protected IMethod getImplemented(
-      IType type,
-      Map<String, IMethod> baseMethods,
-      TypeInfo superTypeInfo,
-      IMethod method)
-    throws Exception
-  {
-    String signature = MethodUtils.getMinimalMethodSignature(method, superTypeInfo);
-    if(method.isConstructor()){
-      signature = signature.replaceFirst(
-          method.getDeclaringType().getElementName(),
-          type.getElementName());
+    String methodsOption = commandLine.getValue(Options.METHOD_OPTION);
+    HashSet<String> chosen = null;
+    if(methodsOption != null){
+      chosen = new HashSet<String>();
+      String[] sigs = new Gson().fromJson(methodsOption, String[].class);
+      for (String sig : sigs){
+        chosen.add(sig.replace(" ", ""));
+      }
     }
-    return baseMethods.get(signature);
+
+    int pos = -1;
+    int len = src.getBuffer().getLength();
+    IJavaElement sibling = getSibling(type);
+    if (sibling != null){
+      pos = ((ISourceReference)sibling).getSourceRange().getOffset();
+    }
+
+    IWorkspaceRunnable op = getImplOperation(
+        src, type, chosen, sibling, pos, commandLine);
+    if (op != null){
+      String lineDelim = src.findRecommendedLineSeparator();
+      IImportDeclaration[] imports = src.getImports();
+      int importsEnd = -1;
+      if (imports.length > 0){
+        ISourceRange last = imports[imports.length - 1].getSourceRange();
+        importsEnd = last.getOffset() + last.getLength() + lineDelim.length();
+      }
+
+      op.run(null);
+
+      // an op.getResultingEdit() would be nice here, but we'll make do w/ what
+      // we got and caculate our own edit offset/length combo so we can format
+      // the new code.
+      int offset = pos != -1 ? pos : (len - 1 - lineDelim.length());
+      int newLen = src.getBuffer().getLength();
+      int length = newLen - len - 1;
+
+      // the change in length may include newly added imports, so handle that as
+      // best we can
+      int importLenChange = 0;
+      imports = src.getImports();
+      if (importsEnd != -1){
+        ISourceRange last = imports[imports.length - 1].getSourceRange();
+        importLenChange = last.getOffset() + last.getLength() +
+          lineDelim.length() - importsEnd;
+      }else if(imports.length > 0){
+        ISourceRange first = imports[0].getSourceRange();
+        ISourceRange last = imports[imports.length - 1].getSourceRange();
+        importLenChange = last.getOffset() + last.getLength() +
+          (lineDelim.length() * 2) - first.getOffset();
+      }
+
+      offset += importLenChange;
+      length -= importLenChange;
+
+      JavaUtils.format(src, CodeFormatter.K_COMPILATION_UNIT, offset, length);
+    }
   }
 
-  /**
-   * Gets the sibling to insert before.
-   *
-   * @param type The type to insert into.
-   * @param baseMethods The currently implemented methods.
-   * @param superTypeInfo The super type info.
-   * @param methods The super types methods.
-   * @param method The method to be added.
-   * @return The sibling, or null if none.
-   */
-  protected IJavaElement getSibling(
-      IType type,
-      Map<String, IMethod> baseMethods,
-      TypeInfo superTypeInfo,
-      IMethod[] methods,
-      IMethod method)
+  private String getMethodBindingSignature(IMethodBinding binding)
+  {
+    return binding.toString().trim()
+      .replaceAll("\\bjava\\.lang\\.", "")
+      .replaceAll("\\s+throws\\s+.*", "")
+      .replaceFirst("\\w+\\s*\\(.*?\\)", getMethodBindingCallSignature(binding));
+  }
+
+  private String getMethodBindingCallSignature(IMethodBinding binding)
+  {
+    ITypeBinding[] paramTypes = binding.getParameterTypes();
+    String[] params = new String[paramTypes.length];
+    for (int i = 0; i < paramTypes.length; i++){
+      params[i] = paramTypes[i].getQualifiedName()
+        .replaceAll("\\bjava\\.lang\\.", "")
+        .replaceAll("#RAW", "");
+    }
+    return binding.getName() + '(' + StringUtils.join(params, ',') + ')';
+  }
+
+  private String getMethodBindingShortCallSignature(IMethodBinding binding)
+  {
+    return getMethodBindingCallSignature(binding).replaceAll("<.*?>", "");
+  }
+
+  private IJavaElement getSibling(IType type)
     throws Exception
   {
-    int index = -1;
-    int implementedIndex = -1;
     IJavaElement sibling = null;
 
-    // find the nearest implemented method
-    for (int ii = 0; ii < methods.length; ii++){
-      if(methods[ii].equals(method)){
-        index = ii;
-      }else{
-        IMethod implemented =
-          getImplemented(type, baseMethods, superTypeInfo, methods[ii]);
-        if(implemented != null){
-          implementedIndex = ii;
-          sibling = implemented;
-          if(index != -1){
-            break;
-          }
-        }
-      }
+    // insert after last method
+    IMethod[] methods = type.getMethods();
+    if (methods.length > 0){
+      sibling = MethodUtils.getMethodAfter(type, methods[methods.length - 1]);
     }
 
-    if(implementedIndex < index && sibling != null){
-      // get the method after the sibling.
-      sibling = MethodUtils.getMethodAfter(type, (IMethod)sibling);
-    }
-
-    // no sibling, get first non enum type.
-    if(sibling == null){
+    // insert before inner classes.
+    if (sibling == null){
       IType[] types = type.getTypes();
-      if(types.length > 0){
-        // find the first non-enum type.
-        for (int ii = 0; ii < types.length; ii++){
-          if(!types[ii].isEnum()){
-            return types[ii];
-          }
+      // find the first non-enum type.
+      for (int ii = 0; ii < types.length; ii++){
+        if(!types[ii].isEnum()){
+          sibling = types[ii];
+          break;
         }
       }
     }
+
     return sibling;
   }
 }

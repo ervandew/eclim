@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.delegate;
+package org.eclim.plugin.jdt.command.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ import static org.junit.Assert.*;
 public class DelegateCommandTest
 {
   private static final String TEST_FILE =
-    "src/org/eclim/test/delegate/TestDelegate.java";
+    "src/org/eclim/test/impl/TestDelegate.java";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -50,32 +51,30 @@ public class DelegateCommandTest
       Eclim.execute(new String[]{
         "java_delegate", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "124", "-e", "utf-8"
+        "-o", "120", "-e", "utf-8"
       });
 
-    assertEquals("org.eclim.test.delegate.TestDelegate", result.get("type"));
+    assertEquals("org.eclim.test.impl.TestDelegate.list", result.get("type"));
 
     List<Map<String,Object>> types =
       (List<Map<String,Object>>)result.get("superTypes");
-    assertEquals(4, types.size());
+    assertEquals(1, types.size());
 
     assertEquals("java.util", types.get(0).get("packageName"));
-    assertEquals("public interface List<Double>",
+    assertEquals("interface List<Double>",
         types.get(0).get("signature"));
+    HashSet<String> methods = new HashSet<String>(
+        (List<String>)types.get(0).get("methods"));
 
-    assertEquals("public abstract Iterator<Double> iterator()",
-        ((List<Map<String,Object>>)
-         types.get(0).get("methods")).get(3).get("signature"));
-    assertEquals("public abstract boolean add(Double e)",
-        ((List<Map<String,Object>>)
-         types.get(0).get("methods")).get(6).get("signature"));
+    assertTrue(methods.contains("public abstract Iterator<Double> iterator()"));
+    assertTrue(methods.contains("public abstract boolean add(Double)"));
 
     result = (Map<String,Object>)
       Eclim.execute(new String[]{
         "java_delegate", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-o", "124", "-e", "utf-8",
-        "-t", "org.eclim.test.delegate.TestDelegate",
-        "-s", "java.util.List%3CDouble%3E", "-m", "add(Double)"
+        "-f", TEST_FILE, "-o", "120", "-e", "utf-8",
+        "-v", "org.eclim.test.impl.TestDelegate.list",
+        "-s", "java.util.List", "-m", "[\"add(Double)\", \"iterator()\"]"
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -83,13 +82,14 @@ public class DelegateCommandTest
         Pattern.compile("public boolean add\\(Double \\w\\)\\s*\\{\n" +
           "\\s+return list.add\\(\\w\\);")
         .matcher(contents).find());
+    assertTrue("Method not found or invalid.",
+        Pattern.compile("public Iterator<Double> iterator\\(\\)\\s*\\{\n" +
+          "\\s+return list.iterator\\(\\);")
+        .matcher(contents).find());
 
     types = (List<Map<String,Object>>)result.get("superTypes");
-    assertEquals("public abstract boolean add(Double e)",
-        ((List<Map<String,Object>>)
-         types.get(0).get("methods")).get(6).get("signature"));
-    assertEquals(true,
-        ((List<Map<String,Object>>)
-         types.get(0).get("methods")).get(6).get("implemented"));
+    methods = new HashSet<String>( (List<String>)types.get(0).get("methods"));
+    assertFalse(methods.contains("public abstract Iterator<Double> iterator()"));
+    assertFalse(methods.contains("public abstract boolean add(Double)"));
   }
 }

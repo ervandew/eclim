@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,103 +22,24 @@ package org.eclim.plugin.jdt.command.impl;
  *
  * @author Eric Van Dewoestine
  */
+@SuppressWarnings("unused")
 public class ImplType
 {
   private String packageName;
   private String signature;
-  private ImplMethod[] methods;
-  private boolean exists = true;
+  private String[] methods;
 
   /**
-   * Get package.
+   * Constructs a new instance.
    *
-   * @return package as String.
+   * @param packageName The packageName for this instance.
+   * @param signature The signature for this instance.
+   * @param methods The methods for this instance.
    */
-  public String getPackage()
-  {
-    return this.packageName;
-  }
-
-  /**
-   * Set package.
-   *
-   * @param packageName the value to set.
-   */
-  public void setPackage(String packageName)
+  public ImplType(String packageName, String signature, String[] methods)
   {
     this.packageName = packageName;
-  }
-
-  /**
-   * Get signature.
-   *
-   * @return signature as String.
-   */
-  public String getSignature()
-  {
-    return this.signature;
-  }
-
-  /**
-   * Set signature.
-   *
-   * @param signature the value to set.
-   */
-  public void setSignature(String signature)
-  {
     this.signature = signature;
-  }
-
-  /**
-   * Determines whether or not the type exists (if it was found in the project).
-   *
-   * @return true if the type exists, false otherwise.
-   */
-  public boolean getExists()
-  {
-    return exists;
-  }
-
-  /**
-   * Sets whether or not the type exists (if it was found in the project).
-   *
-   * @param exists true if the type exists, false otherwise.
-   */
-  public void setExists(boolean exists)
-  {
-    this.exists = exists;
-  }
-
-  /**
-   * Get methods.
-   *
-   * @return methods as ImplMethod[].
-   */
-  public ImplMethod[] getMethods()
-  {
-    return this.methods;
-  }
-
-  /**
-   * Set methods.
-   *
-   * @param methods the value to set.
-   */
-  public void setMethods(ImplMethod[] methods)
-  {
     this.methods = methods;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean equals(Object other)
-  {
-    if(other instanceof ImplType){
-      ImplType type = (ImplType)other;
-      return (type.getSignature().equals(getSignature()) &&
-          type.getPackage().equals(getPackage()));
-    }
-    return false;
   }
 }
