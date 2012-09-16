@@ -17,12 +17,11 @@
 package org.eclim.plugin.jdt.command.junit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-
-import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
@@ -30,30 +29,56 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.core.util.ProjectUtils;
-import org.eclim.plugin.core.util.TemplateUtils;
-
-import org.eclim.plugin.jdt.PluginResources;
 
 import org.eclim.plugin.jdt.command.impl.ImplCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
-import org.eclim.plugin.jdt.util.MethodUtils;
-import org.eclim.plugin.jdt.util.TypeInfo;
-import org.eclim.plugin.jdt.util.TypeUtils;
 
-import org.eclim.util.CollectionUtils;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 
-import org.eclim.util.file.Position;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.core.resources.IProject;
-
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 
-import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.Annotation;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
+
+import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
+
+import org.eclipse.jdt.internal.corext.dom.ASTNodes;
+
+import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
+
+import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
+
+import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+
+import org.eclipse.jdt.internal.junit.JUnitCorePlugin;
+import org.eclipse.jdt.internal.junit.Messages;
+
+import org.eclipse.jdt.internal.junit.util.JUnitStubUtility;
+
+import org.eclipse.jdt.internal.junit.wizards.WizardMessages;
+
+import org.eclipse.jdt.internal.ui.javaeditor.ASTProvider;
+
+import org.eclipse.text.edits.MultiTextEdit;
 
 /**
  * Command to handle creation of junit test stubs.
@@ -75,207 +100,191 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 public class JUnitImplCommand
   extends ImplCommand
 {
-  private static final String JUNIT_TEMPLATE = "junit<version>_method.gst";
+  private ThreadLocal<ITypeBinding> base = new ThreadLocal<ITypeBinding>();
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  protected TypeInfo[] getSuperTypes(CommandLine commandLine, IType type)
+  public Object execute(CommandLine commandLine)
     throws Exception
   {
-    ArrayList<TypeInfo> types = new ArrayList<TypeInfo>();
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    String baseName = commandLine.getValue(Options.BASETYPE_OPTION);
 
-    String baseType = commandLine.getValue(Options.BASETYPE_OPTION);
-    if(baseType != null){
-      IType base = type.getJavaProject().findType(baseType);
-      types.add(new TypeInfo(base, null, null));
+    IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
+    IType baseType = javaProject.findType(baseName);
+    RefactoringASTParser parser =
+      new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+    CompilationUnit cu = parser.parse(baseType.getCompilationUnit(), true);
+    ITypeBinding base = ASTNodeSearchUtil
+      .getTypeDeclarationNode(baseType, cu).resolveBinding();
+    this.base.set(base);
 
-      TypeInfo[] baseTypes = super.getSuperTypes(commandLine, base);
-      CollectionUtils.addAll(types, baseTypes);
-    }
-
-    TypeInfo[] testTypes = super.getSuperTypes(commandLine, type);
-    for(int ii = 0; ii < testTypes.length; ii ++){
-      if(!types.contains(testTypes[ii])){
-        types.add(testTypes[ii]);
-      }
-    }
-
-    return (TypeInfo[])types.toArray(new TypeInfo[types.size()]);
+    return super.execute(commandLine);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  protected boolean isValidMethod(IMethod method)
-    throws Exception
-  {
-    String parent = ((IType)method.getParent()).getFullyQualifiedName();
-    if("java.lang.Object".equals(parent)){
-      return super.isValidMethod(method);
-    }
-    int flags = method.getFlags();
-    return (!Flags.isPrivate(flags) &&
-      !method.isConstructor() &&
-      !"junit.framework.Assert".equals(parent));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean isValidType(IType type)
-    throws Exception
-  {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IMethod getImplemented(
-      IType type,
-      Map<String, IMethod> baseMethods,
-      TypeInfo superTypeInfo,
-      IMethod method)
-    throws Exception
-  {
-    IMethod base = baseMethods.get(
-        MethodUtils.getMinimalMethodSignature(method, superTypeInfo));
-    if(base != null){
-      return base;
-    }
-    return baseMethods.get(getTestMethodSignature(type, method));
-  }
-
-  /**
-   * Gets a string representation of the test method equivalent of the supplied
-   * method.
-   *
-   * @param type The type to be modified.
-   * @param method The method.
-   * @return The test method signature.
-   */
-  protected String getTestMethodSignature(IType type, IMethod method)
+  protected List<IMethodBinding> getOverridableMethods(
+      CompilationUnit cu, ITypeBinding typeBinding)
     throws Exception
   {
     String version = ProjectUtils.getSetting(
-        type.getJavaProject().getProject(), "org.eclim.java.junit.version");
+        cu.getJavaElement().getJavaProject().getProject(),
+        "org.eclim.java.junit.version");
 
-    String name = method.getElementName();
-    if (version.equals("3")){
-      name = "test" + StringUtils.capitalize(name);
+    HashSet<String> testMethods = new HashSet<String>();
+    for (IMethodBinding method : typeBinding.getDeclaredMethods()){
+      int modifiers = method.getModifiers();
+      if (!method.isConstructor() &&
+          !Modifier.isPrivate(modifiers))
+      {
+        testMethods.add(method.getName());
+      }
     }
 
-    StringBuffer buffer = new StringBuffer();
-    buffer.append(name).append("()");
-    return buffer.toString();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Position insertMethod(
-      CommandLine commandLine,
-      ICompilationUnit src,
-      IType type,
-      TypeInfo superTypeInfo,
-      IMethod method,
-      IJavaElement sibling)
-    throws Exception
-  {
-    IType superType = superTypeInfo.getType();
-    String baseType = commandLine.getValue(Options.BASETYPE_OPTION);
-    if(baseType != null){
-      IType base = type.getJavaProject().findType(baseType);
-      if(base.equals(superType)){
-        return insertTestMethod(src, type, superTypeInfo, method, sibling);
-      }else{
-        TypeInfo[] superTypesInfo = TypeUtils.getSuperTypes(base);
-        for (TypeInfo info : superTypesInfo){
-          if(info.getType().equals(superType)){
-            return insertTestMethod(src, type, superTypeInfo, method, sibling);
-          }
+    List<IMethodBinding> testable = new ArrayList<IMethodBinding>();
+    ITypeBinding objectBinding =
+      cu.getAST().resolveWellKnownType("java.lang.Object");
+    ITypeBinding parentBinding = base.get();
+    while (parentBinding != null && !parentBinding.equals(objectBinding)){
+      for (IMethodBinding method : parentBinding.getDeclaredMethods()){
+        String name = method.getName();
+        if (version.equals("3")){
+          name = "test" + StringUtils.capitalize(name);
+        }
+        int modifiers = method.getModifiers();
+        if (!method.isConstructor() &&
+            !Modifier.isPrivate(modifiers) &&
+            !testMethods.contains(name))
+        {
+          testable.add(method);
         }
       }
+      parentBinding = parentBinding.getSuperclass();
     }
 
-    return super.insertMethod(
-        commandLine, src, type, superTypeInfo, method, sibling);
+    return testable;
   }
 
-  /**
-   * Inserts a test method stub for the supplied method.
-   *
-   * @param src The compilation unit.
-   * @param type The type to insert the method into.
-   * @param superTypeInfo The super type the method is defined in.
-   * @param method The method to insert.
-   * @param sibling The element to insert the new method before, or null to
-   *  append to the end.
-   * @return The position the method was inserted at.
-   */
-  protected Position insertTestMethod(
+  @Override
+  protected IWorkspaceRunnable getImplOperation(
       ICompilationUnit src,
       IType type,
-      TypeInfo superTypeInfo,
-      IMethod method,
-      IJavaElement sibling)
+      Set<String> chosen,
+      IJavaElement sibling,
+      int pos,
+      CommandLine commandLine)
     throws Exception
   {
-    IProject project = type.getJavaProject().getProject();
-    HashMap<String, Object> values = new HashMap<String, Object>();
-    JavaUtils.loadPreferencesForTemplate(project, getPreferences(), values);
+    RefactoringASTParser parser = new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+    CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
+    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
 
-    String version =
-      ProjectUtils.getSetting(project, "org.eclim.java.junit.version");
-
-    String name = method.getElementName();
-    if (version.equals("3")){
-      name = "test" + StringUtils.capitalize(name);
-    }
-    values.put("name", name);
-    values.put("methodName", method.getElementName());
-    values.put("superType", superTypeInfo.getType().getFullyQualifiedName());
-    values.put("methodSignatures", getMethodSignatures(superTypeInfo, method));
-    values.put("methodBody", null);
-
-    PluginResources resources = (PluginResources)
-      Services.getPluginResources(PluginResources.NAME);
-    String template = JUNIT_TEMPLATE.replace("<version>", version);
-    String result = TemplateUtils.evaluate(resources, template, values);
-    Position position = TypeUtils.getPosition(type,
-        type.createMethod(result, sibling, false, null));
-    JavaUtils.format(
-        src, CodeFormatter.K_COMPILATION_UNIT,
-        position.getOffset(), position.getLength());
-
-    return position;
-  }
-
-  /**
-   * Constructs an array of method signatures.
-   *
-   * @param typeInfo The type to grab the methods from.
-   * @param method The method or one of the overloaded methods to construct an
-   * array from.
-   * @return Array of method signatures.
-   */
-  protected String[] getMethodSignatures(TypeInfo typeInfo, IMethod method)
-    throws Exception
-  {
-    ArrayList<String> signatures = new ArrayList<String>();
-    IMethod[] methods = typeInfo.getType().getMethods();
-    for (int ii = 0; ii < methods.length; ii++){
-      if(methods[ii].getElementName().equals(method.getElementName())){
-        String sig = MethodUtils.getMinimalMethodSignature(methods[ii], typeInfo);
-        signatures.add(sig);
+    List<IMethodBinding> testable = getOverridableMethods(cu, typeBinding);
+    List<IMethodBinding> tests = new ArrayList<IMethodBinding>();
+    for (IMethodBinding binding : testable){
+      if (isChosen(chosen, binding)){
+        tests.add(binding);
       }
     }
-    return (String[])signatures.toArray(new String[signatures.size()]);
+
+    if (tests.size() > 0){
+      return new AddTestMethodsOperation(
+          cu, typeBinding, tests.toArray(new IMethodBinding[tests.size()]));
+    }
+    return null;
+  }
+
+  private class AddTestMethodsOperation
+    implements IWorkspaceRunnable
+  {
+    private CompilationUnit cu;
+    private ITypeBinding typeBinding;
+    private IMethodBinding[] methodBindings;
+
+    public AddTestMethodsOperation(
+        CompilationUnit cu,
+        ITypeBinding typeBinding,
+        IMethodBinding[] methodBindings)
+    {
+      this.cu = cu;
+      this.typeBinding = typeBinding;
+      this.methodBindings = methodBindings;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void run(IProgressMonitor monitor)
+    {
+      try{
+        ICompilationUnit src = (ICompilationUnit)cu.getJavaElement();
+        IJavaProject javaProject = src.getJavaProject();
+        String version = ProjectUtils.getSetting(
+            cu.getJavaElement().getJavaProject().getProject(),
+            "org.eclim.java.junit.version");
+
+        MultiTextEdit edit = new MultiTextEdit();
+        if (!version.equals("3")){
+          ImportRewrite imports = StubUtility.createImportRewrite(cu, true);
+          imports.addStaticImport("org.junit.Assert", "*", false);
+          imports.addImport(JUnitCorePlugin.JUNIT4_ANNOTATION_NAME);
+          edit.addChild(imports.rewriteImports(null));
+        }
+
+        AST ast = cu.getAST();
+        ASTRewrite astRewrite = ASTRewrite.create(ast);
+        ASTNode node = cu.findDeclaringNode(typeBinding);
+        ChildListPropertyDescriptor property= ((AbstractTypeDeclaration)node)
+          .getBodyDeclarationsProperty();
+        ListRewrite memberRewriter = astRewrite.getListRewrite(node, property);
+        HashSet<String> added = new HashSet<String>();
+        for (IMethodBinding binding : methodBindings){
+          String name = binding.getName();
+          if (version.equals("3")){
+            name = "test" + StringUtils.capitalize(name);
+          }
+          if (added.contains(name)){
+            continue;
+          }
+          added.add(name);
+
+          MethodDeclaration stub = ast.newMethodDeclaration();
+          stub.setConstructor(false);
+          stub.modifiers().addAll(ast.newModifiers(Modifier.PUBLIC));
+
+          if (!version.equals("3")){
+            Annotation marker = ast.newMarkerAnnotation();
+            marker.setTypeName(ast.newSimpleName("Test"));
+            astRewrite
+              .getListRewrite(stub, MethodDeclaration.MODIFIERS2_PROPERTY)
+              .insertFirst(marker, null);
+          }
+
+          stub.setName(ast.newSimpleName(name));
+
+          Block body = ast.newBlock();
+          stub.setBody(body);
+
+          String todoTask = "";
+          String todoTaskTag= JUnitStubUtility.getTodoTaskTag(javaProject);
+          if (todoTaskTag != null) {
+            todoTask= " // " + todoTaskTag;
+          }
+          String message = WizardMessages
+            .NewTestCaseWizardPageOne_not_yet_implemented_string;
+          body.statements().add(astRewrite.createStringPlaceholder(
+                todoTask,
+                ASTNode.RETURN_STATEMENT));
+          body.statements().add(astRewrite.createStringPlaceholder(
+                Messages.format("fail(\"{0}\");", message),
+                ASTNode.RETURN_STATEMENT));
+
+          memberRewriter.insertLast(stub, null);
+        }
+        edit.addChild(astRewrite.rewriteAST());
+
+        JavaModelUtil.applyEdit(src, edit, true, null);
+      }catch(Exception e){
+        throw new RuntimeException(e);
+      }
+    }
   }
 }

@@ -33,6 +33,8 @@ Java:
     <org.eclim.java.import.package_separation_level>`.
   - g:EclimJavaBeanInsertIndexed vim variable removed in favor of suffixing
     :JavaGetSet methods with '!'.
+  - :JavaCorrect, :JavaImpl, :JavaDelegate, :JavaConstructor, and :JUnitImpl
+    all now perform their code manipulations using eclipse operations.
 
 .. _1.7.9:
 

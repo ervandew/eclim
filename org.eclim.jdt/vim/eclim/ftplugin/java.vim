@@ -164,8 +164,8 @@ if exists(":JavaListInstalls") != 2
 endif
 
 if !exists(":JavaConstructor")
-  command -buffer -range=0 JavaConstructor
-    \ :call eclim#java#constructor#Constructor(<line1>, <line2>)
+  command -buffer -range=0 -bang JavaConstructor
+    \ :call eclim#java#impl#Constructor(<line1>, <line2>, '<bang>')
 endif
 
 if !exists(":JavaGet")
@@ -185,7 +185,7 @@ if !exists(":JavaImpl")
   command -buffer JavaImpl :call eclim#java#impl#Impl()
 endif
 if !exists(":JavaDelegate")
-  command -buffer JavaDelegate :call eclim#java#delegate#Delegate()
+  command -buffer JavaDelegate :call eclim#java#impl#Delegate()
 endif
 
 if !exists(":JavaSearch")

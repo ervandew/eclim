@@ -1,9 +1,9 @@
-package org.eclim.test.delegate;
+package org.eclim.test.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestDelegate
+public class TestDelegateVUnit
 {
   private List<Double> list = new ArrayList<Double>();
 }

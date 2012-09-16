@@ -23,16 +23,58 @@
 " }}}
 
 " Script Varables {{{
+  let s:command_constructor =
+    \ '-command java_constructor -p "<project>" -f "<file>" -o <offset> -e <encoding>'
   let s:command_impl =
     \ '-command java_impl -p "<project>" -f "<file>" -o <offset> -e <encoding>'
-  let g:JavaImplCommandInsert =
+  let s:command_impl_insert =
     \ '-command java_impl -p "<project>" -f "<file>" -t "<type>" ' .
+    \ '-s "<superType>" <methods>'
+  let s:command_delegate =
+    \ '-command java_delegate -p "<project>" -f "<file>" -o <offset> -e <encoding>'
+  let s:command_delegate_insert =
+    \ '-command java_delegate -p "<project>" -f "<file>" -v "<type>" ' .
     \ '-s "<superType>" <methods>'
   let s:cross_type_selection = "Visual selection is currently limited to methods of one super type at a time."
 " }}}
 
-" Impl() {{{
-function! eclim#java#impl#Impl()
+function! eclim#java#impl#Constructor(first, last, bang) " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  call eclim#lang#SilentUpdate()
+
+  let properties = a:last == 1 ? [] :
+    \ eclim#java#util#GetSelectedFields(a:first, a:last)
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
+
+  let command = s:command_constructor
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
+  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+  if a:bang == ''
+    let command .= ' -s'
+  endif
+  if len(properties) > 0
+    let command .= ' -r ''' . substitute(string(properties), "'", '"', 'g') . ''''
+  endif
+
+  let result = eclim#ExecuteEclim(command)
+  if type(result) == g:STRING_TYPE && result != ''
+    call eclim#util#EchoError(result)
+    return
+  endif
+
+  if result != "0"
+    call eclim#util#ReloadRetab()
+    write
+  endif
+endfunction " }}}
+
+function! eclim#java#impl#Impl() " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -52,68 +94,47 @@ function! eclim#java#impl#Impl()
   call eclim#java#impl#ImplWindow(command)
 endfunction " }}}
 
-" ImplWindow(command) {{{
-function! eclim#java#impl#ImplWindow(command)
-  let name = eclim#project#util#GetProjectRelativeFilePath() . "_impl"
-  let project = eclim#project#util#GetCurrentProjectName()
-  let workspace = eclim#project#util#GetProjectWorkspace(project)
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-
-  let result = eclim#ExecuteEclim(a:command, port)
-  if type(result) != g:DICT_TYPE
-    return
+function! eclim#java#impl#ImplWindow(command) " {{{
+  if (eclim#java#impl#Window(a:command, "impl"))
+    nnoremap <silent> <buffer> <cr> :call <SID>AddImpl(0)<cr>
+    vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddImpl(1)<cr>
   endif
-
-  let content = [result.type]
-  let notfound = []
-  for super in result.superTypes
-    if !super.exists
-      call add(notfound, super)
-      continue
-    endif
-
-    call add(content, '')
-    call add(content, 'package ' . super.packageName . ';')
-    call add(content, super.signature . ' {')
-    for method in super.methods
-      let signature = split(method.signature, '\n')
-      if method.implemented
-        let signature = map(signature, '"//" . v:val')
-      endif
-      let content += map(signature, '"\t" . v:val')
-    endfor
-    call add(content, '}')
-  endfor
-
-  if len(notfound)
-    call add(content, '')
-    call add(content, '// The following types were not found, either because they were not')
-    call add(content, '// imported or they were not found in the classpath:')
-  endif
-  for super in notfound
-    call add(content, '// ' . super.signature)
-  endfor
-
-  call eclim#util#TempWindow(name, content, {'preserveCursor': 1})
-  setlocal ft=java
-  call eclim#java#impl#ImplWindowFolding()
-
-  nnoremap <silent> <buffer> <cr>
-    \ :call eclim#java#impl#ImplAdd
-    \    (g:JavaImplCommandInsert, function("eclim#java#impl#ImplWindow"), 0)<cr>
-  vnoremap <silent> <buffer> <cr>
-    \ :<C-U>call eclim#java#impl#ImplAdd
-    \    (g:JavaImplCommandInsert, function("eclim#java#impl#ImplWindow"), 1)<cr>
 endfunction " }}}
 
-" ImplWindowFolding() {{{
-function! eclim#java#impl#ImplWindowFolding()
+function! eclim#java#impl#ImplWindowFolding() " {{{
   setlocal foldmethod=syntax
   setlocal foldlevel=99
 endfunction " }}}
 
-" ImplAdd(command, function, visual) {{{
-function! eclim#java#impl#ImplAdd(command, function, visual)
+function! eclim#java#impl#Delegate() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  call eclim#lang#SilentUpdate()
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
+  let offset = eclim#util#GetCurrentElementOffset()
+  let encoding = eclim#util#GetEncoding()
+
+  let command = s:command_delegate
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let command = substitute(command, '<offset>', offset, '')
+  let command = substitute(command, '<encoding>', encoding, '')
+
+  call eclim#java#impl#DelegateWindow(command)
+endfunction " }}}
+
+function! eclim#java#impl#DelegateWindow(command) " {{{
+  if (eclim#java#impl#Window(a:command, "delegate"))
+    nnoremap <silent> <buffer> <cr> :call <SID>AddDelegate(0)<cr>
+    vnoremap <silent> <buffer> <cr> :<C-U>call <SID>AddDelegate(1)<cr>
+  endif
+endfunction " }}}
+
+function! eclim#java#impl#Add(command, function, visual) " {{{
   let winnr = bufwinnr(bufnr('^' . b:filename))
   " src window is not longer open.
   if winnr == -1
@@ -127,7 +148,7 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
   endif
 
   let superType = ""
-  let methods = ""
+  let methods = []
   " non-visual mode or only one line selected
   if !a:visual || start == end
     " not a valid selection
@@ -141,10 +162,7 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
     endif
     " on a method line
     if line =~ '^\s\+'
-      let methods = substitute(line, '.*\s\(\w\+(.*\)', '\1', '')
-      let methods = substitute(methods, '\s\w\+\(,\|)\)', '\1', 'g')
-      let methods = substitute(methods, ',\s', ',', 'g')
-      "let methods = substitute(methods, '<.\{-}>', '', 'g')
+      call add(methods, s:MethodSig(line))
       let ln = search('^\w', 'bWn')
       if ln > 0
         let superType = substitute(getline(ln), '.*\s\(.*\) {', '\1', '')
@@ -164,14 +182,7 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
         " do nothing
       " on a method line
       elseif line =~ '^\s\+'
-        if methods != ""
-          let methods = methods . ",,"
-        endif
-        let method = substitute(line, '.*\s\(\w\+(.*\)', '\1', '')
-        let method = substitute(method, '\s\w\+\(,\|)\)', '\1', 'g')
-        let method = substitute(method, ',\s', ',', 'g')
-        let method = substitute(method, '<.\{-}>', '', 'g')
-        let methods = methods . method
+        call add(methods, s:MethodSig(line))
         call cursor(index, 1)
         let ln = search('^\w', 'bWn')
         if ln > 0
@@ -207,7 +218,7 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
   let ln = search('^package', 'bWn')
   if ln > 0
     let package = substitute(getline(ln), '.*\s\(.*\);', '\1', '')
-    let superType = package . '.' . superType
+    let superType = package . '.' . substitute(superType, '<.\{-}>', '', 'g')
   endif
 
   let type = substitute(getline(1), '\$', '.', 'g')
@@ -223,8 +234,9 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<type>', type, '')
   let command = substitute(command, '<superType>', superType, '')
-  if methods != ""
-    let command = substitute(command, '<methods>', '-m "' . methods . '"', '')
+  if len(methods)
+    let json = substitute(string(methods), "'", '"', 'g')
+    let command = substitute(command, '<methods>', '-m ''' . json . '''', '')
   else
     let command = substitute(command, '<methods>', '', '')
   endif
@@ -235,6 +247,56 @@ function! eclim#java#impl#ImplAdd(command, function, visual)
   call eclim#util#ReloadRetab()
   write
   noautocmd exec impl_winnr . "winc w"
+endfunction " }}}
+
+function! eclim#java#impl#Window(command, name) " {{{
+  let name = eclim#project#util#GetProjectRelativeFilePath() . '_' . a:name
+  let project = eclim#project#util#GetCurrentProjectName()
+  let workspace = eclim#project#util#GetProjectWorkspace(project)
+  let port = eclim#client#nailgun#GetNgPort(workspace)
+
+  let result = eclim#ExecuteEclim(a:command, port)
+  if type(result) == g:STRING_TYPE
+    call eclim#util#EchoError(result)
+    return
+  endif
+  if type(result) != g:DICT_TYPE
+    return
+  endif
+
+  let content = [result.type]
+  for super in result.superTypes
+    call add(content, '')
+    call add(content, 'package ' . super.packageName . ';')
+    call add(content, super.signature . ' {')
+    for method in super.methods
+      let signature = split(method, '\n')
+      let content += map(signature, '"\t" . v:val')
+    endfor
+    call add(content, '}')
+  endfor
+
+  call eclim#util#TempWindow(name, content, {'preserveCursor': 1})
+  setlocal ft=java
+  call eclim#java#impl#ImplWindowFolding()
+  return 1
+endfunction " }}}
+
+function! s:AddImpl(visual) " {{{
+  call eclim#java#impl#Add
+    \ (s:command_impl_insert, function("eclim#java#impl#ImplWindow"), a:visual)
+endfunction " }}}
+
+function! s:AddDelegate(visual) " {{{
+  call eclim#java#impl#Add
+    \ (s:command_delegate_insert, function("eclim#java#impl#DelegateWindow"), a:visual)
+endfunction " }}}
+
+function! s:MethodSig(line) " {{{
+  let sig = substitute(a:line, '.*\s\(\w\+(.*\)', '\1', '')
+  let sig = substitute(sig, ',\s', ',', 'g')
+  let sig = substitute(sig, '<.\{-}>', '', 'g')
+  return sig
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

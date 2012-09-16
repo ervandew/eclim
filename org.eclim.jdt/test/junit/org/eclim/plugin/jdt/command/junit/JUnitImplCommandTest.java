@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.command.junit;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -60,15 +61,12 @@ public class JUnitImplCommandTest
     assertEquals(3, types.size());
 
     assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));
-    assertEquals("public class SomeClass", types.get(0).get("signature"));
-    List<Map<String,Object>> methods =
-      (List<Map<String,Object>>)types.get(0).get("methods");
-    assertEquals("public void aMethod()", methods.get(0).get("signature"));
-    assertEquals(false, methods.get(0).get("implemented"));
-    assertEquals("public void aMethod(String name)", methods.get(1).get("signature"));
-    assertEquals(false, methods.get(1).get("implemented"));
-    assertEquals("public void anotherMethod(int id)", methods.get(2).get("signature"));
-    assertEquals(false, methods.get(2).get("implemented"));
+    assertEquals("class SomeClass", types.get(0).get("signature"));
+    HashSet<String> methods = new HashSet<String>(
+        (List<String>)types.get(0).get("methods"));
+    assertTrue(methods.contains("public void aMethod()"));
+    assertTrue(methods.contains("public void aMethod(String)"));
+    assertTrue(methods.contains("public void anotherMethod(int)"));
 
     result = (Map<String,Object>)
       Eclim.execute(new String[]{
@@ -77,7 +75,7 @@ public class JUnitImplCommandTest
         "-b", "org.eclim.test.junit.SomeClass",
         "-t", "org.eclim.test.junit.SomeClassTest",
         "-s", "org.eclim.test.junit.SomeClass",
-        "-m", "aMethod(String)"
+        "-m", "[\"aMethod(String)\"]"
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -88,13 +86,10 @@ public class JUnitImplCommandTest
     types = (List<Map<String,Object>>)result.get("superTypes");
 
     assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));
-    assertEquals("public class SomeClass", types.get(0).get("signature"));
-    methods = (List<Map<String,Object>>)types.get(0).get("methods");
-    assertEquals("public void aMethod()", methods.get(0).get("signature"));
-    assertEquals(true, methods.get(0).get("implemented"));
-    assertEquals("public void aMethod(String name)", methods.get(1).get("signature"));
-    assertEquals(true, methods.get(1).get("implemented"));
-    assertEquals("public void anotherMethod(int id)", methods.get(2).get("signature"));
-    assertEquals(false, methods.get(2).get("implemented"));
+    assertEquals("class SomeClass", types.get(0).get("signature"));
+    methods = new HashSet<String>((List<String>)types.get(0).get("methods"));
+    assertFalse(methods.contains("public void aMethod()"));
+    assertFalse(methods.contains("public void aMethod(String)"));
+    assertTrue(methods.contains("public void anotherMethod(int)"));
   }
 }

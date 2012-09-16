@@ -1,4 +1,4 @@
-package org.eclim.test.constructor;
+package org.eclim.test.impl;
 
 public class TestConstructorVUnit
 {
