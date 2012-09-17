@@ -19,6 +19,7 @@ package org.eclim.plugin.jdt.command.correct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclim.Services;
@@ -53,6 +54,7 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.core.refactoring.CompilationUnitChange;
 
 import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
+import org.eclipse.jdt.internal.ui.text.correction.CorrectionMessages;
 import org.eclipse.jdt.internal.ui.text.correction.ReorgCorrectionsSubProcessor.ClasspathFixCorrectionProposal;
 
 import org.eclipse.jdt.internal.ui.text.correction.proposals.NewCUUsingWizardProposal;
@@ -92,6 +94,19 @@ import org.eclipse.text.edits.TextEdit;
 public class CodeCorrectCommand
   extends AbstractCommand
 {
+  private static HashSet<Class<? extends IJavaCompletionProposal>> IGNORE_BY_TYPE =
+    new HashSet<Class<? extends IJavaCompletionProposal>>();
+  static {
+    IGNORE_BY_TYPE.add(NewCUUsingWizardProposal.class);
+    IGNORE_BY_TYPE.add(ClasspathFixCorrectionProposal.class);
+  }
+
+  private static HashSet<String> IGNORE_BY_INFO = new HashSet<String>();
+  static {
+    IGNORE_BY_INFO.add(CorrectionMessages
+        .LocalCorrectionsSubProcessor_InferGenericTypeArguments_description);
+  }
+
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -206,9 +221,9 @@ public class CodeCorrectCommand
               continue;
             }
 
-            // skip proposal requiring gui dialogs
-            if (proposal instanceof NewCUUsingWizardProposal ||
-                proposal instanceof ClasspathFixCorrectionProposal)
+            // skip proposal requiring gui dialogs, etc.
+            if (IGNORE_BY_TYPE.contains(proposal.getClass()) ||
+                IGNORE_BY_INFO.contains(proposal.getAdditionalProposalInfo()))
             {
               continue;
             }
