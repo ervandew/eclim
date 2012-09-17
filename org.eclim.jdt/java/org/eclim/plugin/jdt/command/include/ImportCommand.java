@@ -108,6 +108,9 @@ public class ImportCommand
       TextEdit rewrite = importRewrite.rewriteImports(null);
       edits.addChild(rewrite);
       JavaModelUtil.applyEdit(src, edits, true, null);
+      if (src.isWorkingCopy()) {
+        src.commitWorkingCopy(false, null);
+      }
 
     }else{
       ChooseImport query = new ChooseImport(project, type);
@@ -128,6 +131,9 @@ public class ImportCommand
     TextEdit groupingEdit = importGroupingEdit(src, edits.getOffset());
     if (groupingEdit != null){
       JavaModelUtil.applyEdit(src, groupingEdit, true, null);
+      if (src.isWorkingCopy()) {
+        src.commitWorkingCopy(false, null);
+      }
     }
 
     if (edits.getOffset() < offset){

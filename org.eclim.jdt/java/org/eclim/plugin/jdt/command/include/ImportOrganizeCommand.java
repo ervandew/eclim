@@ -106,6 +106,9 @@ public class ImportOrganizeCommand
 
     if (edit != null){
       JavaModelUtil.applyEdit(src, edit, true, null);
+      if (src.isWorkingCopy()) {
+        src.commitWorkingCopy(false, null);
+      }
     }
 
     // our own support for grouping imports based on package levels.
@@ -115,6 +118,9 @@ public class ImportOrganizeCommand
         edit = groupingEdit;
       }
       JavaModelUtil.applyEdit(src, groupingEdit, true, null);
+      if (src.isWorkingCopy()) {
+        src.commitWorkingCopy(false, null);
+      }
     }
 
     if (edit != null){
