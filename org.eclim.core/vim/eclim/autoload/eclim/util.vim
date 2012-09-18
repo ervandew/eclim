@@ -1055,16 +1055,40 @@ function! eclim#util#PromptConfirm(prompt, ...)
   return response =~ '\c\s*\(y\(es\)\?\)\s*'
 endfunction " }}}
 
-" ReloadRetab() {{{
-" Reload the current file using ':edit' and retab.
-" Takes care of preserving &expandtab before executing the edit to keep indent
-" detection plugins from always setting it to 0 if eclipse inserts some tabbed
-" code that the indent detection plugin uses for its calculations.
-function! eclim#util#ReloadRetab()
+" Reload() {{{
+" Reload the current file using ':edit' and perform other operations based on
+" the options supplied.
+" Supported Options:
+"   retab: Issue a retab of the file taking care of preserving &expandtab
+"     before executing the edit to keep indent detection plugins from always
+"     setting it to 0 if eclipse inserts some tabbed code that the indent
+"     detection plugin uses for its calculations.
+"   pos: A line/column pair indicating the new cursor position post edit. When
+"     this pair is supplied, this function will attempt to preserve the
+"     current window's viewport.
+function! eclim#util#Reload(options)
+  let winview = winsaveview()
   let save_expandtab = &expandtab
+
   edit!
-  let &expandtab = save_expandtab
-  retab
+
+  if has_key(a:options, 'pos') && len(a:options.pos) == 2
+    let lnum = a:options.pos[0]
+    let cnum = a:options.pos[1]
+    if winheight(0) < line('$')
+      let winview.topline += lnum - winview.lnum
+      let winview.lnum = lnum
+      let winview.col = cnum
+      call winrestview(winview)
+    else
+      call cursor(lnum, cnum)
+    endif
+  endif
+
+  if has_key(a:options, 'retab') && a:options.retab
+    let &expandtab = save_expandtab
+    retab
+  endif
 endfunction " }}}
 
 " SetLocationList(list, [action]) {{{

@@ -58,7 +58,7 @@ function! eclim#java#bean#GetterSetter(first, last, bang, type) " {{{
 
   let result = eclim#ExecuteEclim(command)
   if result != "0"
-    call eclim#util#ReloadRetab()
+    call eclim#util#Reload({'retab': 1})
     write
   endif
 endfunction " }}}
