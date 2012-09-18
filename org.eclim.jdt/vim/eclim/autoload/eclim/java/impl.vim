@@ -69,7 +69,7 @@ function! eclim#java#impl#Constructor(first, last, bang) " {{{
   endif
 
   if result != "0"
-    call eclim#util#ReloadRetab()
+    call eclim#util#Reload({'retab': 1})
     write
   endif
 endfunction " }}}
@@ -244,7 +244,7 @@ function! eclim#java#impl#Add(command, function, visual) " {{{
   call a:function(command)
 
   noautocmd exec winnr . "winc w"
-  call eclim#util#ReloadRetab()
+  call eclim#util#Reload({'retab': 1})
   write
   noautocmd exec impl_winnr . "winc w"
 endfunction " }}}

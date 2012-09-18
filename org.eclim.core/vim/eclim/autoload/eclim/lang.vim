@@ -403,7 +403,7 @@ function! eclim#lang#Refactor(command)
             exec 'bdelete ' . bufnr
             exec 'edit ' . escape(eclim#util#Simplify(newfile), ' ')
           else
-            call eclim#util#ReloadRetab()
+            call eclim#util#Reload({'retab': 1})
           endif
         endif
       endfor
