@@ -208,7 +208,9 @@ public class ImportCommand
           this.choices = new ArrayList<String>(choices.length);
           for (TypeNameMatch match : choices){
             String fqn = match.getFullyQualifiedName();
-            if (!ImportUtils.isImportExcluded(project, fqn)){
+            if (!ImportUtils.isImportExcluded(project, fqn) &&
+                !this.choices.contains(fqn))
+            {
               this.choices.add(fqn);
             }
           }
