@@ -165,6 +165,11 @@ public class ProjectUtils
       if (file.length() == 0){
         return getPath(project);
       }
+    }else if(file.startsWith("/") ||
+        file.toLowerCase().startsWith("jar:") ||
+        file.toLowerCase().startsWith("zip:"))
+    {
+      return file;
     }
 
     String projectPath = getPath(project);

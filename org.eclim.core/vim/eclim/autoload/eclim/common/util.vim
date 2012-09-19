@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -155,17 +155,22 @@ endfunction " }}}
 " ReadFile() {{{
 " Reads the contents of an archived file.
 function! eclim#common#util#ReadFile()
-  let file = substitute(expand('%'), '\', '/', 'g')
-  let command = substitute(s:command_read, '<file>', file, '')
+  let archive = substitute(expand('%'), '\', '/', 'g')
+  let command = substitute(s:command_read, '<file>', archive, '')
 
   let file = eclim#ExecuteEclim(command)
 
   if string(file) != '0'
+    let project = exists('b:eclim_project') ? b:eclim_project : ''
     let bufnum = bufnr('%')
     if has('win32unix')
       let file = eclim#cygwin#CygwinPath(file)
     endif
     silent exec "keepjumps edit! " . escape(file, ' ')
+    if project != ''
+      let b:eclim_project = project
+      let b:eclim_file = archive
+    endif
 
     exec 'bdelete ' . bufnum
 

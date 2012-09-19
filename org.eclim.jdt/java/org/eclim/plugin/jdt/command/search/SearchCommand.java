@@ -53,7 +53,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
-import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.ICodeAssist;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -172,7 +172,7 @@ public class SearchCommand
     if(file != null && offset != null && length != null){
       int charOffset = getOffset(commandLine);
       IJavaElement element = getElement(
-          project, file, charOffset, Integer.parseInt(length));
+          javaProject, file, charOffset, Integer.parseInt(length));
       if(element != null){
         // user requested a contextual search.
         if(context == -1){
@@ -271,20 +271,29 @@ public class SearchCommand
   /**
    * Gets a IJavaElement by its position.
    *
-   * @param project The project the file is in.
+   * @param javaProject The IJavaProject the file is in.
    * @param filename The file containing the element.
    * @param offset The offset of the element in the file.
    * @param length The lenght of the element.
    * @return The element.
    */
   protected IJavaElement getElement(
-      String project, String filename, int offset, int length)
+      IJavaProject javaProject, String filename, int offset, int length)
     throws Exception
   {
-    ICompilationUnit src = JavaUtils.getCompilationUnit(project, filename);
-    IJavaElement[] elements = src.codeSelect(offset, length);
-    if(elements != null && elements.length > 0){
-      return elements[0];
+    ICodeAssist code = null;
+    try{
+      code = JavaUtils.getCompilationUnit(javaProject, filename);
+    }catch(IllegalArgumentException iae){
+      // source not found, try location the class file.
+      code = JavaUtils.findClassFile(javaProject, filename);
+    }
+
+    if (code != null){
+      IJavaElement[] elements = code.codeSelect(offset, length);
+      if(elements != null && elements.length > 0){
+        return elements[0];
+      }
     }
     return null;
   }

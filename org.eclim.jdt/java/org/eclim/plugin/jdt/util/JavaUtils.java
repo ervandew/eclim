@@ -16,10 +16,20 @@
  */
 package org.eclim.plugin.jdt.util;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.VFS;
 
 import org.eclim.Services;
 
@@ -30,6 +40,8 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.jdt.PluginResources;
+
+import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileUtils;
 
@@ -94,34 +106,12 @@ import org.eclipse.text.edits.TextEdit;
 public class JavaUtils
 {
   /**
-   * Java 1.1 compliance.
-   */
-  public static final String JAVA_1_1 = JavaCore.VERSION_1_1;
-
-  /**
-   * Java 1.2 compliance.
-   */
-  public static final String JAVA_1_2 = JavaCore.VERSION_1_2;
-
-  /**
-   * Java 1.3 compliance.
-   */
-  public static final String JAVA_1_3 = JavaCore.VERSION_1_3;
-
-  /**
-   * Java 1.4 compliance.
-   */
-  public static final String JAVA_1_4 = JavaCore.VERSION_1_4;
-
-  /**
-   * Java 1.5 compliance.
-   */
-  public static final String JAVA_1_5 = JavaCore.VERSION_1_5;
-
-  /**
    * String version of java.lang package.
    */
   public static final String JAVA_LANG = "java.lang";
+
+  private static final Pattern PACKAGE_LINE =
+    Pattern.compile("^\\s*package\\s+(\\w+(\\.\\w+){0,})\\s*;\\s*$");
 
   private static ContributedProcessorDescriptor[] correctionProcessors;
   private static ContributedProcessorDescriptor[] assistProcessors;
@@ -175,17 +165,14 @@ public class JavaUtils
    * @param project The name of the project to locate the file in.
    * @param file The file to find.
    * @return The compilation unit.
+   *
+   * @throws IllegalArgumentException If the file is not found.
    */
   public static ICompilationUnit getCompilationUnit(String project, String file)
     throws Exception
   {
     IJavaProject javaProject = getJavaProject(project);
-    ICompilationUnit src = getCompilationUnit(javaProject, file);
-    if(src == null || !src.exists()){
-      throw new IllegalArgumentException(
-          Services.getMessage("src.file.not.found", file, ".classpath"));
-    }
-    return src;
+    return getCompilationUnit(javaProject, file);
   }
 
   /**
@@ -204,7 +191,8 @@ public class JavaUtils
     for(int ii = 0; ii < projects.length; ii++){
       IJavaProject javaProject = getJavaProject(projects[ii]);
 
-      ICompilationUnit src = getCompilationUnit(javaProject, file);
+      ICompilationUnit src = JavaCore.createCompilationUnitFrom(
+          ProjectUtils.getFile(javaProject.getProject(), file));
       if(src != null && src.exists()){
         return src;
       }
@@ -219,13 +207,20 @@ public class JavaUtils
    * @param project The project.
    * @param file The absolute path to the file.
    * @return The compilation unit or null if not found.
+   *
+   * @throws IllegalArgumentException If the file is not found.
    */
   public static ICompilationUnit getCompilationUnit(
       IJavaProject project, String file)
     throws Exception
   {
-    return JavaCore.createCompilationUnitFrom(
+    ICompilationUnit src = JavaCore.createCompilationUnitFrom(
         ProjectUtils.getFile(project.getProject(), file));
+    if(src == null || !src.exists()){
+      throw new IllegalArgumentException(
+          Services.getMessage("src.file.not.found", file, ".classpath"));
+    }
+    return src;
   }
 
   /**
@@ -272,6 +267,53 @@ public class JavaUtils
         ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
         if(src != null){
           return src;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Attempts to locate the IClassFile for the supplied file path from the
+   * specified project's classpath.
+   *
+   * @param project The project to find the class file in.
+   * @param path Absolute path or url (jar:, zip:) to a .java source file.
+   * @return The IClassFile.
+   */
+  public static IClassFile findClassFile(IJavaProject project, String path)
+    throws Exception
+  {
+    if(path.startsWith("/") ||
+        path.toLowerCase().startsWith("jar:") ||
+        path.toLowerCase().startsWith("zip:"))
+    {
+      FileSystemManager fsManager = VFS.getManager();
+      FileObject file = fsManager.resolveFile(path);
+      if(file.exists()){
+        BufferedReader in = null;
+        try{
+          in = new BufferedReader(
+              new InputStreamReader(file.getContent().getInputStream()));
+          String pack = null;
+          String line = null;
+          while((line = in.readLine()) != null){
+            Matcher matcher = PACKAGE_LINE.matcher(line);
+            if (matcher.matches()){
+              pack = matcher.group(1);
+              break;
+            }
+          }
+          if (pack != null){
+            String name = pack + '.' +
+              FileUtils.getFileName(file.getName().getPath());
+            IType type = project.findType(name);
+            if (type != null){
+              return type.getClassFile();
+            }
+          }
+        }finally{
+          IOUtils.closeQuietly(in);
         }
       }
     }
