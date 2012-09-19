@@ -35,6 +35,8 @@ Java:
     :JavaGetSet methods with '!'.
   - :JavaCorrect, :JavaImpl, :JavaDelegate, :JavaConstructor, and :JUnitImpl
     all now perform their code manipulations using eclipse operations.
+  - Initial support added for running :JavaSearch commands from source file
+    results (library source files) not in a project.
 
 .. _1.7.9:
 

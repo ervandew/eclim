@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -27,19 +27,29 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestSearch() {{{
-function! TestSearch()
+function! TestSearch() " {{{
   edit! src/org/eclim/test/search/TestSearchVUnit.java
 
   call cursor(8, 11)
   JavaSearch
   call vunit#PeekRedir()
-
   let name = fnamemodify(bufname('%'), ':t')
   echom 'line: ' . line('.') . ' ' . getline('.')
   call vunit#AssertEquals(name, 'List.java', 'Wrong or no file found for List.')
   call vunit#AssertTrue(getline('.') =~ 'public interface List',
-    \ 'Not on class declaration.')
+    \ 'Not on List class declaration.')
+
+  call vunit#AssertTrue(search('extends Collection'), 'Could not find "extends Collection"')
+  normal w
+  JavaSearch
+  call vunit#PeekRedir()
+  let name = fnamemodify(bufname('%'), ':t')
+  echom 'line: ' . line('.') . ' ' . getline('.')
+  call vunit#AssertEquals(name, 'Collection.java', 'Wrong or no file found for Collection.')
+  call vunit#AssertTrue(getline('.') =~ 'public interface Collection',
+    \ 'Not on Collection class declaration.')
+
+  bdelete!
   bdelete!
 
   call cursor(12, 5)

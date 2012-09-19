@@ -1121,6 +1121,14 @@ function! eclim#util#SetLocationList(list, ...)
   else
     call setloclist(0, loclist, a:1)
   endif
+
+  let projectName = eclim#project#util#GetCurrentProjectName()
+  if projectName != ''
+    for item in getloclist(0)
+      call setbufvar(item.bufnr, 'eclim_project', projectName)
+    endfor
+  endif
+
   if g:EclimShowCurrentError && len(loclist) > 0
     call eclim#util#DelayedCommand('call eclim#util#ShowCurrentError()')
   endif

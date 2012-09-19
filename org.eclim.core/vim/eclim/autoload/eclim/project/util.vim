@@ -886,6 +886,10 @@ endfunction " }}}
 " GetProjectRelativeFilePath([file]) {{{
 " Gets the project relative path for the current or supplied file.
 function! eclim#project#util#GetProjectRelativeFilePath(...)
+  if exists('b:eclim_file')
+    return b:eclim_file
+  endif
+
   let file = a:0 == 0 ? expand('%:p') : a:1
   let project = eclim#project#util#GetProject(file)
   if !len(project)
@@ -975,6 +979,16 @@ function! eclim#project#util#GetProject(path)
       endif
     endfor
   endfor
+
+  " project not found by path, fallback to buffer local variable
+  if exists('b:eclim_project')
+    for project in projects
+      if project.name == b:eclim_project
+        return project
+      endif
+    endfor
+  endif
+
   return {}
 endfunction " }}}
 

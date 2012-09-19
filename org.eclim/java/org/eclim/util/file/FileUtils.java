@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,10 @@ import java.util.regex.Pattern;
 import javax.naming.CompositeName;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.VFS;
 
 import org.eclim.util.IOUtils;
 
@@ -64,8 +68,11 @@ public class FileUtils
       String filename, int byteOffset, String encoding)
     throws Exception
   {
+    FileSystemManager fsManager = VFS.getManager();
+    FileObject file = fsManager.resolveFile(filename);
+
     return byteOffsetToCharOffset(
-        new FileInputStream(filename), byteOffset, encoding);
+        file.getContent().getInputStream(), byteOffset, encoding);
   }
 
   /**
