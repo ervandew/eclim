@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Plugin to support running checkstyle on a java source file.
+" License: " {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,12 +20,38 @@
 " }}}
 
 " Script Variables {{{
+  let s:format_command =
+    \ '-command java_format -p "<project>" -f "<file>" ' .
+    \ '-b <boffset> -e <eoffset>'
   let s:checkstyle_command = '-command java_checkstyle -p "<project>" -f "<file>"'
 " }}}
 
-" Checkstyle() {{{
-" Executes checkstyle on the current java source file.
-function! eclim#java#checkstyle#Checkstyle()
+function! eclim#java#src#Format(first, last) " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  call eclim#lang#SilentUpdate()
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
+
+  let command = s:format_command
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let begin = eclim#util#GetOffset(a:first, 1)
+  let end = eclim#util#GetOffset(a:last, 1) + len(getline(a:last)) - 1
+  let command = substitute(command, '<boffset>', begin, '')
+  let command = substitute(command, '<eoffset>', end, '')
+
+  let result = eclim#ExecuteEclim(command)
+  if result != "0"
+    call eclim#util#Reload({'retab': 1})
+    write
+  endif
+endfunction " }}}
+
+function! eclim#java#src#Checkstyle() " {{{
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
     let config =
@@ -54,9 +77,6 @@ function! eclim#java#checkstyle#Checkstyle()
     if type(result) == g:LIST_TYPE && len(result) > 0
       let errors = eclim#util#ParseLocationEntries(
         \ result, g:EclimValidateSortResults)
-      for error in errors
-        let error["text"] = "[checkstyle] " . error.text
-      endfor
       call eclim#util#SetLocationList(errors)
     else
       call eclim#util#ClearLocationList('checkstyle')

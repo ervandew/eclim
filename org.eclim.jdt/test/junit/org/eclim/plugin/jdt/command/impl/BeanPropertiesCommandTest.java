@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.bean;
+package org.eclim.plugin.jdt.command.impl;
 
 import java.util.regex.Pattern;
 
@@ -27,14 +27,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test case for PropertiesCommand.
+ * Test case for BeanPropertiesCommand.
  *
  * @author Eric Van Dewoestine
  */
-public class PropertiesCommandTest
+public class BeanPropertiesCommandTest
 {
   private static final String TEST_FILE =
-    "src/org/eclim/test/bean/TestBean.java";
+    "src/org/eclim/test/impl/TestBean.java";
 
   @Test
   public void executeGet()

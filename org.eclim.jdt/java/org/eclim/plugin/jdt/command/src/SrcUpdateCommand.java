@@ -17,6 +17,9 @@
 package org.eclim.plugin.jdt.command.src;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
@@ -58,9 +61,8 @@ import org.eclipse.jdt.core.compiler.IProblem;
 public class SrcUpdateCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
+  @SuppressWarnings("unchecked")
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -99,6 +101,13 @@ public class SrcUpdateCommand
             lineColumn[0],
             lineColumn[1],
             problems[ii].isWarning()));
+      }
+
+      boolean checkstyle = "true".equals(getPreferences()
+          .getValue(project, "org.eclim.java.checkstyle.onvalidate"));
+      if (checkstyle){
+        errors.addAll((List<Error>)
+            Services.getCommand("java_checkstyle").execute(commandLine));
       }
 
       if(commandLine.hasOption(Options.BUILD_OPTION)){

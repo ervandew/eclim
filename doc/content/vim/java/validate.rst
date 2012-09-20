@@ -28,7 +28,7 @@ the corresponding lines in the source file will be marked via Vim's :sign
 functionality with '>>' markers in the left margin.
 
 Automatic validation of java source files can be disabled via the
-**g:EclimJavaSrcValidate** variable (described below).  If you choose to disable
+**g:EclimJavaValidate** variable (described below).  If you choose to disable
 automatic validation, you can still use the **:Validate** command to manually
 validate the current file.
 
@@ -39,7 +39,7 @@ Configuration
 
 .. _g\:EclimJavaSrcValidate:
 
-- **g:EclimJavaSrcValidate** (Default: 1) -
+- **g:EclimJavaValidate** (Default: 1) -
   If set to 0, disables source code validation.
 
 - **g:EclimValidateSortResults** (Default: 'occurrence') -
@@ -52,11 +52,6 @@ Eclim settings
 
 - **org.eclipse.jdt.core.compiler.source** -
   Determines the target java vm version (1.2, 1.3, 1.4, 1.5).
-
-.. _org.eclim.java.validation.ignore.warnings:
-
-- **org.eclim.java.validation.ignore.warnings** -
-  Determines if warnings are suppressed.
 
 .. _\:JavaCorrect:
 
@@ -107,13 +102,9 @@ Checkstyle
 When editing a java source file, eclim provides the command **:Checkstyle**
 which will invoke `checkstyle`_ on the current file.
 
-Additionally, you can configure vim to execute checkstyle automatically when
-you save a java source file.  Simply set the vim variable
-**g:EclimJavaCheckstyleOnSave** to 1 in your vimrc or java ftplugin.
-
-.. code-block:: vim
-
-  let g:EclimJavaCheckstyleOnSave = 1
+Additionally, you can configure eclim to execute checkstyle automatically when
+you save a java source file by setting the eclim project settings
+**org.eclim.java.checkstyle.onvalidate** to true.
 
 Please note that both methods of invoking checkstyle require that you first
 configure the location of your checkstyle config file using the eclim setting
@@ -122,14 +113,6 @@ below.
 
 Configuration
 ^^^^^^^^^^^^^
-
-:doc:`Vim Settings </vim/settings>`
-
-.. _g\:EclimJavaCheckstyleOnSave:
-
-- **g:EclimJavaCheckstyleOnSave** (Default: 0) -
-  When non-zero, enables running of checkstyle automatially upon saving of a
-  java source file.
 
 :doc:`Eclim Settings </vim/settings>`
 
@@ -144,5 +127,11 @@ Configuration
 - **org.eclim.java.checkstyle.properties** -
   Defines the location (project relative or absolute) or your checkstyle
   properties file.
+
+.. _org.eclim.java.checkstyle.onvalidate:
+
+- **org.eclim.java.checkstyle.onvalidate** -
+  When set to true, checkstyle will be run on the file along with the regular
+  java validation upon writing the file.
 
 .. _checkstyle: http://checkstyle.sourceforge.net/

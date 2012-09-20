@@ -24,8 +24,8 @@
 
 " Global Variables {{{
 
-if !exists("g:EclimJavaSrcValidate")
-  let g:EclimJavaSrcValidate = 1
+if !exists("g:EclimJavaValidate")
+  let g:EclimJavaValidate = 1
 endif
 
 if !exists("g:EclimJavaSetCommonOptions")
@@ -38,10 +38,6 @@ endif
 
 if !exists("g:EclimJavaSearchMapping")
   let g:EclimJavaSearchMapping = 1
-endif
-
-if !exists("g:EclimJavaCheckstyleOnSave")
-  let g:EclimJavaCheckstyleOnSave = 0
 endif
 
 " }}}
@@ -113,7 +109,8 @@ endif
 if &ft == 'java'
   augroup eclim_java
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#java#util#UpdateSrcFile(0)
+    autocmd BufWritePost <buffer>
+      \ call eclim#lang#UpdateSrcFile('java', g:EclimJavaValidate)
   augroup END
 endif
 
@@ -122,7 +119,7 @@ endif
 " Command Declarations {{{
 
 if !exists(":Validate")
-  command -nargs=0 -buffer Validate :call eclim#java#util#UpdateSrcFile(1)
+  command -nargs=0 -buffer Validate :call eclim#lang#UpdateSrcFile('java', 1)
 endif
 
 if !exists(":JavaCorrect")
@@ -130,8 +127,7 @@ if !exists(":JavaCorrect")
 endif
 
 if !exists(":JavaFormat")
-  command -buffer -range JavaFormat
-    \ :call eclim#java#format#Format(<line1>, <line2>, "dummy")
+  command -buffer -range JavaFormat :call eclim#java#src#Format(<line1>, <line2>)
 endif
 
 if !exists(":JavaImport")
@@ -170,15 +166,15 @@ endif
 
 if !exists(":JavaGet")
   command -buffer -range -bang JavaGet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, '<bang>', 'getter')
+    \ :call eclim#java#impl#GetterSetter(<line1>, <line2>, '<bang>', 'getter')
 endif
 if !exists(":JavaSet")
   command -buffer -range -bang JavaSet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, '<bang>', 'setter')
+    \ :call eclim#java#impl#GetterSetter(<line1>, <line2>, '<bang>', 'setter')
 endif
 if !exists(":JavaGetSet")
   command -buffer -range -bang JavaGetSet
-    \ :call eclim#java#bean#GetterSetter(<line1>, <line2>, '<bang>', 'getter_setter')
+    \ :call eclim#java#impl#GetterSetter(<line1>, <line2>, '<bang>', 'getter_setter')
 endif
 
 if !exists(":JavaImpl")
@@ -228,7 +224,7 @@ if !exists(":JUnitImpl")
 endif
 
 if !exists(":Checkstyle")
-  command -nargs=0 -buffer Checkstyle :call eclim#java#checkstyle#Checkstyle()
+  command -nargs=0 -buffer Checkstyle :call eclim#java#src#Checkstyle()
 endif
 
 " }}}

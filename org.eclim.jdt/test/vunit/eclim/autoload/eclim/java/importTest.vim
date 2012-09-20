@@ -83,7 +83,7 @@ function! TestImportOrganize() " {{{
   call vunit#AssertEquals(imports[12], 'import javax.swing.JList;')
   call vunit#AssertEquals(imports[13], 'import javax.swing.JTree;')
   call vunit#AssertEquals(imports[14], '')
-  call vunit#AssertEquals(imports[15], 'import org.eclim.test.bean.TestBean;')
+  call vunit#AssertEquals(imports[15], 'import org.eclim.test.impl.TestBean;')
 
   call eclim#project#util#SetProjectSetting(
     \ "org.eclim.java.import.package_separation_level", "-1")
@@ -108,7 +108,7 @@ function! TestImportOrganize() " {{{
   call vunit#AssertEquals(imports[15], 'import javax.swing.JList;')
   call vunit#AssertEquals(imports[16], 'import javax.swing.JTree;')
   call vunit#AssertEquals(imports[17], '')
-  call vunit#AssertEquals(imports[18], 'import org.eclim.test.bean.TestBean;')
+  call vunit#AssertEquals(imports[18], 'import org.eclim.test.impl.TestBean;')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

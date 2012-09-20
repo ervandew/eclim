@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.checkstyle;
+package org.eclim.plugin.jdt.command.src;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -85,9 +85,7 @@ public class CheckstyleCommand
   private static final Logger logger =
     Logger.getLogger(CheckstyleCommand.class);
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -155,6 +153,8 @@ public class CheckstyleCommand
   private static class CheckstyleListener
     implements AuditListener
   {
+    private static final String CHECKSTYLE_PREFIX = "[checkstyle] ";
+
     private ArrayList<Error> errors;
 
     public CheckstyleListener ()
@@ -162,51 +162,36 @@ public class CheckstyleCommand
       errors = new ArrayList<Error>();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see AuditListener#auditStarted(AuditEvent)
-     */
+    @Override
     public void auditStarted(AuditEvent event)
     {
       // ignore
     }
 
-    /**
-     * {@inheritDoc}
-     * @see AuditListener#auditFinished(AuditEvent)
-     */
+    @Override
     public void auditFinished(AuditEvent event)
     {
       // ignore
     }
 
-    /**
-     * {@inheritDoc}
-     * @see AuditListener#fileStarted(AuditEvent)
-     */
+    @Override
     public void fileStarted(AuditEvent event)
     {
       // ignore
     }
 
-    /**
-     * {@inheritDoc}
-     * @see AuditListener#fileFinished(AuditEvent)
-     */
+    @Override
     public void fileFinished(AuditEvent event)
     {
       // ignore
     }
 
-    /**
-     * {@inheritDoc}
-     * @see AuditListener#addError(AuditEvent)
-     */
+    @Override
     public void addError(AuditEvent event)
     {
       errors.add(
           new Error(
-            event.getMessage(),
+            CHECKSTYLE_PREFIX + event.getMessage(),
             event.getFileName().replace('\\', '/'),
             event.getLine(),
             event.getColumn(),
@@ -214,10 +199,7 @@ public class CheckstyleCommand
 
     }
 
-    /**
-     * {@inheritDoc}
-     * @see AuditListener#addException(AuditEvent,Throwable)
-     */
+    @Override
     public void addException(AuditEvent event, Throwable throwable)
     {
       throw new RuntimeException(throwable);

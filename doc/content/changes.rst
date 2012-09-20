@@ -37,6 +37,10 @@ Java:
     all now perform their code manipulations using eclipse operations.
   - Initial support added for running :JavaSearch commands from source file
     results (library source files) not in a project.
+  - g:EclimJavaCheckstyleOnSave replaced with the eclim setting
+    :ref:`org.eclim.java.checkstyle.onvalidate
+    <org.eclim.java.checkstyle.onvalidate>`.
+  - g:EclimJavaSrcValidate renamed to g:EclimJavaValidate.
 
 .. _1.7.9:
 

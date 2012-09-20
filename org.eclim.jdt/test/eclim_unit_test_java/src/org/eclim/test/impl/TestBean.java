@@ -1,4 +1,4 @@
-package org.eclim.test.bean;
+package org.eclim.test.impl;
 
 public class TestBean
 {
