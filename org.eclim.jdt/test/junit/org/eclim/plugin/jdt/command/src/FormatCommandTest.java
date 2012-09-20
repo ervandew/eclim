@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.format;
+package org.eclim.plugin.jdt.command.src;
 
 import java.io.FileWriter;
 
@@ -38,7 +38,7 @@ import static org.junit.Assert.*;
 public class FormatCommandTest
 {
   private static final String TEST_FILE =
-    "src/org/eclim/test/format/TestFormat.java";
+    "src/org/eclim/test/src/TestFormat.java";
 
   private static String contents;
 
@@ -59,7 +59,7 @@ public class FormatCommandTest
   }
 
   @Test
-  public void oneLine()
+  public void execute()
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
@@ -67,72 +67,63 @@ public class FormatCommandTest
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     String[] lines = StringUtils.split(contents, '\n');
     assertEquals("Initial line format incorrect.",
-        "System.out.println(\"test formatting\");", lines[22]);
+        "System.out.println(\"test formatting\");", lines[6]);
 
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-b", "816", "-e", "855"
+      "-b", "109", "-e", "146"
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents.replace("\t", "  "), '\n');
     assertEquals("Result line format incorrect.",
-        "    System.out.println(\"test formatting\");", lines[22]);
-  }
+        "    System.out.println(\"test formatting\");", lines[6]);
 
-  @Test
-  public void range()
-  {
-    assertTrue("Java project doesn't exist.",
-        Eclim.projectExists(Jdt.TEST_PROJECT));
-
-    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    String[] lines = StringUtils.split(contents, '\n');
-    assertEquals("Initial line 1 format incorrect.", "if(true){", lines[23]);
+    // range of lines
+    contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    lines = StringUtils.split(contents, '\n');
+    assertEquals("Initial line 1 format incorrect.", "if(true){", lines[7]);
     assertEquals("Initial line 2 format incorrect.",
-        "System.out.println(\"test format if\");", lines[24]);
-    assertEquals("Initial line 3 format incorrect.", "}", lines[25]);
+        "System.out.println(\"test format if\");", lines[8]);
+    assertEquals("Initial line 3 format incorrect.", "}", lines[9]);
 
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-b", "855", "-e", "907"
+      "-b", "150", "-e", "200"
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents.replace("\t", "  "), '\n');
-    assertEquals("Result line 1 format incorrect.", "    if (true) {", lines[23]);
+    assertEquals("Result line 1 format incorrect.", "    if (true) {", lines[7]);
     assertEquals("Result line 2 format incorrect.",
-        "      System.out.println(\"test format if\");", lines[24]);
-    assertEquals("Result line 3 format incorrect.", "    }", lines[25]);
-  }
+        "      System.out.println(\"test format if\");", lines[8]);
+    assertEquals("Result line 3 format incorrect.", "    }", lines[9]);
 
-  @Test
-  public void wholeFile()
-  {
+    // whole file
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    String[] lines = StringUtils.split(contents, '\n');
-    assertEquals("Initial line 1 format incorrect.", "public", lines[18]);
+    contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    lines = StringUtils.split(contents, '\n');
+    assertEquals("Initial line 1 format incorrect.", "public", lines[2]);
     assertEquals("Initial line 2 format incorrect.",
-        "void main(String[] args)", lines[19]);
+        "void main(String[] args)", lines[3]);
     assertEquals("Initial line 3 format incorrect.",
-        "throws Exception", lines[20]);
+        "throws Exception", lines[4]);
 
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-b", "0", "-e", "909"
+      "-b", "0", "-e", "211"
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents.replace("\t", "  "), '\n');
     assertEquals("Result line 1 format incorrect.",
-        "  public void main(String[] args) throws Exception {", lines[18]);
+        "  public void main(String[] args) throws Exception {", lines[2]);
     assertEquals("Result line 1 format incorrect.",
-        "    System.out.println(\"test formatting\");", lines[19]);
+        "    System.out.println(\"test formatting\");", lines[3]);
   }
 }

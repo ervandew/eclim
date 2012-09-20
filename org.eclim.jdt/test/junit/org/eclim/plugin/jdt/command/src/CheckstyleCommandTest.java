@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.checkstyle;
+package org.eclim.plugin.jdt.command.src;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
 public class CheckstyleCommandTest
 {
   private static final String TEST_FILE =
-    "src/org/eclim/test/checkstyle/TestCheckstyle.java";
+    "src/org/eclim/test/src/TestCheckstyle.java";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -55,30 +55,32 @@ public class CheckstyleCommandTest
 
     Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
-    assertEquals(error.get("message"), "'(' is not preceded with whitespace.");
-    assertEquals(error.get("line"), 21);
+    assertEquals(error.get("message"),
+        "[checkstyle] '(' is not preceded with whitespace.");
+    assertEquals(error.get("line"), 5);
     assertEquals(error.get("column"), 19);
     assertEquals(error.get("warning"), true);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
-        "Redundant throws: 'TestException' is unchecked exception.");
-    assertEquals(error.get("line"), 22);
+        "[checkstyle] Redundant throws: 'TestException' is unchecked exception.");
+    assertEquals(error.get("line"), 6);
     assertEquals(error.get("column"), 12);
     assertEquals(error.get("warning"), true);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
-    assertEquals(error.get("message"), "'{' should be on a new line.");
-    assertEquals(error.get("line"), 22);
+    assertEquals(error.get("message"), "[checkstyle] '{' should be on a new line.");
+    assertEquals(error.get("line"), 6);
     assertEquals(error.get("column"), 26);
     assertEquals(error.get("warning"), true);
 
     error = results.get(3);
     assertEquals(error.get("filename"), file);
-    assertEquals(error.get("message"), "',' is not followed by whitespace.");
-    assertEquals(error.get("line"), 25);
+    assertEquals(error.get("message"),
+        "[checkstyle] ',' is not followed by whitespace.");
+    assertEquals(error.get("line"), 9);
     assertEquals(error.get("column"), 33);
     assertEquals(error.get("warning"), true);
   }

@@ -25,6 +25,9 @@
 " Script Varables {{{
   let s:command_constructor =
     \ '-command java_constructor -p "<project>" -f "<file>" -o <offset> -e <encoding>'
+  let s:command_properties =
+    \ '-command java_bean_properties -p "<project>" -f "<file>" ' .
+    \ '-o <offset> -e <encoding> -t <type> -r <properties> <indexed>'
   let s:command_impl =
     \ '-command java_impl -p "<project>" -f "<file>" -o <offset> -e <encoding>'
   let s:command_impl_insert =
@@ -35,6 +38,11 @@
   let s:command_delegate_insert =
     \ '-command java_delegate -p "<project>" -f "<file>" -v "<type>" ' .
     \ '-s "<superType>" <methods>'
+
+
+  let s:no_properties =
+    \ 'Unable to find property at current cursor position: ' .
+    \ 'Not on a field declaration or possible java syntax error.'
   let s:cross_type_selection = "Visual selection is currently limited to methods of one super type at a time."
 " }}}
 
@@ -68,6 +76,40 @@ function! eclim#java#impl#Constructor(first, last, bang) " {{{
     return
   endif
 
+  if result != "0"
+    call eclim#util#Reload({'retab': 1})
+    write
+  endif
+endfunction " }}}
+
+function! eclim#java#impl#GetterSetter(first, last, bang, type) " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  call eclim#lang#SilentUpdate()
+
+  let properties = eclim#java#util#GetSelectedFields(a:first, a:last)
+
+  if len(properties) == 0
+    call eclim#util#EchoError(s:no_properties)
+    return
+  endif
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
+  let indexed = a:bang != '' ? '-i' : ''
+
+  let command = s:command_properties
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
+  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+  let command = substitute(command, '<type>', a:type, '')
+  let command = substitute(command, '<properties>', join(properties, ','), '')
+  let command = substitute(command, '<indexed>', indexed, '')
+
+  let result = eclim#ExecuteEclim(command)
   if result != "0"
     call eclim#util#Reload({'retab': 1})
     write

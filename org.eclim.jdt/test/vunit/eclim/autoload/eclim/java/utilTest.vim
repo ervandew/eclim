@@ -30,7 +30,7 @@ function! TestFileExists() " {{{
   edit! src/org/eclim/test/src/TestPrototypeVUnit.java
   call vunit#PeekRedir()
 
-  call vunit#AssertTrue(eclim#java#util#FileExists('org/eclim/test/bean/TestBeanVUnit.java'),
+  call vunit#AssertTrue(eclim#java#util#FileExists('org/eclim/test/impl/TestBeanVUnit.java'),
     \ 'TestBeanVUnit.java not found.')
   call vunit#AssertFalse(eclim#java#util#FileExists('org/eclim/test/TestBlah.java'),
     \ 'TestBlah.java found?')
@@ -43,7 +43,7 @@ function! TestGetClassname() " {{{
   call vunit#AssertEquals('TestPrototypeVUnit', eclim#java#util#GetClassname())
   call vunit#AssertEquals('TestBeanVUnit',
     \ eclim#java#util#GetClassname(
-    \   fnamemodify('src/org/eclim/test/bean/TestBeanVUnit.java', ':p')))
+    \   fnamemodify('src/org/eclim/test/impl/TestBeanVUnit.java', ':p')))
 endfunction " }}}
 
 function! TestGetClassDeclarationPosition() " {{{
@@ -59,9 +59,9 @@ function! TestGetFullyQualifiedClassname() " {{{
 
   call vunit#AssertEquals('org.eclim.test.src.TestPrototypeVUnit',
     \ eclim#java#util#GetFullyQualifiedClassname())
-  call vunit#AssertEquals('org.eclim.test.bean.TestBeanVUnit',
+  call vunit#AssertEquals('org.eclim.test.impl.TestBeanVUnit',
     \ eclim#java#util#GetFullyQualifiedClassname(
-    \   fnamemodify('src/org/eclim/test/bean/TestBeanVUnit.java', ':p')))
+    \   fnamemodify('src/org/eclim/test/impl/TestBeanVUnit.java', ':p')))
 endfunction " }}}
 
 function! TestGetPackage() " {{{
@@ -69,8 +69,8 @@ function! TestGetPackage() " {{{
   call vunit#PeekRedir()
 
   call vunit#AssertEquals('org.eclim.test.src', eclim#java#util#GetPackage())
-  call vunit#AssertEquals('org.eclim.test.bean',
-    \ eclim#java#util#GetPackage(fnamemodify('src/org/eclim/test/bean/TestBeanVUnit.java', ':p')))
+  call vunit#AssertEquals('org.eclim.test.impl',
+    \ eclim#java#util#GetPackage(fnamemodify('src/org/eclim/test/impl/TestBeanVUnit.java', ':p')))
 endfunction " }}}
 
 function! TestGetPackageFromImport() " {{{
@@ -82,7 +82,7 @@ function! TestGetPackageFromImport() " {{{
 endfunction " }}}
 
 function! TestGetSelectedFields() " {{{
-  edit! src/org/eclim/test/bean/TestBeanVUnit.java
+  edit! src/org/eclim/test/impl/TestBeanVUnit.java
   call vunit#PeekRedir()
 
   let fields = eclim#java#util#GetSelectedFields(8, 10)
@@ -118,82 +118,6 @@ function! TestJavac() " {{{
   call vunit#AssertTrue(filereadable(
     \ g:TestEclimWorkspace .
     \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
-endfunction " }}}
-
-function! TestValidate() " {{{
-  edit! src/org/eclim/test/src/TestSrcVUnit.java
-  call vunit#PeekRedir()
-
-  call histadd('cmd', 'write') | write
-  call vunit#PeekRedir()
-
-  let results = getloclist(0)
-  echo 'results = ' . string(results)
-
-  call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
-  call vunit#AssertEquals(10, results[0].lnum, 'Wrong line num.')
-  call vunit#AssertEquals(5, results[0].col, 'Wrong col num.')
-  call vunit#AssertEquals(
-    \ "List is a raw type. " .
-    \ "References to generic type List<E> should be parameterized",
-    \ results[0].text, 'Wrong result.')
-  call vunit#AssertEquals(10, results[1].lnum, 'Wrong line num.')
-  call vunit#AssertEquals(21, results[1].col, 'Wrong col num.')
-  call vunit#AssertEquals(
-    \ "ArrayList is a raw type. " .
-    \ "References to generic type ArrayList<E> should be parameterized",
-    \ results[1].text, 'Wrong result.')
-  call vunit#AssertEquals(11, results[2].lnum, 'Wrong line num.')
-  call vunit#AssertEquals(10, results[2].col, 'Wrong col num.')
-  call vunit#AssertEquals(
-    \ "The method a() is undefined for the type List",
-    \ results[2].text, 'Wrong result.')
-
-  " test sorting results by severity
-  let g:EclimValidateSortResults = 'severity'
-  try
-    write
-    call vunit#PeekRedir()
-
-    let results = getloclist(0)
-    echo 'results = ' . string(results)
-
-    call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
-    call vunit#AssertEquals(11, results[0].lnum, 'Wrong line num.')
-    call vunit#AssertEquals(10, results[0].col, 'Wrong col num.')
-    call vunit#AssertEquals(
-      \ "The method a() is undefined for the type List",
-      \ results[0].text, 'Wrong result.')
-    call vunit#AssertEquals(10, results[1].lnum, 'Wrong line num.')
-    call vunit#AssertEquals(5, results[1].col, 'Wrong col num.')
-    call vunit#AssertEquals(
-      \ "List is a raw type. " .
-      \ "References to generic type List<E> should be parameterized",
-      \ results[1].text, 'Wrong result.')
-    call vunit#AssertEquals(10, results[2].lnum, 'Wrong line num.')
-    call vunit#AssertEquals(21, results[2].col, 'Wrong col num.')
-    call vunit#AssertEquals(
-      \ "ArrayList is a raw type. " .
-      \ "References to generic type ArrayList<E> should be parameterized",
-      \ results[2].text, 'Wrong result.')
-  finally
-    let g:EclimValidateSortResults = 'occurrence'
-  endtry
-
-  " test linked file
-  edit! ../eclim_unit_test_java_linked/src/org/eclim/test/TestLinked.java
-  write
-  call vunit#PeekRedir()
-
-  let results = getloclist(0)
-  echo 'results = ' . string(results)
-
-  call vunit#AssertEquals(len(results), 4, 'Wrong number of results for linked resource.')
-  call vunit#AssertEquals(10, results[0].lnum, 'Wrong line num for linked resource.')
-  call vunit#AssertEquals(9, results[0].col, 'Wrong col num for linked resource.')
-  call vunit#AssertEquals(
-    \ 'Syntax error on token ".", invalid VariableDeclarator',
-    \ results[0].text, 'Wrong result for linked resource.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

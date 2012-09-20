@@ -27,7 +27,6 @@
 
   let s:class_declaration = '^\s*\(public\|private\|protected\)\?\(\s\+abstract\)\?\s\+\(class\|interface\|enum\)\s\+[A-Z]'
 
-  let s:update_command = '-command java_src_update -p "<project>" -f "<file>"'
   let s:command_src_exists = '-command java_src_exists -f "<file>"'
   let s:command_list_installs = '-command java_list_installs'
   let s:command_classpath = '-command java_classpath -p "<project>"'
@@ -221,59 +220,6 @@ function! eclim#java#util#IsValidIdentifier(word)
     return 0
   endif
   return 1
-endfunction " }}}
-
-" UpdateSrcFile(validate, [force]) {{{
-" Updates the src file on the server w/ the changes made to the current file.
-function! eclim#java#util#UpdateSrcFile(validate, ...)
-  let project = eclim#project#util#GetCurrentProjectName()
-  if project != ""
-    let file = eclim#project#util#GetProjectRelativeFilePath()
-    let command = s:update_command
-    let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<file>', file, '')
-    if (g:EclimJavaSrcValidate || a:validate) &&
-     \ (a:0 || !eclim#util#WillWrittenBufferClose())
-      let command = command . ' -v'
-      if eclim#project#problems#IsProblemsList()
-        let command = command . ' -b'
-      endif
-    endif
-
-    let result = eclim#ExecuteEclim(command)
-    if (g:EclimJavaSrcValidate || a:validate) &&
-     \ (a:0 || !eclim#util#WillWrittenBufferClose())
-      if type(result) == g:LIST_TYPE && len(result) > 0
-        let errors = eclim#util#ParseLocationEntries(
-          \ result, g:EclimValidateSortResults)
-        call eclim#display#signs#SetPlaceholder()
-        call eclim#util#ClearLocationList('global')
-        call eclim#util#SetLocationList(errors, 'a')
-        call eclim#display#signs#RemovePlaceholder()
-      else
-        " prevent closing of sign column between validation methods
-        call eclim#display#signs#SetPlaceholder()
-
-        call eclim#util#ClearLocationList('global')
-
-        " prevent closing of sign column between validation methods
-        call eclim#display#signs#SetPlaceholder()
-
-        " FIXME: if we start adding anything more here, may want to consider
-        " some sort of register process for plugins to listen for events
-        " during various stages of the save process.
-        if g:EclimJavaCheckstyleOnSave
-          call eclim#java#checkstyle#Checkstyle()
-        endif
-
-        call eclim#display#signs#RemovePlaceholder()
-      endif
-
-      call eclim#project#problems#ProblemsUpdate('save')
-    endif
-  elseif a:validate
-    call eclim#project#util#IsCurrentFileInProject()
-  endif
 endfunction " }}}
 
 " Javac(bang) {{{

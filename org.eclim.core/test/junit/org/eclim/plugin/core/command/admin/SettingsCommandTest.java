@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,8 +61,6 @@ public class SettingsCommandTest
 
     assertTrue("Missing org.eclim.java.logging.impl",
         properties.containsKey("org.eclim.java.logging.impl"));
-    assertTrue("Missing org.eclim.java.validation.ignore.warnings",
-        properties.containsKey("org.eclim.java.validation.ignore.warnings"));
     assertTrue("Missing org.eclipse.jdt.core.compiler.source",
         properties.containsKey("org.eclipse.jdt.core.compiler.source"));
 

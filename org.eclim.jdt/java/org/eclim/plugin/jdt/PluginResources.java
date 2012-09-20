@@ -116,9 +116,9 @@ public class PluginResources
         "(commons-logging|log4j|slf4j|jdk|custom)\n" +
       "JDT org.eclim.java.logging.template logger.gst\n" +
       "JDT org.eclim.java.import.package_separation_level 1 (-1|\\d+)\n" +
-      "JDT org.eclim.java.validation.ignore.warnings false (true|false)\n" +
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
+      "JDT org.eclim.java.checkstyle.onvalidate false (true|false)\n" +
       "JDT org.eclim.java.compile.sourcepath\n" +
       "JDT org.eclim.java.run.mainclass none ^[a-zA-Z0-9_.]*$\n" +
       "JDT/Javadoc org.eclim.java.doc.version\n" +

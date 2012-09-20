@@ -126,7 +126,7 @@ function! eclim#java#correct#CorrectApply()
       let command = substitute(command, '<apply>', index, '')
 
       call eclim#lang#Refactor(command)
-      call eclim#java#util#UpdateSrcFile(1, 1)
+      call eclim#lang#UpdateSrcFile('java', 1)
 
       exec winnr . "winc w"
       close
