@@ -74,7 +74,7 @@ general purpose commands that are useful in and outside the scope of eclim.
 - **:Buffers** -
   Opens a temporary window with a list of all the currently listed buffers in
   vim (like :buffers).  From this list you can open any of the files using one
-  of the following shortcuts\:
+  of the following shortcuts:
 
   - **E** (shift-e) - Open the file with 'edit'.
   - **S** (shift-s) - Open the file with 'split'.
@@ -85,12 +85,18 @@ general purpose commands that are useful in and outside the scope of eclim.
   In addition to the above mappings you can also use <return> to execute the
   configured default action on the buffer under the cursor.
 
-  To configure the default action you can set the following variable\:
+  To configure the default action you can set the following variable:
 
   **g:EclimBuffersDefaultAction** (defaults to 'split')
 
+  Note that eclim will track the tab where buffers are opened and closed
+  allowing **:Buffers** to filter the list to those whose primary tab is the
+  current tab, or for buffers not open, show those that were last open on the
+  current tab. If however you would like to still see all listed buffers, you
+  can append '!' to the command: ``:Buffers!``
+
   By default entries will be sorted by path name, but you may change the
-  sorting via these two variables\:
+  sorting via these two variables:
 
   **Configuration**
 

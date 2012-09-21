@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,13 +22,11 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace
 endfunction " }}}
 
-" TestOnly() {{{
-function! TestOnly()
+function! TestOnly() " {{{
   call vunit#AssertEquals(winnr('$'), 1)
   edit! eclim_unit_test/test_root_file.txt
   ProjectTree
@@ -50,8 +48,7 @@ function! TestOnly()
     \ 'test2.txt not open.')
 endfunction " }}}
 
-" TestBuffers() {{{
-function! TestBuffers()
+function! TestBuffers() " {{{
   edit! eclim_unit_test/test_root_file.txt
 
   Buffers
@@ -101,7 +98,11 @@ function! TestBuffers()
   call vunit#AssertEquals(winnr('$'), 1, 'wrong number of windows after tabnew')
   call vunit#AssertEquals(tabpagenr('$'), 2, 'wrong number of tabs after tabnew')
   Buffers
-  call vunit#AssertEquals(line('$'), 5)
+  call vunit#AssertEquals(line('$'), 3, 'wrong number Buffers after tabnew')
+  call vunit#AssertTrue(getline(1) =~ 'active\s\+test_root_file.txt',
+        \ 'test_root_file.txt not found 4')
+  Buffers!
+  call vunit#AssertEquals(line('$'), 5, 'wrong number of Buffers! after tabnew')
   call vunit#AssertTrue(getline(1) =~ 'active\s\+test1.txt', 'test1.txt not found 4')
   call vunit#AssertTrue(getline(2) =~ 'active\s\+test2.txt', 'test2.txt not found 4')
   call vunit#AssertTrue(getline(3) =~ 'active\s\+test_root_file.txt',
