@@ -39,6 +39,8 @@ public class JUnitImplCommandTest
 {
   private static final String TEST_FILE =
     "src/org/eclim/test/junit/SomeClassTest.java";
+  private static final String TEST_FILE_DIFF_PACK =
+    "src/org/eclim/test/junit/tests/Testme.java";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -49,9 +51,7 @@ public class JUnitImplCommandTest
 
     Map<String,Object> result = (Map<String,Object>)
       Eclim.execute(new String[]{
-        "java_junit_impl", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE,
-        "-b", "org.eclim.test.junit.SomeClass"
+        "java_junit_impl", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       });
 
     assertEquals("org.eclim.test.junit.SomeClassTest", result.get("type"));
@@ -72,7 +72,6 @@ public class JUnitImplCommandTest
       Eclim.execute(new String[]{
         "java_junit_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-b", "org.eclim.test.junit.SomeClass",
         "-t", "org.eclim.test.junit.SomeClassTest",
         "-s", "org.eclim.test.junit.SomeClass",
         "-m", "[\"aMethod(String)\"]"
@@ -91,5 +90,31 @@ public class JUnitImplCommandTest
     assertFalse(methods.contains("public void aMethod()"));
     assertFalse(methods.contains("public void aMethod(String)"));
     assertTrue(methods.contains("public void anotherMethod(int)"));
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void executeDifferentPackage()
+  {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_junit_impl", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE_DIFF_PACK,
+      });
+
+    assertEquals("org.eclim.test.junit.tests.Testme", result.get("type"));
+
+    List<Map<String,Object>> types =
+      (List<Map<String,Object>>)result.get("superTypes");
+    assertEquals(2, types.size());
+
+    assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));
+    assertEquals("class Testme", types.get(0).get("signature"));
+
+    HashSet<String> methods = new HashSet<String>(
+        (List<String>)types.get(0).get("methods"));
+    assertTrue(methods.contains("public void me()"));
   }
 }

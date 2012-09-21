@@ -21,7 +21,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
+
+import org.eclim.Services;
 
 import org.eclim.annotation.Command;
 
@@ -31,6 +36,8 @@ import org.eclim.command.Options;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.jdt.command.impl.ImplCommand;
+
+import org.eclim.plugin.jdt.command.search.SearchRequestor;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
@@ -58,6 +65,13 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.core.search.SearchMatch;
+import org.eclipse.jdt.core.search.SearchParticipant;
+import org.eclipse.jdt.core.search.SearchPattern;
 
 import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
 
@@ -93,13 +107,15 @@ import org.eclipse.text.edits.MultiTextEdit;
     "OPTIONAL o offset ARG," +
     "OPTIONAL e encoding ARG," +
     "OPTIONAL t type ARG," +
-    "OPTIONAL b baseType ARG," +
     "OPTIONAL s superType ARG," +
     "OPTIONAL m methods ARG"
 )
 public class JUnitImplCommand
   extends ImplCommand
 {
+  private static final Pattern TESTING_CLASS_NAME =
+    Pattern.compile("(?:^Test([^a-z].*)|(.*)Test$)");
+
   private ThreadLocal<ITypeBinding> base = new ThreadLocal<ITypeBinding>();
 
   @Override
@@ -107,10 +123,40 @@ public class JUnitImplCommand
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-    String baseName = commandLine.getValue(Options.BASETYPE_OPTION);
-
+    String file = commandLine.getValue(Options.FILE_OPTION);
     IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
-    IType baseType = javaProject.findType(baseName);
+
+    IType baseType = null;
+
+    ICompilationUnit src = JavaUtils.getCompilationUnit(javaProject, file);
+    IType type = src.getTypes()[0];
+    String name = type.getElementName();
+    Matcher matcher = TESTING_CLASS_NAME.matcher(name);
+
+    // test class uses a Test prefix or suffix, so remove that and search for
+    // the fully qualified result matching the same package name.
+    if (matcher.matches()){
+      name = matcher.group(2);
+      String fqn = src.getParent().getElementName() + '.' + name;
+      baseType = javaProject.findType(fqn);
+    }
+
+    // no type found by removing Test prefix / suffix with the same package, so
+    // search for the unqualified name (sans the Test prefix / suffix).
+    if (baseType == null){
+      IType[] types = findTypes(javaProject, type, name);
+      if (types.length > 0){
+        if (types.length > 1){
+          return Services.getMessage("junit.testing.class.not.resolved");
+        }
+        baseType = types[0];
+      }
+    }
+
+    if (baseType == null){
+      return Services.getMessage("junit.testing.class.not.found");
+    }
+
     RefactoringASTParser parser =
       new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
     CompilationUnit cu = parser.parse(baseType.getCompilationUnit(), true);
@@ -191,6 +237,40 @@ public class JUnitImplCommand
           cu, typeBinding, tests.toArray(new IMethodBinding[tests.size()]));
     }
     return null;
+  }
+
+  private IType[] findTypes(IJavaProject javaProject, IType ignore, String name)
+    throws Exception
+  {
+    SearchPattern pattern =
+      SearchPattern.createPattern(name,
+          IJavaSearchConstants.TYPE,
+          IJavaSearchConstants.DECLARATIONS,
+          SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
+    IJavaSearchScope scope =
+      SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
+    SearchRequestor requestor = new SearchRequestor();
+    SearchEngine engine = new SearchEngine();
+    SearchParticipant[] participants =
+      new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
+    engine.search(pattern, participants, scope, requestor, null);
+
+    ArrayList<IType> types = new ArrayList<IType>();
+    if (requestor.getMatches().size() > 0){
+      for (SearchMatch match : requestor.getMatches()){
+        if(match.getAccuracy() != SearchMatch.A_ACCURATE){
+          continue;
+        }
+        IJavaElement element = (IJavaElement)match.getElement();
+        if (element.getElementType() == IJavaElement.TYPE){
+          IType type = (IType)element;
+          if (!type.equals(ignore) && type.getCompilationUnit() != null){
+            types.add(type);
+          }
+        }
+      }
+    }
+    return types.toArray(new IType[types.size()]);
   }
 
   private class AddTestMethodsOperation
