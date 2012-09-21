@@ -111,7 +111,7 @@ target(name: 'init'){
         include(name: 'startup.jar')
         include(name: 'dropins/**/plugins/org.eclipse.*.jar')
         include(name: 'plugins/org.eclipse.*.jar')
-        include(name: 'plugins/org.apache.ant_*/lib/ant.jar')
+        include(name: 'plugins/org.apache.ant_*/lib/ant*.jar')
         include(name: 'plugins/com.ibm.*.jar')
       }
       dirset(dir: path){
@@ -1136,6 +1136,13 @@ def patchPluginResolve(plugin){
   ant.property(name: 'plugin_dir' + plugin, refid: 'plugin_dir' + plugin)
   pluginDir = binding.getVariable('plugin_dir' + plugin)
   if (pluginDir != null && pluginDir != ''){
+    new File("patch/${plugin}").eachDirRecurse{ dir ->
+      subDir = dir.getName()
+      if (!new File("$pluginDir/$subDir").exists()){
+        return;
+      }
+      pluginDir += "/$subDir"
+    }
     return pluginDir
   }
 

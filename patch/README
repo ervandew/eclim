@@ -12,3 +12,9 @@ Steps:
      $ ant patch.all
   4) To revert all patches based on available plugin dirs:
      $ ant patch.revert.all
+
+Note: for jars included in a plugin directory the patch path include the path
+to the nested jar and that jar will be updated (jars nested in a plugin jar are
+not yet supported):
+
+  Ex. patch/org.apache.ant/lib/ant.jar
