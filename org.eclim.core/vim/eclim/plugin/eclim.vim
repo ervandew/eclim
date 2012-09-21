@@ -65,6 +65,10 @@ else
   let g:EclimSignLevel = 0
 endif
 
+if !exists("g:EclimBufferTabTracking")
+  let g:EclimBufferTabTracking = 1
+endif
+
 if !exists("g:EclimSeparator")
   let g:EclimSeparator = '/'
   if has("win32") || has("win64")
@@ -180,8 +184,8 @@ if !exists(":RefactorUndo")
 endif
 
 if !exists(":Buffers")
-  command Buffers :call eclim#common#buffers#Buffers()
-  command BuffersToggle :call eclim#common#buffers#BuffersToggle()
+  command -bang Buffers :call eclim#common#buffers#Buffers('<bang>')
+  command -bang BuffersToggle :call eclim#common#buffers#BuffersToggle('<bang>')
 endif
 
 if !exists(":Only")
@@ -297,6 +301,16 @@ if g:EclimSignLevel
     else
       autocmd QuickFixCmdPost * call eclim#display#signs#QuickFixCmdPost()
     endif
+  augroup END
+endif
+
+if g:EclimBufferTabTracking
+  call eclim#common#buffers#TabInit()
+  augroup eclim_buffer_tab_tracking
+    autocmd!
+    autocmd BufWinEnter,BufWinLeave * call eclim#common#buffers#TabLastOpenIn()
+    autocmd TabEnter * call eclim#common#buffers#TabEnter()
+    autocmd TabLeave * call eclim#common#buffers#TabLeave()
   augroup END
 endif
 

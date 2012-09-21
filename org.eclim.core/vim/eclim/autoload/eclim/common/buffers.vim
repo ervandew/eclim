@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,39 +39,28 @@ if !exists('g:EclimOnlyExcludeFixed')
 endif
 " }}}
 
-" Buffers() {{{
+" ScriptVariables {{{
+  let s:eclim_tab_id = 0
+" }}}
+
+" Buffers(bang) {{{
 " Like, :buffers, but opens a temporary buffer.
-function! eclim#common#buffers#Buffers()
-  redir => list
-  silent exec 'buffers'
-  redir END
-
-  let buffers = []
-  let filelength = 0
-  for entry in split(list, '\n')
-    let buffer = {}
-    let buffer.status = substitute(entry, '\s*[0-9]\+\s\+\(.\{-}\)\s\+".*', '\1', '')
-    let buffer.path = substitute(entry, '.\{-}"\(.\{-}\)".*', '\1', '')
-    let buffer.path = fnamemodify(buffer.path, ':p')
-    let buffer.file = fnamemodify(buffer.path, ':p:t')
-    let buffer.dir = fnamemodify(buffer.path, ':p:h')
-    exec 'let buffer.bufnr = ' . substitute(entry, '\s*\([0-9]\+\).*', '\1', '')
-    exec 'let buffer.lnum = ' .
-      \ substitute(entry, '.*"\s\+line\s\+\([0-9]\+\).*', '\1', '')
-    call add(buffers, buffer)
-
-    if len(buffer.file) > filelength
-      let filelength = len(buffer.file)
-    endif
-  endfor
+function! eclim#common#buffers#Buffers(bang)
+  let options = {'maxfilelength': 0}
+  let buffers = eclim#common#buffers#GetBuffers(options)
 
   if g:EclimBuffersSort != ''
     call sort(buffers, 'eclim#common#buffers#BufferCompare')
   endif
 
   let lines = []
+  let filelength = options['maxfilelength']
+  let tabnr = t:eclim_tab_id
   for buffer in buffers
-    call add(lines, s:BufferEntryToLine(buffer, filelength))
+    let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
+    if a:bang != '' || eclim_tab_id == '' || eclim_tab_id == tabnr
+      call add(lines, s:BufferEntryToLine(buffer, filelength))
+    endif
   endfor
 
   call eclim#util#TempWindow('[buffers]', lines)
@@ -119,18 +108,16 @@ function! eclim#common#buffers#Buffers()
   "augroup END
 endfunction " }}}
 
-" BuffersToggle() {{{
-function! eclim#common#buffers#BuffersToggle()
+function! eclim#common#buffers#BuffersToggle(bang) " {{{
   let name = eclim#util#EscapeBufferName('[buffers]')
   if bufwinnr(name) == -1
-    call eclim#common#buffers#Buffers()
+    call eclim#common#buffers#Buffers(a:bang)
   else
     exec "bdelete " . bufnr(name)
   endif
 endfunction " }}}
 
-" BufferCompare(buffer1, buffer2) {{{
-function! eclim#common#buffers#BufferCompare(buffer1, buffer2)
+function! eclim#common#buffers#BufferCompare(buffer1, buffer2) " {{{
   exec 'let attr1 = a:buffer1.' . g:EclimBuffersSort
   exec 'let attr2 = a:buffer2.' . g:EclimBuffersSort
   let compare = attr1 == attr2 ? 0 : attr1 > attr2 ? 1 : -1
@@ -140,8 +127,7 @@ function! eclim#common#buffers#BufferCompare(buffer1, buffer2)
   return compare
 endfunction " }}}
 
-" Only() {{{
-function! eclim#common#buffers#Only()
+function! eclim#common#buffers#Only() " {{{
   let curwin = winnr()
   let winnum = 1
   while winnum <= winnr('$')
@@ -162,8 +148,106 @@ function! eclim#common#buffers#Only()
   endwhile
 endfunction " }}}
 
-" s:BufferDelete() {{{
-function! s:BufferDelete()
+function! eclim#common#buffers#GetBuffers(...) " {{{
+  let options = a:0 ? a:1 : {}
+
+  redir => list
+  silent exec 'buffers'
+  redir END
+
+  let buffers = []
+  let maxfilelength = 0
+  for entry in split(list, '\n')
+    let buffer = {}
+    let buffer.status = substitute(entry, '\s*[0-9]\+\s\+\(.\{-}\)\s\+".*', '\1', '')
+    let buffer.path = substitute(entry, '.\{-}"\(.\{-}\)".*', '\1', '')
+    let buffer.path = fnamemodify(buffer.path, ':p')
+    let buffer.file = fnamemodify(buffer.path, ':p:t')
+    let buffer.dir = fnamemodify(buffer.path, ':p:h')
+    exec 'let buffer.bufnr = ' . substitute(entry, '\s*\([0-9]\+\).*', '\1', '')
+    exec 'let buffer.lnum = ' .
+      \ substitute(entry, '.*"\s\+line\s\+\([0-9]\+\).*', '\1', '')
+    call add(buffers, buffer)
+
+    if len(buffer.file) > maxfilelength
+      let maxfilelength = len(buffer.file)
+    endif
+  endfor
+
+  if has_key(options, 'maxfilelength')
+    let options['maxfilelength'] = maxfilelength
+  endif
+
+  return buffers
+endfunction " }}}
+
+function! eclim#common#buffers#TabInit() " {{{
+  let tabnr = 1
+  while tabnr <= tabpagenr('$')
+    let tab_id = gettabvar(tabnr, 'eclim_tab_id')
+    if tab_id == ''
+      let s:eclim_tab_id += 1
+      call settabvar(tabnr, 'eclim_tab_id', s:eclim_tab_id)
+      for bufnr in tabpagebuflist(tabnr)
+        let btab_id = getbufvar(bufnr, 'eclim_tab_id')
+        if btab_id == ''
+          call setbufvar(bufnr, 'eclim_tab_id', s:eclim_tab_id)
+        endif
+      endfor
+    endif
+    let tabnr += 1
+  endwhile
+endfunction " }}}
+
+function! eclim#common#buffers#TabEnter() " {{{
+  if !exists('t:eclim_tab_id')
+    let s:eclim_tab_id += 1
+    let t:eclim_tab_id = s:eclim_tab_id
+  endif
+
+  if exists('s:tab_count') && s:tab_count > tabpagenr('$')
+    " delete any buffers associated with the closed tab
+    let buffers = eclim#common#buffers#GetBuffers()
+    for buffer in buffers
+      let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
+      if eclim_tab_id == s:tab_prev
+        exec 'bdelete ' . buffer.bufnr
+      endif
+    endfor
+  endif
+endfunction " }}}
+
+function! eclim#common#buffers#TabLeave() " {{{
+  let s:tab_prev = t:eclim_tab_id
+  let s:tab_count = tabpagenr('$')
+endfunction " }}}
+
+function! eclim#common#buffers#TabLastOpenIn() " {{{
+  if &buftype != ''
+    return
+  endif
+
+  if exists('t:eclim_tab_id')
+    call eclim#common#buffers#TabEnter()
+  endif
+
+  let tabnr = 1
+  let other_tab = 0
+  while tabnr <= tabpagenr('$')
+    if tabnr != tabpagenr() &&
+     \ eclim#util#ListContains(tabpagebuflist(tabnr), bufnr('%'))
+      let other_tab = tabnr
+      break
+    endif
+    let tabnr += 1
+  endwhile
+
+  if !exists('b:eclim_tab_id') || !other_tab
+    let b:eclim_tab_id = t:eclim_tab_id
+  endif
+endfunction " }}}
+
+function! s:BufferDelete() " {{{
   let line = line('.')
   if line > len(b:eclim_buffers)
     return
@@ -192,8 +276,7 @@ function! s:BufferDelete()
   endif
 endfunction " }}}
 
-" s:BufferEntryToLine(buffer, filelength) {{{
-function! s:BufferEntryToLine(buffer, filelength)
+function! s:BufferEntryToLine(buffer, filelength) " {{{
   let line = ''
   let line .= a:buffer.status =~ '+' ? '+' : ' '
   let line .= a:buffer.status =~ 'a' ? 'active' : 'hidden'
@@ -210,8 +293,7 @@ function! s:BufferEntryToLine(buffer, filelength)
   return line
 endfunction " }}}
 
-" s:BufferOpen(cmd) {{{
-function! s:BufferOpen(cmd)
+function! s:BufferOpen(cmd) " {{{
   let line = line('.')
   if line > len(b:eclim_buffers)
     return
