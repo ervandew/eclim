@@ -60,21 +60,23 @@ To determine what class the current test case is for, eclim expects that the
 standard naming convention for test cases is followed, where the test case has
 the same fully qualified class name as the target class with a 'Test' suffix.
 
-For a class ``org.foo.bar.Baz``, the exepected test case would be named
-``org.foo.bar.BazTest``.
+So for the test case ``org.foo.bar.BazTest``, the exepected class being tested
+would be ``org.foo.bar.Baz``.
 
-So when invoking **:JUnitImpl** from within ``org.foo.bar.BazTest``, eclim would
-look for the class ``org.foo.bar.Baz`` and generate a list of methods to test
+.. note::
+
+   Eclim also supports tests with a 'Test' prefix instead of a suffix and in
+   the case of neither a 'Test' prefix or suffix, it will search for a class of
+   the same name in a different package should you perhaps use a package
+   convention for your tests rather than a class name convention.
+
+When invoking **:JUnitImpl** from within ``org.foo.bar.BazTest``, eclim will
+locate the class ``org.foo.bar.Baz`` and generate a list of methods to test
 from it.
 
 When you hit <enter> on the method to add, if that method belongs to a type in
 the hierarchy for the class being tested, then the corresponding test method
 stub will be inserted, otherwise a regular overriding stub will be generated.
-
-.. note::
-
-  The junit.jar file must be in your project's classpath for eclim to
-  display possible methods to override in the junit test-case hierarchy.
 
 Configuration
 ^^^^^^^^^^^^^

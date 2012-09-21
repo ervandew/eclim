@@ -26,14 +26,19 @@ function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
+function! TearDown() " {{{
+  call eclim#project#util#SetProjectSetting(
+    \ "org.eclim.java.junit.version", 4)
+endfunction " }}}
+
 function! TestJUnitImpl4() " {{{
   call s:InitFile('4')
 
   call cursor(3, 1)
   JUnitImpl
-  call vunit#AssertTrue(bufname('%') =~ 'SomeClassTestVUnit.java_impl$',
+  call vunit#AssertTrue(bufname('%') =~ 'SomeClassVUnitTest.java_impl$',
     \ 'JUnit impl window not opened.')
-  call vunit#AssertEquals('org.eclim.test.junit.SomeClassTestVUnit', getline(1),
+  call vunit#AssertEquals('org.eclim.test.junit.SomeClassVUnitTest', getline(1),
     \ 'Wrong type in junit impl window.')
 
   call vunit#AssertTrue(search('^\s*public void aMethod()'),
@@ -64,9 +69,9 @@ function! TestJUnitImpl3() " {{{
 
   call cursor(3, 1)
   JUnitImpl
-  call vunit#AssertTrue(bufname('%') =~ 'SomeClassTestVUnit.java_impl$',
+  call vunit#AssertTrue(bufname('%') =~ 'SomeClassVUnitTest.java_impl$',
     \ 'JUnit impl window not opened.')
-  call vunit#AssertEquals('org.eclim.test.junit.SomeClassTestVUnit', getline(1),
+  call vunit#AssertEquals('org.eclim.test.junit.SomeClassVUnitTest', getline(1),
     \ 'Wrong type in junit impl window.')
 
   call vunit#AssertTrue(search('^\s*public void aMethod()'),
@@ -93,14 +98,14 @@ function! TestJUnitImpl3() " {{{
 endfunction " }}}
 
 function s:InitFile(version) " {{{
-  edit! src/org/eclim/test/junit/SomeClassTestVUnit.java
+  edit! src/org/eclim/test/junit/SomeClassVUnitTest.java
   call vunit#PeekRedir()
 
   1,$delete _
   call append(1, [
       \ 'package org.eclim.test.junit;',
       \ '',
-      \ 'public class SomeClassTestVUnit',
+      \ 'public class SomeClassVUnitTest',
       \ '{',
       \ '}',
     \ ])

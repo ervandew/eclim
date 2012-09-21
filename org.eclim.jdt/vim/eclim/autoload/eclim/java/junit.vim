@@ -23,9 +23,9 @@
 " }}}
 
 " Script Variables {{{
-let s:command_impl = '-command java_junit_impl -p "<project>" -f "<file>" <base>'
+let s:command_impl = '-command java_junit_impl -p "<project>" -f "<file>"'
 let s:command_insert =
-  \ '-command java_junit_impl -p "<project>" -f "<file>" <base> ' .
+  \ '-command java_junit_impl -p "<project>" -f "<file>" ' .
   \ '-t "<type>" -s "<superType>" <methods>'
 " }}}
 
@@ -117,23 +117,10 @@ function! eclim#java#junit#JUnitImpl() " {{{
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#project#util#GetProjectRelativeFilePath()
-
   let command = s:command_impl
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
-  let base = substitute(expand('%:t'), 'Test', '', '')
-  let base = substitute(eclim#java#util#GetPackage(), '\.', '/', 'g') . "/" . base
-  if eclim#java#util#FileExists(base)
-    let base = fnamemodify(base, ':r')
-    let base = substitute(base, '/', '.', 'g')
-    let command = substitute(command, '<base>', '-b ' . base, '')
-  else
-    let base = ""
-    let command = substitute(command, '<base>', '', '')
-  endif
-
   call eclim#java#junit#JUnitImplWindow(command)
-  let b:base = base
 endfunction " }}}
 
 function! eclim#java#junit#JUnitImplWindow(command) " {{{
@@ -144,15 +131,8 @@ function! eclim#java#junit#JUnitImplWindow(command) " {{{
 endfunction " }}}
 
 function! s:AddTestImpl(visual) " {{{
-  let command = s:command_insert
-  if b:base != ""
-    let command = substitute(command, '<base>', '-b ' . b:base, '')
-  else
-    let command = substitute(command, '<base>', '', '')
-  endif
-
   call eclim#java#impl#Add
-    \ (command, function("eclim#java#junit#JUnitImplWindow"), a:visual)
+    \ (s:command_insert, function("eclim#java#junit#JUnitImplWindow"), a:visual)
 endfunction " }}}
 
 function! s:GetResultsDir() " {{{
@@ -170,15 +150,11 @@ function! s:GetResultsDir() " {{{
   return path
 endfunction " }}}
 
-" CommandCompleteTest(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for junit test cases.
-function! eclim#java#junit#CommandCompleteTest(argLead, cmdLine, cursorPos)
+function! eclim#java#junit#CommandCompleteTest(argLead, cmdLine, cursorPos) " {{{
   return eclim#java#test#CommandCompleteTest('junit', a:argLead, a:cmdLine, a:cursorPos)
 endfunction " }}}
 
-" CommandCompleteResult(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for test case results.
-function! eclim#java#junit#CommandCompleteResult(argLead, cmdLine, cursorPos)
+function! eclim#java#junit#CommandCompleteResult(argLead, cmdLine, cursorPos) " {{{
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
