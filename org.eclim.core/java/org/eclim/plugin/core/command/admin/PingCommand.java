@@ -46,9 +46,7 @@ public class PingCommand
 {
   private HashMap<String,String> versions;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {

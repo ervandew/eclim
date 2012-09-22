@@ -32,9 +32,7 @@ import java.util.List;
 
 import org.eclim.Services;
 
-import org.eclim.annotation.Command;
-
-import org.eclim.command.CommandLine;
+import org.eclim.command.ReloadCommand;
 
 import org.eclim.eclipse.ui.internal.EclimWorkbenchWindow;
 
@@ -67,7 +65,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 
-import com.martiansoftware.nailgun.NGContext;
 import com.martiansoftware.nailgun.NGServer;
 
 /**
@@ -527,52 +524,6 @@ public abstract class AbstractEclimApplication
           }
         });
       }
-    }
-  }
-
-  @Command(name = "reload")
-  public static class ReloadCommand
-    implements org.eclim.command.Command
-  {
-    private NGContext context;
-
-    /**
-     * {@inheritDoc}
-     * @see org.eclim.command.Command#execute(CommandLine)
-     */
-    public Object execute(CommandLine commandLine)
-      throws Exception
-    {
-      Bundle bundle = Platform.getBundle(CORE);
-      bundle.update();
-      bundle.start();
-      return Services.getMessage("plugins.reloaded");
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see org.eclim.command.Command#getContext()
-     */
-    public NGContext getContext()
-    {
-      return context;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see org.eclim.command.Command#setContext(NGContext)
-     */
-    public void setContext(NGContext context)
-    {
-      this.context = context;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see org.eclim.command.Command#cleanup(CommandLine)
-     */
-    public void cleanup(CommandLine commandLine)
-    {
     }
   }
 }

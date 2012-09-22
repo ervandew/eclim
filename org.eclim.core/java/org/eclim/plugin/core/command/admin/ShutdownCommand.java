@@ -37,9 +37,7 @@ public class ShutdownCommand
 {
   private static final Logger logger = Logger.getLogger(ShutdownCommand.class);
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
