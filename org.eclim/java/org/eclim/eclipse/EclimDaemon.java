@@ -32,7 +32,11 @@ import java.util.List;
 
 import org.eclim.Services;
 
+import org.eclim.command.ReloadCommand;
+
 import org.eclim.logging.Logger;
+
+import org.eclim.plugin.PluginResources;
 
 import org.eclim.util.IOUtils;
 
@@ -103,6 +107,8 @@ public class EclimDaemon
       server.setCaptureSystemStreams(false);
 
       logger.info("Loading plugin org.eclim");
+      PluginResources defaultResources = Services.getPluginResources("org.eclim");
+      defaultResources.registerCommand(ReloadCommand.class);
 
       logger.info("Loading plugin org.eclim.core");
 
@@ -313,10 +319,7 @@ public class EclimDaemon
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see FrameworkListener#frameworkEvent(FrameworkEvent)
-   */
+  @Override
   public synchronized void frameworkEvent(FrameworkEvent event)
   {
     // We are using a framework INFO event to announce when all the eclim
