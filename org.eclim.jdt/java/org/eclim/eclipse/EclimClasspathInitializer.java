@@ -63,10 +63,6 @@ public class EclimClasspathInitializer
   private static final Logger logger =
     Logger.getLogger(EclimClasspathInitializer.class);
 
-  /**
-   * {@inheritDoc}
-   * @see ClasspathContainerInitializer#initialize(IPath,IJavaProject)
-   */
   @Override
   public void initialize(IPath path, IJavaProject javaProject)
     throws CoreException
@@ -84,7 +80,7 @@ public class EclimClasspathInitializer
 
   private IClasspathEntry[] computeClasspathEntries(IJavaProject javaProject)
   {
-    ArrayList<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
+    final ArrayList<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
     try{
       final LinkedHashSet<String> bundleNames = new LinkedHashSet<String>();
       final ArrayList<String> jarPaths = new ArrayList<String>();
@@ -151,6 +147,21 @@ public class EclimClasspathInitializer
             Path path = new Path(pathName);
             list.add(JavaCore.newLibraryEntry(
                   path, sourcePath(path), null, null, null, false));
+
+            if (path.toFile().isDirectory()){
+              listFiles(path.toFile(), new FileFilter(){
+                public boolean accept(File file) {
+                  if (file.getName().endsWith(".jar")){
+                    list.add(JavaCore.newLibraryEntry(
+                          new Path(file.getPath()),
+                          null, null, null, null, false));
+                  }else if (file.isDirectory()){
+                    listFiles(file, this);
+                  }
+                  return false;
+                }
+              });
+            }
           }
         }catch(IOException ioe){
           logger.error("Failed to locate bundle: " + name, ioe);
@@ -160,8 +171,7 @@ public class EclimClasspathInitializer
       // some plugins need access to nested libraries extracted at build time,
       // handle adding those jars to the classpath here.
       listFiles(new File(projectPath + "/build/temp/lib"), new FileFilter(){
-        public boolean accept(File file)
-        {
+        public boolean accept(File file) {
           if (file.getName().endsWith(".jar")){
             String jar = file.getPath().replace(projectPath, "");
             if (jar.startsWith("/")){
