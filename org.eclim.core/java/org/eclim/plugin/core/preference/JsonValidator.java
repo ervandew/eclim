@@ -38,10 +38,7 @@ public class JsonValidator
     this.itemValidator = itemValidator;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Validator#isValid(Object)
-   */
+  @Override
   public boolean isValid(Object value)
   {
     if (value != null){
@@ -62,10 +59,7 @@ public class JsonValidator
     return true;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Validator#getMessage(String,Object)
-   */
+  @Override
   public String getMessage(String name, Object value)
   {
     if (value != null) {
