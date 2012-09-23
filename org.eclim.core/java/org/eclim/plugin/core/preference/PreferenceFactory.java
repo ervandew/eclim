@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.core.preference;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -27,6 +30,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PreferenceFactory
 {
+  private static final Pattern JSON_ARRAY =
+    Pattern.compile("^JSON\\[(.*)\\]$");
+
   /**
    * Adds options via the supplied options string that contains new line
    * separated options in the form <code>name defaultValue regex</code>.
@@ -81,7 +87,15 @@ public class PreferenceFactory
         preference.setName(attrs[1]);
         preference.setDefaultValue(attrs[2]);
         if (attrs[3] != null && !attrs[3].trim().equals(StringUtils.EMPTY)){
-          preference.setValidator(new RegexValidator(attrs[3]));
+          Matcher jsonArrayMatcher = JSON_ARRAY.matcher(attrs[3]);
+          if (jsonArrayMatcher.matches()){
+            String pattern = jsonArrayMatcher.group(1);
+            preference.setValidator(new JsonValidator(
+                  String[].class,
+                  pattern.length() != 0 ? new RegexValidator(pattern) : null));
+          }else{
+            preference.setValidator(new RegexValidator(attrs[3]));
+          }
         }
 
         preferences.addPreference(preference);

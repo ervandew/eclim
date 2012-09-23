@@ -110,17 +110,20 @@ public class PluginResources
     ProjectNatureFactory.addNature("java", NATURE);
     ProjectManagement.addProjectManager(NATURE, new JavaProjectManager());
 
-    Preferences preferences = Preferences.getInstance();
     PreferenceFactory.addPreferences(NATURE,
       "JDT org.eclim.java.logging.impl commons-logging " +
         "(commons-logging|log4j|slf4j|jdk|custom)\n" +
       "JDT org.eclim.java.logging.template logger.gst\n" +
       "JDT org.eclim.java.import.package_separation_level 1 (-1|\\d+)\n" +
+      "JDT org.eclim.java.import.exclude " +
+        "[\"^com\\.sun\\..*\",\"^sunw\\?\\..*\"] JSON[]\n" +
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
       "JDT org.eclim.java.checkstyle.onvalidate false (true|false)\n" +
       "JDT org.eclim.java.compile.sourcepath\n" +
+      "JDT org.eclim.java.compile.args [] JSON[^-.*]\n" +
       "JDT org.eclim.java.run.mainclass none ^[a-zA-Z0-9_.]*$\n" +
+      "JDT org.eclim.java.run.jvmargs [] JSON[^-.*]\n" +
       "JDT/Javadoc org.eclim.java.doc.version\n" +
       "JDT/Javadoc org.eclim.java.doc.dest doc\n" +
       "JDT/Javadoc org.eclim.java.doc.sourcepath\n" +
@@ -135,30 +138,6 @@ public class PluginResources
       "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-7]\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+"
     );
-
-    Preference jvmArgsPref = new Preference();
-    jvmArgsPref.setNature(NATURE);
-    jvmArgsPref.setPath("JDT");
-    jvmArgsPref.setName("org.eclim.java.run.jvmargs");
-    jvmArgsPref.setValidator(
-        new JsonValidator(String[].class, new RegexValidator("^-.*")));
-    preferences.addPreference(jvmArgsPref);
-
-    Preference javacArgsPref = new Preference();
-    javacArgsPref.setNature(NATURE);
-    javacArgsPref.setPath("JDT");
-    javacArgsPref.setName("org.eclim.java.compile.args");
-    javacArgsPref.setValidator(
-        new JsonValidator(String[].class, new RegexValidator("^-.*")));
-    preferences.addPreference(javacArgsPref);
-
-    Preference javaImportExclude = new Preference();
-    javaImportExclude.setNature(NATURE);
-    javaImportExclude.setPath("JDT");
-    javaImportExclude.setName("org.eclim.java.import.exclude");
-    javaImportExclude.setValidator(new JsonValidator(String[].class, null));
-    javaImportExclude.setDefaultValue("[\"^com\\.sun\\..*\", \"^sunw\\?\\..*\"]");
-    preferences.addPreference(javaImportExclude);
   }
 
   @Override
