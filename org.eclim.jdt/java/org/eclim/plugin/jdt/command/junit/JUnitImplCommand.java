@@ -178,10 +178,13 @@ public class JUnitImplCommand
     CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
     ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
 
+    String superType = commandLine.getValue(Options.SUPERTYPE_OPTION);
     List<IMethodBinding> testable = getOverridableMethods(cu, typeBinding);
     List<IMethodBinding> tests = new ArrayList<IMethodBinding>();
     for (IMethodBinding binding : testable){
-      if (isChosen(chosen, binding)){
+      ITypeBinding declBinding = binding.getDeclaringClass();
+      String fqn = declBinding.getQualifiedName().replaceAll("<.*?>", "");
+      if (fqn.equals(superType) && isChosen(chosen, binding)){
         tests.add(binding);
       }
     }
