@@ -146,9 +146,9 @@ public class ImportCommand
   private TextEdit importGroupingEdit(ICompilationUnit src, int offset)
     throws Exception
   {
-    int separationLevel = Integer.parseInt(getPreferences().getValue(
+    int separationLevel = getPreferences().getIntValue(
           src.getJavaProject().getProject(),
-          "org.eclim.java.import.package_separation_level"));
+          "org.eclim.java.import.package_separation_level");
     String lineDelim = src.findRecommendedLineSeparator();
     CompilationUnit astRoot = SharedASTProvider
       .getAST(src, SharedASTProvider.WAIT_YES, null);

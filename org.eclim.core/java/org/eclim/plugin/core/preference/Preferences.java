@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import org.eclim.Services;
 
 import org.eclim.logging.Logger;
@@ -30,6 +32,8 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+
+import com.google.gson.Gson;
 
 /**
  * Class for handling preferences for eclim.
@@ -245,6 +249,61 @@ public class Preferences
     throws Exception
   {
     return getValues(project).get(name);
+  }
+
+  /**
+   * Gets the integer value of an option/preference.
+   *
+   * @param name The name of the option/preference.
+   * @return The value or -1 if not found.
+   */
+  public int getIntValue(String name)
+    throws Exception
+  {
+    return getIntValue(null, name);
+  }
+
+  /**
+   * Gets the integer value of a project option/preference.
+   *
+   * @param project The project.
+   * @param name The name of the option/preference.
+   * @return The value or -1 if not found.
+   */
+  public int getIntValue(IProject project, String name)
+    throws Exception
+  {
+    String value = getValues(project).get(name);
+    return value != null ? Integer.parseInt(value) : -1;
+  }
+
+  /**
+   * Gets the array value of an option/preference.
+   *
+   * @param name The name of the option/preference.
+   * @return The array value or null if not found
+   */
+  public String[] getArrayValue(String name)
+    throws Exception
+  {
+    return getArrayValue(null, name);
+  }
+
+  /**
+   * Gets the array value of a project option/preference.
+   *
+   * @param project The project.
+   * @param name The name of the option/preference.
+   * @return The array value or and empty array if not found.
+   */
+  public String[] getArrayValue(IProject project, String name)
+    throws Exception
+  {
+    String value = getValues(project).get(name);
+    if (value != null && value.trim().length() != 0){
+      return new Gson().fromJson(value, String[].class);
+    }
+    return ArrayUtils.EMPTY_STRING_ARRAY;
   }
 
   /**

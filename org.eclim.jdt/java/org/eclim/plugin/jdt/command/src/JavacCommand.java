@@ -47,8 +47,6 @@ import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jdt.core.IJavaProject;
 
-import com.google.gson.Gson;
-
 /**
  * Command to run javac on the project source files.
  *
@@ -62,10 +60,7 @@ import com.google.gson.Gson;
 public class JavacCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -97,18 +92,14 @@ public class JavacCommand
     javac.setDestdir(outputDir);
 
     // add default args
-    String setting = ProjectUtils.getSetting(project, "org.eclim.java.compile.args");
-    if (setting != null && !setting.trim().equals(StringUtils.EMPTY)){
-      String[] defaultArgs = (String[])new Gson().fromJson(setting, String[].class);
-      if (defaultArgs != null && defaultArgs.length > 0){
-        for(String arg : defaultArgs){
-          if (!arg.startsWith("-")){
-            continue;
-          }
-          ImplementationSpecificArgument a = javac.createCompilerArg();
-          a.setValue(arg);
-        }
+    String[] defaultArgs =
+      getPreferences().getArrayValue(project, "org.eclim.java.compile.args");
+    for(String arg : defaultArgs){
+      if (!arg.startsWith("-")){
+        continue;
       }
+      ImplementationSpecificArgument a = javac.createCompilerArg();
+      a.setValue(arg);
     }
 
     // construct classpath
@@ -122,7 +113,7 @@ public class JavacCommand
 
     // construct sourcepath
     String sourcepath =
-      ProjectUtils.getSetting(project, "org.eclim.java.compile.sourcepath");
+      getPreferences().getValue(project, "org.eclim.java.compile.sourcepath");
     if (sourcepath != null && !sourcepath.trim().equals(StringUtils.EMPTY)){
       paths = StringUtils.split(sourcepath, " ");
     }else{

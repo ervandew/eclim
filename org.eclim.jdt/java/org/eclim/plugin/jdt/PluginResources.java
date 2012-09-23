@@ -36,11 +36,8 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.AbstractPluginResources;
 
-import org.eclim.plugin.core.preference.JsonValidator;
-import org.eclim.plugin.core.preference.Preference;
 import org.eclim.plugin.core.preference.PreferenceFactory;
 import org.eclim.plugin.core.preference.Preferences;
-import org.eclim.plugin.core.preference.RegexValidator;
 
 import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.project.ProjectNatureFactory;

@@ -27,8 +27,6 @@ import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 
-import com.google.gson.Gson;
-
 /**
  * Utilities for working with java imports.
  *
@@ -83,14 +81,11 @@ public class ImportUtils
   public static boolean isImportExcluded(IProject project, String name)
     throws Exception
   {
-    String setting = Preferences.getInstance().getValue(
-        project, "org.eclim.java.import.exclude");
-    if (setting != null && !setting.trim().equals(StringUtils.EMPTY)){
-      String[] patterns = (String[])new Gson().fromJson(setting, String[].class);
-      for (String pattern : patterns){
-        if (name.matches(pattern)){
-          return true;
-        }
+    String[] patterns = Preferences.getInstance()
+      .getArrayValue(project, "org.eclim.java.import.exclude");
+    for (String pattern : patterns){
+      if (name.matches(pattern)){
+        return true;
       }
     }
     return false;

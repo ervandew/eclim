@@ -33,8 +33,6 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.plugin.core.util.ProjectUtils;
-
 import org.eclim.plugin.jdt.command.impl.ImplCommand;
 
 import org.eclim.plugin.jdt.command.search.SearchRequestor;
@@ -172,7 +170,7 @@ public class JUnitImplCommand
       CompilationUnit cu, ITypeBinding typeBinding)
     throws Exception
   {
-    String version = ProjectUtils.getSetting(
+    String version = getPreferences().getValue(
         cu.getJavaElement().getJavaProject().getProject(),
         "org.eclim.java.junit.version");
 
@@ -300,7 +298,7 @@ public class JUnitImplCommand
       try{
         ICompilationUnit src = (ICompilationUnit)cu.getJavaElement();
         IJavaProject javaProject = src.getJavaProject();
-        String version = ProjectUtils.getSetting(
+        String version = getPreferences().getValue(
             cu.getJavaElement().getJavaProject().getProject(),
             "org.eclim.java.junit.version");
 
