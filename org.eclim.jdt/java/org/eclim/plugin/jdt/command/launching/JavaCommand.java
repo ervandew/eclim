@@ -79,8 +79,6 @@ import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 
-import com.google.gson.Gson;
-
 /**
  * Command to run the project's main class.
  *
@@ -132,7 +130,7 @@ public class JavaCommand
 
     if (mainClass == null){
       mainClass =
-        ProjectUtils.getSetting(project, "org.eclim.java.run.mainclass");
+        getPreferences().getValue(project, "org.eclim.java.run.mainclass");
     }
 
     if (mainClass == null ||
@@ -172,18 +170,14 @@ public class JavaCommand
     java.setClasspath(classpath);
 
     // add default vm args
-    String setting = ProjectUtils.getSetting(project, "org.eclim.java.run.jvmargs");
-    if (setting != null && !setting.trim().equals(StringUtils.EMPTY)){
-      String[] defaultArgs = (String[])new Gson().fromJson(setting, String[].class);
-      if (defaultArgs != null && defaultArgs.length > 0){
-        for(String vmarg : defaultArgs){
-          if (!vmarg.startsWith("-")){
-            continue;
-          }
-          Argument a = java.createJvmarg();
-          a.setValue(vmarg);
-        }
+    String[] defaultArgs =
+      getPreferences().getArrayValue(project, "org.eclim.java.run.jvmargs");
+    for(String vmarg : defaultArgs){
+      if (!vmarg.startsWith("-")){
+        continue;
       }
+      Argument a = java.createJvmarg();
+      a.setValue(vmarg);
     }
 
     // add any supplied vm args

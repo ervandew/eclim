@@ -137,9 +137,9 @@ public class ImportOrganizeCommand
   private TextEdit importGroupingEdit(ICompilationUnit src)
     throws Exception
   {
-    int separationLevel = Integer.parseInt(getPreferences().getValue(
+    int separationLevel = getPreferences().getIntValue(
           src.getJavaProject().getProject(),
-          "org.eclim.java.import.package_separation_level"));
+          "org.eclim.java.import.package_separation_level");
     CompilationUnit astRoot = SharedASTProvider
       .getAST(src, SharedASTProvider.WAIT_YES, null);
 

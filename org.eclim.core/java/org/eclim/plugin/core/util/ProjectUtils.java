@@ -20,8 +20,6 @@ import java.io.File;
 
 import org.eclim.Services;
 
-import org.eclim.plugin.core.preference.Option;
-import org.eclim.plugin.core.preference.OptionInstance;
 import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.project.ProjectManagement;
@@ -309,26 +307,6 @@ public class ProjectUtils
       }
     }catch(Exception ignore){
     }
-  }
-
-  /**
-   * Gets a project setting by name.
-   *
-   * @param project The project.
-   * @param name The setting name.
-   * @return The setting value or null if not found.
-   */
-  public static String getSetting(IProject project, String name)
-    throws Exception
-  {
-    Option[] options = Preferences.getInstance().getOptions(project);
-    for(Option option : options){
-      if(option.getName().equals(name)){
-        OptionInstance instance = (OptionInstance)option;
-        return instance.getValue();
-      }
-    }
-    return null;
   }
 
   /**

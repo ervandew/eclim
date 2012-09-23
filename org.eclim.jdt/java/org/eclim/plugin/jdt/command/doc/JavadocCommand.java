@@ -73,9 +73,9 @@ public class JavadocCommand
     IProject project = ProjectUtils.getProject(projectName);
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
 
-    String dest = ProjectUtils.getSetting(project, "org.eclim.java.doc.dest");
+    String dest = getPreferences().getValue(project, "org.eclim.java.doc.dest");
     String packageNames =
-      ProjectUtils.getSetting(project, "org.eclim.java.doc.packagenames");
+      getPreferences().getValue(project, "org.eclim.java.doc.packagenames");
 
     Project antProject = new Project();
     BuildLogger buildLogger = new DefaultLogger();
@@ -104,7 +104,7 @@ public class JavadocCommand
     if (files == null){
       // construct sourcepath
       String sourcepath =
-        ProjectUtils.getSetting(project, "org.eclim.java.doc.sourcepath");
+        getPreferences().getValue(project, "org.eclim.java.doc.sourcepath");
       if (sourcepath != null && !sourcepath.trim().equals(StringUtils.EMPTY)){
         paths = StringUtils.split(sourcepath, " ");
       }else{
