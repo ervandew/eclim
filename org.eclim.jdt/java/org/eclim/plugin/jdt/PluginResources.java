@@ -127,8 +127,7 @@ public class PluginResources
       "JDT/Javadoc org.eclim.java.doc.packagenames\n" +
       "JDT/JUnit org.eclim.java.junit.command\n" +
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
-      "JDT/JUnit org.eclim.java.junit.src_dir\n" +
-      "JDT/JUnit org.eclim.java.junit.version 4 (3|4)"
+      "JDT/JUnit org.eclim.java.junit.src_dir"
     );
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,

@@ -24,8 +24,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.eclim.Services;
 
 import org.eclim.annotation.Command;
@@ -170,10 +168,6 @@ public class JUnitImplCommand
       CompilationUnit cu, ITypeBinding typeBinding)
     throws Exception
   {
-    String version = getPreferences().getValue(
-        cu.getJavaElement().getJavaProject().getProject(),
-        "org.eclim.java.junit.version");
-
     HashSet<String> testMethods = new HashSet<String>();
     for (IMethodBinding method : typeBinding.getDeclaredMethods()){
       int modifiers = method.getModifiers();
@@ -191,9 +185,6 @@ public class JUnitImplCommand
     while (parentBinding != null && !parentBinding.equals(objectBinding)){
       for (IMethodBinding method : parentBinding.getDeclaredMethods()){
         String name = method.getName();
-        if (version.equals("3")){
-          name = "test" + StringUtils.capitalize(name);
-        }
         int modifiers = method.getModifiers();
         if (!method.isConstructor() &&
             !Modifier.isPrivate(modifiers) &&
@@ -298,17 +289,12 @@ public class JUnitImplCommand
       try{
         ICompilationUnit src = (ICompilationUnit)cu.getJavaElement();
         IJavaProject javaProject = src.getJavaProject();
-        String version = getPreferences().getValue(
-            cu.getJavaElement().getJavaProject().getProject(),
-            "org.eclim.java.junit.version");
 
         MultiTextEdit edit = new MultiTextEdit();
-        if (!version.equals("3")){
-          ImportRewrite imports = StubUtility.createImportRewrite(cu, true);
-          imports.addStaticImport("org.junit.Assert", "*", false);
-          imports.addImport(JUnitCorePlugin.JUNIT4_ANNOTATION_NAME);
-          edit.addChild(imports.rewriteImports(null));
-        }
+        ImportRewrite imports = StubUtility.createImportRewrite(cu, true);
+        imports.addStaticImport("org.junit.Assert", "*", false);
+        imports.addImport(JUnitCorePlugin.JUNIT4_ANNOTATION_NAME);
+        edit.addChild(imports.rewriteImports(null));
 
         AST ast = cu.getAST();
         ASTRewrite astRewrite = ASTRewrite.create(ast);
@@ -319,9 +305,6 @@ public class JUnitImplCommand
         HashSet<String> added = new HashSet<String>();
         for (IMethodBinding binding : methodBindings){
           String name = binding.getName();
-          if (version.equals("3")){
-            name = "test" + StringUtils.capitalize(name);
-          }
           if (added.contains(name)){
             continue;
           }
@@ -331,13 +314,11 @@ public class JUnitImplCommand
           stub.setConstructor(false);
           stub.modifiers().addAll(ast.newModifiers(Modifier.PUBLIC));
 
-          if (!version.equals("3")){
-            Annotation marker = ast.newMarkerAnnotation();
-            marker.setTypeName(ast.newSimpleName("Test"));
-            astRewrite
-              .getListRewrite(stub, MethodDeclaration.MODIFIERS2_PROPERTY)
-              .insertFirst(marker, null);
-          }
+          Annotation marker = ast.newMarkerAnnotation();
+          marker.setTypeName(ast.newSimpleName("Test"));
+          astRewrite
+            .getListRewrite(stub, MethodDeclaration.MODIFIERS2_PROPERTY)
+            .insertFirst(marker, null);
 
           stub.setName(ast.newSimpleName(name));
 

@@ -26,13 +26,9 @@ function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-function! TearDown() " {{{
-  call eclim#project#util#SetProjectSetting(
-    \ "org.eclim.java.junit.version", 4)
-endfunction " }}}
-
-function! TestJUnitImpl4() " {{{
-  call s:InitFile('4')
+function! TestJUnitImpl() " {{{
+  edit! src/org/eclim/test/junit/SomeClassVUnitTest.java
+  call vunit#PeekRedir()
 
   call cursor(3, 1)
   JUnitImpl
@@ -62,62 +58,6 @@ function! TestJUnitImpl4() " {{{
     \ 'testAMethod() not added.')
   call vunit#AssertTrue(search('@Test\_s\+public void equals()'),
     \ 'testEquals() not added.')
-endfunction " }}}
-
-function! TestJUnitImpl3() " {{{
-  call s:InitFile('3')
-
-  call cursor(3, 1)
-  JUnitImpl
-  call vunit#AssertTrue(bufname('%') =~ 'SomeClassVUnitTest.java_impl$',
-    \ 'JUnit impl window not opened.')
-  call vunit#AssertEquals('org.eclim.test.junit.SomeClassVUnitTest', getline(1),
-    \ 'Wrong type in junit impl window.')
-
-  call vunit#AssertTrue(search('^\s*public void aMethod()'),
-    \ 'Super method aMethod() not found')
-  call vunit#AssertTrue(search('^\s*public void aMethod(String)'),
-    \ 'Super method aMethod(String) not found')
-  exec "normal \<cr>"
-  call vunit#AssertEquals(search('^\s*public void aMethod()'), 0,
-    \ 'Super method aMethod() still present after add.')
-  call vunit#AssertEquals(search('^\s*public void aMethod(String)'), 0,
-    \ 'Super method aMethod(String) still resent after add.')
-
-  call vunit#AssertTrue(search('^\s*public boolean equals(Object)'),
-    \ 'Super method equals() not found')
-  exec "normal \<cr>"
-  call vunit#AssertEquals(search('^\s*public abstract boolean equals(Object)'), 0,
-    \ 'Super method equals() still present after add.')
-  bdelete
-
-  call vunit#AssertTrue(search('public void testAMethod()'),
-    \ 'testAMethod() not added.')
-  call vunit#AssertTrue(search('public void testEquals()'),
-    \ 'testEquals() not added.')
-endfunction " }}}
-
-function s:InitFile(version) " {{{
-  edit! src/org/eclim/test/junit/SomeClassVUnitTest.java
-  call vunit#PeekRedir()
-
-  1,$delete _
-  call append(1, [
-      \ 'package org.eclim.test.junit;',
-      \ '',
-      \ 'public class SomeClassVUnitTest',
-      \ '{',
-      \ '}',
-    \ ])
-  1,1delete _
-  " i think eclipse may ignore subisiquent saves if they occur too fast, so
-  " add some human time.
-  sleep 1
-  write
-  call vunit#PeekRedir()
-
-  call eclim#project#util#SetProjectSetting(
-    \ "org.eclim.java.junit.version", a:version)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

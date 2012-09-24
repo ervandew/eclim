@@ -145,12 +145,6 @@ Configuration
     # Maven 1.x using built in test plugin.
     org.eclim.java.junit.command=Maven -Dtestcase=<testcase_class> test:single
 
-.. _org.eclim.java.junit.version:
-
-- **org.eclim.java.junit.version** (Default: 4) -
-  Specifies the primary junit version being used, which determines which junit
-  test method template will be used to generated the test method stubs.
-
 TestNG
 ------
 
