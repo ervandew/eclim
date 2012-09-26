@@ -1210,6 +1210,8 @@ function! eclim#util#ShowCurrentError()
   if message != ''
     " remove any new lines
     let message = substitute(message, '\n', ' ', 'g')
+    " convert tabs to spaces to ensure a consistent char to display length
+    let message = substitute(message, '\t', '  ', 'g')
 
     call eclim#util#WideMessage('echo', message)
     let s:show_current_error_displaying = 1
