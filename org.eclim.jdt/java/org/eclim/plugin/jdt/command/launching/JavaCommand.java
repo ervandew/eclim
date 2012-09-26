@@ -59,6 +59,7 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -117,6 +118,8 @@ public class JavaCommand
     String workingDir = commandLine.getValue(WORKINGDIR_OPTION);
 
     IProject project = ProjectUtils.getProject(projectName);
+    project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
 
     Project antProject = new Project();
