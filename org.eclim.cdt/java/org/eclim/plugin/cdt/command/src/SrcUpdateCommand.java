@@ -17,6 +17,7 @@
 package org.eclim.plugin.cdt.command.src;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.annotation.Command;
@@ -86,8 +87,7 @@ public class SrcUpdateCommand
 {
   // Taken from org.eclipse.cdt.internal.ui.refactoring.utils.TranslationUnitHelper
   private static final int AST_STYLE =
-    ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT |
-    ITranslationUnit.AST_SKIP_INDEXED_HEADERS;
+    ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT;
 
   /**
    * {@inheritDoc}
@@ -152,6 +152,18 @@ public class SrcUpdateCommand
       ProblemCollector collector = new ProblemCollector(problems);
       ast.accept(collector);
 
+      String absolutePath = tu.getResource().getLocation().toOSString();
+      for (Iterator<IProblem> iter = problems.iterator();
+    		  iter.hasNext();) {
+    	  IProblem problem = iter.next();
+    	  
+    	  // Remove problems appearing in includes (e.g. Missing ; in file: /usr/include/c++/4.6/bits/stl_algobase.h:732)
+    	  if ( (!(problem instanceof SemanticProblem)) && (!(absolutePath.equals(new String(problem.getOriginatingFileName())))) ) {
+    		  iter.remove();
+    	  }
+    	  
+      }
+      
       return problems;
     } finally {
       if (index != null){
