@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.plugin.jdt.command.search.SearchRequestor;
+
 import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.Position;
@@ -29,6 +31,7 @@ import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.ISourceRange;
@@ -36,6 +39,13 @@ import org.eclipse.jdt.core.ISourceReference;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.Signature;
+
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.core.search.SearchMatch;
+import org.eclipse.jdt.core.search.SearchParticipant;
+import org.eclipse.jdt.core.search.SearchPattern;
 
 import org.eclipse.jdt.internal.core.CompilationUnit;
 
@@ -633,5 +643,44 @@ public class TypeUtils
       }
     }
     return type;
+  }
+
+  /**
+   * Find types by the supplied fully qualified name or unqualified class name.
+   *
+   * @param javaProject The java project to be searched.
+   * @param name The name to search.
+   *
+   * @return A possibly empty array of IType results found.
+   */
+  public static IType[] findTypes(IJavaProject javaProject, String name)
+    throws Exception
+  {
+    SearchPattern pattern =
+      SearchPattern.createPattern(name,
+          IJavaSearchConstants.TYPE,
+          IJavaSearchConstants.DECLARATIONS,
+          SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
+    IJavaSearchScope scope =
+      SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
+    SearchRequestor requestor = new SearchRequestor();
+    SearchEngine engine = new SearchEngine();
+    SearchParticipant[] participants =
+      new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
+    engine.search(pattern, participants, scope, requestor, null);
+
+    ArrayList<IType> types = new ArrayList<IType>();
+    if (requestor.getMatches().size() > 0){
+      for (SearchMatch match : requestor.getMatches()){
+        if(match.getAccuracy() != SearchMatch.A_ACCURATE){
+          continue;
+        }
+        IJavaElement element = (IJavaElement)match.getElement();
+        if (element.getElementType() == IJavaElement.TYPE){
+          types.add((IType)element);
+        }
+      }
+    }
+    return types.toArray(new IType[types.size()]);
   }
 }

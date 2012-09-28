@@ -211,9 +211,12 @@ if !exists(":JavaLoggingInit")
   command -buffer JavaLoggingInit :call eclim#java#logging#LoggingInit()
 endif
 
-if !exists(":JUnitExecute")
-  command -buffer -nargs=? -complete=customlist,eclim#java#junit#CommandCompleteTest
-    \ JUnitExecute :call eclim#java#junit#JUnitExecute('<args>')
+if !exists(":JUnit")
+  command -buffer -nargs=? -bang -complete=customlist,eclim#java#junit#CommandCompleteTest
+    \ JUnit :call eclim#java#junit#JUnit('<args>', '<bang>')
+endif
+if !exists(":JUnitFindTest")
+  command -buffer JUnitFindTest :call eclim#java#junit#JUnitFindTest()
 endif
 if !exists(":JUnitResult")
   command -buffer -nargs=? -complete=customlist,eclim#java#junit#CommandCompleteResult

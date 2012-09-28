@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,6 +23,16 @@
 " }}}
 
 " Script Variables {{{
+  let s:command_src_find = '-command java_src_find -p "<project>" -c "<classname>"'
+
+  let s:entry_match{'junit'} = 'Tests run:'
+  let s:entry_text_replace{'junit'} = '.*[junit] '
+  let s:entry_text_with{'junit'} = ''
+
+  let s:entry_match{'testng'} = 'eclim testng:'
+  let s:entry_text_replace{'testng'} = '.*eclim testng: .\{-}:'
+  let s:entry_text_with{'testng'} = ''
+
   let s:open_console = 'Open jconsole'
   let s:view_info = 'View Info'
   let s:view_stacks = 'View Stacks'
@@ -42,10 +52,69 @@
   hi JpsViewAdditional gui=underline,bold term=underline,bold cterm=underline,bold
 " }}}
 
-" Jps() {{{
-" Function to execute jps and push the results into a new window where the
-" user can perform additional commands.
-function eclim#java#tools#Jps()
+function! eclim#java#tools#MakeWithJavaBuildTool(compiler, bang, args) " {{{
+  augroup eclim_make_java_test
+    autocmd!
+    autocmd QuickFixCmdPost make
+      \ call eclim#java#tools#ResolveQuickfixResults(['junit', 'testng'])
+  augroup END
+
+  try
+    call eclim#util#MakeWithCompiler(a:compiler, a:bang, a:args)
+  finally
+    silent! autocmd! eclim_make_java_test
+  endtry
+endfunction " }}}
+
+function! eclim#java#tools#ResolveQuickfixResults(frameworks) " {{{
+  " Invoked after a :make to resolve any junit results in the quickfix entries.
+  let frameworks = type(a:frameworks) == g:LIST_TYPE ? a:frameworks : [a:frameworks]
+  let entries = getqflist()
+  let newentries = []
+  for entry in entries
+    let filename = bufname(entry.bufnr)
+    let text = entry.text
+
+    for framework in frameworks
+      if entry.text =~ s:entry_match{framework}
+        let filename = fnamemodify(filename, ':t')
+        let text = substitute(text,
+          \ s:entry_text_replace{framework}, s:entry_text_with{framework}, '')
+
+        let project = eclim#project#util#GetCurrentProjectName()
+        let command = s:command_src_find
+        let command = substitute(command, '<project>', project, '')
+        let command = substitute(command, '<classname>', filename, '')
+        let filename = eclim#ExecuteEclim(command)
+        if filename == ''
+          " file not found.
+          continue
+        endif
+      endif
+    endfor
+
+    if !filereadable(filename)
+      continue
+    endif
+
+    let newentry = {
+        \ 'filename': filename,
+        \ 'lnum': entry.lnum,
+        \ 'col': entry.col,
+        \ 'type': entry.type,
+        \ 'text': text
+      \ }
+    call add(newentries, newentry)
+  endfor
+
+  call setqflist(newentries, 'r')
+
+  " vim is finicky about changing the quickfix list during a QuickFixCmdPost
+  " autocmd, so force a delayed reload of the quickfix results
+  call eclim#util#DelayedCommand('call setqflist(getqflist(), "r")')
+endfunction " }}}
+
+function! eclim#java#tools#Jps() " {{{
   call eclim#util#Echo('Executing...')
 
   let content = []
@@ -114,15 +183,7 @@ function eclim#java#tools#Jps()
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" GetJavaProcesses() {{{
-" Gets a list of maps containing an entry for each running java process
-" excluding the jps process and any processes with no classname or jar
-" file (eg vms started by opera).
-" id - The process id.
-" name - The classname or jar file the process was started from.
-" args_main - Any arguments passed to the main method.
-" args_vm - Any arguments passed to the vm.
-function eclim#java#tools#GetJavaProcesses()
+function! eclim#java#tools#GetJavaProcesses() " {{{
   let java_processes = []
   let result = eclim#util#System('jps -vV')
   if v:shell_error
@@ -161,9 +222,7 @@ function eclim#java#tools#GetJavaProcesses()
   return java_processes
 endfunction " }}}
 
-" ViewAdditionalInfo() {{{
-" Invoked by mapping on jps window.
-function s:ViewAdditionalInfo()
+function! s:ViewAdditionalInfo() " {{{
   let line = getline('.')
   if line =~ '^\s*' . s:supported_command . '$'
     " get the process id.
@@ -182,9 +241,7 @@ function s:ViewAdditionalInfo()
   endif
 endfunction " }}}
 
-" OpenConsole(id) {{{
-" Open jconsole for the process with the given id.
-function s:OpenConsole(id)
+function! s:OpenConsole(id) " {{{
   call eclim#util#Echo('Executing...')
 
   if has('win32') || has('win64')
@@ -197,9 +254,7 @@ function s:OpenConsole(id)
   call eclim#util#Echo(' ')
 endfunction " }}}
 
-" ViewInfo(id) {{{
-" Open a window with extended info for the process with the given id.
-function s:ViewInfo(id)
+function! s:ViewInfo(id) " {{{
   if executable('jinfo')
     call eclim#util#Echo('Executing...')
 
@@ -216,9 +271,7 @@ function s:ViewInfo(id)
   endif
 endfunction " }}}
 
-" ViewStacks(id) {{{
-" Open a window containing thread stacks for the process with the given id.
-function s:ViewStacks(id)
+function! s:ViewStacks(id) " {{{
   if executable('jstack')
     call eclim#util#Echo('Executing...')
     let content = split(eclim#util#System('jstack ' . a:id), '\n')
@@ -238,9 +291,7 @@ function s:ViewStacks(id)
   endif
 endfunction " }}}
 
-" ViewMap(id) {{{
-" Open a window containing memory map for the process with the supplied id.
-function s:ViewMap(id)
+function! s:ViewMap(id) " {{{
   if executable('jmap')
     call eclim#util#Echo('Executing...')
     let content = split(eclim#util#System('jmap ' . a:id), '\n')

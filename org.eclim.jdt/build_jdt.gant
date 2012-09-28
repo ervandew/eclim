@@ -28,5 +28,11 @@ target(name: 'org.eclim.jdt.test'){
           includes: 'eclim_unit_test_java_linked/**/*')
       }
     }
+
+    mkdir(dir: '${eclipse.workspace}/eclim_unit_test_java/lib')
+    copy(tofile: '${eclipse.workspace}/eclim_unit_test_java/lib/junit.jar'){
+      fileset(dir: 'ant/lib', includes: 'junit-*.jar')
+    }
+    eclim('-command project_update -p eclim_unit_test_java')
   }
 }

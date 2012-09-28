@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,15 +30,17 @@
   endif
 " }}}
 
-" Execute(port, command) {{{
-" Function which invokes nailgun.
-function! eclim#client#nailgun#Execute(port, command)
-  if !exists('g:EclimNailgunClient')
-    call s:DetermineClient()
-  endif
+function! eclim#client#nailgun#Execute(port, command, ...) " {{{
+  let exec = a:0 ? a:1 : 0
 
-  if g:EclimNailgunClient == 'python'
-    return eclim#client#python#nailgun#Execute(a:port, a:command)
+  if !exec
+    if !exists('g:EclimNailgunClient')
+      call s:DetermineClient()
+    endif
+
+    if g:EclimNailgunClient == 'python'
+      return eclim#client#python#nailgun#Execute(a:port, a:command)
+    endif
   endif
 
   let eclim = eclim#client#nailgun#GetEclimCommand()
@@ -47,6 +49,10 @@ function! eclim#client#nailgun#Execute(port, command)
   endif
 
   let command = a:command
+  if exec
+    let command = escape(command, '%#')
+  endif
+
   " on windows/cygwin where cmd.exe is used, we need to escape any '^'
   " characters in the command args.
   if has('win32') || has('win64') || has('win32unix')
@@ -54,6 +60,9 @@ function! eclim#client#nailgun#Execute(port, command)
   endif
 
   let eclim .= ' --nailgun-port ' . a:port . ' ' . command
+  if exec
+    let eclim = '!' . eclim
+  endif
 
   " for windows/cygwin, need to add a trailing quote to complete the command.
   if has('win32') || has('win64') || has('win32unix')
@@ -63,13 +72,12 @@ function! eclim#client#nailgun#Execute(port, command)
     let eclim = eclim . ' "'
   endif
 
-  let result = eclim#util#System(eclim)
+  let result = eclim#util#System(eclim, exec, exec)
   return [v:shell_error, result]
 endfunction " }}}
 
-" GetEclimCommand() {{{
-" Gets the command to exexute eclim.
-function! eclim#client#nailgun#GetEclimCommand()
+function! eclim#client#nailgun#GetEclimCommand() " {{{
+  " Gets the command to exexute eclim.
   if !exists('g:EclimPath')
     let g:EclimPath = g:EclimEclipseHome . '/eclim'
 
@@ -107,9 +115,8 @@ function! eclim#client#nailgun#GetEclimCommand()
   return g:EclimPath
 endfunction " }}}
 
-" GetNgCommand() {{{
-" Gets path to the ng executable.
-function! eclim#client#nailgun#GetNgCommand()
+function! eclim#client#nailgun#GetNgCommand() " {{{
+  " Gets path to the ng executable.
   if !exists('g:EclimNgPath')
     let g:EclimNgPath = substitute(g:EclimHome, '\', '/', 'g') .  '/bin/ng'
 
@@ -139,9 +146,11 @@ function! eclim#client#nailgun#GetNgCommand()
   return g:EclimNgPath
 endfunction " }}}
 
-" GetNgPort([workspace]) {{{
-" Gets port that the nailgun server is configured to run on.
-function! eclim#client#nailgun#GetNgPort(...)
+function! eclim#client#nailgun#GetNgPort(...) " {{{
+  " Gets port that the nailgun server is configured to run on.
+  " Optional args:
+  "   workspace
+
   let port = 9091
   let eclimrc = eclim#UserHome() . '/.eclimrc'
   if filereadable(eclimrc)
@@ -203,8 +212,7 @@ function! eclim#client#nailgun#GetNgPort(...)
   return port
 endfunction " }}}
 
-" s:DetermineClient() {{{
-function! s:DetermineClient()
+function! s:DetermineClient() " {{{
   " at least one ubuntu user had serious performance issues using the python
   " client, so we are only going to default to python on windows machines
   " where there is an actual potential benefit to using it.

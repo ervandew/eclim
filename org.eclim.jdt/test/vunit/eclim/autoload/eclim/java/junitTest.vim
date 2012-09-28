@@ -26,6 +26,109 @@ function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
+function! TestJUnit() " {{{
+  edit! src/org/eclim/test/junit/run/FooTest.java
+  call vunit#PeekRedir()
+
+  call cursor(1, 1)
+  silent JUnit
+  call vunit#AssertEquals(winnr('$'), 2, 'Run full test: windows')
+  winc j
+  call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run full test: name')
+  call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.FooTest',
+    \ 'Run full test: Testsuite')
+  call vunit#AssertTrue(getline(4) =~
+    \ 'Tests run: 3, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Run full test: Tests run')
+  call vunit#AssertTrue(getline(6) =~ 'Testcase: foo took [0-9.]\+ sec',
+    \ 'Run full test: foo')
+  call vunit#AssertTrue(getline(7) =~ 'Testcase: fooString took [0-9.]\+ sec',
+    \ 'Run full test: fooString')
+  call vunit#AssertTrue(getline(8) =~ 'Testcase: bar took [0-9.]\+ sec',
+    \ 'Run full test: bar')
+  bdelete
+
+  call cursor(12, 5)
+  silent JUnit
+  call vunit#AssertEquals(winnr('$'), 2, 'Run test: windows')
+  winc j
+  call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run test: name')
+  call vunit#AssertEquals(line('$'), 6, 'Run test: lines')
+  call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.FooTest',
+    \ 'Run test: Testsuite')
+  call vunit#AssertTrue(getline(4) =~
+    \ 'Tests run: 1, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Run test: Tests run')
+  call vunit#AssertTrue(getline(6) =~ 'Testcase: foo took [0-9.]\+ sec',
+    \ 'Run test: foo')
+  bdelete
+
+  edit! src/org/eclim/test/junit/run/Foo.java
+  call cursor(12, 5)
+  silent JUnit
+  call vunit#AssertEquals(winnr('$'), 2, 'Run class test: windows')
+  winc j
+  call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run class test: name')
+  call vunit#AssertEquals(line('$'), 6, 'Run class test: lines')
+  call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.FooTest',
+    \ 'Run class test: Testsuite')
+  call vunit#AssertTrue(getline(4) =~
+    \ 'Tests run: 1, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Run class test: Tests run')
+  call vunit#AssertTrue(getline(6) =~ 'Testcase: fooString took [0-9.]\+ sec',
+    \ 'Run class test: fooString')
+  bdelete
+
+  call cursor(12, 5)
+  silent JUnit **/run/*Test
+  call vunit#AssertEquals(winnr('$'), 2, 'Run pattern: windows')
+  winc j
+  call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run pattern: name')
+  call vunit#AssertEquals(line('$'), 15, 'Run pattern: lines')
+  call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.BarTest',
+    \ 'Run pattern: Testsuite 1')
+  call vunit#AssertTrue(getline(4) =~
+    \ 'Tests run: 1, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Run pattern: Tests run 1')
+  call vunit#AssertEquals(getline(9), 'Testsuite: org.eclim.test.junit.run.FooTest',
+    \ 'Run pattern: Testsuite 2')
+  call vunit#AssertTrue(getline(11) =~
+    \ 'Tests run: 3, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Run pattern: Tests run 2')
+  bdelete
+endfunction " }}}
+
+function! TestJUnitFindTest() " {{{
+  edit! src/org/eclim/test/junit/run/Foo.java
+  call vunit#PeekRedir()
+
+  call cursor(1, 1)
+  JUnitFindTest
+  call vunit#AssertEquals(bufname('%'), 'src/org/eclim/test/junit/run/FooTest.java',
+    \ 'Find test from class.')
+  call vunit#AssertEquals(line('.'), 7, 'Find class from test line.')
+  call vunit#AssertEquals(col('.'), 1, 'Find class from test column.')
+
+  JUnitFindTest
+  call vunit#AssertEquals(bufname('%'), 'src/org/eclim/test/junit/run/Foo.java',
+    \ 'Find class from test.')
+  call vunit#AssertEquals(line('.'), 3, 'Find class from test line.')
+  call vunit#AssertEquals(col('.'), 1, 'Find class from test column.')
+
+  call cursor(12, 5)
+  JUnitFindTest
+  call vunit#AssertEquals(bufname('%'), 'src/org/eclim/test/junit/run/FooTest.java',
+    \ 'Find test method from class.')
+  call vunit#AssertEquals(line('.'), 16, 'Find test method from class line.')
+  call vunit#AssertEquals(col('.'), 3, 'Find test method from class column.')
+
+  JUnitFindTest
+  call vunit#AssertEquals(bufname('%'), 'src/org/eclim/test/junit/run/Foo.java',
+    \ 'Find class method from test.')
+  call vunit#AssertEquals(line('.'), 10, 'Find class method from test line.')
+  call vunit#AssertEquals(col('.'), 3, 'Find class method from test column.')
+endfunction " }}}
+
 function! TestJUnitImpl() " {{{
   edit! src/org/eclim/test/junit/SomeClassVUnitTest.java
   call vunit#PeekRedir()
@@ -58,6 +161,24 @@ function! TestJUnitImpl() " {{{
     \ 'testAMethod() not added.')
   call vunit#AssertTrue(search('@Test\_s\+public void equals()'),
     \ 'testEquals() not added.')
+endfunction " }}}
+
+function! TestCommandCompleteTest() " {{{
+  edit! src/org/eclim/test/junit/SomeClassVUnitTest.java
+  call vunit#PeekRedir()
+
+  let results = eclim#java#junit#CommandCompleteTest(
+    \ 'org.eclim.test.junit.run',
+    \ 'JUnit org.eclim.test.junit.run', 30)
+  call vunit#AssertEquals(results, [
+      \ 'org.eclim.test.junit.run.BarTest',
+      \ 'org.eclim.test.junit.run.FooTest',
+    \ ])
+
+  let results = eclim#java#junit#CommandCompleteTest('F', 'JUnit F', 7)
+  call vunit#AssertEquals(results, [
+      \ 'org.eclim.test.junit.run.FooTest',
+    \ ])
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

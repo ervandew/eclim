@@ -175,10 +175,12 @@ Java Commands
   interfaces.
 - :ref:`:JavaDelegate <:JavaDelegate>` -
   View list of methods that delegate to the field under the cursor.
+- :ref:`:JUnit <:JUnit>` [testcase] -
+  Allows you to execute junit test cases.
+- :ref:`:JUnitFindTest <:JUnitFindTest>` -
+  Attempts to find the corresponding test for the current source file.
 - :ref:`:JUnitImpl <:JUnitImpl>` -
   Similar to **:JavaImpl**, but creates test methods.
-- :ref:`:JUnitExecute <:JUnitExecute>` [testcase] -
-  Allows you to execute test cases in your favorite build tool.
 - :ref:`:JUnitResult <:JUnitResult>` [testcase] -
   Allows you to view the results of a test case.
 - :ref:`:JavaImport <:JavaImport>` - Import the class under the cursor.

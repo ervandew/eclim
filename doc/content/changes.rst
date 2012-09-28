@@ -41,6 +41,10 @@ Java:
     :ref:`org.eclim.java.checkstyle.onvalidate
     <org.eclim.java.checkstyle.onvalidate>`.
   - g:EclimJavaSrcValidate renamed to g:EclimJavaValidate.
+  - :JUnitExecute replaced with a new and improved :ref:`:JUnit <:JUnit>`
+    command.
+  - Added the command :ref:`:JUnitFindTest <:JUnitFindTest>` to open the
+    corresponding test for the current file.
 
 .. _1.7.9:
 

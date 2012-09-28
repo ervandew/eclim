@@ -61,6 +61,7 @@ public class Options
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
   public static final String HELP = "help";
+  public static final String HALT_OPTION = "h";
   public static final String INDENT_OPTION = "i";
   public static final String INDEXED_OPTION = "i";
   public static final String JARS_OPTION = "j";
@@ -89,6 +90,7 @@ public class Options
   public static final String SOURCE_OPTION = "s";
   public static final String SUPERTYPE_OPTION = "s";
   public static final String TEMPLATE_OPTION = "t";
+  public static final String TEST_OPTION = "t";
   public static final String TYPE_OPTION = "t";
   public static final String URL_OPTION = "u";
   public static final String VALIDATE_OPTION = "v";
