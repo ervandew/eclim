@@ -350,6 +350,7 @@ function! s:PreventCloseOnBufferDelete() " {{{
 
     " we found a hidden buffer, so open it
     if len(hiddenbuffers) > 0
+      let curbuf = hiddenbuffers[0]
       exec 'buffer ' . hiddenbuffers[0]
       doautocmd BufEnter
       doautocmd BufWinEnter
