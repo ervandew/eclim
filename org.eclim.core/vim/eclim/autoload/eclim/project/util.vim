@@ -956,7 +956,10 @@ endfunction " }}}
 
 " GetProject(path) {{{
 function! eclim#project#util#GetProject(path)
-  let path = substitute(fnamemodify(a:path, ':p'), '\', '/', 'g')
+  " if a [No Name] buffer, use the current working directory.
+  let path = a:path != '' ? a:path : getcwd()
+
+  let path = substitute(fnamemodify(path, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'
   if has('win32') || has('win64')
     let pattern .= '\c'
