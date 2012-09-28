@@ -927,8 +927,7 @@ Java:
     :ref:`maven's <classpath-maven>` and :ref:`mvn's <classpath-maven>` eclipse
     support.
   - Added TestNG to ant compiler's error format.
-  - Added :ref:`:JUnitExecute <:JUnitExecute>` and
-    :ref:`:JUnitResult <:JUnitResult>`.
+  - Added :JUnitExecute and :ref:`:JUnitResult <:JUnitResult>`.
 
 Xml:
   - Added :ref:`:DtdDefinition <:DtdDefinition>` and

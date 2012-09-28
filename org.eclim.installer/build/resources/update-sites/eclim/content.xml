@@ -158,6 +158,11 @@
             version="${eclim.version}"/>
       </artifacts>
       <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData>
+        <instructions>
+          <instruction key="zipped">true</instruction>
+        </instructions>
+      </touchpointData>
     </unit>
 
     <unit id="org.eclim.vimplugin" version="${eclim.version}">
@@ -231,6 +236,11 @@
             version="${eclim.version}"/>
       </artifacts>
       <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData>
+        <instructions>
+          <instruction key="zipped">true</instruction>
+        </instructions>
+      </touchpointData>
     </unit>
     #end
   #end

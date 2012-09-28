@@ -35,27 +35,20 @@
   let s:import_pattern = '^\s*import\_s\+<import>\_s*;'
 " }}}
 
-" FileExists(name) {{{
-" Determines if the src dir relative file exists.
-function! eclim#java#util#FileExists(name)
+function! eclim#java#util#FileExists(name) " {{{
   let command = substitute(s:command_src_exists, '<file>', a:name, '')
   let result = eclim#ExecuteEclim(command)
   return result =~ '^true$'
 endfunction " }}}
 
-" GetClassname(...) {{{
-" Gets the classname of the current file.
-" Optional file argument may be supplied.
-function! eclim#java#util#GetClassname(...)
+function! eclim#java#util#GetClassname(...) " {{{
   if a:0 > 0
     return fnamemodify(a:1, ":t:r")
   endif
   return expand("%:t:r")
 endfunction " }}}
 
-" GetClassDeclarationPosition(movecursor) {{{
-" Gets the line number of the current file's class declaration.
-function! eclim#java#util#GetClassDeclarationPosition(movecursor)
+function! eclim#java#util#GetClassDeclarationPosition(movecursor) " {{{
   let pos = getpos('.')
   call cursor(1,1)
 
@@ -68,20 +61,14 @@ function! eclim#java#util#GetClassDeclarationPosition(movecursor)
   return position
 endfunction " }}}
 
-" GetFullyQualifiedClassname(...) {{{
-" Gets the fully qualified classname of the current file.
-" Optional file argument may be supplied.
-function! eclim#java#util#GetFullyQualifiedClassname(...)
+function! eclim#java#util#GetFullyQualifiedClassname(...) " {{{
   if a:0 > 0
     return eclim#java#util#GetPackage(a:1) . '.' . eclim#java#util#GetClassname(a:1)
   endif
   return eclim#java#util#GetPackage() . '.' . eclim#java#util#GetClassname()
 endfunction " }}}
 
-" GetPackage(...) {{{
-" Gets the package of the current src file, or of the optionally supplied file
-" argument.
-function! eclim#java#util#GetPackage(...)
+function! eclim#java#util#GetPackage(...) " {{{
   if a:0 > 0
     let winreset = winrestcmd()
     silent exec "sview " . a:1
@@ -111,10 +98,7 @@ function! eclim#java#util#GetPackage(...)
   return package
 endfunction " }}}
 
-" GetPackageFromImport(class) {{{
-" Attempt to determine a class' package from the current file's import
-" statements.
-function! eclim#java#util#GetPackageFromImport(class)
+function! eclim#java#util#GetPackageFromImport(class) " {{{
   let pattern = '^\s*import\s\+\([0-9A-Za-z._]*\)\.' . a:class . '\s*;'
   let found = search(pattern, 'wn')
   if found
@@ -123,9 +107,7 @@ function! eclim#java#util#GetPackageFromImport(class)
   return ""
 endfunction " }}}
 
-" GetSelectedFields(first, last) {{{
-" Gets list of selected fields.
-function! eclim#java#util#GetSelectedFields(first, last) range
+function! eclim#java#util#GetSelectedFields(first, last) range " {{{
   " normalize each field statement into a single line.
   let selection = ''
   let index = a:first
@@ -177,16 +159,11 @@ function! eclim#java#util#GetSelectedFields(first, last) range
   return properties
 endfunction " }}}
 
-" IsKeyword(word) {{{
-" Determines if the supplied word is a java keyword.
-function! eclim#java#util#IsKeyword(word)
+function! eclim#java#util#IsKeyword(word) " {{{
   return (a:word =~ '^' . s:keywords . '$\C')
 endfunction " }}}
 
-" IsImported(classname) {{{
-" Determines if the supplied fully qualified classname is imported by the
-" current java source file.
-function! eclim#java#util#IsImported(classname)
+function! eclim#java#util#IsImported(classname) " {{{
   " search for fully qualified import
   let import_search = s:import_pattern
   let import_search = substitute(import_search, '<import>', a:classname, '')
@@ -213,18 +190,14 @@ function! eclim#java#util#IsImported(classname)
   return 0
 endfunction " }}}
 
-" IsValidIdentifier(word) {{{
-" Determines if the supplied word is a valid java identifier.
-function! eclim#java#util#IsValidIdentifier(word)
+function! eclim#java#util#IsValidIdentifier(word) " {{{
   if a:word == '' || a:word =~ '\W' || eclim#java#util#IsKeyword(a:word)
     return 0
   endif
   return 1
 endfunction " }}}
 
-" Javac(bang) {{{
-" Run javac.
-function! eclim#java#util#Javac(bang)
+function! eclim#java#util#Javac(bang) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -242,9 +215,7 @@ function! eclim#java#util#Javac(bang)
   endtry
 endfunction " }}}
 
-" Java(classname, [args]) {{{
-" Run a projects main class.
-function! eclim#java#util#Java(classname, args)
+function! eclim#java#util#Java(classname, args) " {{{
   let project = eclim#project#util#GetCurrentProjectName()
   if project == '' && exists('b:project')
     let project = b:project
@@ -269,10 +240,7 @@ function! eclim#java#util#Java(classname, args)
     endif
   endif
 
-  let command = '!'
-  let command .= eclim#client#nailgun#GetEclimCommand()
-  let command .= ' --nailgun-port ' . port
-  let command .= ' -command java -p "' . project . '"'
+  let command = '-command java -p "' . project . '"'
   if classname != ''
     let command .= ' -c ' . classname
   endif
@@ -285,12 +253,8 @@ function! eclim#java#util#Java(classname, args)
     endfor
   endif
 
-  if has('win32') || has('win64') || has('win32unix')
-    " add trailing quote for windows like we do in eclim#client#nailgun#Execute
-    let command = command . ' "'
-  endif
-
-  let results = split(eclim#util#Exec(command, 1), "\n")
+  let result = eclim#ExecuteEclim(command, port, {'exec': 1, 'raw': 1})
+  let results = split(result, "\n")
   call eclim#util#TempWindow('[Java Output]', results)
   let b:project = project
 
@@ -299,8 +263,7 @@ function! eclim#java#util#Java(classname, args)
   endif
 endfunction " }}}
 
-" Classpath(...) {{{
-function! eclim#java#util#Classpath(...)
+function! eclim#java#util#Classpath(...) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -321,9 +284,7 @@ function! eclim#java#util#Classpath(...)
   call eclim#util#Echo(result)
 endfunction " }}}
 
-" ListInstalls() {{{
-" Lists all installed jdks/jres.
-function! eclim#java#util#ListInstalls()
+function! eclim#java#util#ListInstalls() " {{{
   let installs = eclim#ExecuteEclim(s:command_list_installs)
   if type(installs) != g:LIST_TYPE
     return
@@ -357,10 +318,7 @@ function! eclim#java#util#ListInstalls()
   call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
-" ReadClassPrototype() {{{
-" Function for BufReadCmd autocmd which generates a prototype for a class
-" file.
-function! eclim#java#util#ReadClassPrototype()
+function! eclim#java#util#ReadClassPrototype() " {{{
   let file = substitute(expand('%:p'), '\', '/', 'g')
   let command = s:command_read_class
   let command = substitute(command, '<class>', expand('%:t:r'), '')
@@ -386,9 +344,7 @@ function! eclim#java#util#ReadClassPrototype()
   endif
 endfunction " }}}
 
-" CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for project names.
-function! eclim#java#util#CommandCompleteProject(argLead, cmdLine, cursorPos)
+function! eclim#java#util#CommandCompleteProject(argLead, cmdLine, cursorPos) " {{{
   return eclim#project#util#CommandCompleteProjectByNature(
     \ a:argLead, a:cmdLine, a:cursorPos, 'java')
 endfunction " }}}

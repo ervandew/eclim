@@ -35,6 +35,7 @@ import static org.junit.Assert.assertNotNull;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * Utility class to executing eclim commands and returning the results.
@@ -169,7 +170,14 @@ public class Eclim
     if (result.equals(StringUtils.EMPTY)){
       result = "\"\"";
     }
-    return toType(JSON_PARSER.parse(result));
+    try{
+      return toType(JSON_PARSER.parse(result));
+    }catch(JsonSyntaxException jse){
+      if(!failOnError){
+        return result;
+      }
+      throw jse;
+    }
   }
 
   public static Object toType(JsonElement json)

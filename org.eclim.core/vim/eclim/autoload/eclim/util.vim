@@ -656,17 +656,6 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     set shellpipe=>\ %s\ 2<&1
   endif
 
-  if a:compiler =~ 'ant\|maven\|mvn'
-    runtime autoload/eclim/java/test.vim
-    if exists('*eclim#java#test#ResolveQuickfixResults')
-      augroup eclim_make_java_test
-        autocmd!
-        autocmd QuickFixCmdPost make
-          \ call eclim#java#test#ResolveQuickfixResults(['junit', 'testng'])
-      augroup END
-    endif
-  endif
-
   try
     unlet! g:current_compiler b:current_compiler
     exec 'compiler ' . a:compiler
@@ -718,8 +707,6 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
       exec 'lcd ' . escape(w:quickfix_dir, ' ')
       unlet w:quickfix_dir
     endif
-
-    silent! autocmd! eclim_make_java_test
   endtry
 endfunction " }}}
 

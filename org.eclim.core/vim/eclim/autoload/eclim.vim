@@ -46,9 +46,14 @@
   let g:eclimd_running = 1
 " }}}
 
-" ExecuteEclim(command, [port]) {{{
-" Executes the supplied eclim command.
-function! eclim#ExecuteEclim(command, ...)
+function! eclim#ExecuteEclim(command, ...) " {{{
+  " Optional args:
+  "   port: the nailgun port to use.
+  "   options {
+  "     exec: 1 to execute the command using execute instead of system.
+  "     raw: 1 to get the result without evaluating as json
+  "   }
+
   if exists('g:EclimDisabled')
     return
   endif
@@ -74,7 +79,9 @@ function! eclim#ExecuteEclim(command, ...)
 
   " execute the command.
   let port = len(a:000) > 0 ? a:000[0] : eclim#client#nailgun#GetNgPort()
-  let [retcode, result] = eclim#client#nailgun#Execute(port, command)
+  let options = len(a:000) > 1 ? a:000[1] : {}
+  let exec = get(options, 'exec', 0)
+  let [retcode, result] = eclim#client#nailgun#Execute(port, command, exec)
   let result = substitute(result, '\n$', '', '')
 
   " not sure this is the best place to handle this, but when using the python
@@ -127,35 +134,32 @@ function! eclim#ExecuteEclim(command, ...)
     return
   endif
 
-  return result != '' ? eval(result) : result
+  let raw = get(options, 'raw', 0)
+  return result != '' && !raw ? eval(result) : result
 endfunction " }}}
 
-" Disable() {{{
-" Temporarily disables communication with eclimd.
-function! eclim#Disable()
+function! eclim#Disable() " {{{
   if !exists('g:EclimDisabled')
     let g:EclimDisabled = 1
   endif
 endfunction " }}}
 
-" Enable() {{{
-" Re-enables communication with eclimd.
-function! eclim#Enable()
+function! eclim#Enable() " {{{
   if exists('g:EclimDisabled')
     unlet g:EclimDisabled
   endif
 endfunction " }}}
 
-" EclimAvailable() {{{
-function! eclim#EclimAvailable()
+function! eclim#EclimAvailable() " {{{
   let instances = eclim#UserHome() . '/.eclim/.eclimd_instances'
   return filereadable(instances)
 endfunction " }}}
 
-" PingEclim(echo, [workspace]) {{{
-" Pings the eclimd server.
-" If echo is non 0, then the result is echoed to the user.
-function! eclim#PingEclim(echo, ...)
+function! eclim#PingEclim(echo, ...) " {{{
+  " If echo is non 0, then the result is echoed to the user.
+  " Optional args:
+  "   workspace
+
   let workspace_found = 1
   if len(a:000) > 0 && a:1 != ''
     let workspace = substitute(a:1, '\', '/', 'g')
@@ -200,8 +204,7 @@ function! eclim#PingEclim(echo, ...)
   endif
 endfunction " }}}
 
-" ParseSettingErrors() {{{
-function! eclim#ParseSettingErrors(errors)
+function! eclim#ParseSettingErrors(errors) " {{{
   let errors = []
   for error in a:errors
     let setting = substitute(error, '^\(.\{-}\): .*', '\1', '')
@@ -217,8 +220,10 @@ function! eclim#ParseSettingErrors(errors)
   return errors
 endfunction " }}}
 
-" SaveSettings(command, project, [port]) {{{
-function! eclim#SaveSettings(command, project, ...)
+function! eclim#SaveSettings(command, project, ...) " {{{
+  " Optional args:
+  "   port
+
   " don't check modified since undo seems to not set the modified flag
   "if &modified
     let tempfile = substitute(tempname(), '\', '/', 'g')
@@ -273,9 +278,7 @@ function! eclim#SaveSettings(command, project, ...)
   "endif
 endfunction " }}}
 
-" Settings(workspace) {{{
-" Opens a window that can be used to edit the global settings.
-function! eclim#Settings(workspace)
+function! eclim#Settings(workspace) " {{{
   let workspace = a:workspace
   if workspace == ''
     let workspace = eclim#eclipse#ChooseWorkspace()
@@ -324,9 +327,7 @@ function! eclim#Settings(workspace)
   augroup END
 endfunction " }}}
 
-" ShutdownEclim() {{{
-" Shuts down the eclimd server.
-function! eclim#ShutdownEclim()
+function! eclim#ShutdownEclim() " {{{
   let workspace = eclim#eclipse#ChooseWorkspace()
   if workspace != '0'
     let port = eclim#client#nailgun#GetNgPort()
@@ -334,8 +335,7 @@ function! eclim#ShutdownEclim()
   endif
 endfunction " }}}
 
-" UserHome() {{{
-function! eclim#UserHome()
+function! eclim#UserHome() " {{{
   let home = expand('$HOME')
   if has('win32unix')
     let home = eclim#cygwin#WindowsHome()
