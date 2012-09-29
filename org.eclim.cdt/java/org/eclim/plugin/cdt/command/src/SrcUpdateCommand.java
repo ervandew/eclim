@@ -17,6 +17,8 @@
 package org.eclim.plugin.cdt.command.src;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclim.annotation.Command;
@@ -35,21 +37,12 @@ import org.eclim.util.CollectionUtils;
 
 import org.eclim.util.file.FileOffsets;
 
+import org.eclipse.cdt.codan.core.model.CheckerLaunchMode;
+import org.eclipse.cdt.codan.internal.core.CodanRunner;
+
 import org.eclipse.cdt.core.CCorePlugin;
 
-import org.eclipse.cdt.core.dom.ast.ASTVisitor;
-import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
-import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
-import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroExpansion;
-import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.IProblemBinding;
-
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexManager;
@@ -63,7 +56,9 @@ import org.eclipse.cdt.core.parser.IProblem;
 
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -89,10 +84,7 @@ public class SrcUpdateCommand
     ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT |
     ITranslationUnit.AST_SKIP_INDEXED_HEADERS;
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -124,6 +116,35 @@ public class SrcUpdateCommand
               problem.isWarning()));
         }
 
+        IMarker[] markers = getMarkers(src);
+        for(IMarker marker : markers){
+          int[] lineColumn = offsets.offsetToLineColumn(
+              ((Integer)marker.getAttribute(IMarker.CHAR_START)).intValue());
+          int severity = ((Integer)
+              marker.getAttribute(IMarker.SEVERITY)).intValue();
+          errors.add(new Error(
+              (String)marker.getAttribute(IMarker.MESSAGE),
+              filename,
+              lineColumn[0],
+              lineColumn[1],
+              severity != IMarker.SEVERITY_ERROR));
+        }
+
+        Collections.sort(errors, new Comparator<Error>(){
+          public int compare(Error e1, Error e2){
+            if (e1.getLine() != e2.getLine()){
+              return e1.getLine() - e2.getLine();
+            }
+            if (e1.getColumn() != e2.getColumn()){
+              return e1.getColumn() - e2.getColumn();
+            }
+            return 0;
+          }
+          public boolean equals(Object obj){
+            return false;
+          }
+        });
+
         if(commandLine.hasOption(Options.BUILD_OPTION)){
           project.build(
               IncrementalProjectBuilder.INCREMENTAL_BUILD,
@@ -135,7 +156,7 @@ public class SrcUpdateCommand
     return null;
   }
 
-  private List<IProblem> getProblems(ITranslationUnit tu)
+  private List<IProblem> getProblems(ITranslationUnit src)
     throws Exception
   {
     IIndex index = null;
@@ -144,13 +165,10 @@ public class SrcUpdateCommand
       index = CCorePlugin.getIndexManager().getIndex(projects);
       index.acquireReadLock();
 
-      IASTTranslationUnit ast = tu.getAST(index, AST_STYLE);
+      IASTTranslationUnit ast = src.getAST(index, AST_STYLE);
       ArrayList<IProblem> problems = new ArrayList<IProblem>();
       CollectionUtils.addAll(problems, ast.getPreprocessorProblems());
       CollectionUtils.addAll(problems, CPPVisitor.getProblems(ast));
-
-      ProblemCollector collector = new ProblemCollector(problems);
-      ast.accept(collector);
 
       return problems;
     } finally {
@@ -160,175 +178,13 @@ public class SrcUpdateCommand
     }
   }
 
-  private class SemanticProblem
-    implements IProblem
+  private IMarker[] getMarkers(ITranslationUnit src)
+    throws Exception
   {
-    private IASTNode node;
-    private IProblemBinding binding;
-
-    public SemanticProblem(IASTNode node, IProblemBinding binding)
-    {
-      this.node = node;
-      this.binding = binding;
-    }
-
-    public int getID()
-    {
-      return binding.getID();
-    }
-
-    public String getMessage()
-    {
-      return binding.getMessage();
-    }
-
-    public String getMessageWithLocation()
-    {
-      return null;
-    }
-
-    public String[] getArguments()
-    {
-      return null;
-    }
-
-    public char[] getOriginatingFileName()
-    {
-      return null;
-    }
-
-    public int getSourceStart()
-    {
-      return node.getFileLocation().getNodeOffset();
-    }
-
-    public int getSourceEnd()
-    {
-      return getSourceStart() + node.getFileLocation().getNodeLength();
-    }
-
-    public int getSourceLineNumber()
-    {
-      return binding.getLineNumber();
-    }
-
-    public boolean isError()
-    {
-      return true;
-    }
-
-    public boolean isWarning()
-    {
-      return !isError();
-    }
-
-    public boolean checkCategory(int cat)
-    {
-      return false;
-    }
-  }
-
-  private class ProblemCollector
-      extends ASTVisitor
-  {
-    private List<IProblem> problems;
-
-    public ProblemCollector(List<IProblem> problems)
-    {
-      this.problems = problems;
-
-      shouldVisitTranslationUnit= true;
-      shouldVisitNames= true;
-      shouldVisitDeclarations= true;
-      shouldVisitExpressions= true;
-      shouldVisitStatements= true;
-      shouldVisitDeclarators= true;
-      shouldVisitNamespaces= true;
-      shouldVisitImplicitNames = true;
-      shouldVisitImplicitNameAlternates = true;
-    }
-
-    @Override
-    public int visit(IASTTranslationUnit tu)
-    {
-      // visit macro definitions
-      for (IASTPreprocessorMacroDefinition macroDef : tu.getMacroDefinitions()) {
-        if (macroDef.isPartOfTranslationUnitFile()) {
-          visitNode(macroDef.getName());
-        }
-      }
-
-      // visit macro expansions
-      for (IASTPreprocessorMacroExpansion macroExp : tu.getMacroExpansions()) {
-        if (macroExp.isPartOfTranslationUnitFile()) {
-          IASTName macroRef= macroExp.getMacroReference();
-          visitNode(macroRef);
-          IASTName[] nestedMacroRefs= macroExp.getNestedMacroReferences();
-          for (IASTName nestedMacroRef : nestedMacroRefs) {
-            visitNode(nestedMacroRef);
-          }
-        }
-      }
-
-      // visit ordinary code
-      return super.visit(tu);
-    }
-
-    @Override
-    public int visit(IASTDeclaration declaration)
-    {
-      if (!declaration.isPartOfTranslationUnitFile()) {
-        return PROCESS_SKIP;
-      }
-      return PROCESS_CONTINUE;
-    }
-
-    @Override
-    public int leave(IASTDeclaration declaration)
-    {
-      return PROCESS_CONTINUE;
-    }
-
-    @Override
-    public int visit(ICPPASTNamespaceDefinition namespace)
-    {
-      if (!namespace.isPartOfTranslationUnitFile()) {
-        return PROCESS_SKIP;
-      }
-      return PROCESS_CONTINUE;
-    }
-
-    @Override
-    public int visit(IASTDeclarator declarator)
-    {
-      return PROCESS_CONTINUE;
-    }
-
-    @Override
-    public int visit(IASTStatement statement)
-    {
-      return PROCESS_CONTINUE;
-    }
-
-    @Override
-    public int visit(IASTName name)
-    {
-      if (visitNode(name)) {
-        return PROCESS_SKIP;
-      }
-      return PROCESS_CONTINUE;
-    }
-
-    private boolean visitNode(IASTNode node)
-    {
-      if (node instanceof IASTName){
-        IBinding binding = ((IASTName)node).resolveBinding();
-        if (binding instanceof IProblemBinding){
-          node.getFileLocation().getNodeOffset();
-          problems.add(new SemanticProblem(node, (IProblemBinding)binding));
-        }
-      }
-      return false;
-    }
+    // run cdt checkers for non syntactic problems.
+    IResource resource = src.getResource();
+    CodanRunner.processResource(
+        resource, CheckerLaunchMode.RUN_ON_DEMAND, new NullProgressMonitor());
+    return resource.findMarkers(null, true, IResource.DEPTH_ZERO);
   }
 }

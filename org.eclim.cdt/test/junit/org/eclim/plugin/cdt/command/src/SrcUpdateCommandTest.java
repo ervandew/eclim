@@ -82,14 +82,14 @@ public class SrcUpdateCommandTest
 
     Map<String,Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
-    assertEquals(error.get("message"), "Invalid redeclaration of the name arg");
+    assertEquals(error.get("message"), "Invalid redeclaration of 'arg'");
     assertEquals(error.get("line"), 3);
     assertEquals(error.get("column"), 7);
     assertEquals(error.get("warning"), false);
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
-    assertEquals(error.get("message"), "Attempt to use symbol failed: foo");
+    assertEquals(error.get("message"), "Function 'foo' could not be resolved");
     assertEquals(error.get("line"), 4);
     assertEquals(error.get("column"), 3);
     assertEquals(error.get("warning"), false);

@@ -59,12 +59,12 @@ function! TestUpdateCPPSrcFile() " {{{
   call vunit#AssertEquals(results[0].lnum, 3, 'Wrong lnum.')
   call vunit#AssertEquals(results[0].col, 7, 'Wrong lnum.')
   call vunit#AssertEquals(
-    \ results[0].text, 'Invalid redeclaration of the name arg', 'Wrong error msg.')
+    \ results[0].text, "Invalid redeclaration of 'arg'", 'Wrong error msg.')
 
   call vunit#AssertEquals(results[1].lnum, 4, 'Wrong lnum.')
   call vunit#AssertEquals(results[1].col, 3, 'Wrong lnum.')
   call vunit#AssertEquals(
-    \ results[1].text, 'Attempt to use symbol failed: foo', 'Wrong error msg.')
+    \ results[1].text, "Function 'foo' could not be resolved", 'Wrong error msg.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
