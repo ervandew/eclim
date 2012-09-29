@@ -137,7 +137,7 @@ function! TestCodeCompleteLinkedResource() " {{{
   let results = eclim#java#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
   call vunit#AssertTrue(len(results) > 10, 'Not enough results (full complete).')
-  call vunit#AssertTrue(len(results) < 50, 'Too many results (full complete).')
+  call vunit#AssertTrue(len(results) < 60, 'Too many results (full complete).')
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
     \ 'Results does not contain add()')
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
