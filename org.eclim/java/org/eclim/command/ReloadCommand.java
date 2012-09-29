@@ -49,7 +49,7 @@ public class ReloadCommand
 
     ArrayList<Bundle> bundles = new ArrayList<Bundle>();
     bundles.add(Platform.getBundle("org.eclim.core"));
-    framework.refreshBundles(bundles);
+    framework.resolveBundles(bundles);
 
     return Services.getMessage("plugins.reloaded");
   }
