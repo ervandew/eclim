@@ -23,6 +23,7 @@ import org.eclim.Services;
 import org.eclipse.core.runtime.Platform;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkListener;
 
 import org.osgi.framework.wiring.FrameworkWiring;
 
@@ -49,7 +50,7 @@ public class ReloadCommand
 
     ArrayList<Bundle> bundles = new ArrayList<Bundle>();
     bundles.add(Platform.getBundle("org.eclim.core"));
-    framework.refreshBundles(bundles);
+    framework.refreshBundles(bundles, new FrameworkListener[0]);
 
     return Services.getMessage("plugins.reloaded");
   }
