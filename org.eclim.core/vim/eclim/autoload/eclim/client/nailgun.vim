@@ -1,8 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
@@ -64,14 +62,6 @@ function! eclim#client#nailgun#Execute(port, command, ...) " {{{
     let eclim = '!' . eclim
   endif
 
-  " for windows/cygwin, need to add a trailing quote to complete the command.
-  if has('win32') || has('win64') || has('win32unix')
-    " for some reason, in cywin, if two double quotes are next to each other,
-    " then the preceding arg isn't quoted correctly, so add a space to prevent
-    " this.
-    let eclim = eclim . ' "'
-  endif
-
   let result = eclim#util#System(eclim, exec, exec)
   return [v:shell_error, result]
 endfunction " }}}
@@ -91,23 +81,10 @@ function! eclim#client#nailgun#GetEclimCommand() " {{{
       return
     endif
 
-    " jump through the windows hoops
-    if has('win32') || has('win64') || has('win32unix')
-      if has("win32unix")
-        let g:EclimPath = eclim#cygwin#WindowsPath(g:EclimPath, 1)
-      endif
-
-      " on windows, the command must be executed on the drive where eclipse is
-      " installed.
-      let drive = substitute(g:EclimPath, '^\([a-zA-Z]:\).*', '\1', '')
-      let g:EclimPath = '" ' . drive . ' && "' . g:EclimPath . '"'
-
+    if has('win32unix')
       " in cygwin, we must use 'cmd /c' to prevent issues with eclim script +
       " some arg containing spaces causing a failure to invoke the script.
-      if has('win32unix')
-        let g:EclimPath = 'cmd /c ' . g:EclimPath
-      endif
-
+      let g:EclimPath = 'cmd /c "' . eclim#cygwin#WindowsPath(g:EclimPath, 1) . '"'
     else
       let g:EclimPath = '"' . g:EclimPath . '"'
     endif
@@ -133,15 +110,7 @@ function! eclim#client#nailgun#GetNgCommand() " {{{
       return
     endif
 
-    " on windows, the command must be executed on the drive where eclipse is
-    " installed.
-    "if has("win32") || has("win64")
-    "  let g:EclimNgPath =
-    "    \ '"' . substitute(g:EclimNgPath, '^\([a-zA-Z]:\).*', '\1', '') .
-    "    \ ' && "' . g:EclimNgPath . '"'
-    "else
-      let g:EclimNgPath = '"' . g:EclimNgPath . '"'
-    "endif
+    let g:EclimNgPath = '"' . g:EclimNgPath . '"'
   endif
   return g:EclimNgPath
 endfunction " }}}

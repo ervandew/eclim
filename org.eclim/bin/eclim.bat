@@ -1,6 +1,6 @@
 @echo off
 
-rem Copyright (C) 2005 - 2009  Eric Van Dewoestine
+rem Copyright (C) 2005 - 2012  Eric Van Dewoestine
 rem
 rem This program is free software: you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@ rem
 rem You should have received a copy of the GNU General Public License
 rem along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-set CUR_PATH=%~p0
+set CUR_PATH=%~dp0
 set JAVA_CMD="%CUR_PATH%\ng" --nailgun-port 9091
 
 %JAVA_CMD% org.eclim.command.Main %* 2>&1

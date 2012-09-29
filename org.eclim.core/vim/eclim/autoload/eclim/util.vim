@@ -1,12 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Utility functions.
-"
-"   This plugin contains shared functions that can be used regardless of the
-"   current file type being edited.
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
@@ -1284,11 +1278,12 @@ function! eclim#util#System(cmd, ...)
         let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
         if has('win32') || has('win64') || has('win32unix')
           let cmd = substitute(cmd, '^!', '', '')
-          let cmd = substitute(cmd, '^"\(.*\)"$', '\1', '')
-          if executable('tee')
+          if (executable('tee') || executable('wtee')) && !has('win32unix')
+            let tee = executable('wtee') ? 'wtee' : 'tee'
             let teefile = has('win32unix') ? eclim#cygwin#CygwinPath(outfile) : outfile
-            let cmd = '!cmd /c "' . cmd . ' 2>&1 | tee "' . teefile . '" "'
+            let cmd = '!cmd /c "' . cmd . ' 2>&1 | ' . tee . ' "' . teefile . '" "'
           else
+            let outfile = has('win32unix') ? eclim#cygwin#WindowsPath(outfile) : outfile
             let cmd = '!cmd /c "' . cmd . ' >"' . outfile . '" 2>&1 "'
           endif
         else
@@ -1362,14 +1357,18 @@ function! eclim#util#TempWindow(name, lines, ...)
   let filename = expand('%:p')
   let winnr = winnr()
 
-  let name = eclim#util#EscapeBufferName(a:name)
+  let bufname = eclim#util#EscapeBufferName(a:name)
+  let name = escape(a:name, ' ')
+  if has('unix')
+    let name = escape(name, '[]')
+  endif
 
   let line = 1
   let col = 1
 
-  if bufwinnr(name) == -1
+  if bufwinnr(bufname) == -1
     let height = get(options, 'height', 10)
-    silent! noautocmd exec "botright " . height . "sview " . escape(a:name, ' []')
+    silent! noautocmd exec "botright " . height . "sview " . name
     setlocal nowrap
     setlocal winfixheight
     setlocal noswapfile
@@ -1378,7 +1377,7 @@ function! eclim#util#TempWindow(name, lines, ...)
     setlocal bufhidden=delete
     silent doautocmd WinEnter
   else
-    let temp_winnr = bufwinnr(name)
+    let temp_winnr = bufwinnr(bufname)
     if temp_winnr != winnr()
       exec temp_winnr . 'winc w'
       silent doautocmd WinEnter
