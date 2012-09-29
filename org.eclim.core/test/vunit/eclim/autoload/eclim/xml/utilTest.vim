@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,9 +22,11 @@
 "
 " }}}
 
-" TestGetDtd() {{{
-function! TestGetDtd()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
+endfunction " }}}
+
+function! TestGetDtd() " {{{
   edit! xml/test_nodtd.xml
   call vunit#PeekRedir()
   call vunit#AssertEquals('', eclim#xml#util#GetDtd())
@@ -36,24 +38,19 @@ function! TestGetDtd()
     \ eclim#xml#util#GetDtd())
 endfunction " }}}
 
-" TestGetXsd() {{{
-function! TestGetXsd()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
+function! TestGetXsd() " {{{
   edit! xml/spring_test.xml
   call vunit#PeekRedir()
   call vunit#AssertEquals('', eclim#xml#util#GetXsd())
 
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
-  edit! pom.xml
+  edit! xml/pom.xml
   call vunit#PeekRedir()
   call vunit#AssertEquals(
     \ 'http://maven.apache.org/maven-v4_0_0.xsd', eclim#xml#util#GetXsd())
 endfunction " }}}
 
-" TestGetElementName() {{{
-function! TestGetElementName()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
-  edit! pom.xml
+function! TestGetElementName() " {{{
+  edit! xml/pom.xml
   call vunit#PeekRedir()
 
   call cursor(6, 1)
@@ -75,10 +72,8 @@ function! TestGetElementName()
   call vunit#AssertEquals('', eclim#xml#util#GetElementName())
 endfunction " }}}
 
-" TestGetParentElementName() {{{
-function! TestGetParentElementName()
-  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
-  edit! pom.xml
+function! TestGetParentElementName() " {{{
+  edit! xml/pom.xml
   call vunit#PeekRedir()
 
   call cursor(6, 1)
