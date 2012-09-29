@@ -43,9 +43,9 @@ endif
   let s:eclim_tab_id = 0
 " }}}
 
-" Buffers(bang) {{{
-" Like, :buffers, but opens a temporary buffer.
-function! eclim#common#buffers#Buffers(bang)
+function! eclim#common#buffers#Buffers(bang) " {{{
+  " Like, :buffers, but opens a temporary buffer.
+
   let options = {'maxfilelength': 0}
   let buffers = eclim#common#buffers#GetBuffers(options)
 
@@ -56,9 +56,16 @@ function! eclim#common#buffers#Buffers(bang)
   let lines = []
   let filelength = options['maxfilelength']
   let tabnr = t:eclim_tab_id
+  let tabbuffers = tabpagebuflist()
   for buffer in buffers
     let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
     if a:bang != '' || eclim_tab_id == '' || eclim_tab_id == tabnr
+      " for buffers w/ out a tab id, don't show them in the list if they
+      " are active, but aren't open on the current tab.
+      if a:bang == '' && buffer.status =~ 'a' && index(tabbuffers, buffer.bufnr) == -1
+        continue
+      endif
+
       call add(lines, s:BufferEntryToLine(buffer, filelength))
     endif
   endfor
