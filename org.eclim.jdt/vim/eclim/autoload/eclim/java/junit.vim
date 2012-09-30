@@ -52,12 +52,12 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
   let command = substitute(command, '<project>', project, '')
   if a:test != ''
     if a:test == '%'
-      let command .= ' -f ' . eclim#project#util#GetProjectRelativeFilePath()
+      let command .= ' -f "' . eclim#project#util#GetProjectRelativeFilePath() . '"'
     elseif a:test != '*'
       let command .= ' -t "' . a:test . '"'
     endif
   else
-    let command .= ' -f ' . eclim#project#util#GetProjectRelativeFilePath()
+    let command .= ' -f "' . eclim#project#util#GetProjectRelativeFilePath() . '"'
     let command .= ' -o ' . eclim#util#GetOffset()
     let command .= ' -e ' . eclim#util#GetEncoding()
   endif
