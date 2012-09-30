@@ -53,6 +53,7 @@ public class Options
   public static final String DEBUG_OPTION = "d";
   public static final String DELIMETER_OPTION = "d";
   public static final String DEPENDS_OPTION = "d";
+  public static final String DEST_OPTION = "d";
   public static final String DIR_OPTION = "d";
   public static final String ENCODING_OPTION = "e";
   public static final String EXCLUDES_OPTION = "e";

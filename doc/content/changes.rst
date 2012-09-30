@@ -49,6 +49,8 @@ Java:
     typically make the :Javac call a no op, and in cases where you need to
     induce compilation, :ref:`:ProjectBuild <:ProjectBuild>` does so in a
     language agnostic way.
+  - Added :ref:`:JavaMove <:JavaMove>` command to move a java source file from
+    one package to another.
 
 .. _1.7.9:
 

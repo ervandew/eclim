@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Test case for refactor.vim
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,13 +19,34 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestRenameField() {{{
-function! TestRenameField()
+function! TestMove() " {{{
+  edit! src/org/eclim/test/refactoring/move/p1/TestMove.java
+  call vunit#PeekRedir()
+
+  let g:EclimTestPromptQueue = ['y']
+  JavaMove org.eclim.test.refactoring.move.p2
+
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call vunit#AssertEquals(name,
+    \ 'src/org/eclim/test/refactoring/move/p2/TestMove.java',
+    \ 'Move result file incorrect')
+  call vunit#AssertEquals(getline(1),
+    \ 'package org.eclim.test.refactoring.move.p2;', 'Move package incorrect')
+
+  RefactorUndo
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call vunit#AssertEquals(name,
+    \ 'src/org/eclim/test/refactoring/move/p1/TestMove.java',
+    \ 'Undo result file incorrect')
+  call vunit#AssertEquals(getline(1),
+    \ 'package org.eclim.test.refactoring.move.p1;', 'Undo package incorrect')
+endfunction " }}}
+
+function! TestRenameField() " {{{
   let g:EclimRefactorPromptDefault = 2 " preview
   edit! src/org/eclim/test/refactoring/rename/vn1/TestN1VUnit.java
   call vunit#PeekRedir()
@@ -103,8 +121,7 @@ function! TestRenameField()
     \ 'static field reference rename incorrect')
 endfunction " }}}
 
-" TestRenameMethod() {{{
-function! TestRenameMethod()
+function! TestRenameMethod() " {{{
   let g:EclimRefactorPromptDefault = 2 " preview
   edit! src/org/eclim/test/refactoring/rename/vn1/vn2/TestN2VUnit.java
   call vunit#PeekRedir()
@@ -169,8 +186,7 @@ function! TestRenameMethod()
     \ '  public void testRename()', 'method rename incorrect')
 endfunction " }}}
 
-" TestRenameType() {{{
-function! TestRenameType()
+function! TestRenameType() " {{{
   let g:EclimRefactorPromptDefault = 2 " preview
   edit! src/org/eclim/test/refactoring/rename/vn1/TestN1VUnit.java
   call vunit#PeekRedir()
@@ -241,8 +257,7 @@ function! TestRenameType()
     \ 'type reference rename incorrect')
 endfunction " }}}
 
-" TestRenamePackage() {{{
-function! TestRenamePackage()
+function! TestRenamePackage() " {{{
   let g:EclimRefactorPromptDefault = 2 " preview
   edit! src/org/eclim/test/refactoring/rename/vn1/vn2/TestN2VUnit.java
   call vunit#PeekRedir()

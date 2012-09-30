@@ -203,6 +203,10 @@ endif
 if !exists(":JavaRename")
   command -nargs=1 -buffer JavaRename :call eclim#java#refactor#Rename('<args>')
 endif
+if !exists(":JavaMove")
+  command -nargs=1 -buffer -complete=customlist,eclim#java#util#CommandCompletePackage
+    \ JavaMove :call eclim#java#refactor#Move('<args>')
+endif
 
 if !exists(":JavaLoggingInit")
   command -buffer JavaLoggingInit :call eclim#java#logging#LoggingInit()

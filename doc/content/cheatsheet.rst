@@ -200,6 +200,8 @@ Java Commands
   Adds or updates the comments for the element under the cursor.
 - :ref:`:JavaRename <:JavaRename>` [new_name] -
   Rename the element under the cursor.
+- :ref:`:JavaMove <:JavaMove>` [new_package] -
+  Move the current class/interface to another package.
 - :ref:`:Java <:Java>` -
   Executes the java using your project's main class.
 - :ref:`:JavaClasspath <:JavaClasspath>` [-d <delim>] -

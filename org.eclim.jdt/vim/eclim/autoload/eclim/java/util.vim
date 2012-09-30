@@ -31,6 +31,7 @@
   let s:command_list_installs = '-command java_list_installs'
   let s:command_classpath = '-command java_classpath -p "<project>"'
   let s:command_read_class = '-command java_class_prototype -c <class>'
+  let s:command_complete_package = '-command java_complete_package -p "<project>"'
 
   let s:import_pattern = '^\s*import\_s\+<import>\_s*;'
 " }}}
@@ -329,6 +330,24 @@ endfunction " }}}
 function! eclim#java#util#CommandCompleteProject(argLead, cmdLine, cursorPos) " {{{
   return eclim#project#util#CommandCompleteProjectByNature(
     \ a:argLead, a:cmdLine, a:cursorPos, 'java')
+endfunction " }}}
+
+function! eclim#java#util#CommandCompletePackage(argLead, cmdLine, cursorPos) " {{{
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  if project == ''
+    return []
+  endif
+
+  let command = s:command_complete_package
+  let command = substitute(command, '<project>', project, '')
+  if argLead != ''
+    let command .= ' -n ' . argLead
+  endif
+  let results = eclim#ExecuteEclim(command)
+  return type(results) == g:LIST_TYPE ? results : []
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
