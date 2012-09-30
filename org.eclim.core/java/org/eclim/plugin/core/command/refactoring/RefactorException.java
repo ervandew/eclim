@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.core.command.refactoring;
 
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+
 /**
  * Exception used to break out of a refactoring during initialization and return
  * a message.
@@ -26,6 +28,7 @@ public class RefactorException
   extends RuntimeException
 {
   private static final long serialVersionUID = 1L;
+  private RefactoringStatus status;
 
   /**
    * @see RuntimeException#RuntimeException()
@@ -41,5 +44,16 @@ public class RefactorException
   public RefactorException(String message)
   {
     super(message);
+  }
+
+  public RefactorException(RefactoringStatus status)
+  {
+    super();
+    this.status = status;
+  }
+
+  public RefactoringStatus getStatus()
+  {
+    return status;
   }
 }

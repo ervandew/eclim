@@ -74,7 +74,6 @@ public abstract class AbstractRefactorCommand
       }
     }
 
-    List<String> errors = new ArrayList<String>();
     try{
       NullProgressMonitor monitor = new NullProgressMonitor();
       Refactor refactor = createRefactoring(commandLine);
@@ -84,17 +83,7 @@ public abstract class AbstractRefactorCommand
           new SubProgressMonitor(monitor, 4));
       int stopSeverity = RefactoringCore.getConditionCheckingFailedSeverity();
       if (status.getSeverity() >= stopSeverity) {
-        for (RefactoringStatusEntry entry : status.getEntries()){
-          String message = entry.getMessage();
-          if (!errors.contains(message) &&
-              !message.startsWith("Found potential matches"))
-          {
-            errors.add(message);
-          }
-        }
-        HashMap<String,List<String>> result = new HashMap<String,List<String>>();
-        result.put("errors", errors);
-        return result;
+        throw new RefactorException(status);
       }
 
       Change change = refactoring.createChange(new SubProgressMonitor(monitor, 2));
@@ -161,7 +150,24 @@ public abstract class AbstractRefactorCommand
       }
     }catch(RefactorException re){
       HashMap<String,List<String>> result = new HashMap<String,List<String>>();
-      errors.add(re.getMessage());
+      List<String> errors = new ArrayList<String>();
+
+      if (re.getMessage() != null){
+        errors.add(re.getMessage());
+      }
+
+      RefactoringStatus status = re.getStatus();
+      if (status != null){
+        for (RefactoringStatusEntry entry : status.getEntries()){
+          String message = entry.getMessage();
+          if (!errors.contains(message) &&
+              !message.startsWith("Found potential matches"))
+          {
+            errors.add(message);
+          }
+        }
+      }
+
       result.put("errors", errors);
       return result;
     }
@@ -225,5 +231,4 @@ public abstract class AbstractRefactorCommand
     }
     return null;
   }
-
 }

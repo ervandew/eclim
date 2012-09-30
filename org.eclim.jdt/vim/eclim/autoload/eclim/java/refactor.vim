@@ -23,7 +23,7 @@
   let s:command_rename = '-command java_refactor_rename ' .
     \ '-p "<project>" -f "<file>" -o <offset> -e <encoding> -l <length> -n <name>'
   let s:command_move = '-command java_refactor_move ' .
-    \ '-p "<project>" -f "<file>" -d <package>'
+    \ '-p "<project>" -f "<file>" -n <package>'
 " }}}
 
 function! eclim#java#refactor#Rename(name) " {{{
@@ -92,7 +92,8 @@ function! eclim#java#refactor#Move(package) " {{{
   let name = eclim#java#util#GetClassname()
   let package = eclim#java#util#GetPackage()
   let prompt = printf('Move %s from "%s" to "%s"', name, package, a:package)
-  let result = eclim#util#PromptConfirm(prompt)
+  let result = exists('g:EclimRefactorPromptDefault') ?
+    \ g:EclimRefactorPromptDefault : eclim#lang#RefactorPrompt(prompt)
   if result <= 0
     return
   endif
@@ -107,6 +108,12 @@ function! eclim#java#refactor#Move(package) " {{{
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<package>', a:package, '')
+  " user chose preview at the prompt
+  if result == 2
+    let command .= ' -v'
+    call eclim#lang#RefactorPreview(command)
+    return
+  endif
   call eclim#lang#Refactor(command)
 endfunction " }}}
 

@@ -27,7 +27,7 @@ function! TestMove() " {{{
   edit! src/org/eclim/test/refactoring/move/p1/TestMove.java
   call vunit#PeekRedir()
 
-  let g:EclimTestPromptQueue = ['y']
+  let g:EclimRefactorPromptDefault = 1 " execute
   JavaMove org.eclim.test.refactoring.move.p2
 
   let name = substitute(expand('%'), '\', '/', 'g')

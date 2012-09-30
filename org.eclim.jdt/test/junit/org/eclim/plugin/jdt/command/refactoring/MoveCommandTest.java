@@ -46,7 +46,7 @@ public class MoveCommandTest
     Map<String,Object> result = (Map<String,Object>)
       Eclim.execute(new String[]{
         "java_refactor_move", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-d", "org.eclim.test.refactoring.move.p3"
+        "-f", TEST_FILE, "-n", "org.eclim.test.refactoring.move.p3"
       });
     assertTrue(result.containsKey("errors"));
     List<String> errors = (List<String>)result.get("errors");
@@ -58,12 +58,14 @@ public class MoveCommandTest
     List<Map<String,String>> results = (List<Map<String,String>>)
       Eclim.execute(new String[]{
         "java_refactor_move", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-d", "org.eclim.test.refactoring.move.p2"
+        "-f", TEST_FILE, "-n", "org.eclim.test.refactoring.move.p2"
       });
+    assertEquals(p + "src/org/eclim/test/refactoring/move/p1/UsesMove.java",
+        results.get(0).get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/move/p1/TestMove.java",
-        results.get(0).get("from"));
+        results.get(1).get("from"));
     assertEquals(p + "src/org/eclim/test/refactoring/move/p2/TestMove.java",
-        results.get(0).get("to"));
+        results.get(1).get("to"));
 
     results = (List<Map<String,String>>)
       Eclim.execute(new String[]{"refactor_undo"});
@@ -71,5 +73,7 @@ public class MoveCommandTest
         results.get(0).get("from"));
     assertEquals(p + "src/org/eclim/test/refactoring/move/p1/TestMove.java",
         results.get(0).get("to"));
+    assertEquals(p + "src/org/eclim/test/refactoring/move/p1/UsesMove.java",
+        results.get(1).get("file"));
   }
 }

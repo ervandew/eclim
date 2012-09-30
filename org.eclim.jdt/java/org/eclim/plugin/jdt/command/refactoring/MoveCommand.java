@@ -23,36 +23,38 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.eclipse.EclimPlugin;
+
 import org.eclim.plugin.core.command.refactoring.AbstractRefactorCommand;
 import org.eclim.plugin.core.command.refactoring.Refactor;
 import org.eclim.plugin.core.command.refactoring.RefactorException;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.resources.IResource;
 
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 
-import org.eclipse.jdt.internal.corext.refactoring.changes.CreatePackageChange;
-import org.eclipse.jdt.internal.corext.refactoring.changes.MoveCompilationUnitChange;
+import org.eclipse.jdt.internal.corext.refactoring.reorg.IReorgDestination;
+import org.eclipse.jdt.internal.corext.refactoring.reorg.IReorgPolicy.IMovePolicy;
+import org.eclipse.jdt.internal.corext.refactoring.reorg.JavaMoveProcessor;
+import org.eclipse.jdt.internal.corext.refactoring.reorg.ReorgDestinationFactory;
+import org.eclipse.jdt.internal.corext.refactoring.reorg.ReorgPolicyFactory;
 
 import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
-import org.eclipse.jdt.internal.corext.util.Messages;
 
-import org.eclipse.jdt.internal.ui.text.correction.CorrectionMessages;
+import org.eclipse.jdt.internal.ui.refactoring.reorg.CreateTargetQueries;
+import org.eclipse.jdt.internal.ui.refactoring.reorg.ReorgQueries;
 
-import org.eclipse.jdt.internal.ui.viewsupport.BasicElementLabels;
-
-import org.eclipse.jdt.ui.JavaElementLabels;
-
-import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+
+import org.eclipse.ltk.core.refactoring.participants.MoveRefactoring;
+
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * Command to move a compilation unit.
@@ -64,7 +66,9 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
-    "REQUIRED d dest ARG"
+    "REQUIRED n name ARG," +
+    "OPTIONAL v preview NOARG," +
+    "OPTIONAL d diff ARG"
 )
 public class MoveCommand
   extends AbstractRefactorCommand
@@ -75,7 +79,7 @@ public class MoveCommand
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
-    String packName = commandLine.getValue(Options.DEST_OPTION);
+    String packName = commandLine.getValue(Options.NAME_OPTION);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
     IPackageFragmentRoot root = JavaModelUtil.getPackageFragmentRoot(src);
@@ -88,66 +92,32 @@ public class MoveCommand
             src.getElementName()));
     }
 
-    String label;
-    if (pack.isDefaultPackage()) {
-      label = Messages.format(
-          CorrectionMessages
-            .ReorgCorrectionsSubProcessor_movecu_default_description,
-          BasicElementLabels.getFileName(src));
-    } else {
-      String packageLabel = JavaElementLabels
-        .getElementLabel(pack, JavaElementLabels.ALL_DEFAULT);
-      label = Messages.format(
-          CorrectionMessages
-            .ReorgCorrectionsSubProcessor_movecu_description,
-          new Object[] { BasicElementLabels.getFileName(src), packageLabel });
+    if(!pack.exists()){
+      pack = root.createPackageFragment(packName, true, null);
     }
 
-    CompositeChange composite = new CompositeChange(label);
-    composite.add(new CreatePackageChange(pack));
-    composite.add(new MoveCompilationUnitChange(src, pack));
+    IMovePolicy policy = ReorgPolicyFactory.createMovePolicy(
+        new IResource[0],
+        new IJavaElement[]{src});
 
-    return new Refactor(new MoveRefactoring(composite));
-  }
-
-  private class MoveRefactoring
-    extends Refactoring
-  {
-    private Change change;
-    private RefactoringStatus status;
-
-    public MoveRefactoring(Change change)
-    {
-      this.change = change;
-      this.status = new RefactoringStatus();
+    JavaMoveProcessor processor = new JavaMoveProcessor(policy);
+    IReorgDestination destination =
+      ReorgDestinationFactory.createDestination(pack);
+    RefactoringStatus status = processor.setDestination(destination);
+    if (status.hasError()){
+      throw new RefactorException(status);
     }
 
-    @Override
-    public String getName()
-    {
-      return change.getName();
-    }
+    Shell shell = EclimPlugin.getShell();
+    processor.setCreateTargetQueries(new CreateTargetQueries(shell));
+    processor.setReorgQueries(new ReorgQueries(shell));
 
-    @Override
-    public RefactoringStatus checkInitialConditions(IProgressMonitor pm)
-      throws CoreException,
-             OperationCanceledException
-    {
-      return status;
-    }
+    Refactoring refactoring = new MoveRefactoring(processor);
 
-    public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
-      throws CoreException,
-             OperationCanceledException
-    {
-      return status;
-    }
+    // create a more descriptive name than the default.
+    String desc = refactoring.getName() +
+      " (" + src.getElementName() + " -> " + pack.getElementName() + ')';
 
-    public Change createChange(IProgressMonitor pm)
-      throws CoreException,
-             OperationCanceledException
-    {
-      return change;
-    }
+    return new Refactor(desc, refactoring);
   }
 }
