@@ -213,6 +213,9 @@ function! eclim#java#junit#CommandCompleteTest(argLead, cmdLine, cursorPos) " {{
   if project == '' && exists('b:project')
     let project = b:project
   endif
+  if project == ''
+    return []
+  endif
 
   let command = s:command_tests
   let command = substitute(command, '<project>', project, '')

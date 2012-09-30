@@ -39,8 +39,8 @@ Refactor Undo/Redo
 In the event that you need to undo a refactoring, eclim provides the
 **:RefactorUndo** command. When executed, the last refactoring will be
 reverted. If you are unsure what the last refactoring was, the
-**:RefactorUndoPeek** command will the name of the top most refactoring on the
-undo stack.
+**:RefactorUndoPeek** command will print the name of the top most refactoring
+on the undo stack.
 
 Eclim also provides the **:RefactorRedo** and **:RefactorRedoPeek** commands
 which provide the redo counterpart to the undo commands.

@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/refactor.html
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
@@ -25,9 +22,11 @@
 " Script Varables {{{
   let s:command_rename = '-command java_refactor_rename ' .
     \ '-p "<project>" -f "<file>" -o <offset> -e <encoding> -l <length> -n <name>'
+  let s:command_move = '-command java_refactor_move ' .
+    \ '-p "<project>" -f "<file>" -d <package>'
 " }}}
 
-function eclim#java#refactor#Rename(name) " {{{
+function! eclim#java#refactor#Rename(name) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -76,6 +75,38 @@ function eclim#java#refactor#Rename(name) " {{{
     return
   endif
 
+  call eclim#lang#Refactor(command)
+endfunction " }}}
+
+function! eclim#java#refactor#Move(package) " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let line = getline('.')
+  let package_pattern = '^\s*package\s\+\(.*\%' . col('.') . 'c\w*\).*;'
+  if line =~ package_pattern
+    let element = substitute(line, package_pattern, '\1', '')
+  endif
+
+  let name = eclim#java#util#GetClassname()
+  let package = eclim#java#util#GetPackage()
+  let prompt = printf('Move %s from "%s" to "%s"', name, package, a:package)
+  let result = eclim#util#PromptConfirm(prompt)
+  if result <= 0
+    return
+  endif
+
+  " update the file before vim makes any changes.
+  call eclim#lang#SilentUpdate()
+  wall
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
+  let command = s:command_move
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let command = substitute(command, '<package>', a:package, '')
   call eclim#lang#Refactor(command)
 endfunction " }}}
 

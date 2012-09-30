@@ -119,6 +119,25 @@ package would be moved to the same level as 'org' and then renamed.
   you will have to do so manually.  A best practice would be to close any other
   vim sessions that might be affected by the renaming of a package.
 
+.. _\:JavaMove:
+
+Move
+----
+
+Eclim also supports moving a top level class or interface from one package to
+another using the **:JavaMove** command.
+
+In this example the current file would be moved from its current package to the
+package ``org.foo``:
+
+.. code-block:: vim
+
+  :JavaMove org.foo
+
+Like the package renaming described in the previous section, the argument to
+**:JavaMove** must be the full package name you want to move the current file
+to.
+
 .. include:: /vim/refactoring.rst
    :start-after: begin-refactor-undo-redo
    :end-before: end-refactor-undo-redo
