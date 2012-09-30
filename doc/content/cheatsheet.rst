@@ -202,8 +202,6 @@ Java Commands
   Rename the element under the cursor.
 - :ref:`:Java <:Java>` -
   Executes the java using your project's main class.
-- :ref:`:Javac <:Javac>` -
-  Executes the javac utility against all source files.
 - :ref:`:JavaClasspath <:JavaClasspath>` [-d <delim>] -
   Echos the project's classpath delimited by the system path separator or the
   supplied delimiter.

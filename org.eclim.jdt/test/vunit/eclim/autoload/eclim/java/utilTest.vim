@@ -101,23 +101,4 @@ function! TestIsImported() " {{{
     \ 'File imported.')
 endfunction " }}}
 
-function! TestJavac() " {{{
-  edit! src-javac/org/eclim/test/Test.java
-  call vunit#PeekRedir()
-
-  call delete(
-    \ g:TestEclimWorkspace .
-    \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class')
-
-  call vunit#AssertFalse(filereadable(
-    \ g:TestEclimWorkspace .
-    \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
-
-  Javac
-
-  call vunit#AssertTrue(filereadable(
-    \ g:TestEclimWorkspace .
-    \ 'eclim_unit_test_java/bin/org/eclim/test/Test.class'))
-endfunction " }}}
-
 " vim:ft=vim:fdm=marker

@@ -473,7 +473,7 @@ C/C++:
 
 Java:
   - Added command to run :ref:`java <:Java>`.
-  - Added command to run :ref:`javac <:Javac>`.
+  - Added command to run javac.
   - Added command to run :ref:`javadoc <:Javadoc>`.
 
 .. _1.4.5:

@@ -146,9 +146,6 @@ if !exists(":Javadoc")
     \ -complete=customlist,eclim#java#doc#CommandCompleteJavadoc
     \ Javadoc :call eclim#java#doc#Javadoc('<bang>', <q-args>)
 endif
-if !exists(":Javac")
-  command -buffer -bang Javac :call eclim#java#util#Javac('<bang>')
-endif
 if exists(":Java") != 2
   command -buffer -nargs=* Java :call eclim#java#util#Java('', <q-args>)
 endif

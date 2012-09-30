@@ -13,8 +13,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Java / Javac / Jps
-==================
+Java / Jps
+==========
 
 .. _\:Java:
 
@@ -49,38 +49,6 @@ Configuration
   Fully qualified name of the class containing the main method.
 - **org.eclim.java.run.jvmargs** -
   Json formatted list of default jvm args.
-
-.. _\:Javac:
-
-Javac
------
-
-To compile your project's source code, you may use the **:Javac** command,
-which will run javac on all source files found in your project's src
-directories as configured by your .classpath file.  You may use the
-:ref:`org.eclim.java.compile.sourcepath` setting described below, if you wish
-to alter which directories are used.  The resulting class files will be written
-to the output path as defined in your project's .classpath file.
-
-.. note::
-
-  Please note that this command is not intended to be a full replacement for
-  javac support provided by more comprehensive build tools like ant or maven.
-
-Configuration
-^^^^^^^^^^^^^
-
-:doc:`Eclim Settings </vim/settings>`
-
-.. _org.eclim.java.compile.sourcepath:
-
-- **org.eclim.java.compile.sourcepath** -
-  The project relative source paths to be compiled by javac.  This should be a
-  space separated list of project relative source directories which you want
-  javac to be executed against.  When unset, all your configured source
-  directories will be used.
-- **org.eclim.java.compile.args** -
-  Json formatted list of default javac args.
 
 .. _\:JavaClasspath:
 

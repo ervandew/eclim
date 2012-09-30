@@ -117,8 +117,6 @@ public class PluginResources
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
       "JDT org.eclim.java.checkstyle.onvalidate false (true|false)\n" +
-      "JDT org.eclim.java.compile.sourcepath\n" +
-      "JDT org.eclim.java.compile.args [] JSON[^-.*]\n" +
       "JDT org.eclim.java.run.mainclass none ^[a-zA-Z0-9_.]*$\n" +
       "JDT org.eclim.java.run.jvmargs [] JSON[^-.*]\n" +
       "JDT/Javadoc org.eclim.java.doc.version\n" +

@@ -45,6 +45,10 @@ Java:
     command.
   - Added the command :ref:`:JUnitFindTest <:JUnitFindTest>` to open the
     corresponding test for the current file.
+  - Removed :Javac command since eclipse's continuous incremental builds
+    typically make the :Javac call a no op, and in cases where you need to
+    induce compilation, :ref:`:ProjectBuild <:ProjectBuild>` does so in a
+    language agnostic way.
 
 .. _1.7.9:
 
@@ -202,7 +206,7 @@ C/C++:
 
 Java:
   - Added project settings for specifying default jvm args for
-    :ref:`:Java <:Java>` and default args for :ref:`:Javac <:Javac>`.
+    :ref:`:Java <:Java>` and default args for :Javac.
   - Code inserted by
     :ref:`:JavaConstructor <:JavaConstructor>`,
     :ref:`:JavaGetSet <:JavaGetSet>`,

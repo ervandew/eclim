@@ -197,24 +197,6 @@ function! eclim#java#util#IsValidIdentifier(word) " {{{
   return 1
 endfunction " }}}
 
-function! eclim#java#util#Javac(bang) " {{{
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
-  endif
-
-  let project_path = eclim#project#util#GetCurrentProjectRoot()
-  let project = eclim#project#util#GetCurrentProjectName()
-  let args = '-p "' . project . '"'
-
-  let cwd = getcwd()
-  try
-    exec 'lcd ' . escape(project_path, ' ')
-    call eclim#util#MakeWithCompiler('eclim_javac', a:bang, args)
-  finally
-    exec 'lcd ' . escape(cwd, ' ')
-  endtry
-endfunction " }}}
-
 function! eclim#java#util#Java(classname, args) " {{{
   let project = eclim#project#util#GetCurrentProjectName()
   if project == '' && exists('b:project')
