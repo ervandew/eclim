@@ -997,6 +997,7 @@ function! eclim#util#PromptList(prompt, list, ...)
     endwhile
   finally
     echohl None
+    redraw!
   endtry
 
   if response == ''
