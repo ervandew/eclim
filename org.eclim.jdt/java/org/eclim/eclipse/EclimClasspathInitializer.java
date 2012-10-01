@@ -28,7 +28,10 @@ import java.security.CodeSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -46,6 +49,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -62,6 +66,28 @@ public class EclimClasspathInitializer
 {
   private static final Logger logger =
     Logger.getLogger(EclimClasspathInitializer.class);
+
+  private Map<IPath,Map<String,String>> docJars =
+    new HashMap<IPath,Map<String,String>>();
+  private Set<String> platformNames = new HashSet<String>();
+  {
+    platformNames.add("org.eclipse.ant");
+    platformNames.add("org.eclipse.compare");
+    platformNames.add("org.eclipse.core");
+    platformNames.add("org.eclipse.debug");
+    platformNames.add("org.eclipse.equinox");
+    platformNames.add("org.eclipse.help");
+    platformNames.add("org.eclipse.jface");
+    platformNames.add("org.eclipse.jsch");
+    platformNames.add("org.eclipse.ltk");
+    platformNames.add("org.eclipse.osgi");
+    platformNames.add("org.eclipse.search");
+    platformNames.add("org.eclipse.swt");
+    platformNames.add("org.eclipse.team");
+    platformNames.add("org.eclipse.text");
+    platformNames.add("org.eclipse.ui");
+    platformNames.add("org.eclipse.update");
+  }
 
   @Override
   public void initialize(IPath path, IJavaProject javaProject)
@@ -134,7 +160,7 @@ public class EclimClasspathInitializer
           logger.debug("adding swt to classpath: {}", swt.getPath());
           Path path = new Path(swt.getPath());
           list.add(JavaCore.newLibraryEntry(
-                path, sourcePath(path), null, null, null, false));
+                path, sourcePath(path), null, null, attributes(path), false));
         }
       }
 
@@ -146,7 +172,7 @@ public class EclimClasspathInitializer
             String pathName = FileLocator.getBundleFile(bundle).getPath();
             Path path = new Path(pathName);
             list.add(JavaCore.newLibraryEntry(
-                  path, sourcePath(path), null, null, null, false));
+                  path, sourcePath(path), null, null, attributes(path), false));
 
             if (path.toFile().isDirectory()){
               listFiles(path.toFile(), new FileFilter(){
@@ -225,5 +251,58 @@ public class EclimClasspathInitializer
     }
 
     return sourcePath != null && sourcePath.toFile().exists() ? sourcePath : null;
+  }
+
+  private IClasspathAttribute[] attributes(Path path)
+  {
+    String name = null;
+    // handle native bundles (swt)
+    if (path.lastSegment().indexOf(".x86_64_") != -1){
+      name = path.lastSegment().replaceFirst(".x86_64_.*", "");
+
+    // all other bundles
+    }else{
+      String[] parts = StringUtils.split(path.lastSegment(), "_", 2);
+      name = parts[0];
+    }
+    if (!name.startsWith("org.eclipse.")){
+      return null;
+    }
+
+    final IPath dir = path.uptoSegment(path.segmentCount() - 1);
+    if (!docJars.containsKey(dir)){
+      docJars.put(dir, new HashMap<String,String>());
+      dir.toFile().list(new FilenameFilter(){
+        public boolean accept(File path, String name){
+          if (name.endsWith(".jar") && name.indexOf(".doc.isv_") != -1){
+            String url = "jar:file:" + path + '/' + name + "!/reference/api";
+            String bundleName = name.replaceFirst("\\.doc\\.isv_.*", "");
+            docJars.get(dir).put(bundleName, url);
+          }
+          return false;
+        }
+      });
+    }
+
+    String url = null;
+    Map<String,String> jars = docJars.get(dir);
+    String shortName = StringUtils.join(
+        StringUtils.split(name, ".", 4), ".", 0, 3);
+    if (jars.containsKey(shortName)){
+      url = jars.get(shortName);
+    }else if (platformNames.contains(shortName) &&
+        docJars.containsKey("org.eclipse.platform"))
+    {
+      url = jars.get("org.eclipse.platform");
+    }
+
+    if (url != null){
+      return new IClasspathAttribute[]{
+        JavaCore.newClasspathAttribute(
+            IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME,
+            url)};
+    }
+
+    return null;
   }
 }
