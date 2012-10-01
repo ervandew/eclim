@@ -219,11 +219,10 @@ Lets get started writing our first java application using eclim.
      System.out.println("Hello World");  // finish up the example code.
 
 5. After saving the file you should have no more validation errors, so now we
-   can compile the code and run it like so:
+   can run the code like so:
 
    ::
 
-     :Javac
      :Java
 
    After running the :Java command in vim you should now see your output in a
