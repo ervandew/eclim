@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,13 @@ package org.eclim.plugin.pdt.command.search;
 import org.eclim.annotation.Command;
 
 import org.eclim.plugin.core.project.ProjectNatureFactory;
+
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
+
+import org.eclipse.jface.text.Region;
+
+import org.eclipse.php.internal.core.typeinference.PHPModelUtils;
 
 /**
  * Command for php project search requests.
@@ -42,33 +49,32 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 public class SearchCommand
   extends org.eclim.plugin.dltk.command.search.SearchCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getNature()
-   */
   @Override
   protected String getNature()
   {
     return ProjectNatureFactory.getNatureForAlias("php");
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator()
-   */
   @Override
   protected String getElementSeparator()
   {
     return " -> ";
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator()
-   */
   @Override
   protected String getElementTypeName()
   {
     return "class";
+  }
+
+  @Override
+  protected IModelElement[] getElements(ISourceModule src, int offset, int length)
+    throws Exception
+  {
+    IModelElement[] elements = super.getElements(src, offset, length);
+    if (elements == null || elements.length == 0){
+      elements = PHPModelUtils.getTypeInString(src, new Region(offset, length));
+    }
+    return elements;
   }
 }

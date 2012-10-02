@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,9 @@ public class SearchCommandTest
     assertEquals(result.get("column"), 7);
   }
 
-  @Test
+  // as of pdt 3.1.1 (eclipse 4.2.1), element based search for a constant
+  // doesn't work, but the hyperlink in the gui editor does.
+  /*@Test
   @SuppressWarnings("unchecked")
   public void searchElementConstant()
   {
@@ -117,7 +119,7 @@ public class SearchCommandTest
     assertEquals(result.get("message"), "field CONSTANT1");
     assertEquals(result.get("line"), 60);
     assertEquals(result.get("column"), 1);
-  }
+  }*/
 
   @Test
   @SuppressWarnings("unchecked")
@@ -183,7 +185,9 @@ public class SearchCommandTest
     assertEquals(result.get("column"), 19);
   }
 
-  @Test
+  // as of pdt 3.1.1 (eclipse 4.2.1), pattern based search for a constant
+  // doesn't work, including in the eclipse gui.
+  /*@Test
   @SuppressWarnings("unchecked")
   public void searchConstant()
   {
@@ -202,7 +206,7 @@ public class SearchCommandTest
     assertEquals(result.get("message"), "field CONSTANT1");
     assertEquals(result.get("line"), 60);
     assertEquals(result.get("column"), 1);
-  }
+  }*/
 
   @Test
   @SuppressWarnings("unchecked")

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,9 +96,7 @@ public class SearchCommand
   public static final String TYPE_FUNCTION = "function";
   public static final String TYPE_FIELD = "field";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -127,8 +125,8 @@ public class SearchCommand
       IFile ifile = ProjectUtils.getFile(project, file);
 
       ISourceModule src = DLTKCore.createSourceModuleFrom(ifile);
-      IModelElement[] elements = src.codeSelect(
-          getOffset(commandLine), Integer.parseInt(length));
+      IModelElement[] elements = getElements(
+          src, getOffset(commandLine), Integer.parseInt(length));
       IModelElement element = null;
       if(elements != null && elements.length > 0){
         element = elements[0];
@@ -175,6 +173,20 @@ public class SearchCommand
       return requestor.getMatches();
     }
     return null;
+  }
+
+  /**
+   * Find the elements at the given offset.
+   *
+   * @param src The source to find the elements in.
+   * @param offset The offset to find the elements at.
+   * @param length The length of the element.
+   * @return Array of IModelElement.
+   */
+  protected IModelElement[] getElements(ISourceModule src, int offset, int length)
+    throws Exception
+  {
+    return src.codeSelect(offset, length);
   }
 
   /**
@@ -353,10 +365,6 @@ public class SearchCommand
   {
     private ArrayList<Position> matches = new ArrayList<Position>();
 
-    /**
-     * {@inheritDoc}
-     * @see org.eclipse.dltk.core.search.SearchRequestor#acceptSearchMatch(SearchMatch)
-     */
     @Override
     public void acceptSearchMatch(SearchMatch match)
       throws CoreException
