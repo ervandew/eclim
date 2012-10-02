@@ -74,6 +74,8 @@ import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 
@@ -98,10 +100,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class CallHierarchyCommand
   extends SearchCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -116,7 +115,7 @@ public class CallHierarchyCommand
     ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
     CCorePlugin.getIndexManager().update(
         new ICElement[]{src}, IIndexManager.UPDATE_ALL);
-    CCorePlugin.getIndexManager().joinIndexer(3000, null);
+    CCorePlugin.getIndexManager().joinIndexer(3000, new NullProgressMonitor());
     src = src.getWorkingCopy();
 
     IEditorInput input = new FileEditorInput((IFile)src.getResource());
@@ -178,7 +177,7 @@ public class CallHierarchyCommand
       results.addAll(findCalledBy(index, calleeBinding, true, project, seen));
       if (calleeBinding instanceof ICPPMethod) {
         IBinding[] overriddenBindings =
-          ClassTypeHelper.findOverridden((ICPPMethod)calleeBinding);
+          ClassTypeHelper.findOverridden((ICPPMethod)calleeBinding, null);
         for (IBinding overriddenBinding : overriddenBindings) {
           results.addAll(findCalledBy(
               index, overriddenBinding, false, project, seen));
@@ -277,10 +276,7 @@ public class CallHierarchyCommand
         element.getElementName();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see Comparable#compareTo(T)
-     */
+    @Override
     public int compareTo(Call o)
     {
       int result = COLLATOR.compare(location, o.location);

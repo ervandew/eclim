@@ -107,10 +107,7 @@ public class CProjectManager
   private static final Pattern INCLUDE_PATTERN =
     Pattern.compile(".*?\\((.*?)\\).*");
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#create(IProject,CommandLine)
-   */
+  @Override
   public void create(final IProject project, CommandLine commandLine)
     throws Exception
   {
@@ -169,10 +166,7 @@ public class CProjectManager
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#update(IProject,CommandLine)
-   */
+  @Override
   public List<Error> update(IProject project, CommandLine commandLine)
     throws Exception
   {
@@ -214,31 +208,23 @@ public class CProjectManager
     return errors;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#delete(IProject,CommandLine)
-   */
+  @Override
   public void delete(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,CommandLine)
-   */
+  @Override
   public void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
     ICProject cproject = CUtils.getCProject(project);
     CCorePlugin.getIndexManager().reindex(cproject);
-    CCorePlugin.getIndexManager().joinIndexer(IIndexManager.FOREVER, null);
+    CCorePlugin.getIndexManager()
+      .joinIndexer(IIndexManager.FOREVER, new NullProgressMonitor());
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,IFile)
-   */
+  @Override
   public void refresh(IProject project, IFile file)
     throws Exception
   {
