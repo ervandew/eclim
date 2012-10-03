@@ -411,7 +411,8 @@ function! eclim#java#search#FindClassDeclaration()
   let class = substitute(line,
     \ '.\{-}\([0-9a-zA-Z_.]*\%' . col('.') . 'c[0-9a-zA-Z_.]*\).*', '\1', '')
   if class != line && class != '' && class =~ '^[a-zA-Z]'
-    exec "JavaSearch -t classOrInterface -p " . class
+    call eclim#java#search#SearchAndDisplay(
+      \ 'java_search', '-t classOrInterface -p ' . class)
   endif
 endfunction " }}}
 

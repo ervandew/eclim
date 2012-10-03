@@ -36,10 +36,6 @@ if !exists("g:EclimJavaCompilerAutoDetect")
   let g:EclimJavaCompilerAutoDetect = 1
 endif
 
-if !exists("g:EclimJavaSearchMapping")
-  let g:EclimJavaSearchMapping = 1
-endif
-
 " }}}
 
 " Options {{{

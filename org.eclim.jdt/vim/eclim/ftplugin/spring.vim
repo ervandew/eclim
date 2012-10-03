@@ -23,11 +23,7 @@
 
 runtime! ftplugin/xml.vim
 runtime! indent/xml.vim
-runtime eclim/ftplugin/java.vim
-
-if g:EclimJavaSearchMapping
-  noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>
-endif
+runtime eclim/ftplugin/java-xml.vim
 
 if !exists("g:tlist_spring_settings")
   let g:tlist_spring_settings = {

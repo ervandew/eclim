@@ -1,10 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -21,24 +19,22 @@
 "
 " }}}
 
-runtime! ftplugin/xml.vim
-runtime! indent/xml.vim
-runtime eclim/ftplugin/java-xml.vim
+" Functionality exposed to java xml files (web.xml, spring xml files, etc.).
 
-if !exists("g:tlist_hibernate_settings")
-  let g:tlist_hibernate_settings = {
-      \ 'lang': 'hibernate',
-      \ 'parse': 'eclim#taglisttoo#lang#hibernate#Parse',
-      \ 'tags': {
-        \ 't': 'typedef',
-        \ 'f': 'filter-def',
-        \ 'i': 'import',
-        \ 'q': 'query',
-        \ 's': 'sql-query',
-        \ 'c': 'class',
-        \ 'j': 'joined-subclass'
-      \ }
-    \ }
+" Global Variables {{{
+
+if !exists("g:EclimJavaSearchMapping")
+  let g:EclimJavaSearchMapping = 1
 endif
+
+" }}}
+
+" Mappings {{{
+
+if g:EclimJavaSearchMapping
+  noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>
+endif
+
+" }}}
 
 " vim:ft=vim:fdm=marker
