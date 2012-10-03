@@ -304,6 +304,8 @@ public abstract class AbstractEclimApplication
         server.shutdown(false /* exit vm */);
       }
 
+      unregisterInstance();
+
       logger.info("Stopping plugin " + CORE);
       Bundle bundle = Platform.getBundle(CORE);
       if (bundle != null){
@@ -319,8 +321,6 @@ public abstract class AbstractEclimApplication
       if(plugin != null){
         plugin.stop(null);
       }
-
-      unregisterInstance();
 
       onStop();
 
