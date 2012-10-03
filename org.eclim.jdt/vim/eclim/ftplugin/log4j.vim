@@ -24,7 +24,7 @@
 
 runtime! ftplugin/xml.vim
 runtime! indent/xml.vim
-runtime eclim/ftplugin/java.vim
+runtime eclim/ftplugin/java-xml.vim
 
 " Global Variables {{{
 
@@ -47,14 +47,6 @@ endif
 augroup eclim_xml
   autocmd! BufWritePost <buffer>
 augroup END
-
-" }}}
-
-" Mappings {{{
-
-if g:EclimJavaSearchMapping
-  noremap <silent> <buffer> <cr> :call eclim#java#search#FindClassDeclaration()<cr>
-endif
 
 " }}}
 
