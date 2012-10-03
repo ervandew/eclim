@@ -29,7 +29,8 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
 
-import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
 import org.eclipse.swt.graphics.Point;
 
@@ -49,29 +50,22 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 public abstract class WstCodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
-  private static StructuredTextViewer viewer;
-
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
-   */
-  protected ITextViewer getTextViewer(
-      CommandLine commandLine, String project, String file)
+  @Override
+  protected ICompletionProposal[] getCompletionProposals(
+      CommandLine commandLine, String project, String file, int offset)
     throws Exception
   {
-    int offset = getOffset(commandLine);
+    IContentAssistProcessor processor =
+      getContentAssistProcessor(commandLine, project, file);
+
     IFile ifile = ProjectUtils.getFile(
         ProjectUtils.getProject(project, true), file);
 
     IStructuredModel model =
       StructuredModelManager.getModelManager().getModelForRead(ifile);
 
-    if (model == null){
-      return null;
-    }
-
-    if (viewer == null) {
-      viewer = new StructuredTextViewer(
+    if (model != null){
+      StructuredTextViewer viewer = new StructuredTextViewer(
           EclimPlugin.getShell(), null, null, false, 0){
         private Point point;
         public Point getSelectedRange()
@@ -92,10 +86,15 @@ public abstract class WstCodeCompleteCommand
           }
         }
       };
+      viewer.setDocument(model.getStructuredDocument());
+      // note: non-zero length can break html completion.
+      viewer.setSelectedRange(offset, 0);
+
+      ICompletionProposal[] proposals =
+        processor.computeCompletionProposals(viewer, offset);
+      model.releaseFromRead();
+      return proposals;
     }
-    viewer.setDocument(model.getStructuredDocument());
-    // note: non-zero length can break html completion.
-    viewer.setSelectedRange(offset, 0);
-    return viewer;
+    return new ICompletionProposal[0];
   }
 }

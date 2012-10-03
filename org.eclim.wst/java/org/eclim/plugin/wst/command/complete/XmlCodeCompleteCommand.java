@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,10 +51,7 @@ public class XmlCodeCompleteCommand
     IGNORE.add("XSL processing instruction - XSL processing instruction");
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
-   */
+  @Override
   protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
     throws Exception
@@ -62,21 +59,16 @@ public class XmlCodeCompleteCommand
     return new XMLContentAssistProcessor();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
-   */
+  @Override
   protected boolean acceptProposal(ICompletionProposal proposal)
   {
     String display = proposal.getDisplayString();
     return !display.toLowerCase().startsWith("close with") &&
+      !display.toLowerCase().startsWith("end with") &&
       !IGNORE.contains(display);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getMenu(ICompletionProposal)
-   */
+  @Override
   protected String getMenu(ICompletionProposal proposal)
   {
     String menu = proposal.getAdditionalProposalInfo();

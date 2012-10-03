@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,9 +47,7 @@ public abstract class AbstractCodeCompleteCommand
   private static String COMPACT = "compact";
   //private static String STANDARD = "standard";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(final CommandLine commandLine)
     throws Exception
   {
