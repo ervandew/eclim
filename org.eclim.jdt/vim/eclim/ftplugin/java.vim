@@ -140,6 +140,9 @@ endif
 if !exists(":JavaDocComment")
   command -buffer JavaDocComment :call eclim#java#doc#Comment()
 endif
+if !exists(":JavaDocPreview")
+  command -buffer JavaDocPreview :call eclim#java#doc#Preview()
+endif
 
 if !exists(":Javadoc")
   command -buffer -bang -nargs=*

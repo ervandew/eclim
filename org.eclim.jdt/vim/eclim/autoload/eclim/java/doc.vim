@@ -25,12 +25,15 @@
 " Script Variables {{{
 let s:command_comment =
   \ '-command javadoc_comment -p "<project>" -f "<file>" -o <offset> -e <encoding>'
+let s:command_element_doc =
+  \ '-command java_element_doc -p "<project>" -f "<file>" -o <offset> -l <length> -e <encoding>'
+let s:command_doc_link = '-command java_element_doc -u "<url>"'
 let s:command_source_dirs = '-command java_src_dirs -p "<project>"'
 " }}}
 
-" Comment() {{{
-" Add / update the comments for the element under the cursor.
-function! eclim#java#doc#Comment()
+function! eclim#java#doc#Comment() " {{{
+  " Add / update the comments for the element under the cursor.
+
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -55,9 +58,151 @@ function! eclim#java#doc#Comment()
   endif
 endfunction " }}}
 
-" Javadoc(bang, [file, file, ...]) {{{
-" Run javadoc for all, or the supplied, source files.
-function! eclim#java#doc#Javadoc(bang, ...)
+function! eclim#java#doc#Preview() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  if !eclim#java#util#IsValidIdentifier(expand('<cword>'))
+    call eclim#util#EchoError
+      \ ("Element under the cursor is not a valid java identifier.")
+    return 0
+  endif
+
+  exec 'pedit +:call\ eclim#java#doc#PreviewOpen(' . bufnr('%') . ') javadoc'
+endfunction " }}}
+
+function! eclim#java#doc#PreviewOpen(bufnr_or_url) " {{{
+  if a:bufnr_or_url =~ '^\d\+$'
+    let curwin = winnr()
+    exec bufwinnr(a:bufnr_or_url) . 'winc w'
+
+    let project = eclim#project#util#GetCurrentProjectName()
+    let file = eclim#project#util#GetProjectRelativeFilePath()
+    let position = eclim#util#GetCurrentElementPosition()
+    let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
+    let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
+
+    exec curwin . 'winc w'
+
+    let command = s:command_element_doc
+    let command = substitute(command, '<project>', project, '')
+    let command = substitute(command, '<file>', file, '')
+    let command = substitute(command, '<offset>', offset, '')
+    let command = substitute(command, '<length>', length, '')
+    let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+  else
+    let command = s:command_doc_link
+    let command = substitute(command, '<url>', a:bufnr_or_url, '')
+  endif
+
+  let result =  eclim#ExecuteEclim(command)
+  if type(result) == g:DICT_TYPE
+    if !exists('b:eclim_javadoc_stack')
+      let b:eclim_javadoc_stack = []
+      let b:eclim_javadoc_index = -1
+    elseif b:eclim_javadoc_index >= 0
+      let b:eclim_javadoc_stack = b:eclim_javadoc_stack[:b:eclim_javadoc_index]
+    endif
+    call add(b:eclim_javadoc_stack, result)
+    let b:eclim_javadoc_index += 1
+    let b:eclim_javadoc = result
+
+    setlocal modifiable
+    call append(0, split(result.text, '\n'))
+    retab
+    if getline('$') =~ '^\s*$'
+      $,$delete _
+    endif
+    call cursor(1, 1)
+
+  elseif type(result) == g:STRING_TYPE
+    if result == ''
+      call eclim#util#EchoWarning('No javadoc found.')
+    else
+      call eclim#util#EchoError(result)
+    endif
+
+    return
+  endif
+
+  setlocal wrap
+  setlocal nomodifiable
+  setlocal nolist
+  setlocal noswapfile
+  setlocal nobuflisted
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal conceallevel=2 concealcursor=n
+
+  set ft=javadoc_preview
+  hi link javadocPreviewLink Label
+  syntax match javadocPreviewLinkStart contained /|/ conceal
+  syntax match javadocPreviewLinkEnd contained /\[\d\+\]|/ conceal
+  syntax region javadocPreviewLink start="|" end="" concealends
+  syntax match javadocPreviewLink /|.\{-}\[\d\+\]|/
+    \ contains=JavadocPreviewLinkStart,JavadocPreviewLinkEnd
+
+  nnoremap <silent> <buffer> <cr> :call eclim#java#doc#PreviewLink()<cr>
+  nnoremap <silent> <buffer> <c-]> :call eclim#java#doc#PreviewLink()<cr>
+  nnoremap <silent> <buffer> <c-o> :call eclim#java#doc#PreviewHistory(-1)<cr>
+  nnoremap <silent> <buffer> <c-i> :call eclim#java#doc#PreviewHistory(1)<cr>
+endfunction " }}}
+
+function! eclim#java#doc#PreviewLink() " {{{
+  let line = getline('.')
+  let cnum = col('.')
+  if line[cnum - 1] == '|'
+    let cnum += cnum > 1 && line[cnum - 2] == ']' ? -1 : 1
+  endif
+  let text = substitute(line, '.*|\(.\{-}\%' . cnum . 'c.\{-}\)|.*', '\1', '')
+  if text == line || text !~ '\[\d\+]$'
+    return
+  endif
+
+  exec 'let index = ' . substitute(text, '.*\[\(\d\+\)\]$', '\1', '')
+  if !exists('b:eclim_javadoc') || len(b:eclim_javadoc.links) <= index
+    return
+  endif
+
+  let url = b:eclim_javadoc.links[index].href
+  if url =~ '^eclipse-javadoc:'
+    exec 'pedit +:call\ eclim#java#doc#PreviewOpen("' . url . '") javadoc'
+  else
+    call eclim#web#OpenUrl(url)
+  endif
+endfunction " }}}
+
+function! eclim#java#doc#PreviewHistory(offset) " {{{
+  if !exists('b:eclim_javadoc_stack')
+    return
+  endif
+
+  let index = b:eclim_javadoc_index + a:offset
+  if index < 0 || index > len(b:eclim_javadoc_stack) -1
+    return
+  endif
+
+  let result = b:eclim_javadoc_stack[index]
+  let b:eclim_javadoc = result
+  let b:eclim_javadoc_index = index
+
+  setlocal modifiable
+  1,$delete _
+  call append(0, split(result.text, '\n'))
+  retab
+  if getline('$') =~ '^\s*$'
+    $,$delete _
+  endif
+  setlocal nomodifiable
+  call cursor(1, 1)
+endfunction " }}}
+
+function! eclim#java#doc#Javadoc(bang, ...) " {{{
+  " Run javadoc for all, or the supplied, source files.
+  " Optional args:
+  "   file, file, file, ...: one ore more source files.
+
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -79,10 +224,7 @@ function! eclim#java#doc#Javadoc(bang, ...)
   endtry
 endfunction " }}}
 
-" CommandCompleteJavadoc(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for :Javadoc
-function! eclim#java#doc#CommandCompleteJavadoc(
-    \ argLead, cmdLine, cursorPos)
+function! eclim#java#doc#CommandCompleteJavadoc(argLead, cmdLine, cursorPos) " {{{
   let dir = eclim#project#util#GetCurrentProjectRoot()
 
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)

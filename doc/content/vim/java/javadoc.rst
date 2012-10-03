@@ -24,6 +24,18 @@ Commenting
 Eclim provides the **:JavaDocComment** command which will add or update the
 javadoc comments for the element under the cursor.
 
+.. _\:JavaDocPreview:
+
+Viewing
+--------
+
+While editing java code, if you'd like to view the javadoc of the element under
+the cursor, you can run the **:JavaDocPreview** command which will open vim's
+preview window with the element's javadoc content. In the preview window links
+classes, methods, etc. in the javadoc will be highlighted and you can view that
+content by hitting ``<cr>`` on the link. You can also use ``<c-o>`` to back to
+the previous javadoc preview and ``<c-i>`` to navigate forward.
+
 .. _\:JavaDocSearch:
 
 Searching
@@ -35,7 +47,7 @@ Eclim supports searching of javadocs just like you would
 The only difference is that you use **:JavaDocSearch** instead of
 **:JavaSearch**.
 
-The results will be displayed in a window and you can simply hit <enter> on an
+The results will be displayed in a window and you can simply hit ``<cr>`` on an
 entry to open it using the browser you configured via :ref:`g:EclimBrowser`.
 
 The locations of the javadocs are determined via your Eclipse project's

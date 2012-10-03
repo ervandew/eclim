@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,6 +110,19 @@ public class CommandLine
       return value;
     }
     return null;
+  }
+
+  /**
+   * Get the raw value of an arg supplied with the command line option with no
+   * decoding of special characters.
+   *
+   * @param name The name of the option to get the arg for.
+   * @return The argument supplied to the option.
+   */
+  public Object getRawValue(String name)
+    throws Exception
+  {
+    return options.get(name);
   }
 
   /**
