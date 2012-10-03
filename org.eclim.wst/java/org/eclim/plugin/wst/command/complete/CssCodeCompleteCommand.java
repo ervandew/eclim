@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,10 +61,7 @@ public class CssCodeCompleteCommand
 {
   private static StructuredTextViewer viewer;
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
-   */
+  @Override
   protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
     throws Exception
@@ -72,10 +69,7 @@ public class CssCodeCompleteCommand
     return new CSSContentAssistProcessor();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getTextViewer(CommandLine,String,String)
-   */
+  @Override
   protected ITextViewer getTextViewer(
       CommandLine commandLine, String project, String file)
     throws Exception

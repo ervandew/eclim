@@ -41,10 +41,7 @@ import org.eclipse.wst.html.ui.internal.contentassist.HTMLContentAssistProcessor
 public class HtmlCodeCompleteCommand
   extends WstCodeCompleteCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
-   */
+  @Override
   protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
     throws Exception
@@ -52,10 +49,7 @@ public class HtmlCodeCompleteCommand
     return new HTMLContentAssistProcessor();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand#acceptProposal(ICompletionProposal)
-   */
+  @Override
   protected boolean acceptProposal(ICompletionProposal proposal)
   {
     String display = proposal.getDisplayString();
