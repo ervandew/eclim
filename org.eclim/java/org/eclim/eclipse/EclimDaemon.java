@@ -156,6 +156,8 @@ public class EclimDaemon
           server.shutdown(false /* exit vm */);
         }
 
+        unregisterInstance();
+
         logger.info("Stopping plugin " + CORE);
         Bundle bundle = Platform.getBundle(CORE);
         if (bundle != null){
@@ -166,8 +168,6 @@ public class EclimDaemon
             // shutdown hook during shutdown.
           }
         }
-
-        unregisterInstance();
 
         logger.info("Eclim stopped.");
       }finally{
