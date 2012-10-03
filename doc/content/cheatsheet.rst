@@ -198,6 +198,8 @@ Java Commands
   Search for javadocs.  Same usage as **:JavaSearch**.
 - :ref:`:JavaDocComment <:JavaDocComment>` -
   Adds or updates the comments for the element under the cursor.
+- :ref:`:JavaDocPreview <:JavaDocPreview>` -
+  Display the javadoc of the element under the cursor in vim's preview window.
 - :ref:`:JavaRename <:JavaRename>` [new_name] -
   Rename the element under the cursor.
 - :ref:`:JavaMove <:JavaMove>` [new_package] -

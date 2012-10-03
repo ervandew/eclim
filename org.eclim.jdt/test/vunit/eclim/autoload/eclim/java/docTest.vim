@@ -27,8 +27,7 @@ function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
 endfunction " }}}
 
-" TestComment() {{{
-function! TestComment()
+function! TestComment() " {{{
   edit! src/org/eclim/test/doc/TestCommentVUnit.java
   set shiftwidth=2
   set tabstop=2
@@ -58,8 +57,77 @@ function! TestComment()
   call vunit#AssertEquals('   */', getline(13), 'Wrong doc line 13.')
 endfunction " }}}
 
-" TestSearch() {{{
-function! TestSearch()
+function! TestPreview() " {{{
+  edit! src/org/eclim/test/doc/TestPreview.java
+  call vunit#PeekRedir()
+  set shiftwidth=2
+  set tabstop=2
+  set expandtab
+  set splitbelow
+
+  " class reference
+  call cursor(17, 9)
+  JavaDocPreview
+  call vunit#AssertEquals(winnr('$'), 2, 'Class ref: Wrong win nums.')
+  winc j
+  call vunit#AssertEquals(&previewwindow, 1, 'Class ref: Not preview window.')
+  call vunit#AssertEquals('org.eclim.test.doc.TestPreview', getline(1))
+  call vunit#AssertEquals('', getline(2))
+  call vunit#AssertEquals('A test class for javadoc previews.', getline(3))
+  call vunit#AssertEquals('Author:', getline(4))
+  call vunit#AssertEquals('   Eric Van Dewoestine', getline(5))
+  winc k
+
+  " constructor reference
+  call cursor(17, 35)
+  JavaDocPreview
+  call vunit#AssertEquals(winnr('$'), 2, 'Constructor ref: Wrong win nums.')
+  winc j
+  call vunit#AssertEquals(&previewwindow, 1, 'Constructor ref: Not preview window.')
+  call vunit#AssertEquals(
+    \ 'org.eclim.test.doc.|TestPreview[0]|.TestPreview(|String[1]|[] args)',
+    \ getline(1))
+  call vunit#AssertEquals('', getline(2))
+  call vunit#AssertEquals('Constructs a new instance from the supplied arguments.', getline(3))
+  call vunit#AssertEquals('Parameters:', getline(4))
+  call vunit#AssertEquals('  args The arguments.', getline(5))
+  winc k
+
+  " method reference
+  call cursor(18, 7)
+  JavaDocPreview
+  call vunit#AssertEquals(winnr('$'), 2, 'Method ref: Wrong win nums.')
+  winc j
+  call vunit#AssertEquals(&previewwindow, 1, 'Method ref: Not preview window.')
+  call vunit#AssertEquals(
+    \ '|String[0]| org.eclim.test.doc.|TestPreview[1]|.test()',
+    \ getline(1))
+  call vunit#AssertEquals('', getline(2))
+  call vunit#AssertEquals('A test method.', getline(3))
+  call vunit#AssertEquals('Returns:', getline(4))
+  call vunit#AssertEquals('   a test |String[2]|', getline(5))
+
+  " follow link
+  call cursor(5, 13)
+  exec "normal \<cr>"
+  call vunit#AssertEquals(winnr('$'), 2, 'Link: Wrong win nums.')
+  call vunit#AssertEquals(&previewwindow, 1, 'Link: Not preview window.')
+  call vunit#AssertEquals('java.lang.String', getline(1))
+  call vunit#AssertTrue(getline(3) =~ '^The String class')
+
+  " back
+  exec "normal \<c-o>"
+  call vunit#AssertEquals(
+    \ '|String[0]| org.eclim.test.doc.|TestPreview[1]|.test()',
+    \ getline(1), 'back to method')
+
+  " forward
+  " not working from vunit for some reason
+  "exec "normal \<c-i>"
+  "call vunit#AssertEquals('java.lang.String', getline(1), 'forward to String')
+endfunction " }}}
+
+function! TestSearch() " {{{
   edit! src/org/eclim/test/doc/TestDocSearchVUnit.java
   call vunit#PeekRedir()
 
@@ -75,8 +143,7 @@ function! TestSearch()
     \ line('1'), 'Wrong result.')
 endfunction " }}}
 
-" TestJavadoc() {{{
-function! TestJavadoc()
+function! TestJavadoc() " {{{
   edit! src/org/eclim/test/doc/javadoc/TestJavadocVUnit.java
   call vunit#PeekRedir()
 

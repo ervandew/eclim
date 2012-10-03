@@ -192,7 +192,8 @@ function! eclim#java#util#IsImported(classname) " {{{
 endfunction " }}}
 
 function! eclim#java#util#IsValidIdentifier(word) " {{{
-  if a:word == '' || a:word =~ '\W' || eclim#java#util#IsKeyword(a:word)
+  if a:word == '' || a:word =~ '\W' || a:word =~ '^\d\+$' ||
+   \ eclim#java#util#IsKeyword(a:word)
     return 0
   endif
   return 1

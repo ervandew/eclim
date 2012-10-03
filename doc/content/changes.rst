@@ -51,6 +51,8 @@ Java:
     language agnostic way.
   - Added :ref:`:JavaMove <:JavaMove>` command to move a java source file from
     one package to another.
+  - Added :ref:`:JavaDocPreview <:JavaDocPreview>` to display the javadoc of
+    the element under the cursor in vim's preview window.
 
 .. _1.7.9:
 
