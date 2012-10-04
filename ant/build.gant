@@ -726,19 +726,26 @@ def initPlugins(){
 
   // find all the available eclipse features
   featurePaths = [new File(getVariable('eclipse') + '/features')]
-  dropins = new File(getVariable('eclipse') + '/dropins')
-  if (dropins.exists()){
-    dropins.eachDir{ dropin ->
-      featurePaths << new File(dropin.getAbsolutePath() + '/eclipse/features')
-      featurePaths << new File(dropin.getAbsolutePath() + '/features')
-    }
-  }
+  dropinDirs = [new File(getVariable('eclipse') + '/dropins')]
   if (getVariable('eclipse') != getVariable('eclipse.local')){
     featurePaths << new File(getVariable('eclipse.local') + '/features')
+    dropinDirs << new File(getVariable('eclipse.local') + '/dropins')
   }
+
+  dropinDirs.each { dropins ->
+    ant.echo("Scan dropins dir: ${dropins}", level: 'debug')
+    if (dropins.exists()){
+      dropins.eachDirRecurse{ dropin ->
+        if (dropin.getName().equals("features")){
+          featurePaths << new File(dropin.getAbsolutePath())
+        }
+      }
+    }
+  }
+
   featurePaths.each { path ->
-    ant.echo("Feature path: ${path} exists: ${path.exists()}", level: 'debug')
     if (path.exists()){
+      ant.echo("Feature path: ${path}", level: 'debug')
       path.eachFile{ file ->
         name = file.getName()
         if (file.isDirectory() || name.endsWith('.jar')){
