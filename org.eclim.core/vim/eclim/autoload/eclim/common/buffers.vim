@@ -55,11 +55,11 @@ function! eclim#common#buffers#Buffers(bang) " {{{
 
   let lines = []
   let filelength = options['maxfilelength']
-  let tabnr = t:eclim_tab_id
+  let tabid = s:GetTabId()
   let tabbuffers = tabpagebuflist()
   for buffer in buffers
     let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
-    if a:bang != '' || eclim_tab_id == '' || eclim_tab_id == tabnr
+    if a:bang != '' || eclim_tab_id == '' || eclim_tab_id == tabid
       " for buffers w/ out a tab id, don't show them in the list if they
       " are active, but aren't open on the current tab.
       if a:bang == '' && buffer.status =~ 'a' && index(tabbuffers, buffer.bufnr) == -1
@@ -207,9 +207,8 @@ function! eclim#common#buffers#TabInit() " {{{
 endfunction " }}}
 
 function! eclim#common#buffers#TabEnter() " {{{
-  if !exists('t:eclim_tab_id')
-    let s:eclim_tab_id += 1
-    let t:eclim_tab_id = s:eclim_tab_id
+  if !s:GetTabId()
+    call s:SetTabId()
   endif
 
   if exists('s:tab_count') && s:tab_count > tabpagenr('$')
@@ -217,7 +216,9 @@ function! eclim#common#buffers#TabEnter() " {{{
     let buffers = eclim#common#buffers#GetBuffers()
     for buffer in buffers
       let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
-      if eclim_tab_id == s:tab_prev
+      " don't delete active buffers, just in case the tab has the wrong
+      " eclim_tab_id
+      if eclim_tab_id == s:tab_prev && buffer.status !~ 'a'
         exec 'bdelete ' . buffer.bufnr
       endif
     endfor
@@ -225,24 +226,25 @@ function! eclim#common#buffers#TabEnter() " {{{
 endfunction " }}}
 
 function! eclim#common#buffers#TabLeave() " {{{
-  let s:tab_prev = t:eclim_tab_id
+  let s:tab_prev = s:GetTabId()
   let s:tab_count = tabpagenr('$')
 endfunction " }}}
 
 function! eclim#common#buffers#TabLastOpenIn() " {{{
-  if &buftype != ''
-    return
+  if !buflisted('%')
+    silent! unlet b:eclim_tab_id
   endif
 
-  if exists('t:eclim_tab_id')
-    call eclim#common#buffers#TabEnter()
+  if !s:GetTabId()
+    call s:SetTabId()
   endif
 
   let tabnr = 1
   let other_tab = 0
+  let bufnr = bufnr('%')
   while tabnr <= tabpagenr('$')
     if tabnr != tabpagenr() &&
-     \ eclim#util#ListContains(tabpagebuflist(tabnr), bufnr('%'))
+     \ eclim#util#ListContains(tabpagebuflist(tabnr), bufnr)
       let other_tab = tabnr
       break
     endif
@@ -250,7 +252,7 @@ function! eclim#common#buffers#TabLastOpenIn() " {{{
   endwhile
 
   if !exists('b:eclim_tab_id') || !other_tab
-    let b:eclim_tab_id = t:eclim_tab_id
+    let b:eclim_tab_id = s:GetTabId()
   endif
 endfunction " }}}
 
@@ -325,6 +327,21 @@ function! s:BufferOpen(cmd) " {{{
 
   exec winnr . 'winc w'
   call eclim#util#GoToBufferWindowOrOpen(file, a:cmd)
+endfunction " }}}
+
+function! s:GetTabId(...) " {{{
+  let tabnr = a:0 ? a:1 : tabpagenr()
+  " using gettabvar over t:eclim_tab_id because while autocmds are executing,
+  " the tabpagenr() may return the correct tab number, but accessing
+  " t:eclim_tab_id may return the value from the previously focused tab.
+  return gettabvar(tabnr, 'eclim_tab_id')
+endfunction " }}}
+
+function! s:SetTabId(...) " {{{
+  let tabnr = a:0 ? a:1 : tabpagenr()
+  let s:eclim_tab_id += 1
+  " using settabvar for reason explained in s:GetTabId()
+  call settabvar(tabnr, 'eclim_tab_id', s:eclim_tab_id)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
