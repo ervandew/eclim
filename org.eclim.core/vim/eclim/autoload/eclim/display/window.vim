@@ -118,6 +118,7 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
   let name = bufnum == -1 ? a:name : '+buffer' . bufnum
   silent call eclim#util#ExecWithoutAutocmds(wincmd . ' split ' . name)
 
+  doautocmd BufWinEnter
   setlocal winfixwidth
   setlocal nonumber
 
