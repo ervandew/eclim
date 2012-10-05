@@ -119,6 +119,7 @@ html_translator_class = 'bootstrap.HTMLTranslator'
 # documentation.
 html_theme_options = {
   'global_toc_maxdepth': -1,
+  'global_toc_name': 'Contents',
   'show_bootstrap': True,
   'sourcelink_position': 'footer',
 }
