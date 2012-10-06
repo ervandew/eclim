@@ -131,6 +131,8 @@ public class GetElementDocCommand
     String html = buffer.toString();
     String result = IOUtils.toString(
         new HTML2TextReader(new StringReader(html), null));
+    // remove \r for windows
+    result = result.replaceAll("\r", "");
     // compact excessive spacing between sig and doc.
     result = result.replaceFirst("\n\n\n", "\n\n");
 

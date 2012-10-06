@@ -69,7 +69,7 @@ function! eclim#java#doc#Preview() " {{{
     return 0
   endif
 
-  exec 'pedit +:call\ eclim#java#doc#PreviewOpen(' . bufnr('%') . ') javadoc'
+  exec 'pedit +:call\ eclim#java#doc#PreviewOpen(' . bufnr('%') . ') [javadoc]'
 endfunction " }}}
 
 function! eclim#java#doc#PreviewOpen(bufnr_or_url) " {{{
@@ -167,7 +167,7 @@ function! eclim#java#doc#PreviewLink() " {{{
 
   let url = b:eclim_javadoc.links[index].href
   if url =~ '^eclipse-javadoc:'
-    exec 'pedit +:call\ eclim#java#doc#PreviewOpen("' . url . '") javadoc'
+    exec 'pedit +:call\ eclim#java#doc#PreviewOpen("' . url . '") [javadoc]'
   else
     call eclim#web#OpenUrl(url)
   endif
