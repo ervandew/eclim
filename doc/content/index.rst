@@ -114,6 +114,15 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+2012-10-07
+----------
+
+Two new eclim updates are once again available with several bug fixes and
+improvements.
+
+- :ref:`Eclim 2.2.2 <2.2.2>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.10 <1.7.10>` for Eclipse 3.7 (Indigo).
+
 2012-09-09
 ----------
 
