@@ -42,6 +42,7 @@ import org.eclim.util.file.Position;
 
 import org.eclipse.cdt.core.CCorePlugin;
 
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
@@ -176,8 +177,25 @@ public class CallHierarchyCommand
     if (calleeBinding != null) {
       results.addAll(findCalledBy(index, calleeBinding, true, project, seen));
       if (calleeBinding instanceof ICPPMethod) {
-        IBinding[] overriddenBindings =
-          ClassTypeHelper.findOverridden((ICPPMethod)calleeBinding, null);
+        // cdt 8.1.1 requires a second arg (point: IASTNode), but cdt 8.1.1
+        // hasn't been released independent of eclipse 4.2.1, so distros are
+        // less likely to have it. So rather than attempt to force an
+        // eclipse/cdt version, we'll resort to reflection for now this time.
+        /*IBinding[] overriddenBindings =
+          ClassTypeHelper.findOverridden((ICPPMethod)calleeBinding, null);*/
+        IBinding[] overriddenBindings = null;
+        try{
+          Method findOverridden = ClassTypeHelper.class
+            .getMethod("findOverridden", ICPPMethod.class, IASTNode.class);
+          overriddenBindings = (IBinding[])
+            findOverridden.invoke(null, (ICPPMethod)calleeBinding, null);
+        }catch(NoSuchMethodException nsme){
+          Method findOverridden = ClassTypeHelper.class
+            .getMethod("findOverridden", ICPPMethod.class);
+          overriddenBindings = (IBinding[])
+            findOverridden.invoke(null, (ICPPMethod)calleeBinding);
+        }
+
         for (IBinding overriddenBinding : overriddenBindings) {
           results.addAll(findCalledBy(
               index, overriddenBinding, false, project, seen));
