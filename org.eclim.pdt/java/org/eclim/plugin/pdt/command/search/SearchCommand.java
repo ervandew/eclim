@@ -23,9 +23,9 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
 
-import org.eclipse.jface.text.Region;
+//import org.eclipse.jface.text.Region;
 
-import org.eclipse.php.internal.core.typeinference.PHPModelUtils;
+//import org.eclipse.php.internal.core.typeinference.PHPModelUtils;
 
 /**
  * Command for php project search requests.
@@ -72,9 +72,10 @@ public class SearchCommand
     throws Exception
   {
     IModelElement[] elements = super.getElements(src, offset, length);
-    if (elements == null || elements.length == 0){
+    // disabled for now to retain compatibility with eclipse 4.2
+    /*if (elements == null || elements.length == 0){
       elements = PHPModelUtils.getTypeInString(src, new Region(offset, length));
-    }
+    }*/
     return elements;
   }
 }
