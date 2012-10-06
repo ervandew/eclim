@@ -6,5 +6,6 @@ org.eclim.java.import.package_separation_level=-1
 org.eclim.java.junit.output_dir=build/test/junit/results
 org.eclim.java.logging.impl=custom
 org.eclim.java.logging.template=eclim.logger.gst
+org.eclim.project.copyright=copyright
 org.eclim.project.vcs.web.url=http\://github.com/ervandew/eclim/
 org.eclim.project.vcs.web.viewer=github
