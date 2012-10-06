@@ -19,8 +19,17 @@ History of Changes
 .. _2.2.2:
 .. _1.7.10:
 
-2.2.2 / 1.7.10 (Sep. xx, 2012)
+2.2.2 / 1.7.10 (Oct. 07, 2012)
 ------------------------------
+
+Eclimd:
+  - Updated eclimd script for Linux/OSX to supply reasonable defaults for heap
+    and perm gen space if not already set by ~/.eclimrc.
+
+C/C++:
+  - Fixed C++ project creation to auto add the required C nature.
+  - Fixed C/C++ issues introduced by the eclipse 4.2.1 release (project
+    create/refresh and call hierarchy).
 
 Java:
   - :JavaImportSort, :JavaImportClean, and :JavaImportMissing all removed in
