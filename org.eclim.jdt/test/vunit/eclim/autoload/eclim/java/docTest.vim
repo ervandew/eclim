@@ -47,12 +47,12 @@ function! TestComment() " {{{
   JavaDocComment
 
   call vunit#AssertEquals('  /**', getline(5), 'Wrong doc line 5.')
-  call vunit#AssertEquals('   * ', getline(6), 'Wrong doc line 6.')
-  call vunit#AssertEquals('   * ', getline(7), 'Wrong doc line 7.')
+  call vunit#AssertEquals('   *', getline(6), 'Wrong doc line 6.')
+  call vunit#AssertEquals('   *', getline(7), 'Wrong doc line 7.')
   call vunit#AssertEquals('   * @param _id', getline(8), 'Wrong doc line 8.')
   call vunit#AssertEquals('   * @param _name', getline(9), 'Wrong doc line 9.')
   call vunit#AssertEquals('   * @return', getline(10), 'Wrong doc line 10.')
-  call vunit#AssertEquals('   * ', getline(11), 'Wrong doc line 11.')
+  call vunit#AssertEquals('   *', getline(11), 'Wrong doc line 11.')
   call vunit#AssertEquals('   * @throws IOException', getline(12), 'Wrong doc line 12.')
   call vunit#AssertEquals('   */', getline(13), 'Wrong doc line 13.')
 endfunction " }}}

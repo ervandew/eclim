@@ -67,7 +67,21 @@ public abstract class AbstractCommand
   public int getOffset(CommandLine commandLine)
     throws Exception
   {
-    int offset = commandLine.getIntValue(Options.OFFSET_OPTION);
+    return getOffset(commandLine, Options.OFFSET_OPTION);
+  }
+
+  /**
+   * Convenience method which uses the standard project, file, offset, and
+   * encoding options to determine the character offset in the file.
+   *
+   * @param commandLine The command line instance.
+   * @param option The name of the option containing the offset value.
+   * @return The char offset.
+   */
+  public int getOffset(CommandLine commandLine, String option)
+    throws Exception
+  {
+    int offset = commandLine.getIntValue(option);
     if (offset == -1){
       return offset;
     }
