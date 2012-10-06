@@ -44,12 +44,12 @@ public class CommentCommandTest
 
   private static final Pattern COMMENT_2 = Pattern.compile(
     "\\s+/\\*\\*\n" +
-    "\\s+ \\* \n" +
-    "\\s+ \\* \n" +
+    "\\s+ \\*\n" +
+    "\\s+ \\*\n" +
     "\\s+ \\* @param _id\n" +
     "\\s+ \\* @param _name\n" +
     "\\s+ \\* @return\n" +
-    "\\s+ \\* \n" +
+    "\\s+ \\*\n" +
     "\\s+ \\* @throws IOException\n" +
     "\\s+ \\*/");
 

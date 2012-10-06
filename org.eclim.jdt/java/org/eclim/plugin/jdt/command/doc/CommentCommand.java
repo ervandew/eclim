@@ -90,9 +90,7 @@ public class CommentCommand
   private static final String INHERIT_DOC =
     "{" + TagElement.TAG_INHERITDOC + "}";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {

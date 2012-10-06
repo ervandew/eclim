@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
@@ -105,6 +107,9 @@ public class JavaUtils
 
   private static final Pattern PACKAGE_LINE =
     Pattern.compile("^\\s*package\\s+(\\w+(\\.\\w+){0,})\\s*;\\s*$");
+
+  private static final Pattern TRAILING_WHITESPACE =
+    Pattern.compile("[ \t]+$", Pattern.MULTILINE);
 
   private static ContributedProcessorDescriptor[] correctionProcessors;
   private static ContributedProcessorDescriptor[] assistProcessors;
@@ -520,7 +525,7 @@ public class JavaUtils
       length++;
     }
     while ((offset + length) < contents.length() &&
-        IndentManipulation.isLineDelimiterChar(buffer.getChar(offset + length + 1)))
+        IndentManipulation.isLineDelimiterChar(buffer.getChar(offset + length)))
     {
       length++;
     }
@@ -530,9 +535,35 @@ public class JavaUtils
 
     TextEdit edits = formatter.format(kind, contents, offset, length, 0, delimiter);
     if (edits != null) {
-      Document document = new Document(src.getBuffer().getContents());
+      int oldLength = contents.length();
+      Document document = new Document(contents);
       edits.apply(document);
-      src.getBuffer().setContents(document.get());
+
+      String formatted = document.get();
+
+      // jdt formatter can introduce trailing whitespace (javadoc comments), so
+      // we'll remove all trailing whitespace from the formatted section.
+      length += formatted.length() - oldLength;
+      if (offset < (offset + length)){
+        String pre = formatted.substring(0, offset);
+        StringBuffer section = new StringBuffer(
+            formatted.substring(offset, offset + length));
+        StringBuffer post = new StringBuffer(
+            formatted.substring(offset + length));
+        // account for section not ending at a line delimiter
+        while (!section.toString().endsWith(delimiter) && post.length() > 0){
+          section.append(post.charAt(0));
+          post.deleteCharAt(0);
+        }
+
+        Matcher matcher = TRAILING_WHITESPACE.matcher(section);
+        String stripped = matcher.replaceAll(StringUtils.EMPTY);
+
+        src.getBuffer().setContents(pre + stripped + post);
+      }else{
+        src.getBuffer().setContents(formatted);
+      }
+
       if (src.isWorkingCopy()) {
         src.commitWorkingCopy(false, null);
       }

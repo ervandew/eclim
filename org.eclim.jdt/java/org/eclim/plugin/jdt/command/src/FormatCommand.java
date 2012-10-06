@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.jdt.command.src;
 
-import java.io.ByteArrayOutputStream;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -28,16 +26,7 @@ import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
-
-import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
-
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
-
-import org.eclipse.jface.text.Document;
-
-import org.eclipse.text.edits.TextEdit;
 
 /**
  * Command used to format source code in the way Source / Format menu does it.
@@ -50,62 +39,26 @@ import org.eclipse.text.edits.TextEdit;
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
-    "REQUIRED b boffset ARG," +
-    "REQUIRED e eoffset ARG"
+    "REQUIRED h hoffset ARG," +
+    "REQUIRED t toffset ARG," +
+    "REQUIRED e encoding ARG"
 )
 public class FormatCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
-    int bByteOffset = commandLine.getIntValue(Options.BOFFSET_OPTION);
-    int eByteOffset = commandLine.getIntValue(Options.EOFFSET_OPTION);
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
-
-    IJavaProject myProject = JavaUtils.getJavaProject(project);
-    DefaultCodeFormatter formatter =
-      new DefaultCodeFormatter(myProject.getOptions(true));
-
+    int headOffset = getOffset(commandLine, "h");
+    int tailOffset = getOffset(commandLine, "t");
     int kind = CodeFormatter.K_COMPILATION_UNIT |
       CodeFormatter.F_INCLUDE_COMMENTS;
 
-    String source = src.getBuffer().getContents();
-    String vimEncoding = "UTF-8";
-    byte[] byteSource = source.getBytes(vimEncoding);
-    ByteArrayOutputStream outStream = null;
-
-    outStream = new ByteArrayOutputStream();
-    outStream.write(byteSource, 0, bByteOffset);
-    String sourcePrefix = outStream.toString(vimEncoding);
-
-    outStream = new ByteArrayOutputStream();
-    outStream.write(byteSource, bByteOffset, eByteOffset - bByteOffset);
-    String sourceRoot = outStream.toString(vimEncoding);
-
-    int bCharOffset = sourcePrefix.length();
-    int eCharOffset = bCharOffset + sourceRoot.length();
-    int charLength = eCharOffset - bCharOffset;
-
-    String lineDelimiter = StubUtility.getLineDelimiterUsed(src);
-    TextEdit edits = formatter.format(
-        kind, source, bCharOffset, charLength, 0, lineDelimiter);
-    if (edits == null) {
-      return "no edits returned on attempt to format the source.";
-    }
-    Document document = new Document(src.getBuffer().getContents());
-    edits.apply(document);
-    src.getBuffer().setContents(document.get());
-    if (src.isWorkingCopy()) {
-        src.commitWorkingCopy(false, null);
-    }
-    src.save(null, false);
+    JavaUtils.format(src, kind, headOffset, tailOffset - headOffset);
 
     return null;
   }

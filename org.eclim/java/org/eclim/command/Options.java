@@ -75,8 +75,6 @@ public class Options
   public static final String NAME_OPTION = "n";
   public static final String NATURE_OPTION = "n";
   public static final String OFFSET_OPTION = "o";
-  public static final String BOFFSET_OPTION = "b";
-  public static final String EOFFSET_OPTION = "e";
   public static final String PATH_OPTION = "p";
   public static final String PATTERN_OPTION = "p";
   public static final String PEEK_OPTION = "p";

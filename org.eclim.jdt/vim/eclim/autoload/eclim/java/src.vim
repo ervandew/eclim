@@ -22,7 +22,7 @@
 " Script Variables {{{
   let s:format_command =
     \ '-command java_format -p "<project>" -f "<file>" ' .
-    \ '-b <boffset> -e <eoffset>'
+    \ '-h <hoffset> -t <toffset> -e <encoding>'
   let s:checkstyle_command = '-command java_checkstyle -p "<project>" -f "<file>"'
 " }}}
 
@@ -41,8 +41,9 @@ function! eclim#java#src#Format(first, last) " {{{
   let command = substitute(command, '<file>', file, '')
   let begin = eclim#util#GetOffset(a:first, 1)
   let end = eclim#util#GetOffset(a:last, 1) + len(getline(a:last)) - 1
-  let command = substitute(command, '<boffset>', begin, '')
-  let command = substitute(command, '<eoffset>', end, '')
+  let command = substitute(command, '<hoffset>', begin, '')
+  let command = substitute(command, '<toffset>', end, '')
+  let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
   let result = eclim#ExecuteEclim(command)
   if result != "0"
