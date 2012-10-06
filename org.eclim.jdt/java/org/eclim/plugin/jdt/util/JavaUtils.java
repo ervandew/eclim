@@ -529,9 +529,6 @@ public class JavaUtils
     {
       length++;
     }
-    if ((offset + length) < contents.length()){
-      length++;
-    }
 
     TextEdit edits = formatter.format(kind, contents, offset, length, 0, delimiter);
     if (edits != null) {
