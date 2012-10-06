@@ -78,7 +78,7 @@ function! eclim#java#doc#PreviewOpen(bufnr_or_url) " {{{
     exec bufwinnr(a:bufnr_or_url) . 'winc w'
 
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#project#util#GetProjectRelativeFilePath()
+    let file = eclim#lang#SilentUpdate(1, 1)
     let position = eclim#util#GetCurrentElementPosition()
     let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
     let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
