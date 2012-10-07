@@ -10,4 +10,5 @@
 /org.eclim/nailgun/ng
 /org.eclim/nailgun/ng.*
 /patch/*
+/todo.txt
 /user.properties
