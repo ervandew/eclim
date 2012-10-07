@@ -1,47 +1,3 @@
-HIGH {{{
-  Bugs:
-    - figure out why eclimd affects the eclipse workspace selector
-
-  Features:
-    - Remote eclimd
-      - mount point for code/workspace location
-      - ~/.eclimrc (both sides need to agree)
-      - ~/.eclim/.eclimd_instances (client needs to read server created file)
-
-    - signature + docs (python docstrings, javadocs, etc.) of a method, class,
-      etc. (suggest default insert keybinding to get this essentially while typing)
-      - open a scratch window for displaying these
-
-    - cache remote xsd/dtd, prevent validating remove xsd/dtd
-      Example of xml file (save in file test.xml to prevent being recognized as
-      a webxml file) that fetches and validate the remote xsd:
-        <?xml version="1.0" encoding="UTF-8"?>
-        <web-app xmlns="http://java.sun.com/xml/ns/javaee"
-                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-                 version="2.5">
-            <display-name>Project</display-name>
-        </web-app>
-
-  Tasks:
-    - Breakout more vim plugins:
-      - buffers  (common/buffers.vim)
-        - test internationalized :buffers output
-        - add refresh shortcut
-        - on delete, refresh
-        - range delete + open
-      - :Jps
-      - django/jinja end tag completion?
-      - maven support
-
-      Create ability to package up other plugins in the rtp when building the
-      eclim installer, then break out these (use git submodules so that this
-      comes for free, for me and others checking out the source?):
-        - tree (TreeTab, etc.)
-        - sign support?
-}}}
-
 TODO {{{
 
   Bugs {{{
@@ -65,17 +21,6 @@ TODO {{{
     - django functionality
     - :EclimHelp, :EclimHelpGrep
     - :Jps
-    - vim templating
-  }}}
-
-  Installer {{{
-    - Update unattended install to auto install plugins based on available
-      eclipse features, unless explicitly disabled by the user.
-
-    - detect gnome / kde and add installer step to auto start eclimd
-
-    - installer validation
-      - java version
   }}}
 
   Documentation {{{
@@ -119,9 +64,6 @@ TODO {{{
     - CursorHold validation of files.
       - via temp file?
 
-    - Auto code completion
-      - using python to spawn completion in the background
-
     - Support for starting/stopping eclim from vim
       - fork eclimd
       - buffer to tail the eclimd log
@@ -129,7 +71,10 @@ TODO {{{
 
   Vimplugin {{{
     - setting to force eclipse to not make gvim the default editor for each
-      file opened via gvim.
+      file opened via gvim. Someone else also wants the opposite, where they
+      have vim as the default, but occasionaly open via the Java Editor
+      (https://github.com/ervandew/eclim/issues/140).
+      - funtionality should be added to VimEditorPartListener
     - add an "Open With Gvim" command that can be bound to an eclipse key binding.
       - Find the eclipse "Open Declaration" command for an example:
         Command:  Open Declaration
@@ -241,12 +186,9 @@ TODO {{{
       $ cd eclipse/plugins/com.android.ide.eclipse.adt/src/com/android/ide/eclipse/adt
     }}}
 
-    - refactoring
-      - move compilation unit to another package
-
     - add, remove, set default vm install.
 
-    - :Java, :Javac, :Javadoc
+    - :Java, :Javadoc
       - allow specific jdk/jre to be used to run the command?
 
     - :Java
@@ -259,9 +201,6 @@ TODO {{{
 
     - :Jps handle errors when opening jconsole
 
-    - :JavaCorrect, need to get the eclipse apply version working (but probably
-      should wait until :edit is a considered a change operation in vim).
-
     - :JavaClassCreate create a new class
       - handle locating the src dir, or prompting user if more than one
       - handle creation of package dirs if necessary
@@ -269,6 +208,8 @@ TODO {{{
 
     - generic support for java based xml config file validation
       - support list of xpaths to class name attributes / values to validate
+      - create spring file validation of class names like w/ log4j.
+      - class name completion support
 
     - refactoring support.
       - Safe deletes. Check for references before deleting.
@@ -280,8 +221,6 @@ TODO {{{
         - Remove Unused Code (imports, private methods, private constructors,
           private types).
         - JSE 5.0 (add missing @Override, add missing @Deprecated)
-
-    - create spring file validation of class names like w/ log4j.
 
     - JUnit
       - results in the browser.
@@ -310,38 +249,17 @@ TODO {{{
       by changing the get file name function to examine b:currentfile.
       - JavaImpl, JavaDelegate, JUnitImpl, JUnitResult
 
-    - add :JavaBeanImpl for defining an implementation of a bean interface.
     - automate switch statement generation for enums.
       When switch(enum), create cases for all enum values.
-    - :JavaImpl, wrap long parameter lines.
     - modify for loop abbreviations to increment the looping var if the current
       one is taken.  (ii, jj, kk, ll, mm, nn, ...)
-    - create a groovy templating harness
-      - create utility class with methods such as
-        - createMethod (velocity_template, values)
-        - createField (velocity_template, values)
-        - createImport (velocity_template, values)
-        - createClass (velocity_template, values)
-        - createCode (velocity_template, values) - insert code at current
-          cursor position
-      - standard templates
-        - jakarta equals, hashCode, toString.
-        - logging
     - push method to interface... create method in interface from method in
       implementation.
-
-    - logging
-      - Templates for generating logging statements:
-        Ex. logger.debug("${methodSignature} - ");
-      - Support for replacing System.out, System.err, and printStackTrace()
-        with logging statements.
 
     - searching
       - Expand searching from non java source files (spring xml, hibernate xml,
         etc).
       - Third party plugins may provide this functionality.
-
-    - highlight instance variables differently than local variables
 
     - content assist
       - Generate anonymous class body, including all methods that need to be
@@ -436,60 +354,23 @@ TODO {{{
 
   Python {{{
     - move to pydev
-    - look into using pyflakes fork, and possibly including it in vim like rope
-      http://github.com/kevinw/pyflakes/tree/master
 
     - jython?
 
     - modify :DjangoFind to account for django provided tags and filters.
 
     - when adding new method for a class, auto add self as first parameter.
-
-    - debugger: http://pyclewn.wiki.sourceforge.net/
-      - currently doen't support pdb
-      - seems to currently use netbeans support which means gvim only... look
-        into making it console vim compatible.
   }}}
 
   Ruby {{{
-    - ruby interpreter
-      - add command to set default interpreter
+    - switch to aptana
+      - http://www.aptana.com/
   }}}
 
   Scala {{{
     - vim files for scala
       https://github.com/scala/scala-dist/tree/master/tool-support/src/vim
       https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src/vim
-
-    ch.epfl.lamp.sdt
-    org.eclipse.contribution.weaving
-    org.scala-ide.sdt.weaving.feature
-    org.scala-ide.sdt.feature
-
-    <feature id="sdt">
-      <dependency id="org.scala-ide.sdt.weaving.feature" version="1.1.0">
-        <site url="http://download.scala-ide.org/update-current"/>
-      </dependency>
-      <dependency id="org.scala-ide.sdt.feature" version="1.1.0">
-        <site url="http://download.scala-ide.org/update-current"/>
-      </dependency>
-    </feature>
-
-    .classpath
-      <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
-
-    .project
-      <buildSpec>
-        <buildCommand>
-          <name>org.scala-ide.sdt.core.scalabuilder</name>
-          <arguments>
-          </arguments>
-        </buildCommand>
-      </buildSpec>
-      <natures>
-        <nature>org.scala-ide.sdt.core.scalanature</nature>
-        <nature>org.eclipse.jdt.core.javanature</nature>
-      </natures>
   }}}
 
   SQL {{{
@@ -517,8 +398,6 @@ NOTES {{{
     2) create sourceforge release
        - update windows and linux download pages with latest file to download.
     3) update documentation website
-    4) announce on freecode (the site formally know as freshmeat)
-       - http://freecode.com/projects/eclim/
   }}}
 
   Eclipse Docs {{{
@@ -545,14 +424,6 @@ NOTES {{{
           -application org.eclipse.equinox.p2.director
           -repository http://download.eclipse.org/releases/ganymede
           -uninstallIU org.eclipse.wst.web_ui.feature.feature.group
-
-    Old update manager:
-      http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/misc/update_standalone.html
-
-      Listing installed features:
-        ./eclipse -nosplash -consolelog
-          -application org.eclipse.update.core.standaloneUpdate
-          -command listFeatures
   }}}
 
   Adding a new plugin {{{
@@ -584,13 +455,6 @@ NOTES {{{
     Minimum execution of gvim inside of eclipse:
       Window -> Preferences -> Vimplugin -> Additional gvim args:
         -u NONE -U NONE --cmd "set nocp | sy on | filetype plugin indent on | ru plugin/eclim.vim"
-
-    Helpful link for debugging plugin errors.
-      http://eclipse.org/eclipse/platform-core/documents/3.1/debug.html
-
-    Core Tools (plugin with tools for debugging / fixing issues)
-      http://www.eclipse.org/eclipse/platform-core/downloads.html (Spies/Tools)
-      - Workspace Re-Builder (looks a bit old, may need some work).
 
     When using a project created from eclipse, may get errors in log when saving +
     closing a src file, complaining that the .swp file doesn't exist.  To fix this,
