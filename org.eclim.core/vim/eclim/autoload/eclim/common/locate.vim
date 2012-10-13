@@ -543,7 +543,7 @@ endfunction " }}}
 function! s:LocateFileCommand(pattern) " {{{
   let command = s:command_locate
   if g:EclimLocateFileCaseInsensitive == 'always' ||
-   \ (a:pattern !~ '[A-Z]' && g:EclimLocateFileCaseInsensitive != 'never')
+   \ (a:pattern !~# '[A-Z]' && g:EclimLocateFileCaseInsensitive != 'never')
     let command .= ' -i'
   endif
   let command .= ' -p "' . a:pattern . '"'
