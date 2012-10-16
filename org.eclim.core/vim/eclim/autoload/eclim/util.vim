@@ -1309,10 +1309,23 @@ function! eclim#util#System(cmd, ...)
     " use system
     else
       let begin = localtime()
+      let cmd = a:cmd
       try
-        let result = system(a:cmd)
+        " Dos is pretty bad at dealing with quoting of commands resulting in
+        " eclim calls failing if the path to the eclim bat/cmd file is quoted
+        " and there is a quoted arg in that command as well. We can fix this
+        " by wrapping the whole command in quotes with a space between the
+        " quotes and the actual command.
+        if (has('win32') || has('win64')) && a:cmd =~ '^"'
+          let cmd = '" ' . cmd . ' "'
+        " same issue, but handle the fact that we prefix eclim calls with
+        " 'cmd /c' for cygwin
+        elseif has('win32unix') && a:cmd =~? '^cmd /c "[a-z]'
+          let cmd = 'cmd /c " ' . substitute(cmd, '^cmd /c ', '', '') . ' "'
+        endif
+        let result = system(cmd)
       finally
-        call eclim#util#EchoTrace('system: ' . a:cmd, localtime() - begin)
+        call eclim#util#EchoTrace('system: ' . cmd, localtime() - begin)
       endtry
     endif
   finally
