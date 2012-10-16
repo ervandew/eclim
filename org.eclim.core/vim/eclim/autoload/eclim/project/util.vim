@@ -1212,9 +1212,12 @@ function! eclim#project#util#CommandCompleteProjectByNature(
   let projects = eclim#project#util#GetProjectNames(a:nature)
   if cmdLine !~ '[^\\]\s$'
     let argLead = escape(escape(argLead, '~'), '~')
+    " remove escape slashes
+    let argLead = substitute(argLead, '\', '', 'g')
     call filter(projects, 'v:val =~ "^' . argLead . '"')
   endif
 
+  call map(projects, 'escape(v:val, " ")')
   return projects
 endfunction " }}}
 
