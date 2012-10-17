@@ -55,7 +55,7 @@ function! eclim#common#buffers#Buffers(bang) " {{{
 
   let lines = []
   let filelength = options['maxfilelength']
-  let tabid = s:GetTabId()
+  let tabid = exists('*gettabvar') ? s:GetTabId() : 0
   let tabbuffers = tabpagebuflist()
   for buffer in buffers
     let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
