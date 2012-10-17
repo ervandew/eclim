@@ -304,7 +304,7 @@ if g:EclimSignLevel
   augroup END
 endif
 
-if g:EclimBufferTabTracking
+if g:EclimBufferTabTracking && exists('*gettabvar')
   call eclim#common#buffers#TabInit()
   augroup eclim_buffer_tab_tracking
     autocmd!
