@@ -63,6 +63,7 @@ target(name: 'init'){
   }else if (dotversion.exists()){ // only used by source distribution (tar.gz)
     version = dotversion.getText().trim()
     release = version
+    release_indigo = 'none'
   }else{
     // set eclim version based on current repos state (most recent tag w/
     // possible suffix including number of revisions since that tag + last commit
@@ -75,11 +76,14 @@ target(name: 'init'){
     version = version.replaceFirst(/^(\d+\.\d+\.\d+)-(\d+-\w+)$/, '$1.$2')
 
     release = execute('git', 'describe --abbrev=0')
+    release_indigo = execute('git', 'describe --abbrev=0 indigo')
   }
   property(name: 'eclim.version', value: version)
   property(name: 'eclim.release', value: release)
+  property(name: 'eclim.release.indigo', value: release_indigo)
   echo('eclim.version: ${eclim.version}')
   echo('eclim.release: ${eclim.release}')
+  echo('eclim.release.indigo: ${eclim.release.indigo}')
 
   property(name: 'eclim.features', value: '${eclipse.local}/features')
   property(name: 'eclim.plugins', value: '${eclipse.local}/plugins')
@@ -464,6 +468,7 @@ target(name: 'docs'){
       'google-site-verification: google4c368e38cc6ac62e.html')
 
   replace(dir: 'build/doc/site', includes: '**/*.html'){
+    replacefilter(token: 'eclim_release_indigo', value: '${eclim.release.indigo}')
     replacefilter(token: 'eclim_release', value: '${eclim.release}')
   }
 
@@ -496,6 +501,7 @@ target(name: 'vimdocs'){
   }
 
   replace(dir: 'build/doc/vimdocs', includes: '**/*.txt'){
+    replacefilter(token: 'eclim_release_indigo', value: '${eclim.release_indigo}')
     replacefilter(token: 'eclim_release', value: '${eclim.release}')
   }
 
