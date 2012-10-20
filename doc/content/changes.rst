@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _2.2.3:
+.. _1.7.11:
+
+2.2.3 / 1.7.11 (Oct. 19, 2012)
+------------------------------
+
+Eclim:
+  - Fixes execution of eclim commands from vim on Windows when using the
+    external nailgun client (vs the python client).
+
 .. _2.2.2:
 .. _1.7.10:
 
