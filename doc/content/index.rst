@@ -114,6 +114,15 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+2012-10-19
+----------
+
+This is a bug fix release for Windows users which fixes executing of eclim
+commands from vim:
+
+- :ref:`Eclim 2.2.3 <2.2.3>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.11 <1.7.11>` for Eclipse 3.7 (Indigo).
+
 2012-10-07
 ----------
 
