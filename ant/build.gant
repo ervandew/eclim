@@ -500,7 +500,7 @@ target(name: 'vimdocs'){
   }
 
   replace(dir: 'build/doc/vimdocs', includes: '**/*.txt'){
-    replacefilter(token: 'eclim_release_indigo', value: '${eclim.release_indigo}')
+    replacefilter(token: 'eclim_release_indigo', value: '${eclim.release.indigo}')
     replacefilter(token: 'eclim_release', value: '${eclim.release}')
   }
 
