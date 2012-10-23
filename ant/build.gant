@@ -76,7 +76,13 @@ target(name: 'init'){
     version = version.replaceFirst(/^(\d+\.\d+\.\d+)-(\d+-\w+)$/, '$1.$2')
 
     release = execute('git', 'describe --abbrev=0')
-    release_indigo = execute('git', 'describe --abbrev=0 indigo')
+    try {
+        release_indigo = execute('git', 'describe --abbrev=0 indigo')
+    }
+    catch (ex) {
+        echo('Unable to get indigo release information - do you have an indigo branch?')
+        release_indigo = 'none'
+    }
   }
   property(name: 'eclim.version', value: version)
   property(name: 'eclim.release', value: release)
