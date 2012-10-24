@@ -119,16 +119,19 @@ public class SrcUpdateCommand
 
         IMarker[] markers = getMarkers(src);
         for(IMarker marker : markers){
-          int[] lineColumn = offsets.offsetToLineColumn(
-              ((Integer)marker.getAttribute(IMarker.CHAR_START)).intValue());
-          int severity = ((Integer)
-              marker.getAttribute(IMarker.SEVERITY)).intValue();
+          Integer start = (Integer)marker.getAttribute(IMarker.CHAR_START);
+          if (start == null){
+            continue;
+          }
+
+          Integer severity = (Integer)marker.getAttribute(IMarker.SEVERITY);
+          int[] lineColumn = offsets.offsetToLineColumn(start.intValue());
           errors.add(new Error(
               (String)marker.getAttribute(IMarker.MESSAGE),
               filename,
               lineColumn[0],
               lineColumn[1],
-              severity != IMarker.SEVERITY_ERROR));
+              severity != null && severity.intValue() != IMarker.SEVERITY_ERROR));
         }
 
         Collections.sort(errors, new Comparator<Error>(){
