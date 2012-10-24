@@ -51,7 +51,7 @@ function! eclim#html#util#InCssBlock()
 
   let stylestart = search('<style\>', 'bcWn')
   if stylestart > 0
-    let styleend = search('</style\s*>', 'bcWn', line('w0'))
+    let styleend = search('</style\s*>', 'bWn')
   endif
   if stylestart > 0 && stylestart < line &&
       \ (styleend == 0 || (styleend > stylestart && line < styleend))
@@ -68,7 +68,7 @@ function! eclim#html#util#InJavascriptBlock()
 
   let scriptstart = search('<script\>', 'bcWn')
   if scriptstart > 0
-    let scriptend = search('</script\s*>', 'bcWn', line('w0'))
+    let scriptend = search('</script\s*>', 'bWn')
   endif
   if scriptstart > 0 && scriptstart < line &&
         \ (scriptend == 0 || (scriptend > scriptstart && line < scriptend))
