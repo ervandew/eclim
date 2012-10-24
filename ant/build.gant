@@ -78,8 +78,7 @@ target(name: 'init'){
     release = execute('git', 'describe --abbrev=0')
     try {
         release_indigo = execute('git', 'describe --abbrev=0 indigo')
-    }
-    catch (ex) {
+    }catch(ex) {
         echo('Unable to get indigo release information - do you have an indigo branch?')
         release_indigo = 'none'
     }
