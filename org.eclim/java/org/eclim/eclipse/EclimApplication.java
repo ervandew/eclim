@@ -62,7 +62,8 @@ public class EclimApplication
     };
     String[] newArgs = new String[appArgs.length + presentationArgs.length];
     System.arraycopy(appArgs, 0, newArgs, 0, appArgs.length);
-    System.arraycopy(presentationArgs, 0, newArgs, appArgs.length, presentationArgs.length);
+    System.arraycopy(
+        presentationArgs, 0, newArgs, appArgs.length, presentationArgs.length);
 
     args.put(IApplicationContext.APPLICATION_ARGS, newArgs);
 
@@ -89,7 +90,7 @@ public class EclimApplication
     return instance != null;
   }
 
-  public synchronized static void shutdown()
+  public static synchronized void shutdown()
     throws Exception
   {
     if (instance != null && !stopping){

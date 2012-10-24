@@ -191,7 +191,8 @@ public class ConstructorCommand
     IMethodBinding constructor = null;
     if (typeBinding.isEnum() || variables.length != 0) {
       ITypeBinding binding = cu.getAST().resolveWellKnownType("java.lang.Object");
-      constructor = Bindings.findMethodInType(binding, "Object", new ITypeBinding[0]);
+      constructor = Bindings.findMethodInType(
+          binding, "Object", new ITypeBinding[0]);
     } else {
       IMethodBinding[] bindings = StubUtility2
         .getVisibleConstructors(typeBinding, false, true);

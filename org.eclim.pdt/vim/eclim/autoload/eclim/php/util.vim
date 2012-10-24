@@ -27,9 +27,9 @@
   let s:html_validate_command = '-command html_validate -p "<project>" -f "<file>"'
 " }}}
 
-" IsPhpCode(lnum) {{{
-" Determines if the code under the cursor is php code (in a php block).
-function! eclim#php#util#IsPhpCode(lnum)
+function! eclim#php#util#IsPhpCode(lnum) " {{{
+  " Determines if the code under the cursor is php code (in a php block).
+
   " FIXME: may get confused if either of these occur in a comment.
   "        can fix with searchpos and checking syntax name on result.
   let phpstart = search('<?\(php\|=\)\?', 'bcnW')
@@ -37,9 +37,9 @@ function! eclim#php#util#IsPhpCode(lnum)
   return phpstart > 0 && phpstart <= a:lnum && (phpend == 0 || phpend < phpstart)
 endfunction " }}}
 
-" UpdateSrcFile(validate) {{{
-" Updates the src file on the server w/ the changes made to the current file.
-function! eclim#php#util#UpdateSrcFile(validate)
+function! eclim#php#util#UpdateSrcFile(validate) " {{{
+  " Updates the src file on the server w/ the changes made to the current file.
+
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
     let file = eclim#project#util#GetProjectRelativeFilePath()
@@ -82,9 +82,7 @@ function! eclim#php#util#UpdateSrcFile(validate)
   endif
 endfunction " }}}
 
-" CommandCompleteProject(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for project names.
-function! eclim#php#util#CommandCompleteProject(argLead, cmdLine, cursorPos)
+function! eclim#php#util#CommandCompleteProject(argLead, cmdLine, cursorPos) " {{{
   return eclim#project#util#CommandCompleteProjectByNature(
     \ a:argLead, a:cmdLine, a:cursorPos, 'php')
 endfunction " }}}

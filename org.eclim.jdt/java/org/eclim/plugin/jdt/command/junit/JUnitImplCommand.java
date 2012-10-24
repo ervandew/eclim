@@ -169,7 +169,8 @@ public class JUnitImplCommand
       CommandLine commandLine)
     throws Exception
   {
-    RefactoringASTParser parser = new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+    RefactoringASTParser parser =
+      new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
     CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
     ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
 
@@ -225,7 +226,7 @@ public class JUnitImplCommand
         AST ast = cu.getAST();
         ASTRewrite astRewrite = ASTRewrite.create(ast);
         ASTNode node = cu.findDeclaringNode(typeBinding);
-        ChildListPropertyDescriptor property= ((AbstractTypeDeclaration)node)
+        ChildListPropertyDescriptor property = ((AbstractTypeDeclaration)node)
           .getBodyDeclarationsProperty();
         ListRewrite memberRewriter = astRewrite.getListRewrite(node, property);
         HashSet<String> added = new HashSet<String>();
@@ -252,9 +253,9 @@ public class JUnitImplCommand
           stub.setBody(body);
 
           String todoTask = "";
-          String todoTaskTag= JUnitStubUtility.getTodoTaskTag(javaProject);
+          String todoTaskTag = JUnitStubUtility.getTodoTaskTag(javaProject);
           if (todoTaskTag != null) {
-            todoTask= " // " + todoTaskTag;
+            todoTask = " // " + todoTaskTag;
           }
           String message = WizardMessages
             .NewTestCaseWizardPageOne_not_yet_implemented_string;

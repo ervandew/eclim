@@ -61,8 +61,7 @@ public class HeadlessPresentationEngine
   {
     // prevent event loop from exiting on non-visible top window.
     for (MWindow win : windows) {
-      if (win.isToBeRendered() //&& win.isVisible()
-          && win.getWidget() != null) {
+      if (win.isToBeRendered() /*&& win.isVisible()*/ && win.getWidget() != null) {
         return true;
       }
     }

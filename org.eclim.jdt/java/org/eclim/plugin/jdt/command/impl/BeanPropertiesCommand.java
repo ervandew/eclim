@@ -180,7 +180,8 @@ public class BeanPropertiesCommand
         stub = stub.replaceFirst(
             "\n(\\s*\\*\\s*@return)",
             "\n * @param index the index to get\n$1");
-        stub = stub.replaceFirst("\\[\\]\\s*(" + name + "\\s*\\()\\)", " $1int index)");
+        stub = stub.replaceFirst(
+            "\\[\\]\\s*(" + name + "\\s*\\()\\)", " $1int index)");
         stub = stub.replaceFirst("(return\\s+\\w+)(.*?;)", "$1[index]$2");
 
         IMethod inserted = type.createMethod(stub, sibling, false, null);
