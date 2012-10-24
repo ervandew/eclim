@@ -33,7 +33,9 @@ function! eclim#php#util#IsPhpCode(lnum)
   " FIXME: may get confused if either of these occur in a comment.
   "        can fix with searchpos and checking syntax name on result.
   let phpstart = search('<?\(php\|=\)\?', 'bcnW')
-  let phpend = search('?>', 'bnW')
+  if phpstart > 0
+    let phpend = search('?>', 'bnW')
+  endif
   return phpstart > 0 && phpstart <= a:lnum && (phpend == 0 || phpend < phpstart)
 endfunction " }}}
 
