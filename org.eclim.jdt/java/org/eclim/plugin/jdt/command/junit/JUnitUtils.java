@@ -172,7 +172,8 @@ public class JUnitUtils
     for (IMethod method : methods){
       String testName = "test" + StringUtils.capitalize(method.getElementName());
       StringBuffer testNameWithParams = new StringBuffer(testName);
-      appendParameterNamesToMethodName(testNameWithParams, method.getParameterTypes());
+      appendParameterNamesToMethodName(
+          testNameWithParams, method.getParameterTypes());
       replaceIllegalCharacters(testNameWithParams);
 
       StringBuffer nameWithParams = new StringBuffer(method.getElementName());
@@ -208,19 +209,20 @@ public class JUnitUtils
 
   /* from org.eclipse.jdt.junit.wizards.NewTestCaseWizardPageOne */
 
-  private final static String QUESTION_MARK_TAG= "Q";
-  private final static String OF_TAG= "Of";
+  private static final String QUESTION_MARK_TAG = "Q";
+  private static final String OF_TAG = "Of";
   private static void appendParameterNamesToMethodName(
       StringBuffer buffer, String[] parameters)
   {
     for (String parameter : parameters) {
-      final StringBuffer buf= new StringBuffer(
+      final StringBuffer buf = new StringBuffer(
           Signature.getSimpleName(
             Signature.toString(
               Signature.getElementType(parameter))));
-      final char character= buf.charAt(0);
-      if (buf.length() > 0 && !Character.isUpperCase(character))
+      final char character = buf.charAt(0);
+      if (buf.length() > 0 && !Character.isUpperCase(character)){
         buf.setCharAt(0, Character.toUpperCase(character));
+      }
       buffer.append(buf.toString());
       for (int j = 0, arrayCount = Signature.getArrayCount(parameter);
            j < arrayCount; j++)
@@ -231,9 +233,9 @@ public class JUnitUtils
   }
   private static void replaceIllegalCharacters(StringBuffer buffer)
   {
-    char character= 0;
-    for (int index= buffer.length() - 1; index >= 0; index--) {
-      character= buffer.charAt(index);
+    char character = 0;
+    for (int index = buffer.length() - 1; index >= 0; index--) {
+      character = buffer.charAt(index);
       if (Character.isWhitespace(character)){
         buffer.deleteCharAt(index);
       }else if (character == '<'){

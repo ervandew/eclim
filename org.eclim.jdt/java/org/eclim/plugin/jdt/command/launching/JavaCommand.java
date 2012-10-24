@@ -17,8 +17,8 @@
 package org.eclim.plugin.jdt.command.launching;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.lang.reflect.Method;
@@ -38,7 +38,6 @@ import org.apache.tools.ant.taskdefs.Redirector;
 import org.apache.tools.ant.taskdefs.StreamPumper;
 
 import org.apache.tools.ant.types.Commandline.Argument;
-
 import org.apache.tools.ant.types.Environment.Variable;
 import org.apache.tools.ant.types.Path;
 

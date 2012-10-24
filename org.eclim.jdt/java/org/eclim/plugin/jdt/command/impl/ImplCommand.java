@@ -143,7 +143,8 @@ public class ImplCommand
       CommandLine commandLine)
     throws Exception
   {
-    RefactoringASTParser parser = new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+    RefactoringASTParser parser =
+      new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
     CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
     ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
 
@@ -240,7 +241,8 @@ public class ImplCommand
       ICompilationUnit src, IType type)
     throws Exception
   {
-    RefactoringASTParser parser = new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+    RefactoringASTParser parser =
+      new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
     CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
     ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
     return getOverridableMethods(cu, typeBinding);

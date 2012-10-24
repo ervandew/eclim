@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,19 @@ public class Position
   private int line = 1;
   private int column = 1;
   private String message;
+
+  private Position (
+      String filename, String message,
+      int offset, int length,
+      int line, int column)
+  {
+    this.filename = filename;
+    this.message = message != null ? message : StringUtils.EMPTY;
+    this.offset = offset;
+    this.length = length;
+    this.line = line;
+    this.column = column;
+  }
 
   /**
    * Construct a new Position given a filename, message, offset, and length.
@@ -76,30 +89,6 @@ public class Position
       String filename, String message, int line, int column)
   {
     return new Position(filename, message, 0, 0, line, column);
-  }
-
-  /**
-   * Constructs a new instance.
-   *
-   * @param filename The file name.
-   * @param message The message for the element at this postion.
-   * @param offset The character offset within the file.
-   * @param length The length of this position (number of characters from the
-   *   offset).
-   * @param line The line number within the file.
-   * @param column The column number within the file.
-   */
-  private Position (
-      String filename, String message,
-      int offset, int length,
-      int line, int column)
-  {
-    this.filename = filename;
-    this.message = message != null ? message : StringUtils.EMPTY;
-    this.offset = offset;
-    this.length = length;
-    this.line = line;
-    this.column = column;
   }
 
   /**

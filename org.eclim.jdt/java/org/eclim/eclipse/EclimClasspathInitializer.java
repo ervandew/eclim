@@ -117,7 +117,8 @@ public class EclimClasspathInitializer
         {
           if (name.startsWith("org.eclim")){
             // first pull bundle dependencies from the manifest
-            File manifest = new File(dir.getPath() + '/' + name + "/META-INF/MANIFEST.MF");
+            File manifest = new File(
+              dir.getPath() + '/' + name + "/META-INF/MANIFEST.MF");
             if (manifest.exists()){
               FileInputStream fin = null;
               try{
@@ -300,7 +301,8 @@ public class EclimClasspathInitializer
       return new IClasspathAttribute[]{
         JavaCore.newClasspathAttribute(
             IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME,
-            url)};
+            url),
+      };
     }
 
     return null;
