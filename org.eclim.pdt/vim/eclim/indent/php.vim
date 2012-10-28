@@ -39,22 +39,23 @@ setlocal indentkeys=0{,0},0),:,!^F,o,O,e,*<Return>,=?>,=<?,=*/,<>>,<bs>,{,}
 
 " EclimGetPhpHtmlIndent(lnum) {{{
 function! EclimGetPhpHtmlIndent(lnum)
-  let phpstart = search('<?php', 'bcnW')
-  if eclim#php#util#IsPhpCode(a:lnum)
-    let indent = GetPhpIndent()
-    " default php indent pushes first line of php code to left margin and
-    " indents all following php code relative to that. So just make sure that
-    " the first line of php after the opening php tag is indented at the same
-    " level as the opening tag.
-    if indent <= 0
-      let prevline = prevnonblank(a:lnum - 1)
-      if prevline == phpstart
-        return indent + indent(phpstart)
-      endif
-    endif
-    return indent
+  if ! eclim#php#util#IsPhpCode(a:lnum)
+    return EclimGetHtmlIndent(a:lnum)
   endif
-  return EclimGetHtmlIndent(a:lnum)
+
+  let indent = GetPhpIndent()
+  " default php indent pushes first line of php code to left margin and
+  " indents all following php code relative to that. So just make sure that
+  " the first line of php after the opening php tag is indented at the same
+  " level as the opening tag.
+  if indent <= 0
+    let phpstart = search('<?php', 'bcnW')
+    let prevline = prevnonblank(a:lnum - 1)
+    if prevline == phpstart
+      return indent + indent(phpstart)
+    endif
+  endif
+  return indent
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
