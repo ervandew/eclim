@@ -36,7 +36,7 @@ function! eclim#client#nailgun#Execute(port, command, ...) " {{{
       call s:DetermineClient()
     endif
 
-    if g:EclimNailgunClient == 'python'
+    if g:EclimNailgunClient == 'python' && has('python')
       return eclim#client#python#nailgun#Execute(a:port, a:command)
     endif
   endif
