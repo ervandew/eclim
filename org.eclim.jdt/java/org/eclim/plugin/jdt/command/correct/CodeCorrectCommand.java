@@ -232,7 +232,10 @@ public class CodeCorrectCommand
             if (proposal instanceof ASTRewriteCorrectionProposal){
               ImportRewrite rewrite =
                 ((ASTRewriteCorrectionProposal)proposal).getImportRewrite();
-              if (rewrite != null){
+              if (rewrite != null && (
+                    rewrite.getAddedImports().length != 0 ||
+                    rewrite.getAddedStaticImports().length != 0))
+              {
                 boolean exclude = true;
                 for(String fqn : rewrite.getAddedImports()){
                   if (!ImportUtils.isImportExcluded(project, fqn)){
