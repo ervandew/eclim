@@ -302,5 +302,5 @@ features to get your project started.
    .. code-block:: bash
 
      $ vim
-     :MvnRepos
+     :MvnRepo
      :ProjectImport /path/to/new/project
