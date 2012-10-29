@@ -72,7 +72,7 @@ function! eclim#python#search#Find(context)
     else
       exec 'lopen ' . g:EclimLocationListHeight
     endif
-  else
+  elseif has('python')
     call eclim#util#EchoInfo("Element not found.")
   endif
 endfunction " }}}
