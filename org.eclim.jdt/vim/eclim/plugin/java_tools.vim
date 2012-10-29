@@ -43,9 +43,17 @@ if !exists(":Maven")
   command -bang -nargs=* Maven
     \ :call eclim#java#tools#MakeWithJavaBuildTool('eclim_maven', '<bang>', '<args>')
 endif
+if !exists(":MavenRepo")
+  command -nargs=0 -buffer
+    \ MavenRepo :call eclim#java#maven#SetClasspathVariable('Maven', 'MAVEN_REPO')
+endif
 if !exists(":Mvn")
   command -bang -nargs=* Mvn
     \ :call eclim#java#tools#MakeWithJavaBuildTool('eclim_mvn', '<bang>', '<args>')
+endif
+if !exists(":MvnRepo")
+  command -nargs=0 -buffer
+    \ MvnRepo :call eclim#java#maven#SetClasspathVariable('Mvn', 'M2_REPO')
 endif
 " }}}
 

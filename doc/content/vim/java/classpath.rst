@@ -163,8 +163,7 @@ users).
 
   To initialize maven's support for updating the eclipse classpath you first need
   to set the ``M2_REPO`` (or ``MAVEN_REPO`` for 1.x) classpath variable in the
-  Eclipse workspace by executing the following command which is made available
-  when editing the pom.xml (or project.xml for 1.x) file in vim:
+  Eclipse workspace by executing the following command in vim:
 
   maven 2.x:
 
