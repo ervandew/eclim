@@ -664,7 +664,7 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     endif
 
     " windows machines where 'tee' is available
-    if (has('win32') || has('win64')) && executable('tee')
+    if (has('win32') || has('win64')) && (executable('tee') || executable('wtee'))
       doautocmd QuickFixCmdPre make
       let resultfile = eclim#util#Exec(make_cmd, 2)
       if filereadable(resultfile)
@@ -1279,12 +1279,12 @@ function! eclim#util#System(cmd, ...)
         let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
         if has('win32') || has('win64') || has('win32unix')
           let cmd = substitute(cmd, '^!', '', '')
-          if (executable('tee') || executable('wtee')) && !has('win32unix')
+          if has('win32unix')
+            let cmd = '!cmd /c "' . cmd . ' 2>&1 " | tee "' . outfile . '"'
+          elseif executable('tee') || executable('wtee')
             let tee = executable('wtee') ? 'wtee' : 'tee'
-            let teefile = has('win32unix') ? eclim#cygwin#CygwinPath(outfile) : outfile
-            let cmd = '!cmd /c "' . cmd . ' 2>&1 | ' . tee . ' "' . teefile . '" "'
+            let cmd = '!cmd /c "' . cmd . ' 2>&1 | ' . tee . ' "' . outfile . '" "'
           else
-            let outfile = has('win32unix') ? eclim#cygwin#WindowsPath(outfile) : outfile
             let cmd = '!cmd /c "' . cmd . ' >"' . outfile . '" 2>&1 "'
           endif
         else
