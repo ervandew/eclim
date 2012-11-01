@@ -166,7 +166,7 @@ function! eclim#common#util#ReadFile()
     if has('win32unix')
       let file = eclim#cygwin#CygwinPath(file)
     endif
-    silent exec "keepjumps edit! " . escape(file, ' ')
+    silent exec "keepalt keepjumps edit! " . escape(file, ' ')
     if project != ''
       let b:eclim_project = project
       let b:eclim_file = archive
