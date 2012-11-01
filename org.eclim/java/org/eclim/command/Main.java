@@ -77,7 +77,9 @@ public class Main
       }
 
       if (arguments.isEmpty() || arguments.contains("-?")){
-        usage(context.out);
+        int index = arguments.indexOf("-?");
+        String cmd = arguments.size() > index + 1 ? arguments.get(index + 1) : null;
+        usage(cmd, context.out);
         System.exit(arguments.isEmpty() ? 1 : 0);
       }
 
@@ -137,7 +139,7 @@ public class Main
     }
   }
 
-  public static void usage(PrintStream out)
+  public static void usage(String cmd, PrintStream out)
   {
     ArrayList<org.eclim.annotation.Command> commands =
       new ArrayList<org.eclim.annotation.Command>();
@@ -153,13 +155,31 @@ public class Main
       }
     });
 
-    String osOpts = StringUtils.EMPTY;
-    if (SystemUtils.IS_OS_UNIX){
-      osOpts = " [-f eclimrc] [--nailgun-port port]";
+    boolean cmdFound = cmd == null;
+    if (cmd == null){
+      String osOpts = StringUtils.EMPTY;
+      if (SystemUtils.IS_OS_UNIX){
+        osOpts = " [-f eclimrc] [--nailgun-port port]";
+      }
+      out.println("Usage: eclim" + osOpts + " -command command [args]");
+      out.println("  To view a full list of available commands:");
+      out.println("    eclim -? commands");
+      out.println("  To view info for a specific command:");
+      out.println("    eclim -? <command_name>");
+      out.println("  Ex.");
+      out.println("    eclim -? project_create");
+    }else if(cmd.equals("commands")){
+      out.println("Available Commands:");
+    }else{
+      out.println("Requested Command:");
     }
-    out.println("Usage: eclim" + osOpts + " -command command [args]");
-    out.println("  Available Commands:");
+
     for (org.eclim.annotation.Command command : commands){
+      if (cmd == null || (!cmd.equals(command.name()) && !cmd.equals("commands"))){
+        continue;
+      }
+      cmdFound = true;
+
       Collection<Option> options = new Options()
         .parseOptions(command.options());
       StringBuffer opts = new StringBuffer();
@@ -185,6 +205,10 @@ public class Main
       if (!command.description().equals(StringUtils.EMPTY)){
         out.println("      " + command.description());
       }
+    }
+
+    if (!cmdFound){
+      out.println("    No Such Command: " + cmd);
     }
   }
 
