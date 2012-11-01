@@ -88,8 +88,8 @@ function! EclimGetHtmlIndent(lnum)
 
     " handle case where previous line is a multi-line comment (<!-- -->) on one
     " line, which IndentAnything doesn't handle properly.
-    "if prevline =~ '^\s\+<!--.\{-}-->'
-    "  let adj = indent(prevlnum)
+    if prevline =~ '^\s\+<!--.\{-}-->'
+      let adj = indent(prevlnum)
 
     " handle <br> tags without '/>'
     if prevline =~ '<br\s*>'
