@@ -27,7 +27,6 @@
   <classpathentry kind="src" path="org.eclim.jdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.pdt/java"/>
   <classpathentry kind="src" path="org.eclim.pdt/test/junit"/>
-  <classpathentry kind="src" path="org.eclim.sdt/java"/>
   <classpathentry kind="src" path="org.eclim.sdt/scala"/>
   <classpathentry kind="src" path="org.eclim.sdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.vimplugin/java"/>
