@@ -12,3 +12,5 @@
 /patch/*
 /todo.txt
 /user.properties
+.ctrlp
+tags
