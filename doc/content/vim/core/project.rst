@@ -433,6 +433,16 @@ Vim's command line completion to complete the project name.
   on multiple projects within a single vim instance where each project is
   isolated to its own tab.
 
+  **Configuration**
+
+  :doc:`Vim Settings </vim/settings>`
+
+  .. _g\:EclimProjectTabTreeAutoOpen:
+
+  - **g:EclimProjectTabTreeAutoOpen** (Default: 1)
+
+    When non 0, the project tree window will be auto opened on the newly created tab.
+
 .. _\:TreeTab:
 
 - **:TreeTab** <dir>

@@ -44,6 +44,10 @@ if !exists('g:EclimProjectTreeAutoOpen') || exists('g:vimplugin_running')
   let g:EclimProjectTreeAutoOpen = 0
 endif
 
+if !exists('g:EclimProjectTabTreeAutoOpen')
+  let g:EclimProjectTabTreeAutoOpen = 1
+endif
+
 if !exists('g:EclimProjectTreeExpandPathOnOpen')
   let g:EclimProjectTreeExpandPathOnOpen = 0
 endif
