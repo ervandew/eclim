@@ -777,12 +777,19 @@ function! eclim#project#util#ProjectTab(project)
     call eclim#util#EchoError("No project '" . a:project . "' found.")
     return
   endif
-  if winnr('$') > 1 || expand('%') != '' ||
+  if exists('t:eclim_project') ||
+   \ winnr('$') > 1 || expand('%') != '' ||
    \ &modified || line('$') != 1 || getline(1) != ''
     tablast | tabnew
   endif
-  call eclim#common#util#Tcd(eclim#project#util#GetProjectRoot(a:project))
-  call eclim#project#tree#ProjectTree(a:project)
+  let t:eclim_project = a:project
+  let root = eclim#project#util#GetProjectRoot(a:project)
+  call eclim#common#util#Tcd(root)
+  if g:EclimProjectTabTreeAutoOpen
+    call eclim#project#tree#ProjectTree(a:project)
+  else
+    call eclim#util#Echo('ProjectTab ' . a:project . ' cwd: ' . root)
+  endif
 endfunction " }}}
 
 " TreeTab(dir) {{{
