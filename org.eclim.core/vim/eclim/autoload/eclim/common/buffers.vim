@@ -258,6 +258,52 @@ function! eclim#common#buffers#TabLastOpenIn() " {{{
   endif
 endfunction " }}}
 
+function! eclim#common#buffers#OpenNextHiddenTabBuffer(current) " {{{
+  let allbuffers = eclim#common#buffers#GetBuffers()
+
+  " build list of buffers open in other tabs to exclude
+  let tabbuffers = []
+  let lasttab = tabpagenr('$')
+  let index = 1
+  while index <= lasttab
+    if index != tabpagenr()
+      for bnum in tabpagebuflist(index)
+        call add(tabbuffers, bnum)
+      endfor
+    endif
+    let index += 1
+  endwhile
+
+  " build list of buffers not open in any window, and last seen on the
+  " current tab.
+  let hiddenbuffers = []
+  for buffer in allbuffers
+    let bnum = buffer.bufnr
+    if bnum != a:current && index(tabbuffers, bnum) == -1 && bufwinnr(bnum) == -1
+      let eclim_tab_id = getbufvar(bnum, 'eclim_tab_id')
+      if eclim_tab_id != '' && eclim_tab_id != t:eclim_tab_id
+        continue
+      endif
+
+      if bnum < a:current
+        call insert(hiddenbuffers, bnum)
+      else
+        call add(hiddenbuffers, bnum)
+      endif
+    endif
+  endfor
+
+  " we found a hidden buffer, so open it
+  if len(hiddenbuffers) > 0
+    exec 'buffer ' . hiddenbuffers[0]
+    doautocmd BufEnter
+    doautocmd BufWinEnter
+    doautocmd BufReadPost
+    return hiddenbuffers[0]
+  endif
+  return 0
+endfunction " }}}
+
 function! s:BufferDelete() " {{{
   let line = line('.')
   if line > len(b:eclim_buffers)

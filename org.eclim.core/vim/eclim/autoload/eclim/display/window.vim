@@ -40,10 +40,10 @@ if !exists('g:VerticalToolWindowWidth')
 endif
 " }}}
 
-" VerticalToolWindowOpen(name, weight, [tablocal]) {{{
-" Handles opening windows in the vertical tool window on the left (taglist,
-" project tree, etc.)
-function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
+function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
+  " Handles opening windows in the vertical tool window on the left (taglist,
+  " project tree, etc.)
+
   let taglist_window = -1
   if exists('g:TagList_title')
     let taglist_window = bufwinnr(eclim#util#EscapeBufferName(g:TagList_title))
@@ -152,10 +152,10 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...)
   augroup END
 endfunction " }}}
 
-" VerticalToolWindowRestore() {{{
-" Used to restore the tool windows to their proper width if some action
-" altered them.
-function! eclim#display#window#VerticalToolWindowRestore()
+function! eclim#display#window#VerticalToolWindowRestore() " {{{
+  " Used to restore the tool windows to their proper width if some action
+  " altered them.
+
   for toolbuf in keys(g:VerticalToolBuffers)
     exec 'let toolbuf = ' . toolbuf
     if bufwinnr(toolbuf) != -1
@@ -164,10 +164,10 @@ function! eclim#display#window#VerticalToolWindowRestore()
   endfor
 endfunction " }}}
 
-" GetWindowOptions(winnum) {{{
-" Gets a dictionary containing all the localy set options for the specified
-" window.
-function! eclim#display#window#GetWindowOptions(winnum)
+function! eclim#display#window#GetWindowOptions(winnum) " {{{
+  " Gets a dictionary containing all the localy set options for the specified
+  " window.
+
   let curwin = winnr()
   try
     exec a:winnum . 'winc w'
@@ -194,10 +194,10 @@ function! eclim#display#window#GetWindowOptions(winnum)
   return winopts
 endfunction " }}}
 
-" SetWindowOptions(winnum, options) {{{
-" Given a dictionary of options, sets each as local options for the specified
-" window.
-function! eclim#display#window#SetWindowOptions(winnum, options)
+function! eclim#display#window#SetWindowOptions(winnum, options) " {{{
+  " Given a dictionary of options, sets each as local options for the specified
+  " window.
+
   let curwin = winnr()
   try
     exec a:winnum . 'winc w'
@@ -313,49 +313,10 @@ function! s:PreventCloseOnBufferDelete() " {{{
     endif
     setlocal noreadonly modifiable
     let curbuf = bufnr('%')
-    exec 'let bufnr = ' . expand('<abuf>')
-
-    let allbuffers = eclim#common#buffers#GetBuffers()
-
-    " build list of buffers open in other tabs to exclude
-    let tabbuffers = []
-    let lasttab = tabpagenr('$')
-    let index = 1
-    while index <= lasttab
-      if index != tabpagenr()
-        for bnum in tabpagebuflist(index)
-          call add(tabbuffers, bnum)
-        endfor
-      endif
-      let index += 1
-    endwhile
-
-    " build list of buffers not open in any window, and last seen on the
-    " current tab.
-    let hiddenbuffers = []
-    for buffer in allbuffers
-      let bnum = buffer.bufnr
-      if bnum != bufnr && index(tabbuffers, bnum) == -1 && bufwinnr(bnum) == -1
-        let eclim_tab_id = getbufvar(bnum, 'eclim_tab_id')
-        if eclim_tab_id != '' && eclim_tab_id != t:eclim_tab_id
-          continue
-        endif
-
-        if bnum < bufnr
-          call insert(hiddenbuffers, bnum)
-        else
-          call add(hiddenbuffers, bnum)
-        endif
-      endif
-    endfor
-
-    " we found a hidden buffer, so open it
-    if len(hiddenbuffers) > 0
-      let curbuf = hiddenbuffers[0]
-      exec 'buffer ' . hiddenbuffers[0]
-      doautocmd BufEnter
-      doautocmd BufWinEnter
-      doautocmd BufReadPost
+    let removed = str2nr(expand('<abuf>'))
+    let next = eclim#common#buffers#OpenNextHiddenTabBuffer(removed)
+    if next != 0
+      let curbuf = next
     endif
 
     " resize windows
