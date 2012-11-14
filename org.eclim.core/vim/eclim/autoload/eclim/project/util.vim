@@ -768,55 +768,42 @@ function! eclim#project#util#ProjectGrep(command, args)
   endif
 endfunction " }}}
 
-" ProjectTab(project) {{{
-" Opens a new tab with the project tree and tab relative working directory for
-" the specified project.
-function! eclim#project#util#ProjectTab(project)
+function! eclim#project#util#ProjectTab(project) " {{{
+  " Opens a new tab with the project tree and tab relative working directory for
+  " the specified project.
+
+  let project = a:project
   let names = eclim#project#util#GetProjectNames()
-  if index(names, a:project) == -1
-    call eclim#util#EchoError("No project '" . a:project . "' found.")
-    return
+  if index(names, project) == -1
+    let is_project = 0
+    let dir = expand(project, ':p')
+    if !isdirectory(dir)
+      call eclim#util#EchoError("No project '" . project . "' found.")
+      return
+    endif
+    let project = fnamemodify(substitute(dir, '/$', '', ''), ':t')
+  else
+    let is_project = 1
+    let dir = eclim#project#util#GetProjectRoot(project)
   endif
+
   if exists('t:eclim_project') ||
    \ winnr('$') > 1 || expand('%') != '' ||
    \ &modified || line('$') != 1 || getline(1) != ''
     tablast | tabnew
   endif
-  let t:eclim_project = a:project
-  let root = eclim#project#util#GetProjectRoot(a:project)
-  call eclim#common#util#Tcd(root)
-  if g:EclimProjectTabTreeAutoOpen
-    call eclim#project#tree#ProjectTree(a:project)
-  else
-    call eclim#util#Echo('ProjectTab ' . a:project . ' cwd: ' . root)
-  endif
-endfunction " }}}
 
-" TreeTab(dir) {{{
-" Like ProjectTab, but opens for an arbitrary directory.
-function! eclim#project#util#TreeTab(dir)
-  let dir = fnamemodify(a:dir, ':p')
-  let dir = substitute(dir, '/$', '', '')
-  if !isdirectory(dir)
-    call eclim#util#EchoError('Directory does not exist: ' . dir)
-    return
-  endif
-
-  if winnr('$') > 1 || expand('%') != '' ||
-   \ &modified || line('$') != 1 || getline(1) != ''
-    tablast | tabnew
-    if dir == eclim#UserHome()
-      tabmove 0
-    endif
-  endif
-  let name = dir
-  let display = name
-  if len(name) > 30
-    let display = fnamemodify(dir, ':t')
-    let name = display . ': ' . dir
-  endif
+  let t:eclim_project = project
   call eclim#common#util#Tcd(dir)
-  call eclim#project#tree#ProjectTreeOpen('Tree: ' . display, [name], [dir])
+  if g:EclimProjectTabTreeAutoOpen
+    if is_project
+      call eclim#project#tree#ProjectTree(project)
+    else
+      call eclim#project#tree#ProjectTreeOpen('Tree: ' . project, [project], [dir])
+    endif
+  else
+    call eclim#util#Echo('ProjectTab ' . project . ' cwd: ' . dir)
+  endif
 endfunction " }}}
 
 " Todo() {{{
@@ -1340,6 +1327,19 @@ function! eclim#project#util#CommandCompleteProjectRelative(
   call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
 
   return eclim#util#ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
+function! eclim#project#util#CommandCompleteProject(argLead, cmdLine, cursorPos) " {{{
+  " Custom command completion for :ProjectTree to complete project names or
+  " directories
+
+  let projects = []
+  if a:argLead !~ '[~/]'
+    let projects = eclim#project#util#CommandCompleteProjectByNature(
+      \ a:argLead, a:cmdLine, a:cursorPos, '')
+  endif
+  let dirs = eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
+  return projects + dirs
 endfunction " }}}
 
 " CommandCompleteAbsoluteOrProjectRelative(argLead, cmdLine, cursorPos) {{{

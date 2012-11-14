@@ -162,7 +162,7 @@ endif
 
 if !exists(":ProjectTree")
   command -nargs=*
-    \ -complete=customlist,eclim#project#util#CommandCompleteProject
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectTree
     \ ProjectTree :call eclim#project#tree#ProjectTree(<f-args>)
   command -nargs=0 ProjectTreeToggle :call eclim#project#tree#ProjectTreeToggle()
   command -nargs=0 ProjectsTree
@@ -170,8 +170,6 @@ if !exists(":ProjectTree")
   command -nargs=1
     \ -complete=customlist,eclim#project#util#CommandCompleteProject
     \ ProjectTab :call eclim#project#util#ProjectTab('<args>')
-  command! -nargs=1 -complete=dir TreeTab
-    \ :call eclim#project#util#TreeTab(expand('<args>', ':p'))
 endif
 
 if !exists(":ProjectCD")

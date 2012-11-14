@@ -426,12 +426,16 @@ Vim's command line completion to complete the project name.
 
 .. _\:ProjectTab:
 
-- **:ProjectTab** <project>
+- | **:ProjectTab** <project>
+  | **:ProjectTab** <dir>
 
   Command to initialize a new vim tab with the project tree open and the tab
   relative working directory set to the project root.  This allows you to work
   on multiple projects within a single vim instance where each project is
-  isolated to its own tab.
+  isolated to its own tab. The command also supports an arbitrary directory as
+  an argument instead of a project name should you want to open a tab for a
+  project not managed by eclim/eclipse (Note: the last part of the path will be
+  used as the project's name).
 
   **Configuration**
 
@@ -442,13 +446,6 @@ Vim's command line completion to complete the project name.
   - **g:EclimProjectTabTreeAutoOpen** (Default: 1)
 
     When non 0, the project tree window will be auto opened on the newly created tab.
-
-.. _\:TreeTab:
-
-- **:TreeTab** <dir>
-
-  Like **:ProjectTree**, but opens a vim tab with a tree window for any
-  arbitrary directory.
 
 .. _\:ProjectGrep:
 
