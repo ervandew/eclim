@@ -25,6 +25,10 @@ History of Changes
 Eclim:
   - Fixes execution of eclim commands from vim on Windows when using the
     external nailgun client (vs the python client).
+  - Updated :ref:`:ProjectTab <:ProjectTab>` to support an arbitrary directory
+    as an argument, allowing you to use the command for project's not managed
+    by eclipse/eclim. :TreeTab has been removed since the update to :ProjectTab
+    makes it redundant.
 
 .. _2.2.2:
 .. _1.7.10:

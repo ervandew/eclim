@@ -155,8 +155,8 @@ Eclim:
     instances on the same workspace.
 
 Common:
-  - Added a :ref:`:TreeTab <:TreeTab>` command like :ref:`:ProjectTab
-    <:ProjectTab>` but for any arbitrary directory.
+  - Added a :TreeTab command like :ref:`:ProjectTab <:ProjectTab>` but for any
+    arbitrary directory.
   - Added a :ref:`:BuffersToggle <:BuffersToggle>` command to toggle whether
     the eclim buffers windows is open or closed.
   - Refactored Vcs support, including a new :VcsLog layout.
