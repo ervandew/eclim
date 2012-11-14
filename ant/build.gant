@@ -686,21 +686,20 @@ target(name: 'patch.revert'){
 }
 
 def getSysPath() {
-    def envPaths= ['env.Path', 'env.PATH']
-    def syspath = ''
-    envPaths.each() {
-        if (hasVariable("${it}")) {
-            syspath = binding.getVariable("${it}")
-        }
+  for (path in ['env.PATH', 'env.Path']) {
+    if (hasVariable(path)) {
+      return binding.getVariable(path)
     }
-    return syspath
+  }
+  return null
 }
 
 def getGitAvailable(){
   if (!new File("${basedir}/.git").exists()){
     return false
   }
-  def syspath = getSysPath()
+
+  syspath = getSysPath()
   if (Os.isFamily(Os.FAMILY_WINDOWS)) {
     ant.available(file: 'git.cmd', filepath: syspath, property: 'git.available')
     ant.available(file: 'git.exe', filepath: syspath, property: 'git.available')
