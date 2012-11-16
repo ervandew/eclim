@@ -23,10 +23,10 @@ History of Changes
 ------------------------------
 
 Eclim:
-  - Updated :ref:`:ProjectTab <:ProjectTab>` to support an arbitrary directory
-    as an argument, allowing you to use the command for project's not managed
-    by eclipse/eclim. :TreeTab has been removed since the update to :ProjectTab
-    makes it redundant.
+  - Updated :ref:`:ProjectTree <:ProjectTree>` and :ref:`:ProjectTab
+    <:ProjectTab>` to support an arbitrary directory as an argument, allowing
+    you to use the command for project's not managed by eclipse/eclim. :TreeTab
+    has been removed since the update to :ProjectTab makes it redundant.
 
 Android:
   - Updated for ADT 21.0.0.
