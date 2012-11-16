@@ -202,49 +202,44 @@ public class ProjectManagement
       IWorkspace workspace = ResourcesPlugin.getWorkspace();
       IPath location = new Path(folder);
 
-      // location must not overlap the workspace.
+      // location must not overlap the workspace (unless it's a nested project)
       IPath workspaceLocation = workspace.getRoot().getRawLocation();
+      IPath relLocation = null;
       if (location.toOSString().toLowerCase().startsWith(
             workspaceLocation.toOSString().toLowerCase()))
       {
-        IPath tmpLocation = location.removeFirstSegments(
+        relLocation = location.removeFirstSegments(
             location.matchingFirstSegments(workspaceLocation));
+      }
 
-        if (tmpLocation.segmentCount() > 1){
-          throw new RuntimeException(
-              Services.getMessage("project.segments.error"));
-        }
-
-        String tmpName = tmpLocation.toString();
-        // hack for windows... manually remove drive letter
-        tmpName = tmpName.replaceFirst("^[a-zA-Z]:", "");
-
-        project = ProjectUtils.getProject(tmpName, true);
-        if(!project.exists()){
-          IProjectDescription description = workspace.newProjectDescription(tmpName);
-          description.setNatureIds(natures);
-          project.create(description, null/*monitor*/);
-          // FIXME: eclipse will ignore this name change.  need to find the
-          // proper way to rename a project if we want to support this.
-          /*project.open(null);
-          description = project.getDescription();
-          description.setName(name);*/
-        }
-
-      }else{
+      // project is outside the workspace otherwise not at the top of the
+      // workspace
+      if (relLocation == null || relLocation.segmentCount() != 1) {
         IProjectDescription description = workspace.newProjectDescription(name);
         description.setLocation(location);
         description.setNatureIds(natures);
         project.create(description, null/*monitor*/);
-      }
 
-    /*}else{
-      // check if the existing project is located elsewhere.
-      File path = project.getLocation().toFile();
-      if(!path.equals(new File(folder))){
-        throw new IllegalArgumentException(Services.getMessage(
-            "project.name.exists", name, path.toString()));
-      }*/
+      // project is at the workspace root, requires jumping through eclipse
+      // hoops
+      }else{
+        String relName = relLocation.toString();
+        // hack for windows... manually remove drive letter
+        relName = relName.replaceFirst("^[a-zA-Z]:", "");
+
+        project = ProjectUtils.getProject(relName, true);
+        if(!project.exists()){
+          IProjectDescription description = workspace.newProjectDescription(relName);
+          description.setNatureIds(natures);
+          project.create(description, null/*monitor*/);
+          // FIXME: eclipse will ignore this name change.  need to find the
+          // proper way to rename a project in the workspace root if we want to
+          // support this.
+          /*project.open(null);
+          description = project.getDescription();
+          description.setName(name);*/
+        }
+      }
 
     // project exists, so just add any missing requested natures
     }else{
