@@ -799,7 +799,7 @@ function! eclim#project#util#ProjectTab(project) " {{{
     if is_project
       call eclim#project#tree#ProjectTree(project)
     else
-      call eclim#project#tree#ProjectTreeOpen('Tree: ' . project, [project], [dir])
+      call eclim#project#tree#ProjectTree(dir)
     endif
   else
     call eclim#util#Echo('ProjectTab ' . project . ' cwd: ' . dir)
@@ -1329,8 +1329,8 @@ function! eclim#project#util#CommandCompleteProjectRelative(
   return eclim#util#ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
-function! eclim#project#util#CommandCompleteProject(argLead, cmdLine, cursorPos) " {{{
-  " Custom command completion for :ProjectTree to complete project names or
+function! eclim#project#util#CommandCompleteProjectOrDirectory(argLead, cmdLine, cursorPos) " {{{
+  " Custom command completion for :ProjectTree/:ProjectTab to complete project names or
   " directories
 
   let projects = []

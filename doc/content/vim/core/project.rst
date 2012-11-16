@@ -290,12 +290,16 @@ Vim's command line completion to complete the project name.
 
 .. _\:ProjectTree:
 
-- **:ProjectTree** [<project> <project> ...]
+- | **:ProjectTree** [<project> <project> ...]
+  | **:ProjectTree** <dir> [<dir> <project> ...]
 
   Opens a window containing a navigable tree for the root directory of one or
   more projects.  If no arguments are supplied, the resulting tree is for the
   current project.  Otherwise, the tree contains multiple root nodes, one for
-  each project root directory.
+  each project root directory. The command also supports one or more arbitrary
+  directories as arguments as well should you want to open a tree for a project
+  not managed by eclim/eclipse (Note: the last part of the path will be used as
+  the project's name).
 
   **Available key mappings in project tree window.**
 
