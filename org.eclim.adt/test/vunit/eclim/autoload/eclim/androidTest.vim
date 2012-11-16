@@ -55,7 +55,7 @@ function! TestAndroidSdkSetting() " {{{
   call vunit#AssertEquals(loclist[0].lnum, lnum, 'Empty sdk loclist lnum incorrect')
   call vunit#AssertEquals(
     \ loclist[0].text,
-    \ "Could not find folder 'tools' inside SDK '/'.",
+    \ "Location of the Android SDK has not been setup in the preferences.",
     \ 'Empty sdk loclist text incorrect')
 
   " non-existant directory

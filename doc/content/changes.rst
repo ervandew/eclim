@@ -16,6 +16,21 @@
 History of Changes
 ==================
 
+.. _2.2.4:
+.. _1.7.12:
+
+2.2.4 / 1.7.12 ()
+------------------------------
+
+Eclim:
+  - Updated :ref:`:ProjectTab <:ProjectTab>` to support an arbitrary directory
+    as an argument, allowing you to use the command for project's not managed
+    by eclipse/eclim. :TreeTab has been removed since the update to :ProjectTab
+    makes it redundant.
+
+Android:
+  - Updated for ADT 21.0.0.
+
 .. _2.2.3:
 .. _1.7.11:
 
@@ -25,10 +40,6 @@ History of Changes
 Eclim:
   - Fixes execution of eclim commands from vim on Windows when using the
     external nailgun client (vs the python client).
-  - Updated :ref:`:ProjectTab <:ProjectTab>` to support an arbitrary directory
-    as an argument, allowing you to use the command for project's not managed
-    by eclipse/eclim. :TreeTab has been removed since the update to :ProjectTab
-    makes it redundant.
 
 .. _2.2.2:
 .. _1.7.10:
