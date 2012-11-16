@@ -32,8 +32,9 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import com.android.ide.eclipse.adt.internal.sdk.Sdk;
 
-import com.android.sdklib.ISdkLog;
 import com.android.sdklib.SdkManager;
+
+import com.android.utils.ILogger;
 
 /**
  * Command to reload the android sdk environment.
@@ -43,7 +44,7 @@ import com.android.sdklib.SdkManager;
 @Command(name = "android_reload")
 public class ReloadCommand
   extends AbstractCommand
-  implements ISdkLog
+  implements ILogger
 {
   private static final Logger logger = Logger.getLogger(ReloadCommand.class);
 
@@ -78,8 +79,14 @@ public class ReloadCommand
   }
 
   @Override
-  public void printf(String message, Object... args)
+  public void info(String message, Object... args)
   {
     logger.info(MessageFormat.format(message, args));
+  }
+
+  @Override
+  public void verbose(String message, Object... args)
+  {
+    logger.debug(MessageFormat.format(message, args));
   }
 }

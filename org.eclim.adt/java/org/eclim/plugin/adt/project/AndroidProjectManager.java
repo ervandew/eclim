@@ -38,6 +38,8 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import com.android.SdkConstants;
+
 import com.android.ide.eclipse.adt.AdtConstants;
 import com.android.ide.eclipse.adt.AdtPlugin;
 
@@ -46,7 +48,6 @@ import com.android.ide.eclipse.adt.internal.sdk.Sdk;
 import com.android.ide.eclipse.adt.internal.wizards.newproject.NewProjectCreator;
 
 import com.android.sdklib.IAndroidTarget;
-import com.android.sdklib.SdkConstants;
 
 /**
  * Implementation of {@link ProjectManager} for android projects.
@@ -56,10 +57,8 @@ import com.android.sdklib.SdkConstants;
 public class AndroidProjectManager
   implements ProjectManager
 {
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#create(IProject,CommandLine)
-   */
+  @Override
+  @SuppressWarnings("static-access")
   public void create(IProject project, CommandLine commandLine)
     throws Exception
   {
@@ -144,38 +143,26 @@ public class AndroidProjectManager
     return method.invoke(obj, args);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#update(IProject,CommandLine)
-   */
+  @Override
   public List<Error> update(IProject project, CommandLine commandLine)
     throws Exception
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#delete(IProject,CommandLine)
-   */
+  @Override
   public void delete(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,CommandLine)
-   */
+  @Override
   public void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,IFile)
-   */
+  @Override
   public void refresh(IProject project, IFile file)
     throws Exception
   {
