@@ -45,6 +45,7 @@ let s:command_delete = '-command project_delete -p "<project>"'
 let s:command_rename = '-command project_rename -p "<project>" -n "<name>"'
 let s:command_move = '-command project_move -p "<project>" -d "<dir>"'
 let s:command_refresh = '-command project_refresh -p "<project>"'
+let s:command_run = '-command project_run "<configuration>"'
 let s:command_refresh_file =
   \ '-command project_refresh_file -p "<project>" -f "<file>"'
 let s:command_build = '-command project_build -p "<project>"'
@@ -388,6 +389,20 @@ function! eclim#project#util#ProjectRefreshAll()
   endfor
   call eclim#util#Echo('Done.')
 endfunction " }}}
+
+" ProjectRun(args) {{{
+" Runs the Build Configuration that matches
+function! eclim#project#util#ProjectRun(...)
+  let config = a:0 > 0 ? a:1 : ''
+  if config != ''
+    let project = eclim#project#util#GetCurrentProjectName()
+    let port = eclim#project#util#GetProjectPort(project)
+    let command = substitute(s:command_run,'<configuration>',config,'')
+    call eclim#util#Echo(eclim#ExecuteEclim(command, port))
+    return
+  endif
+endfunction
+" }}}
 
 " ProjectRefresh(args, [clear_cache]) {{{
 " Refresh the requested projects.

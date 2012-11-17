@@ -152,6 +152,9 @@ if !exists(":ProjectCreate")
     \ -complete=customlist,eclim#project#util#CommandCompleteProjectNatureRemove
     \ ProjectNatureRemove
     \ :call eclim#project#util#ProjectNatureModify('remove', '<args>')
+  command -nargs=1
+    \ ProjectRun
+    \ :call eclim#project#util#ProjectRun('<args>')
 endif
 
 if !exists(":ProjectProblems")
