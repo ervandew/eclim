@@ -77,9 +77,9 @@ target(name: 'init'){
 
     release = execute('git', 'describe --abbrev=0')
     try {
-        release_indigo = execute('git', 'describe --abbrev=0 indigo')
+        release_indigo = execute('git', 'describe --abbrev=0 indigo',
+          failonerror=true, output=null, suppresserror=true)
     }catch(ex) {
-        echo('Unable to get indigo release information - do you have an indigo branch?')
         release_indigo = 'none'
     }
   }
@@ -1025,7 +1025,7 @@ eclim = { args, port=null, failonerror=true, dir=null ->
   }
 }
 
-def execute(exe, args, failonerror=true, output=null, append=false){
+def execute(exe, args, failonerror=true, output=null, suppresserror=false){
   // use a temp file to get a good random property name since ant properties
   // can only be set once.
   file = File.createTempFile('gant', '')
@@ -1035,12 +1035,14 @@ def execute(exe, args, failonerror=true, output=null, append=false){
   values = [
     outputproperty: name,
     failonerror: failonerror,
-    append: append,
     logError: true,
   ]
   values['executable'] = Os.isFamily(Os.FAMILY_WINDOWS) ? 'cmd.exe' : exe
   if (output != null){
     values['output'] = output
+  }
+  if (suppresserror){
+    values['errorproperty'] = 'error' + name
   }
 
   ant.exec(values){
