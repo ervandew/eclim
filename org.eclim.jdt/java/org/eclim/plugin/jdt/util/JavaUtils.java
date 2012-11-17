@@ -562,7 +562,7 @@ public class JavaUtils
       }
 
       if (src.isWorkingCopy()) {
-        src.commitWorkingCopy(false, null);
+        src.commitWorkingCopy(true, null);
       }
       src.save(null, false);
     }
