@@ -155,6 +155,9 @@ if !exists(":ProjectCreate")
   command -nargs=1
     \ ProjectRun
     \ :call eclim#project#util#ProjectRun('<args>')
+  command -nargs=0
+    \ ProjectRunList
+    \ :call eclim#project#util#ProjectRunList()
 endif
 
 if !exists(":ProjectProblems")
