@@ -46,6 +46,7 @@ let s:command_rename = '-command project_rename -p "<project>" -n "<name>"'
 let s:command_move = '-command project_move -p "<project>" -d "<dir>"'
 let s:command_refresh = '-command project_refresh -p "<project>"'
 let s:command_run = '-command project_run "<configuration>"'
+let s:command_run_debug = '-command project_run "<configuration>" -d'
 let s:command_run_list = '-command project_run -l'
 let s:command_run_list_with_indices = '-command project_run -l -i'
 let s:command_refresh_file =
@@ -405,6 +406,19 @@ function! eclim#project#util#ProjectRun(...)
   endif
 endfunction
 " }}}
+
+" ProjectRunDebug() {{{
+" Runs the Build Configuration that matches the argument in Run mode
+function! eclim#project#util#ProjectRunDebug(...)
+  let config = a:0 > 0 ? a:1 : ''
+  if config != ''
+    let project = eclim#project#util#GetCurrentProjectName()
+    let port = eclim#project#util#GetProjectPort(project)
+    let command = substitute(s:command_run_debug,'<configuration>',config,'')
+    call eclim#util#Echo(eclim#ExecuteEclim(command, port))
+    return
+  endif
+endfunction
 
 " ProjectRunList() {{{
 " Lists the Build Configurations of current project
