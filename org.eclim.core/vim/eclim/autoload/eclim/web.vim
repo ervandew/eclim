@@ -44,9 +44,9 @@ endif
     \ ]
 " }}}
 
-" OpenUrl(url, [no_vim, line1, line2]) {{{
-" Opens the supplied url in a web browser or opens the url under the cursor.
-function! eclim#web#OpenUrl(url, ...)
+function! eclim#web#OpenUrl(url, ...) " {{{
+  " Opens the supplied url in a web browser or opens the url under the cursor.
+
   if !exists('s:browser') || s:browser == ''
     let s:browser = s:DetermineBrowser()
 
@@ -82,7 +82,7 @@ function! eclim#web#OpenUrl(url, ...)
   endif
 
   " prepend http:// or file:// if no protocol defined.
-  if url !~ '^\w\+:\/\/'
+  if url !~ '^\(https\?\|file\):'
     " absolute file on windows or unix
     if url =~ '^\([a-zA-Z]:[/\\]\|/\)'
       let url = 'file://' . url
@@ -116,9 +116,9 @@ function! eclim#web#OpenUrl(url, ...)
   endif
 endfunction " }}}
 
-" SearchEngine(url, args) {{{
-" Function to use a search engine to search for a word or phrase.
-function! eclim#web#SearchEngine(url, args, line1, line2)
+function! eclim#web#SearchEngine(url, args, line1, line2) " {{{
+  " Function to use a search engine to search for a word or phrase.
+
   let search_string = a:args
   if search_string == ''
     let search_string = eclim#util#GetVisualSelection(a:line1, a:line2, 0)
@@ -133,9 +133,9 @@ function! eclim#web#SearchEngine(url, args, line1, line2)
   call eclim#web#OpenUrl(url)
 endfunction " }}}
 
-" WordLookup(url, word) {{{
-" Function to lookup a word on an online dictionary, thesaurus, etc.
-function! eclim#web#WordLookup(url, word)
+function! eclim#web#WordLookup(url, word) " {{{
+  " Function to lookup a word on an online dictionary, thesaurus, etc.
+
   let word = a:word
   if word == ''
     let word = expand('<cword>')
@@ -146,8 +146,7 @@ function! eclim#web#WordLookup(url, word)
   call eclim#web#OpenUrl(url)
 endfunction " }}}
 
-" s:DetermineBrowser() {{{
-function! s:DetermineBrowser()
+function! s:DetermineBrowser() " {{{
   let browser = ''
 
   " user specified a browser, we just need to fill in any gaps if necessary.
