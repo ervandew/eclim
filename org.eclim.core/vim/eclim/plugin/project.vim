@@ -153,6 +153,7 @@ if !exists(":ProjectCreate")
     \ ProjectNatureRemove
     \ :call eclim#project#util#ProjectNatureModify('remove', '<args>')
   command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectRunList
     \ ProjectRun
     \ :call eclim#project#util#ProjectRun('<args>')
   command -nargs=0
