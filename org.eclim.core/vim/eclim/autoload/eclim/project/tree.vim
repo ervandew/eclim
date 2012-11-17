@@ -47,11 +47,15 @@ function! eclim#project#tree#ProjectTree(...) " {{{
   " no project dirs supplied, use current project
   if len(a:000) == 0
     let name = eclim#project#util#GetCurrentProjectName()
-    if name == ''
-      call eclim#project#util#UnableToDetermineProject()
-      return
-    endif
     let names = [name]
+    if name == ''
+      if exists('t:cwd')
+        let names = [t:cwd]
+      else
+        call eclim#project#util#UnableToDetermineProject()
+        return
+      endif
+    endif
 
   " list of project names supplied
   elseif type(a:000[0]) == g:LIST_TYPE
