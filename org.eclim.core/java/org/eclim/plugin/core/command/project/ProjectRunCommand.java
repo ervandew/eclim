@@ -20,6 +20,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.annotation.Command;
@@ -57,15 +58,15 @@ public class ProjectRunCommand
     ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
     String mode;
     //sets the mode for running the launc
-    if (commandLine.hasOption("d")) {
+    if (commandLine.hasOption(Options.DEBUG_OPTION)) {
       mode = IDebugUIConstants.ID_DEBUG_LAUNCH_GROUP;
     } else {
       mode = IDebugUIConstants.ID_RUN_LAUNCH_GROUP;
     }
     //Lists launchers if l is set
-    if (commandLine.hasOption("l")) {
+    if (commandLine.hasOption(Options.LIST_OPTION)) {
       StringBuilder builder = new StringBuilder();
-      boolean showIndices = commandLine.hasOption("i");
+      boolean showIndices = commandLine.hasOption(Options.INDEXED_OPTION);
       int index = 0;
       for (ILaunchConfiguration config:configs) {
         //shows indices of each launcher in case user wants to launch by index
