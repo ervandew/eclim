@@ -31,7 +31,10 @@ import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 
-@org.eclim.annotation.Command(name = "project_run")
+@org.eclim.annotation.Command(
+    name = "project_run",
+    options = "OPTIONAL l"
+    )
 public class ProjectRunCommand
   extends AbstractCommand
 {
