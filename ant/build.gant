@@ -974,6 +974,17 @@ createProject = { pluginName, project, extra=null ->
   ant.sleep(seconds: 1)
 }
 
+// converts a version string ("3.2.10") to an integer so that it can be
+// compared to other version strings numerically instead of alphabetically so
+// that "3.2.10" would be greater than "3.2.9"
+versionToInt = { version ->
+  result = 0
+  version.tokenize('.').reverse().eachWithIndex { part, index ->
+    result += index > 0 ? (part.toInteger() * (10 ** index)) : part.toInteger()
+  }
+  return result
+}
+
 eclim = { args, port=null, failonerror=true, dir=null ->
   if (port == null){
     eclimrc = "${basedir}/org.eclim.core/test/eclimrc.test"

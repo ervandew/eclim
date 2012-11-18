@@ -1,19 +1,21 @@
 feature_adt = 'com.android.ide.eclipse.adt'
 
 target(name: 'org.eclim.adt.classpath.prepare'){
+  version = adtVersion()
   unjar(dest: 'build/temp/lib/android'){
     fileset(dir: '${eclipse}'){
-      include(name: 'dropins/**/plugins/com.android.*.jar')
-      include(name: 'plugins/com.android.*.jar')
+      include(name: "dropins/**/plugins/com.android.*_${version}.*.jar")
+      include(name: "plugins/com.android.*_${version}.*.jar")
     }
     patternset{ include(name: '**/*.jar') }
   }
 }
 
 target(name: 'org.eclim.adt.classpath'){
+  version = adtVersion()
   fileset(dir: '${eclipse}'){
-    include(name: 'dropins/**/plugins/com.android.*.jar')
-    include(name: 'plugins/com.android.*.jar')
+    include(name: "dropins/**/plugins/com.android.*_${version}.*.jar")
+    include(name: "plugins/com.android.*_${version}.*.jar")
   }
   fileset(dir: 'build/temp/lib/android'){
     include(name: '**/*.jar')
@@ -25,4 +27,26 @@ target(name: 'org.eclim.adt.test'){
   runTests('org.eclim.adt'){
     //createProject('org.eclim.adt', 'eclim_unit_test_android')
   }
+}
+
+def adtVersion() {
+  paths = [binding.getVariable('eclipse')]
+  if (binding.getVariable('eclipse') != binding.getVariable('eclipse.local')){
+    paths << getVariable('eclipse.local')
+  }
+  version = null
+  for (path in paths){
+    for (dir in ['dropins', 'plugins']){
+      new File("${path}/${dir}").eachFileRecurse { file ->
+        if (file =~ /com\.android\.ide\.eclipse\.adt_.*\.jar/){
+          ver = file.toString().replaceFirst(
+            /.*com\.android\.ide\.eclipse\.adt_(\d+\.\d+\.\d+).*\.jar/, '$1')
+          if (version == null || versionToInt(ver) > versionToInt(version)){
+            version = ver
+          }
+        }
+      }
+    }
+  }
+  return version
 }
