@@ -114,6 +114,15 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+2012-11-18
+----------
+
+This is another bug fix release which includes support for the latest Android
+development toolkit (21.0.0).
+
+- :ref:`Eclim 2.2.4 <2.2.4>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.12 <1.7.12>` for Eclipse 3.7 (Indigo).
+
 2012-10-19
 ----------
 

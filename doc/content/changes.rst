@@ -19,7 +19,7 @@ History of Changes
 .. _2.2.4:
 .. _1.7.12:
 
-2.2.4 / 1.7.12 ()
+2.2.4 / 1.7.12 (Nov. 18, 2012)
 ------------------------------
 
 Eclim:
@@ -27,9 +27,17 @@ Eclim:
     <:ProjectTab>` to support an arbitrary directory as an argument, allowing
     you to use the command for project's not managed by eclipse/eclim. :TreeTab
     has been removed since the update to :ProjectTab makes it redundant.
+  - Creation of projects in nested directories in the eclipse workspace (vs at
+    the root of the workspace) is now properly supported through eclim.
 
 Android:
   - Updated for ADT 21.0.0.
+
+C/C++:
+  - Fix placement of some error markers.
+
+Php:
+  - Some indentation fixes.
 
 .. _2.2.3:
 .. _1.7.11:
