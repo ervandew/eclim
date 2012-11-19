@@ -995,7 +995,7 @@ function! eclim#tree#ListDir(dir, ...)
     endif
     let contents = split(eclim#util#System(ls . " '" . a:dir . "'"), '\n')
     if !b:view_hidden && &wildignore != ''
-      let pattern = substitute(escape(&wildignore, '.'), '\*', '.*', 'g')
+      let pattern = substitute(escape(&wildignore, '.~'), '\*', '.*', 'g')
       let pattern = '\(' . join(split(pattern, ','), '\|') . '\)$'
       call filter(contents, 'v:val !~ pattern')
     endif
