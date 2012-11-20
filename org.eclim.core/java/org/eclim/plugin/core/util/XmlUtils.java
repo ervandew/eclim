@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,8 @@ import org.eclim.Services;
 
 import org.eclim.command.Error;
 
+import org.eclim.logging.Logger;
+
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.IOUtils;
@@ -71,6 +73,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XmlUtils
 {
+  private static final Logger logger = Logger.getLogger(XmlUtils.class);
+
   private static final Pattern WIN_BUG = Pattern.compile("^/[a-zA-Z]:/.*");
 
   private static XPath XPATH;
@@ -462,27 +466,21 @@ public class XmlUtils
       this.filename = filename;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void warning(SAXParseException ex)
       throws SAXException
     {
       addError(ex, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void error(SAXParseException ex)
       throws SAXException
     {
       addError(ex, false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void fatalError(SAXParseException ex)
       throws SAXException
     {
@@ -552,7 +550,7 @@ public class XmlUtils
     private String lastPath;
 
     // cache missing sources to avoiding hitting the same url repeatedly
-    private HashMap<String,IOException> missingSources =
+    private static HashMap<String,IOException> missingSources =
       new HashMap<String,IOException>();
 
     /**
@@ -565,9 +563,7 @@ public class XmlUtils
       this.path = path;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public InputSource resolveEntity(String publicId, String systemId)
       throws SAXException, IOException
     {
@@ -606,13 +602,14 @@ public class XmlUtils
             // download and save remote file.
             URL remote = new URL(systemId);
             URLConnection conn = remote.openConnection();
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(3000);
+            conn.setReadTimeout(5000);
             conn.connect();
             in = conn.getInputStream();
             out = tempFile.getContent().getOutputStream();
             IOUtils.copy(in, out);
           }catch(Exception e){
+            logger.warn(e.getMessage());
             IOUtils.closeQuietly(out);
             try{
               tempFile.delete();
