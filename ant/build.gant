@@ -492,6 +492,14 @@ target(name: 'docs'){
   }
   gzip(src: 'build/doc/site/sitemap.xml', destfile: 'build/doc/site/sitemap.xml.gz')
   delete(file: 'build/doc/site/sitemap.xml')
+
+  // hack for 404 page to make statics + hrefs absolute since the 404 may be
+  // rendered in a sub dir.
+  replaceregexp(
+    file: 'build/doc/site/404.html',
+    match: '(href|src)="(?!/|https?:)',
+    replace: '\\1="/',
+    flags: 'g')
 }
 
 target(name: 'vimdocs'){
