@@ -31,6 +31,10 @@ if !exists('g:EclimLocateFileScope')
   let g:EclimLocateFileScope = 'project'
 endif
 
+if !exists('g:EclimLocateFileNonProjectScope')
+  let g:EclimLocateFileNonProjectScope = 'workspace'
+endif
+
 if !exists('g:EclimLocateFileFuzzy')
   let g:EclimLocateFileFuzzy = 1
 endif
@@ -92,18 +96,21 @@ function! eclim#common#locate#LocateFile(action, file, ...)
     return
   endif
 
-  if scope == 'project' && project == ''
-    let scope = 'workspace'
+  if scope == 'project' && (project == '' || !eclim#EclimAvailable())
+    let scope = g:EclimLocateFileNonProjectScope
   endif
 
-  let workspace = eclim#eclipse#ChooseWorkspace()
-  if workspace == '0'
-    return
-  endif
+  let workspace = ''
+  if scope == 'project' || scope == 'workspace'
+    let workspace = eclim#eclipse#ChooseWorkspace()
+    if workspace == '0'
+      return
+    endif
 
-  if !eclim#PingEclim(0, workspace)
-    call eclim#util#EchoError('Unable to connect to eclimd.')
-    return
+    if !eclim#PingEclim(0, workspace)
+      call eclim#util#EchoError('Unable to connect to eclimd.')
+      return
+    endif
   endif
 
   let results = []
@@ -625,13 +632,21 @@ function! eclim#common#locate#LocateFileFromFileList(pattern, file) " {{{
   if has('win32unix')
     let file = eclim#cygwin#WindowsPath(file)
   endif
-  let command = substitute(s:LocateFileCommand(a:pattern), '<scope>', 'list', '')
-  let command .= ' -f "' . file . '"'
-  let port = eclim#client#nailgun#GetNgPort(b:workspace)
-  let results = eclim#ExecuteEclim(command, port)
-  if type(results) != g:LIST_TYPE
-    return []
+  if eclim#EclimAvailable()
+    let command = substitute(s:LocateFileCommand(a:pattern), '<scope>', 'list', '')
+    let command .= ' -f "' . file . '"'
+    let port = eclim#client#nailgun#GetNgPort(b:workspace)
+    let results = eclim#ExecuteEclim(command, port)
+    if type(results) != g:LIST_TYPE
+      return []
+    endif
+  else
+    let results = []
+    for result in readfile(file)
+      call add(results, {'name': fnamemodify(result, ':t'), 'path': result})
+    endfor
   endif
+
   return results
 endfunction " }}}
 
