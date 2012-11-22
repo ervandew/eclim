@@ -31,6 +31,16 @@ Checking out the code and building it.
 
   $ git clone git://github.com/ervandew/eclim.git
 
+.. note::
+
+  If you are still using Eclipse 3.7 (Indigo) you will need to checkout the
+  eclim indigo branch before attempting to build eclim:
+
+  ::
+
+    $ cd eclim
+    $ git checkout indigo
+
 2. Build eclim:
 ^^^^^^^^^^^^^^^
 
