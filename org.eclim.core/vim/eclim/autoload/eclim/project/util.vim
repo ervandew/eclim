@@ -27,7 +27,18 @@ if !exists('g:EclimTodoSearchPattern')
 endif
 
 if !exists('g:EclimTodoSearchExtensions')
-  let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
+  let g:EclimTodoSearchExtensions = [
+      \ 'css',
+      \ 'html',
+      \ 'java',
+      \ 'js',
+      \ 'jsp',
+      \ 'php',
+      \ 'py',
+      \ 'rb',
+      \ 'sql',
+      \ 'xml',
+    \ ]
 endif
 
 if !exists('g:EclimProjectStatusLine')
@@ -723,24 +734,43 @@ function! eclim#project#util#ProjectUpdate()
   endif
 endfunction " }}}
 
-" ProjectGrep(command, args) {{{
-" Executes the supplied vim grep command with the specified pattern against
-" one or more file patterns.
-function! eclim#project#util#ProjectGrep(command, args)
+function! eclim#project#util#ProjectGrep(command, args) " {{{
+  " Executes the supplied vim grep command with the specified pattern against
+  " one or more file patterns.
+
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
-  let bufnum = bufnr('%')
-  let project_dir = eclim#project#util#GetCurrentProjectRoot()
-  let cwd = getcwd()
+  let project = eclim#project#util#GetProject(expand('%:p'))
+  let tail = substitute(a:args, '\(.\).\{-}\1\s\(.*\)', '\2', '')
+  let pattern = substitute(a:args, '\(.*\)\s\+\M' . tail . '\m$', '\1', '')
+  let cmd = a:command
   let acd = &autochdir
   set noautochdir
-"  let save_opt = &eventignore
-"  set eventignore=all
   try
-    silent exec 'lcd ' . escape(project_dir, ' ')
-    silent exec a:command . ' ' . a:args
+    if pattern != a:args && tail != a:args && tail != ''
+      let files = eclim#util#ParseArgs(tail)
+      let paths = ''
+      for file in files
+        if paths != ''
+          let paths .= ' '
+        endif
+        let paths .= escape(project.path, ' ') . '/' . file
+      endfor
+      let links = get(project, 'links', {})
+      if len(links)
+        for link in values(links)
+          for file in files
+            let paths .= ' ' . escape(link, ' ') . '/' . file
+          endfor
+        endfor
+      endif
+      silent exec a:command . ' ' . pattern . ' ' . paths
+    else
+      " let vim generate the proper error
+      silent exec a:command . ' ' . a:args
+    endif
   catch /E480/
     " no results found
   catch /.*/
@@ -748,21 +778,11 @@ function! eclim#project#util#ProjectGrep(command, args)
     return
   finally
     let &autochdir = acd
-"    let &eventignore = save_opt
-    silent exec 'lcd ' . escape(cwd, ' ')
     " force quickfix / location list signs to update.
     call eclim#display#signs#Update()
   endtry
-"  if bufnum != bufnr('%')
-    " force autocommands to execute if grep jumped to a file.
-"    edit
-"  endif
-  if a:command =~ '^l'
-    let numresults = len(getloclist(0))
-  else
-    let numresults = len(getqflist())
-  endif
 
+  let numresults = len(a:command =~ '^l' ? getloclist(0) : getqflist())
   if numresults == 0
     call eclim#util#EchoInfo('No results found.')
   endif
@@ -822,27 +842,38 @@ function! eclim#project#util#Todo()
   endif
 endfunction " }}}
 
-" ProjectTodo() {{{
-" Show the todo tags of the whole project in the location list.
-function! eclim#project#util#ProjectTodo()
+function! eclim#project#util#ProjectTodo() " {{{
+  " Show the todo tags of the whole project in the location list.
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
-  let path = eclim#project#util#GetCurrentProjectRoot()
-  if len(g:EclimTodoSearchExtensions) > 0
-    let paths = map(copy(g:EclimTodoSearchExtensions), 'path . "/**/*." . v:val')
+  if len(g:EclimTodoSearchExtensions) == 0
+  endif
 
-    silent! exec 'lvimgrep /' . g:EclimTodoSearchPattern . '/gj ' . paths[0]
-    for path in paths[1:]
-      silent! exec 'lvimgrepadd /' . g:EclimTodoSearchPattern . '/gj ' . path
-    endfor
-
-    if !empty(getloclist(0))
-      exec 'lopen ' . g:EclimLocationListHeight
-    else
-      call eclim#util#Echo('No Results found')
+  let project = eclim#project#util#GetProject(expand('%:p'))
+  let paths = ''
+  for ext in g:EclimTodoSearchExtensions
+    if paths != ''
+      let paths .= ' '
     endif
+    let paths .= escape(project.path, ' ') . '/**/*' . ext
+  endfor
+  let links = get(project, 'links', {})
+  if len(links)
+    for link in values(links)
+      for ext in g:EclimTodoSearchExtensions
+        let paths .= ' ' . escape(link, ' ') . '/**/*' . ext
+      endfor
+    endfor
+  endif
+
+  silent! exec 'lvimgrep /' . g:EclimTodoSearchPattern . '/gj ' . paths
+
+  if !empty(getloclist(0))
+    exec 'lopen ' . g:EclimLocationListHeight
+  else
+    call eclim#util#Echo('No Results found')
   endif
 endfunction " }}}
 
