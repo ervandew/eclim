@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.cdt.command.search;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import org.eclim.plugin.cdt.util.CUtils;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.ReflectionUtils;
 
 import org.eclim.util.CollectionUtils;
 
@@ -57,19 +59,16 @@ import org.eclipse.cdt.core.index.IIndexFileLocation;
 import org.eclipse.cdt.core.index.IIndexManager;
 
 import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 
 import org.eclipse.cdt.internal.ui.search.CSearchMessages;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchElement;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchMatch;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchPatternQuery;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchQuery;
-import org.eclipse.cdt.internal.ui.search.PDOMSearchResult;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.search.ui.text.Match;
@@ -120,10 +119,64 @@ public class SearchCommand
   public static final String TYPE_TYPEDEF = "typedef";
   public static final String TYPE_MACRO = "macro";
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  private static final Class<?> CSearchElement = ReflectionUtils.loadClass(
+      SearchCommand.class,
+      "org.eclipse.cdt.internal.ui.search.CSearchElement",
+      "org.eclipse.cdt.internal.ui.search.PDOMSearchElement");
+  private static final Class<?> CSearchMatch = ReflectionUtils.loadClass(
+      SearchCommand.class,
+      "org.eclipse.cdt.internal.ui.search.CSearchMatch",
+      "org.eclipse.cdt.internal.ui.search.PDOMSearchMatch");
+  private static final Class<?> CSearchPatternQuery = ReflectionUtils.loadClass(
+      SearchCommand.class,
+      "org.eclipse.cdt.internal.ui.search.CSearchPatternQuery",
+      "org.eclipse.cdt.internal.ui.search.PDOMSearchPatternQuery");
+  private static final Class<?> CSearchQuery = ReflectionUtils.loadClass(
+      SearchCommand.class,
+      "org.eclipse.cdt.internal.ui.search.CSearchQuery",
+      "org.eclipse.cdt.internal.ui.search.PDOMSearchQuery");
+  private static final Class<?> CSearchResult = ReflectionUtils.loadClass(
+      SearchCommand.class,
+      "org.eclipse.cdt.internal.ui.search.CSearchResult",
+      "org.eclipse.cdt.internal.ui.search.PDOMSearchResult");
+
+  private static final int FIND_ALL_OCCURRENCES =
+    ReflectionUtils.getIntField(CSearchQuery, "FIND_ALL_OCCURRENCES", null);
+  private static final int FIND_REFERENCES =
+    ReflectionUtils.getIntField(CSearchQuery, "FIND_REFERENCES", null);
+  private static final int FIND_DECLARATIONS_DEFINITIONS =
+    ReflectionUtils.getIntField(CSearchQuery, "FIND_DECLARATIONS_DEFINITIONS", null);
+  private static final int FIND_DECLARATIONS =
+    ReflectionUtils.getIntField(CSearchQuery, "FIND_DECLARATIONS", null);
+  private static final int FIND_DEFINITIONS =
+    ReflectionUtils.getIntField(CSearchQuery, "FIND_DEFINITIONS", null);
+
+  private static final int FIND_CLASS_STRUCT =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_CLASS_STRUCT", null);
+  private static final int FIND_FUNCTION =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_FUNCTION", null);
+  private static final int FIND_VARIABLE =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_VARIABLE", null);
+  private static final int FIND_UNION =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_UNION", null);
+  private static final int FIND_METHOD =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_METHOD", null);
+  private static final int FIND_FIELD =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_FIELD", null);
+  private static final int FIND_ENUM =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_ENUM", null);
+  private static final int FIND_ENUMERATOR =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_ENUMERATOR", null);
+  private static final int FIND_NAMESPACE =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_NAMESPACE", null);
+  private static final int FIND_TYPEDEF =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_TYPEDEF", null);
+  private static final int FIND_MACRO =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_MACRO", null);
+  private static final int FIND_ALL_TYPES =
+    ReflectionUtils.getIntField(CSearchPatternQuery, "FIND_ALL_TYPES", null);
+
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -195,6 +248,7 @@ public class SearchCommand
     return results;
   }
 
+  @SuppressWarnings({ "rawtypes" })
   private Object executePatternSearch(
       CommandLine commandLine, ICProject cproject)
     throws Exception
@@ -213,25 +267,32 @@ public class SearchCommand
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
     boolean caseSensitive =
       !commandLine.hasOption(Options.CASE_INSENSITIVE_OPTION);
-    PDOMSearchQuery query = new PDOMSearchPatternQuery(
+    Constructor queryConstructor = CSearchPatternQuery.getConstructor(
+        ICElement[].class, String.class, String.class, Boolean.TYPE, Integer.TYPE);
+    Object query = queryConstructor.newInstance(
         scope, scopeDesc, pattern, caseSensitive, type | context);
+
+    Method run = CSearchQuery.getMethod("run", IProgressMonitor.class);
+    Method getSearchResult = CSearchQuery.getMethod("getSearchResult");
+    Method getElements = CSearchResult.getMethod("getElements");
+    Method getMatches = CSearchResult.getMethod("getMatches", Object.class);
+    Method getOffset = CSearchMatch.getMethod("getOffset");
+    Method getLocation = CSearchElement.getDeclaredMethod("getLocation");
+    getLocation.setAccessible(true);
 
     ArrayList<Position> results = new ArrayList<Position>();
     if (query != null){
-      query.run(new NullProgressMonitor());
-      PDOMSearchResult result = (PDOMSearchResult)query.getSearchResult();
-      for (Object e : result.getElements()){
-        Method method = PDOMSearchElement.class.getDeclaredMethod("getLocation");
-        method.setAccessible(true);
-        IIndexFileLocation location = (IIndexFileLocation)method.invoke(e);
+      run.invoke(query, new NullProgressMonitor());
+      Object result = getSearchResult.invoke(query);
+      for (Object e : (Object[])getElements.invoke(result)){
+        IIndexFileLocation location = (IIndexFileLocation)getLocation.invoke(e);
         String filename = location.getURI().getPath();
         if (Os.isFamily("windows") && filename.startsWith("/")){
           filename = filename.substring(1);
         }
-        for (Match m : result.getMatches(e)){
-          PDOMSearchMatch match = (PDOMSearchMatch)m;
-          results.add(
-              Position.fromOffset(filename, null, match.getOffset(), 0));
+        for (Match m : (Match[])getMatches.invoke(result, e)){
+          results.add(Position.fromOffset(
+                filename, null, ((Integer)getOffset.invoke(m)).intValue(), 0));
         }
       }
     }
@@ -267,15 +328,15 @@ public class SearchCommand
             flags |= (name.isDefinition() ?
                 IIndex.FIND_DECLARATIONS : IIndex.FIND_DEFINITIONS);
           }
-        } else if (context == PDOMSearchQuery.FIND_ALL_OCCURRENCES){
+        } else if (context == FIND_ALL_OCCURRENCES){
           flags |= IIndex.FIND_ALL_OCCURRENCES;
-        } else if (context == PDOMSearchQuery.FIND_REFERENCES){
+        } else if (context == FIND_REFERENCES){
           flags |= IIndex.FIND_REFERENCES;
-        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS) {
+        } else if (context == FIND_DECLARATIONS_DEFINITIONS) {
           flags |= IIndex.FIND_DECLARATIONS_DEFINITIONS;
-        } else if (context == PDOMSearchQuery.FIND_DECLARATIONS) {
+        } else if (context == FIND_DECLARATIONS) {
           flags |= IIndex.FIND_DECLARATIONS;
-        } else if (context == PDOMSearchQuery.FIND_DEFINITIONS) {
+        } else if (context == FIND_DEFINITIONS) {
           flags |= IIndex.FIND_DEFINITIONS;
         }
 
@@ -360,7 +421,7 @@ public class SearchCommand
    */
   protected int getContext(String context)
   {
-    return getContext(context, PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS);
+    return getContext(context, FIND_DECLARATIONS_DEFINITIONS);
   }
 
   /**
@@ -377,17 +438,17 @@ public class SearchCommand
     }
 
     if(CONTEXT_ALL.equals(context)){
-      return PDOMSearchQuery.FIND_ALL_OCCURRENCES;
+      return FIND_ALL_OCCURRENCES;
     }else if(CONTEXT_CONTEXT.equals(context)){
       return FIND_CONTEXT;
     }else if(CONTEXT_REFERENCES.equals(context)){
-      return PDOMSearchQuery.FIND_REFERENCES;
+      return FIND_REFERENCES;
     }else if(CONTEXT_DECLARATIONS.equals(context)){
-      return PDOMSearchQuery.FIND_DECLARATIONS;
+      return FIND_DECLARATIONS;
     }else if(CONTEXT_DEFINITIONS.equals(context)){
-      return PDOMSearchQuery.FIND_DEFINITIONS;
+      return FIND_DEFINITIONS;
     }
-    return PDOMSearchQuery.FIND_DECLARATIONS_DEFINITIONS;
+    return FIND_DECLARATIONS_DEFINITIONS;
   }
 
   /**
@@ -399,28 +460,28 @@ public class SearchCommand
   protected int getType(String type)
   {
     if(TYPE_CLASS_STRUCT.equals(type)){
-      return PDOMSearchPatternQuery.FIND_CLASS_STRUCT;
+      return FIND_CLASS_STRUCT;
     }else if(TYPE_FUNCTION.equals(type)){
-      return PDOMSearchPatternQuery.FIND_FUNCTION;
+      return FIND_FUNCTION;
     }else if(TYPE_VARIABLE.equals(type)){
-      return PDOMSearchPatternQuery.FIND_VARIABLE;
+      return FIND_VARIABLE;
     }else if(TYPE_UNION.equals(type)){
-      return PDOMSearchPatternQuery.FIND_UNION;
+      return FIND_UNION;
     }else if(TYPE_METHOD.equals(type)){
-      return PDOMSearchPatternQuery.FIND_METHOD;
+      return FIND_METHOD;
     }else if(TYPE_FIELD.equals(type)){
-      return PDOMSearchPatternQuery.FIND_FIELD;
+      return FIND_FIELD;
     }else if(TYPE_ENUM.equals(type)){
-      return PDOMSearchPatternQuery.FIND_ENUM;
+      return FIND_ENUM;
     }else if(TYPE_ENUMERATOR.equals(type)){
-      return PDOMSearchPatternQuery.FIND_ENUMERATOR;
+      return FIND_ENUMERATOR;
     }else if(TYPE_NAMESPACE.equals(type)){
-      return PDOMSearchPatternQuery.FIND_NAMESPACE;
+      return FIND_NAMESPACE;
     }else if(TYPE_TYPEDEF.equals(type)){
-      return PDOMSearchPatternQuery.FIND_TYPEDEF;
+      return FIND_TYPEDEF;
     }else if(TYPE_MACRO.equals(type)){
-      return PDOMSearchPatternQuery.FIND_MACRO;
+      return FIND_MACRO;
     }
-    return PDOMSearchPatternQuery.FIND_ALL_TYPES;
+    return FIND_ALL_TYPES;
   }
 }

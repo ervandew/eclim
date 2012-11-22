@@ -42,6 +42,7 @@ import org.eclim.util.file.Position;
 
 import org.eclipse.cdt.core.CCorePlugin;
 
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
@@ -74,6 +75,8 @@ import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 
@@ -98,10 +101,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class CallHierarchyCommand
   extends SearchCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -116,7 +116,7 @@ public class CallHierarchyCommand
     ITranslationUnit src = CUtils.getTranslationUnit(cproject, file);
     CCorePlugin.getIndexManager().update(
         new ICElement[]{src}, IIndexManager.UPDATE_ALL);
-    CCorePlugin.getIndexManager().joinIndexer(3000, null);
+    CCorePlugin.getIndexManager().joinIndexer(3000, new NullProgressMonitor());
     src = src.getWorkingCopy();
 
     IEditorInput input = new FileEditorInput((IFile)src.getResource());
@@ -177,8 +177,25 @@ public class CallHierarchyCommand
     if (calleeBinding != null) {
       results.addAll(findCalledBy(index, calleeBinding, true, project, seen));
       if (calleeBinding instanceof ICPPMethod) {
-        IBinding[] overriddenBindings =
-          ClassTypeHelper.findOverridden((ICPPMethod)calleeBinding);
+        // cdt 8.1.1 requires a second arg (point: IASTNode), but cdt 8.1.1
+        // hasn't been released independent of eclipse 4.2.1, so distros are
+        // less likely to have it. So rather than attempt to force an
+        // eclipse/cdt version, we'll resort to reflection for now this time.
+        /*IBinding[] overriddenBindings =
+          ClassTypeHelper.findOverridden((ICPPMethod)calleeBinding, null);*/
+        IBinding[] overriddenBindings = null;
+        try{
+          Method findOverridden = ClassTypeHelper.class
+            .getMethod("findOverridden", ICPPMethod.class, IASTNode.class);
+          overriddenBindings = (IBinding[])
+            findOverridden.invoke(null, (ICPPMethod)calleeBinding, null);
+        }catch(NoSuchMethodException nsme){
+          Method findOverridden = ClassTypeHelper.class
+            .getMethod("findOverridden", ICPPMethod.class);
+          overriddenBindings = (IBinding[])
+            findOverridden.invoke(null, (ICPPMethod)calleeBinding);
+        }
+
         for (IBinding overriddenBinding : overriddenBindings) {
           results.addAll(findCalledBy(
               index, overriddenBinding, false, project, seen));

@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.correct;
 
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,6 +34,8 @@ import org.eclim.command.Options;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.command.refactoring.ResourceChangeListener;
+
+import org.eclim.plugin.core.util.ReflectionUtils;
 
 import org.eclim.plugin.jdt.command.include.ImportUtils;
 
@@ -57,9 +61,6 @@ import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
 import org.eclipse.jdt.internal.ui.text.correction.CorrectionMessages;
 import org.eclipse.jdt.internal.ui.text.correction.ReorgCorrectionsSubProcessor.ClasspathFixCorrectionProposal;
 
-import org.eclipse.jdt.internal.ui.text.correction.proposals.ASTRewriteCorrectionProposal;
-import org.eclipse.jdt.internal.ui.text.correction.proposals.ChangeCorrectionProposal;
-import org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal;
 import org.eclipse.jdt.internal.ui.text.correction.proposals.NewCUUsingWizardProposal;
 
 import org.eclipse.jdt.ui.text.java.CompletionProposalComparator;
@@ -107,6 +108,15 @@ public class CodeCorrectCommand
         .LocalCorrectionsSubProcessor_InferGenericTypeArguments_description);
   }
 
+  private static final Class<?> ASTRewriteCorrectionProposal = ReflectionUtils.loadClass(
+      CodeCorrectCommand.class,
+      "org.eclipse.jdt.ui.text.java.correction.ASTRewriteCorrectionProposal",
+      "org.eclipse.jdt.internal.ui.text.correction.proposals.ASTRewriteCorrectionProposal");
+  private static final Class<?> ChangeCorrectionProposal = ReflectionUtils.loadClass(
+      CodeCorrectCommand.class,
+      "org.eclipse.jdt.ui.text.java.correction.ChangeCorrectionProposal",
+      "org.eclipse.jdt.internal.ui.text.correction.proposals.ChangeCorrectionProposal");
+
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -128,9 +138,9 @@ public class CodeCorrectCommand
       return message;
     }
 
-    List<ChangeCorrectionProposal> proposals = getProposals(src, problem);
+    List<IJavaCompletionProposal> proposals = getProposals(src, problem);
     if(commandLine.hasOption(Options.APPLY_OPTION)){
-      ChangeCorrectionProposal proposal =
+      IJavaCompletionProposal proposal =
         proposals.get(commandLine.getIntValue(Options.APPLY_OPTION));
       return apply(src, proposal);
     }
@@ -185,14 +195,14 @@ public class CodeCorrectCommand
    * @param problem The problem.
    * @return Returns a List of ChangeCorrectionProposal.
    */
-  private List<ChangeCorrectionProposal> getProposals(
+  private List<IJavaCompletionProposal> getProposals(
       ICompilationUnit src, IProblem problem)
     throws Exception
   {
     IProject project = src.getJavaProject().getProject();
 
-    ArrayList<ChangeCorrectionProposal> results =
-      new ArrayList<ChangeCorrectionProposal>();
+    ArrayList<IJavaCompletionProposal> results =
+      new ArrayList<IJavaCompletionProposal>();
     int length = (problem.getSourceEnd() + 1) - problem.getSourceStart();
     AssistContext context = new AssistContext(
         src, problem.getSourceStart(), length);
@@ -200,6 +210,9 @@ public class CodeCorrectCommand
     IProblemLocation[] locations =
       new IProblemLocation[]{new ProblemLocation(problem)};
     IQuickFixProcessor[] processors = JavaUtils.getQuickFixProcessors(src);
+
+    Method getImportRewrite =
+      ASTRewriteCorrectionProposal.getMethod("getImportRewrite");
     for(int ii = 0; ii < processors.length; ii++){
       if (processors[ii] != null &&
           processors[ii].hasCorrections(src, problem.getID()))
@@ -217,7 +230,7 @@ public class CodeCorrectCommand
           processors[ii].getCorrections(context, locations);
         if(proposals != null){
           for (IJavaCompletionProposal proposal : proposals){
-            if (!(proposal instanceof ChangeCorrectionProposal)){
+            if (!ChangeCorrectionProposal.isInstance(proposal)){
               continue;
             }
 
@@ -229,9 +242,8 @@ public class CodeCorrectCommand
             }
 
             // honor the user's import exclusions
-            if (proposal instanceof ASTRewriteCorrectionProposal){
-              ImportRewrite rewrite =
-                ((ASTRewriteCorrectionProposal)proposal).getImportRewrite();
+            if (ASTRewriteCorrectionProposal.isInstance(proposal)){
+              ImportRewrite rewrite = (ImportRewrite)getImportRewrite.invoke(proposal);
               if (rewrite != null && (
                     rewrite.getAddedImports().length != 0 ||
                     rewrite.getAddedStaticImports().length != 0))
@@ -256,7 +268,7 @@ public class CodeCorrectCommand
               }
             }
 
-            results.add((ChangeCorrectionProposal)proposal);
+            results.add(proposal);
           }
         }
       }
@@ -274,12 +286,12 @@ public class CodeCorrectCommand
    * @return Array of CodeCorrectResult.
    */
   private List<CodeCorrectResult> getCorrections(
-      List<ChangeCorrectionProposal> proposals)
+      List<IJavaCompletionProposal> proposals)
     throws Exception
   {
     ArrayList<CodeCorrectResult> corrections = new ArrayList<CodeCorrectResult>();
     int index = 0;
-    for(ChangeCorrectionProposal proposal : proposals){
+    for(IJavaCompletionProposal proposal : proposals){
       String preview = proposal.getAdditionalProposalInfo();
       if (preview != null){
         preview = preview
@@ -302,13 +314,14 @@ public class CodeCorrectCommand
    * @param proposal The ChangeCorrectionProposal to apply.
    * @return A list of changed files or a map containing a list of errors.
    */
-  private Object apply(ICompilationUnit src, ChangeCorrectionProposal proposal)
+  private Object apply(ICompilationUnit src, IJavaCompletionProposal proposal)
     throws Exception
   {
     Change change = null;
     try {
       NullProgressMonitor monitor = new NullProgressMonitor();
-      change = proposal.getChange();
+      change = (Change)ChangeCorrectionProposal
+        .getMethod("getChange").invoke(proposal);
       change.initializeValidationData(monitor);
       RefactoringStatus status = change.isValid(monitor);
       if (status.hasFatalError()){
@@ -337,8 +350,9 @@ public class CodeCorrectCommand
           edit = fileChange.getEdit();
         }
         PerformChangeOperation changeOperation = new PerformChangeOperation(change);
-        changeOperation.setUndoManager(
-            RefactoringCore.getUndoManager(), proposal.getName());
+        String name = (String)ChangeCorrectionProposal
+          .getMethod("getName").invoke(proposal);
+        changeOperation.setUndoManager(RefactoringCore.getUndoManager(), name);
         changeOperation.run(monitor);
 
         if (edit != null &&
