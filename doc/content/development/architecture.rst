@@ -59,9 +59,9 @@ Here is a diagram showing the sequence in a bit more detail:
    deactivate eclim.vim
 
 
-The commands which are executed on the eclimd side are also fairly simply.
+The commands which are executed on the eclimd side are also fairly simple.
 They accept an object containing the command line parameters passed into the
-eclimd invocation and then return an object (String, Collection, etc) which is
+eclim invocation and then return an object (String, Collection, etc) which is
 converted to a json response.  Below is a simple class diagram showing the
 hierarchy of a couple typical commands.
 
