@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _2.2.5:
+.. _1.7.13:
+
+2.2.5 / 1.7.13 (2012)
+------------------------------
+
+Eclim:
+  - 1.7.13 and above will now support Eclipse 3.8 as well as 3.7.
+  - Other minor bug fixes.
+
 .. _2.2.4:
 .. _1.7.12:
 
