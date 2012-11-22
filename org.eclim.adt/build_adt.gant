@@ -32,7 +32,7 @@ target(name: 'org.eclim.adt.test'){
 def adtVersion() {
   paths = [binding.getVariable('eclipse')]
   if (binding.getVariable('eclipse') != binding.getVariable('eclipse.local')){
-    paths << getVariable('eclipse.local')
+    paths << binding.getVariable('eclipse.local')
   }
   version = null
   for (path in paths){
