@@ -24,6 +24,8 @@ History of Changes
 
 Eclim:
   - 1.7.13 and above will now support Eclipse 3.8 as well as 3.7.
+  - Fix :ref:`:ProjectGrep <:ProjectGrep>` and :ref:`:ProjectTodo
+    <:ProjectTodo>` to search in all of the project's links as well.
   - Other minor bug fixes.
 
 .. _2.2.4:
