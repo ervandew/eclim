@@ -76,9 +76,7 @@ public class LocateFileCommand
   public static final String SCOPE_WORKSPACE = "workspace";
   public static final String SCOPE_LIST = "list";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -97,6 +95,12 @@ public class LocateFileCommand
       new FilePathComparator(pattern, projectName);
     Collections.sort(results, comparator);
     return results;
+  }
+
+  @Override
+  public void cleanup(CommandLine commandLine)
+  {
+    // no-op
   }
 
   private List<Result> executeLocateFromFileList(
@@ -244,10 +248,7 @@ public class LocateFileCommand
       }
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IResourceProxyVisitor#visit(IResourceProxy)
-     */
+    @Override
     public boolean visit(IResourceProxy proxy)
       throws CoreException
     {
@@ -329,10 +330,7 @@ public class LocateFileCommand
       this.projectName = projectName;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see Comparator#compare(T,T)
-     */
+    @Override
     public int compare(Result o1, Result o2)
     {
       double score1 = score(o1);
@@ -360,10 +358,7 @@ public class LocateFileCommand
       return score;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see Comparator#equals(Object)
-     */
+    @Override
     public boolean equals(Object obj)
     {
       return super.equals(obj);
