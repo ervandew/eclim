@@ -36,8 +36,12 @@ def adtVersion() {
   }
   version = null
   for (path in paths){
-    for (dir in ['dropins', 'plugins']){
-      new File("${path}/${dir}").eachFileRecurse { file ->
+    for (dir in ['dropins', 'plugins', 'blah']){
+      pluginsDir = new File("${path}/${dir}")
+      if (!pluginsDir.exists()){
+        continue
+      }
+      pluginsDir.eachFileRecurse { file ->
         if (file =~ /com\.android\.ide\.eclipse\.adt_.*\.jar/){
           ver = file.toString().replaceFirst(
             /.*com\.android\.ide\.eclipse\.adt_(\d+\.\d+\.\d+).*\.jar/, '$1')
