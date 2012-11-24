@@ -98,28 +98,19 @@ public abstract class AbstractCommand
     return FileUtils.byteOffsetToCharOffset(file, offset, encoding);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Command#getContext()
-   */
+  @Override
   public NGContext getContext()
   {
     return context;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Command#setContext(NGContext)
-   */
+  @Override
   public void setContext(NGContext context)
   {
     this.context = context;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Command#cleanup(CommandLine)
-   */
+  @Override
   public void cleanup(CommandLine commandLine)
   {
     try{
