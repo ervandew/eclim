@@ -48,26 +48,25 @@ if !exists("g:EclimUserSignHighlight")
 endif
 " }}}
 
-" Define(name, text, highlight) {{{
-" Defines a new sign name or updates an existing one.
-function! eclim#display#signs#Define(name, text, highlight)
+function! eclim#display#signs#Define(name, text, highlight) " {{{
+  " Defines a new sign name or updates an existing one.
   exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
 endfunction " }}}
 
-" Place(name, line) {{{
-" Places a sign in the current buffer.
-function! eclim#display#signs#Place(name, line)
+function! eclim#display#signs#Place(name, line) " {{{
+  " Places a sign in the current buffer.
   if a:line > 0
     let lastline = line('$')
     let line = a:line <= lastline ? a:line : lastline
-    exec "sign place " . line . " line=" . line . " name=" . a:name .
+    let id = a:name == 'placeholder' ? 999999 : line
+    exec "sign place " . id . " line=" . line . " name=" . a:name .
       \ " buffer=" . bufnr('%')
   endif
 endfunction " }}}
 
-" PlaceAll(name, list) {{{
-" Places a sign in the current buffer for each line in the list.
-function! eclim#display#signs#PlaceAll(name, list)
+function! eclim#display#signs#PlaceAll(name, list) " {{{
+  " Places a sign in the current buffer for each line in the list.
+
   let lastline = line('$')
   for line in a:list
     if line > 0
@@ -78,23 +77,21 @@ function! eclim#display#signs#PlaceAll(name, list)
   endfor
 endfunction " }}}
 
-" Undefine(name) {{{
-" Undefines a sign name.
-function! eclim#display#signs#Undefine(name)
+function! eclim#display#signs#Undefine(name) " {{{
+  " Undefines a sign name.
   exec "sign undefine " . a:name
 endfunction " }}}
 
-" Unplace(id) {{{
-" Un-places a sign in the current buffer.
-function! eclim#display#signs#Unplace(id)
+function! eclim#display#signs#Unplace(id) " {{{
+  " Un-places a sign in the current buffer.
   exec 'sign unplace ' . a:id . ' buffer=' . bufnr('%')
 endfunction " }}}
 
-" UnplaceAll(id) {{{
-" Un-places all signs in the supplied list from the current buffer.
-" The list may be a list of ids or a list of dictionaries as returned by
-" GetExisting()
-function! eclim#display#signs#UnplaceAll(list)
+function! eclim#display#signs#UnplaceAll(list) " {{{
+  " Un-places all signs in the supplied list from the current buffer.
+  " The list may be a list of ids or a list of dictionaries as returned by
+  " GetExisting()
+
   for sign in a:list
     if type(sign) == g:DICT_TYPE
       call eclim#display#signs#Unplace(sign['id'])
@@ -104,9 +101,8 @@ function! eclim#display#signs#UnplaceAll(list)
   endfor
 endfunction " }}}
 
-" Toggle(name, line) {{{
-" Toggle a sign on the current line.
-function! eclim#display#signs#Toggle(name, line)
+function! eclim#display#signs#Toggle(name, line) " {{{
+  " Toggle a sign on the current line.
   if a:line > 0
     let existing = eclim#display#signs#GetExisting(a:name)
     let exists = len(filter(existing, "v:val['line'] == a:line"))
@@ -118,9 +114,9 @@ function! eclim#display#signs#Toggle(name, line)
   endif
 endfunction " }}}
 
-" CompareSigns(s1, s2) {{{
-" Used by ViewSigns to sort list of sign dictionaries.
-function! s:CompareSigns(s1, s2)
+function! s:CompareSigns(s1, s2) " {{{
+  " Used by ViewSigns to sort list of sign dictionaries.
+
   if a:s1.line == a:s2.line
     return 0
   endif
@@ -130,10 +126,10 @@ function! s:CompareSigns(s1, s2)
   return -1
 endfunction " }}}
 
-" ViewSigns(name) {{{
-" Open a window to view all placed signs with the given name in the current
-" buffer.
-function! eclim#display#signs#ViewSigns(name)
+function! eclim#display#signs#ViewSigns(name) " {{{
+  " Open a window to view all placed signs with the given name in the current
+  " buffer.
+
   let filename = expand('%:p')
   let signs = eclim#display#signs#GetExisting(a:name)
   call sort(signs, 's:CompareSigns')
@@ -152,8 +148,7 @@ function! eclim#display#signs#ViewSigns(name)
   augroup END
 endfunction " }}}
 
-" JumpToSign() {{{
-function! s:JumpToSign()
+function! s:JumpToSign() " {{{
   let winnr = bufwinnr(bufnr('^' . b:filename))
   if winnr != -1
     let line = substitute(getline('.'), '^\(\d\+\)|.*', '\1', '')
@@ -162,9 +157,9 @@ function! s:JumpToSign()
   endif
 endfunction " }}}
 
-" GetDefined() {{{
-" Gets a list of defined sign names.
-function! eclim#display#signs#GetDefined()
+function! eclim#display#signs#GetDefined() " {{{
+  " Gets a list of defined sign names.
+
   redir => list
   silent exec 'sign list'
   redir END
@@ -177,15 +172,15 @@ function! eclim#display#signs#GetDefined()
   return names
 endfunction " }}}
 
-" GetExisting(...) {{{
-" Gets a list of existing signs for the current buffer.
-" The list consists of dictionaries with the following keys:
-"   id:   The sign id.
-"   line: The line number.
-"   name: The sign name (erorr, warning, etc.)
-"
-" Optionally a sign name may be supplied to only retrieve signs of that name.
-function! eclim#display#signs#GetExisting(...)
+function! eclim#display#signs#GetExisting(...) " {{{
+  " Gets a list of existing signs for the current buffer.
+  " The list consists of dictionaries with the following keys:
+  "   id:   The sign id.
+  "   line: The line number.
+  "   name: The sign name (erorr, warning, etc.)
+  "
+  " Optionally a sign name may be supplied to only retrieve signs of that name.
+
   let bufnr = bufnr('%')
 
   redir => signs
@@ -206,10 +201,10 @@ function! eclim#display#signs#GetExisting(...)
   return existing
 endfunction " }}}
 
-" HasExisting(...) {{{
-" Determines if there are any existing signs.
-" Optionally a sign name may be supplied to only test for signs of that name.
-function! eclim#display#signs#HasExisting(...)
+function! eclim#display#signs#HasExisting(...) " {{{
+  " Determines if there are any existing signs.
+  " Optionally a sign name may be supplied to only test for signs of that name.
+
   let bufnr = bufnr('%')
 
   redir => results
@@ -231,8 +226,7 @@ function! eclim#display#signs#HasExisting(...)
   return 0
 endfunction " }}}
 
-" s:ParseSign(raw) {{{
-function! s:ParseSign(raw)
+function! s:ParseSign(raw) " {{{
   let attrs = split(a:raw)
 
   exec 'let line = ' . split(attrs[0], '=')[1]
@@ -253,14 +247,14 @@ function! s:ParseSign(raw)
   return {'id': id, 'line': line, 'name': name}
 endfunction " }}}
 
-" Update() {{{
-" Updates the signs for the current buffer.  This function will read both the
-" location list and the quickfix list and place a sign for any entries for the
-" current file.
-" This function supports a severity level by examining the 'type' key of the
-" dictionaries in the location or quickfix list.  It supports 'i' (info), 'w'
-" (warning), and 'e' (error).
-function! eclim#display#signs#Update()
+function! eclim#display#signs#Update() " {{{
+  " Updates the signs for the current buffer.  This function will read both the
+  " location list and the quickfix list and place a sign for any entries for the
+  " current file.
+  " This function supports a severity level by examining the 'type' key of the
+  " dictionaries in the location or quickfix list.  It supports 'i' (info), 'w'
+  " (warning), and 'e' (error).
+
   if !has('signs') || !g:EclimSignLevel
     return
   endif
@@ -312,9 +306,8 @@ function! eclim#display#signs#Update()
   let &lazyredraw = save_lazy
 endfunction " }}}
 
-" QuickFixCmdPost() {{{
-" Force 'make' results to be of type error if no type set.
-function! eclim#display#signs#QuickFixCmdPost()
+function! eclim#display#signs#QuickFixCmdPost() " {{{
+  " Force 'make' results to be of type error if no type set.
   if expand('<amatch>') == 'make'
     let newentries = []
     for entry in getqflist()
@@ -329,10 +322,13 @@ function! eclim#display#signs#QuickFixCmdPost()
   redraw!
 endfunction " }}}
 
-" SetPlaceholder([only_if_necessary]) {{{
-" Set sign at line 1 to prevent sign column from collapsing, and subsiquent
-" screen redraw.
-function! eclim#display#signs#SetPlaceholder(...)
+function! eclim#display#signs#SetPlaceholder(...) " {{{
+  " Set sign at line 1 to prevent sign column from collapsing, and subsiquent
+  " screen redraw.
+  " Optional args:
+  "   only_if_necessary: if 1, only set a placeholder if there are no existing
+  "   signs
+
   if !has('signs') || !g:EclimSignLevel
     return
   endif
@@ -353,8 +349,7 @@ function! eclim#display#signs#SetPlaceholder(...)
   return
 endfunction " }}}
 
-" RemovePlaceholder() {{{
-function! eclim#display#signs#RemovePlaceholder()
+function! eclim#display#signs#RemovePlaceholder() " {{{
   if !has('signs') || !g:EclimSignLevel
     return
   endif
