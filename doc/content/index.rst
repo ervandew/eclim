@@ -114,6 +114,15 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+2012-11-25
+----------
+
+The most notable change in this release is support for Eclipse 3.8 with the
+Indigo release (1.7.13). Both releases also include several small bug fixes.
+
+- :ref:`Eclim 2.2.5 <2.2.5>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.13 <1.7.13>` for Eclipse 3.7/3.8 (Indigo).
+
 2012-11-18
 ----------
 
