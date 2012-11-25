@@ -1037,18 +1037,18 @@ function! eclim#util#PromptConfirm(prompt, ...)
   return response =~ '\c\s*\(y\(es\)\?\)\s*'
 endfunction " }}}
 
-" Reload() {{{
-" Reload the current file using ':edit' and perform other operations based on
-" the options supplied.
-" Supported Options:
-"   retab: Issue a retab of the file taking care of preserving &expandtab
-"     before executing the edit to keep indent detection plugins from always
-"     setting it to 0 if eclipse inserts some tabbed code that the indent
-"     detection plugin uses for its calculations.
-"   pos: A line/column pair indicating the new cursor position post edit. When
-"     this pair is supplied, this function will attempt to preserve the
-"     current window's viewport.
-function! eclim#util#Reload(options)
+function! eclim#util#Reload(options) " {{{
+  " Reload the current file using ':edit' and perform other operations based on
+  " the options supplied.
+  " Supported Options:
+  "   retab: Issue a retab of the file taking care of preserving &expandtab
+  "     before executing the edit to keep indent detection plugins from always
+  "     setting it to 0 if eclipse inserts some tabbed code that the indent
+  "     detection plugin uses for its calculations.
+  "   pos: A line/column pair indicating the new cursor position post edit. When
+  "     this pair is supplied, this function will attempt to preserve the
+  "     current window's viewport.
+
   let winview = winsaveview()
   let save_expandtab = &expandtab
 
@@ -1060,7 +1060,7 @@ function! eclim#util#Reload(options)
     if winheight(0) < line('$')
       let winview.topline += lnum - winview.lnum
       let winview.lnum = lnum
-      let winview.col = cnum
+      let winview.col = cnum - 1
       call winrestview(winview)
     else
       call cursor(lnum, cnum)
