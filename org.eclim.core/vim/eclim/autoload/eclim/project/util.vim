@@ -56,6 +56,10 @@ let s:command_delete = '-command project_delete -p "<project>"'
 let s:command_rename = '-command project_rename -p "<project>" -n "<name>"'
 let s:command_move = '-command project_move -p "<project>" -d "<dir>"'
 let s:command_refresh = '-command project_refresh -p "<project>"'
+let s:command_run = '-command project_run "<configuration>"'
+let s:command_run_debug = '-command project_run "<configuration>" -d'
+let s:command_run_list = '-command project_run -l'
+let s:command_run_list_with_indices = '-command project_run -l -i'
 let s:command_refresh_file =
   \ '-command project_refresh_file -p "<project>" -f "<file>"'
 let s:command_build = '-command project_build -p "<project>"'
@@ -398,6 +402,72 @@ function! eclim#project#util#ProjectRefreshAll()
     call eclim#project#util#ProjectRefresh(project, 0)
   endfor
   call eclim#util#Echo('Done.')
+endfunction " }}}
+
+" ProjectRun(args) {{{
+" Runs the Build Configuration that matches
+function! eclim#project#util#ProjectRun(...)
+  let config = a:0 > 0 ? a:1 : ''
+  if config != ''
+    let project = eclim#project#util#GetCurrentProjectName()
+    let port = eclim#project#util#GetProjectPort(project)
+    let command = substitute(s:command_run,'<configuration>',config,'')
+    call eclim#util#Echo(eclim#ExecuteEclim(command, port))
+    return
+  endif
+endfunction
+" }}}
+
+" ProjectRunDebug() {{{
+" Runs the Build Configuration that matches the argument in Run mode
+function! eclim#project#util#ProjectRunDebug(...)
+  let config = a:0 > 0 ? a:1 : ''
+  if config != ''
+    let project = eclim#project#util#GetCurrentProjectName()
+    let port = eclim#project#util#GetProjectPort(project)
+    let command = substitute(s:command_run_debug,'<configuration>',config,'')
+    call eclim#util#Echo(eclim#ExecuteEclim(command, port))
+    return
+  endif
+endfunction
+
+" ProjectRunList() {{{
+" Lists the Build Configurations of current project
+function! eclim#project#util#ProjectRunList()
+  let project = eclim#project#util#GetCurrentProjectName()
+  let port = eclim#project#util#GetProjectPort(project)
+  call eclim#util#Echo(eclim#ExecuteEclim(s:command_run_list_with_indices, port))
+  return
+endfunction
+" }}}
+
+" getProjectRunList() {{{
+" Returns the Build Configurations in a list
+function! eclim#project#util#getProjectRunList()
+  let project = eclim#project#util#GetCurrentProjectName()
+  let port = eclim#project#util#GetProjectPort(project)
+  return split(eclim#ExecuteEclim(s:command_run_list, port), '\n')
+endfunction
+" }}}
+
+" CommandCompleteProjectRunList(argLead, cmdLine, cursorPos) {{{
+" Custom command completion for project run configurations.
+function! eclim#project#util#CommandCompleteProjectRunList(
+    \ argLead, cmdLine, cursorPos)
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+
+  let runList = eclim#project#util#getProjectRunList()
+  if cmdLine !~ '[^\\]\s$'
+    let argLead = escape(escape(argLead, '~'), '~')
+    " remove escape slashes
+    let argLead = substitute(argLead, '\', '', 'g')
+    call filter(runList, 'v:val =~ "^' . argLead . '"')
+  endif
+
+  call map(runList, 'escape(v:val, " ")')
+  return runList
 endfunction " }}}
 
 " ProjectRefresh(args, [clear_cache]) {{{

@@ -152,6 +152,17 @@ if !exists(":ProjectCreate")
     \ -complete=customlist,eclim#project#util#CommandCompleteProjectNatureRemove
     \ ProjectNatureRemove
     \ :call eclim#project#util#ProjectNatureModify('remove', '<args>')
+  command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectRunList
+    \ ProjectRun
+    \ :call eclim#project#util#ProjectRun('<args>')
+  command -nargs=1
+    \ -complete=customlist,eclim#project#util#CommandCompleteProjectRunList
+    \ ProjectRunDebug
+    \ :call eclim#project#util#ProjectRunDebug('<args>')
+  command -nargs=0
+    \ ProjectRunList
+    \ :call eclim#project#util#ProjectRunList()
 endif
 
 if !exists(":ProjectProblems")
