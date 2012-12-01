@@ -70,7 +70,7 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
 
   if exists(":JUnit") != 2
     command -buffer -nargs=? -complete=customlist,eclim#java#junit#CommandCompleteTest
-      \ JUnit :call eclim#java#junit#JUnit('<args>')
+      \ JUnit :call eclim#java#junit#JUnit('<args>', '<bang>')
   endif
 
   exec bufwinnr(curbuf) . 'winc w'
