@@ -114,8 +114,8 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
-2012-11-25
-----------
+Nov. 25, 2012
+-------------
 
 The most notable change in this release is support for Eclipse 3.8 with the
 Indigo release (1.7.13). Both releases also include several small bug fixes.
@@ -123,8 +123,8 @@ Indigo release (1.7.13). Both releases also include several small bug fixes.
 - :ref:`Eclim 2.2.5 <2.2.5>` for Eclipse 4.2 (Juno).
 - :ref:`Eclim 1.7.13 <1.7.13>` for Eclipse 3.7/3.8 (Indigo).
 
-2012-11-18
-----------
+Nov. 18, 2012
+-------------
 
 This is another bug fix release which includes support for the latest Android
 development toolkit (21.0.0).
@@ -132,8 +132,8 @@ development toolkit (21.0.0).
 - :ref:`Eclim 2.2.4 <2.2.4>` for Eclipse 4.2 (Juno).
 - :ref:`Eclim 1.7.12 <1.7.12>` for Eclipse 3.7 (Indigo).
 
-2012-10-19
-----------
+Oct. 19, 2012
+-------------
 
 This is a bug fix release for Windows users which fixes executing of eclim
 commands from vim:
@@ -141,8 +141,8 @@ commands from vim:
 - :ref:`Eclim 2.2.3 <2.2.3>` for Eclipse 4.2 (Juno).
 - :ref:`Eclim 1.7.11 <1.7.11>` for Eclipse 3.7 (Indigo).
 
-2012-10-07
-----------
+Oct. 07, 2012
+-------------
 
 Two new eclim updates are once again available with several bug fixes and
 improvements.
@@ -150,8 +150,8 @@ improvements.
 - :ref:`Eclim 2.2.2 <2.2.2>` for Eclipse 4.2 (Juno).
 - :ref:`Eclim 1.7.10 <1.7.10>` for Eclipse 3.7 (Indigo).
 
-2012-09-09
-----------
+Sep. 09, 2012
+-------------
 
 | :ref:`Eclim 1.7.9 <1.7.9>` for Eclipse 3.7 (Indigo) is now available.
 | This release adds initial support for :doc:`scala </vim/scala/index>`.
@@ -161,8 +161,8 @@ provide scala support, is not yet available for Eclipse 4.2 (Juno), so eclim's
 scala support will not be available for the eclim 2.2.x releases until sometime
 after the Scala IDE has been updated for Juno.
 
-2012-09-01
-----------
+Sep. 01, 2012
+-------------
 
 Another set of releases are now available for both Juno and Indigo. These both
 include several bug fixes along with new support for creating android projects.
@@ -173,9 +173,8 @@ include several bug fixes along with new support for creating android projects.
 Eclim also has a newly redesigned site using the
 `sphinx bootstrap theme <https://github.com/ervandew/sphinx-bootstrap-theme>`_.
 
-
-2012-08-07
-----------
+Aug. 07, 2012
+-------------
 
 Two new versions of eclim have been released, one for the latest Eclipse
 version, Juno, the other a bug fix release for the previous version of Eclipse,
@@ -184,27 +183,27 @@ Indigo.
 - :ref:`Eclim 2.2.0 <2.2.0>` for Eclipse 4.2 (Juno).
 - :ref:`Eclim 1.7.7 <1.7.7>` for Eclipse 3.7 (Indigo).
 
-2012-06-07
-----------
+Jun. 07, 2012
+-------------
 
 | :ref:`Eclim 1.7.6 <1.7.6>` is now available.
 | This is a minor bug fix release.
 
-2012-06-03
-----------
+Jun. 03, 2012
+-------------
 
 | :ref:`Eclim 1.7.5 <1.7.5>` is now available.
 | This is a minor release with an improved installer, some bug fixes, and a few
   minor enhancements.
 
-2012-04-22
-----------
+Apr. 22, 2012
+-------------
 
 | :ref:`Eclim 1.7.4 <1.7.4>` is now available.
 | This is a bug fix release.
 
-2012-03-18
-----------
+Mar. 18, 2012
+-------------
 
 | :ref:`Eclim 1.7.3 <1.7.3>` is now available.
 | This version fixes numerious small bugs and adds a handful of small features.
