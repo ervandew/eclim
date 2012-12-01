@@ -315,6 +315,12 @@ function! s:InfoLine() " {{{
     catch /E\(117\|700\)/
       " fall back to fugitive
       try
+        " fugitive calls a User autocmd, so stop if that one is triggering
+        " this one to prevent a recursive loop
+        if exists('b:eclim_fugative_autocmd')
+          return
+        endif
+
         " make sure fugitive has the git dir for the current project
         if !exists('b:git_dir') || (b:git_dir !~ '^\M' . b:roots[0])
           let cwd = ''
@@ -326,6 +332,10 @@ function! s:InfoLine() " {{{
           if exists('b:git_dir')
             unlet b:git_dir
           endif
+
+          " slight hack to prevent recursive autocmd loop with fugitive
+          let b:eclim_fugative_autocmd = 1
+
           silent! doautocmd fugitive BufReadPost %
 
           if cwd != ''
@@ -342,6 +352,8 @@ function! s:InfoLine() " {{{
         endif
       catch /E\(117\|700\)/
         " noop if the neither function was found
+      finally
+          silent! unlet b:eclim_fugative_autocmd
       endtry
     endtry
 
