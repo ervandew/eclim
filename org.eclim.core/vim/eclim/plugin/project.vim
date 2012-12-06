@@ -94,9 +94,9 @@ if g:EclimProjectTreeAutoOpen
     \     !exists('t:project_tree_auto_opened') &&
     \     !exists('g:SessionLoad') &&
     \     eclim#project#util#GetCurrentProjectRoot() != '' |
+    \   let t:project_tree_auto_opened = 1 |
     \   call eclim#project#tree#ProjectTree(copy(g:EclimProjectTreeAutoOpenProjects)) |
     \   exec g:EclimProjectTreeContentWincmd |
-    \   let t:project_tree_auto_opened = 1 |
     \ endif
 endif
 
