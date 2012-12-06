@@ -135,6 +135,7 @@ function! eclim#project#tree#ProjectTreeOpen(display, names, dirs) " {{{
     if line('$') > 1 || getline(1) !~ '^\s*$'
       setlocal nowrap nonumber
       setlocal foldmethod=manual foldtext=getline(v:foldstart)
+      exec 'setlocal statusline=' . escape(a:display, ' ')
       if !exists('t:project_tree_name')
         exec 'let t:project_tree_id = ' .
           \ substitute(bufname(shared), g:EclimProjectTreeTitle . '\(\d\+\)', '\1', '')
