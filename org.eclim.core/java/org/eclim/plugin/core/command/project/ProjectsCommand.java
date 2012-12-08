@@ -57,10 +57,7 @@ import org.eclipse.core.runtime.IPath;
 public class ProjectsCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -107,7 +104,7 @@ public class ProjectsCommand
                 IFileStore store = EFS.getStore(member.getLocationURI());
                 String resolvedPath = store != null ?
                   store.toString() : link.getLocationURI().getPath();
-                links.put(path.toString(), resolvedPath);
+                links.put(path.toString(), resolvedPath.replace("\\", "/"));
               }
             }
           }
