@@ -254,7 +254,9 @@ endif
 " Auto Commands{{{
 augroup eclim_archive_read
   autocmd!
-  silent! autocmd! archive_read
+  if exists('#archive_read')
+    autocmd! archive_read
+  endif
   autocmd BufReadCmd
     \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,
     \tar:/*,tar:\*,tar:file:/*,tar:file:\*,
