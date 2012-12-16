@@ -30,6 +30,7 @@ endfunction " }}}
 " TestValidate() {{{
 function! TestValidate()
   edit! php/src/test.php
+  let b:EclimPhpHtmlValidate = 1
   call vunit#PeekRedir()
 
   call histadd('cmd', 'write') | write
@@ -47,7 +48,6 @@ function! TestValidate()
     \ results[0].text, 'Wrong result.')
 
   call vunit#AssertEquals(7, results[1].lnum, 'Wrong line num.')
-  call vunit#AssertEquals(3, results[1].col, 'Wrong col num.')
   call vunit#AssertEquals('discarding unexpected </div>', results[1].text, 'Wrong result.')
 endfunction " }}}
 

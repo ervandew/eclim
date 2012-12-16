@@ -16,6 +16,17 @@
 History of Changes
 ==================
 
+.. _2.2.6:
+.. _1.7.14:
+
+2.2.6 / 1.7.14 ()
+------------------------------
+
+Php:
+  - Eclim will no longer run php files through html validation by default (see
+    the :doc:`Php Validation </vim/php/validate>` doc for settings to enable
+    html validation).
+
 .. _2.2.5:
 .. _1.7.13:
 

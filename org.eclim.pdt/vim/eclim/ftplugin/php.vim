@@ -29,7 +29,7 @@ if !exists("g:EclimPhpValidate")
 endif
 
 if !exists("g:EclimPhpHtmlValidate")
-  let g:EclimPhpHtmlValidate = g:EclimPhpValidate
+  let g:EclimPhpHtmlValidate = 0
 endif
 
 " }}}
