@@ -186,6 +186,9 @@ script in the Vimplugin preferences:
     set guioptions-=L " turn off left scrollbar
     set guioptions-=l
 
+
+.. _eclim-gvim-embedded-shortcuts:
+
 **Eclipse/Vim key shortcuts in embedded gvim**
 
 Depending on your OS and windowing system, when the embedded gvim has focus,
