@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,9 +67,7 @@ import org.w3c.tidy.Tidy;
 public class HtmlValidateCommand
   extends WstValidateCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -152,7 +150,9 @@ public class HtmlValidateCommand
   {
     return
       line.indexOf(": inserting") == -1 &&
-      line.indexOf(": trimming") == -1;
+      line.indexOf(": trimming") == -1 &&
+      line.indexOf("unknown attribute") == -1 &&
+      line.indexOf("missing <!DOCTYPE> declaration") == -1;
   }
 
   /**
