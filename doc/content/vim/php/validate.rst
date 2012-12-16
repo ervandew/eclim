@@ -40,8 +40,14 @@ Configuration
 - **g:EclimPhpValidate** (Default: 1) -
   If set to 0, disables source code validation.
 
-- **g:EclimPhpHtmlValidate** (Default: 1) -
-  If set to 0, disables validating html markup in the php file.
+- **g:EclimPhpHtmlValidate** (Default: 0) -
+  If set to a non 0 value, enables validating html markup in the php file.
+  Enabling of html validation can also be enabled on a per buffer basis using a
+  buffer local setting:
+
+  .. code-block:: vim
+
+    let b:EclimPhpHtmlValidate = 1
 
 - **g:EclimValidateSortResults** (Default: 'occurrence') -
   If set to 'severity', the validation results will be sorted by severity

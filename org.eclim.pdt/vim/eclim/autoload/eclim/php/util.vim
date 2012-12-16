@@ -59,8 +59,9 @@ function! eclim#php#util#UpdateSrcFile(validate) " {{{
       return
     endif
 
-    if (g:EclimPhpHtmlValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
-      " html validate
+    let html_validate = exists('b:EclimPhpHtmlValidate') ?
+      \ b:EclimPhpHtmlValidate : g:EclimPhpHtmlValidate
+    if html_validate && !eclim#util#WillWrittenBufferClose()
       let command = s:html_validate_command
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<file>', file, '')
