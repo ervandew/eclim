@@ -221,7 +221,12 @@ function! eclim#common#buffers#TabEnter() " {{{
       " don't delete active buffers, just in case the tab has the wrong
       " eclim_tab_id
       if eclim_tab_id == s:tab_prev && buffer.status !~ 'a'
-        exec 'bdelete ' . buffer.bufnr
+        try
+          exec 'bdelete ' . buffer.bufnr
+        catch /E89/
+          " ignore since it happens when using bd! on the last buffer for
+          " another tab.
+        endtry
       endif
     endfor
   endif
