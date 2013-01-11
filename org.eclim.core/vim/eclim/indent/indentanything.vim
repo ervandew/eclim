@@ -138,7 +138,7 @@ endfunction
 function! s:IsLineComment(linenum)
     let cursor = getpos('.')
     exec a:linenum
-    normal ^
+    normal! ^
     let l:iscomment = 0
     let l:syn = synIDattr(synID(line('.'), col('.'), 1), "name")
     if l:syn =~ b:lineCommentRE " b:commentRE || l:syn =~ b:stringRE
@@ -154,7 +154,7 @@ endfunction
 function! s:IsComment(linenum)
     let cursor = getpos('.')
     exec a:linenum
-    normal ^
+    normal! ^
     let l:iscomment = 0
     let l:syn = synIDattr(synID(line('.'), col('.'), 1), "name")
     if l:syn =~ b:commentRE " b:commentRE || l:syn =~ b:stringRE
@@ -170,7 +170,7 @@ endfunction
 function! s:IsBlockComment(linenum)
     let cursor = getpos('.')
     exec a:linenum
-    normal ^
+    normal! ^
     let l:iscomment = 0
     let l:syn = synIDattr(synID(line('.'), col('.'), 1), "name")
     if l:syn =~ b:blockCommentRE " b:commentRE || l:syn =~ b:stringRE
@@ -358,7 +358,7 @@ function! s:GetBlockCommentIndent(CurrLNum, LastLNum)
     if a:LastLNum == searchpair(b:blockCommentStartRE, '', b:blockCommentEndRE, 'bWr')
                 \ && a:LastLNum > 0
         let l:adj = col('.') + b:blockCommentMiddleExtra
-        normal ^
+        normal! ^
         let l:adj -= col('.')
     endif
     call setpos('.', l:cursor)
@@ -372,7 +372,7 @@ function! s:GetPostBlockCommentIndent(LNum)
 
     " Find beginning of block comment containing the start of line LNum
     exec a:LNum
-    normal ^
+    normal! ^
     let l:ind = indent(searchpair(b:blockCommentStartRE, '', b:blockCommentEndRE, 'bWr'))
 
     if 1 || l:ind != 0 && b:indent_anything_echo
@@ -467,7 +467,7 @@ function! s:GetPairIndent(CurrLine, LastLine, LastLNum, Head, Mid, Tail)
 
         " Move to the beginning of the last line
         call cursor(a:LastLNum,0)
-        normal ^
+        normal! ^
 
         " If the line starts with an open, The close shouldn't be counted as
         " such, because we're looking for closes that didn't start on this
