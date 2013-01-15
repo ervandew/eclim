@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@ function! eclim#common#buffers#Buffers(bang) " {{{
   endif
 
   let lines = []
+  let buflist = []
   let filelength = options['maxfilelength']
   let tabid = exists('*gettabvar') ? s:GetTabId() : 0
   let tabbuffers = tabpagebuflist()
@@ -67,6 +68,7 @@ function! eclim#common#buffers#Buffers(bang) " {{{
       endif
 
       call add(lines, s:BufferEntryToLine(buffer, filelength))
+      call add(buflist, buffer)
     endif
   endfor
 
@@ -76,7 +78,7 @@ function! eclim#common#buffers#Buffers(bang) " {{{
   call append(line('$'), ['', '" use ? to view help'])
   setlocal nomodifiable readonly
 
-  let b:eclim_buffers = buffers
+  let b:eclim_buffers = buflist
 
   " syntax
   set ft=eclim_buffers
