@@ -31,6 +31,7 @@ sys.path.append(os.path.abspath('../theme'))
 extensions = [
   'sphinx.ext.extlinks',
   'sphinxcontrib.plantuml',
+  'eclim.sphinx.include',
   'eclim.sphinx.vimdoc',
   'eclim.sphinx.rss',
 ]
