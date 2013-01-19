@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -152,8 +152,13 @@ function! eclim#help#CommandCompleteTag(argLead, cmdLine, cursorPos)
   let savetags = &tags
   exec 'set tags=' . escape(escape(g:EclimHelpDir, ' '), ' ') . '/**/tags'
   try
-    let results = taglist(argLead . '.*')
-    call map(results, "v:val['name']")
+    let tags = sort(map(taglist(argLead . '.*'), "v:val['name']"))
+    let results = []
+    for tag in tags
+      if index(results, tag) == -1
+        call add(results, tag)
+      endif
+    endfor
     return results
   finally
     let &tags = savetags
