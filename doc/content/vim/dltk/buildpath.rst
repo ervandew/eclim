@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ location-list).
 The following is a list of commands that eclim provides while editing your
 .buildpath.
 
-.. _\:NewSrcEntry:
+.. _\:NewSrcEntry_dltk:
 
 - **:NewSrcEntry** <dir> [<dir> ...] -
   Adds one or more new entries which reference source directories in your project.
@@ -46,7 +46,7 @@ The following is a list of commands that eclim provides while editing your
 
   This command supports command completion of project relative directories.
 
-.. _\:NewLibEntry:
+.. _\:NewLibEntry_dltk:
 
 - **:NewLibEntry** <dir> [<dir> ...] -
   Adds one or more new entries which reference external source
@@ -58,7 +58,7 @@ The following is a list of commands that eclim provides while editing your
 
   This command supports command completion of directories.
 
-.. _\:NewProjectEntry:
+.. _\:NewProjectEntry_dltk:
 
 - **:NewProjectEntry** <project> [<project> ...] -
   Adds one or more new entries which reference other projects.

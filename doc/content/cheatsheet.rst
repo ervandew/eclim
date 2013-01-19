@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -222,12 +222,12 @@ Java Commands
 Java .classpath Commands
 ------------------------
 
-- :ref:`:NewSrcEntry <:NewSrcEntry>` <dir> [<dir> ...] -
+- :ref:`:NewSrcEntry <:NewSrcEntry_java>` <dir> [<dir> ...] -
   Add a new source dir entry.
-- :ref:`:NewProjectEntry <:NewProjectEntry>` <project> [<project> ...] -
+- :ref:`:NewProjectEntry <:NewProjectEntry_java>` <project> [<project> ...] -
   Add a new project entry.
-- :ref:`:NewJarEntry <:NewJarEntry>` <file> [<file> ...] - Add a jar entry.
-- :ref:`:NewVarEntry <:NewVarEntry>` <VAR/file> [<VAR/file> ...] -
+- :ref:`:NewJarEntry <:NewJarEntry_java>` <file> [<file> ...] - Add a jar entry.
+- :ref:`:NewVarEntry <:NewVarEntry_java>` <VAR/file> [<VAR/file> ...] -
   Add a new var entry.
 - :ref:`:VariableList <:VariableList>`
   List available classpath variables and their corresponding values.

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ and variables.
   update the eclipse classpath <classpath-ivy>` when saving changes to your
   ivy.xml.
 
-.. _\:NewSrcEntry:
+.. _\:NewSrcEntry_java:
 
 - **:NewSrcEntry** <dir> [<dir> ...] -
   Adds a new entry for one or more source code directories relative to the
@@ -56,7 +56,7 @@ and variables.
   This command supports command completion of directories relative to the
   .classpath file.
 
-.. _\:NewProjectEntry:
+.. _\:NewProjectEntry_java:
 
 - **:NewProjectEntry** <project> [<project> ...] -
   Adds a new entry for one or more dependencies on other projects.
@@ -67,7 +67,7 @@ and variables.
 
   This command supports command completion of project names.
 
-.. _\:NewJarEntry:
+.. _\:NewJarEntry_java:
 
 - **:NewJarEntry** <file> [<file> ...] -
   Adds a new entry for one or more jar file dependencies.  If the jar file is
@@ -78,7 +78,7 @@ and variables.
 
     <classpathentry exported="true" kind="lib" path="lib/hibernate-4.0.jar"/>
 
-.. _\:NewVarEntry:
+.. _\:NewVarEntry_java:
 
 - **:NewVarEntry** <VAR/file> [<VAR/file> ...] -
   Just like NewJarEntry except an Eclipse "var" entry is created.  When a jar

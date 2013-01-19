@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -145,5 +145,6 @@ to.
 .. include:: /vim/refactoring.rst
    :start-after: begin-refactor-config
    :end-before: end-refactor-config
+   :ref-suffix: java
 
 .. _eclim-user: http://groups.google.com/group/eclim-user
