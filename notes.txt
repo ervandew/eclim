@@ -1,6 +1,8 @@
 TODO {{{
 
   Bugs {{{
+    - Install w/ MyEclipse
+
     - after external change by eclipse, all view info is lost (manual folds, etc).
       - https://sourceforge.net/tracker/?func=detail&atid=763326&aid=2123378&group_id=145869
 
@@ -25,10 +27,28 @@ TODO {{{
 
   Documentation {{{
     - add menu of some sort in vimdocs
+
     - consider a command to open topic in web docs
+
+    - boostrap theme
+      - on short pages, clicking subnav element force it to be "selected"
+
+    - eclipse version variable
+
+    - Sublime text like gif examples (issue #142):
+      http://www.sublimetext.com/
+      Use byzanz
+
+    - Reference docs:
+      - note on using :EclimHelp
+        - suggest wildmenu settings
+          set wildmenu
+          set wildmode=longest:full,full
   }}}
 
   Common {{{
+    - add command to create project links
+
     - leverage eclipse save actions
 
     - settings export/import
@@ -42,6 +62,15 @@ TODO {{{
 
     - :ProjectCreateWizard - use input()
 
+    - EclimValidate, per lang validation
+      - :verbose set completefunc?
+      - is the current file in a src path
+
+    - update nailgun to pass signals from client to server
+      - support ctrl-c on client killing process on server for :Java and :JUnit
+        - extend task and override createWatchdog() giving us a handle to the
+          process which we can call destroy() on.
+
     - eclim console log
       - https://sourceforge.net/tracker/?func=detail&aid=2027557&group_id=145869&atid=763326
 
@@ -51,9 +80,13 @@ TODO {{{
       http://www.vim.org/scripts/script.php?script_id=663
       (probably not windows compatible either)
 
-    - creating a project in the workspace dir w/ a different name than the
-      directory doesn't work (Eclipse doesn't support this).
-      :ProjectCreate ~/workspace/my_project_dir -p my_project
+    Templates
+      - replace eclim templates w/ eclipse templates
+        org.eclim.core/vim/eclim/autoload/eclim/common/template.vim
+      - org/eclipse/ui/texteditor/templates/TemplatePreferencePage.java
+        - list, edit, create, remove
+      - TemplateStore codeTemplateStore = JavaPlugin.getDefault().getCodeTemplateStore();
+      - ProjectTemplateStore projectStore = new ProjectTemplateStore(project.getProject());
 
     - determines the user's default workspace using (account for
       ~/.eclipse/org.eclipse.../configuration)
@@ -67,6 +100,11 @@ TODO {{{
     - Support for starting/stopping eclim from vim
       - fork eclimd
       - buffer to tail the eclimd log
+
+    - Remote eclimd
+      - mount point for code/workspace location
+      - ~/.eclimrc (both sides need to agree)
+      - ~/.eclim/.eclimd_instances (client needs to read server created file)
   }}}
 
   Vimplugin {{{
@@ -186,6 +224,9 @@ TODO {{{
       $ cd eclipse/plugins/com.android.ide.eclipse.adt/src/com/android/ide/eclipse/adt
     }}}
 
+    - replace eclim import filters with
+      Preferences > Java > Appearance > Type Filters
+
     - add, remove, set default vm install.
 
     - :Java, :Javadoc
@@ -196,6 +237,15 @@ TODO {{{
         returning to vim.
       - add ability to supply jvm args, system properties, env vars, etc.
 
+    - Support for running :JUnit / :Java via screen.vim
+
+    - Consider replacing :Java w/ a :ProjectRun command using eclipse launch
+      configurations.
+
+    - :JavaDocSearch
+      - how to deal with headless installs? can we open the full class docs into a
+        buffer?
+
     - get/set, construtor, etc. templates
       - consider using the eclipse templates or giving the user that option
 
@@ -205,6 +255,14 @@ TODO {{{
       - handle locating the src dir, or prompting user if more than one
       - handle creation of package dirs if necessary
       - open new class in a split window
+
+    - Configure java code formatting from within vim
+      - eclipse java templates
+      - preview
+        - sub class CompilationUnitPreview and pull the preview text from fPreviewDocument
+        - jdt/internal/ui/preferences/formatter/BracesTabPage.java
+        - jdt/internal/ui/preferences/formatter/CompilationUnitPreview.java
+        - jdt/internal/ui/preferences/formatter/JavaPreview.java
 
     - generic support for java based xml config file validation
       - support list of xpaths to class name attributes / values to validate
@@ -353,13 +411,15 @@ TODO {{{
   }}}
 
   Python {{{
-    - move to pydev
+    - Pydev
+      - preview docstrings: PyTextHover.getHoverInfo
+      - code format: Ctrl+Shift+F
+      - organize imports: Ctrl+Shift+O
+      - refactor -> rename: Alt+Shift+R
 
     - jython?
 
     - modify :DjangoFind to account for django provided tags and filters.
-
-    - when adding new method for a class, auto add self as first parameter.
   }}}
 
   Ruby {{{
@@ -524,7 +584,7 @@ NOTES {{{
     Eclipse Color Themes:
     http://www.eclipsecolorthemes.org/
 
-    Sourceforget shell access:
+    Sourceforge shell access:
     ssh -t USER,PROJECT@shell.sourceforge.net create
 
     Git repos for vim:
