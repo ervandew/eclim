@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,8 +68,11 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+
+import org.eclipse.jdt.core.compiler.IProblem;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -104,10 +107,7 @@ public class JavaCommand
   private static final String SYSPROPS_OPTION = "s";
   private static final String ENVARGS_OPTION = "e";
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -149,6 +149,21 @@ public class JavaCommand
 
     if (mainClass.endsWith(".java") || mainClass.endsWith(".class")){
       mainClass = mainClass.substring(0, mainClass.lastIndexOf('.'));
+    }
+
+    // validate that the main class doesn't contain errors
+    IType type = javaProject.findType(mainClass);
+    if (type != null){
+      ICompilationUnit src = type.getCompilationUnit();
+      if (src != null){
+        IProblem[] problems = JavaUtils.getProblems(src);
+        for (IProblem problem : problems){
+          if (problem.isError()){
+            println(Services.getMessage("src.contains.errors"));
+            return null;
+          }
+        }
+      }
     }
 
     Java java = new MyJava();
