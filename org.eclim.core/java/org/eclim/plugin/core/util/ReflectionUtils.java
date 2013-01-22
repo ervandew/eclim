@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ public class ReflectionUtils
    * @param names One or more fully qualified class names.
    * @return A Class for the first class found or null if none found.
    */
-  public static Class<?> loadClass(Class context, String... names){
+  public static Class<?> loadClass(Class context, String... names)
+  {
     for(String name : names){
       try{
         Class<?> clazz = Class.forName(name, true, context.getClassLoader());
