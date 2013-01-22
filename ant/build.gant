@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -539,7 +539,9 @@ target(name: 'checkstyle'){
       debug: 'on', optimize: false, deprecation: '${javac.deprecation}',
       target: '${javac.target}', source: '${javac.target}',
       failonerror: true,
-      includeantruntime: false)
+      includeantruntime: false) {
+    compilerarg(value: '-Xlint:-options')
+  }
   taskdef(resource: 'checkstyletask.properties', classpathref: 'checkstyle-classpath')
 
   checkstyle(config: 'ant/checkstyle.xml'){
@@ -640,6 +642,7 @@ target(name: 'patch'){
 
     mkdir(dir: '${build.classes}/' + plugin)
     compile("patch/${plugin}", '${build.classes}/' + plugin){
+      compilerarg(value: '-Xlint:-options')
       include(name: '**/*.java')
     }
 
@@ -832,6 +835,7 @@ def plugin(name){
 
   if (new File("${name}/java").exists()){
     compile("${name}/java", '${build.classes}/' + name, failonerror=true){
+      compilerarg(value: '-Xlint:-options')
       include(name: "**/*.java")
       classpath{fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')}
     }
@@ -894,11 +898,13 @@ junit = { pluginName ->
 
   ant.mkdir(dir: "build/test/junit/classes/${pluginName}")
   compile("org.eclim.core/test/junit", "build/test/junit/classes/${pluginName}"){
+    ant.compilerarg(value: '-Xlint:-options')
     ant.include(name: '**/*.java')
     ant.exclude(name: 'org/eclim/plugin/**/*.java')
     ant.classpath{ant.pathelement(path: '${build.classes}/org.eclim')}
   }
   compile("${pluginName}/test/junit", "build/test/junit/classes/${pluginName}"){
+    ant.compilerarg(value: '-Xlint:-options')
     ant.include(name: '**/*.java')
     ant.classpath{ant.pathelement(path: '${build.classes}/org.eclim')}
   }
