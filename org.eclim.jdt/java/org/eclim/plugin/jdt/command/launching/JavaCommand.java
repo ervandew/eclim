@@ -37,6 +37,8 @@ import org.apache.tools.ant.taskdefs.PumpStreamHandler;
 import org.apache.tools.ant.taskdefs.Redirector;
 import org.apache.tools.ant.taskdefs.StreamPumper;
 
+import org.apache.tools.ant.taskdefs.condition.Os;
+
 import org.apache.tools.ant.types.Commandline.Argument;
 import org.apache.tools.ant.types.Environment.Variable;
 import org.apache.tools.ant.types.Path;
@@ -81,6 +83,9 @@ import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
+
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 /**
  * Command to run the project's main class.
@@ -171,6 +176,18 @@ public class JavaCommand
     java.setProject(antProject);
     java.setClassname(mainClass);
     java.setFork(true);
+
+    // use the project configured jvm if possible
+    IVMInstall jvm = JavaRuntime.getVMInstall(javaProject);
+    if (jvm != null){
+      String path = jvm.getInstallLocation() + "/bin/java";
+      if (Os.isFamily(Os.FAMILY_WINDOWS)){
+        path += ".exe";
+      }
+      if (new File(path).exists()){
+        java.setJvm(path);
+      }
+    }
 
     if (workingDir != null){
       java.setDir(new File(workingDir));
