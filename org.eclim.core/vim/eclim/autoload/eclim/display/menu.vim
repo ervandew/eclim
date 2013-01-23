@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,9 @@ let s:eclim_menus = {}
 " Generate() {{{
 " Generate gvim menu items for available eclim commands.
 function! eclim#display#menu#Generate()
-  if &guioptions !~ 'm'
+  " check that the menu bar is enabled or that we are running in a mac gui where
+  " the menu bar always exists regardless of guioptions
+  if &guioptions !~ 'm' && !has('gui_macvim')
     if exists('b:eclim_menus')
       unlet b:eclim_menus
     endif
