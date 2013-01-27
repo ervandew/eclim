@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@ Php:
     the :doc:`Php Validation </vim/php/validate>` doc for settings to enable
     html validation).
 
+| :gitlog:`Git Log (2.2.6) <2.2.5...2.2.6>`
+| :gitlog:`Git Log (1.7.14) <1.7.13...1.7.14>`
+
 .. _2.2.5:
 .. _1.7.13:
 
@@ -38,6 +41,9 @@ Eclim:
   - Fix :ref:`:ProjectGrep <:ProjectGrep>` and :ref:`:ProjectTodo
     <:ProjectTodo>` to search in all of the project's links as well.
   - Other minor bug fixes.
+
+| :gitlog:`Git Log (2.2.5) <2.2.4...2.2.5>`
+| :gitlog:`Git Log (1.7.13) <1.7.12...1.7.13>`
 
 .. _2.2.4:
 .. _1.7.12:
@@ -62,6 +68,9 @@ C/C++:
 Php:
   - Some indentation fixes.
 
+| :gitlog:`Git Log (2.2.4) <2.2.3...2.2.4>`
+| :gitlog:`Git Log (1.7.12) <1.7.11...1.7.12>`
+
 .. _2.2.3:
 .. _1.7.11:
 
@@ -71,6 +80,9 @@ Php:
 Eclim:
   - Fixes execution of eclim commands from vim on Windows when using the
     external nailgun client (vs the python client).
+
+| :gitlog:`Git Log (2.2.3) <2.2.2...2.2.3>`
+| :gitlog:`Git Log (1.7.11) <1.7.10...1.7.11>`
 
 .. _2.2.2:
 .. _1.7.10:
@@ -119,6 +131,9 @@ Java:
   - Added :ref:`:JavaDocPreview <:JavaDocPreview>` to display the javadoc of
     the element under the cursor in vim's preview window.
 
+| :gitlog:`Git Log (2.2.2) <2.2.1...2.2.2>`
+| :gitlog:`Git Log (1.7.10) <1.7.9...1.7.10>`
+
 .. _1.7.9:
 
 1.7.9 (Sep. 09, 2012)
@@ -128,6 +143,8 @@ Scala:
   - Add support for scala :doc:`code completion </vim/scala/complete>`,
     :doc:`code validation </vim/scala/validate>`, and :doc:`element definition
     searches </vim/scala/search>`.
+
+:gitlog:`Git Log (1.7.9) <1.7.8...1.7.9>`
 
 .. _2.2.1:
 .. _1.7.8:
@@ -156,6 +173,9 @@ Vimplugin:
   - Fixed disabling of conflicting Eclipse keybindings on Juno while the
     embedded vim has focus (fixes usage of Ctrl+V for blockwise visual
     selections).
+
+| :gitlog:`Git Log (2.2.1) <2.2.0...2.2.1>`
+| :gitlog:`Git Log (1.7.8) <1.7.7...1.7.8>`
 
 .. _2.2.0:
 .. _1.7.7:
@@ -199,6 +219,9 @@ Vimplugin:
     (opening new file from eclipse in a new external vim tab, using "Save As"
     from eclipse, and jumping to a line number from the project tree etc.)
 
+| :gitlog:`Git Log (2.2.0) <1.7.6...2.2.0>`
+| :gitlog:`Git Log (1.7.7) <1.7.6...1.7.7>`
+
 .. _1.7.6:
 
 1.7.6 (Jun. 07, 2012)
@@ -210,6 +233,8 @@ Bug Fixes:
 Installer:
   - Fixed install location of eclim's vim help files (broken in the previous
     release).
+
+:gitlog:`Git Log (1.7.6) <1.7.5...1.7.6>`
 
 .. _1.7.5:
 
@@ -238,6 +263,8 @@ Java:
   - Improved location of a project's main class for the :ref:`:Java <:Java>`
     command, when not explicitly set.
 
+:gitlog:`Git Log (1.7.5) <1.7.4...1.7.5>`
+
 .. _1.7.4:
 
 1.7.4 (Apr. 22, 2012)
@@ -252,6 +279,8 @@ C/C++:
 
 Java:
   - Fixed :Java on windows as well as handling of stdin for ant 1.8.2+.
+
+:gitlog:`Git Log (1.7.4) <1.7.3...1.7.4>`
 
 .. _1.7.3:
 
@@ -292,5 +321,7 @@ Maven:
 
 Php:
   - Now handles completion from within php short tags.
+
+:gitlog:`Git Log (1.7.3) <1.7.2...1.7.3>`
 
 :doc:`/archive/changes`
