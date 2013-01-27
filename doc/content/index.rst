@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ How do I get/install it?
 ========================
 
 You can follow the :doc:`eclim install guide </install>` which will walk you
-through downloading and installing eclim..
+through downloading and installing eclim.
 
 ================
 How do I use it?

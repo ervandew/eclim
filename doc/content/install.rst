@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ Before beginning the installation, first confirm that you have met the
 following requirements.
 
 - `Java Development Kit`_ 1.6 or greater
-- `Vim 7.1.x`_
+- `Vim`_ 7.1 or greater
 - `Eclipse 4.2.x (Juno)`_ (eclim 2.2.x), `Eclipse 3.7.x (Indigo)`_ (eclim
   1.7.x), or `Eclipse 3.8`_ (eclim 1.7.13 or greater)
 - Mac and Linux users must also have make and gcc installed.
@@ -35,13 +35,18 @@ following requirements.
   - **set nocompatible**
 
     Execute :h 'compatible' for more info.  You can confirm that
-    compatibliity is turned off by executing the following:
+    compatibliity is turned off by executing the following in vim:
 
     .. code-block:: vim
 
       :echo &compatible
 
-    Which should output '0'.
+    Which should output '0', but if not, then add the following to your ~/.vimrc
+    files (_vimrc on Windows):
+
+    .. code-block:: vim
+
+      set nocompatible
   - **filetype plugin on**
 
     Execute :h filetype-plugin-on for more info.  You can confirm
@@ -52,7 +57,12 @@ following requirements.
       :filetype
 
     Which should output 'filetype detection:ON  plugin:ON indent:ON', showing
-    at least 'ON' for 'detection' and 'plugin'.
+    at least 'ON' for 'detection' and 'plugin', but if not, then update your
+    ~/.vimrc (_vimrc on Windows) to include:
+
+    .. code-block:: vim
+
+      filetype plugin indent on
 
 Download
 ========
@@ -388,10 +398,9 @@ Upgrading
 
 The upgrading procedure is the same as the installation procedure but please be
 aware that the installer will remove the previous version of eclim prior to
-installing the new one.  The installer will delete all the files in the eclim
-eclipse plugins and the files eclim adds to your .vim or vimfiles directory.
-So if you made any alterations to any of these files, be sure to back them up
-prior to upgrading.
+installing the new one.  The installer will delete all the org.eclim* eclipse
+plugins along with all the files eclim adds to your .vim or vimfiles directory
+(plugin/eclim.vim, eclim/\*\*/\*).
 
 .. _uninstall:
 
@@ -441,6 +450,6 @@ just need to supply your vim files and eclipse paths as system properties:
 .. _eclipse 4.2.x (juno): http://eclipse.org/downloads/index.php
 .. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/packages/release/indigo/sr2
 .. _eclipse 3.8: http://download.eclipse.org/eclipse/downloads/drops/R-3.8-201206081200/
-.. _vim 7.1.x: http://www.vim.org/download.php
+.. _vim: http://www.vim.org/download.php
 .. _eclim-user: http://groups.google.com/group/eclim-user
 .. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml

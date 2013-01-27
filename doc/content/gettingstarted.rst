@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ are unsure how to start eclimd).
 Creating your first project
 ---------------------------
 
-Once you've got eclimd running open an instance of vim and create your project
+Once you've got eclimd running, open an instance of vim and create your project
 like so:
 
 .. note::
@@ -206,7 +206,7 @@ Lets get started writing our first java application using eclim.
    all the errors in the file at once.
 
 4. Now lets try out code completion.  Place your cursor on the '.' of 'System.'
-   and start insert mode in vim use 'a', then follow the example below:
+   and start insert mode in vim using 'a', then follow the example below:
 
    .. code-block:: java
 

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ The following is a list of some of the common Vim variables available.
 
 .. _g\:EclimLogLevel:
 
-- **g:EclimLogLevel** (Default: 5)
+- **g:EclimLogLevel** (Default: 4)
 
   Much like the Vim 'verbose' option, this variable allows you to
   control the level of output from eclim as follows\:
