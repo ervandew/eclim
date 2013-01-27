@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,6 +45,8 @@ Php:
   - Improved completion of magic properties.
   - Support new php 5.3 version in pdt.
 
+:gitlog:`Git Log (1.7.2) <1.7.1...1.7.2>`
+
 .. _1.7.1:
 
 1.7.1 (Jul. 02, 2011)
@@ -57,6 +59,8 @@ Bug Fixes:
 Eclipse:
   - Enable vim embedding on Solaris, AIX, and HP-UX versions of eclipse.
 
+:gitlog:`Git Log (1.7.1) <1.7.0...1.7.1>`
+
 .. _1.7.0:
 
 1.7.0 (Jun. 26, 2011)
@@ -68,6 +72,8 @@ Bug Fixes:
 
 Eclipse:
   - Eclim now requires the latest version of eclipse (Indigo, 3.7).
+
+:gitlog:`Git Log (1.7.0) <1.6.3...1.7.0>`
 
 .. _1.6.3:
 
@@ -86,6 +92,8 @@ Installer:
 Java:
   - Added :ref:`:JavaClasspath <:JavaClasspath>` to echo the project's current
     classpath.
+
+:gitlog:`Git Log (1.6.3) <1.6.2...1.6.3>`
 
 .. _1.6.2:
 
@@ -134,6 +142,8 @@ Other:
     definition/references lookup support broken out from eclim to
     http://github.com/ervandew/lookup.
 
+:gitlog:`Git Log (1.6.2) <1.6.1...1.6.2>`
+
 .. _1.6.1:
 
 1.6.1 (Oct. 23, 2010)
@@ -172,6 +182,8 @@ Python:
 Php:
   - Fixed validating php files in eclipse 3.6.1.
 
+:gitlog:`Git Log (1.6.1) <1.6.0...1.6.1>`
+
 .. _1.6.0:
 
 1.6.0 (Aug. 01, 2010)
@@ -187,6 +199,8 @@ Eclipse:
 Common:
   - :ref:`:ProjectTree <:ProjectTree>` now supports eclipse resource links.
 
+:gitlog:`Git Log (1.6.0) <1.5.8...1.6.0>`
+
 .. _1.5.8:
 
 1.5.8 (Jun. 26, 2010)
@@ -197,6 +211,8 @@ Bug Fixes:
     eclipse features needs to be upgraded.
   - Fixed code completion and search for php as well as search for ruby, all of
     which were all affected by dltk module caching introduced in galileo SR2.
+
+:gitlog:`Git Log (1.5.8) <1.5.7...1.5.8>`
 
 .. _1.5.7:
 
@@ -210,6 +226,8 @@ Bug Fixes:
 Installer:
   - The installer has undergone some extensive changes to make it more reliable
     and to better support various environments.
+
+:gitlog:`Git Log (1.5.7) <1.5.6...1.5.7>`
 
 .. _1.5.6:
 
@@ -248,6 +266,8 @@ Eclim:
       to the new location, but you may want to back those files up just in
       case.
 
+:gitlog:`Git Log (1.5.6) <1.5.5...1.5.6>`
+
 .. _1.5.5:
 
 1.5.5 (Feb. 22, 2010)
@@ -259,6 +279,8 @@ Bug Fixes:
 
 Install:
   - Fixed issue downloading content.jar from eclipse update site.
+
+:gitlog:`Git Log (1.5.5) <1.5.4...1.5.5>`
 
 .. _1.5.4:
 
@@ -274,6 +296,8 @@ Common:
     <:LocateFile>` buffer.
   - Added new search scopes (buffers, quickfix, vcsmodified) to
     :ref:`:LocateFile <:LocateFile>`.
+
+:gitlog:`Git Log (1.5.4) <1.5.3...1.5.4>`
 
 .. _1.5.3:
 
@@ -313,6 +337,8 @@ Java:
   - Added :ref:`:JavaListInstalls <:JavaListInstalls>` to list all the
     installed JDKs/JREs that eclipse is aware of.
 
+:gitlog:`Git Log (1.5.3) <1.5.2...1.5.3>`
+
 .. _1.5.2:
 
 1.5.2 (Aug. 30, 2009)
@@ -351,6 +377,8 @@ Java:
     import order preference and added the ability to edit that preference via
     :ref:`:ProjectSettings` and :ref:`:EclimSettings`.
   - Added initial :doc:`refactoring </vim/java/refactor>` support.
+
+:gitlog:`Git Log (1.5.2) <1.5.1...1.5.2>`
 
 .. _1.5.1:
 
@@ -393,6 +421,8 @@ C/C++:
       After that you will need to re-configure any src or include folders you
       may have added.
 
+:gitlog:`Git Log (1.5.1) <1.5.0...1.5.1>`
+
 .. _1.5.0:
 
 1.5.0 (Jul. 12, 2009)
@@ -414,6 +444,8 @@ Java:
   - Added ability to configure java indentation globally via
     :ref:`:EclimSettings` or per project using :ref:`:ProjectSettings`.
 
+:gitlog:`Git Log (1.5.0) <1.4.9...1.5.0>`
+
 .. _1.4.9:
 
 1.4.9 (Jun. 14, 2009)
@@ -428,6 +460,8 @@ Eclim:
     from eclipse.
   - Handle possible key binding conflicts when using embedded gvim for two
     common gvim bindings (ctrl-w, ctrl-u).
+
+:gitlog:`Git Log (1.4.9) <1.4.8...1.4.9>`
 
 .. _1.4.8:
 
@@ -448,6 +482,8 @@ Maven
 Python:
   - Added :ref:`:PythonSearchContext`.
 
+:gitlog:`Git Log (1.4.8) <1.4.7...1.4.8>`
+
 .. _1.4.7:
 
 1.4.7 (May 02, 2009)
@@ -455,6 +491,8 @@ Python:
 
 Bug Fixes:
   - Fixed installation error on unix based operating systems.
+
+:gitlog:`Git Log (1.4.7) <1.4.6...1.4.7>`
 
 .. _1.4.6:
 
@@ -476,6 +514,8 @@ Java:
   - Added command to run javac.
   - Added command to run :ref:`javadoc <:Javadoc>`.
 
+:gitlog:`Git Log (1.4.6) <1.4.5...1.4.6>`
+
 .. _1.4.5:
 
 1.4.5 (Apr. 04, 2009)
@@ -495,6 +535,8 @@ Eclim:
 Java:
   - Added command to view :ref:`type hierarchy <:JavaHierarchy>`.
   - Added command to import all undefined types.
+
+:gitlog:`Git Log (1.4.5) <1.4.4...1.4.5>`
 
 .. _1.4.4:
 
@@ -528,6 +570,8 @@ Vcs:
   - Added option to allow users to change the pattern used to match tracker
     ticket numbers in :VcsLog.
 
+:gitlog:`Git Log (1.4.4) <1.4.3...1.4.4>`
+
 .. _1.4.3:
 
 1.4.3 (Nov. 15, 2008)
@@ -549,6 +593,8 @@ Python:
   - Added support for :doc:`finding an element definition </vim/python/search>`.
   - Improved :ref:`:PyLint` support.
 
+:gitlog:`Git Log (1.4.3) <1.4.2...1.4.3>`
+
 .. _1.4.2:
 
 1.4.2 (Sep. 30, 2008)
@@ -563,6 +609,8 @@ Bug Fixes:
 
 Vcs:
   - Added support for git to :Vcs commands
+
+:gitlog:`Git Log (1.4.2) <1.4.1...1.4.2>`
 
 .. _1.4.1:
 
@@ -583,6 +631,8 @@ Eclim:
 Java:
   - Added :ref:`:JavaFormat` command contributed by Anton Sharonov.
   - Added :ref:`:Checkstyle` support.
+
+:gitlog:`Git Log (1.4.1) <1.4.0...1.4.1>`
 
 .. _1.4.0:
 
@@ -630,6 +680,8 @@ Vim:
   - Added :OtherWorkingCopyDiff, :OtherWorkingCopyEdit,
     :OtherWorkingCopySplit, and :OtherWorkingCopyTabopen.
 
+:gitlog:`Git Log (1.4.0) <1.3.5...1.4.0>`
+
 .. _1.3.5:
 
 1.3.5 (Mar. 11, 2008)
@@ -653,6 +705,8 @@ Vcs:
 
 Trac:
   - Added :TracLog, :TracAnnotate, :TracChangeSet, and :TracDiff.
+
+:gitlog:`Git Log (1.3.5) <1.3.4...1.3.5>`
 
 .. _1.3.4:
 
@@ -680,6 +734,8 @@ Php:
     :doc:`validation </vim/php/validate>`.
     Requires the `eclipse pdt`_ plugin.
 
+:gitlog:`Git Log (1.3.4) <1.3.3...1.3.4>`
+
 .. _1.3.3:
 
 1.3.3 (Dec. 15, 2007)
@@ -687,6 +743,8 @@ Php:
 
 Bug Fixes:
   - Installer bug fixes.
+
+:gitlog:`Git Log (1.3.3) <1.3.2...1.3.3>`
 
 .. _1.3.2:
 
@@ -743,6 +801,8 @@ Vim:
   - Added :VimgrepRelative, :VimgrepAddRelative, :LvimgrepRelative,
     :LvimgrepAddRelative, :CdRelative, and :LcdRelative.
 
+:gitlog:`Git Log (1.3.2) <1.3.1...1.3.2>`
+
 .. _1.3.1:
 
 1.3.1 (July 13, 2007)
@@ -754,6 +814,8 @@ Bug Fixes:
     dependencies for wst integration.
   - Fixed installer to not exclude html/util.vim when not installing wst
     integrations (fixes dependent code like java code completion).
+
+:gitlog:`Git Log (1.3.1) <1.3.0...1.3.1>`
 
 .. _1.3.0:
 
@@ -857,6 +919,8 @@ Xml:
   - Added :doc:`xml code completion </vim/xml/index>`.  Requires the
     `eclipse wst`_ plugin.
 
+:gitlog:`Git Log (1.3.0) <1.2.3...1.3.0>`
+
 .. _1.2.3:
 
 1.2.3 (Oct. 08, 2006)
@@ -883,6 +947,8 @@ Java:
 Xml:
   - Added command :ref:`:XmlFormat <:XmlFormat>` to reformat a xml file.
 
+:gitlog:`Git Log (1.2.3) <1.2.2...1.2.3>`
+
 .. _1.2.2:
 
 1.2.2 (Sep. 08, 2006)
@@ -894,6 +960,8 @@ Bug Fixes:
   - Fixed plugin/eclim.vim to check vim version earlier to avoid errors on
     pre Vim 7 instances.
   - Fixed all usages of the temp window to account properly for errors.
+
+:gitlog:`Git Log (1.2.2) <1.2.1...1.2.2>`
 
 .. _1.2.1:
 
@@ -938,6 +1006,8 @@ Vim:
   - Changed **:FindFunctionVariableContext** to **:FindByContext**.
   - Added **:Tabnew** and **:TabnewRelative**.
   - **:Split** and **:SplitRelative** now support '*' and '**' wildcards.
+
+:gitlog:`Git Log (1.2.1) <1.2.0...1.2.1>`
 
 .. _1.2.0:
 
@@ -1021,6 +1091,8 @@ Vim:
   - Added **:Split**, **:SplitRelative**, **:EditRelative**,
     **:LocateFileEdit**, **:LocateFileSplit**, and **:LocateFileTab**.
 
+:gitlog:`Git Log (1.2.0) <1.1.2...1.2.0>`
+
 .. _1.1.2:
 
 1.1.2 (May 07, 2006)
@@ -1087,6 +1159,8 @@ Vim:
 
 Xml:
   - Xml validation now caches remote entities (like dtds).
+
+:gitlog:`Git Log (1.1.2) <1.1.1...1.1.2>`
 
 .. _1.1.1:
 
@@ -1160,6 +1234,8 @@ Vim:
 
       - ftplugin/java/eclim_util.vim removed.
 
+:gitlog:`Git Log (1.1.1) <1.1.0...1.1.1>`
+
 .. _1.1.0:
 
 1.1.0 (Dec. 26, 2005)
@@ -1210,6 +1286,8 @@ Vim:
 Xml:
   - :ref:`Xml validation <xml-validation>`.
 
+:gitlog:`Git Log (1.1.0) <1.0.0...1.1.0>`
+
 .. _1.0.0:
 
 1.0.0 (Oct. 16, 2005)
@@ -1217,6 +1295,8 @@ Xml:
 
 Eclim:
   - Initial release.
+
+`Git Log (1.0.0) <https://github.com/ervandew/eclim/commits/1.0.0>`_
 
 .. _eclipse cdt: http://eclipse.org/cdt/
 .. _eclipse pdt: http://eclipse.org/pdt/
