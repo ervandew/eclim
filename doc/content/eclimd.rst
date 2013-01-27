@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -164,7 +164,7 @@ script in the Vimplugin preferences:
 :menuselection:`Eclipse --> Preferences --> Vimplugin`
 
 .. note::
-  If you have non-eclim version of vimplugin installed you should remove it
+  If you have a non-eclim version of vimplugin installed you should remove it
   prior to using the eclim version.
 
 .. note::
@@ -299,8 +299,8 @@ nailgun server port should you choose to change the default.
 
 .. note::
 
-  Your system must have **sed** available so that eclim can
-  process your .eclimrc file.
+  Your system must have **perl** and **sed** available so that eclim can process
+  your .eclimrc file.
 
 Both the eclim and eclimd scripts also support a -f argument allowing you to
 specify an alternate location for your .eclimrc:
