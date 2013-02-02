@@ -898,6 +898,11 @@ function! eclim#project#util#GetProjects() " {{{
   "   links: List of linked paths.
 
   let instances = eclim#client#nailgun#GetEclimdInstances()
+  if type(instances) != g:DICT_TYPE
+    let s:workspace_projects = {}
+    return []
+  endif
+
   if len(s:workspace_projects) != len(instances)
     for workspace in keys(instances)
       let instance = instances[workspace]
