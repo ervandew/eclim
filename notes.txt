@@ -245,6 +245,7 @@ TODO {{{
     - :JavaDocSearch
       - how to deal with headless installs? can we open the full class docs into a
         buffer?
+        - w3m -halfdump -cols <cols> (can support page anchors)
 
     - get/set, construtor, etc. templates
       - consider using the eclipse templates or giving the user that option
@@ -376,6 +377,8 @@ TODO {{{
 
   Jsp {{{
     jsp
+      - syntax validation
+      - imports
       - <%%>, <%=%> code completion
       - <%@ page import="javax." %> completion
       - <jsp: completion, with attribute name completion
