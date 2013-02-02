@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@
 "
 " }}}
 
-" LoggingInit(var) {{{
-function! eclim#java#logging#LoggingInit(var)
+function! eclim#java#logging#LoggingInit(var) " {{{
   let char = nr2char(getchar())
   " only execute if the user types a '.' for a method call and if the logger
   " is not already present.
@@ -55,9 +54,7 @@ function! eclim#java#logging#LoggingInit(var)
   return char
 endfunction " }}}
 
-" InitLoggingSettings() {{{
-" Initializes the necessary logging settings.
-function! s:InitLoggingSettings()
+function! s:InitLoggingSettings() " {{{
   let s:EclimLoggingImpl =
     \ eclim#project#util#GetProjectSetting("org.eclim.java.logging.impl")
   if type(s:EclimLoggingImpl) == g:NUMBER_TYPE || s:EclimLoggingImpl == '0'
@@ -85,12 +82,18 @@ function! s:InitLoggingSettings()
       \ "private static final Logger ${var} = Logger.getLogger(${class}.class.getName());"
     let s:logger_imports = ["java.util.logging.Logger"]
   elseif s:EclimLoggingImpl == "custom"
+    let instance = eclim#client#nailgun#ChooseEclimdInstance()
+    if type(instance) != g:DICT_TYPE
+      return
+    endif
+
     let name = eclim#project#util#GetProjectSetting("org.eclim.java.logging.template")
     if type(name) == g:NUMBER_TYPE || name == ''
       return
     endif
+
     let local = eclim#UserHome() . '/.eclim/resources/jdt/templates/' . name
-    let remote = substitute(g:EclimHome, 'org.eclim_', 'org.eclim.jdt_', '') .
+    let remote = substitute(instance.home, 'org.eclim_', 'org.eclim.jdt_', '') .
       \ '/resources/templates/' . name
     if filereadable(local)
       let template = local
