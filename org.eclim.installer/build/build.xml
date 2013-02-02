@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2012  Eric Van Dewoestine
+  Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
     <fileset dir="${eclipse.home}">
       <include name="plugins/org.eclipse.*.jar"/>
     </fileset>
+    <fileset dir="org.eclim/lib" includes="gson-*.jar"/>
   </path>
 
   <formic:classpath id="formic.classpath"/>
@@ -78,6 +79,9 @@
     <formic:package destfile="build/dist/eclim_${eclim.version}.jar">
       <formic:libset dir="${build.installer}/formic/dist">
         <include name="eclim.jar"/>
+      </formic:libset>
+      <formic:libset dir="org.eclim/lib">
+        <include name="gson-*.jar"/>
       </formic:libset>
       <fileset dir="." includes="LICENSE"/>
       <fileset dir="${build.installer}/formic" includes="build.properties"/>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import com.google.gson.Gson;
+
 /**
  * Task for shutting down eclimd.
  *
@@ -48,6 +50,7 @@ public class ShutdownTask
   public void execute()
     throws BuildException
   {
+    Gson gson = new Gson();
     FileReader reader = null;
     try{
       File instances = new File(
@@ -57,11 +60,11 @@ public class ShutdownTask
         reader = new FileReader(instances);
         for(Iterator<String> ii = IOUtils.lineIterator(reader); ii.hasNext();){
           count++;
-          String instance = ii.next();
+          Instance instance = gson.fromJson(ii.next(), Instance.class);
           try{
-            log("Shutting down eclimd: " + instance);
-            int port = Integer.parseInt(instance.replaceFirst(".*:", ""));
-            shutdown(port);
+            log("Shutting down eclimd: " +
+                instance.workspace + ':' + instance.port);
+            shutdown(instance.port);
           }catch(Exception e){
             log("Unable to shut down eclimd (" + instance + "): " +
                 e.getClass().getName() + " - " + e.getMessage());
@@ -119,5 +122,13 @@ public class ShutdownTask
     packet[4] = (byte)type;
     System.arraycopy(value.getBytes(), 0, packet, 5, length);
     return packet;
+  }
+
+  @SuppressWarnings("unused")
+  private class Instance
+  {
+    public String home;
+    public String workspace;
+    public int port;
   }
 }
