@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ function! eclim#java#maven#Search(query, type)
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<query>', a:query, '')
 
-  let results = eclim#ExecuteEclim(command)
+  let results = eclim#Execute(command)
   if type(results) != g:LIST_TYPE
     return
   endif
@@ -162,11 +162,12 @@ endfunction " }}}
 
 " SetClasspathVariable(cmd variable) {{{
 function eclim#java#maven#SetClasspathVariable(cmd, variable)
-  let workspace = eclim#eclipse#ChooseWorkspace()
-  if workspace == '0'
+  let instance = eclim#client#nailgun#ChooseEclimdInstance()
+  if type(instance) != g:DICT_TYPE
     return
   endif
 
+  let workspace = instance.workspace
   let command = a:cmd .
     \ ' -Declipse.workspace=' . workspace .
     \ ' -Dmaven.eclipse.workspace=' . workspace .
@@ -221,7 +222,7 @@ function! eclim#java#maven#UpdateClasspath()
   let command = s:update_command
   let command = substitute(command, '<project>', name, '')
   let command = substitute(command, '<build>', escape(expand('%:p'), '\'), '')
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
 
   if type(result) == g:LIST_TYPE && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(

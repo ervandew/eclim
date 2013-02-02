@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ function! eclim#common#util#ReadFile()
   let archive = substitute(expand('%'), '\', '/', 'g')
   let command = substitute(s:command_read, '<file>', archive, '')
 
-  let file = eclim#ExecuteEclim(command)
+  let file = eclim#Execute(command)
 
   if string(file) != '0'
     let project = exists('b:eclim_project') ? b:eclim_project : ''

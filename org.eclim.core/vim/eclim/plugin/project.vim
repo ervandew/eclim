@@ -127,7 +127,7 @@ if !exists(":ProjectCreate")
     \ ProjectBuild :call eclim#project#util#ProjectBuild('<args>')
   command ProjectRefreshAll :call eclim#project#util#ProjectRefreshAll()
   command ProjectCacheClear :call eclim#project#util#ClearProjectsCache()
-  command -nargs=? -complete=customlist,eclim#eclipse#CommandCompleteWorkspaces
+  command -nargs=? -complete=customlist,eclim#client#nailgun#CommandCompleteWorkspaces
     \ ProjectList :call eclim#project#util#ProjectList('<args>')
   command -nargs=?
     \ -complete=customlist,eclim#project#util#CommandCompleteProject

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ function! eclim#c#hierarchy#CallHierarchy()
   let command = substitute(command, '<length>', length, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if type(result) != g:DICT_TYPE
     return
   endif

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,9 +45,6 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
     return
   endif
 
-  let workspace = eclim#project#util#GetProjectWorkspace(project)
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-
   let command = s:command_junit
   let command = substitute(command, '<project>', project, '')
   if a:test != ''
@@ -63,7 +60,7 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
   endif
 
   let curbuf = bufnr('%')
-  let result = eclim#ExecuteEclim(command, port, {'exec': 1, 'raw': 1})
+  let result = eclim#Execute(command, {'project': project, 'exec': 1, 'raw': 1})
   let results = split(substitute(result, "^\n*", '', 'g'), "\n")
   call eclim#util#TempWindow('[JUnit Output]', results)
   let b:project = project
@@ -90,7 +87,7 @@ function! eclim#java#junit#JUnitFindTest() " {{{
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<offset>', eclim#util#GetOffset(), '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if type(result) == g:STRING_TYPE
     call eclim#util#EchoError(result)
     return
@@ -219,7 +216,7 @@ function! eclim#java#junit#CommandCompleteTest(argLead, cmdLine, cursorPos) " {{
 
   let command = s:command_tests
   let command = substitute(command, '<project>', project, '')
-  let results = eclim#ExecuteEclim(command)
+  let results = eclim#Execute(command)
   if type(results) != g:LIST_TYPE
     return []
   endif

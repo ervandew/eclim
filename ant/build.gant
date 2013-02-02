@@ -289,13 +289,6 @@ target(name: 'deploy.vim'){
       binding.getVariable("${name}.build.vim")()
     }
   }
-
-  replace(file: '${vim.files}/eclim/plugin/eclim.vim'){
-    replacefilter(token: '"$${vim.eclim.home}"',
-        value: 'let g:EclimHome = \'${eclim.home}\'')
-    replacefilter(token: '"$${vim.eclipse.home}"',
-        value: 'let g:EclimEclipseHome = \'${eclipse.local}\'')
-  }
 }
 
 target(name: 'test.init'){

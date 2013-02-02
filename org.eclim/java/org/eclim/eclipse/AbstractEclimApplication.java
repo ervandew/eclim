@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ package org.eclim.eclipse;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import java.net.BindException;
@@ -46,6 +46,9 @@ import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.eclipse.core.runtime.adaptor.LocationManager;
@@ -65,6 +68,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 
+import com.google.gson.Gson;
+
 import com.martiansoftware.nailgun.NGServer;
 
 /**
@@ -79,28 +84,19 @@ public abstract class AbstractEclimApplication
   private static final Logger logger =
     Logger.getLogger(AbstractEclimApplication.class);
 
+  private static final String BASE = "org.eclim";
   private static final String CORE = "org.eclim.core";
   private static AbstractEclimApplication instance;
 
-  private String workspace;
   private NGServer server;
   private boolean starting;
   private boolean stopping;
   private boolean registered;
 
-  /**
-   * {@inheritDoc}
-   * @see IApplication#start(IApplicationContext)
-   */
+  @Override
   public Object start(IApplicationContext context)
     throws Exception
   {
-    workspace = ResourcesPlugin
-      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
-    logger.info("Workspace: " + workspace);
-
-    starting = true;
-    logger.info("Starting eclim...");
     instance = this;
     int exitCode = 0;
 
@@ -110,6 +106,15 @@ public abstract class AbstractEclimApplication
       .getProperty("nailgun.server.port");
 
     try{
+      String workspace = getWorkspace();
+      logger.info("Workspace: " + workspace);
+
+      String home = getHome();
+      logger.info("Home: " + home);
+
+      starting = true;
+      logger.info("Starting eclim...");
+
       if (!onStart()){
         return EXIT_OK;
       }
@@ -117,11 +122,12 @@ public abstract class AbstractEclimApplication
       // add shutdown hook.
       Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
+      final int port = Integer.parseInt(portString);
+
       // register that server is running to external processes.
-      registered = registerInstance();
+      registered = registerInstance(home, workspace, port);
 
       // setup nailgun
-      final int port = Integer.parseInt(portString);
       InetAddress address = InetAddress.getByName(host);
       server = new NGServer(address, port, getExtensionClassLoader());
       server.setCaptureSystemStreams(false);
@@ -183,10 +189,7 @@ public abstract class AbstractEclimApplication
     return new Integer(exitCode);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IApplication#stop()
-   */
+  @Override
   public void stop()
   {
     try{
@@ -334,29 +337,26 @@ public abstract class AbstractEclimApplication
 
   /**
    * Register the current instance in the eclimd instances file for use by vim.
-   *
-   * @return true if the instance was registered, false otherwise.
    */
-  private boolean registerInstance()
+  private boolean registerInstance(String home, String workspace, int port)
     throws Exception
   {
     File instances = new File(FileUtils.concat(
           System.getProperty("user.home"), ".eclim/.eclimd_instances"));
 
-    FileOutputStream out = null;
+    Gson gson = new Gson();
+    FileWriter out = null;
     try{
-      List<String> entries = readInstances();
-      if (entries == null){
-        return false;
-      }
-
-      String port = Services.getPluginResources("org.eclim")
-        .getProperty("nailgun.server.port");
-      String instance = workspace + ':' + port;
-      if (!entries.contains(instance)){
-        entries.add(0, instance);
-        out = new FileOutputStream(instances);
-        IOUtils.writeLines(entries, out);
+      List<Instance> entries = readInstances();
+      if (entries != null){
+        Instance instance = new Instance(home, workspace, port);
+        if (!entries.contains(instance)){
+          entries.add(instance);
+          out = new FileWriter(instances);
+          for (Instance entry : entries) {
+            out.write(gson.toJson(entry) + '\n');
+          }
+        }
       }
       return true;
     }catch(IOException ioe){
@@ -382,16 +382,15 @@ public abstract class AbstractEclimApplication
     File instances = new File(FileUtils.concat(
           System.getProperty("user.home"), ".eclim/.eclimd_instances"));
 
-    FileOutputStream out = null;
+    Gson gson = new Gson();
+    FileWriter out = null;
     try{
-      List<String> entries = readInstances();
+      List<Instance> entries = readInstances();
       if (entries == null){
         return;
       }
 
-      String port = Services.getPluginResources("org.eclim")
-        .getProperty("nailgun.server.port");
-      String instance = workspace + ':' + port;
+      Instance instance = new Instance(getHome(), getWorkspace(), getPort());
       entries.remove(instance);
 
       if (entries.size() == 0){
@@ -399,8 +398,10 @@ public abstract class AbstractEclimApplication
           logger.error("Error deleting eclimd instances file: " + instances);
         }
       }else{
-        out = new FileOutputStream(instances);
-        IOUtils.writeLines(entries, out);
+        out = new FileWriter(instances);
+        for (Instance entry : entries) {
+          out.write(gson.toJson(entry) + '\n');
+        }
       }
     }catch(IOException ioe){
       logger.error(
@@ -412,7 +413,7 @@ public abstract class AbstractEclimApplication
     }
   }
 
-  private List<String> readInstances()
+  private List<Instance> readInstances()
     throws Exception
   {
     File doteclim =
@@ -436,14 +437,43 @@ public abstract class AbstractEclimApplication
       }
     }
 
+    Gson gson = new Gson();
     FileInputStream in = null;
     try{
       in = new FileInputStream(instances);
-      List<String> entries = IOUtils.readLines(in);
+      List<String> lines = IOUtils.readLines(in);
+      List<Instance> entries = new ArrayList<Instance>();
+      for (String line : lines){
+        if (!line.startsWith("{")) {
+          continue;
+        }
+        entries.add(gson.fromJson(line, Instance.class));
+      }
       return entries;
     }finally{
       IOUtils.closeQuietly(in);
     }
+  }
+
+  private String getWorkspace()
+  {
+    return ResourcesPlugin.getWorkspace()
+      .getRoot().getRawLocation().toOSString().replace('\\', '/');
+  }
+
+  private String getHome()
+    throws IOException
+  {
+    Bundle bundle = Platform.getBundle(BASE);
+    IPath p = Path.fromOSString(FileLocator.getBundleFile(bundle).getPath());
+    return p.addTrailingSeparator().toOSString();
+  }
+
+  private int getPort()
+  {
+    String portString = Services.getPluginResources("org.eclim")
+      .getProperty("nailgun.server.port");
+    return Integer.parseInt(portString);
   }
 
   /**
@@ -485,10 +515,7 @@ public abstract class AbstractEclimApplication
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see FrameworkListener#frameworkEvent(FrameworkEvent)
-   */
+  @Override
   public synchronized void frameworkEvent(FrameworkEvent event)
   {
     // We are using a framework INFO event to announce when all the eclim
@@ -499,6 +526,31 @@ public abstract class AbstractEclimApplication
     {
       logger.info("Loaded plugin org.eclim.core");
       notify();
+    }
+  }
+
+  private class Instance
+  {
+    private String home;
+    private String workspace;
+    private int port;
+
+    public Instance(String home, String workspace, int port)
+    {
+      this.home = home;
+      this.workspace = workspace;
+      this.port = port;
+    }
+
+    public boolean equals(Object other)
+    {
+      if (!(other instanceof Instance)){
+        return false;
+      }
+      Instance otheri = (Instance)other;
+      return workspace.equals(otheri.workspace) &&
+        home.equals(otheri.home) &&
+        port == otheri.port;
     }
   }
 

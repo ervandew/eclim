@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ function! eclim#java#complete#CodeComplete(findstart, base)
     let command = substitute(command, '<layout>', g:EclimJavaCompleteLayout, '')
 
     let completions = []
-    let response = eclim#ExecuteEclim(command)
+    let response = eclim#Execute(command)
     if type(response) != g:DICT_TYPE
       return
     endif

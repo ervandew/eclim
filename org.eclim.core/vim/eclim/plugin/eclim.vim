@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -118,21 +118,6 @@ if !exists("g:EclimMakeQfFilter")
   let g:EclimMakeQfFilter = 1
 endif
 
-if !exists("g:EclimHome")
-  " set at build/install time.
-  "${vim.eclim.home}"
-  if has('win32unix')
-    let g:EclimHome = eclim#cygwin#CygwinPath(g:EclimHome)
-  endif
-endif
-if !exists("g:EclimEclipseHome")
-  " set at build/install time.
-  "${vim.eclipse.home}"
-  if has('win32unix')
-    let g:EclimEclipseHome = eclim#cygwin#CygwinPath(g:EclimEclipseHome)
-  endif
-endif
-
 if !exists("g:EclimMenus")
   let g:EclimMenus = 1
 endif
@@ -152,14 +137,14 @@ endif
 
 " Command Declarations {{{
 if !exists(":PingEclim")
-  command -nargs=? -complete=customlist,eclim#eclipse#CommandCompleteWorkspaces
+  command -nargs=? -complete=customlist,eclim#client#nailgun#CommandCompleteWorkspaces
     \ PingEclim :call eclim#PingEclim(1, '<args>')
 endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call eclim#ShutdownEclim()
 endif
 if !exists(":EclimSettings")
-  command -nargs=? -complete=customlist,eclim#eclipse#CommandCompleteWorkspaces
+  command -nargs=? -complete=customlist,eclim#client#nailgun#CommandCompleteWorkspaces
     \ EclimSettings :call eclim#Settings('<args>')
 endif
 if !exists(":EclimDisable")

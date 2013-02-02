@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ function! eclim#common#history#AddHistory()
   let command = s:command_add
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
-  call eclim#ExecuteEclim(command)
+  call eclim#Execute(command)
 endfunction " }}}
 
 " History() {{{
@@ -63,7 +63,7 @@ function! eclim#common#history#History()
   let command = s:command_list
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
-  let history = eclim#ExecuteEclim(command)
+  let history = eclim#Execute(command)
   if type(history) != g:LIST_TYPE
     return
   endif
@@ -146,7 +146,7 @@ function s:View(...)
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
     let command = substitute(command, '<revision>', revision, '')
-    let result = eclim#ExecuteEclim(command)
+    let result = eclim#Execute(command)
     if result == "0"
       return
     endif
@@ -251,7 +251,7 @@ function s:Revert()
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
     let command = substitute(command, '<revision>', revision, '')
-    let result = eclim#ExecuteEclim(command)
+    let result = eclim#Execute(command)
     if result == "0"
       return
     endif
@@ -293,7 +293,7 @@ function s:Clear(prompt, ...)
     let command = s:command_clear
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', current, '')
-    let result = eclim#ExecuteEclim(command)
+    let result = eclim#Execute(command)
     if result == "0"
       return
     endif

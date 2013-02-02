@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ Here is a diagram showing the sequence in a bit more detail:
      participant "<Command>"
    end box
 
-   "<command>.vim" -> eclim.vim : eclim#ExecuteEclim
+   "<command>.vim" -> eclim.vim : eclim#Execute
    activate eclim.vim
 
    eclim.vim -> nailgun

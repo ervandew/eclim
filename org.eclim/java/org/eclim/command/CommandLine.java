@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ public class CommandLine
       }else{
         value = (String)val;
       }
-      // decoded special characters encoded by eclim#ExecuteEclim
+      // decoded special characters encoded by eclim#Execute
       value = StringUtils.replace(value, "%2A", "*");
       value = StringUtils.replace(value, "%24", "$");
       value = StringUtils.replace(value, "%3C", "<");
@@ -159,7 +159,7 @@ public class CommandLine
       }
 
       for (int ii = 0; ii < values.length; ii++){
-        // decoded special characters encoded by eclim#ExecuteEclim
+        // decoded special characters encoded by eclim#Execute
         values[ii] = StringUtils.replace(values[ii], "%2A", "*");
         values[ii] = StringUtils.replace(values[ii], "%24", "$");
         values[ii] = StringUtils.replace(values[ii], "%3C", "<");

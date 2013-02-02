@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2012  Eric Van Dewoestine
+" Copyright (C) 2012 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,13 +24,7 @@ let s:command_reload = '-command android_reload'
 " }}}
 
 function! eclim#android#Reload() " {{{
-  let workspace = eclim#eclipse#ChooseWorkspace()
-  if workspace == '0'
-    return
-  endif
-
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-  let result = eclim#ExecuteEclim(s:command_reload, port)
+  let result = eclim#Execute(s:command_reload)
   if type(result) != g:DICT_TYPE
     return
   endif

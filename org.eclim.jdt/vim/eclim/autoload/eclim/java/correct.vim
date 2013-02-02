@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ function! eclim#java#correct#Correct()
   let filename = expand('%:p')
   call eclim#util#TempWindowClear(window_name)
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
 
   " error executing the command.
   if type(result) != g:DICT_TYPE && type(result) != g:STRING_TYPE

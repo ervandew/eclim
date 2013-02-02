@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ function! eclim#java#import#Import(...) " {{{
   if a:0
     let command .= ' -t ' . a:1
   endif
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
 
   if type(result) == g:STRING_TYPE
     call eclim#util#EchoError(result)
@@ -96,7 +96,7 @@ function! eclim#java#import#OrganizeImports(...) " {{{
   if a:0
     let command .= ' -t ' . join(a:1, ',')
   endif
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
 
   if type(result) == g:STRING_TYPE
     call eclim#util#EchoError(result)

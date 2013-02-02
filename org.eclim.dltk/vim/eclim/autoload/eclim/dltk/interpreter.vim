@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 function eclim#dltk#interpreter#GetInterpreters(nature)
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
-  let interpreters = eclim#ExecuteEclim(command)
+  let interpreters = eclim#Execute(command)
   if type(interpreters) != g:LIST_TYPE || len(interpreters) == 0
     return []
   endif
@@ -45,7 +45,7 @@ endfunction " }}}
 function eclim#dltk#interpreter#ListInterpreters(nature)
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
-  let interpreters = eclim#ExecuteEclim(command)
+  let interpreters = eclim#Execute(command)
   if type(interpreters) != g:LIST_TYPE
     return
   endif
@@ -100,7 +100,7 @@ function s:InterpreterAddRemove(nature, type, path, action)
   if a:action == 'add'
     let command .= ' -t ' . a:type
   endif
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     call eclim#util#Echo(result)
     return 1

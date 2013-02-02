@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2012  Eric Van Dewoestine
+" Copyright (C) 2012 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,9 +34,7 @@ function! eclim#android#project#ProjectNatureAddPre(project) " {{{
 endfunction " }}}
 
 function! eclim#android#project#GetTargets(folder) " {{{
-  let workspace = eclim#eclipse#ChooseWorkspace(a:folder)
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-  let results = eclim#ExecuteEclim(s:command_list_targets, port)
+  let results = eclim#Execute(s:command_list_targets, {'dir': a:folder})
   if type(results) != g:LIST_TYPE
     if type(results) == g:STRING_TYPE
       call eclim#util#EchoError(results)
