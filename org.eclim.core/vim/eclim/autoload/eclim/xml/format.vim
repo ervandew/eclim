@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ function! eclim#xml#format#Format()
   let command = substitute(command, '<indent>', &shiftwidth, '')
   let command = substitute(command, '<ff>', &ff, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     silent! 1,$delete _
     silent put =result

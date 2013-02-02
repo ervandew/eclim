@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@ function! s:Search(command, ...)
     let search_cmd = substitute(search_cmd, '<length>', length, '')
     let search_cmd = substitute(search_cmd, '<args>', argline, '')
 
-    let result = eclim#ExecuteEclim(search_cmd)
+    let result = eclim#Execute(search_cmd)
 
   " pattern search
   else
@@ -147,13 +147,7 @@ function! s:Search(command, ...)
     let search_cmd =
       \ substitute(search_cmd, '\(.*-p\s\+\)\(.\{-}\)\(\s\|$\)\(.*\)', '\1"\2"\3\4', '')
 
-    let workspace = eclim#eclipse#ChooseWorkspace()
-    if workspace == '0'
-      return ''
-    endif
-
-    let port = eclim#client#nailgun#GetNgPort(workspace)
-    let result =  eclim#ExecuteEclim(search_cmd, port)
+    let result =  eclim#Execute(search_cmd)
 
     if !in_project && filereadable(expand('%'))
       return result + s:SearchAlternate(argline, 0)
@@ -364,7 +358,7 @@ function! s:ViewDoc(...)
 
   " handle javadocs inside of a jar
   if url =~ '^jar:file:.*!'
-    call eclim#ExecuteEclim(substitute(s:open_doc, '<url>', url, ''))
+    call eclim#Execute(substitute(s:open_doc, '<url>', url, ''))
   else
     call eclim#web#OpenUrl(url)
   endif

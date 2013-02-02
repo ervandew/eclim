@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ package org.eclim.eclipse;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import java.net.BindException;
@@ -44,11 +44,16 @@ import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+
+import com.google.gson.Gson;
 
 import com.martiansoftware.nailgun.NGServer;
 
@@ -64,6 +69,7 @@ public class EclimDaemon
   private static final Logger logger =
     Logger.getLogger(EclimDaemon.class);
 
+  private static String BASE = "org.eclim";
   private static String CORE = "org.eclim.core";
   private static EclimDaemon instance = new EclimDaemon();
 
@@ -87,21 +93,23 @@ public class EclimDaemon
         return;
     }
 
-    String workspace = ResourcesPlugin
-      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
-    logger.info("Workspace: " + workspace);
-
-    starting = true;
-    logger.info("Starting eclim...");
-
-    final String host = Services.getPluginResources("org.eclim")
+    String host = Services.getPluginResources("org.eclim")
       .getProperty("nailgun.server.host");
-    final String portString = Services.getPluginResources("org.eclim")
+    String portString = Services.getPluginResources("org.eclim")
       .getProperty("nailgun.server.port");
     try{
-      final int port = Integer.parseInt(portString);
+      String workspace = getWorkspace();
+      logger.info("Workspace: " + workspace);
 
-      registerInstance(workspace, port);
+      String home = getHome();
+      logger.info("Home: " + home);
+
+      starting = true;
+      logger.info("Starting eclim...");
+
+      int port = Integer.parseInt(portString);
+
+      registerInstance(home, workspace, port);
       InetAddress address = InetAddress.getByName(host);
       server = new NGServer(address, port, getExtensionClassLoader());
       server.setCaptureSystemStreams(false);
@@ -179,21 +187,24 @@ public class EclimDaemon
   /**
    * Register the current instance in the eclimd instances file for use by vim.
    */
-  private void registerInstance(String workspace, int port)
+  private void registerInstance(String home, String workspace, int port)
     throws Exception
   {
     File instances = new File(FileUtils.concat(
           System.getProperty("user.home"), ".eclim/.eclimd_instances"));
 
-    FileOutputStream out = null;
+    Gson gson = new Gson();
+    FileWriter out = null;
     try{
-      List<String> entries = readInstances();
+      List<Instance> entries = readInstances();
       if (entries != null){
-        String instance = workspace + ':' + port;
+        Instance instance = new Instance(home, workspace, port);
         if (!entries.contains(instance)){
-          entries.add(0, instance);
-          out = new FileOutputStream(instances);
-          IOUtils.writeLines(entries, out);
+          entries.add(instance);
+          out = new FileWriter(instances);
+          for (Instance entry : entries) {
+            out.write(gson.toJson(entry) + '\n');
+          }
         }
       }
     }catch(IOException ioe){
@@ -214,18 +225,15 @@ public class EclimDaemon
     File instances = new File(FileUtils.concat(
           System.getProperty("user.home"), ".eclim/.eclimd_instances"));
 
-    FileOutputStream out = null;
+    Gson gson = new Gson();
+    FileWriter out = null;
     try{
-      List<String> entries = readInstances();
+      List<Instance> entries = readInstances();
       if (entries == null){
         return;
       }
 
-      String workspace = ResourcesPlugin
-        .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
-      String port = Services.getPluginResources("org.eclim")
-        .getProperty("nailgun.server.port");
-      String instance = workspace + ':' + port;
+      Instance instance = new Instance(getHome(), getWorkspace(), getPort());
       entries.remove(instance);
 
       if (entries.size() == 0){
@@ -233,8 +241,10 @@ public class EclimDaemon
           logger.error("Error deleting eclimd instances file: " + instances);
         }
       }else{
-        out = new FileOutputStream(instances);
-        IOUtils.writeLines(entries, out);
+        out = new FileWriter(instances);
+        for (Instance entry : entries) {
+          out.write(gson.toJson(entry) + '\n');
+        }
       }
     }catch(IOException ioe){
       logger.error(
@@ -246,7 +256,8 @@ public class EclimDaemon
     }
   }
 
-  private List<String> readInstances()
+  @SuppressWarnings("unchecked")
+  private List<Instance> readInstances()
     throws Exception
   {
     File doteclim =
@@ -270,14 +281,43 @@ public class EclimDaemon
       }
     }
 
+    Gson gson = new Gson();
     FileInputStream in = null;
     try{
       in = new FileInputStream(instances);
-      List<String> entries = IOUtils.readLines(in);
+      List<String> lines = IOUtils.readLines(in);
+      List<Instance> entries = new ArrayList<Instance>();
+      for (String line : lines){
+        if (!line.startsWith("{")) {
+          continue;
+        }
+        entries.add(gson.fromJson(line, Instance.class));
+      }
       return entries;
     }finally{
       IOUtils.closeQuietly(in);
     }
+  }
+
+  private String getWorkspace()
+  {
+    return ResourcesPlugin.getWorkspace()
+      .getRoot().getRawLocation().toOSString().replace('\\', '/');
+  }
+
+  private String getHome()
+    throws IOException
+  {
+    Bundle bundle = Platform.getBundle(BASE);
+    IPath p = Path.fromOSString(FileLocator.getBundleFile(bundle).getPath());
+    return p.addTrailingSeparator().toOSString();
+  }
+
+  private int getPort()
+  {
+    String portString = Services.getPluginResources("org.eclim")
+      .getProperty("nailgun.server.port");
+    return Integer.parseInt(portString);
   }
 
   /**
@@ -330,6 +370,32 @@ public class EclimDaemon
     {
       logger.info("Loaded plugin org.eclim.core");
       notify();
+    }
+  }
+
+  @SuppressWarnings("unused")
+  private class Instance
+  {
+    private String home;
+    private String workspace;
+    private int port;
+
+    public Instance(String home, String workspace, int port)
+    {
+      this.home = home;
+      this.workspace = workspace;
+      this.port = port;
+    }
+
+    public boolean equals(Object other)
+    {
+      if (!(other instanceof Instance)){
+        return false;
+      }
+      Instance otheri = (Instance)other;
+      return workspace.equals(otheri.workspace) &&
+        home.equals(otheri.home) &&
+        port == otheri.port;
     }
   }
 }

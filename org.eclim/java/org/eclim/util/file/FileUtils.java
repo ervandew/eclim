@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -311,11 +311,30 @@ public class FileUtils
   }
 
   /**
+   * Gets the directory path from the supplied path by removing the last path
+   * segment.
+   * <pre>
+   * FileUtils.getDirName("/a/b/c/") :  "/a/b/"
+   * FileUtils.getDirName("/a/b/c") :  "/a/b/"
+   * FileUtils.getDirName("/a/b/c.txt") :  "/a/b/"
+   * </pre>
+   *
+   * @param path The path.
+   * @return The full path.
+   */
+  public static String getDirName(String path)
+  {
+    IPath p = Path.fromOSString(path);
+    p = p.uptoSegment(p.segmentCount() - 1);
+    return p.addTrailingSeparator().toOSString();
+  }
+
+  /**
    * Gets the file name minus the extension from the supplied path.
    * <pre>
-   * FileUtils.getFullPath("/a/b/c/") :  ""
-   * FileUtils.getFullPath("/a/b/c") :  "c"
-   * FileUtils.getFullPath("/a/b/c.txt") :  "c"
+   * FileUtils.getFileName("/a/b/c/") :  ""
+   * FileUtils.getFileName("/a/b/c") :  "c"
+   * FileUtils.getFileName("/a/b/c.txt") :  "c"
    * </pre>
    *
    * @param path The path.

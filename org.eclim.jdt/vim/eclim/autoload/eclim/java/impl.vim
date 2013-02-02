@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ function! eclim#java#impl#Constructor(first, last, bang) " {{{
     let command .= ' -r ''' . substitute(string(properties), "'", '"', 'g') . ''''
   endif
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if type(result) == g:STRING_TYPE && result != ''
     call eclim#util#EchoError(result)
     return
@@ -109,7 +109,7 @@ function! eclim#java#impl#GetterSetter(first, last, bang, type) " {{{
   let command = substitute(command, '<properties>', join(properties, ','), '')
   let command = substitute(command, '<indexed>', indexed, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != "0"
     call eclim#util#Reload({'retab': 1})
     write
@@ -294,10 +294,7 @@ endfunction " }}}
 function! eclim#java#impl#Window(command, name) " {{{
   let name = eclim#project#util#GetProjectRelativeFilePath() . '_' . a:name
   let project = eclim#project#util#GetCurrentProjectName()
-  let workspace = eclim#project#util#GetProjectWorkspace(project)
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-
-  let result = eclim#ExecuteEclim(a:command, port)
+  let result = eclim#Execute(a:command, {'project': project})
   if type(result) == g:STRING_TYPE
     call eclim#util#EchoError(result)
     return

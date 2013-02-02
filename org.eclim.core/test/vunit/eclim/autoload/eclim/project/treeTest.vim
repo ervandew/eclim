@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,14 +22,12 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace
   let g:EclimProjectTreeSharedInstance = 0
 endfunction " }}}
 
-" TestProjectTree() {{{
-function! TestProjectTree()
+function! TestProjectTree() " {{{
   let workspace = eclim#project#util#GetProjectWorkspace('eclim_unit_test')
   ProjectTree eclim_unit_test
   call vunit#AssertEquals(expand('%'), 'ProjectTree_1')
@@ -37,7 +35,7 @@ function! TestProjectTree()
   call vunit#AssertEquals(getline(2), '  + bin/')
   call vunit#AssertEquals(getline(3), '  + files/')
   call vunit#AssertEquals(getline(4), '  + history/')
-  call vunit#AssertEquals(getline(5), '  + linked -> ' . workspace . 'eclim_unit_test_linked/other/')
+  call vunit#AssertEquals(getline(5), '  + linked -> ' . workspace . '/eclim_unit_test_linked/other/')
   call vunit#AssertEquals(getline(6), '  + src/')
   call vunit#AssertEquals(getline(7), '  + vim/')
   call vunit#AssertEquals(getline(8), '  + xml/')
@@ -55,7 +53,7 @@ function! TestProjectTree()
   call vunit#AssertEquals(getline( 5), '        test2.txt')
   call vunit#AssertEquals(getline( 6), '        test3.txt')
   call vunit#AssertEquals(getline( 7), '  + history/')
-  call vunit#AssertEquals(getline( 8), '  + linked -> ' . workspace . 'eclim_unit_test_linked/other/')
+  call vunit#AssertEquals(getline( 8), '  + linked -> ' . workspace . '/eclim_unit_test_linked/other/')
   call vunit#AssertEquals(getline( 9), '  + src/')
   call vunit#AssertEquals(getline(10), '  + vim/')
   call vunit#AssertEquals(getline(11), '  + xml/')
@@ -70,7 +68,7 @@ function! TestProjectTree()
   call vunit#AssertEquals(getline( 5), '        test2.txt')
   call vunit#AssertEquals(getline( 6), '        test3.txt')
   call vunit#AssertEquals(getline( 7), '  + history/')
-  call vunit#AssertEquals(getline( 8), '  - linked -> ' . workspace . 'eclim_unit_test_linked/other/')
+  call vunit#AssertEquals(getline( 8), '  - linked -> ' . workspace . '/eclim_unit_test_linked/other/')
   call vunit#AssertEquals(getline( 9), '      + foo/')
   call vunit#AssertEquals(getline(10), '  + src/')
   call vunit#AssertEquals(getline(11), '  + vim/')
@@ -86,7 +84,7 @@ function! TestProjectTree()
   call vunit#AssertEquals(getline( 5), '        test2.txt')
   call vunit#AssertEquals(getline( 6), '        test3.txt')
   call vunit#AssertEquals(getline( 7), '  + history/')
-  call vunit#AssertEquals(getline( 8), '  - linked -> ' . workspace . 'eclim_unit_test_linked/other/')
+  call vunit#AssertEquals(getline( 8), '  - linked -> ' . workspace . '/eclim_unit_test_linked/other/')
   call vunit#AssertEquals(getline( 9), '      - foo/')
   call vunit#AssertEquals(getline(10), '            bar.txt')
   call vunit#AssertEquals(getline(11), '  + src/')

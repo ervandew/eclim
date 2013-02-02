@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
     endif
 
     let completions = []
-    let results = eclim#ExecuteEclim(command)
+    let results = eclim#Execute(command)
     if type(results) != g:LIST_TYPE
       return
     endif
@@ -170,14 +170,7 @@ function! eclim#lang#Search(command, singleResultAction, argline)
   endif
 
   let search_cmd .= ' ' . argline
-
-  let workspace = eclim#eclipse#ChooseWorkspace()
-  if workspace == '0'
-    return ''
-  endif
-
-  let port = eclim#client#nailgun#GetNgPort(workspace)
-  let results =  eclim#ExecuteEclim(search_cmd, port)
+  let results =  eclim#Execute(search_cmd)
   if type(results) != g:LIST_TYPE
     return
   endif
@@ -234,7 +227,7 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
       endif
     endif
 
-    let result = eclim#ExecuteEclim(command)
+    let result = eclim#Execute(command)
     if type(result) == g:LIST_TYPE && len(result) > 0
       let errors = eclim#util#ParseLocationEntries(
         \ result, g:EclimValidateSortResults)
@@ -268,7 +261,7 @@ function! eclim#lang#Validate(type, on_save, ...)
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if type(result) == g:LIST_TYPE && len(result) > 0
     let errors = eclim#util#ParseLocationEntries(
       \ result, g:EclimValidateSortResults)
@@ -341,7 +334,7 @@ function! eclim#lang#Refactor(command)
     " cd to the project root to avoid folder renaming issues on windows.
     exec 'cd ' . escape(eclim#project#util#GetCurrentProjectRoot(), ' ')
 
-    let result = eclim#ExecuteEclim(a:command)
+    let result = eclim#Execute(a:command)
     if type(result) != g:LIST_TYPE && type(result) != g:DICT_TYPE
       return
     endif
@@ -432,7 +425,7 @@ endfunction " }}}
 " Executes the supplied refactor preview command and opens a corresponding
 " window to view that preview.
 function! eclim#lang#RefactorPreview(command)
-  let result = eclim#ExecuteEclim(a:command)
+  let result = eclim#Execute(a:command)
   if type(result) != g:DICT_TYPE
     return
   endif
@@ -497,7 +490,7 @@ function! eclim#lang#RefactorPreviewLink()
       let file = substitute(line, '^|diff|:\s*', '', '')
       let command .= ' -v -d "' . file . '"'
 
-      let diff = eclim#ExecuteEclim(command)
+      let diff = eclim#Execute(command)
       if type(diff) != g:STRING_TYPE
         return
       endif
@@ -580,7 +573,7 @@ function! eclim#lang#UndoRedo(operation, peek)
   let command = substitute(command, '<operation>', a:operation, '')
   if a:peek
     let command .= ' -p'
-    let result = eclim#ExecuteEclim(command)
+    let result = eclim#Execute(command)
     if type(result) == g:STRING_TYPE
       call eclim#util#Echo(result)
     endif

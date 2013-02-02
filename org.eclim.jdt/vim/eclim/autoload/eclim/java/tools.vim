@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ function! eclim#java#tools#ResolveQuickfixResults(frameworks) " {{{
         let command = s:command_src_find
         let command = substitute(command, '<project>', project, '')
         let command = substitute(command, '<classname>', filename, '')
-        let filename = eclim#ExecuteEclim(command)
+        let filename = eclim#Execute(command)
         if filename == ''
           " file not found.
           continue

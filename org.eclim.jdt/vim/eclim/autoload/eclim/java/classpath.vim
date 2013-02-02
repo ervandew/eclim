@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ endfunction " }}}
 " GetVariableNames() {{{
 " Gets a list of all variable names.
 function! eclim#java#classpath#GetVariableNames()
-  let variables = eclim#ExecuteEclim(s:command_variables)
+  let variables = eclim#Execute(s:command_variables)
   if type(variables) != g:LIST_TYPE
     return []
   endif
@@ -68,7 +68,7 @@ endfunction " }}}
 " VariableList() {{{
 " Lists all the variables currently available.
 function! eclim#java#classpath#VariableList()
-  let variables = eclim#ExecuteEclim(s:command_variables)
+  let variables = eclim#Execute(s:command_variables)
   if type(variables) != g:LIST_TYPE
     return
   endif
@@ -100,7 +100,7 @@ function! eclim#java#classpath#VariableCreate(name, path)
   let command = substitute(command, '<name>', a:name, '')
   let command = substitute(command, '<path>', path, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     call eclim#util#Echo(result)
   endif
@@ -112,7 +112,7 @@ function! eclim#java#classpath#VariableDelete(name)
   let command = s:command_variable_delete
   let command = substitute(command, '<name>', a:name, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     call eclim#util#Echo(result)
   endif
@@ -137,7 +137,7 @@ function! eclim#java#classpath#CommandCompleteVarPath(argLead, cmdLine, cursorPo
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
-  let vars = eclim#ExecuteEclim(s:command_variables)
+  let vars = eclim#Execute(s:command_variables)
 
   " just the variable name
   if argLead !~ '/'

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 
 function! eclim#java#util#FileExists(name) " {{{
   let command = substitute(s:command_src_exists, '<file>', a:name, '')
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   return result =~ '^true$'
 endfunction " }}}
 
@@ -210,8 +210,6 @@ function! eclim#java#util#Java(classname, args) " {{{
     return
   endif
 
-  let workspace = eclim#project#util#GetProjectWorkspace(project)
-  let port = eclim#client#nailgun#GetNgPort(workspace)
   let args = eclim#util#ParseArgs(a:args)
   let classname = a:classname
   if classname == '' && len(args)
@@ -237,7 +235,7 @@ function! eclim#java#util#Java(classname, args) " {{{
     endfor
   endif
 
-  let result = eclim#ExecuteEclim(command, port, {'exec': 1, 'raw': 1})
+  let result = eclim#Execute(command, {'project', project, 'exec': 1, 'raw': 1})
   let results = split(result, "\n")
   call eclim#util#TempWindow('[Java Output]', results)
   let b:project = project
@@ -261,7 +259,7 @@ function! eclim#java#util#Classpath(...) " {{{
     endif
     let command .= " \"" . arg . "\""
   endfor
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result == '0'
     return
   endif
@@ -269,7 +267,7 @@ function! eclim#java#util#Classpath(...) " {{{
 endfunction " }}}
 
 function! eclim#java#util#ListInstalls() " {{{
-  let installs = eclim#ExecuteEclim(s:command_list_installs)
+  let installs = eclim#Execute(s:command_list_installs)
   if type(installs) != g:LIST_TYPE
     return
   endif
@@ -308,7 +306,7 @@ function! eclim#java#util#ReadClassPrototype() " {{{
   let command = substitute(command, '<class>', expand('%:t:r'), '')
   let command .= ' -f "' . file . '"'
 
-  let file = eclim#ExecuteEclim(command)
+  let file = eclim#Execute(command)
   if string(file) != '0'
     let bufnum = bufnr('%')
     if has('win32unix')
@@ -347,7 +345,7 @@ function! eclim#java#util#CommandCompletePackage(argLead, cmdLine, cursorPos) " 
   if argLead != ''
     let command .= ' -n ' . argLead
   endif
-  let results = eclim#ExecuteEclim(command)
+  let results = eclim#Execute(command)
   return type(results) == g:LIST_TYPE ? results : []
 endfunction " }}}
 

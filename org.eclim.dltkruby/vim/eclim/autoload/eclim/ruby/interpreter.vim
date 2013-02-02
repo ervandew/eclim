@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ function eclim#ruby#interpreter#AddInterpreter(path)
   endif
   let command = s:command_add
   let command = substitute(command, '<path>', path, '')
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     call eclim#util#Echo(result)
     return 1

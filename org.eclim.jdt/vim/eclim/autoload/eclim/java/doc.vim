@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ function! eclim#java#doc#Comment() " {{{
   let command = substitute(command, '<offset>', offset, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
-  let result =  eclim#ExecuteEclim(command)
+  let result =  eclim#Execute(command)
 
   if result != "0"
     call eclim#util#Reload({'retab': 1})
@@ -96,7 +96,7 @@ function! eclim#java#doc#PreviewOpen(bufnr_or_url) " {{{
     let command = substitute(command, '<url>', a:bufnr_or_url, '')
   endif
 
-  let result =  eclim#ExecuteEclim(command)
+  let result =  eclim#Execute(command)
   if type(result) == g:DICT_TYPE
     if !exists('b:eclim_javadoc_stack')
       let b:eclim_javadoc_stack = []
@@ -233,7 +233,7 @@ function! eclim#java#doc#CommandCompleteJavadoc(argLead, cmdLine, cursorPos) " {
 
   let project = eclim#project#util#GetCurrentProjectName()
   let command = substitute(s:command_source_dirs, '<project>', project, '')
-  let result =  eclim#ExecuteEclim(command)
+  let result =  eclim#Execute(command)
   let paths = []
   if result != '' && result != '0'
     let paths = map(split(result, "\n"),

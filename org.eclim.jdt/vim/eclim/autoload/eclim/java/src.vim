@@ -2,7 +2,7 @@
 "
 " License: " {{{
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ function! eclim#java#src#Format(first, last) " {{{
   let command = substitute(command, '<toffset>', end, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != "0"
     call eclim#util#Reload({'retab': 1})
     write
@@ -74,7 +74,7 @@ function! eclim#java#src#Checkstyle() " {{{
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
 
-    let result = eclim#ExecuteEclim(command)
+    let result = eclim#Execute(command)
     if type(result) == g:LIST_TYPE && len(result) > 0
       let errors = eclim#util#ParseLocationEntries(
         \ result, g:EclimValidateSortResults)

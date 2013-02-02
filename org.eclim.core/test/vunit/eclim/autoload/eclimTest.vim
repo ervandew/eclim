@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,14 +22,21 @@
 "
 " }}}
 
-" TestGetEclimCommand() {{{
-function! TestGetEclimCommand()
-  let result = eclim#client#nailgun#GetEclimCommand()
+function! TestChooseEclimdInstance() " {{{
+  exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
+  let instance = eclim#client#nailgun#ChooseEclimdInstance()
+  let expected = substitute(g:TestEclimWorkspace, '/$', '', '')
+  call vunit#AssertEquals(expected, instance.workspace,
+    \ "Wrong workspace dir returned.")
+endfunction " }}}
+
+function! TestGetEclimCommand() " {{{
+  let instance = eclim#client#nailgun#ChooseEclimdInstance()
+  let result = eclim#client#nailgun#GetEclimCommand(instance.home)
   call vunit#AssertTrue(result =~ '\<eclim\>', "Invalid eclim command.")
 endfunction " }}}
 
-" TestPing() {{{
-function! TestPing()
+function! TestPing() " {{{
   let result = eclim#PingEclim(0)
   call vunit#AssertTrue(result, "Ping did not return true.")
 
@@ -44,8 +51,7 @@ function! TestPing()
   "endtry
 endfunction " }}}
 
-" TestSettings() {{{
-function! TestSettings()
+function! TestSettings() " {{{
   exec 'EclimSettings ' . g:TestEclimWorkspace
   call vunit#AssertEquals('Eclim_Global_Settings', expand('%'),
     \ "Didn't open settings window.")

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -50,8 +50,7 @@ function! eclim#c#project#Configs(...)
   let command = s:configs_command
   let command = substitute(command, '<project>', project, '')
 
-  let port = eclim#project#util#GetProjectPort(project)
-  let configs = eclim#ExecuteEclim(command, port)
+  let configs = eclim#Execute(command, {'project': project})
   if type(configs) != g:LIST_TYPE
     return
   endif
@@ -152,7 +151,7 @@ function! s:AddSource()
     let command .= ' -e "' . excludes . '"'
   endif
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     call eclim#c#project#Configs(b:project)
     call eclim#util#Echo(result)
@@ -179,7 +178,7 @@ function! s:AddInclude()
   let command = substitute(command, '<lang>', s:GetLang(), '')
   let command = substitute(command, '<dir>', dir, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     call eclim#c#project#Configs(b:project)
     call eclim#util#Echo(result)
@@ -206,7 +205,7 @@ function! s:AddSymbol()
   let command = substitute(command, '<name>', name, '')
   let command .= ' -v "' . value . '"'
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     call eclim#c#project#Configs(b:project)
     call eclim#util#Echo(result)
@@ -260,7 +259,7 @@ function! s:DeleteSource(lnum)
   let command = substitute(command, '<action>', 'delete', '')
   let command = substitute(command, '<dir>', dir, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     return result
   endif
@@ -281,7 +280,7 @@ function! s:DeleteInclude(lnum)
   let command = substitute(command, '<lang>', s:GetLang(), '')
   let command = substitute(command, '<dir>', dir, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     return result
   endif
@@ -299,7 +298,7 @@ function! s:DeleteSymbol(lnum)
   let command = substitute(command, '<lang>', s:GetLang(), '')
   let command = substitute(command, '<name>', name, '')
 
-  let result = eclim#ExecuteEclim(command)
+  let result = eclim#Execute(command)
   if result != '0'
     return result
   endif
