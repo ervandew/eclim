@@ -279,11 +279,16 @@ public class ImplCommand
   private ImplType createImplType(
       ITypeBinding typeBinding, List<String> overridable)
   {
+    String packageName = typeBinding.getPackage().getName();
+    String qualifiedBindingName = typeBinding.getQualifiedName();
+    // Take the remaining part after package name (and following dot) to be the
+    // binding name so as to correctly identify nested classes/interfaces
+    String bindingName = qualifiedBindingName.substring(packageName.length() + 1);
     String signature =
       (typeBinding.isInterface() ? "interface " : "class ") +
-      typeBinding.getName().replaceAll("#RAW", "");
+      bindingName.replaceAll("#RAW", "");
     return new ImplType(
-        typeBinding.getPackage().getName(),
+        packageName,
         signature,
         overridable.toArray(new String[overridable.size()]));
   }
