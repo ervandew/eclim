@@ -903,7 +903,8 @@ function! eclim#project#util#GetProjects() " {{{
     return []
   endif
 
-  if len(s:workspace_projects) != len(instances)
+  if keys(s:workspace_projects) != keys(instances)
+    let s:workspace_projects = {}
     for workspace in keys(instances)
       let instance = instances[workspace]
       let results = eclim#Execute(
