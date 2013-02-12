@@ -33,6 +33,7 @@ public class ReflectionUtils
    * @param names One or more fully qualified class names.
    * @return A Class for the first class found or null if none found.
    */
+  @SuppressWarnings("rawtypes")
   public static Class<?> loadClass(Class context, String... names)
   {
     for(String name : names){
@@ -53,7 +54,7 @@ public class ReflectionUtils
    * @param name The name of the field.
    * @param instance The instance to get the value from, or null or a static
    * field.
-   * @return
+   * @return the int value of the field.
    */
   public static int getIntField(Class<?> clazz, String name, Object instance)
   {
