@@ -263,7 +263,7 @@ function! eclim#java#impl#Add(command, function, visual) " {{{
     let superType = package . '.' . substitute(superType, '<.\{-}>', '', 'g')
   endif
 
-  let type = substitute(getline(1), '\$', '.', 'g')
+  let type = getline(1)
   let impl_winnr = winnr()
   exec winnr . "winc w"
   call eclim#lang#SilentUpdate()

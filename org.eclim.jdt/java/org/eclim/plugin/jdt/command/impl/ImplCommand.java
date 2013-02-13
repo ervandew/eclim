@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.command.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,9 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IParent;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.ISourceReference;
 import org.eclipse.jdt.core.IType;
@@ -114,11 +117,52 @@ public class ImplCommand
   protected IType getType(ICompilationUnit src, CommandLine commandLine)
     throws Exception
   {
-    // get the type to be modified by name or its offset in the file.
-    return commandLine.hasOption(Options.TYPE_OPTION) ?
-      src.getJavaProject().findType(
-          commandLine.getValue(Options.TYPE_OPTION).replace('$', '.')) :
-      TypeUtils.getType(src, getOffset(commandLine));
+    IType type = null;
+
+    // If a qualified name for the type being modified was supplied
+    if (commandLine.hasOption(Options.TYPE_OPTION)) {
+      IJavaProject javaProject = src.getJavaProject();
+      String typeFQN = commandLine.getValue(Options.TYPE_OPTION);
+      int indexOfDollar = typeFQN.indexOf("$");
+
+      // If we are dealing with an anonymous inner class, findType does not work
+      // so lets find it starting at the class containing the anonymous class.
+      if (indexOfDollar > 0) {
+        String primaryTypeFQN = typeFQN.substring(0, indexOfDollar);
+        IType primaryType = javaProject.findType(primaryTypeFQN);
+
+        LinkedList<IJavaElement> todo= new LinkedList<IJavaElement>();
+        todo.add(primaryType);
+        while (!todo.isEmpty()) {
+          IJavaElement element = todo.removeFirst();
+          
+          if (element instanceof IType) {
+            IType tempType = (IType) element;
+            String name = tempType.getFullyQualifiedName();
+            if (name.equals(typeFQN)) {
+              type = tempType;
+              break;
+            }
+          }
+          
+          if (element instanceof IParent) {
+            for (IJavaElement child: ((IParent)element).getChildren()) {
+              todo.add(child);
+            }
+          }
+        }
+      } 
+      // Else it is a normal class/interface so find works
+      else {
+          type = javaProject.findType(typeFQN);
+      }
+    } 
+    // If not, we need to find it based on the current selection
+    else {
+      type = TypeUtils.getType(src, getOffset(commandLine));
+    }
+
+    return type;
   }
 
   /**
