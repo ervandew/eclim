@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,10 @@ public class ImplCommandTest
     "src/org/eclim/test/impl/TestImpl.java";
   private static final String TEST_SUB_FILE =
     "src/org/eclim/test/impl/TestSubImpl.java";
+  private static final String TEST_NESTED_FILE =
+    "src/org/eclim/test/impl/TestNestedImpl.java";
+  private static final String TEST_ANONYMOUS_FILE =
+    "src/org/eclim/test/impl/TestAnonymousImpl.java";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -162,5 +166,83 @@ public class ImplCommandTest
 
     superTypes = (List<Map<String,Object>>)result.get("superTypes");
     assertEquals(3, superTypes.size());
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void executeNested()
+  {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_NESTED_FILE,
+        "-o", "104", "-e", "utf-8"
+      });
+
+    assertEquals("org.eclim.test.impl.TestNestedImpl", result.get("type"));
+
+    List<Map<String,Object>> superTypes =
+      (List<Map<String,Object>>)result.get("superTypes");
+
+    assertEquals("java.util", superTypes.get(1).get("packageName"));
+    assertEquals("interface Map.Entry", superTypes.get(1).get("signature"));
+    HashSet<String> methods = new HashSet<String>(
+        (List<String>)superTypes.get(1).get("methods"));
+    assertTrue(methods.contains("public abstract Object setValue(Object)"));
+
+    result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_NESTED_FILE,
+        "-t", "org.eclim.test.impl.TestNestedImpl",
+        "-s", "java.util.Map.Entry", "-m", "[\"setValue(Object)\"]"
+      });
+
+    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_NESTED_FILE);
+    assertTrue("Method not found or invalid.",
+        Pattern.compile("public Object setValue\\(Object value\\)")
+        .matcher(contents).find());
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void executeAnonymous()
+  {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    Map<String,Object> result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_ANONYMOUS_FILE,
+        "-o", "140", "-e", "utf-8"
+      });
+
+    assertEquals("org.eclim.test.impl.TestAnonymousImpl$1", result.get("type"));
+
+    List<Map<String,Object>> superTypes =
+      (List<Map<String,Object>>)result.get("superTypes");
+
+    assertEquals("java.util", superTypes.get(1).get("packageName"));
+    assertEquals("interface Map.Entry<Object,Object>", superTypes.get(1).get("signature"));
+    HashSet<String> methods = new HashSet<String>(
+        (List<String>)superTypes.get(1).get("methods"));
+    assertTrue(methods.contains("public abstract Object setValue(Object)"));
+
+    result = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_impl", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_ANONYMOUS_FILE,
+        "-t", "org.eclim.test.impl.TestAnonymousImpl$1",
+        "-s", "java.util.Map.Entry", "-m", "[\"setValue(Object)\"]"
+      });
+
+    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_ANONYMOUS_FILE);
+    assertTrue("Method not found or invalid.",
+        Pattern.compile("public Object setValue\\(Object value\\)")
+        .matcher(contents).find());
   }
 }

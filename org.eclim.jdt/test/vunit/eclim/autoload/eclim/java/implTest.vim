@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -243,6 +243,57 @@ function! TestJavaImplSub() " {{{
     \ 'put method not inserted.')
   call vunit#AssertTrue(search('public String put(Integer \w\+, String \w\+)'),
     \ 'compare method not inserted.')
+endfunction " }}}
+
+function! TestJavaImplNested() " {{{
+  edit! src/org/eclim/test/impl/TestNestedImplVUnit.java
+  call vunit#PeekRedir()
+
+  JavaImpl
+
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call vunit#AssertTrue(name =~ 'src/org/eclim/test/impl/TestNestedImplVUnit\.java_impl$')
+
+  let setValueLine = search('public abstract Object setValue(Object)')
+
+  call vunit#AssertTrue(setValueLine > 0, 'setValue method not found.')
+
+  silent! exec "normal \<cr>"
+
+  call vunit#AssertEquals(search('public abstract Object setValue(Object)', 'w'), 0,
+    \ 'setValue still in results')
+
+  bdelete
+
+  call cursor(1, 1)
+  call vunit#AssertTrue(search('public Object setValue(Object \w\+)'),
+    \ 'setValue method not inserted.')
+endfunction " }}}
+
+function! TestJavaImplAnonymous() " {{{
+  edit! src/org/eclim/test/impl/TestAnonymousImplVUnit.java
+  call vunit#PeekRedir()
+
+  call cursor(8, 1)
+  JavaImpl
+
+  let name = substitute(bufname('%'), '\', '/', 'g')
+  call vunit#AssertTrue(name =~ 'src/org/eclim/test/impl/TestAnonymousImplVUnit\.java_impl$')
+
+  let setValueLine = search('public abstract Object setValue(Object)')
+
+  call vunit#AssertTrue(setValueLine > 0, 'setValue method not found.')
+
+  silent! exec "normal \<cr>"
+
+  call vunit#AssertEquals(search('public abstract Object setValue(Object)', 'w'), 0,
+    \ 'setValue still in results')
+
+  bdelete
+
+  call cursor(1, 1)
+  call vunit#AssertTrue(search('public Object setValue(Object \w\+)'),
+    \ 'setValue method not inserted.')
 endfunction " }}}
 
 function! TestJavaDelegate() " {{{
