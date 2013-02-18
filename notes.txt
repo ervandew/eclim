@@ -290,8 +290,6 @@ TODO {{{
         choice which to use (eclipse or current external version).
         org.eclim.java.junit.engine=(eclipse|external)
 
-    - :JavaImpl support anonymous classes.
-
     - validation, look into grabbing additional message that eclipse displays
       that is not picked up by eclim
       - Code:

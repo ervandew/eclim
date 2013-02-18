@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -163,10 +163,10 @@ If you would like to generate stubs for all methods in an interface or class,
 then simply hit <enter> with the cursor over the class name and stub methods
 will be created for each method in that class or interface.
 
-This functionality is currently supported for both outer and inner classes, but
-not for anonymous inner classes.  To view the list of methods to override for an
-inner class, simply execute **:JavaImpl** with the cursor somewhere in the inner
-class.
+This functionality supports outer, inner, and anonymous classes classes.
+To view the list of methods to override for an inner or anonymous class, simply
+execute **:JavaImpl** with the cursor somewhere in the body of the inner or
+anonymous class.
 
 .. _\:JavaDelegate:
 
@@ -226,6 +226,3 @@ code will be inserted.
 If you would like to generate delegate methods for all methods in an interface
 or class, then simply hit <enter> with the cursor over the class name, and
 delegate methods will be created for each method in that interface or class.
-
-This functionality is currently supported for both outer and inner classes, but
-not for anonymous inner classes.

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,11 +131,11 @@ public class ImplCommand
         String primaryTypeFQN = typeFQN.substring(0, indexOfDollar);
         IType primaryType = javaProject.findType(primaryTypeFQN);
 
-        LinkedList<IJavaElement> todo= new LinkedList<IJavaElement>();
+        LinkedList<IJavaElement> todo = new LinkedList<IJavaElement>();
         todo.add(primaryType);
         while (!todo.isEmpty()) {
           IJavaElement element = todo.removeFirst();
-          
+
           if (element instanceof IType) {
             IType tempType = (IType) element;
             String name = tempType.getFullyQualifiedName();
@@ -144,21 +144,19 @@ public class ImplCommand
               break;
             }
           }
-          
+
           if (element instanceof IParent) {
-            for (IJavaElement child: ((IParent)element).getChildren()) {
+            for (IJavaElement child : ((IParent)element).getChildren()) {
               todo.add(child);
             }
           }
         }
-      } 
       // Else it is a normal class/interface so find works
-      else {
+      } else {
           type = javaProject.findType(typeFQN);
       }
-    } 
     // If not, we need to find it based on the current selection
-    else {
+    } else {
       type = TypeUtils.getType(src, getOffset(commandLine));
     }
 
@@ -330,7 +328,7 @@ public class ImplCommand
     String bindingName = qualifiedBindingName.substring(packageName.length() + 1);
     String signature =
       (typeBinding.isInterface() ? "interface " : "class ") +
-      bindingName.replaceAll("#RAW", "");
+      bindingName.replaceAll("(\\bjava\\.lang\\.|#RAW)", "");
     return new ImplType(
         packageName,
         signature,
