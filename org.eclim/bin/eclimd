@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2012  Eric Van Dewoestine
+# Copyright (C) 2005 - 2013  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -106,18 +106,22 @@ build_vmargs(){
     ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
   fi
 
-  # ensure that the correct jvm environment is used.
+  # ensure that the correct jvm environment is used, but only force the
+  # architecture if we find the swt jars, since linux distros may have the swt
+  # libraries outside of eclipse.
   SWT=`ls $ECLIM_ECLIPSE_HOME/plugins/org.eclipse.swt.*.jar 2> /dev/null`
-  if `echo "$SWT" | grep -q "x86_64"` ; then
-    ARCH=-d64
-  else
-    ARCH=-d32
-  fi
+  if [ -n "$SWT" ] ; then
+    if `echo "$SWT" | grep -q "x86_64"` ; then
+      ARCH=-d64
+    else
+      ARCH=-d32
+    fi
 
-  if ! `java $ARCH -version 2> /dev/null` ; then
-    echo "Your jvm does not support the architecture required " \
-      "for the version of eclipse you have installed: $ARCH"
-    exit 1;
+    if ! `java $ARCH -version 2> /dev/null` ; then
+      echo "Your jvm does not support the architecture required " \
+        "for the version of eclipse you have installed: $ARCH"
+      exit 1;
+    fi
   fi
 
   ECLIM_VMARGS="$ARCH $ECLIM_VMARGS"
