@@ -222,6 +222,8 @@ TODO {{{
       $ cd android-sdk/src
       $ git co android_sdk-adt_<version>
       $ cd eclipse/plugins/com.android.ide.eclipse.adt/src/com/android/ide/eclipse/adt
+
+      - completion in android resource files (AndroidManifest.xml, etc)
     }}}
 
     - replace eclim import filters with
