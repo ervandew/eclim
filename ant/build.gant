@@ -237,12 +237,16 @@ target(name: 'deploy.eclipse'){
           includes: 'eclimd.bat,eclimd.cmd,eclim.bat,eclim.cmd,ng.exe')
     }
   }else{
+    delete{
+      fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
+          includes: '*.bat,*.cmd,*.exe')
+    }
     replace(file: '${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd',
         token: '#$${eclipse.home}', value: 'ECLIM_ECLIPSE_HOME="${eclipse}"')
     chmod(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
-        includes: '**/*', excludes: '*.sed', perm: 'ugo+x')
+        includes: '**/*', perm: 'ugo+x')
     // java symlink support sucks, especially if the link is broken
-    exec(executable: 'rm'){
+    exec(executable: 'rm', errorproperty: 'ignore'){
       arg(line: '"${eclipse.local}/eclim" "${eclipse.local}/eclimd"')
     }
     // if ln supports it (gnu), make the links relative, otherwise fallback to
