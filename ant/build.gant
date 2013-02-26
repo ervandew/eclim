@@ -89,7 +89,7 @@ target(name: 'init'){
   echo('eclim.release.indigo: ${eclim.release.indigo}')
 
   property(name: 'eclim.features', value: '${eclipse.local}/features')
-  property(name: 'eclim.plugins', value: '${eclipse.local}/plugins')
+  property(name: 'eclim.plugins', value: '${eclipse.local}/dropins')
   property(name: 'eclim.home', value: '${eclim.plugins}/org.eclim_${eclim.version}')
 
   // set location of vim files if not already set
