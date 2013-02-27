@@ -62,7 +62,13 @@ _ARGS_BY_FILEFORMAT = {
     }
 
 def generate_plantuml_args(self, fileformat):
-    if isinstance(self.builder.config.plantuml, basestring):
+    try:
+        is_string = isinstance(self.builder.config.plantuml, basestring)
+    except NameError:
+        # python 3
+        is_string = isinstance(self.builder.config.plantuml, str)
+
+    if is_string:
         args = shlex.split(self.builder.config.plantuml)
     else:
         args = list(self.builder.config.plantuml)
@@ -81,7 +87,7 @@ def render_plantuml(self, node, fileformat):
             p = subprocess.Popen(generate_plantuml_args(self, fileformat),
                                  stdout=f, stdin=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
-        except OSError, err:
+        except OSError as err:
             if err.errno != ENOENT:
                 raise
             raise PlantUmlError('plantuml command %r cannot be run'
@@ -143,7 +149,7 @@ def html_visit_plantuml(self, node):
         # fnames: {fileformat: (refname, outfname), ...}
         fnames = dict((e, render_plantuml(self, node, e))
                       for e in fileformats)
-    except PlantUmlError, err:
+    except PlantUmlError as err:
         self.builder.warn(str(err))
         raise nodes.SkipNode
 
@@ -153,7 +159,13 @@ def html_visit_plantuml(self, node):
     raise nodes.SkipNode
 
 def _convert_eps_to_pdf(self, refname, fname):
-    if isinstance(self.builder.config.plantuml_epstopdf, basestring):
+    try:
+        is_string = isinstance(self.builder.config.plantuml_epstopdf, basestring)
+    except NameError:
+        # python 3
+        is_string = isinstance(self.builder.config.plantuml_epstopdf, str)
+
+    if is_string:
         args = shlex.split(self.builder.config.plantuml_epstopdf)
     else:
         args = list(self.builder.config.plantuml_epstopdf)
@@ -162,13 +174,13 @@ def _convert_eps_to_pdf(self, refname, fname):
         try:
             p = subprocess.Popen(args, stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
-        except OSError, err:
+        except OSError as err:
             # workaround for missing shebang of epstopdf script
             if err.errno != getattr(errno, 'ENOEXEC', 0):
                 raise
             p = subprocess.Popen(['bash'] + args, stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
-    except OSError, err:
+    except OSError as err:
         if err.errno != ENOENT:
             raise
         raise PlantUmlError('epstopdf command %r cannot be run'
@@ -195,7 +207,7 @@ def latex_visit_plantuml(self, node):
                 % (', '.join(map(repr, _KNOWN_LATEX_FORMATS)), format))
         refname, outfname = render_plantuml(self, node, fileformat)
         refname, outfname = postproc(self, refname, outfname)
-    except PlantUmlError, err:
+    except PlantUmlError as err:
         self.builder.warn(str(err))
         raise nodes.SkipNode
     self.body.append('\n\\includegraphics{%s}\n' % self.encode(refname))
@@ -205,7 +217,7 @@ def pdf_visit_plantuml(self, node):
     try:
         refname, outfname = render_plantuml(self, node, 'eps')
         refname, outfname = _convert_eps_to_pdf(self, refname, outfname)
-    except PlantUmlError, err:
+    except PlantUmlError as err:
         self.builder.warn(str(err))
         raise nodes.SkipNode
     rep = nodes.image(uri=outfname, alt=node['alt'] or node['uml'])
