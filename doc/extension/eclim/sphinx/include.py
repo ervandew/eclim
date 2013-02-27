@@ -59,12 +59,12 @@ class IncludeDirective(Include):
                                   encoding=encoding,
                                   error_handler=e_handler)
     except UnicodeEncodeError as error:
-      raise self.severe(u'Problems with "%s" directive path:\n'
+      raise self.severe('Problems with "%s" directive path:\n'
                         'Cannot encode input file path "%s" '
                         '(wrong locale?).' %
                         (self.name, SafeString(path)))
     except IOError as error:
-      raise self.severe(u'Problems with "%s" directive path:\n%s.' %
+      raise self.severe('Problems with "%s" directive path:\n%s.' %
           (self.name, ErrorString(error)))
     startline = self.options.get('start-line', None)
     endline = self.options.get('end-line', None)
@@ -75,7 +75,7 @@ class IncludeDirective(Include):
       else:
         rawtext = include_file.read()
     except UnicodeError as error:
-      raise self.severe(u'Problem with "%s" directive:\n%s' %
+      raise self.severe('Problem with "%s" directive:\n%s' %
                         (self.name, ErrorString(error)))
     # start-after/end-before: no restrictions on newlines in match-text,
     # and no restrictions on matching inside lines vs. line boundaries
