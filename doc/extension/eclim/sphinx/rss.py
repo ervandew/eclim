@@ -120,7 +120,7 @@ class RssInsertDirective(Directive):
 
         dest = os.path.join(env.app.outdir, os_path(env.docname) + '.rss')
         pageurl = '%s/%s' % (baseurl, path)
-        with file(dest, 'w') as rss:
+        with open(dest, 'w') as rss:
             title = self.options.get('title', '')
             description = self.options.get('description', None)
             rss.write('<?xml version="1.0" encoding="ISO-8859-1" ?>\n')

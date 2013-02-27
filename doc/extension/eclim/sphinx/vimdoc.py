@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2012  Eric Van Dewoestine
+Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -52,10 +52,17 @@ class VimdocWriter(text.TextWriter):
     self.output = visitor.body
 
     # add page tag and vim modline
-    page = os.path.relpath(
-      self.document.settings._source,
-      self.builder.env.srcdir
-    ).replace(self.builder.config.source_suffix, '')
+    try:
+      page = os.path.relpath(
+        self.document.settings._source,
+        self.builder.env.srcdir
+      ).replace(self.builder.config.source_suffix, '')
+    except TypeError:
+      # python 3
+      page = os.path.relpath(
+        self.document.settings._source.decode('utf8'),
+        self.builder.env.srcdir
+      ).replace(self.builder.config.source_suffix, '')
 
     self.output = '*%s*\n\n%s\n\nvim:ft=eclimhelp' % (
       page.replace(os.path.sep, '-'),
@@ -111,7 +118,11 @@ class VimdocTranslator(text.TextTranslator):
   def visit_reference(self, node):
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
-      value = unicode(em.children[0])
+      try:
+        value = unicode(em.children[0])
+      except NameError:
+        # python 3
+        value = str(em.children[0])
       refuri = node.get('refuri')
 
       # attempt to translate #id\d+ into the original names
@@ -132,7 +143,11 @@ class VimdocTranslator(text.TextTranslator):
     # internal references
     if node.children and isinstance(node.children[0], nodes.emphasis):
       em = node.children[0]
-      value = unicode(em.children[0])
+      try:
+        value = unicode(em.children[0])
+      except NameError:
+        # python 3
+        value = str(em.children[0])
       refuri = node.get('refuri')
 
       # attempt to translate #id\d+ into the original names
