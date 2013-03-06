@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public class VimEditorPartListener
   private boolean keysDisabled = false;
   private IBindingService bindingService;
 
-  private String[] keys = {"Ctrl+N", "Ctrl+U", "Ctrl+V", "Ctrl+W"};
+  private String[] keys = {"Ctrl+N", "Ctrl+U", "Ctrl+V", "Ctrl+W", "Ctrl+X"};
 
   private KeySequence[] keySequences;
 

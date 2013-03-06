@@ -226,6 +226,8 @@ you will fall into one of two groups:
        gvim), but in gvim this is needed for column wise visual selections.
      - Ctrl+W: in eclipse this closes a tab, but in gvim this is needed to
        switch windows (ex. ctrl-w j).
+     - Ctrl+X: in eclipse this cuts a selection to the clipboard, but in gvim
+       this is needed to start various insert completions (ex. ctrl-x ctrl-u).
 
 .. _FeedKeys:
 
