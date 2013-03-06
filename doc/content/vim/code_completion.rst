@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,19 @@ All the code completion functionality provided by eclim (ant, java, etc) makes
 use of the new "User Defined Completion" added to Vim 7.  To initiate code
 completion enter insert mode and type *Ctrl-X Ctrl-U*.  By default Vim will
 open a popup if there is more than one completion.
+
+.. _g\:EclimCompletionMethod:
+
+.. note::
+
+  If you would prefer to have eclim use vim's omni code completion instead, you
+  can add the following to your vimrc:
+
+  ::
+
+    let g:EclimCompletionMethod = 'omnifunc'
+
+  When using omnifunc you will use *Ctrl-X Ctrl-O* to start code completion.
 
 Example with java completion
 

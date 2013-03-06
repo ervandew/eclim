@@ -106,6 +106,10 @@ if !exists("g:EclimDefaultFileOpenAction")
   let g:EclimDefaultFileOpenAction = 'split'
 endif
 
+if !exists("g:EclimCompletionMethod")
+  let g:EclimCompletionMethod = 'completefunc'
+endif
+
 if !exists("g:EclimLocationListHeight")
   let g:EclimLocationListHeight = 10
 endif
