@@ -24,6 +24,10 @@
 " }}}
 
 " Global Varables {{{
+  if !exists('g:EclimFileTypeValidate')
+    let g:EclimFileTypeValidate = 1
+  endif
+
   if !exists('g:EclimRefactorDiffOrientation')
     let g:EclimRefactorDiffOrientation = 'vertical'
   endif
@@ -219,7 +223,9 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
     let command = substitute(command, '<lang>', a:lang, '')
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
-    if a:validate && !eclim#util#WillWrittenBufferClose()
+    if a:validate &&
+     \ g:EclimFileTypeValidate &&
+     \ !eclim#util#WillWrittenBufferClose()
       let command = command . ' -v'
       if eclim#project#problems#IsProblemsList() &&
        \ g:EclimProjectProblemsUpdateOnSave
