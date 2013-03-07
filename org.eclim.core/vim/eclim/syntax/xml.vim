@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -24,6 +24,12 @@
 " }}}
 
 source $VIMRUNTIME/syntax/xml.vim
+
+" the c# syntax file loads syntax/xml.vim, but the below changes may break
+" syntax highlighting in c#
+if &ft == 'cs'
+  finish
+endif
 
 if !exists('g:xml_syntax_folding')
   " taken from syntax/xml.vim, but removed unecessary portions.
