@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,8 @@ import org.apache.tools.ant.taskdefs.optional.junit.FormatterElement;
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTask;
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
 
+import org.apache.tools.ant.types.Commandline.Argument;
+import org.apache.tools.ant.types.Environment.Variable;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 
@@ -49,6 +51,8 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.jdt.util.ClasspathUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclim.util.StringUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -105,6 +109,45 @@ public class JUnitCommand
 
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
     JUnitTask junit = createJUnitTask(javaProject, debug, halt);
+
+    String[] vmargs =
+      getPreferences().getArrayValue(project, "org.eclim.java.junit.jvmargs");
+    for(String vmarg : vmargs){
+      if (!vmarg.startsWith("-")){
+        continue;
+      }
+      Argument a = junit.createJvmarg();
+      a.setValue(vmarg);
+    }
+
+    String[] props =
+      getPreferences().getArrayValue(project, "org.eclim.java.junit.sysprops");
+    for(String prop : props){
+      String[] sysprop = StringUtils.split(prop, "=", 2);
+      if (sysprop.length != 2){
+        continue;
+      }
+      if (sysprop[0].startsWith("-D")){
+        sysprop[0] = sysprop[0].substring(2);
+      }
+      Variable var = new Variable();
+      var.setKey(sysprop[0]);
+      var.setValue(sysprop[1]);
+      junit.addConfiguredSysproperty(var);
+    }
+
+    String[] envs =
+      getPreferences().getArrayValue(project, "org.eclim.java.junit.envvars");
+    for(String env : envs){
+      String[] envvar = StringUtils.split(env, "=", 2);
+      if (envvar.length != 2){
+        continue;
+      }
+      Variable var = new Variable();
+      var.setKey(envvar[0]);
+      var.setValue(envvar[1]);
+      junit.addEnv(var);
+    }
 
     if (file != null){
       ICompilationUnit src = JavaUtils.getCompilationUnit(javaProject, file);

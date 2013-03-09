@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -144,6 +144,42 @@ Configuration
   .. code-block:: cfg
 
     org.eclim.java.junit.output_dir=build/test/results
+
+.. _org.eclim.java.junit.jvmargs:
+
+- **org.eclim.java.junit.jvmargs** -
+  Json formatted list of strings to supply as args to the jvm when forking to
+  run unit tests.
+
+  Ex.
+
+  .. code-block:: cfg
+
+    org.eclim.java.junit.jvmargs=["-Xmx512m", "-XX:MaxPermSize=128m"]
+
+.. _org.eclim.java.junit.sysprops:
+
+- **org.eclim.java.junit.sysprops** -
+  Json formatted list of strings to supply as system properties to the jvm when
+  forking to run unit tests.
+
+  Ex.
+
+  .. code-block:: cfg
+
+    org.eclim.java.junit.sysprops=["file.encoding=UTF8", "foo.bar=baz"]
+
+.. _org.eclim.java.junit.envvars:
+
+- **org.eclim.java.junit.envvars** -
+  Json formatted list of strings to supply as environment variables to the jvm
+  when forking to run unit tests.
+
+  Ex.
+
+  .. code-block:: cfg
+
+    org.eclim.java.junit.envvars=["FOO=bar"]
 
 TestNG
 ------
