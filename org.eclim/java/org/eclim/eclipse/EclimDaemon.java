@@ -109,7 +109,6 @@ public class EclimDaemon
 
       int port = Integer.parseInt(portString);
 
-      registerInstance(home, workspace, port);
       InetAddress address = InetAddress.getByName(host);
       server = new NGServer(address, port, getExtensionClassLoader());
       server.setCaptureSystemStreams(false);
@@ -138,6 +137,7 @@ public class EclimDaemon
       starting = false;
       started = true;
       logger.info("Eclim Server Started on: {}:{}", host, port);
+      registerInstance(home, workspace, port);
       server.run();
     }catch(NumberFormatException nfe){
       logger.error("Error starting eclim:",
@@ -147,6 +147,11 @@ public class EclimDaemon
     }catch(Throwable t){
       logger.error("Error starting eclim:", t);
     }finally{
+      try{
+        unregisterInstance();
+      }catch(Exception e){
+        throw new RuntimeException(e);
+      }
       starting = false;
       started = false;
     }
@@ -172,7 +177,7 @@ public class EclimDaemon
           try{
             bundle.stop();
           }catch(IllegalStateException ise){
-            // thrown because eclipse osgi BaseStorage attempt to register a
+            // thrown because eclipse osgi BaseStorage attempts to register a
             // shutdown hook during shutdown.
           }
         }
@@ -219,7 +224,7 @@ public class EclimDaemon
   /**
    * Unregister the current instance in the eclimd instances file for use by vim.
    */
-  private void unregisterInstance()
+  private synchronized void unregisterInstance()
     throws Exception
   {
     File instances = new File(FileUtils.concat(
