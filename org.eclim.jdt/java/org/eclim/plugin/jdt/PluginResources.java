@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,7 +123,10 @@ public class PluginResources
       "JDT/Javadoc org.eclim.java.doc.dest doc\n" +
       "JDT/Javadoc org.eclim.java.doc.sourcepath\n" +
       "JDT/Javadoc org.eclim.java.doc.packagenames\n" +
-      "JDT/JUnit org.eclim.java.junit.output_dir"
+      "JDT/JUnit org.eclim.java.junit.output_dir\n" +
+      "JDT/JUnit org.eclim.java.junit.jvmargs [] JSON[^-.*]\n" +
+      "JDT/JUnit org.eclim.java.junit.sysprops [] JSON[^(-D)?\\S+=.*]\n" +
+      "JDT/JUnit org.eclim.java.junit.envvars [] JSON[^\\w+=.*]"
     );
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,
