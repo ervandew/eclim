@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,13 @@ import java.io.File
 
 import scala.collection.JavaConversions
 
-import scala.tools.eclipse.ScalaHyperlinkDetector
+import scala.reflect.runtime.{universe => ru}
+
 import scala.tools.eclipse.ScalaWordFinder
+
+import scala.tools.eclipse.hyperlink.text.Hyperlink
+
+import scala.tools.eclipse.hyperlink.text.detector.ScalaDeclarationHyperlinkComputer
 
 import scala.tools.eclipse.javaelements.ScalaClassFile
 import scala.tools.eclipse.javaelements.ScalaCompilationUnit
@@ -64,7 +69,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink
 class SearchCommand
   extends org.eclim.plugin.jdt.command.search.SearchCommand
 {
-  private val HYPERLINKS = new ScalaHyperlinkDetector
+  private val HYPERLINKS = new ScalaDeclarationHyperlinkComputer
 
   override def execute(commandLine: CommandLine): Object = {
     val project = commandLine.getValue(Options.NAME_OPTION)
@@ -82,31 +87,44 @@ class SearchCommand
 
   def scalaLinks(src: ScalaCompilationUnit, offset: Int, length: Int): List[Position] = {
     val region = ScalaWordFinder.findWord(src.getContents, offset)
-    HYPERLINKS.scalaHyperlinks(src, region) match {
+    HYPERLINKS.findHyperlinks(src, region) match {
       case None             => null
       case Some(List())     => javaLinks(src, region.getOffset, region.getLength)
-      case Some(hyperlinks) => hyperlinks.map(
-        _ match {
-          case link: HYPERLINKS.Hyperlink => {
-            link.file match {
-              case cu: ICompilationUnit => {
-                Position.fromOffset(
-                  cu.getResource.getLocation.toOSString.replace('\\', '/'),
-                  link.text, link.pos, link.len)
-              }
-              case sc: ScalaClassFile => {
-                var ss = scalaSource(sc)
-                if (ss != null)
-                  Position.fromOffset(ss, link.text, link.pos, link.len)
-                else
-                  null
-              }
-              case _ => null
-            }
+      case Some(hyperlinks) => hyperlinks.map(link => {
+        val openableOrUnitField = link.getClass.getDeclaredField("openableOrUnit")
+        val textField = link.getClass.getDeclaredField("text")
+        val posField = link.getClass.getDeclaredField("pos")
+        val lenField = link.getClass.getDeclaredField("len")
+
+        openableOrUnitField.setAccessible(true)
+        textField.setAccessible(true)
+        posField.setAccessible(true)
+        lenField.setAccessible(true)
+
+        val unit = openableOrUnitField.get(link)
+        val pos = posField.get(link).asInstanceOf[Int]
+        val len = lenField.get(link).asInstanceOf[Int]
+        var text = textField.get(link).asInstanceOf[String]
+        if (text.indexOf("Open Declaration (") != -1){
+          text = text.substring(18, text.length - 1)
+        }
+
+        unit match {
+          case cu: ICompilationUnit => {
+            Position.fromOffset(
+              cu.getResource.getLocation.toOSString.replace('\\', '/'),
+              text, pos, len)
+          }
+          case sc: ScalaClassFile => {
+            var ss = scalaSource(sc)
+            if (ss != null)
+              Position.fromOffset(ss, text, pos, len)
+            else
+              null
           }
           case _ => null
         }
-      )
+      })
     }
   }
 

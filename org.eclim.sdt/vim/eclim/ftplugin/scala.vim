@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2011 - 2012  Eric Van Dewoestine
+" Copyright (C) 2011 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ endif
 
 " Options {{{
 
-setlocal completefunc=eclim#scala#complete#CodeComplete
+exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#scala#complete#CodeComplete'
 
 " }}}
 

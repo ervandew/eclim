@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2012 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2013 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ object ScalaUtils
    */
   def refreshSourceFile(src: ScalaSourceFile): ScalaSourceFile = {
     if (src != null){
-      src.project.doWithPresentationCompiler(_.askReload(src, src.getContents))
+      src.scalaProject.doWithPresentationCompiler(_.askReload(src, src.getContents))
     }
     src
   }

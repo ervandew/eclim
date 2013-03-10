@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2011  Eric Van Dewoestine
+" Copyright (C) 2011 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ function! TestValidate()
   edit! src/eclim/test/src/TestSrc.scala
   call vunit#PeekRedir()
 
-  write
+  Validate
   call vunit#PeekRedir()
 
   let results = getloclist(0)

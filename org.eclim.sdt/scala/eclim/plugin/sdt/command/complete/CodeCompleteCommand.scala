@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2012 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2013 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ import scala.collection.mutable.ListBuffer
 import scala.tools.eclipse.ScalaWordFinder
 
 import scala.tools.eclipse.completion.CompletionProposal
-import scala.tools.eclipse.completion.HasArgs
 import scala.tools.eclipse.completion.ScalaCompletions
 
 import eclim.plugin.sdt.util.ScalaUtils
@@ -79,7 +78,7 @@ class CodeCompleteCommand
       // for short desc, shorten all fully qualified Types to just the type.
       val shortDescription = description.replaceAll(
           "[a-zA-Z]\\w*[\\w.]*\\.(\\w+[^.])", "$1")
-      completion = if (proposal.hasArgs == HasArgs.NonEmptyArgs)
+      completion = if (proposal.paramTypes.size > 0)
         completion + "(" else completion
       results += new CodeCompleteResult(
         completion, shortDescription, description)

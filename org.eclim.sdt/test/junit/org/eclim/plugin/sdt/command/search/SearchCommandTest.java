@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class SearchCommandTest
         Eclim.resolveFile(Sdt.TEST_PROJECT, "src/eclim/test/TestScala.scala"));
     assertEquals(result.get("line"), 5);
     assertEquals(result.get("column"), 7);
-    assertEquals(result.get("message"), "class eclim.test.TestScala");
+    assertEquals(result.get("message"), "class TestScala");
 
     results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
@@ -72,7 +72,7 @@ public class SearchCommandTest
         Eclim.resolveFile(Sdt.TEST_PROJECT, "src/eclim/test/TestScala.scala"));
     assertEquals(result.get("line"), 7);
     assertEquals(result.get("column"), 7);
-    assertEquals(result.get("message"), "method eclim.test.TestScala.scalaMethod1");
+    assertEquals(result.get("message"), "method scalaMethod1");
   }
 
   @Test

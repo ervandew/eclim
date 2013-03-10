@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,10 +90,11 @@ public class EclipseInfo
       NodeList deps = feature.getElementsByTagName("dependency");
       for(int j = 0; j < deps.getLength(); j++){
         Element node = (Element)deps.item(j);
-        Element site = (Element)node.getElementsByTagName("site").item(0);
+        NodeList sites = node.getElementsByTagName("site");
+        Element site = sites.getLength() > 0 ? (Element)sites.item(0) : null;
         dependencies.add(new Dependency(
               node.getAttribute("id"),
-              site.getAttribute("url"),
+              site != null ? site.getAttribute("url") : null,
               node.getAttribute("version"),
               this.installedFeatures.get(node.getAttribute("id"))));
       }

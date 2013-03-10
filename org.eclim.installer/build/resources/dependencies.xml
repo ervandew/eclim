@@ -4,7 +4,6 @@
   <feature id="cdt">
     <dependency id="org.eclipse.cdt" version="8.0.0">
       <site url="http://download.eclipse.org/releases/indigo/"/>
-      <!--site url="http://download.eclipse.org/tools/cdt/releases/indigo/"/-->
     </dependency>
   </feature>
 
@@ -35,7 +34,6 @@
   <feature id="wst">
     <dependency id="org.eclipse.wst.web_ui.feature" version="3.3.0">
       <site url="http://download.eclipse.org/releases/indigo/"/>
-      <!--site url="http://download.eclipse.org/webtools/updates/"/-->
     </dependency>
   </feature>
 
@@ -46,8 +44,6 @@
   </feature>
 
   <feature id="sdt">
-    <dependency id="org.scala-ide.sdt.feature" version="2.0.2">
-      <site url="http://download.scala-ide.org/releases-29/stable/site"/>
-    </dependency>
+    <dependency id="org.scala-ide.sdt.feature" version="3.0.0"/>
   </feature>
 </dependencies>
