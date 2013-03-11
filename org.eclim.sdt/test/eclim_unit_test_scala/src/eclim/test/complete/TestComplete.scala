@@ -6,7 +6,7 @@ class TestComplete {
 
   def testScala(){
     val test = new TestScala
-    test.s 
+    test.sc 
   }
 
   def testJava(){

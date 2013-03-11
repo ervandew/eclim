@@ -1,4 +1,4 @@
-.. Copyright (C) 2012  Eric Van Dewoestine
+.. Copyright (C) 2012 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,18 +15,6 @@
 
 Scala
 =====
-
-.. begin-scala-note
-
-.. note::
-
-   Eclim's scala support is currently only available for Eclipse 3.7 (Indigo)
-   using eclim 1.7.x. Eclim 2.2.x will be updated to include scala support
-   sometime after the `Scala IDE`_ is updated to support Eclipse 4.2 (Juno).
-
-.. _scala ide: http://scala-ide.org
-
-.. end-scala-note
 
 .. toctree::
    :maxdepth: 1

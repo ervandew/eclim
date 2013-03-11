@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2011 - 2012  Eric Van Dewoestine
+" Copyright (C) 2011 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,25 +22,23 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_scala'
   set completeopt-=preview
 endfunction " }}}
 
-" TestCodeComplete() {{{
-function! TestCodeComplete()
+function! TestCodeComplete() " {{{
   edit! src/eclim/test/complete/TestComplete.scala
   call vunit#PeekRedir()
 
-  call cursor(9, 11)
+  call cursor(9, 12)
   let start = eclim#scala#complete#CodeComplete(1, '')
   call vunit#AssertEquals(9, start, 'Wrong starting column.')
 
-  call cursor(9, 11)
+  call cursor(9, 12)
   let results = eclim#scala#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
-  call vunit#AssertTrue(len(results) > 3, 'Not enough results.')
+  call vunit#AssertEquals(len(results), 3, 'Not enough results.')
   call vunit#AssertEquals(results[0].word, 'scalaMethod1',
     \ 'Results does not contain scalaMethod1')
   call vunit#AssertEquals(results[1].word, 'scalaMethod2(',

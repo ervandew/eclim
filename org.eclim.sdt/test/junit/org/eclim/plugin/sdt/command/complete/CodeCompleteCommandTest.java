@@ -48,10 +48,10 @@ public class CodeCompleteCommandTest
       Eclim.execute(new String[]{
         "scala_complete", "-p", Sdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "150", "-e", "utf-8", "-l", "standard"
+        "-o", "151", "-e", "utf-8", "-l", "standard"
       });
 
-    assertTrue("Wrong number of results.", results.size() > 3);
+    assertEquals("Wrong number of results.", results.size(), 3);
 
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "scalaMethod1");
@@ -85,7 +85,7 @@ public class CodeCompleteCommandTest
       Eclim.execute(new String[]{
         "scala_complete", "-p", Sdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "213", "-e", "utf-8", "-l", "standard"
+        "-o", "214", "-e", "utf-8", "-l", "standard"
       });
 
     assertEquals("Wrong number of results.", 3, results.size());

@@ -1,4 +1,4 @@
-.. Copyright (C) 2012  Eric Van Dewoestine
+.. Copyright (C) 2012 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,10 +15,6 @@
 
 Scala Code Completion
 =====================
-
-.. include:: /vim/scala/index.rst
-   :start-after: begin-scala-note
-   :end-before: end-scala-note
 
 Scala code completion uses the standard
 :doc:`Vim code completion mechanism </vim/code_completion>` like so:

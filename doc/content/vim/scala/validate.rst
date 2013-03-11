@@ -1,4 +1,4 @@
-.. Copyright (C) 2012  Eric Van Dewoestine
+.. Copyright (C) 2012 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,10 +17,6 @@
 
 Scala Validation
 ================
-
-.. include:: /vim/scala/index.rst
-   :start-after: begin-scala-note
-   :end-before: end-scala-note
 
 When saving a scala source file that resides in a project, eclim will update
 that source file in Eclipse and will report any validation errors found. Any
