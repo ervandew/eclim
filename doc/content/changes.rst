@@ -27,6 +27,10 @@ Php:
     the :doc:`Php Validation </vim/php/validate>` doc for settings to enable
     html validation).
 
+Scala:
+  - Scala support updated for Scala IDE 3.0.0.
+  - Scala now supported on both versions of eclim (Juno and Indigo).
+
 | :gitlog:`Git Log (2.2.6) <2.2.5...2.2.6>`
 | :gitlog:`Git Log (1.7.14) <1.7.13...1.7.14>`
 

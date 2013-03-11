@@ -3,7 +3,7 @@
 <!ELEMENT feature (dependency+)>
 <!ATTLIST feature id ID #REQUIRED>
 
-<!ELEMENT dependency (site)>
+<!ELEMENT dependency (site?)>
 <!ATTLIST dependency id ID #REQUIRED>
 <!ATTLIST dependency version CDATA #REQUIRED>
 

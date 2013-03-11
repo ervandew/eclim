@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,10 +35,10 @@ public class FeatureProvider
              PropertyChangeListener
 {
   public static final String[] FEATURES =
-    {"jdt", "adt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python"};
+    {"jdt", "adt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python", "sdt"};
 
   private static final String[][] FEATURES_DEPENDS =
-    {null, {"jdt", "wst"}, null, null, null, {"dltk"}, {"dltk", "wst"}, null};
+    {null, {"jdt", "wst"}, null, null, null, {"dltk"}, {"dltk", "wst"}, null, null};
 
   /**
    * {@inheritDoc}

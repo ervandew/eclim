@@ -1,0 +1,56 @@
+feature_sdt = 'org.scala-ide.sdt.feature'
+
+target(name: 'org.eclim.sdt.classpath.prepare'){
+  unjar(dest: 'build/temp/lib/scala'){
+    fileset(dir: '${eclipse}'){
+      include(name: 'dropins/**/plugins/org.scala-ide.scala.*.jar')
+      include(name: 'plugins/org.scala-ide.scala.*.jar')
+    }
+    patternset{ include(name: '**/*.jar') }
+  }
+}
+
+target(name: 'org.eclim.sdt.classpath'){
+  fileset(dir: '${eclipse}'){
+    include(name: 'dropins/**/plugins/org.scala-ide.*.jar')
+    include(name: 'plugins/org.scala-ide.*.jar')
+  }
+  fileset(dir: 'build/temp/lib/scala', erroronmissingdir: false){
+    include(name: '**/*.jar')
+  }
+}
+
+target(name: 'org.eclim.sdt.plugin.compile'){
+  taskdef(resource: 'scala/tools/ant/antlib.xml'){
+    classpath{
+      fileset(dir: 'build/temp/lib/scala', erroronmissingdir: false){
+        include(name: '**/*.jar')
+      }
+    }
+  }
+
+  mkdir(dir: '${build.classes}/org.eclim.sdt')
+  scalac(
+      srcdir: 'org.eclim.sdt/scala',
+      destdir: '${build.classes}/org.eclim.sdt',
+      classpathref: 'classpath',
+      deprecation: true)
+  {
+    include(name: '**/*.scala')
+    classpath{fileset(dir: '${build.classes}/org.eclim.sdt', includes: 'org.eclim/**')}
+    classpath{
+      pathelement(path: '${build.classes}/org.eclim.sdt')
+      fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')
+    }
+  }
+  copy(todir: '${build.classes}/org.eclim.sdt'){
+    fileset(dir: "org.eclim.sdt/scala", includes: "eclim/**", excludes: '**/*.scala')
+  }
+}
+
+target(name: 'org.eclim.sdt.test'){
+  depends('test.init')
+  runTests('org.eclim.sdt'){
+    createProject('org.eclim.sdt', 'eclim_unit_test_scala')
+  }
+}

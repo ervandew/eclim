@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,10 +110,7 @@ public class EclipsePluginsStep
     super(name, properties);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.step.GuiStep#init()
-   */
+  @Override
   public Component init()
   {
     theme = new DesertBlue();
@@ -145,10 +142,7 @@ public class EclipsePluginsStep
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#displayed()
-   */
+  @Override
   public void displayed()
   {
     setBusy(true);
@@ -299,14 +293,19 @@ public class EclipsePluginsStep
       public Object run()
         throws Exception
       {
+        final Map<String,String> availableFeatures = new HashMap<String,String>();
+
         ArrayList<String> sites = new ArrayList<String>();
         for (Dependency dependency : dependencies){
-          if(!sites.contains(dependency.getSite())){
-            sites.add(dependency.getSite());
+          String site = dependency.getSite();
+          if (site == null){
+            availableFeatures.put(
+              dependency.getId(), dependency.getRequiredVersion());
+          }else if (!sites.contains(site)){
+            sites.add(site);
           }
         }
 
-        final Map<String,String> availableFeatures = new HashMap<String,String>();
         OutputHandler handler = new OutputHandler(){
           public void process(String line){
             String[] parts = StringUtils.split(line, "=");
@@ -316,18 +315,20 @@ public class EclipsePluginsStep
             }
           }
         };
-        Command command = new ListCommand(
-          handler, sites.toArray(new String[sites.size()]));
-        try{
-          command.start();
-          command.join();
-          if(command.getReturnCode() != 0){
-            throw new RuntimeException(
-                "error: " + command.getErrorMessage() +
-                " out: " + command.getResult());
+        if (sites.size() > 0){
+          Command command = new ListCommand(
+            handler, sites.toArray(new String[sites.size()]));
+          try{
+            command.start();
+            command.join();
+            if(command.getReturnCode() != 0){
+              throw new RuntimeException(
+                  "error: " + command.getErrorMessage() +
+                  " out: " + command.getResult());
+            }
+          }finally{
+            command.destroy();
           }
-        }finally{
-          command.destroy();
         }
         return availableFeatures;
       }
@@ -374,14 +375,23 @@ public class EclipsePluginsStep
               }
             }
 
-            overallProgress.setMaximum(dependencies.size() * 100);
+            int installCount = 0;
+            for (Iterator<Dependency> ii = dependencies.iterator(); ii.hasNext();){
+              Dependency dependency = ii.next();
+              if (dependency.getSite() != null){
+                installCount++;
+              }
+            }
+
+            overallProgress.setMaximum(installCount * 100);
             overallProgress.setValue(0);
 
             int removeIndex = 0;
             for (Iterator<Dependency> ii = dependencies.iterator(); ii.hasNext();){
               Dependency dependency = ii.next();
+              String site = dependency.getSite();
               String version = availableFeatures.get(dependency.getId());
-              if (version != null){
+              if (site != null && version != null){
                 if(!dependency.isUpgrade()){
                   overallLabel.setText("Installing feature: " +
                       dependency.getId() + '-' + version);
@@ -504,10 +514,7 @@ public class EclipsePluginsStep
   private class DependencySelectionListener
     implements ListSelectionListener
   {
-    /**
-     * {@inheritDoc}
-     * @see ListSelectionListener#valueChanged(ListSelectionEvent)
-     */
+    @Override
     public void valueChanged(ListSelectionEvent e)
     {
       ListSelectionModel model = (ListSelectionModel)e.getSource();
@@ -539,6 +546,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.cdt");
       NAMES.add("featureList.pdt");
       NAMES.add("featureList.python");
+      NAMES.add("featureList.sdt");
     }
 
     public int compare(String ob1, String ob2)

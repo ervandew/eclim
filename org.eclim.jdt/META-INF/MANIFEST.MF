@@ -10,6 +10,12 @@ Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
   eclim.jdt.jar,
   ${eclim.lib.jars}
+Export-Package: org.eclim.plugin.jdt,
+  org.eclim.plugin.jdt.command,
+  org.eclim.plugin.jdt.command.search,
+  org.eclim.plugin.jdt.preference,
+  org.eclim.plugin.jdt.project,
+  org.eclim.plugin.jdt.util
 Require-Bundle: org.apache.ant,
   org.eclim,
   org.eclim.core,

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.util;
 
 import org.eclim.logging.Logger;
 
+import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 
@@ -84,6 +85,20 @@ public class ASTUtils
     }
 
     return cu;
+  }
+
+  /**
+   * Gets the AST CompilationUnit for the supplied IClassFile.
+   *
+   * @param clazz The IClassFile.
+   * @return The CompilationUnit.
+   */
+  public static CompilationUnit getCompilationUnit(IClassFile clazz)
+    throws Exception
+  {
+    ASTParser parser = ASTParser.newParser(AST.JLS4);
+    parser.setSource(clazz);
+    return (CompilationUnit)parser.createAST(null);
   }
 
   /**

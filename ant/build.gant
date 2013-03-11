@@ -70,6 +70,9 @@ target(name: 'init'){
     // possible suffix including number of revisions since that tag + last commit
     // id, if last tag is not at the head)
     version = execute('git', 'describe')
+    // handle 4 part eclim version number tag before next step to ensure a
+    // valid osgi verion number
+    version = version.replaceFirst(/^(\d+\.\d+\.\d+)(\.\d+)(.*)?/, '$1$3')
     // ensure version is a valid osgi version
     version = version.replaceFirst(/^(\d+\.\d+\.\d+)-(\d+-\w+)$/, '$1.$2')
 
@@ -845,17 +848,24 @@ def plugin(name){
   pluginPath = "${pluginsDir}/${name}_${version}"
   ant.mkdir(dir: pluginPath)
 
-  compile("${name}/java", '${build.classes}/' + name, failonerror=true){
-    compilerarg(value: '-Xlint:-options')
-    include(name: "**/*.java")
-    classpath{fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')}
+  if (new File("${name}/java").exists()){
+    compile("${name}/java", '${build.classes}/' + name, failonerror=true){
+      compilerarg(value: '-Xlint:-options')
+      include(name: "**/*.java")
+      classpath{fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')}
+    }
+  }
+
+  // run plugin specific gant target
+  if (hasVariable("${name}.plugin.compile")){
+    binding.getVariable("${name}.plugin.compile")()
   }
 
   jarName = name.replaceFirst('^org\\.', '')
   ant.jar(jarfile: "${pluginPath}/${jarName}.jar"){
     ant.fileset(dir: '${build.classes}/' + name,
-      includes: "org/eclim/**,org/eclipse/**")
-    ant.fileset(dir: "${name}/java",
+      includes: "eclim/**,org/eclim/**,org/eclipse/**")
+    ant.fileset(dir: "${name}/java", erroronmissingdir: false,
         includes: "org/eclim/**", excludes: '**/package.html,**/*.java')
   }
 
