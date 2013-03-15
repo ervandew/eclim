@@ -21,7 +21,7 @@ usage(){
   echo "         default (~/.eclimrc). Must be the first option supplied."
 }
 
-if [ "$1" = "-?" || "$1" = '-h' || "$1" = '--help' ] ; then
+if [ "$1" = "-?" -o "$1" = "-h" -o "$1" = "--help" ] ; then
   usage
   exit 0
 fi
@@ -78,13 +78,15 @@ resolve_eclipse_launcher(){
 #
 build_vmargs(){
   #ECLIMD_OPTS="-Djava.ext.dirs"
-  ECLIM_VMARGS="$ECLIMD_OPTS"
+  if [ -n "$ECLIMD_OPTS" ] ; then
+    ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" "$ECLIMD_OPTS")
+  fi
 
   # attempt to grab properties from .eclimrc if available.
   PERL=`which perl 2> /dev/null`
   if [ -f "$ECLIMRC" -a -n "$PERL" ] ; then
-    ECLIM_VMARGS="$ECLIM_VMARGS `
-      cat "$ECLIMRC" | perl -pe '
+    IFS=$'\n'
+    for vmarg in $(cat "$ECLIMRC" | perl -pe '
         # remove leading/trailing whitespace
         s|^\s+||g ; s|\s+$|\n|g ;
         # delete comment lines
@@ -94,16 +96,15 @@ build_vmargs(){
         # remove line continuations
         s|\\\\\n||g ;
         # add -D for each property
-        s|^\s*([a-zA-Z])| -D\1|g ;
-        # new line characters
-        s|\n| |g ;
-      '
-    `"
-  fi
-
-  # for osx
-  if `uname -a | grep -iq "darwin"` ; then
-    ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
+        s|^\s*([a-zA-Z])|-D\1|g ;
+      ')
+    do
+      arg=$(echo "$vmarg" | perl -pe 's|(-D.*?)=.*|\1|')
+      arg=$(echo "$arg" | perl -pe 's|\d+.*||')
+      if [[ "${ECLIM_VMARGS[@]}" != *"$arg"* ]] ; then
+        ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" $vmarg)
+      fi
+    done
   fi
 
   # ensure that the correct jvm environment is used, but only force the
@@ -122,9 +123,8 @@ build_vmargs(){
         "for the version of eclipse you have installed: $ARCH"
       exit 1;
     fi
+    ECLIM_VMARGS=($ARCH "${ECLIM_VMARGS[@]}")
   fi
-
-  ECLIM_VMARGS="$ARCH $ECLIM_VMARGS"
 
   ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/eclipse.ini"
   if `uname -a | grep -iq "darwin"` ; then
@@ -142,39 +142,45 @@ build_vmargs(){
         '
       )
     fi
-    ECLIPSE_VMARGS=$(
-      echo "$CONTENTS" | perl -pe '
-        # remove everthing up to the -vmargs
-        s|^.*-vmargs||s
-      '
-    )
-    for vmarg in $ECLIPSE_VMARGS ; do
-      arg=$(echo "$vmarg" | perl -pe 's|\d+.*||')
+
+    IFS=$'\n'
+    IS_VMARGS=0
+    for line in $(cat "$ECLIPSE_INI") ; do
+      if [[ $IS_VMARGS -ne 1 ]] ; then
+        if [[ "$line" == "-vmargs"* ]] ; then
+          IS_VMARGS=1
+        fi
+        continue
+      fi
+
+      vmarg=$line
+      arg=$(echo "$vmarg" | perl -pe 's|(-D.*?)=.*|\1|')
+      arg=$(echo "$arg" | perl -pe 's|\d+.*||')
       # ignore dock icon since it's probably on OSX and relative to
       # Eclipse.app/Contents
       if [[ "$vmarg" == *-Xdock:icon* ]] ; then
         continue
       fi
-      if [[ "$ECLIM_VMARGS" != *"$arg"* ]] ; then
-        ECLIM_VMARGS="$ECLIM_VMARGS $vmarg"
+      if [[ "${ECLIM_VMARGS[@]}" != *"$arg"* ]] ; then
+        ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" $vmarg)
       fi
     done
   fi
 
   # set a default perm gen size if one isn't set
-  if [[ "$ECLIM_VMARGS" != *-XX:MaxPermSize* ]]; then
-    ECLIM_VMARGS="$ECLIM_VMARGS $PERMGEN_SIZE"
+  if [[ "${ECLIM_VMARGS[@]}" != *-XX:MaxPermSize* ]]; then
+    ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" $PERMGEN_SIZE)
   fi
 
   # same deal for max heap space
-  if [[ "$ECLIM_VMARGS" != *-Xmx* ]]; then
-    ECLIM_VMARGS="$ECLIM_VMARGS -Xmx256m"
+  if [[ "${ECLIM_VMARGS[@]}" != *-Xmx* ]]; then
+    ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" -Xmx256m)
   fi
 
   # for osx
   if `uname -a | grep -iq "darwin"` ; then
-    if [[ "$ECLIM_VMARGS" != *-XstartOnFirstThread* ]]; then
-      ECLIM_VMARGS="$ECLIM_VMARGS -XstartOnFirstThread"
+    if [[ "${ECLIM_VMARGS}[@]" != *-XstartOnFirstThread* ]]; then
+      ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" -XstartOnFirstThread)
     fi
   fi
 }
@@ -206,16 +212,32 @@ if [ "$1" = "-f" ] ; then
   done
 fi
 
+BACKGROUND=0
+if [ "$1" = "start" ]; then
+  BACKGROUND=1
+  shift
+fi
+
 resolve_eclim_home
 resolve_eclipse_launcher
+
+declare -a ECLIM_VMARGS=("$@")
 build_vmargs
 
-ECLIPSE_ARGS="-debug -clean -refresh -application org.eclim.application_headless"
+ARGS=(
+  "${ECLIM_VMARGS[@]}"
+  -jar
+  "$ECLIPSE_LAUNCHER"
+  -debug
+  -clean
+  -refresh
+  -application org.eclim.application_headless
+)
 
-if [ "$1" = "start" ]; then
+if [ $BACKGROUND -eq 1 ]; then
   shift
-  CLASSPATH="" java $ECLIM_VMARGS "$@" -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS > /dev/null &
+  CLASSPATH="" java "${ARGS[@]}" > /dev/null &
 else
-  echo "java $ECLIM_VMARGS $@ -jar \"$ECLIPSE_LAUNCHER\" $ECLIPSE_ARGS"
-  CLASSPATH="" java $ECLIM_VMARGS "$@" -jar "$ECLIPSE_LAUNCHER" $ECLIPSE_ARGS
+  echo java "${ARGS[@]}"
+  CLASSPATH="" java "${ARGS[@]}"
 fi
