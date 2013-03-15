@@ -28,11 +28,20 @@ if !exists("g:EclimRubyValidate")
   let g:EclimRubyValidate = 1
 endif
 
+if !exists("g:EclimRubySyntasticEnabled")
+  let g:EclimRubySyntasticEnabled = 0
+endif
+
 " }}}
 
 " Options {{{
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#ruby#complete#CodeComplete'
+
+" disable syntastic
+if exists('g:loaded_syntastic_plugin') && !g:EclimRubySyntasticEnabled
+  let g:syntastic_ruby_checkers = []
+endif
 
 " }}}
 

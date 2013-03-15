@@ -27,11 +27,20 @@ if !exists("g:EclimCValidate")
   let g:EclimCValidate = 1
 endif
 
+if !exists("g:EclimCSyntasticEnabled")
+  let g:EclimCSyntasticEnabled = 0
+endif
+
 " }}}
 
 " Options {{{
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#c#complete#CodeComplete'
+
+" disable syntastic
+if exists('g:loaded_syntastic_plugin') && !g:EclimCSyntasticEnabled
+  let g:syntastic_c_checkers = []
+endif
 
 " }}}
 

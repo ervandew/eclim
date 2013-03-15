@@ -28,11 +28,20 @@ if !exists("g:EclimHtmlValidate")
   let g:EclimHtmlValidate = 1
 endif
 
+if !exists("g:EclimHtmlSyntasticEnabled")
+  let g:EclimHtmlSyntasticEnabled = 0
+endif
+
 " }}}
 
 " Options {{{
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#html#complete#CodeComplete'
+
+" disable syntastic
+if exists('g:loaded_syntastic_plugin') && !g:EclimHtmlSyntasticEnabled
+  let g:syntastic_html_checkers = []
+endif
 
 " }}}
 
