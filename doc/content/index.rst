@@ -68,6 +68,15 @@ There are three primary usage scenarios in which eclim is designed to be used:
    external vim instances would. This feature is only support on Windows and
    Unix systems (where gvim is compiled with the gtk gui).
 
+   .. note::
+
+     Please be aware that the embedded vim does not behave like a standard
+     eclipse editor. It's a separate program (vim) embedded into eclipse, so
+     eclipse features are provided by eclim's vim plugins and not the usual
+     eclipse key bindings, context menus, etc. For those that just want vim like
+     key bindings in their eclipse editors, vrapper_ is an excellent alternative
+     which provides exactly that.
+
 Eclim is released under the GPLv3_.
 
 ========================
@@ -223,3 +232,4 @@ Mar. 18, 2012
 .. _eclipse: http://eclipse.org
 .. _vim: http://www.vim.org
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
+.. _vrapper: http://vrapper.sourceforge.net/home/
