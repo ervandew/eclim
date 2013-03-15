@@ -32,11 +32,20 @@ if !exists("g:EclimPhpHtmlValidate")
   let g:EclimPhpHtmlValidate = 0
 endif
 
+if !exists("g:EclimPhpSyntasticEnabled")
+  let g:EclimPhpSyntasticEnabled = 0
+endif
+
 " }}}
 
 " Options {{{
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#php#complete#CodeComplete'
+
+" disable syntastic
+if exists('g:loaded_syntastic_plugin') && !g:EclimPhpSyntasticEnabled
+  let g:syntastic_php_checkers = []
+endif
 
 " }}}
 

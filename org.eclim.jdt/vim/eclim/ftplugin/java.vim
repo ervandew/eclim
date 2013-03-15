@@ -36,6 +36,10 @@ if !exists("g:EclimJavaCompilerAutoDetect")
   let g:EclimJavaCompilerAutoDetect = 1
 endif
 
+if !exists("g:EclimJavaSyntasticEnabled")
+  let g:EclimJavaSyntasticEnabled = 0
+endif
+
 " }}}
 
 " Options {{{
@@ -87,6 +91,11 @@ if g:EclimJavaCompilerAutoDetect
     compiler javac
     let g:EclimMakeLCD = 0
   endif
+endif
+
+" disable syntastic
+if exists('g:loaded_syntastic_plugin') && !g:EclimJavaSyntasticEnabled
+  let g:syntastic_java_checkers = []
 endif
 
 " }}}
