@@ -160,7 +160,7 @@ function! s:InsertDependency(type, group, artifact, vrsn) " {{{
   retab
 endfunction " }}}
 
-function! eclim#java#maven#SetClasspathVariable(cmd, variable) " {{{
+function! eclim#java#maven#SetClasspathVariable(cmd, variable, args) " {{{
   let instance = eclim#client#nailgun#ChooseEclimdInstance()
   if type(instance) != g:DICT_TYPE
     return
@@ -180,7 +180,7 @@ function! eclim#java#maven#SetClasspathVariable(cmd, variable) " {{{
   else
     let prefs = workspace .
       \ '/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs'
-    let command = a:cmd .
+    let command = a:cmd . ' ' . a:args .
       \ ' "-Declipse.workspace=' . workspace . '"' .
       \ ' eclipse:configure-workspace'
   endif
