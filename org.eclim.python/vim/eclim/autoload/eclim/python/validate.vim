@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@
 " Validate(on_save) {{{
 " Validates the current file.
 function! eclim#python#validate#Validate(on_save)
-  if eclim#util#WillWrittenBufferClose()
+  if eclim#util#WillWrittenBufferClose() ||
+   \ (exists('g:EclimFileTypeValidate') && !g:EclimFileTypeValidate)
     return
   endif
 
