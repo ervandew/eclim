@@ -82,9 +82,8 @@ function! eclim#python#validate#Validate(on_save)
     endif
   endif
 
+  call filter(results, "v:val !~ 'unable to detect undefined names'")
   if !empty(results) || syntax_error != ''
-    call filter(results, "v:val !~ 'unable to detect undefined names'")
-
     let errors = []
     if syntax_error != ''
       let lnum = substitute(syntax_error, '.*(line \(\d\+\))', '\1', '')
@@ -99,9 +98,7 @@ function! eclim#python#validate#Validate(on_save)
           \ 'text': text,
           \ 'type': 'e'
         \ })
-    endif
-
-    if syntax_error == ''
+    else
       for error in results
         let file = substitute(error, '\(.\{-}\):[0-9]\+:.*', '\1', '')
         let line = substitute(error, '.\{-}:\([0-9]\+\):.*', '\1', '')
