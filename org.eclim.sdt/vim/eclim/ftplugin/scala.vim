@@ -40,8 +40,7 @@ exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#scala#complete#CodeComplete
 
 augroup eclim_scala
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer>
-    \ call eclim#lang#UpdateSrcFile('scala', g:EclimScalaValidate)
+  autocmd BufWritePost <buffer> call eclim#lang#UpdateSrcFile('scala')
 augroup END
 
 " }}}

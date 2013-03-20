@@ -213,9 +213,21 @@ function! eclim#lang#Search(command, singleResultAction, argline)
 
 endfunction " }}}
 
-" UpdateSrcFile(validate) {{{
-" Updates the src file on the server w/ the changes made to the current file.
-function! eclim#lang#UpdateSrcFile(lang, validate)
+function! eclim#lang#UpdateSrcFile(lang, ...) " {{{
+  " Updates the src file on the server w/ the changes made to the current file.
+  " Optional arg:
+  "   validate: when 1 force the validation to execute, when 0 prevent it.
+
+  if !a:0
+    " per lang setting
+    exec 'let validate = g:Eclim' . toupper(a:lang[0]) . a:lang[1:] . 'Validate'
+    " global setting
+    let validate = validate && g:EclimFileTypeValidate
+  else
+    " arg override
+    let validate = a:1
+  endif
+
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
     let file = eclim#project#util#GetProjectRelativeFilePath()
@@ -223,9 +235,7 @@ function! eclim#lang#UpdateSrcFile(lang, validate)
     let command = substitute(command, '<lang>', a:lang, '')
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
-    if a:validate &&
-     \ g:EclimFileTypeValidate &&
-     \ !eclim#util#WillWrittenBufferClose()
+    if validate && !eclim#util#WillWrittenBufferClose()
       let command = command . ' -v'
       if eclim#project#problems#IsProblemsList() &&
        \ g:EclimProjectProblemsUpdateOnSave

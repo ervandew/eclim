@@ -48,8 +48,7 @@ endif
 
 augroup eclim_c
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer>
-    \ call eclim#lang#UpdateSrcFile('c', g:EclimCValidate)
+  autocmd BufWritePost <buffer> call eclim#lang#UpdateSrcFile('c')
 augroup END
 
 " }}}

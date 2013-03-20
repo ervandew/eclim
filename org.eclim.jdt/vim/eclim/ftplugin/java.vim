@@ -114,8 +114,7 @@ endif
 if &ft == 'java'
   augroup eclim_java
     autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer>
-      \ call eclim#lang#UpdateSrcFile('java', g:EclimJavaValidate)
+    autocmd BufWritePost <buffer> call eclim#lang#UpdateSrcFile('java')
   augroup END
 endif
 

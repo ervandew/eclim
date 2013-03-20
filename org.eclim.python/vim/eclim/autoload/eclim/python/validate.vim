@@ -41,8 +41,11 @@
 " Validate(on_save) {{{
 " Validates the current file.
 function! eclim#python#validate#Validate(on_save)
-  if eclim#util#WillWrittenBufferClose() ||
-   \ (exists('g:EclimFileTypeValidate') && !g:EclimFileTypeValidate)
+  let validate = !a:on_save || (
+    \ g:EclimPythonValidate &&
+    \ (!exists('g:EclimFileTypeValidate') || g:EclimFileTypeValidate))
+
+  if !validate || eclim#util#WillWrittenBufferClose()
     return
   endif
 
