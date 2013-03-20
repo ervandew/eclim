@@ -57,14 +57,14 @@ augroup END
 
 augroup eclim_php
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer> call eclim#php#util#UpdateSrcFile(0)
+  autocmd BufWritePost <buffer> call eclim#php#util#UpdateSrcFile(1)
 augroup END
 
 " }}}
 
 " Command Declarations {{{
 
-command! -nargs=0 -buffer Validate :call eclim#php#util#UpdateSrcFile(1)
+command! -nargs=0 -buffer Validate :call eclim#php#util#UpdateSrcFile(0)
 
 if !exists(":PhpSearch")
   command -buffer -nargs=*

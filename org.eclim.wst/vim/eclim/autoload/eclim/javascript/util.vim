@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,19 +39,29 @@
     \ ], '\|') . '\)'
 " }}}
 
-" UpdateSrcFile(validate) {{{
-function! eclim#javascript#util#UpdateSrcFile(validate)
-  " Disabled until the jsdt matures.
-  "call eclim#lang#UpdateSrcFile('javascript', a:validate)
+function! eclim#javascript#util#UpdateSrcFile(on_save) " {{{
+  " Optional arg:
+  "   validate: when 1 force the validation to execute, when 0 prevent it.
 
-  if g:EclimJavascriptLintEnabled
+  " Disabled until the jsdt matures.
+  "if !a:on_save
+  "  call eclim#lang#UpdateSrcFile('javascript', 1)
+  "else
+  "  call eclim#lang#UpdateSrcFile('javascript')
+  "endif
+
+  let validate = !a:on_save || (
+    \ g:EclimJavascriptValidate &&
+    \ (!exists('g:EclimFileTypeValidate') || g:EclimFileTypeValidate))
+
+  if validate && g:EclimJavascriptLintEnabled
     call eclim#javascript#util#Jsl()
   endif
 endfunction " }}}
 
-" Jsl() {{{
-" Runs jsl (javascript lint) on the current file.
-function! eclim#javascript#util#Jsl()
+function! eclim#javascript#util#Jsl() " {{{
+  " Runs jsl (javascript lint) on the current file.
+
   if eclim#util#WillWrittenBufferClose()
     return
   endif

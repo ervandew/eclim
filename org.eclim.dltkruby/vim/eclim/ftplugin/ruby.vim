@@ -49,8 +49,7 @@ endif
 
 augroup eclim_ruby
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer>
-    \ call eclim#lang#UpdateSrcFile('ruby', g:EclimRubyValidate)
+  autocmd BufWritePost <buffer> call eclim#lang#UpdateSrcFile('ruby')
 augroup END
 
 " }}}

@@ -39,8 +39,12 @@ function! eclim#php#util#IsPhpCode(lnum) " {{{
   return phpstart > 0 && phpstart <= a:lnum && (phpend == 0 || phpend < phpstart)
 endfunction " }}}
 
-function! eclim#php#util#UpdateSrcFile(validate) " {{{
+function! eclim#php#util#UpdateSrcFile(on_save) " {{{
   " Updates the src file on the server w/ the changes made to the current file.
+
+  let validate = !a:on_save || (
+    \ g:EclimPhpValidate &&
+    \ (!exists('g:EclimFileTypeValidate') || g:EclimFileTypeValidate))
 
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
@@ -48,7 +52,7 @@ function! eclim#php#util#UpdateSrcFile(validate) " {{{
     let command = s:update_command
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
-    if (g:EclimPhpValidate || a:validate) && !eclim#util#WillWrittenBufferClose()
+    if validate && !eclim#util#WillWrittenBufferClose()
       let command = command . ' -v'
       if eclim#project#problems#IsProblemsList()
         let command = command . ' -b'
@@ -61,7 +65,7 @@ function! eclim#php#util#UpdateSrcFile(validate) " {{{
 
     let html_validate = exists('b:EclimPhpHtmlValidate') ?
       \ b:EclimPhpHtmlValidate : g:EclimPhpHtmlValidate
-    if html_validate && !eclim#util#WillWrittenBufferClose()
+    if validate && html_validate && !eclim#util#WillWrittenBufferClose()
       let command = s:html_validate_command
       let command = substitute(command, '<project>', project, '')
       let command = substitute(command, '<file>', file, '')
@@ -80,7 +84,7 @@ function! eclim#php#util#UpdateSrcFile(validate) " {{{
     endif
 
     call eclim#project#problems#ProblemsUpdate('save')
-  elseif a:validate
+  elseif !a:on_save
     call eclim#project#util#IsCurrentFileInProject()
   endif
 endfunction " }}}
