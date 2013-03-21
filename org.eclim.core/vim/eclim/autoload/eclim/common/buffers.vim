@@ -160,12 +160,9 @@ endfunction " }}}
 function! eclim#common#buffers#GetBuffers(...) " {{{
   let options = a:0 ? a:1 : {}
 
-  let saved_lang = v:lang
-  language C
   redir => list
   silent buffers
   redir END
-  execute 'language' saved_lang
 
   let buffers = []
   let maxfilelength = 0
@@ -177,7 +174,7 @@ function! eclim#common#buffers#GetBuffers(...) " {{{
     let buffer.file = fnamemodify(buffer.path, ':p:t')
     let buffer.dir = fnamemodify(buffer.path, ':p:h')
     let buffer.bufnr = str2nr(substitute(entry, '\s*\([0-9]\+\).*', '\1', ''))
-    let buffer.lnum = str2nr(substitute(entry, '.*"\s\+line\s\+\([0-9]\+\).*', '\1', ''))
+    let buffer.lnum = str2nr(substitute(entry, '.*"\s\+\w\+\s\+\(\d\+\)', '\1', ''))
     call add(buffers, buffer)
 
     if len(buffer.file) > maxfilelength
