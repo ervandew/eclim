@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,14 +22,12 @@
 "
 " }}}
 
-" Validate(on_save) {{{
-" Validates the current html file.
-function! eclim#html#validate#Validate(on_save)
-  if a:on_save && !g:EclimHtmlValidate
-    return
-  endif
+function! eclim#html#validate#Validate(on_save) " {{{
+  let validate = !a:on_save || (
+    \ g:EclimHtmlValidate &&
+    \ (!exists('g:EclimFileTypeValidate') || g:EclimFileTypeValidate))
 
-  if eclim#util#WillWrittenBufferClose()
+  if !validate || eclim#util#WillWrittenBufferClose()
     return
   endif
 

@@ -403,6 +403,7 @@ public class ImplCommand
     return binding.toString().trim()
       .replaceAll("\\bjava\\.lang\\.", "")
       .replaceAll("\\s+throws\\s+.*", "")
+      .replaceAll("#RAW", "")
       .replaceFirst("\\w+\\s*\\(.*?\\)", getMethodBindingCallSignature(binding));
   }
 

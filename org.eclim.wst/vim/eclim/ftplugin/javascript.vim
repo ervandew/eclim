@@ -40,8 +40,7 @@ exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#javascript#complete#CodeCom
 
 augroup eclim_javascript
   autocmd! BufWritePost <buffer>
-  autocmd BufWritePost <buffer>
-    \ call eclim#javascript#util#UpdateSrcFile(g:EclimJavascriptValidate)
+  autocmd BufWritePost <buffer> call eclim#javascript#util#UpdateSrcFile(0)
 augroup END
 
 " }}}

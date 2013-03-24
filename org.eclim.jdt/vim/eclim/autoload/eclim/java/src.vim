@@ -63,7 +63,7 @@ function! eclim#java#src#Checkstyle() " {{{
 
     if config == ''
       call eclim#util#EchoWarning(
-        \ "Before invokeing checkstyle, you must first configure the " .
+        \ "Before invoking checkstyle, you must first configure the " .
         \ "location of your\ncheckstyle config via the setting:  " .
         \ "'org.eclim.java.checkstyle.config'.")
       return

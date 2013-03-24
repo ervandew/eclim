@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,7 +41,11 @@
 " Validate(on_save) {{{
 " Validates the current file.
 function! eclim#python#validate#Validate(on_save)
-  if eclim#util#WillWrittenBufferClose()
+  let validate = !a:on_save || (
+    \ g:EclimPythonValidate &&
+    \ (!exists('g:EclimFileTypeValidate') || g:EclimFileTypeValidate))
+
+  if !validate || eclim#util#WillWrittenBufferClose()
     return
   endif
 
@@ -81,9 +85,8 @@ function! eclim#python#validate#Validate(on_save)
     endif
   endif
 
+  call filter(results, "v:val !~ 'unable to detect undefined names'")
   if !empty(results) || syntax_error != ''
-    call filter(results, "v:val !~ 'unable to detect undefined names'")
-
     let errors = []
     if syntax_error != ''
       let lnum = substitute(syntax_error, '.*(line \(\d\+\))', '\1', '')
@@ -98,9 +101,7 @@ function! eclim#python#validate#Validate(on_save)
           \ 'text': text,
           \ 'type': 'e'
         \ })
-    endif
-
-    if syntax_error == ''
+    else
       for error in results
         let file = substitute(error, '\(.\{-}\):[0-9]\+:.*', '\1', '')
         let line = substitute(error, '.\{-}:\([0-9]\+\):.*', '\1', '')
