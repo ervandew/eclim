@@ -96,11 +96,14 @@ import org.eclipse.ui.part.FileEditorInput;
     "REQUIRED f file ARG," +
     "REQUIRED o offset ARG," +
     "REQUIRED l length ARG," +
-    "REQUIRED e encoding ARG"
+    "REQUIRED e encoding ARG," +
+    "REQUIRED m mode ARG"
 )
 public class CallHierarchyCommand
   extends SearchCommand
 {
+  private boolean searchCalls;
+	
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -109,7 +112,14 @@ public class CallHierarchyCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
     int offset = getOffset(commandLine);
     int length = commandLine.getIntValue(Options.LENGTH_OPTION);
+    String mode = commandLine.getValue(Options.MODE_OPTION);
 
+    if (mode.equals("CalledBy")) {
+      searchCalls=false;
+    }
+    else {
+      searchCalls=true;
+    }
     ICProject cproject = CUtils.getCProject(projectName);
 
     CUIPlugin cuiPlugin = CUIPlugin.getDefault();
@@ -241,6 +251,40 @@ public class CallHierarchyCommand
     }
     return results;
   }
+  
+  private ArrayList<HashMap<String,Object>> findCalls(
+	      IIndex index, ICElement element, Set<ICElement> seen)
+	    throws Exception
+  {
+	IIndexName name;
+	IIndexName[] enclosedNames;
+	ICProject project=element.getCProject();
+
+	name=IndexUI.elementToName(index, element);
+	enclosedNames=name.getEnclosedNames();
+	
+	ArrayList<Call> calls = new ArrayList<Call>(enclosedNames.length);
+    for (IIndexName enclosedName : enclosedNames) {
+      IIndexBinding binding=index.findBinding(enclosedName);
+	  IIndexName enclosedDefinitionName=index.findDefinitions(binding)[0];    	
+      ICElement enclosedElement = IndexUI.getCElementForName(project, index, enclosedDefinitionName);
+      if (element == null) {
+    	continue;
+      }
+      if (element instanceof IFunction) {
+    	calls.add(new Call(enclosedName, enclosedElement));
+      }
+    }
+    
+    Collections.sort(calls);
+
+    ArrayList<HashMap<String,Object>> results =
+      new ArrayList<HashMap<String,Object>>();
+    for (Call call : calls) {
+      results.add(formatElement(index, call.element, call.name, seen));
+    }
+    return results;    
+  }
 
   private HashMap<String,Object> formatElement(
       IIndex index, ICElement element, IIndexName name, Set<ICElement> seen)
@@ -270,7 +314,12 @@ public class CallHierarchyCommand
 
     if (!seen.contains(element)){
       seen.add(element);
-      result.put("calledBy", findCalledBy(index, element, seen));
+      if (searchCalls) {
+    	result.put("found", findCalls(index, element, seen));
+      }
+      else {
+    	result.put("found", findCalledBy(index, element, seen));
+      }
     }
 
     return result;
