@@ -253,7 +253,7 @@ function! eclim#lang#UpdateSrcFile(lang, ...) " {{{
     endif
 
     call eclim#project#problems#ProblemsUpdate('save')
-  elseif a:validate && expand('<amatch>') == ''
+  elseif validate && expand('<amatch>') == ''
     call eclim#project#util#IsCurrentFileInProject()
   endif
 endfunction " }}}
