@@ -15,6 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+if [ "$(whoami)" == "root" ] ; then
+  echo "eclimd should not be run as root."
+  echo "You need to run eclimd as the same user as your editor (vim, emacs, etc)."
+  exit 1
+fi
+
 usage(){
   echo "Usage: eclimd [-f eclimrc] [jvmarg ...]"
   echo "    -f   specify the location of an eclimrc file other than the"
