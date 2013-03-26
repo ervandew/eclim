@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,6 +80,25 @@ in there:
   vim.files=${user.home}/.vim/bundle/eclim
 
 .. end-build
+
+.. _coding-style:
+
+Coding Style
+------------
+
+When contributing code please try to adhere to the coding style of similar code
+so that eclim's source can retain consistency throughout. For java code, eclim
+includes a checkstyle configuration which can be run against the whole project:
+
+::
+
+  $ ant checkstyle
+
+or against the current java file from within vim:
+
+::
+
+  :Checkstyle
 
 .. _development-patches:
 
