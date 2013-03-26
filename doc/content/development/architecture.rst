@@ -43,7 +43,7 @@ Here is a diagram showing the sequence in a bit more detail:
    eclim.vim -> nailgun
    activate nailgun
 
-   eclim.vim -> Main : main
+   nailgun -> Main : main
    activate Main
 
    Main -> Services : getCommand
