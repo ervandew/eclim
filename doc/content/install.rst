@@ -393,6 +393,10 @@ The first time you start eclimd you may want to omit the 'start' argument so
 that you can see the output on the console to ensure that eclimd starts
 correctly.
 
+.. include:: /eclimd.rst
+   :start-after: begin-eclimd-user
+   :end-before: end-eclimd-user
+
 Upgrading
 ---------
 
