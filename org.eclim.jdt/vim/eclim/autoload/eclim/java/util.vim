@@ -235,7 +235,7 @@ function! eclim#java#util#Java(classname, args) " {{{
     endfor
   endif
 
-  let result = eclim#Execute(command, {'project', project, 'exec': 1, 'raw': 1})
+  let result = eclim#Execute(command, {'project': project, 'exec': 1, 'raw': 1})
   let results = split(result, "\n")
   call eclim#util#TempWindow('[Java Output]', results)
   let b:project = project
