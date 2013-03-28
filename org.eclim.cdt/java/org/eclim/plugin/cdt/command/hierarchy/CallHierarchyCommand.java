@@ -103,7 +103,7 @@ public class CallHierarchyCommand
   extends SearchCommand
 {
   private boolean searchCalls;
-	
+
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -115,10 +115,9 @@ public class CallHierarchyCommand
     String mode = commandLine.getValue(Options.MODE_OPTION);
 
     if (mode.equals("CalledBy")) {
-      searchCalls=false;
-    }
-    else {
-      searchCalls=true;
+      searchCalls = false;
+    } else {
+      searchCalls = true;
     }
     ICProject cproject = CUtils.getCProject(projectName);
 
@@ -253,26 +252,27 @@ public class CallHierarchyCommand
   }
   
   private ArrayList<HashMap<String,Object>> findCalls(
-	      IIndex index, ICElement element, Set<ICElement> seen)
-	    throws Exception
+      IIndex index, ICElement element, Set<ICElement> seen)
+      throws Exception
   {
-	IIndexName name;
-	IIndexName[] enclosedNames;
-	ICProject project=element.getCProject();
+    IIndexName name;
+    IIndexName[] enclosedNames;
+    ICProject project = element.getCProject();
 
-	name=IndexUI.elementToName(index, element);
-	enclosedNames=name.getEnclosedNames();
-	
-	ArrayList<Call> calls = new ArrayList<Call>(enclosedNames.length);
+    name = IndexUI.elementToName(index, element);
+    enclosedNames = name.getEnclosedNames();
+
+    ArrayList<Call> calls = new ArrayList<Call>(enclosedNames.length);
     for (IIndexName enclosedName : enclosedNames) {
-      IIndexBinding binding=index.findBinding(enclosedName);
-	  IIndexName enclosedDefinitionName=index.findDefinitions(binding)[0];    	
-      ICElement enclosedElement = IndexUI.getCElementForName(project, index, enclosedDefinitionName);
+      IIndexBinding binding = index.findBinding(enclosedName);
+      IIndexName enclosedDefinitionName = index.findDefinitions(binding)[0];
+      ICElement enclosedElement = 
+        IndexUI.getCElementForName(project, index, enclosedDefinitionName);
       if (element == null) {
-    	continue;
+      continue;
       }
       if (element instanceof IFunction) {
-    	calls.add(new Call(enclosedName, enclosedElement));
+      calls.add(new Call(enclosedName, enclosedElement));
       }
     }
     
@@ -315,10 +315,9 @@ public class CallHierarchyCommand
     if (!seen.contains(element)){
       seen.add(element);
       if (searchCalls) {
-    	result.put("found", findCalls(index, element, seen));
-      }
-      else {
-    	result.put("found", findCalledBy(index, element, seen));
+        result.put("found", findCalls(index, element, seen));
+      } else {
+        result.put("found", findCalledBy(index, element, seen));
       }
     }
 
