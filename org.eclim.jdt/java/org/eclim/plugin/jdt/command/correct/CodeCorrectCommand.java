@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,6 +105,8 @@ public class CodeCorrectCommand
   static {
     IGNORE_BY_INFO.add(CorrectionMessages
         .LocalCorrectionsSubProcessor_InferGenericTypeArguments_description);
+    IGNORE_BY_INFO.add(CorrectionMessages
+        .GetterSetterCorrectionSubProcessor_additional_info);
   }
 
   @Override
