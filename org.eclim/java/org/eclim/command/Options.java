@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,6 @@ public class Options
   public static final String LINE_OPTION = "l";
   public static final String LINE_WIDTH_OPTION = "w";
   public static final String METHOD_OPTION = "m";
-  public static final String MODE_OPTION = "m";
   public static final String NAME_OPTION = "n";
   public static final String NATURE_OPTION = "n";
   public static final String OFFSET_OPTION = "o";

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,13 @@ cursor using one of the following key bindings:
 - S - open the type via :split
 - T - open the type via :tabnew
 - ? - view help buffer
+
+**:CCallHierarchy** can also be used to view the callees for a function or
+method by invoking the command with a ``!``:
+
+.. code-block:: vim
+
+  :CCallHierarchy!
 
 Configuration
 ^^^^^^^^^^^^^

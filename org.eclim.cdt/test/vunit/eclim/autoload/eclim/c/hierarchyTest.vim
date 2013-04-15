@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,15 +22,13 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_c'
   set expandtab
   set shiftwidth=2 tabstop=2
 endfunction " }}}
 
-" TestCallHierarchy() {{{
-function! TestCallHierarchy()
+function! TestCallHierarchyCallers() " {{{
   edit! src/callhierarchy/mod2.c
   call vunit#PeekRedir()
 
@@ -77,6 +75,42 @@ function! TestCallHierarchy()
 
   call vunit#AssertEquals('[Call Hierarchy]', expand('%'), 'No results on update call')
   call vunit#AssertEquals(9, line('$'), 'Wrong number of lines on update call')
+endfunction " }}}
+
+function! TestCallHierarchyCallees() " {{{
+  edit! src/callhierarchy/mod2.c
+  call vunit#PeekRedir()
+
+  call cursor(5, 5)
+  :CCallHierarchy!
+  call vunit#PeekRedir()
+
+  call vunit#AssertEquals('[Call Hierarchy]', expand('%'), 'Wrong window')
+  call vunit#AssertEquals(8, line('$'), 'Wrong number of lines')
+
+  call vunit#AssertEquals('fun3(int)', getline(1), 'Wrong content on line 1')
+  call vunit#AssertEquals('  fun1(int)', getline(2), 'Wrong content on line 2')
+  call vunit#AssertEquals('    fun2(int)', getline(3), 'Wrong content on line 3')
+  call vunit#AssertEquals('  fun2(int)', getline(4), 'Wrong content on line 4')
+  call vunit#AssertEquals('  fun2(int)', getline(5), 'Wrong content on line 5')
+  call vunit#AssertEquals('  fun2(int)', getline(6), 'Wrong content on line 6')
+
+  let chwin = winnr()
+
+  call cursor(2, 1)
+  exec "normal \<cr>"
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call vunit#AssertEquals('src/callhierarchy/mod2.c', name, 'Wrong window (mod2.c)')
+  call vunit#AssertEquals(8, line('.'), 'Wrong line (mod2.c')
+  call vunit#AssertEquals(10, col('.'), 'Wrong column (mod2.c')
+  exec chwin . 'winc w'
+
+  call cursor(3, 1)
+  exec "normal \<cr>"
+  let name = substitute(expand('%'), '\', '/', 'g')
+  call vunit#AssertEquals('src/callhierarchy/mod1.c', name, 'Wrong window (mod1.c)')
+  call vunit#AssertEquals(5, line('.'), 'Wrong line (mod1.c')
+  call vunit#AssertEquals(10, col('.'), 'Wrong column (mod1.c')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
