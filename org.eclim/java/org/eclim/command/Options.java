@@ -72,6 +72,7 @@ public class Options
   public static final String LINE_OPTION = "l";
   public static final String LINE_WIDTH_OPTION = "w";
   public static final String METHOD_OPTION = "m";
+  public static final String MODE_OPTION = "m";
   public static final String NAME_OPTION = "n";
   public static final String NATURE_OPTION = "n";
   public static final String OFFSET_OPTION = "o";
