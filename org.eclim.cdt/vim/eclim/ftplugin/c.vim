@@ -67,12 +67,8 @@ if !exists(":CSearchContext")
   command -buffer CSearchContext :call eclim#c#search#SearchContext()
 endif
 
-if !exists(":CCallHierarchyCalled")
-  command -buffer CCallHierarchyCalled :call eclim#c#hierarchy#CallHierarchy("CalledBy")
-endif
-
-if !exists(":CCallHierarchyCalls")
-  command -buffer CCallHierarchyCalls :call eclim#c#hierarchy#CallHierarchy("Calls")
+if !exists(":CCallHierarchy")
+  command -buffer -bang CCallHierarchy :call eclim#c#hierarchy#CallHierarchy('<bang>')
 endif
 
 " }}}

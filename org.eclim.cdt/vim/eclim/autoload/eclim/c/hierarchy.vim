@@ -31,11 +31,10 @@ endif
 " Script Varables {{{
   let s:call_hierarchy =
     \ '-command c_callhierarchy -p "<project>" -f "<file>" ' .
-    \ '-o <offset> -l <length> -e <encoding> -m <mode>'
+    \ '-o <offset> -l <length> -e <encoding>'
 " }}}
 
-" CallHierarchy() {{{
-function! eclim#c#hierarchy#CallHierarchy(mode)
+function! eclim#c#hierarchy#CallHierarchy(bang) " {{{
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -53,7 +52,10 @@ function! eclim#c#hierarchy#CallHierarchy(mode)
   let command = substitute(command, '<offset>', offset, '')
   let command = substitute(command, '<length>', length, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
-  let command = substitute(command, '<mode>', a:mode, '')
+  " return callees
+  if a:bang != ''
+    let command .= ' -c'
+  endif
 
   let result = eclim#Execute(command)
   if type(result) != g:DICT_TYPE
@@ -67,7 +69,8 @@ function! eclim#c#hierarchy#CallHierarchy(mode)
 
   let lines = []
   let info = []
-  call s:CallHierarchyFormat(result, lines, info, '')
+  let key = a:bang != '' ? 'callees' : 'callers'
+  call s:CallHierarchyFormat(result, key, lines, info, '')
 
   call eclim#util#TempWindow('[Call Hierarchy]', lines)
   set ft=c
@@ -101,8 +104,7 @@ function! eclim#c#hierarchy#CallHierarchy(mode)
     \ :call eclim#help#BufferHelp(b:hierarchy_help, 'vertical', 40)<cr>
 endfunction " }}}
 
-" s:CallHierarchyFormat(result, lines, info, indent) {{{
-function! s:CallHierarchyFormat(result, lines, info, indent)
+function! s:CallHierarchyFormat(result, key, lines, info, indent) " {{{
   if has_key(a:result, 'position')
     call add(a:info, {
         \ 'file': a:result.position.filename,
@@ -115,13 +117,12 @@ function! s:CallHierarchyFormat(result, lines, info, indent)
     call add(a:lines, a:indent . a:result.name)
   endif
 
-  for caller in get(a:result, 'found', [])
-    call s:CallHierarchyFormat(caller, a:lines, a:info, a:indent . "\t")
+  for call in get(a:result, a:key, [])
+    call s:CallHierarchyFormat(call, a:key, a:lines, a:info, a:indent . "\t")
   endfor
 endfunction " }}}
 
-" s:Open(action) {{{
-function! s:Open(action)
+function! s:Open(action) " {{{
   let line = line('.')
   if line > len(b:hierarchy_info)
     return

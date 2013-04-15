@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,12 +97,12 @@ import org.eclipse.ui.part.FileEditorInput;
     "REQUIRED o offset ARG," +
     "REQUIRED l length ARG," +
     "REQUIRED e encoding ARG," +
-    "REQUIRED m mode ARG"
+    "OPTIONAL c callees NOARG"
 )
 public class CallHierarchyCommand
   extends SearchCommand
 {
-  private boolean searchCalls;
+  private static final String CALLEES_OPTION = "c";
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -110,15 +110,10 @@ public class CallHierarchyCommand
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
+    boolean callees = commandLine.hasOption(CALLEES_OPTION);
     int offset = getOffset(commandLine);
     int length = commandLine.getIntValue(Options.LENGTH_OPTION);
-    String mode = commandLine.getValue(Options.MODE_OPTION);
 
-    if (mode.equals("CalledBy")) {
-      searchCalls = false;
-    } else {
-      searchCalls = true;
-    }
     ICProject cproject = CUtils.getCProject(projectName);
 
     CUIPlugin cuiPlugin = CUIPlugin.getDefault();
@@ -153,16 +148,16 @@ public class CallHierarchyCommand
           null, cproject, input, selection);
 
       if (elements != null && elements.length > 0) {
-        ICElement callee = elements[0];
+        ICElement element = elements[0];
         Set<ICElement> seen = new HashSet<ICElement>();
-        ICProject project = callee.getCProject();
+        ICProject project = element.getCProject();
         ICProject[] scope = getScope(SCOPE_PROJECT, project);
         IIndex index = CCorePlugin.getIndexManager().getIndex(
             scope, IIndexManager.ADD_DEPENDENCIES | IIndexManager.ADD_DEPENDENT);
         index.acquireReadLock();
         try{
-          IIndexName name = IndexUI.elementToName(index, callee);
-          result = formatElement(index, callee, name, seen);
+          IIndexName name = IndexUI.elementToName(index, element);
+          result = formatElement(index, new Call(name, element), seen, callees);
         }finally{
           index.releaseReadLock();
         }
@@ -175,16 +170,16 @@ public class CallHierarchyCommand
     return result;
   }
 
-  private ArrayList<HashMap<String,Object>> findCalledBy(
-      IIndex index, ICElement callee, Set<ICElement> seen)
+  private ArrayList<HashMap<String,Object>> findCallers(
+      IIndex index, ICElement element, Set<ICElement> seen)
     throws Exception
   {
     ArrayList<HashMap<String,Object>> results =
       new ArrayList<HashMap<String,Object>>();
-    ICProject project = callee.getCProject();
-    IIndexBinding calleeBinding = IndexUI.elementToBinding(index, callee);
+    ICProject project = element.getCProject();
+    IIndexBinding calleeBinding = IndexUI.elementToBinding(index, element);
     if (calleeBinding != null) {
-      results.addAll(findCalledBy(index, calleeBinding, true, project, seen));
+      results.addAll(findCallers(index, calleeBinding, true, project, seen));
       if (calleeBinding instanceof ICPPMethod) {
         // cdt 8.1.1 requires a second arg (point: IASTNode), but cdt 8.1.1
         // hasn't been released independent of eclipse 4.2.1, so distros are
@@ -206,7 +201,7 @@ public class CallHierarchyCommand
         }
 
         for (IBinding overriddenBinding : overriddenBindings) {
-          results.addAll(findCalledBy(
+          results.addAll(findCallers(
               index, overriddenBinding, false, project, seen));
         }
       }
@@ -214,16 +209,16 @@ public class CallHierarchyCommand
     return results;
   }
 
-  private ArrayList<HashMap<String,Object>> findCalledBy(
+  private ArrayList<HashMap<String,Object>> findCallers(
       IIndex index,
-      IBinding callee,
+      IBinding binding,
       boolean includeOrdinaryCalls,
       ICProject project,
       Set<ICElement> seen)
     throws Exception
   {
     IIndexName[] names = index.findNames(
-        callee, IIndex.FIND_REFERENCES | IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES);
+        binding, IIndex.FIND_REFERENCES | IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES);
 
     ArrayList<Call> calls = new ArrayList<Call>(names.length);
     for (IIndexName name : names) {
@@ -246,53 +241,57 @@ public class CallHierarchyCommand
     ArrayList<HashMap<String,Object>> results =
       new ArrayList<HashMap<String,Object>>();
     for (Call call : calls) {
-      results.add(formatElement(index, call.element, call.name, seen));
+      results.add(formatElement(index, call, seen, false));
     }
     return results;
   }
-  
-  private ArrayList<HashMap<String,Object>> findCalls(
+
+  private ArrayList<HashMap<String,Object>> findCallees(
       IIndex index, ICElement element, Set<ICElement> seen)
       throws Exception
   {
-    IIndexName name;
-    IIndexName[] enclosedNames;
     ICProject project = element.getCProject();
-
-    name = IndexUI.elementToName(index, element);
-    enclosedNames = name.getEnclosedNames();
+    IIndexName name = IndexUI.elementToName(index, element);
+    IIndexName[] enclosedNames = name.getEnclosedNames();
 
     ArrayList<Call> calls = new ArrayList<Call>(enclosedNames.length);
     for (IIndexName enclosedName : enclosedNames) {
       IIndexBinding binding = index.findBinding(enclosedName);
       IIndexName enclosedDefinitionName = index.findDefinitions(binding)[0];
-      ICElement enclosedElement = 
+      ICElement enclosedElement =
         IndexUI.getCElementForName(project, index, enclosedDefinitionName);
-      if (element == null) {
-      continue;
+      if (enclosedElement == null) {
+        continue;
       }
-      if (element instanceof IFunction) {
-      calls.add(new Call(enclosedName, enclosedElement));
+      if (enclosedElement instanceof IFunction) {
+        calls.add(new Call(
+              enclosedName, enclosedElement, element.getResource()));
       }
     }
-    
+
     Collections.sort(calls);
 
     ArrayList<HashMap<String,Object>> results =
       new ArrayList<HashMap<String,Object>>();
     for (Call call : calls) {
-      results.add(formatElement(index, call.element, call.name, seen));
+      results.add(formatElement(index, call, seen, true));
     }
-    return results;    
+    return results;
   }
 
   private HashMap<String,Object> formatElement(
-      IIndex index, ICElement element, IIndexName name, Set<ICElement> seen)
+      IIndex index,
+      Call call,
+      Set<ICElement> seen,
+      boolean callees)
     throws Exception
   {
     HashMap<String,Object> result = new HashMap<String,Object>();
 
     String[] types = null;
+    IIndexName name = call.name;
+    ICElement element = call.element;
+
     if (element instanceof IFunction){
       types = ((IFunction)element).getParameterTypes();
     }else if (element instanceof IFunctionDeclaration){
@@ -303,10 +302,9 @@ public class CallHierarchyCommand
     result.put("name", message);
 
     if (name != null){
-      IResource resource = element.getResource();
+      IResource resource = call.resource;
       if (resource != null){
-        String file = element.getResource()
-          .getLocation().toOSString().replace('\\', '/');
+        String file = resource.getLocation().toOSString().replace('\\', '/');
         result.put("position",
             Position.fromOffset(file, null, name.getNodeOffset(), 0));
       }
@@ -314,10 +312,10 @@ public class CallHierarchyCommand
 
     if (!seen.contains(element)){
       seen.add(element);
-      if (searchCalls) {
-        result.put("found", findCalls(index, element, seen));
+      if (callees) {
+        result.put("callees", findCallees(index, element, seen));
       } else {
-        result.put("found", findCalledBy(index, element, seen));
+        result.put("callers", findCallers(index, element, seen));
       }
     }
 
@@ -331,21 +329,26 @@ public class CallHierarchyCommand
 
     public IIndexName name;
     public ICElement element;
+    public IResource resource;
     public String location;
 
     public Call(IIndexName name, ICElement element)
     {
       this.name = name;
       this.element = element;
+      this.resource = element.getResource();
       this.location =
         element.getResource().getLocation().toOSString() +
         element.getElementName();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see Comparable#compareTo(T)
-     */
+    public Call(IIndexName name, ICElement element, IResource resource)
+    {
+      this(name, element);
+      this.resource = resource;
+    }
+
+    @Override
     public int compareTo(Call o)
     {
       int result = COLLATOR.compare(location, o.location);
