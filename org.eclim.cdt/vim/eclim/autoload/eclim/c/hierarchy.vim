@@ -31,11 +31,11 @@ endif
 " Script Varables {{{
   let s:call_hierarchy =
     \ '-command c_callhierarchy -p "<project>" -f "<file>" ' .
-    \ '-o <offset> -l <length> -e <encoding>'
+    \ '-o <offset> -l <length> -e <encoding> -m <mode>'
 " }}}
 
 " CallHierarchy() {{{
-function! eclim#c#hierarchy#CallHierarchy()
+function! eclim#c#hierarchy#CallHierarchy(mode)
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -53,6 +53,7 @@ function! eclim#c#hierarchy#CallHierarchy()
   let command = substitute(command, '<offset>', offset, '')
   let command = substitute(command, '<length>', length, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+  let command = substitute(command, '<mode>', a:mode, '')
 
   let result = eclim#Execute(command)
   if type(result) != g:DICT_TYPE
@@ -114,7 +115,7 @@ function! s:CallHierarchyFormat(result, lines, info, indent)
     call add(a:lines, a:indent . a:result.name)
   endif
 
-  for caller in get(a:result, 'calledBy', [])
+  for caller in get(a:result, 'found', [])
     call s:CallHierarchyFormat(caller, a:lines, a:info, a:indent . "\t")
   endfor
 endfunction " }}}
