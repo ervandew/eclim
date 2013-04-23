@@ -604,9 +604,19 @@ function! eclim#util#ListContains(list, element)
   return 0
 endfunction " }}}
 
-" Make(bang, args) {{{
-" Executes make using the supplied arguments.
-function! eclim#util#Make(bang, args)
+function! eclim#util#Make(bang, args) " {{{
+  " Executes make using the supplied arguments.
+
+  " tpope/vim-rake/plugin/rake.vim will execute :Make if it exists, so mimic
+  " Rake's behavior here if that's the case.
+  if b:current_compiler == 'rake'
+    " See tpope/vim-rage/plugin/rake.vim s:Rake(bang,arg)
+    exec 'make! ' . a:args
+    if a:bang !=# '!'
+      exec 'cwindow'
+    endif
+    return
+  endif
   let makefile = findfile('makefile', '.;')
   let makefile2 = findfile('Makefile', '.;')
   if len(makefile2) > len(makefile)
