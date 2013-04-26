@@ -20,8 +20,6 @@ import java.io.File
 
 import scala.collection.JavaConversions
 
-import scala.reflect.runtime.{universe => ru}
-
 import scala.tools.eclipse.ScalaWordFinder
 
 import scala.tools.eclipse.hyperlink.text.Hyperlink
