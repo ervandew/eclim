@@ -74,7 +74,9 @@ class CodeCompleteCommand
     val results: ListBuffer[CodeCompleteResult] = ListBuffer()
     for (proposal <- proposals.sortBy(p => (-p.relevance, p.completion))){
       var completion = proposal.completion
-      val description = proposal.display
+      // for desc, shorten fully qualified types out of java.lang
+      val description = proposal.display.replaceAll(
+          "\\bjava\\.lang\\.([A-Z]\\w*)", "$1")
       // for short desc, shorten all fully qualified Types to just the type.
       val shortDescription = description.replaceAll(
           "[a-zA-Z]\\w*[\\w.]*\\.(\\w+[^.])", "$1")
