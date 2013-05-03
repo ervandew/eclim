@@ -237,7 +237,7 @@ target(name: 'deploy.eclipse'){
   if (Os.isFamily(Os.FAMILY_WINDOWS)){
     move(todir: '${eclipse}'){
       fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
-          includes: 'eclimd.bat,eclimd.cmd,eclim.bat,eclim.cmd,ng.exe')
+          includes: 'eclimd.bat,eclimd.cmd')
     }
   }else{
     delete{
