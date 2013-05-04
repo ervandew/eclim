@@ -235,7 +235,11 @@ target(name: 'deploy.eclipse'){
   }
 
   if (Os.isFamily(Os.FAMILY_WINDOWS)){
-    move(todir: '${eclipse}'){
+    // the vimfiles will look for eclim and ng in the plugin's bin dir in
+    // accordance to the .eclimd_instances file, but third party eclim clients
+    // may continue to expect them at the eclipse root, so we'll copy them
+    // there.
+    copy(todir: '${eclipse}'){
       fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
           includes: 'eclimd.bat,eclimd.cmd,eclim.bat,eclim.cmd,ng.exe')
     }
