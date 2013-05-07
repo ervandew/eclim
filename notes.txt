@@ -235,9 +235,15 @@ TODO {{{
       - allow specific jdk/jre to be used to run the command?
 
     - :Java
+      - run via a system call so that ctrl-c from vim will kill it
+        - have eclimd create a temp build.xml and return the ant command string
+          to run.
       - add option to 'spawn' the jvm to keep the program running while
         returning to vim.
       - add ability to supply jvm args, system properties, env vars, etc.
+
+    - add support for generating toString, equals, hasCode methods
+      https://github.com/ervandew/eclim/issues/212
 
     - Support for running :JUnit / :Java via screen.vim
 
