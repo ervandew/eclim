@@ -44,6 +44,60 @@ TODO {{{
         - suggest wildmenu settings
           set wildmenu
           set wildmode=longest:full,full
+
+    - Document eclim commands better by providing descriptions of the arguments
+      and perhaps using doclets to provide examples or to generate a separate
+      reference by command.
+      - add descriptions to the Command annotation
+      - Example docs for a command:
+        Gathers ant completion candidates for the given ant file in the given
+        project at the given offset.
+
+        ..
+            java_complete -p project -f file -o offset -e encoding -l layout
+
+        * project: the project name
+        * file: the file, relative to the project root
+        * offset: the absolute offset for the context of completions 
+        * encoding: The encoding of the file ( generally use utf8 )
+        * layout: the layout of the completion object ( only 'compact'? )
+
+        Results in the following json document which represents a list of
+        completions. Each completion object consists of the following keys:
+
+        * completion: The actual text used for replacement
+        * menu: descriptive text of the completion?
+        * info: additional information about the completion
+        * type: type of completion, valid options and their meanings are
+          * v: variable
+          * f: function
+          * t: type
+
+        Sample Result:
+
+        ..
+
+          {"completions":[{
+              "completion":"args",
+              "menu":"args : String[]",
+              "info":"args : String[]",
+              "type":"v"
+            },{
+              "completion":"greet()",
+              "menu":"greet() : void - Hello",
+              "info":"greet() : void - Hello",
+              "type":"f"
+            },{
+              "completion":"Hello",
+              "menu":"Hello - test",
+              "info":"Hello - test",
+              "type":"t"
+            },{
+              "completion":"main(",
+              "menu":"main(String... args) : void - Hello",
+              "info":"main(String... args) : void - Hello",
+              "type":"f"}
+            ]}
   }}}
 
   Common {{{
