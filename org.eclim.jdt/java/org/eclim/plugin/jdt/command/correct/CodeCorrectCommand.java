@@ -58,6 +58,7 @@ import org.eclipse.jdt.internal.ui.text.correction.CorrectionMessages;
 import org.eclipse.jdt.internal.ui.text.correction.ReorgCorrectionsSubProcessor.ClasspathFixCorrectionProposal;
 
 import org.eclipse.jdt.internal.ui.text.correction.proposals.NewCUUsingWizardProposal;
+import org.eclipse.jdt.internal.ui.text.correction.proposals.NewVariableCorrectionProposal;
 
 import org.eclipse.jdt.ui.text.java.CompletionProposalComparator;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
@@ -343,14 +344,39 @@ public class CodeCorrectCommand
             RefactoringCore.getUndoManager(), proposal.getName());
         changeOperation.run(monitor);
 
+        // reformat the first line of the change whose indentation may be off
+        // due to tabs vs spaces differences between the eclipse config and the
+        // file's actual contents (as written by vim).
         if (edit != null &&
             change instanceof CompilationUnitChange &&
             src.equals(((CompilationUnitChange)change).getCompilationUnit()))
         {
+          int length = edit.getLength();
+
+          // for "Create field" and "Create local", the edit length includes
+          // additional existing code that we don't want to reformat.
+          if (proposal instanceof NewVariableCorrectionProposal){
+            String text = src.getBuffer()
+              .getText(edit.getOffset(), edit.getLength());
+            int index = text.indexOf('\n');
+            if (index != -1){
+              length = index;
+              // include the white space up to the next bit of code
+              while(length < text.length()){
+                char next = text.charAt(length);
+                if (next == '\t' || next == '\n' || next == ' '){
+                  length += 1;
+                  continue;
+                }
+                break;
+              }
+            }
+          }
+
           JavaUtils.format(
               src, CodeFormatter.K_COMPILATION_UNIT,
               edit.getOffset(),
-              edit.getLength());
+              length);
         }
 
         return rcl.getChangedFiles();
