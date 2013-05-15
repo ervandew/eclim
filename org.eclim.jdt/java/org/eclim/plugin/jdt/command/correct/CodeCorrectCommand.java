@@ -358,9 +358,6 @@ public class CodeCorrectCommand
         changeOperation.setUndoManager(RefactoringCore.getUndoManager(), name);
         changeOperation.run(monitor);
 
-        // reformat the first line of the change whose indentation may be off
-        // due to tabs vs spaces differences between the eclipse config and the
-        // file's actual contents (as written by vim).
         if (edit != null &&
             change instanceof CompilationUnitChange &&
             src.equals(((CompilationUnitChange)change).getCompilationUnit()))
