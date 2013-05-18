@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2012  Eric Van Dewoestine
+" Copyright (C) 2012 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,8 +41,14 @@ function! TestProjectCreatePre() " {{{
   let targets = eclim#android#project#GetTargets(g:TestEclimWorkspace)
   call vunit#AssertTrue(len(targets) > 0, "No targets found.")
 
-  let g:EclimTestPromptQueue = [
-      \ 0, 'org.test', 'Test VUnit App', 'n', 'y', 'TestVUnitAppActivity']
+  if len(targets) > 1
+    let g:EclimTestPromptQueue = [
+        \ 0, 'org.test', 'Test VUnit App', 'n', 'y', 'TestVUnitAppActivity']
+  else
+    let g:EclimTestPromptQueue = [
+        \ 'org.test', 'Test VUnit App', 'n', 'y', 'TestVUnitAppActivity']
+  endif
+
   let g:result = ''
   call vunit#PushRedir('=> g:result')
   exec 'ProjectCreate ' . path . ' -n android'

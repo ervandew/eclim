@@ -688,6 +688,18 @@ NOTES {{{
 
   }}}
 
+  Android {{{
+    adt source:
+      $ git clone https://android.googlesource.com/platform/sdk android-sdk
+      $ cd android-sdk/eclipse/plugins
+
+    Arch packages:
+      android-sdk
+      android-sdk-build-tools
+      android-sdk-platform-tools
+      android-platform-<version>
+  }}}
+
 }}}
 
 // vim:fdm=marker:tw=0
