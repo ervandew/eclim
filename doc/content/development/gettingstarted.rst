@@ -68,6 +68,39 @@ This will build and deploy eclim to your eclipse and vim directories.
 
     $ ant -Dvim.files=<your vimfiles dir>
 
+When the build starts, it will first examine your eclipse installation to
+find what eclipse plugins are available. It will then use that list to determine
+which eclim features/plugins should be built and will output a list like the one
+below showing what will be built vs what will be skipped:
+
+::
+
+  [echo] ${eclipse}: /opt/eclipse
+  [echo] # Skipping org.eclim.adt, missing com.android.ide.eclipse.adt
+  [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
+  [echo] # Skipping org.eclim.dltkruby, missing org.eclipse.dltk.ruby
+  [echo] # Skipping org.eclim.pdt, missing org.eclipse.php
+  [echo] Plugins:
+  [echo]   org.eclim.cdt
+  [echo]   org.eclim.jdt
+  [echo]   org.eclim.python
+  [echo]   org.eclim.sdt
+  [echo]   org.eclim.wst
+
+In this case we can see that four eclim plugins will be skipped along with the
+eclipse feature that would be required to build those plugins. If you see an
+eclipse feature in that list that you know you have, it may be the case that you
+installed it as a regular user, so that feature was installed in your user local
+eclipse directory. In that case you will need to notify the build of that
+directory so it can examine it as well (just replace the ``<version>`` portion
+below with the actual version found in your ~/.eclipse directory):
+
+::
+
+  $ ant \
+      -Declipse.home=/opt/eclipse \
+      -Declipse.local=$HOME/.eclipse/org.eclipse.platform_<version>
+
 If you don't want to supply the eclipse home directory, or any other
 properties, on the command line every time you build eclim, you can create a
 ``user.properties`` file at the eclim source root and put all your properties
