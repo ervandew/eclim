@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * Resource change listener which can be used to collect a list of relevant
@@ -100,7 +101,14 @@ public class ResourceChangeListener
       HashMap<String,String> result = new HashMap<String,String>();
 
       IResource resource = delta.getResource();
-      String file = resource.getLocation().toOSString().replace('\\', '/');
+      IPath location = resource.getLocation();
+
+      // ignore reported moves of .class files
+      if ("class".equals(location.getFileExtension())){
+        continue;
+      }
+
+      String file = location.toOSString().replace('\\', '/');
 
       if ((flags & IResourceDelta.MOVED_FROM) != 0){
         String path = ProjectUtils.getFilePath(
