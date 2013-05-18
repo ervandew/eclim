@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,20 +60,32 @@ public class MoveCommandTest
         "java_refactor_move", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE, "-n", "org.eclim.test.refactoring.move.p2"
       });
+    Map<String,String> file = results.get(0);
+    Map<String,String> move = results.get(1);
+    if (file.get("file") == null){
+      file = results.get(1);
+      move = results.get(0);
+    }
     assertEquals(p + "src/org/eclim/test/refactoring/move/p1/UsesMove.java",
-        results.get(0).get("file"));
+        file.get("file"));
     assertEquals(p + "src/org/eclim/test/refactoring/move/p1/TestMove.java",
-        results.get(1).get("from"));
+        move.get("from"));
     assertEquals(p + "src/org/eclim/test/refactoring/move/p2/TestMove.java",
-        results.get(1).get("to"));
+        move.get("to"));
 
     results = (List<Map<String,String>>)
       Eclim.execute(new String[]{"refactor_undo"});
-    assertEquals(p + "src/org/eclim/test/refactoring/move/p2/TestMove.java",
-        results.get(0).get("from"));
-    assertEquals(p + "src/org/eclim/test/refactoring/move/p1/TestMove.java",
-        results.get(0).get("to"));
+    file = results.get(0);
+    move = results.get(1);
+    if (file.get("file") == null){
+      file = results.get(1);
+      move = results.get(0);
+    }
     assertEquals(p + "src/org/eclim/test/refactoring/move/p1/UsesMove.java",
-        results.get(1).get("file"));
+        file.get("file"));
+    assertEquals(p + "src/org/eclim/test/refactoring/move/p2/TestMove.java",
+        move.get("from"));
+    assertEquals(p + "src/org/eclim/test/refactoring/move/p1/TestMove.java",
+        move.get("to"));
   }
 }
