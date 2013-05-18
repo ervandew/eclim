@@ -700,6 +700,20 @@ NOTES {{{
       android-platform-<version>
   }}}
 
+  Ruby {{{
+    Builtins are gathered using:
+    org.eclipse.dltk.ruby.launching_<version>.jar/scripts/builtin.rb
+
+    Completion of builtins not working for ruby 2.0?
+      $ ruby builtin.rb
+      builtin.rb:648:in `sort': comparison of Class with Class failed (ArgumentError)
+              from builtin.rb:648:in `process_all'
+              from builtin.rb:702:in `<main>'
+
+      I submitted a bug w/ a potential fix:
+      https://bugs.eclipse.org/bugs/show_bug.cgi?id=408386
+  }}}
+
 }}}
 
 // vim:fdm=marker:tw=0
