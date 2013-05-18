@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ public class DocSearchCommand
   extends SearchCommand
 {
   private static final Pattern ANDROID_JDK_URL = Pattern.compile(
-      ".*android.*?/docs/reference/java.*", Pattern.CASE_INSENSITIVE);
+      ".*android.*?/reference/java.*", Pattern.CASE_INSENSITIVE);
 
   @Override
   public Object execute(CommandLine commandLine)
