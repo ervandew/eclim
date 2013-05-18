@@ -19,8 +19,26 @@ History of Changes
 .. _2.2.6:
 .. _1.7.14:
 
-2.2.6 / 1.7.14 ()
+2.2.6 / 1.7.14 (May 18, 2013)
 ------------------------------
+
+Bug Fixes:
+  - Fixed eclimd to prevent incorrect addition of -d32 on 64bit systems, which
+    prevents eclimd from starting.
+  - Fix potential conflicts between syntastic validation vs eclim validation
+    (syntastic validation will be diabled if eclim validation is available for
+    the current file type).
+  - Many more fixes.
+
+Android:
+  - Updated for ADT 22.0.0
+
+C/C++:
+  - :ref:`:CCallHierarchy <:CCallHierarchy>` now support showing callee tree.
+
+Java:
+  - :ref:`:JavaImpl <:JavaImpl>` now supports anonymous inner classes and will
+    also properly handle suggesting methods from a nested superclass.
 
 Php:
   - Eclim will no longer run php files through html validation by default (see

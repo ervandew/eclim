@@ -123,6 +123,16 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+May 18, 2013
+-------------
+
+Eclim has been updated to suport the Android Developement Toolkit version
+22.0.0, scala is now supported for both Juno and Indigo, and there are a few
+other improvements and many bug fixes.
+
+- :ref:`Eclim 2.2.6 <2.2.6>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.14 <1.7.14>` for Eclipse 3.7/3.8 (Indigo).
+
 Nov. 25, 2012
 -------------
 
