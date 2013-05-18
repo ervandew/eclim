@@ -126,7 +126,7 @@ What's New?
 May 18, 2013
 -------------
 
-Eclim has been updated to suport the Android Developement Toolkit version
+Eclim has been updated to support the Android Development Toolkit version
 22.0.0, scala is now supported for both Juno and Indigo, and there are a few
 other improvements and many bug fixes.
 
