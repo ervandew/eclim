@@ -2,6 +2,7 @@
 *.pyc
 *.swp
 /.ant-targets-build.xml
+/.cache
 /.ropeproject
 /build
 /org.eclim/nailgun/config.log
