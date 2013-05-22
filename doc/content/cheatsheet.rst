@@ -323,7 +323,7 @@ Ruby Commands
   Add a ruby interpreter.
 - :ref:`:RubyInterpreterRemove <:RubyInterpreterRemove>` <path> -
   Remove a ruby interpreter.
-- :ref:`:RubyInterpreters <:RubyInterpreters>`  -
+- :ref:`:RubyInterpreterList <:RubyInterpreterList>`  -
   List the available ruby interpreters.
 
 

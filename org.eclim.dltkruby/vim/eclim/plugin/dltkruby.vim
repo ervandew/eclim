@@ -21,8 +21,8 @@
 
 " Command Declarations {{{
 
-if !exists(":RubyInterpreters")
-  command -buffer RubyInterpreters
+if !exists(":RubyInterpreterList")
+  command -buffer RubyInterpreterList
     \ :call eclim#dltk#interpreter#ListInterpreters('ruby')
   command -buffer -nargs=*
     \ -complete=customlist,eclim#dltk#interpreter#CommandCompleteInterpreterAdd

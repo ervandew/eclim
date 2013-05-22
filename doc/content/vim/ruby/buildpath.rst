@@ -18,7 +18,7 @@ Ruby Interpreters / Build Path
 
 .. _\:RubyInterpreterAdd:
 .. _\:RubyInterpreterRemove:
-.. _\:RubyInterpreters:
+.. _\:RubyInterpreterList:
 
 Interpreters
 ------------
@@ -29,7 +29,7 @@ manage your ruby interpreters with the following commands:
 
 - **:RubyInterpreterAdd** [-n <name>] <path> - Add a ruby interpreter.
 - **:RubyInterpreterRemove** <path> - Remove a ruby interpreter.
-- **:RubyInterpreters**  - List the available ruby interpreters.
+- **:RubyInterpreterList**  - List the available ruby interpreters.
 
 If you have more than one interpreter configured when you create subsequent
 projects you will be prompted to choose the interpreter to use. If you remove an
