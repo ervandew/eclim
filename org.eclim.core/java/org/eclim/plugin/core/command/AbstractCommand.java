@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,6 +119,11 @@ public abstract class AbstractCommand
           (commandLine.hasOption(Options.PROJECT_OPTION) ||
            commandLine.hasOption(Options.NAME_OPTION)))
       {
+        String file = commandLine.getValue(Options.FILE_OPTION);
+        if (file.indexOf("__eclim_temp_") == -1){
+          return;
+        }
+
         IProject project = null;
         String projectName = commandLine.getValue(Options.PROJECT_OPTION);
         if (projectName == null){
@@ -143,7 +148,6 @@ public abstract class AbstractCommand
           }
         }
 
-        String file = commandLine.getValue(Options.FILE_OPTION);
         if (project != null && project.exists() && file != null){
           IFile temp = ProjectUtils.getFile(project, file);
           if (temp.exists() && temp.getName().startsWith("__eclim_temp_")){
