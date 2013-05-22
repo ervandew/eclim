@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.OptionBuilder;
+
 import org.eclim.Services;
 
 import org.eclim.command.CommandLine;
@@ -47,6 +50,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
 import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.IBuildpathEntry;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.IModelStatus;
@@ -56,6 +60,10 @@ import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.internal.core.BuildpathEntry;
 
 import org.eclipse.dltk.internal.ui.wizards.BuildpathDetector;
+
+import org.eclipse.dltk.launching.IInterpreterInstall;
+import org.eclipse.dltk.launching.IInterpreterInstallType;
+import org.eclipse.dltk.launching.ScriptRuntime;
 
 /**
  * Implementation of {@link ProjectManager} for dltk projects.
@@ -69,19 +77,45 @@ public abstract class DltkProjectManager
   private static final String BUILDPATH_XSD =
     "/resources/schema/eclipse/buildpath.xsd";
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#create(IProject,CommandLine)
-   */
+  @Override
+  @SuppressWarnings("static-access")
   public void create(IProject project, CommandLine commandLine)
     throws Exception
   {
+    String[] args = commandLine.getValues(Options.ARGS_OPTION);
+    GnuParser parser = new GnuParser();
+    org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
+    options.addOption(OptionBuilder.hasArg().withLongOpt("interpreter").create());
+    org.apache.commons.cli.CommandLine cli = parser.parse(options, args);
+
+    IInterpreterInstall interpreter = null;
+    if (cli.hasOption("interpreter")){
+      String interpreterName = cli.getOptionValue("interpreter");
+      IInterpreterInstallType[] types =
+        ScriptRuntime.getInterpreterInstallTypes(getNatureId());
+
+      loop: for (IInterpreterInstallType type : types){
+        IInterpreterInstall[] installs = type.getInterpreterInstalls();
+        for (IInterpreterInstall install : installs){
+          if (install.getName().equals(interpreterName)){
+            interpreter = install;
+            break loop;
+          }
+        }
+      }
+
+      if (interpreter == null){
+        throw new IllegalArgumentException(Services.getMessage(
+            "interpreter.name.not.found", interpreterName));
+      }
+    }
+
     String dependsString = commandLine.getValue(Options.DEPENDS_OPTION);
 
     IScriptProject scriptProject = DLTKCore.create(project);
 
     if (!project.getFile(BUILDPATH).exists()) {
-      IDLTKLanguageToolkit toolkit = getLanguageToolkit();
+      IDLTKLanguageToolkit toolkit = getLanguageToolkit(getNatureId());
       BuildpathDetector detector = new BuildpathDetector(project, toolkit);
       detector.detectBuildpath(null);
       IBuildpathEntry[] detected = detector.getBuildpath();
@@ -108,14 +142,35 @@ public abstract class DltkProjectManager
 
       scriptProject.setRawBuildpath(buildpath, null);
     }
+
+    if (interpreter != null){
+      IBuildpathEntry[] buildpath = scriptProject.getRawBuildpath();
+      int containerIndex = 0;
+      for (int i = 0; i < buildpath.length; i++){
+        if (buildpath[i].getEntryKind() == IBuildpathEntry.BPE_CONTAINER){
+          containerIndex = i;
+          break;
+        }
+      }
+
+      if (containerIndex == 0){
+        throw new RuntimeException("No container buildpath entry found.");
+      }
+
+      IBuildpathEntry container = buildpath[containerIndex];
+      buildpath[containerIndex] = DLTKCore.newContainerEntry(
+          ScriptRuntime.newInterpreterContainerPath(interpreter),
+          container.getAccessRules(),
+          container.getExtraAttributes(),
+          container.isExported());
+      scriptProject.setRawBuildpath(buildpath, null);
+    }
+
     scriptProject.makeConsistent(null);
     scriptProject.save(null, false);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#update(IProject,CommandLine)
-   */
+  @Override
   public List<Error> update(IProject project, CommandLine commandLine)
     throws Exception
   {
@@ -161,41 +216,43 @@ public abstract class DltkProjectManager
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#delete(IProject,CommandLine)
-   */
+  @Override
   public void delete(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,CommandLine)
-   */
+  @Override
   public void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
     SourceParserUtil.clearCache();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,IFile)
-   */
+  @Override
   public void refresh(IProject project, IFile file)
     throws Exception
   {
   }
 
   /**
-   * Abstract method for subclasses to override which provides the appropriate
-   * dltk language toolkit.
+   * Get the language toolkit to use.
    *
+   * @param natureId The nature id to get the toolkit for.
    * @return The IDLTKLanguageToolkit to use.
    */
-  public abstract IDLTKLanguageToolkit getLanguageToolkit();
+  public IDLTKLanguageToolkit getLanguageToolkit(String natureId)
+  {
+    return DLTKLanguageManager.getLanguageToolkit(natureId);
+  }
+
+  /**
+   * Abstract method for subclasses to override which provides the appropriate
+   * dltk nature id.
+   *
+   * @return The nature.
+   */
+  public abstract String getNatureId();
 
   /**
    * Creates an Error from the supplied IModelStatus.

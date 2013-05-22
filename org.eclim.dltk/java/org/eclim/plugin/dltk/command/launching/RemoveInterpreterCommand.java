@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,28 +51,24 @@ import org.eclipse.dltk.utils.PlatformFileUtils;
 @Command(
   name = "dltk_remove_interpreter",
   options =
-    "REQUIRED n nature ARG," +
-    "REQUIRED i interpreter ARG"
+    "REQUIRED p path ARG," +
+    "REQUIRED l nature ARG"
 )
-public class DeleteInterpreterCommand
+public class RemoveInterpreterCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    String nature = commandLine.getValue(Options.NATURE_OPTION);
-    nature = ProjectNatureFactory.getNatureForAlias(nature);
+    String alias = getNatureAlias(commandLine);
+    String nature = ProjectNatureFactory.getNatureForAlias(alias);
     if (nature == null){
       throw new RuntimeException(
-          Services.getMessage("nature.alias.not.found",
-            commandLine.getValue(Options.NATURE_OPTION)));
+          Services.getMessage("nature.alias.not.found", alias));
     }
 
-    String interpreterPath = commandLine.getValue("i");
+    String interpreterPath = commandLine.getValue(Options.PATH_OPTION);
 
     IEnvironment env = EnvironmentManager.getLocalEnvironment();
     IFileHandle file = PlatformFileUtils
@@ -113,5 +109,11 @@ public class DeleteInterpreterCommand
       return Services.getMessage("interpreter.removed");
     }
     return Services.getMessage("interpreter.not.found");
+  }
+
+  protected String getNatureAlias(CommandLine commandLine)
+    throws Exception
+  {
+    return commandLine.getValue(Options.LANG_OPTION);
   }
 }

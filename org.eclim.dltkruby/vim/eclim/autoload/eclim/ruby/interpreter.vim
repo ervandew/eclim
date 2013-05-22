@@ -23,19 +23,33 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_add = '-command ruby_add_interpreter -n ruby -i "<path>"'
+  let s:command_add = '-command ruby_add_interpreter -p "<path>"'
 " }}}
 
-" AddInterpreter(path) {{{
-function eclim#ruby#interpreter#AddInterpreter(path)
-  let path = a:path
+function eclim#ruby#interpreter#AddInterpreter(args) " }}}
+  let args = eclim#util#ParseCmdLine(a:args)
+  if len(args) != 1 && len(args) != 3
+    call eclim#util#EchoError(
+      \ "You must supply either just the path to the interpreter or\n" .
+      \ "-n followed by the name to give to the interpreter followed\n" .
+      \ "by the interpreter path.")
+    return 0
+  endif
+
+  let path = args[-1]
   let path = substitute(path, '\ ', ' ', 'g')
   let path = substitute(path, '\', '/', 'g')
   if has('win32unix')
     let path = eclim#cygwin#WindowsPath(path)
   endif
+
   let command = s:command_add
   let command = substitute(command, '<path>', path, '')
+  if args[0] == '-n'
+    let name = args[1]
+    let command .= ' -n "' . name . '"'
+  endif
+
   let result = eclim#Execute(command)
   if result != '0'
     call eclim#util#Echo(result)
@@ -44,15 +58,34 @@ function eclim#ruby#interpreter#AddInterpreter(path)
   return 0
 endfunction " }}}
 
-" CommandCompleteInterpreterPath(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for ruby interpreter paths.
-function! eclim#ruby#interpreter#CommandCompleteInterpreterPath(
-    \ argLead, cmdLine, cursorPos)
+function! eclim#ruby#interpreter#CommandCompleteInterpreterAdd(argLead, cmdLine, cursorPos) " {{{
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseCmdLine(cmdLine)[1:]
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+  echom 'cmdLine: |' . cmdLine . '| argLead: |' . argLead . '| args: ' . string(args)
+
+  if argLead == '-' && args[0] == '-'
+    return ['-n']
+  endif
+
+  if len(args) == 0 ||
+   \ len(args) == 3 ||
+   \ (len(args) == 1 && argLead !~ '^-\|^$') ||
+   \ (len(args) == 2 && argLead == '')
+    return eclim#util#CommandCompleteFile(a:argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  return []
+endfunction " }}}
+
+function! eclim#ruby#interpreter#CommandCompleteInterpreterPath(argLead, cmdLine, cursorPos) " {{{
+  " Custom command completion for ruby interpreter paths.
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
 
   let interpreters = eclim#dltk#interpreter#GetInterpreters('ruby')
+  call map(interpreters, 'v:val.path')
   if cmdLine !~ '[^\\]\s$'
     call filter(interpreters, 'v:val =~ "^' . argLead . '"')
   endif

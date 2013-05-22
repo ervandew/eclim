@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,9 +96,7 @@ public class SearchCommand
   public static final String TYPE_FUNCTION = "function";
   public static final String TYPE_FIELD = "field";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -195,14 +193,16 @@ public class SearchCommand
     IDLTKLanguageToolkit toolkit = null;
     ProjectManager manager = ProjectManagement.getProjectManager(getNature());
     if(manager instanceof DltkProjectManager){
-      toolkit = ((DltkProjectManager)manager).getLanguageToolkit();
+      DltkProjectManager dltkManager = (DltkProjectManager)manager;
+      toolkit = dltkManager.getLanguageToolkit(dltkManager.getNatureId());
     }
     if (toolkit == null && project != null){
       for(String nature : ProjectManagement.getProjectManagerNatures()){
         if(project.hasNature(nature)){
           manager = ProjectManagement.getProjectManager(nature);
           if(manager instanceof DltkProjectManager){
-            toolkit = ((DltkProjectManager)manager).getLanguageToolkit();
+            DltkProjectManager dltkManager = (DltkProjectManager)manager;
+            toolkit = dltkManager.getLanguageToolkit(dltkManager.getNatureId());
             break;
           }
         }
@@ -353,10 +353,6 @@ public class SearchCommand
   {
     private ArrayList<Position> matches = new ArrayList<Position>();
 
-    /**
-     * {@inheritDoc}
-     * @see org.eclipse.dltk.core.search.SearchRequestor#acceptSearchMatch(SearchMatch)
-     */
     @Override
     public void acceptSearchMatch(SearchMatch match)
       throws CoreException

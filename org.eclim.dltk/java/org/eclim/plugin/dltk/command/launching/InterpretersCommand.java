@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,22 +52,19 @@ import org.eclipse.dltk.launching.ScriptRuntime;
   name = "dltk_interpreters",
   options =
     "OPTIONAL p project ARG," +
-    "OPTIONAL n nature ARG"
+    "OPTIONAL l nature ARG"
 )
 public class InterpretersCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-    String nature = commandLine.getValue(Options.NATURE_OPTION);
+    String alias = commandLine.getValue(Options.LANG_OPTION);
 
-    if (projectName == null && nature == null){
+    if (projectName == null && alias == null){
       throw new RuntimeException(
           Services.getMessage("interpreters.arg.required"));
     }
@@ -83,11 +80,10 @@ public class InterpretersCommand
         }
       }
     }else{
-      nature = ProjectNatureFactory.getNatureForAlias(nature);
+      String nature = ProjectNatureFactory.getNatureForAlias(alias);
       if (nature == null){
         throw new RuntimeException(
-            Services.getMessage("nature.alias.not.found",
-              commandLine.getValue(Options.NATURE_OPTION)));
+            Services.getMessage("nature.alias.not.found", alias));
       }
       natures.add(nature);
       env = EnvironmentManager.getLocalEnvironment();

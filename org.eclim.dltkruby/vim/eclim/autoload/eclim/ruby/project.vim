@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -100,6 +100,19 @@ function s:InitInterpreters() " {{{
         echohl None
       endtry
     endif
+
+  elseif len(interpreters) > 1
+    let answer = eclim#util#PromptList(
+      \ "Please choose the interpreter to use for this project",
+      \ map(copy(interpreters), 'v:val.name . " (" . v:val.path . ")"'))
+    if answer == -1
+      return 0
+    endif
+
+    let interpreter = interpreters[answer].name
+    redraw
+
+    return '--interpreter ' . interpreter
   endif
 
   return 1

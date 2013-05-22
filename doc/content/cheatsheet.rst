@@ -319,6 +319,12 @@ Ruby Commands
 - :ref:`:RubySearchContext <:RubySearchContext>` -
   Find the element under the cursor based on its context.
 - :ref:`:Validate <:Validate_ruby>` - Manually runs source code validation.
+- :ref:`:RubyInterpreterAdd <:RubyInterpreterAdd>` [-n <name>] <path> -
+  Add a ruby interpreter.
+- :ref:`:RubyInterpreterRemove <:RubyInterpreterRemove>` <path> -
+  Remove a ruby interpreter.
+- :ref:`:RubyInterpreters <:RubyInterpreters>`  -
+  List the available ruby interpreters.
 
 
 WebXml Commands

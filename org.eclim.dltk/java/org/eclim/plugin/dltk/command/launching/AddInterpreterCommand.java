@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,29 +66,26 @@ import org.eclipse.dltk.utils.PlatformFileUtils;
 @Command(
   name = "dltk_add_interpreter",
   options =
-    "REQUIRED n nature ARG," +
+    "REQUIRED l nature ARG," +
     "REQUIRED t type ARG," +
-    "REQUIRED i interpreter ARG"
+    "REQUIRED p path ARG," +
+    "OPTIONAL n name ARG"
 )
 public class AddInterpreterCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    String nature = commandLine.getValue(Options.NATURE_OPTION);
-    nature = ProjectNatureFactory.getNatureForAlias(nature);
-    if (nature == null){
+    String alias = getNatureAlias(commandLine);
+    String nature = ProjectNatureFactory.getNatureForAlias(alias);
+    if (alias == null){
       throw new RuntimeException(
-          Services.getMessage("nature.alias.not.found",
-            commandLine.getValue(Options.NATURE_OPTION)));
+          Services.getMessage("nature.alias.not.found", alias));
     }
 
-    String interpreterPath = commandLine.getValue("i");
+    String interpreterPath = commandLine.getValue(Options.PATH_OPTION);
 
     IInterpreterInstallType type = getInterpreterInstallType(nature, commandLine);
     if (type == null){
@@ -140,7 +137,11 @@ public class AddInterpreterCommand
       }
     }
 
-    String name = generateInterpreterName(file, nature);
+    String name = commandLine.getValue(Options.NAME_OPTION);
+    if (name == null){
+      name = generateInterpreterName(file, nature);
+    }
+
     String id = null;
     do {
       id = String.valueOf(System.currentTimeMillis());
@@ -167,6 +168,12 @@ public class AddInterpreterCommand
     updater.updateInterpreterSettings(nature, installs, defaults);
 
     return Services.getMessage("interpreter.added");
+  }
+
+  protected String getNatureAlias(CommandLine commandLine)
+    throws Exception
+  {
+    return commandLine.getValue(Options.LANG_OPTION);
   }
 
   protected IInterpreterInstallType getInterpreterInstallType(
