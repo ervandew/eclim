@@ -68,19 +68,6 @@ if !exists(":RubySearchContext")
   command -buffer RubySearchContext :call eclim#ruby#search#SearchContext()
 endif
 
-if !exists(":RubyInterpreters")
-  command -buffer RubyInterpreters
-    \ :call eclim#dltk#interpreter#ListInterpreters('ruby')
-  command -buffer -nargs=*
-    \ -complete=customlist,eclim#ruby#interpreter#CommandCompleteInterpreterAdd
-    \ RubyInterpreterAdd
-    \ :call eclim#ruby#interpreter#AddInterpreter('<args>')
-  command -buffer -nargs=1
-    \ -complete=customlist,eclim#ruby#interpreter#CommandCompleteInterpreterPath
-    \ RubyInterpreterRemove
-    \ :call eclim#dltk#interpreter#RemoveInterpreter('ruby', '<args>')
-endif
-
 " }}}
 
 " vim:ft=vim:fdm=marker
