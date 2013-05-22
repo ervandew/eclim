@@ -60,13 +60,25 @@ public class ShutdownTask
         reader = new FileReader(instances);
         for(Iterator<String> ii = IOUtils.lineIterator(reader); ii.hasNext();){
           count++;
-          Instance instance = gson.fromJson(ii.next(), Instance.class);
+
+          String line = ii.next();
+          String name = null;
+          int port = 9091;
+
+          if (line.startsWith("{")){
+            Instance instance = gson.fromJson(line, Instance.class);
+            name = instance.workspace + ':' + instance.port;
+            port = instance.port;
+          }else{
+            name = line;
+            port = Integer.parseInt(line.replaceFirst(".*:", ""));
+          }
+
           try{
-            log("Shutting down eclimd: " +
-                instance.workspace + ':' + instance.port);
-            shutdown(instance.port);
+            log("Shutting down eclimd: " + name);
+            shutdown(port);
           }catch(Exception e){
-            log("Unable to shut down eclimd (" + instance + "): " +
+            log("Unable to shut down eclimd (" + name + "): " +
                 e.getClass().getName() + " - " + e.getMessage());
           }
         }
