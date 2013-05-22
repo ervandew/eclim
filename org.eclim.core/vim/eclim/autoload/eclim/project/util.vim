@@ -1120,10 +1120,13 @@ function! eclim#project#util#RefreshFileBootstrap() " {{{
   " refresh by the eclim project. The command should only be called as part of
   " the a BufWritePre autocmd.
   if eclim#project#util#GetCurrentProjectName() != '' && &modified
-    augroup eclim_refresh_files_bootstrap
-      autocmd!
-      autocmd BufWritePost <buffer> call eclim#project#util#RefreshFile()
-    augroup END
+    let refresh = !exists('b:EclimRefreshDisabled') || !b:EclimRefreshDisabled
+    if refresh
+      augroup eclim_refresh_files_bootstrap
+        autocmd!
+        autocmd BufWritePost <buffer> call eclim#project#util#RefreshFile()
+      augroup END
+    endif
   endif
 endfunction " }}}
 
