@@ -26,7 +26,7 @@
   let s:command_add = '-command ruby_add_interpreter -p "<path>"'
 " }}}
 
-function eclim#ruby#interpreter#AddInterpreter(args) " }}}
+function eclim#ruby#interpreter#AddInterpreter(args) " {{{
   let args = eclim#util#ParseCmdLine(a:args)
   if len(args) != 1 && len(args) != 3
     call eclim#util#EchoError(
