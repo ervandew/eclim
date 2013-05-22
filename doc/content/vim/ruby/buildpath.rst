@@ -13,8 +13,54 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Ruby Build Path
-================
+Ruby Interpreters / Build Path
+==============================
+
+.. _\:RubyInterpreterAdd:
+.. _\:RubyInterpreterRemove:
+.. _\:RubyInterpreters:
+
+Interpreters
+------------
+
+When creating your first ruby project you will be prompted to configure a new
+interpreter if you haven't already done so in eclipse. You can also manually
+manage your ruby interpreters with the following commands:
+
+- **:RubyInterpreterAdd** [-n <name>] <path> - Add a ruby interpreter.
+- **:RubyInterpreterRemove** <path> - Remove a ruby interpreter.
+- **:RubyInterpreters**  - List the available ruby interpreters.
+
+If you have more than one interpreter configured when you create subsequent
+projects you will be prompted to choose the interpreter to use. If you remove an
+interpreter used by one of your projects, you'll have to go back to that project
+and edit its ``.buildpath`` file and change the interpreter name in the
+container entry.
+
+Example (wrapped for readability): Changing ``ruby1.9`` to ``ruby1.8``:
+
+.. code-block:: xml
+
+  <buildpathentry kind="con"
+      path="org.eclipse.dltk.launching.INTERPRETER_CONTAINER/
+            org.eclipse.dltk.internal.debug.ui.launcher.GenericRubyInstallType/ruby1.9"/>
+
+.. code-block:: xml
+
+  <buildpathentry kind="con"
+      path="org.eclipse.dltk.launching.INTERPRETER_CONTAINER/
+            org.eclipse.dltk.internal.debug.ui.launcher.GenericRubyInstallType/ruby1.8"/>
+
+If there is no suffix on the container entry, that project will be using what
+ever is he default interpreter:
+
+.. code-block:: xml
+
+   <buildpathentry kind="con"
+       path="org.eclipse.dltk.launching.INTERPRETER_CONTAINER"/>
+
+Build Path
+----------
 
 .. include:: /vim/dltk/buildpath.rst
    :start-after: begin-buildpath

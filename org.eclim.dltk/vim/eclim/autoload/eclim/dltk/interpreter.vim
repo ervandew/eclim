@@ -23,13 +23,12 @@
 " }}}
 
 " Script Variables {{{
-  let s:command_interpreters = '-command dltk_interpreters -n <nature>'
+  let s:command_interpreters = '-command dltk_interpreters -l <nature>'
   let s:command_interpreter_addremove =
-    \ '-command dltk_<action>_interpreter -n <nature> -i "<path>"'
+    \ '-command dltk_<action>_interpreter -l <nature> -p "<path>"'
 " }}}
 
-" GetInterpreters(nature) {{{
-function eclim#dltk#interpreter#GetInterpreters(nature)
+function eclim#dltk#interpreter#GetInterpreters(nature) " {{{
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
   let interpreters = eclim#Execute(command)
@@ -37,12 +36,10 @@ function eclim#dltk#interpreter#GetInterpreters(nature)
     return []
   endif
 
-  call map(interpreters, 'v:val.path')
   return interpreters
 endfunction " }}}
 
-" ListInterpreters(nature) {{{
-function eclim#dltk#interpreter#ListInterpreters(nature)
+function eclim#dltk#interpreter#ListInterpreters(nature) " {{{
   let command = s:command_interpreters
   let command = substitute(command, '<nature>', a:nature, '')
   let interpreters = eclim#Execute(command)
@@ -78,18 +75,15 @@ function eclim#dltk#interpreter#ListInterpreters(nature)
   call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
-" AddInterpreter(nature, type, path) {{{
-function eclim#dltk#interpreter#AddInterpreter(nature, type, path)
+function eclim#dltk#interpreter#AddInterpreter(nature, type, path) " {{{
   return s:InterpreterAddRemove(a:nature, a:type, a:path, 'add')
 endfunction " }}}
 
-" RemoveInterpreter(nature, path) {{{
-function eclim#dltk#interpreter#RemoveInterpreter(nature, path)
+function eclim#dltk#interpreter#RemoveInterpreter(nature, path) " {{{
   return s:InterpreterAddRemove(a:nature, '', a:path, 'remove')
 endfunction " }}}
 
-" s:InterpreterAddRemove(nature, type, path, action) {{{
-function s:InterpreterAddRemove(nature, type, path, action)
+function s:InterpreterAddRemove(nature, type, path, action) " {{{
   let path = a:path
   let path = substitute(path, '\ ', ' ', 'g')
   let path = substitute(path, '\', '/', 'g')

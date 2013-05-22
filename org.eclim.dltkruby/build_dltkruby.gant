@@ -11,8 +11,8 @@ target(name: 'org.eclim.dltkruby.test'){
   }else{
     property(name: 'ruby.path', value: '/usr/bin/ruby')
   }
-  eclim('-command dltk_remove_interpreter -n ruby -i "${ruby.path}"')
-  eclim('-command dltk_add_interpreter -n ruby -t ruby -i "${ruby.path}"')
+  eclim('-command dltk_remove_interpreter -l ruby -p "${ruby.path}"')
+  eclim('-command dltk_add_interpreter -l ruby -t ruby -p "${ruby.path}"')
 
   runTests('org.eclim.dltkruby'){
     createProject('org.eclim.dltkruby', 'eclim_unit_test_ruby')

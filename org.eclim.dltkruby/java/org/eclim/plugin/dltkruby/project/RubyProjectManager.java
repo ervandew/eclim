@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,12 @@
  */
 package org.eclim.plugin.dltkruby.project;
 
+//import java.lang.reflect.Field;
+
+//import java.util.List;
+
 import org.eclim.command.CommandLine;
+//import org.eclim.command.Error;
 
 import org.eclim.plugin.dltk.project.DltkProjectManager;
 
@@ -29,26 +34,27 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.dltk.core.DLTKCore;
-import org.eclipse.dltk.core.DLTKLanguageManager;
-import org.eclipse.dltk.core.IDLTKLanguageToolkit;
+//import org.eclipse.dltk.core.IBuildpathEntry;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
 
+//import org.eclipse.dltk.launching.IInterpreterInstall;
+//import org.eclipse.dltk.launching.ScriptRuntime;
+
 import org.eclipse.dltk.ruby.core.RubyNature;
+
+//import org.eclipse.dltk.ruby.internal.launching.RubyGenericInstall;
 
 /**
  * Implementation of {@link org.eclim.plugin.core.project.ProjectManager} for
- * php projects.
+ * ruby projects.
  *
  * @author Eric Van Dewoestine
  */
 public class RubyProjectManager
   extends DltkProjectManager
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.project.ProjectManager#create(IProject,CommandLine)
-   */
+  @Override
   public void create(IProject project, CommandLine commandLine)
     throws Exception
   {
@@ -64,10 +70,57 @@ public class RubyProjectManager
     scriptProject.save(null, false);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.project.ProjectManager#refresh(IProject,IFile)
-   */
+  // that last block doesn't seem to flush the previous interpreter's
+  // completions... must be some other way to do that.
+  /*@Override
+  public List<Error> update(IProject project, CommandLine commandLine)
+    throws Exception
+  {
+    IScriptProject scriptProject = DLTKCore.create(project);
+    IBuildpathEntry[] buildpath = scriptProject.getRawBuildpath();
+    IBuildpathEntry container = null;
+    for (IBuildpathEntry entry : buildpath){
+      if (entry.getEntryKind() == IBuildpathEntry.BPE_CONTAINER){
+        container = entry;
+        break;
+      }
+    }
+
+    List<Error> errors = super.update(project, commandLine);
+    if (errors != null){
+      return errors;
+    }
+
+    buildpath = scriptProject.getRawBuildpath();
+    IBuildpathEntry newContainer = null;
+    for (IBuildpathEntry entry : buildpath){
+      if (entry.getEntryKind() == IBuildpathEntry.BPE_CONTAINER){
+        newContainer = entry;
+        break;
+      }
+    }
+
+    if (container != null && !container.equals(newContainer)){
+      IInterpreterInstall install =
+        ScriptRuntime.getInterpreterInstall(scriptProject);
+      if (install != null){
+        if (install instanceof RubyGenericInstall){
+          RubyGenericInstall ruby = (RubyGenericInstall)install;
+          Field helperField = ruby.getClass().getDeclaredField("helper");
+          helperField.setAccessible(true);
+          RubyGenericInstall.BuiltinsHelper helper =
+            (RubyGenericInstall.BuiltinsHelper)helperField.get(ruby);
+          Field sourcesField = helper.getClass().getDeclaredField("sources");
+          sourcesField.setAccessible(true);
+          sourcesField.set(helper, null);
+        }
+      }
+    }
+
+    return null;
+  }*/
+
+  @Override
   public void refresh(IProject project, IFile file)
     throws Exception
   {
@@ -77,13 +130,9 @@ public class RubyProjectManager
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see DltkProjectManager#getLanguageToolkit()
-   */
   @Override
-  public IDLTKLanguageToolkit getLanguageToolkit()
+  public String getNatureId()
   {
-    return DLTKLanguageManager.getLanguageToolkit(RubyNature.NATURE_ID);
+    return RubyNature.NATURE_ID;
   }
 }

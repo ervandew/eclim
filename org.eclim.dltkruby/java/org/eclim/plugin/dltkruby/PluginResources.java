@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,6 @@ public class PluginResources
    */
   public static final String NAME = "org.eclim.dltkruby";
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#initialize(String)
-   */
   @Override
   public void initialize(String name)
   {
@@ -69,10 +65,7 @@ public class PluginResources
         "org.eclipse.dltk.ruby.internal.launching.JRubyInstallType");
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#getBundleBaseName()
-   */
+  @Override
   protected String getBundleBaseName()
   {
     return "org/eclim/plugin/dltkruby/messages";

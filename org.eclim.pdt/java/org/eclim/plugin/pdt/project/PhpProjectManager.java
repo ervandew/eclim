@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,6 @@ import org.eclipse.core.resources.IProject;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import org.eclipse.dltk.core.DLTKLanguageManager;
-import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.ISourceModule;
 
 import org.eclipse.php.internal.core.project.PHPNature;
@@ -44,20 +42,12 @@ import org.eclipse.ui.part.FileEditorInput;
 public class PhpProjectManager
   extends DltkProjectManager
 {
-  /**
-   * {@inheritDoc}
-   * @see DltkProjectManager#getLanguageToolkit()
-   */
   @Override
-  public IDLTKLanguageToolkit getLanguageToolkit()
+  public String getNatureId()
   {
-    return DLTKLanguageManager.getLanguageToolkit(PHPNature.ID);
+    return PHPNature.ID;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.project.ProjectManager#refresh(IProject,IFile)
-   */
   @Override
   public void refresh(IProject project, IFile file)
     throws Exception

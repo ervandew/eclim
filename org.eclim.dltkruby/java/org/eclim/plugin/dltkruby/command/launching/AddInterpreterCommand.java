@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package org.eclim.plugin.dltkruby.command.launching;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
@@ -36,8 +37,8 @@ import org.eclipse.dltk.launching.IInterpreterInstallType;
 @Command(
   name = "ruby_add_interpreter",
   options =
-    "REQUIRED n nature ARG," +
-    "REQUIRED i interpreter ARG"
+    "REQUIRED p path ARG," +
+    "OPTIONAL n name ARG"
 )
 public class AddInterpreterCommand
   extends org.eclim.plugin.dltk.command.launching.AddInterpreterCommand
@@ -45,16 +46,19 @@ public class AddInterpreterCommand
   private static final Logger logger =
     Logger.getLogger(AddInterpreterCommand.class);
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.launching.AddInterpreterCommand#getInterpreterInstallType(String,CommandLine)
-   */
+  @Override
+  protected String getNatureAlias(CommandLine commandLine)
+    throws Exception
+  {
+    return "ruby";
+  }
+
   @Override
   protected IInterpreterInstallType getInterpreterInstallType(
       String nature, CommandLine commandLine)
     throws Exception
   {
-    String interpreterPath = commandLine.getValue("i");
+    String interpreterPath = commandLine.getValue(Options.PATH_OPTION);
     String type = "ruby";
     CommandExecutor process = CommandExecutor.execute(new String[]{
       interpreterPath, "--version",
