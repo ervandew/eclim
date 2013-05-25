@@ -912,15 +912,39 @@ function! eclim#project#util#GetProjects() " {{{
       if type(results) != g:LIST_TYPE
         continue
       endif
+
+      if has('win32unix')
+        " gather paths to translate
+        let winpaths = []
+        for project in results
+          call add(winpaths, project['path'])
+          if has_key(project, 'links')
+            for key in sort(keys(project['links']))
+              call add(winpaths, project['links'][key])
+            endfor
+          endif
+        endfor
+
+        let cygpaths = eclim#cygwin#CygwinPath(winpaths)
+
+        " update each project with the cygwin version of its paths
+        let index = 0
+        for project in results
+          let project['path'] = cygpaths[index]
+          let index += 1
+          if has_key(project, 'links')
+            for key in sort(keys(project['links']))
+              let project['links'][key] = cygpaths[index]
+              let index += 1
+            endfor
+          endif
+        endfor
+      endif
+
       for project in results
         let project['workspace'] = instance.workspace
-        if has('win32unix')
-          let project['path'] = eclim#cygwin#CygwinPath(project['path'])
-          if has_key(project, 'links')
-            call map(project['links'], 'eclim#cygwin#CygwinPath(v:val)')
-          endif
-        endif
       endfor
+
       let s:workspace_projects[instance.workspace] = results
       unlet results
     endfor
