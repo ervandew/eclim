@@ -160,7 +160,7 @@ function! eclim#client#nailgun#GetEclimCommand(home) " {{{
   if has('win32unix')
     " in cygwin, we must use 'cmd /c' to prevent issues with eclim script +
     " some arg containing spaces causing a failure to invoke the script.
-    return 'cmd /c "' . eclim#cygwin#WindowsPath(command, 1) . '"'
+    return 'cmd /c "' . eclim#cygwin#WindowsPath(command) . '"'
   endif
   return '"' . command . '"'
 endfunction " }}}

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,67 +22,39 @@
 "
 " }}}
 
-" Script variable {{{
-  let s:cygpath_cache = {}
-  let s:cygpath_previous = ['', '', '']
-" }}}
-
-" CygwinPath(path, [cache]) {{{
-function! eclim#cygwin#CygwinPath(path, ...)
-  return s:Cygpath(a:path, 'cygwin', a:0 > 0 ? a:1 : 0)
+function! eclim#cygwin#CygwinPath(path) " {{{
+  return s:Cygpath(a:path, 'cygwin')
 endfunction " }}}
 
-" WindowsPath(path, [cache]) {{{
-function! eclim#cygwin#WindowsPath(path, ...)
-  return s:Cygpath(a:path, 'windows', a:0 > 0 ? a:1 : 0)
-endfunction " }}}
-
-" WindowsHome() {{{
-function! eclim#cygwin#WindowsHome()
-  let dir = s:Cygpath('-D', 'cygwin', 1)
-  if dir == '-D'
-    return ''
+function! eclim#cygwin#WindowsPath(path) " {{{
+  if type(a:path) == g:STRING_TYPE && a:path =~? '^[a-z]:'
+    return substitute(a:path, '\', '/', 'g')
   endif
-  return fnamemodify(dir, ':h')
+  return s:Cygpath(a:path, 'windows')
 endfunction " }}}
 
-" s:CygPath(path, type, cache) {{{
-function! s:Cygpath(path, type, cache)
+function! eclim#cygwin#WindowsHome() " {{{
+  if !exists('s:cygpath_winhome')
+    let dir = s:Cygpath('-D', 'cygwin')
+    let s:cygpath_winhome = dir != '-D' ? fnamemodify(dir, ':h') : ''
+  endif
+  return s:cygpath_winhome
+endfunction " }}}
+
+function! s:Cygpath(paths, type) " {{{
   if executable('cygpath')
-    let path = substitute(a:path, '\', '/', 'g')
+    let paths = type(a:paths) == g:LIST_TYPE ? a:paths : [a:paths]
+    let paths = map(paths, "'\"' . substitute(v:val, '\\', '/', 'g') . '\"'")
 
-    " try the cache if requested
-    if a:cache
-      let key = '[' . a:type . ']' . a:path
-      let result = get(s:cygpath_cache, key, '')
-      if result != ''
-        return result
-      endif
+    let args = a:type == 'windows' ? '-m ' : ''
+    let results = split(eclim#util#System('cygpath ' . args . join(paths)), "\n")
+
+    if type(a:paths) == g:LIST_TYPE
+      return results
     endif
-
-    " check the last requested path to see if it is being requested again.
-    if s:cygpath_previous[0] == a:type && s:cygpath_previous[1] == a:path
-      return s:cygpath_previous[2]
-    endif
-
-    if a:type == 'windows'
-      let path = eclim#util#System('cygpath -m "' . path . '"')
-    else
-      let path = eclim#util#System('cygpath "' . path . '"')
-    endif
-    let path = substitute(path, '\n$', '', '')
-
-    " store in the cache if requested
-    if a:cache
-      let s:cygpath_cache[key] = path
-    endif
-
-    " store in previous request var
-    let s:cygpath_previous = [a:type, a:path, path]
-
-    return path
+    return results[0]
   endif
-  return a:path
+  return a:paths
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
