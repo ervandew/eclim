@@ -34,10 +34,6 @@ public class PluginResources
    */
   public static final String NAME = "org.eclim.${plugin}";
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#initialize(String)
-   */
   @Override
   public void initialize(String name)
   {
@@ -47,10 +43,7 @@ public class PluginResources
     //ProjectNatureFactory.addNature("<alias>", SomePlugin.SOME_NAME);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#getBundleBaseName()
-   */
+  @Override
   protected String getBundleBaseName()
   {
     return "org/eclim/plugin/${plugin}/messages";

@@ -628,6 +628,15 @@ target(name: 'plugin.create'){
         "<target name=['\"]test\\.\\w+['\"].*>",
     )
     println "    * updated build.xml"
+
+    insertIntoFile(
+        new File(".classpath"),
+        "  <classpathentry kind=\"src\" path=\"org.eclim.${name}/java\"/>\n" +
+        "  <classpathentry kind=\"src\" path=\"org.eclim.${name}/test/junit\"/>",
+        "<(classpathentry\\b.*|/classpath)>",
+        "<classpathentry kind=\"src\".*>",
+    )
+    println "    * updated .classpath"
   }
 }
 
