@@ -60,7 +60,7 @@ points to the base url of the javadoc (http, file, etc).
     <attributes>
       <attribute value="http://hibernate.org/hib_docs/v3/api" name="javadoc_location"/>
     </attributes>
-  </classpath>
+  </classpathentry>
 
 .. _\:Javadoc:
 
