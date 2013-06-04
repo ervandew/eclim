@@ -139,7 +139,7 @@ url, whether it be on the local file system (file:) or remote (http:).
     <attributes>
       <attribute value="file:<javadoc>" name="javadoc_location"/>
     </attributes>
-  </classpath>
+  </classpathentry>
 
 .. _classpath-maven:
 
