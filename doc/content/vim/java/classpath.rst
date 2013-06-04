@@ -221,6 +221,22 @@ users).
 
     let g:EclimMavenPomClasspathUpdate = 0
 
+  .. note::
+
+    This feature simply updates the entries in your project's ``.classpath``
+    file, it does not download any newly added jars. When you'd like maven to
+    download those new jars, you can run the following from the command line:
+
+    ::
+
+      mvn dependency:resolve
+
+    or from within Vim:
+
+    .. code-block:: vim
+
+      :Mvn dependency:resolve
+
 * Search Online Maven Repository
 
   Eclim also provides the command **:MvnDependencySearch**
@@ -262,10 +278,34 @@ differ in version will be updated, and any stale entries deleted.
 
 * Updating your .classpath
 
-  Once you have performed the initial setup, updating the Eclipse
-  ``.classpath`` file is as easy as saving your ivy.xml file (:w) and letting
-  eclim do the rest.
+  Once you have performed the initial setup, updating the Eclipse ``.classpath``
+  file is as easy as saving your ivy.xml file (``:w``) and letting eclim do the
+  rest.
 
+  .. note::
+
+    This will update your project's ``.classpath`` file accordingly, but it will
+    not download any newly added jars. For that you'll need to have a target in
+    your ant build file which you can run that will force ivy to download
+    dependencies. Something like the example from the ivy docs:
+
+    .. code-block:: xml
+
+      <target name="resolve" description="--> retrieve dependencies with ivy">
+        <ivy:retrieve/>
+      </target>
+
+    You can then run this target from the command line:
+
+    ::
+
+      ant resolve
+
+    or from within Vim
+
+    .. code-block:: vim
+
+      :Ant resolve
 
 * Preserving manually added entries
 
