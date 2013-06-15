@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,14 +49,10 @@ public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
   private static final Pattern DISPALY_TO_COMPLETION =
-    Pattern.compile("^(.*)\\s+-\\s+.*");
+    Pattern.compile("^(.*?)\\s+-\\s+.*");
   private static final Pattern METHOD_WITH_ARGS =
     Pattern.compile("^([a-zA-Z_?!=`<>~]+\\s*\\().+\\)\\s*$");
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletionCollector(ISourceModule)
-   */
   @Override
   protected ScriptCompletionProposalCollector getCompletionCollector(
       ISourceModule module)
@@ -65,10 +61,6 @@ public class CodeCompleteCommand
     return new RubyCompletionProposalCollector(module);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletion(IScriptCompletionProposal)
-   */
   @Override
   protected String getCompletion(IScriptCompletionProposal proposal)
   {
@@ -84,10 +76,6 @@ public class CodeCompleteCommand
     return completion;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getInfo(IScriptCompletionProposal)
-   */
   @Override
   protected String getInfo(IScriptCompletionProposal proposal)
   {
