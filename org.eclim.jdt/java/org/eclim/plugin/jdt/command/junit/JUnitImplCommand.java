@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ public class JUnitImplCommand
 
     ICompilationUnit test = JavaUtils.getCompilationUnit(javaProject, file);
     ICompilationUnit src = JUnitUtils.findClass(javaProject, test.getTypes()[0]);
-    if (base == null){
+    if (src == null){
       return Services.getMessage("junit.testing.class.not.found");
     }
 
