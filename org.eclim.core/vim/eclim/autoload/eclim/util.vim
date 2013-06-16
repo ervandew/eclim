@@ -1429,6 +1429,7 @@ function! eclim#util#TempWindow(name, lines, ...)
     setlocal nomodified
     setlocal nomodifiable
     setlocal readonly
+    nmap <buffer> q :q<cr>
   endif
 
   silent doautocmd BufEnter
