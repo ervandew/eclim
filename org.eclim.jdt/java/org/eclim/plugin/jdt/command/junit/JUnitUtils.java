@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,6 +86,9 @@ public class JUnitUtils
     // the fully qualified result matching the same package name.
     if (matcher.matches()){
       name = matcher.group(2);
+      if (name == null){
+        name = matcher.group(1);
+      }
       String fqn = type.getPackageFragment().getElementName() + '.' + name;
       found = javaProject.findType(fqn);
     }
@@ -98,7 +101,7 @@ public class JUnitUtils
         found = types[0];
       }
     }
-    return found.getCompilationUnit();
+    return found != null ? found.getCompilationUnit() : null;
   }
 
   private static IType[] findTypes(
