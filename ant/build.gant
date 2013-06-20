@@ -45,9 +45,13 @@ if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
 }else{
   ant.property(name: 'eclipse', value: eclipseHome)
   ant.property(name: 'eclipse.local', value: eclipseHome)
+  ant.property(name: 'eclipse.dest', value: binding.getVariable('eclipse.local'))
   ant.echo('$${eclipse}: ${eclipse}')
   if (binding.getVariable('eclipse') != binding.getVariable('eclipse.local')){
     ant.echo('$${eclipse.local}: ${eclipse.local}')
+  }
+  if (binding.getVariable('eclipse.local') != binding.getVariable('eclipse.dest')){
+    ant.echo('$${eclipse.dest}: ${eclipse.dest}')
   }
 }
 
@@ -91,8 +95,8 @@ target(name: 'init'){
   echo('eclim.release: ${eclim.release}')
   echo('eclim.release.indigo: ${eclim.release.indigo}')
 
-  property(name: 'eclim.features', value: '${eclipse.local}/features')
-  property(name: 'eclim.plugins', value: '${eclipse.local}/plugins')
+  property(name: 'eclim.features', value: '${eclipse.dest}/features')
+  property(name: 'eclim.plugins', value: '${eclipse.dest}/plugins')
   property(name: 'eclim.home', value: '${eclim.plugins}/org.eclim_${eclim.version}')
 
   // set location of vim files if not already set
