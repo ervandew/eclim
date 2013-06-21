@@ -57,3 +57,49 @@ Configuration
 - **g:EclimJavaHierarchyDefaultAction** (defaults to 'split') -
   Determines the command used to open the type when hitting <enter> on the type
   entry in the hierarchy buffer.
+
+.. _\:JavaCallHierarchy:
+
+Call Hierarchy
+--------------
+
+When viewing a java source file you can view the call hierarchy of a function
+or method by issuing the command **:JavaCallHierarchy**.  This will open a
+temporary buffer with an inversed tree view of the hierarchy of callers of the
+requested function or method.
+
+.. code-block:: c
+
+  fun2(int)
+     fun1(int)
+       main()
+       fun3(int)
+     fun3(int)
+
+While you are in the hierarchy tree buffer, you can jump to the call under the
+cursor using one of the following key bindings:
+
+- <cr> - open the type using the
+  (:ref:`default action <g:EclimJavaCallHierarchyDefaultAction>`).
+- E - open the type via :edit
+- S - open the type via :split
+- T - open the type via :tabnew
+- ? - view help buffer
+
+**:JavaCallHierarchy** can also be used to view the callees for a function or
+method by invoking the command with a ``!``:
+
+.. code-block:: vim
+
+  :JavaCallHierarchy!
+
+Configuration
+^^^^^^^^^^^^^
+
+:doc:`Vim Settings </vim/settings>`
+
+.. _g\:EclimJavaCallHierarchyDefaultAction:
+
+- **g:EclimJavaCallHierarchyDefaultAction** (defaults to 'split') -
+  Determines the command used to open the file when hitting <enter> on an entry
+  in the hierarchy buffer.

@@ -203,6 +203,10 @@ if !exists(":JavaDocSearch")
     \ JavaDocSearch :call eclim#java#search#SearchAndDisplay('java_docsearch', '<args>')
 endif
 
+if !exists(":JavaCallHierarchy")
+  command -buffer -bang JavaCallHierarchy :call eclim#java#callhierarchy#CallHierarchy('<bang>')
+endif
+
 if !exists(":JavaHierarchy")
   command -buffer -range JavaHierarchy :call eclim#java#hierarchy#Hierarchy()
 endif
