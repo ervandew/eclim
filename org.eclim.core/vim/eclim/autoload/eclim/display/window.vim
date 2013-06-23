@@ -121,6 +121,7 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
   doautocmd BufWinEnter
   setlocal winfixwidth
   setlocal nonumber
+  setlocal nospell norelativenumber
 
   let b:weight = a:weight
   let bufnum = bufnr('%')
