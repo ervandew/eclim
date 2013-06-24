@@ -117,6 +117,7 @@ function! eclim#help#BufferHelp(lines, orientation, size)
   endif
   setlocal nowrap
   setlocal noswapfile nobuflisted nonumber
+  setlocal nospell norelativenumber
   setlocal buftype=nofile bufhidden=delete
   nnoremap <buffer> <silent> ? :bd<cr>
   nnoremap <buffer> <silent> q :bd<cr>
