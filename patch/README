@@ -9,12 +9,12 @@ Steps:
      Ex. $ mkdir -p patch/org.eclipse.ui.workbench/org/eclipse/ui/internal
   2) add any src files to be patched.
   3) Run the patch ant task.
-     $ ant patch.all
+     $ ant patch
   4) To revert all patches based on available plugin dirs:
-     $ ant patch.revert.all
+     $ ant patch.revert
 
-Note: for jars included in a plugin directory the patch path include the path
-to the nested jar and that jar will be updated (jars nested in a plugin jar are
-not yet supported):
+Note: for jars included in a plugin directory the patch path can include the
+path to the nested jar and that jar will be updated (jars nested in a plugin jar
+are not yet supported):
 
   Ex. patch/org.apache.ant/lib/ant.jar
