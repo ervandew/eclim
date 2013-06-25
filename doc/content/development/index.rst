@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@ Development Docs
 
    gettingstarted
    architecture
-..   commands
+   commands
    plugins
-   unittests
+..   unittests
    installer
 
 :doc:`/development/gettingstarted`
@@ -32,23 +32,25 @@ Development Docs
   Explains the underlying architecture that eclim utilizes including an
   overview of the call sequence from vim to eclipse.
 
-**... More To Come**
-
-.. :ref:`development/commands`
-
+:doc:`/development/commands`
   Details the process of adding a new command to vim which calls to
   corresponding implementation in eclipse.
 
-.. :ref:`development/plugins`
-
+:doc:`/development/plugins`
   Details the process of adding a new plugin to eclim.
 
-.. :ref:`development/unittests`
+**... More To Come**
+
+.. :doc:`/development/unittests`
 
   Explains how to run the unit tests as well as create new junit or vunit test
   cases.
 
-.. :ref:`development/installer`
+.. :doc:`/development/installer`
 
   Outlines the basics of the eclim installer and how to add support for newly
   added plugins.
+
+.. :doc:`/development/documentation`
+
+  Guide on writing documentation for eclim.
