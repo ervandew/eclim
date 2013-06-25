@@ -91,10 +91,10 @@ running the eclim server inside of a headed eclipse instance.
 
 **Starting eclimd**
 
-The eclim daemon inside of eclipse is implemented as an eclipse view.  To open
-the view, go to the Window menu and select:
+The eclim daemon inside of eclipse is implemented as an eclipse view which can
+be found via:
 
-:menuselection:`Show View --> Other --> Eclim --> eclimd`
+:menuselection:`Window --> Show View --> Other --> Eclim --> eclimd`
 
 The view will be opened in a new tab in the same pane as the "Problems" tab, as
 shown below.
@@ -323,7 +323,7 @@ Eclimd utilizes log4j for all of its logging.  As such, the logging can be
 configured via the $ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
 
 By default, eclimd writes all logging info to both the console and to a log
-file in your workspace: <workspace>/.metadata/.log.eclimd
+file in your workspace: <workspace>/eclimd.log
 
 .. _eclimd-multiworkspace:
 
