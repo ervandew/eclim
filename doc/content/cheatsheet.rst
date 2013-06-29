@@ -169,6 +169,8 @@ Java Commands
   Create both a java bean getter and setter method.
 - :ref:`:JavaConstructor <:JavaConstructor>` -
   Creates class constructor, either empty or based on selected class fields.
+- :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` -
+  Display the call hierarchy for the method under the cursor.
 - :ref:`:JavaHierarchy <:JavaHierarchy>` - View the type hierarchy tree.
 - :ref:`:JavaImpl <:JavaImpl>` -
   View implementable / overridable methods from super classes and implemented

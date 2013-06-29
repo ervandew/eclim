@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,18 +63,16 @@ Configuration
 Call Hierarchy
 --------------
 
-When viewing a java source file you can view the call hierarchy of a function
-or method by issuing the command **:JavaCallHierarchy**.  This will open a
-temporary buffer with an inversed tree view of the hierarchy of callers of the
-requested function or method.
+When viewing a java source file you can view the call hierarchy of a method by
+issuing the command **:JavaCallHierarchy**.  This will open a temporary buffer
+with an inversed tree view of the hierarchy of callers of the requested method.
 
-.. code-block:: c
+.. code-block:: java
 
-  fun2(int)
-     fun1(int)
-       main()
-       fun3(int)
-     fun3(int)
+  foo(int) : Object - org.test.SomeClass
+     bar() : void - org.test.AnotherClass
+       main() : void - org.test.MainClass
+     baz(String) : int - org.test.AnotherClass
 
 While you are in the hierarchy tree buffer, you can jump to the call under the
 cursor using one of the following key bindings:
@@ -86,8 +84,8 @@ cursor using one of the following key bindings:
 - T - open the type via :tabnew
 - ? - view help buffer
 
-**:JavaCallHierarchy** can also be used to view the callees for a function or
-method by invoking the command with a ``!``:
+**:JavaCallHierarchy** can also be used to view the callees for a method by
+invoking the command with a ``!``:
 
 .. code-block:: vim
 

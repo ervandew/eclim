@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/c/hierarchy.html
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
@@ -22,19 +19,13 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists('g:EclimJavaCallHierarchyDefaultAction')
-  let g:EclimJavaCallHierarchyDefaultAction = g:EclimDefaultFileOpenAction
-endif
-" }}}
-
 " Script Variables {{{
   let s:call_hierarchy =
-    \ '-command java_callhierarchy -p "<project>" -f "<file>" ' .
+    \ '-command <lang>_callhierarchy -p "<project>" -f "<file>" ' .
     \ '-o <offset> -l <length> -e <encoding>'
 " }}}
 
-function! eclim#java#callhierarchy#CallHierarchy(bang) " {{{
+function! eclim#lang#hierarchy#CallHierarchy(lang, default_action, bang) " {{{
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -47,6 +38,7 @@ function! eclim#java#callhierarchy#CallHierarchy(bang) " {{{
   let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
   let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
   let command = s:call_hierarchy
+  let command = substitute(command, '<lang>', a:lang, '')
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<offset>', offset, '')
@@ -69,11 +61,11 @@ function! eclim#java#callhierarchy#CallHierarchy(bang) " {{{
 
   let lines = []
   let info = []
-  let key = 'callers'
+  let key = a:bang != '' ? 'callees' : 'callers'
   call s:CallHierarchyFormat(result, key, lines, info, '')
 
   call eclim#util#TempWindow('[Call Hierarchy]', lines)
-  set ft=c
+  exec 'set ft=' . a:lang
   " fold function calls into their parent
   setlocal foldmethod=expr
   setlocal foldexpr='>'.len(substitute(getline(v:lnum),'^\\(\\s*\\).*','\\1',''))/2
@@ -86,8 +78,8 @@ function! eclim#java#callhierarchy#CallHierarchy(bang) " {{{
 
   let b:hierarchy_info = info
 
-  nnoremap <buffer> <silent> <cr>
-    \ :call <SID>Open(g:EclimJavaCallHierarchyDefaultAction)<cr>
+  exec 'nnoremap <buffer> <silent> <cr> ' .
+    \ ':call <SID>Open("' . a:default_action . '")<cr>'
   nnoremap <buffer> <silent> E :call <SID>Open('edit')<cr>
   nnoremap <buffer> <silent> S :call <SID>Open('split')<cr>
   nnoremap <buffer> <silent> T :call <SID>Open("tablast \| tabnew")<cr>
