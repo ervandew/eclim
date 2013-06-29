@@ -38,7 +38,7 @@ While you are in the hierarchy tree buffer, you can jump to the call under the
 cursor using one of the following key bindings:
 
 - <cr> - open the type using the
-  (:ref:`default action <g:EclimCHierarchyDefaultAction>`).
+  (:ref:`default action <g:EclimCCallHierarchyDefaultAction>`).
 - E - open the type via :edit
 - S - open the type via :split
 - T - open the type via :tabnew
@@ -56,8 +56,8 @@ Configuration
 
 :doc:`Vim Settings </vim/settings>`
 
-.. _g\:EclimCHierarchyDefaultAction:
+.. _g\:EclimCCallHierarchyDefaultAction:
 
-- **g:EclimCHierarchyDefaultAction** (defaults to 'split') -
+- **g:EclimCCallHierarchyDefaultAction** (defaults to 'split') -
   Determines the command used to open the file when hitting <enter> on an entry
   in the hierarchy buffer.

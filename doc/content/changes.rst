@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _2.3.0:
+.. _1.7.15:
+
+2.3.0 / 1.7.15 (2013)
+------------------------------
+
+Java:
+  - :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` added to show the caller or
+    callee hierarchy of a method. Thanks to Alexandre Fonseca.
+
 .. _2.2.6:
 .. _1.7.14:
 

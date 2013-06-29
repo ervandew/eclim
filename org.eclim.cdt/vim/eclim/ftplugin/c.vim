@@ -31,6 +31,10 @@ if !exists("g:EclimCSyntasticEnabled")
   let g:EclimCSyntasticEnabled = 0
 endif
 
+if !exists('g:EclimCCallHierarchyDefaultAction')
+  let g:EclimCCallHierarchyDefaultAction = g:EclimDefaultFileOpenAction
+endif
+
 " }}}
 
 " Options {{{
@@ -68,7 +72,9 @@ if !exists(":CSearchContext")
 endif
 
 if !exists(":CCallHierarchy")
-  command -buffer -bang CCallHierarchy :call eclim#c#hierarchy#CallHierarchy('<bang>')
+  command -buffer -bang CCallHierarchy
+    \ :call eclim#lang#hierarchy#CallHierarchy(
+      \ 'c', g:EclimCCallHierarchyDefaultAction, '<bang>')
 endif
 
 " }}}

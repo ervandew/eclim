@@ -16,9 +16,6 @@
  */
 package org.eclim.plugin.jdt.command.hierarchy;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -28,8 +25,6 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
-
-import org.eclim.logging.Logger;
 
 import org.eclim.plugin.jdt.command.search.SearchCommand;
 
@@ -58,7 +53,7 @@ import org.eclipse.jdt.internal.ui.viewsupport.AppearanceAwareLabelProvider;
 import org.eclipse.jdt.ui.JavaElementLabels;
 
 /**
- * Command to generate a call hierarchy for a method or function.
+ * Command to generate a call hierarchy for a method.
  *
  * @author Alexandre Fonseca
  */
@@ -77,7 +72,6 @@ public class CallHierarchyCommand
 {
   private static final String CALLEES_OPTION = "c";
   private static final int MAX_CALL_DEPTH = 3;
-  private static Logger logger = Logger.getLogger(CallHierarchyCommand.class);
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -85,69 +79,68 @@ public class CallHierarchyCommand
   {
     HashMap<String,Object> result  = new HashMap<String, Object>();
 
-    try {
-      String project = commandLine.getValue(Options.PROJECT_OPTION);
-      String file = commandLine.getValue(Options.FILE_OPTION);
-      boolean callees = commandLine.hasOption(CALLEES_OPTION);
-      int offset = getOffset(commandLine);
+    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String file = commandLine.getValue(Options.FILE_OPTION);
+    boolean callees = commandLine.hasOption(CALLEES_OPTION);
+    int length = commandLine.getIntValue(Options.LENGTH_OPTION);
+    int offset = getOffset(commandLine);
 
-      ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
-
-      IJavaElement element = src.getElementAt(offset);
-
-      if (element instanceof IMethod) {
-        IMethod method = (IMethod) element;
-        IMember[] members = new IMember[]{method};
-        MethodWrapper[] roots;
-
-        CallHierarchy callHierarchy = CallHierarchy.getDefault();
-        // Keep search scope for hierarchy in current project
-        callHierarchy.setSearchScope(
-          SearchEngine.createJavaSearchScope(new IJavaElement[] {
-            src.getJavaProject(),
-          }));
-
-        Comparator<MethodWrapper> comparator = null;
-        
-        if (callees) {
-          roots = callHierarchy.getCalleeRoots(members);
-        } else {
-          roots = callHierarchy.getCallerRoots(members);
-          // Following Eclipse's GUI, callers are ordered
-          // alphabetically, callees by position in function.
-          comparator = new Comparator<MethodWrapper>() {
-            public int compare(MethodWrapper o1, MethodWrapper o2) {
-              return o1.getName().compareToIgnoreCase(o2.getName());
-            }
-          };
-        }
-
-        if (roots.length > 0) {
-          // Is it possible to have multiple roots? If so we'll need
-          // to change this.
-          result = formatRoot(roots[0], comparator);
-
-          IResource resource = method.getResource();
-          ISourceRange sourceRange = method.getSourceRange();
-          // The root element doesn't get his location like all the others
-          // (this happens with the GUI too). So add it ourselves.
-          result.put("position", Position.fromOffset(
-                resource.getLocation().toOSString(), null, sourceRange.getOffset(),
-                sourceRange.getLength()));
-        }
-      }
-    } catch (Exception e) {
-      StringWriter sw = new StringWriter();
-      PrintWriter pw = new PrintWriter(sw);
-      e.printStackTrace(pw);
-      logger.error(e.getMessage() + "\n" + sw.toString());
+    ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    IJavaElement[] elements = src.codeSelect(offset, length);
+    if(elements == null || elements.length == 0){
+      return result;
     }
 
-      return result;
+    IJavaElement element = elements[0];
+    if (element instanceof IMethod) {
+      IMethod method = (IMethod) element;
+      IMember[] members = new IMember[]{method};
+      MethodWrapper[] roots;
+
+      CallHierarchy callHierarchy = CallHierarchy.getDefault();
+      // Keep search scope for hierarchy in current project
+      callHierarchy.setSearchScope(
+        SearchEngine.createJavaSearchScope(new IJavaElement[] {
+          src.getJavaProject(),
+        }));
+
+      Comparator<MethodWrapper> comparator = null;
+
+      if (callees) {
+        roots = callHierarchy.getCalleeRoots(members);
+      } else {
+        roots = callHierarchy.getCallerRoots(members);
+        // Following Eclipse's GUI, callers are ordered
+        // alphabetically, callees by position in function.
+        comparator = new Comparator<MethodWrapper>() {
+          public int compare(MethodWrapper o1, MethodWrapper o2) {
+            return o1.getName().compareToIgnoreCase(o2.getName());
+          }
+        };
+      }
+
+      if (roots.length > 0) {
+        // Is it possible to have multiple roots? If so we'll need
+        // to change this.
+        result = formatRoot(roots[0], comparator, callees);
+
+        IResource resource = method.getResource();
+        ISourceRange sourceRange = method.getSourceRange();
+        // The root element doesn't get his location like all the others
+        // (this happens with the GUI too). So add it ourselves.
+        result.put("position", Position.fromOffset(
+              resource.getLocation().toOSString(), null, sourceRange.getOffset(),
+              sourceRange.getLength()));
+      }
+    }
+
+    return result;
   }
 
   private ArrayList<HashMap<String,Object>> formatRoots(
-      MethodWrapper[] roots, Comparator<MethodWrapper> comparator)
+      MethodWrapper[] roots,
+      Comparator<MethodWrapper> comparator,
+      boolean callees)
     throws Exception
   {
     ArrayList<HashMap<String,Object>> results =
@@ -161,14 +154,14 @@ public class CallHierarchyCommand
       if (root.getLevel() > MAX_CALL_DEPTH || root.isRecursive()) {
         continue;
       }
-      results.add(formatRoot(root, comparator));
+      results.add(formatRoot(root, comparator, callees));
     }
 
     return results;
   }
 
-  private HashMap<String, Object> formatRoot(MethodWrapper root,
-      Comparator<MethodWrapper> comparator)
+  private HashMap<String, Object> formatRoot(
+      MethodWrapper root, Comparator<MethodWrapper> comparator, boolean callees)
     throws Exception
   {
     IMember member = root.getMember();
@@ -196,9 +189,10 @@ public class CallHierarchyCommand
       }
     }
 
-    result.put("callers", formatRoots(
-          root.getCalls(new NullProgressMonitor()),
-          comparator));
+    result.put(callees ? "callees" : "callers", formatRoots(
+        root.getCalls(new NullProgressMonitor()),
+        comparator,
+        callees));
 
     return result;
   }
