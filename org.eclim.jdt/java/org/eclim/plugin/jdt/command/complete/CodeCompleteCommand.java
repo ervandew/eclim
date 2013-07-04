@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,9 +61,7 @@ public class CodeCompleteCommand
   private static String COMPACT = "compact";
   //private static String STANDARD = "standard";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -123,10 +121,17 @@ public class CodeCompleteCommand
     int kind = collector.getProposal(index).getKind();
     switch(kind){
       case CompletionProposal.METHOD_REF:
+        int length = completion.length();
+        if (length == 0){
+          break;
+        }
+        if (completion.charAt(length - 1) == ';'){
+          completion = completion.substring(0, length - 1);
+          length--;
+        }
         // trim off the trailing paren if the method takes any arguments.
         if (menu.lastIndexOf(')') > menu.lastIndexOf('(') + 1 &&
-            (completion.length() > 0 &&
-             completion.charAt(completion.length() - 1) == ')'))
+            completion.charAt(length - 1) == ')')
         {
           completion = completion.substring(0, completion.length() - 1);
         }
