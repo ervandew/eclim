@@ -133,7 +133,7 @@ function! eclim#java#doc#PreviewOpen(bufnr_or_url) " {{{
   setlocal nobuflisted
   setlocal buftype=nofile
   setlocal bufhidden=delete
-  setlocal conceallevel=2 concealcursor=n
+  setlocal conceallevel=2 concealcursor=ncv
 
   set ft=javadoc_preview
   hi link javadocPreviewLink Label
