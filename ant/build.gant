@@ -654,7 +654,11 @@ target(name: 'eclipse.docs'){
 
 target(name: 'eclipse.src'){
   eclipseHome = binding.getVariable('eclipse')
-  new File("${eclipseHome}/plugins").eachFileRecurse(){ file ->
+  property(name: 'src.dir', value: "${eclipseHome}/plugins")
+  srcDir = binding.getVariable('src.dir')
+
+  echo('Extracting source jars from ${src.dir} ...')
+  new File("${srcDir}").eachFileRecurse(){ file ->
     if (file =~ /.*\.source_.*\.jar/){
       unjar(src: file.getPath(), dest: '${eclipse.local}/src')
     }
@@ -666,37 +670,41 @@ target(name: 'patch'){
 
   patchPlugins(){ plugin ->
     eclipseHome = binding.getVariable('eclipse')
-    path = new File(patchPluginResolve(plugin))
+    resolved = patchPluginResolve(plugin)
 
-    echo("Patching plugin: ${path}")
+    if (resolved != null){
+      path = new File(resolved)
 
-    mkdir(dir: '${build.classes}/' + plugin)
-    compile("patch/${plugin}", '${build.classes}/' + plugin){
-      compilerarg(value: '-Xlint:-options')
-      include(name: '**/*.java')
-    }
+      echo("Patching plugin: ${path}")
 
-    if (path.isDirectory()){
-      // backup plugin dir if necessary
-      if (!new File("${eclipseHome}/patch.backup/${path.name}").exists()){
-        mkdir(dir: "${eclipseHome}/patch.backup")
-        exec(executable: 'cp', failonerror: true){
-          arg(line: "-a ${path} ${eclipseHome}/patch.backup/")
+      mkdir(dir: '${build.classes}/' + plugin)
+      compile("patch/${plugin}", '${build.classes}/' + plugin){
+        compilerarg(value: '-Xlint:-options')
+        include(name: '**/*.java')
+      }
+
+      if (path.isDirectory()){
+        // backup plugin dir if necessary
+        if (!new File("${eclipseHome}/patch.backup/${path.name}").exists()){
+          mkdir(dir: "${eclipseHome}/patch.backup")
+          exec(executable: 'cp', failonerror: true){
+            arg(line: "-a ${path} ${eclipseHome}/patch.backup/")
+          }
         }
-      }
-      copy(todir: "${path}"){
-        fileset(dir: '${build.classes}/' + plugin, includes: '**/*.class')
-      }
-    }else{
-      // backup plugin file if necessary
-      if (!new File("${path}.bak").exists()){
-        exec(executable: 'cp', failonerror: true){
-          arg(line: "-a ${path} ${path}.bak")
+        copy(todir: "${path}"){
+          fileset(dir: '${build.classes}/' + plugin, includes: '**/*.class')
         }
-      }
+      }else{
+        // backup plugin file if necessary
+        if (!new File("${path}.bak").exists()){
+          exec(executable: 'cp', failonerror: true){
+            arg(line: "-a ${path} ${path}.bak")
+          }
+        }
 
-      jar(jarfile: path, update: true){
-        fileset(dir: '${build.classes}/' + plugin, includes: '**/*.class')
+        jar(jarfile: path, update: true){
+          fileset(dir: '${build.classes}/' + plugin, includes: '**/*.class')
+        }
       }
     }
   }
@@ -704,26 +712,30 @@ target(name: 'patch'){
 
 target(name: 'patch.revert'){
   patchPlugins(){ plugin ->
-    path = new File(patchPluginResolve(plugin))
+    resolved = patchPluginResolve(plugin)
 
-    echo("Reverting patch for plugin: ${path}")
+    if (path != null){
+      path = new File(resolved)
 
-    if (path.isDirectory()){
-      if (new File("${eclipseHome}/patch.backup/${path.name}").exists()){
-        exec(executable: 'rm', failonerror: true){
-          arg(line: "-r ${path}")
+      echo("Reverting patch for plugin: ${path}")
+
+      if (path.isDirectory()){
+        if (new File("${eclipseHome}/patch.backup/${path.name}").exists()){
+          exec(executable: 'rm', failonerror: true){
+            arg(line: "-r ${path}")
+          }
+          exec(executable: 'mv', failonerror: true){
+            arg(line: "${eclipseHome}/patch.backup/${path.name} ${path}")
+          }
         }
-        exec(executable: 'mv', failonerror: true){
-          arg(line: "${eclipseHome}/patch.backup/${path.name} ${path}")
+      }else{
+        if (new File("${path}.bak").exists()){
+          move(file: "${path}.bak", tofile: path)
         }
       }
-    }else{
-      if (new File("${path}.bak").exists()){
-        move(file: "${path}.bak", tofile: path)
-      }
+
+      delete(dir: "build/patch/${plugin}")
     }
-
-    delete(dir: "build/patch/${plugin}")
   }
 }
 
@@ -1230,6 +1242,7 @@ def patchPluginResolve(plugin){
   }
 
   eclipseHome = binding.getVariable('eclipse')
-  ant.fail(message:
-    "No plugin jar file or dir found for '${plugin}' in '${eclipseHome}'.")
+  ant.echo(message:
+    "WARN: No plugin jar file or dir found for '${plugin}' in '${eclipseHome}'.")
+  return null
 }
