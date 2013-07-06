@@ -211,6 +211,7 @@ public class JUnitUtils
   }
 
   /* from org.eclipse.jdt.junit.wizards.NewTestCaseWizardPageOne */
+  // CHECKSTYLE:OFF
 
   private static final String QUESTION_MARK_TAG = "Q";
   private static final String OF_TAG = "Of";
@@ -254,4 +255,5 @@ public class JUnitUtils
       }
     }
   }
+  // CHECKSTYLE:ON
 }

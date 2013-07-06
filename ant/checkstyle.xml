@@ -6,10 +6,12 @@
 <module name="Checker">
   <property name="severity" value="warning"/>
 
+  <module name="SuppressionCommentFilter"/>
   <module name="FileTabCharacter"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="2" />
 
+    <module name="FileContentsHolder"/>
     <module name="ArrayTrailingComma"/>
     <module name="ArrayTypeStyle"/>
     <module name="AvoidStarImport"/>
