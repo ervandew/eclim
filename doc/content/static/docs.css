@@ -11,3 +11,8 @@ a[href='index.rss'] {
 #_what-s-new > h2:first-child {
   padding-left: 35px;
 }
+
+/* improve readability of bootstrap alerts */
+.alert {
+  color: #555;
+}
