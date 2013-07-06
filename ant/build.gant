@@ -716,7 +716,7 @@ target(name: 'patch.revert'){
   patchPlugins(){ plugin ->
     resolved = patchPluginResolve(plugin)
 
-    if (path != null){
+    if (resolved != null){
       path = new File(resolved)
 
       echo("Reverting patch for plugin: ${path}")
