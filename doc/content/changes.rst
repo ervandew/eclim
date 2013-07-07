@@ -26,6 +26,19 @@ Java:
   - :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` added to show the caller or
     callee hierarchy of a method. Thanks to Alexandre Fonseca.
 
+Php:
+  .. warning::
+
+    The format of the h2 database used for php searching and code completion has
+    changed in **Kepler** which may result in searching / code completion not
+    returning any results, both in eclim and in the standard eclipse php editor.
+    To fix this you'll need to stop eclipse, remove the old index, and then
+    restart:
+
+    ::
+
+      $ rm -r <your workspace>/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
+
 .. _2.2.6:
 .. _1.7.14:
 
