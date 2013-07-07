@@ -208,8 +208,6 @@ TODO {{{
       http://download.eclipse.org/tools/cdt/releases/ganymede/site.xml
       http://cdt-devel-faq.wikidot.com/
 
-    - :CCallHierarchy support to display callees view (eclipse gui supports
-      switching between callers and callees view).
     - :CppHierarchy command which opens a buffer showing the class hierarchy for
       the current file.
     - :C[pp]IncludeHierarchy command which opens a buffer showing hierarchy of each
