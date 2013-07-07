@@ -7,6 +7,9 @@
   <property name="severity" value="warning"/>
 
   <module name="SuppressionCommentFilter"/>
+  <module name="SuppressionFilter">
+    <property name="file" value="ant/checkstyle-suppressions.xml"/>
+  </module>
   <module name="FileTabCharacter"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="2" />
