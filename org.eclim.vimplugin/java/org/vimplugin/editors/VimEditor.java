@@ -106,6 +106,7 @@ public class VimEditor
 
   private boolean dirty;
   private boolean alreadyClosed = false;
+  private long lastFocus = 0;
 
   private Composite parent;
 
@@ -659,15 +660,23 @@ public class VimEditor
       boolean autoClickFocus = plugin.getPreferenceStore()
         .getBoolean(PreferenceConstants.P_FOCUS_AUTO_CLICK);
       if (autoClickFocus){
-        Rectangle bounds = parent.getBounds();
-        final Point point = parent.toDisplay(
-            bounds.x + 5, bounds.y + bounds.height - 25);
-        new Thread(){
-          public void run()
-          {
-            DisplayUtils.doClick(parent.getDisplay(), point.x, point.y, true);
-          }
-        }.start();
+        // hack: setFocus may be called more than once, so attempt to only
+        // simulate a click only on the first one.
+        long now = System.currentTimeMillis();
+        long delta = (now - lastFocus);
+        lastFocus = now;
+
+        if (delta > 300) {
+          Rectangle bounds = parent.getBounds();
+          final Point point = parent.toDisplay(
+              bounds.x + 5, bounds.y + bounds.height - 25);
+          new Thread(){
+            public void run()
+            {
+              DisplayUtils.doClick(parent.getDisplay(), point.x, point.y, true);
+            }
+          }.start();
+        }
       }
     }
   }
