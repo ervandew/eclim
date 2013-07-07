@@ -190,6 +190,19 @@ script in the Vimplugin preferences:
     set guioptions-=L " turn off left scrollbar
     set guioptions-=l
 
+.. _eclim-gvim-embedded-focus:
+
+**Embedded gvim focus**
+
+In some windowing environments, the embedded gvim is treated more like a
+separate window. The result of this is that clicking the eclipse tab (or using
+tab focusing keyboard shortcuts) may focus that tab, but it won't focus the
+embedded gvim on that tab. Eclim adds a setting to vimplugin which when enabled,
+will attempt to simulate a click on the embedded gvim window to force it to
+focus:
+
+:menuselection:`Window --> Preferences --> Vimplugin --> Force gvim focus via
+automated click`
 
 .. _eclim-gvim-embedded-shortcuts:
 
