@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -38,16 +38,28 @@
   if !exists('g:TreeExpandSingleDirs')
     let g:TreeExpandSingleDirs = 0
   endif
+  if !exists('g:TreeIndent')
+    let g:TreeIndent = 4
+  endif
+  if g:TreeIndent < 2
+    call eclim#util#EchoWarning('g:TreeIndent can be no less than 2.')
+    let g:TreeIndent = 2
+  endif
 " }}}
 
 " Script Variables {{{
-  let s:node_prefix = '  '
+  let s:node_prefix = ''
+  let index = 0
+  while index < (g:TreeIndent - 2)
+    let s:node_prefix .= ' '
+    let index += 1
+  endwhile
 
   let s:dir_opened_prefix = '- '
   let s:dir_closed_prefix = '+ '
   let s:file_prefix = '  '
 
-  let s:indent_length = 4
+  let s:indent_length = len(s:node_prefix) + len(s:file_prefix)
 
   let s:node_regex = s:node_prefix .  '\(' .
     \ s:dir_opened_prefix . '\|' .
