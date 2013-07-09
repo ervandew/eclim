@@ -81,13 +81,13 @@ its classpath. The only part of this file that you should edit is the
 ``Require-Bundle:`` section. This is a comma separated list of bundles (or
 plugins) which this bundle depends on. When this bundle is loaded only those
 bundles listed here will be available in the classpath. So when you start
-running commands you've written later, if you receive a ClassNotFound exception,
-that is likely due to the bundle containing that class not being listed in your
-plugin's ``Require-Bundle:`` list. At this point you probably don't know yet
-what bundles you need to add to this list. When you start writing commands for
-your plugin, you'll have to find out which bundles contain the classes imported
-from the eclipse plugin you are integrating with, and you'll need to add those
-bundles accordingly.
+running commands you've written later, if you receive a
+``ClassNotFoundException``, that is likely due to the bundle containing that
+class not being listed in your plugin's ``Require-Bundle:`` list. At this point
+you probably don't know yet what bundles you need to add to this list. When you
+start writing commands for your plugin, you'll have to find out which bundles
+contain the classes imported from the eclipse plugin you are integrating with,
+and you'll need to add those bundles accordingly.
 
 It's also worth noting that eclim provides a custom classpath container which
 scans the manifest of each eclim plugin and loads the required bundles of each
@@ -116,10 +116,16 @@ some examples that should give you an idea of where to look:
 
 - **jdt:** org.eclipse.jdt.core.JavaCore.NATURE_ID
 - **cdt:**
+
   - org.eclipse.cdt.core.CProjectNature.CNATURE_ID
   - org.eclipse.cdt.core.CCProjectNature.CC_NATURE_ID
+
 - **dltkruby:** org.eclipse.dltk.ruby.core.RubyNature.NATURE_ID
 - **adt:** com.android.ide.eclipse.adt.AdtConstants.NATURE_DEFAULT
+
+One way to find it is to open up the ``.project`` file in a project containing
+the nature, locate the fully qualified name in the ``<natures>`` section, then
+grep the plugin's code for that name.
 
 Once you have the reference to the nature id, you can then create a public
 static variable called ``NATURE``:
@@ -131,7 +137,7 @@ static variable called ``NATURE``:
 You'll be using this constant as the key to register features for project
 containing this nature, but first we'll register a short alias for this nature
 since the actual nature id tends to be long and unstandardized, and we don't
-want users to have to type it out when creating projects for eclim:
+want users to have to type it out when creating projects from eclim:
 
 .. code-block:: java
 
@@ -154,9 +160,12 @@ logic necessary here varies widely.  Finding what you'll need is a matter of
 digging through the parent plugin's source code, typically looking for the
 project creation wizard class, to see what it does to create a project of this
 nature and later comparing the created artifacts from your code against those of
-a project created from the eclipse gui. This can be difficult hurdle to get past
-for someone doing this the first time, so please don't be shy about asking for
-help on the `eclim-dev`_ mailing list.
+a project created from the eclipse gui. This can be a difficult hurdle to get
+past for someone doing this the first time, so please don't be shy about asking
+for help on the `eclim-dev`_ mailing list.
+
+Once you've created your project manager, you then map it to your plugin's
+nature inside of your ``PluginResources.initialize`` method like so:
 
 .. code-block:: java
 
