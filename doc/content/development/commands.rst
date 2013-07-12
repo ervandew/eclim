@@ -112,6 +112,39 @@ Where each part is defined as:
    option with that value and when running the command from the command line,
    that option should be supplied last.
 
+That should give you the basics on what's involved with creating a new command,
+but the biggest hurdle for creating most commands is locating and deciphering
+the eclipse API calls that are necessary to implement the feature you want.
+Unfortunately most of the eclipse code that you'll need to hook into will most
+likely have little to no documentation so you're going to have to dig through
+the eclipse code. Eclim does provide a couple ant tasks to at least help you to
+quickly extract any docs or source code found in your eclipse install:
+
+.. begin-eclipse-doc-src
+
+- **eclipse.doc:** This target will extract any doc jars from your eclipse
+  install to a 'doc' directory in your eclipse home (or user local eclipse
+  home).
+
+- **eclipse.src:** This target will extract any src jars from your eclipse
+  install to a 'src' directory in your eclipse home (or user local eclipse
+  home). If you download the sdk version of eclipse then the jdt and all the
+  core eclipse source will be available. Some other plugins provide sdk versions
+  which include the source code and this target can extract those as well, but
+  some plugins don't seem to have this option when installing via eclipse's
+  update manager (and may not include the source when installed from a system
+  package manager). For those you can often download a zip version of their
+  update site which should include source bundles. Once you've extracted that
+  file, you can tell this target to extract source bundles from a specified
+  directory. Here is an example of extracting the source from an unpacked dltk
+  update site:
+
+  ::
+
+    $ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
+
+.. end-eclipse-doc-src
+
 Running a Command
 ------------------
 
@@ -200,7 +233,7 @@ eclipse features to expose them for use in vim or the editor of your choice.
 
 You should also take a look at the eclim :doc:`/development/plugins`
 documentation which documents how to create a new eclim plugin, including
-information on adding new eclim settings, managing the plugin's depenencies
+information on adding new eclim settings, managing the plugin's dependencies
 through its ``META-INF/MANIFEST.MF``, etc.
 
 .. _gson: http://code.google.com/p/google-gson/

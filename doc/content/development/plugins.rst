@@ -156,13 +156,20 @@ classpath/buildpath on update, forcing a full update of the search index on
 refresh, or any number of other things.
 
 Overriding the ``create`` method will almost certainly be necessary, but the
-logic necessary here varies widely.  Finding what you'll need is a matter of
+logic you'll need here varies widely.  Finding what you'll need is a matter of
 digging through the parent plugin's source code, typically looking for the
 project creation wizard class, to see what it does to create a project of this
 nature and later comparing the created artifacts from your code against those of
 a project created from the eclipse gui. This can be a difficult hurdle to get
 past for someone doing this the first time, so please don't be shy about asking
 for help on the `eclim-dev`_ mailing list.
+
+Eclim does provide a couple ant tasks to at least help you to quickly extract
+any docs and source code found in your eclipse install:
+
+.. include:: /development/commands.rst
+   :start-after: begin-eclipse-doc-src
+   :end-before: end-eclipse-doc-src
 
 Once you've created your project manager, you then map it to your plugin's
 nature inside of your ``PluginResources.initialize`` method like so:
