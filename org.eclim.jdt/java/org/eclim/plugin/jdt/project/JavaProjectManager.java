@@ -101,9 +101,7 @@ public class JavaProjectManager
     PARSERS.put("pom.xml", new MvnParser());
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void create(IProject project, CommandLine commandLine)
     throws Exception
   {
@@ -111,9 +109,7 @@ public class JavaProjectManager
     create(project, depends);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public List<Error> update(IProject project, CommandLine commandLine)
     throws Exception
   {
@@ -145,6 +141,17 @@ public class JavaProjectManager
 
     // .classpath updated.
     }else{
+      // if an exception occurs reading the classpath then eclipse will return a
+      // default classpath which we would otherwise then write back into the
+      // .classpath file. This hack prevents that and will return a relevent
+      // error message as a validation error.
+      try{
+        ((JavaProject)javaProject).readFileEntriesWithException(null);
+      } catch(Exception e) {
+        errors.add(new Error(e.getMessage(), dotclasspath, 1, 1, false));
+        return errors;
+      }
+
       IClasspathEntry[] entries = javaProject.readRawClasspath();
       errors = setClasspath(javaProject, entries, dotclasspath);
     }
@@ -155,26 +162,19 @@ public class JavaProjectManager
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void refresh(IProject project, CommandLine commandLine)
     throws Exception
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ProjectManager#refresh(IProject,IFile)
-   */
+  @Override
   public void refresh(IProject project, IFile file)
     throws Exception
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void delete(IProject project, CommandLine commandLine)
     throws Exception
   {
