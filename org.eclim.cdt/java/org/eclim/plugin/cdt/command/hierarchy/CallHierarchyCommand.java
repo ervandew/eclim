@@ -257,12 +257,18 @@ public class CallHierarchyCommand
     ArrayList<Call> calls = new ArrayList<Call>(enclosedNames.length);
     for (IIndexName enclosedName : enclosedNames) {
       IIndexBinding binding = index.findBinding(enclosedName);
-      IIndexName enclosedDefinitionName = index.findDefinitions(binding)[0];
+      IIndexName[] enclosedDefinitionNames = index.findDefinitions(binding);
+      if (enclosedDefinitionNames == null || enclosedDefinitionNames.length == 0){
+        continue;
+      }
+
+      IIndexName enclosedDefinitionName = enclosedDefinitionNames[0];
       ICElement enclosedElement =
         IndexUI.getCElementForName(project, index, enclosedDefinitionName);
       if (enclosedElement == null) {
         continue;
       }
+
       if (enclosedElement instanceof IFunction) {
         calls.add(new Call(
               enclosedName, enclosedElement, element.getResource()));
