@@ -19,10 +19,13 @@ History of Changes
 .. _2.2.7:
 .. _1.7.15:
 
-2.2.7 / 1.7.15 (2013)
+2.2.7 / 1.7.15 (Jul. 14, 2013)
 ------------------------------
 
 Java:
+  - Fix for some completions on Kepler.
+  - Fix for rare case where an invalid classpath entry could result in the
+    .classpath file reverted to the eclipse default.
   - :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` added to show the caller or
     callee hierarchy of a method. Thanks to Alexandre Fonseca.
 
@@ -39,11 +42,34 @@ Php:
 
       $ rm -r <your workspace>/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
 
+Ruby:
+  - Fixed the inserted completion text for some ruby libraries.
+
 Scala:
   - The graphical installer now includes a compiled eclim sdt bundle for both
     scala 2.9.x and 2.10.x for which one will be chosen for you if you already
     have the scala-ide installed, otherwise you can pick one and the appropriate
     version of the scala-ide will be installed for you.
+
+Vimplugin:
+  - The option to force focusing of gvim with a simulated click is now disabled
+    by default, but when enabled, it should be less likely to have unintended
+    side affects.
+
+Cygwin:
+  - Performance optimization for user's with many projects.
+
+Installer:
+  - The installer will now properly shutdown eclimd instances registered using
+    the old non-json format.
+
+Docs:
+  - Expanded the :doc:`developer docs </development/index>` to include docs on
+    :doc:`creating new commands </development/commands>` along with some of the
+    basics for :doc:`adding new eclim plugins </development/plugins>`.
+
+| :gitlog:`Git Log (2.2.7) <2.2.6...2.2.7>`
+| :gitlog:`Git Log (1.7.15) <1.7.14...1.7.15>`
 
 .. _2.2.6:
 .. _1.7.14:

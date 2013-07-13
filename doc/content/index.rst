@@ -123,6 +123,19 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Jul. 14, 2013
+-------------
+
+This is primarily a bug fix release with a few new features. Unless some
+critical error is found, this will be the last release targeting Juno. The next
+release will likely target Kepler though this release should work fine on Kepler
+as well, with the exception of scala support which has not been tested. Indigo
+support will continue but will likely end with the release of Luna, possibly
+sooner.
+
+- :ref:`Eclim 2.2.7 <2.2.7>` for Eclipse 4.2 (Juno).
+- :ref:`Eclim 1.7.15 <1.7.15>` for Eclipse 3.7/3.8 (Indigo).
+
 May 18, 2013
 -------------
 
