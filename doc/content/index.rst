@@ -134,7 +134,7 @@ support will continue but will likely end with the release of Luna, possibly
 sooner.
 
 - :ref:`Eclim 2.2.7 <2.2.7>` for Eclipse 4.2 (Juno).
-- :ref:`Eclim 1.7.15 <1.7.15>` for Eclipse 3.7/3.8 (Indigo).
+- :ref:`Eclim 1.7.16 <1.7.16>` for Eclipse 3.7/3.8 (Indigo).
 
 May 18, 2013
 -------------
