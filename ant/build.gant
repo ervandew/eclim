@@ -194,7 +194,7 @@ target(name: 'build.eclipse.plugin'){
   pluginName = binding.getVariable('plugin.name')
   if (!pluginNames.contains(pluginName)){
     fail(
-      'The plugin ${plugin.name} either doesn\'t' +
+      'The plugin ${plugin.name} either doesn\'t ' +
       'exist or is missing it\'s required dependency')
   }
 
