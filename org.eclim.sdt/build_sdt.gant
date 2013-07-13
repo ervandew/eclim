@@ -93,7 +93,7 @@ target(name: 'org.eclim.sdt.plugin.dist'){
     delete(dir: '${build.classes}/org.eclim.sdt')
     // NOTE: using ant(inheritAll: false) was still carrying over some
     // classpath remnants
-    exec(executable: '${ant.home}/bin/ant', dir: '${basedir}'){
+    exec(executable: '${ant.home}/bin/ant', dir: '${basedir}', failonerror: true){
       arg(value: "-Declipse.home=${sdtHome}")
       arg(value: '-Dplugin.name=org.eclim.sdt')
       arg(value: 'build.eclipse.plugin')
