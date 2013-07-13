@@ -96,6 +96,7 @@ public class EclipseInfo
               node.getAttribute("id"),
               site != null ? site.getAttribute("url") : null,
               node.getAttribute("version"),
+              node.getAttribute("match"),
               this.installedFeatures.get(node.getAttribute("id"))));
       }
       this.dependencies.put(feature.getAttribute("id"), dependencies);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ public class Feature
     Pattern.compile("^(\\d+\\.\\d+\\.\\d+)(\\..*)?");
 
   private String version;
+  private String fullVersion;
   private File site;
 
   public Feature(String version, File site)
@@ -36,11 +37,17 @@ public class Feature
     Matcher matcher = VERSION.matcher(version);
     matcher.find();
     this.version = matcher.group(1);
+    this.fullVersion = version;
   }
 
   public String getVersion()
   {
     return version;
+  }
+
+  public String getFullVersion()
+  {
+    return fullVersion;
   }
 
   public File getSite()

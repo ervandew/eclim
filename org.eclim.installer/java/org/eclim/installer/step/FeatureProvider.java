@@ -21,6 +21,11 @@ import java.beans.PropertyChangeListener;
 
 import java.io.File;
 
+import java.util.ArrayList;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.formic.Installer;
 
 import org.formic.wizard.step.shared.Feature;
@@ -34,16 +39,25 @@ public class FeatureProvider
   implements org.formic.wizard.step.shared.FeatureProvider,
              PropertyChangeListener
 {
-  public static final String[] FEATURES =
-    {"jdt", "adt", "wst", "cdt", "dltk", "dltkruby", "pdt", "python", "sdt"};
+  public static final String[] FEATURES = {
+    "jdt", "adt", "wst", "cdt",
+    "dltk", "dltkruby", "pdt",
+    "python", "sdt209", "sdt210"
+  };
 
-  private static final String[][] FEATURES_DEPENDS =
-    {null, {"jdt", "wst"}, null, null, null, {"dltk"}, {"dltk", "wst"}, null, null};
+  private static final String[][] FEATURES_DEPENDS = {
+    null, {"jdt", "wst"}, null, null,
+    null, {"dltk"}, {"dltk", "wst"},
+    null, {"jdt"}, {"jdt"}
+  };
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.step.shared.FeatureProvider#getFeatures()
-   */
+  private static final String[][] FEATURES_EXCLUSIVE = {
+    null, null, null, null,
+    null, null, null,
+    null, {"sdt210"}, {"sdt209"}
+  };
+
+  @Override
   public Feature[] getFeatures()
   {
     EclipseInfo info = (EclipseInfo)
@@ -63,19 +77,36 @@ public class FeatureProvider
       }
     }
 
-    Feature[] features = new Feature[FEATURES.length];
-    for (int ii = 0; ii < features.length; ii++){
-      features[ii] = new Feature(
-          FEATURES[ii], enabled[ii], FEATURES_DEPENDS[ii]);
+    ArrayList<Feature> features = new ArrayList<Feature>();
+    feature:
+    for (int ii = 0; ii < FEATURES.length; ii++){
+      // check if the feature has any dependency matching, if so, exclude the
+      // feature if the dependency exists but doesn't match
+      for(Dependency dep : info.getDependencies(FEATURES[ii])){
+        if (!dep.isInstalled()){
+          continue;
+        }
+        String match = dep.getMatchVersion();
+        if (match != null && match.length() > 0){
+          Matcher matcher = Pattern.compile(match)
+            .matcher(dep.getFeature().getFullVersion());
+          if (!matcher.find()){
+            continue feature;
+          }
+        }
+      }
+
+      features.add(new Feature(
+          FEATURES[ii],
+          enabled[ii],
+          FEATURES_DEPENDS[ii],
+          FEATURES_EXCLUSIVE[ii]));
     }
 
-    return features;
+    return features.toArray(new Feature[features.size()]);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see PropertyChangeListener#propertyChange(PropertyChangeEvent)
-   */
+  @Override
   public void propertyChange(PropertyChangeEvent evt)
   {
     // do nothing for now.

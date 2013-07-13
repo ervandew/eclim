@@ -16,10 +16,10 @@
 History of Changes
 ==================
 
-.. _2.3.0:
+.. _2.2.7:
 .. _1.7.15:
 
-2.3.0 / 1.7.15 (2013)
+2.2.7 / 1.7.15 (2013)
 ------------------------------
 
 Java:
@@ -38,6 +38,12 @@ Php:
     ::
 
       $ rm -r <your workspace>/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
+
+Scala:
+  - The graphical installer now includes a compiled eclim sdt bundle for both
+    scala 2.9.x and 2.10.x for which one will be chosen for you if you already
+    have the scala-ide installed, otherwise you can pick one and the appropriate
+    version of the scala-ide will be installed for you.
 
 .. _2.2.6:
 .. _1.7.14:

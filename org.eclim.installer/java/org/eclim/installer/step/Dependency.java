@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,16 +25,19 @@ public class Dependency
   private boolean upgrade;
   private Feature feature;
   private String requiredVersion;
+  private String matchVersion;
 
   public Dependency(
       String id,
       String site,
       String requiredVersion,
+      String matchVersion,
       Feature feature)
   {
     this.id = id;
     this.site = site;
     this.requiredVersion = requiredVersion;
+    this.matchVersion = matchVersion;
     this.feature = feature;
     if(feature != null){
       this.upgrade = compareVersions(this.requiredVersion, feature.getVersion()) < 0;
@@ -59,6 +62,16 @@ public class Dependency
   public String getRequiredVersion()
   {
     return requiredVersion;
+  }
+
+  /**
+   * Gets the string to match the full version against.
+   *
+   * @return The version string match.
+   */
+  public String getMatchVersion()
+  {
+    return matchVersion;
   }
 
   /**
