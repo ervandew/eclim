@@ -6,6 +6,7 @@
 <!ELEMENT dependency (site?)>
 <!ATTLIST dependency id ID #REQUIRED>
 <!ATTLIST dependency version CDATA #REQUIRED>
+<!ATTLIST dependency match CDATA #IMPLIED>
 
 <!ELEMENT site EMPTY>
 <!ATTLIST site url CDATA #REQUIRED>

@@ -49,6 +49,10 @@
     <antcall target="gant"> <param name="target" value="plugin.create"/> </antcall>
   </target>
 
+  <target name="build.eclipse.plugin">
+    <antcall target="gant"> <param name="target" value="build.eclipse.plugin"/> </antcall>
+  </target>
+
   <target name="test">
     <antcall target="gant"> <param name="target" value="test"/> </antcall>
   </target>

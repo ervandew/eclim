@@ -43,7 +43,15 @@
     </dependency>
   </feature>
 
-  <feature id="sdt">
-    <dependency id="org.scala-ide.sdt.feature" version="3.0.0"/>
+  <feature id="sdt209">
+    <dependency id="org.scala-ide.sdt.feature" version="3.0.0" match="v-2_09">
+      <site url="http://download.scala-ide.org/sdk/e38/scala29/stable/site"/>
+    </dependency>
+  </feature>
+
+  <feature id="sdt210">
+    <dependency id="org.scala-ide.sdt.feature" version="3.0.0" match="v-2_10">
+      <site url="http://download.scala-ide.org/sdk/e38/scala210/stable/site"/>
+    </dependency>
   </feature>
 </dependencies>

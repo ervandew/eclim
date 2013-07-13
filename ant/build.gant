@@ -163,14 +163,7 @@ target(name: 'build.eclipse'){
   delete(includeemptydirs: true, failonerror: false){
     fileset(dir: '${build.plugins}', includes: '**/*')
   }
-  pluginNames.each(){ name ->
-    plugin(name)
-
-    // run plugin specific gant target
-    if (hasVariable("${name}.build.eclipse")){
-      binding.getVariable("${name}.build.eclipse")()
-    }
-  }
+  pluginNames.each(){ name -> plugin(name) }
 }
 
 target(name: 'build.vim'){
@@ -190,6 +183,22 @@ target(name: 'build.vim'){
       binding.getVariable("${name}.build.vim")()
     }
   }
+}
+
+target(name: 'build.eclipse.plugin'){
+  depends(init)
+
+  if (!hasVariable('plugin.name')){
+    fail('${plugin.name} property must be set.')
+  }
+  pluginName = binding.getVariable('plugin.name')
+  if (!pluginNames.contains(pluginName)){
+    fail(
+      'The plugin ${plugin.name} either doesn\'t' +
+      'exist or is missing it\'s required dependency')
+  }
+
+  plugin(pluginName)
 }
 
 target(name: 'deploy'){
@@ -378,12 +387,16 @@ target(name: 'dist'){
     fileset(dir: 'build/doc', includes: 'api/**/*, site/**/*')
   }
 
-  // src archive
+  // src archive + custom dist target
   pluginNames.each(){ name ->
-    if (new File("${name}/java").exists()){
-      zip(destfile: '${build.plugins}/' + name + '_${eclim.version}/src.zip'){
-        fileset(dir: "${name}/java", includes: '**/*')
-      }
+    zip(destfile: '${build.plugins}/' + name + '_${eclim.version}/src.zip'){
+      fileset(dir: "${name}/java", includes: '**/*', erroronmissingdir: false)
+      fileset(dir: "${name}/scala", includes: '**/*', erroronmissingdir: false)
+    }
+
+    // run plugin specific gant target
+    if (hasVariable("${name}.plugin.dist")){
+      binding.getVariable("${name}.plugin.dist")()
     }
   }
 
@@ -915,7 +928,7 @@ def plugin(name){
 
   ant.copy(todir: pluginPath){
     ant.fileset(dir: "${name}",
-        includes: '**/*', excludes: '*.gant,java/**,vim/**,test/**')
+        includes: '**/*', excludes: '*.gant,java/**,scala/**,vim/**,test/**')
   }
 
   ant.replace(dir: pluginPath,
@@ -939,6 +952,11 @@ def plugin(name){
     }
 
     ant.fixcrlf(srcdir: pluginPath, includes: 'META-INF/MANIFEST.MF', eol: 'unix')
+  }
+
+  // run plugin specific gant target
+  if (hasVariable("${name}.build.eclipse")){
+    binding.getVariable("${name}.build.eclipse")()
   }
 }
 
