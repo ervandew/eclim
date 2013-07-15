@@ -224,12 +224,13 @@ Java Commands
 Java .classpath Commands
 ------------------------
 
-- :ref:`:NewSrcEntry <:NewSrcEntry_java>` <dir> [<dir> ...] -
+- :ref:`:NewSrcEntry <:NewSrcEntry_java>` <dir> -
   Add a new source dir entry.
-- :ref:`:NewProjectEntry <:NewProjectEntry_java>` <project> [<project> ...] -
+- :ref:`:NewProjectEntry <:NewProjectEntry_java>` <project> -
   Add a new project entry.
-- :ref:`:NewJarEntry <:NewJarEntry_java>` <file> [<file> ...] - Add a jar entry.
-- :ref:`:NewVarEntry <:NewVarEntry_java>` <VAR/file> [<VAR/file> ...] -
+- :ref:`:NewJarEntry <:NewJarEntry_java>` <file> [<src_path> <javadoc_path>] -
+  Add a jar entry.
+- :ref:`:NewVarEntry <:NewVarEntry_java>` <VAR/file> [<src_path> <javadoc_path>] -
   Add a new var entry.
 - :ref:`:VariableList <:VariableList>`
   List available classpath variables and their corresponding values.

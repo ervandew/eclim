@@ -1326,6 +1326,33 @@ function! eclim#project#util#CommandCompleteProjectRelative(argLead, cmdLine, cu
   return eclim#util#ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
+function! eclim#project#util#CommandCompleteProjectRelativeDir(argLead, cmdLine, cursorPos) " {{{
+  " Custom command completion for project relative files and directories.
+
+  let dir = eclim#project#util#GetCurrentProjectRoot()
+  if dir == '' && exists('b:project')
+    let dir = eclim#project#util#GetProjectRoot(b:project)
+  endif
+
+  if dir == ''
+    return []
+  endif
+
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseCmdLine(cmdLine)
+  let argLead = cmdLine =~ '\s$' ? '' : (len(args) > 0 ? args[len(args) - 1] : '')
+
+  let results = split(eclim#util#Glob(dir . '/' . argLead . '*', 1), '\n')
+  call map(results, "substitute(v:val, '\\', '/', 'g')")
+  call filter(results, 'isdirectory(v:val)')
+  call map(results, 'v:val . "/"')
+  call map(results, 'substitute(v:val, dir, "", "")')
+  call map(results, 'substitute(v:val, "^\\(/\\|\\\\\\)", "", "g")')
+  call map(results, "substitute(v:val, ' ', '\\\\ ', 'g')")
+
+  return eclim#util#ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
 function! eclim#project#util#CommandCompleteProjectOrDirectory(argLead, cmdLine, cursorPos) " {{{
   " Custom command completion for :ProjectTree/:ProjectTab to complete project names or
   " directories
@@ -1346,10 +1373,24 @@ function! eclim#project#util#CommandCompleteAbsoluteOrProjectRelative(argLead, c
   if len(args) > 0
     let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
     if argLead =~ '^\(/\|[a-zA-Z]:\)'
-      return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
+      return eclim#util#CommandCompleteFile(a:argLead, a:cmdLine, a:cursorPos)
     endif
   endif
   return eclim#project#util#CommandCompleteProjectRelative(
+    \ a:argLead, a:cmdLine, a:cursorPos)
+endfunction " }}}
+
+function! eclim#project#util#CommandCompleteAbsoluteOrProjectRelativeDir(argLead, cmdLine, cursorPos) " {{{
+  " Custom command completion for project relative files and directories.
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseCmdLine(cmdLine)
+  if len(args) > 0
+    let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+    if argLead =~ '^\(/\|[a-zA-Z]:\)'
+      return eclim#util#CommandCompleteDir(a:argLead, a:cmdLine, a:cursorPos)
+    endif
+  endif
+  return eclim#project#util#CommandCompleteProjectRelativeDir(
     \ a:argLead, a:cmdLine, a:cursorPos)
 endfunction " }}}
 

@@ -161,7 +161,7 @@ endfunction " }}}
 " s:AddInclude() {{{
 function! s:AddInclude()
   let project_root = eclim#project#util#GetProjectRoot(b:project)
-  let complete = 'customlist,eclim#project#util#CommandCompleteAbsoluteOrProjectRelative'
+  let complete = 'customlist,eclim#project#util#CommandCompleteAbsoluteOrProjectRelativeDir'
   let dir = input('dir: ', '', complete)
 
   if dir == ''
