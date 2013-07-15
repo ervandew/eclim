@@ -44,34 +44,47 @@ Once you have started the completion you can use *Ctrl-N* to proceed to the
 next match and *Ctrl-P* to move to the previous match.
 
 If you are like me and you find those key strokes a bit cumbersome, then you
-can use the SuperTab_ plugin which allows you to use the Tab key for
-completion.
+might want to check out one of the following plugins which can make completion
+usage less cumbersome:
 
-Another option, which can be used in lieu of or with SuperTab, is the
-AutoComplPop_ plugin, which will automatically trigger code completion as you
-type.
+- SuperTab_ This plugin's aim is to allow you to use ``<tab>`` for all your
+  code completion needs.
+- AutoComplPop_ This plugin will automatically open the completion popup
+  for you after you've typed a preconfigured number of characters. You can use
+  AutoComplPop in lieu of, on in conjunction with SuperTab.
 
-AutoComplPop by default only supports triggering code completion for file types
-who have an omni completion that ships with vim, but you can configure it to
-support eclim code completion. Here is an example of some vim script you can
-add to your vimrc to enabled AutoComlPop for java file types (this example will
-trigger the completion popup when at least 3 characters have been typed after a
-dot, but you can tweak this to your tastes):
+  AutoComplPop by default only supports triggering code completion for file types
+  who have an omni completion that ships with vim, but you can configure it to
+  support eclim code completion. Here is an example of some vim script you can
+  add to your vimrc to enabled AutoComlPop for java file types (this example will
+  trigger the completion popup when at least 3 characters have been typed after a
+  dot, but you can tweak this to your tastes):
 
-.. code-block:: vim
+  .. code-block:: vim
 
-  let g:acp_behaviorJavaEclimLength = 3
-  function MeetsForJavaEclim(context)
-    return g:acp_behaviorJavaEclimLength >= 0 &&
-          \ a:context =~ '\k\.\k\{' . g:acp_behaviorJavaEclimLength . ',}$'
-  endfunction
-  let g:acp_behavior = {
-      \ 'java': [{
-        \ 'command': "\<c-x>\<c-u>",
-        \ 'completefunc' : 'eclim#java#complete#CodeComplete',
-        \ 'meets'        : 'MeetsForJavaEclim',
-      \ }]
-    \ }
+    let g:acp_behaviorJavaEclimLength = 3
+    function MeetsForJavaEclim(context)
+      return g:acp_behaviorJavaEclimLength >= 0 &&
+            \ a:context =~ '\k\.\k\{' . g:acp_behaviorJavaEclimLength . ',}$'
+    endfunction
+    let g:acp_behavior = {
+        \ 'java': [{
+          \ 'command': "\<c-x>\<c-u>",
+          \ 'completefunc' : 'eclim#java#complete#CodeComplete',
+          \ 'meets'        : 'MeetsForJavaEclim',
+        \ }]
+      \ }
+- YouCompleteMe_: Like AutoComplPop, YouCompleteMe will automatically open
+  the completion popup for you and it also adds fuzzy matching of completion
+  results. This plugin does have a compiled component to it so be sure to read
+  their install docs thoroughly.
+
+  Once installed, you'll need to add the following to your vimrc so that eclim
+  and YouCompleteMe play nice together:
+
+  .. code-block:: vim
+
+    let g:EclimCompletionMethod = 'omnifunc'
 
 To find out more about Vim's insert completion execute the following from
 within Vim:
@@ -80,5 +93,6 @@ within Vim:
 
   :h ins-completion
 
-.. _supertab: http://www.vim.org/scripts/script.php?script_id=1643
-.. _autocomplpop: http://www.vim.org/scripts/script.php?script_id=1879
+.. _supertab: https://github.com/ervandew/supertab
+.. _autocomplpop: https://bitbucket.org/ns9tks/vim-autocomplpop
+.. _youcompleteme: https://github.com/Valloric/YouCompleteMe
