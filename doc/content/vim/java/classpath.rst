@@ -45,42 +45,69 @@ and variables.
 
 .. _\:NewSrcEntry_java:
 
-- **:NewSrcEntry** <dir> [<dir> ...] -
-  Adds a new entry for one or more source code directories relative to the
-  project's root directory.
+- **:NewSrcEntry** <dir> -
+  Adds a new entry for a source code directory relative to the project's root
+  directory.
 
   .. code-block:: xml
 
     <classpathentry kind="src" path="src/java"/>
 
-  This command supports command completion of directories relative to the
+  This command supports command completion of the directory relative to the
   .classpath file.
 
 .. _\:NewProjectEntry_java:
 
-- **:NewProjectEntry** <project> [<project> ...] -
-  Adds a new entry for one or more dependencies on other projects.
+- **:NewProjectEntry** <project> -
+  Adds a new entry for a dependency on another project.
 
   .. code-block:: xml
 
     <classpathentry exported="true" kind="src" path="/a_project"/>
 
-  This command supports command completion of project names.
+  This command supports command completion of the project name.
 
 .. _\:NewJarEntry_java:
 
-- **:NewJarEntry** <file> [<file> ...] -
-  Adds a new entry for one or more jar file dependencies.  If the jar file is
-  not in a folder under the project root, you must use an absolute path
-  (apparent limitation with Eclipse).
+- **:NewJarEntry** <file> [<src_path> <javadoc_path>] -
+  Adds a new entry for a jar file dependency.  If the jar file is not in a
+  folder under the project root, you must use an absolute path (apparent
+  limitation with Eclipse).
 
   .. code-block:: xml
 
-    <classpathentry exported="true" kind="lib" path="lib/hibernate-4.0.jar"/>
+    <classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.8.3.jar"/>
+
+  You may optionally supply the path to the source for this jar and the entry
+  created will include the ``sourcepath`` attribute:
+
+  ::
+
+    :NewJarEntry lib/commons-beanutils-1.8.3.jar lib/commons-beanutils-1.8.3-sources.jar
+
+  .. code-block:: xml
+
+    <classpathentry kind="lib" path="lib/commons-beanutils-1.8.3.jar"
+        sourcepath="lib/commons-beanutils-1.8.3-sources.jar"/>
+
+  In addition to the source path you can all supply the path to the javadocs:
+
+  ::
+
+    :NewJarEntry lib/commons-beanutils-1.8.3.jar lib/commons-beanutils-1.8.3-sources.jar lib/commons-beanutils-1.8.3-javadoc.jar
+
+  .. code-block:: xml
+
+    <classpathentry kind="lib" path="lib/commons-beanutils-1.8.3.jar"
+        sourcepath="lib/commons-beanutils-1.8.3-sources.jar">
+      <attributes>
+        <attribute name="javadoc_location" value="jar:platform:/resource/my_project/lib/commons-beanutils-1.8.3-javadoc.jar"/>
+      </attributes>
+    </classpathentry>
 
 .. _\:NewVarEntry_java:
 
-- **:NewVarEntry** <VAR/file> [<VAR/file> ...] -
+- **:NewVarEntry** <VAR/file> [<src_path> <javadoc_path>] -
   Just like NewJarEntry except an Eclipse "var" entry is created.  When a jar
   entry references an absolute path, you should instead use a var entry.  The
   var entry allows you to define a base dir as a variable (ex. USER_HOME =
@@ -126,20 +153,37 @@ and variables.
 Source and Javadoc location
 ---------------------------
 
-For your 'var' and 'lib' classpath entries you can configure the location for
-that entry's source code and javadocs, like the example below, allowing you to
-:ref:`jump to the source <:JavaSearch>` or :ref:`lookup the docs <:JavaDocSearch>`
-of classes, etc found in that library. Note that the javadoc location must be a
-url, whether it be on the local file system (file:) or remote (http:).
+For your ``var`` and ``lib`` classpath entries, if you didn't do so when you
+created the entry, you can configure the location for that entry's source code
+and javadocs, like the example below, allowing you to :ref:`jump to the source
+<:JavaSearch>` or :ref:`lookup the docs <:JavaDocSearch>` of classes, etc found
+in that library. Note that the javadoc location must be a url, whether it be on
+the local file system (file:, jar:file:) or remote (http:).
 
 .. code-block:: xml
 
   <classpathentry exported="true" kind="lib" path="lib/hibernate-4.0.jar"
       sourcepath="<path>">
     <attributes>
-      <attribute value="file:<javadoc>" name="javadoc_location"/>
+      <attribute name="javadoc_location" value="file:<javadoc_dir>"/>
     </attributes>
   </classpathentry>
+
+.. note::
+
+  If your javadoc location is a jar in your workspace (in the curent project or
+  another project), then the url must be in the form (where ``<project_name>``
+  is replaced with your project's name):
+
+  ::
+
+    jar:platform:/resource/<project_name>/path/to/javadoc.jar!/
+
+  If the jar file is outside of your workspace, then it would be in the form:
+
+  ::
+
+    jar:file:/your/absolute/path/to/javadoc.jar!/
 
 .. _classpath-maven:
 
