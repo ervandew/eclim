@@ -37,7 +37,6 @@
 " Script Varables {{{
   let s:search_src = "java_search"
   let s:search_doc = "java_docsearch"
-  let s:open_doc = "-command java_doc_url_open -u '<url>'"
   let s:search_element =
     \ '-command <search> -n "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <length> <args>'
@@ -64,17 +63,17 @@
     \ '\(implements\|extends\)\_[0-9A-Za-z,[:space:]]*\<<element>\>\_[0-9A-Za-z,[:space:]]*{'
 " }}}
 
-" Search(command, ...) {{{
-" Executes a search.
-" Usage closely resebles eclim command line client usage.
-" When doing a non-pattern search the element under the cursor is searched for.
-"   Search for declarations of element under the cursor
-"     call s:Search("-x", "declarations")
-"   Search for references of HashMap
-"     call s:Search("-p", "HashM*", "-t", "class", "-x", "references")
-" Or all the arguments can be passed in at once:
-"   call s:Search("-p 'HashM*' -t class -x references")
-function! s:Search(command, ...)
+function! s:Search(command, ...) " {{{
+  " Executes a search.
+  " Usage closely resebles eclim command line client usage.
+  " When doing a non-pattern search the element under the cursor is searched for.
+  "   Search for declarations of element under the cursor
+  "     call s:Search("-x", "declarations")
+  "   Search for references of HashMap
+  "     call s:Search("-p", "HashM*", "-t", "class", "-x", "references")
+  " Or all the arguments can be passed in at once:
+  "   call s:Search("-p 'HashM*' -t class -x references")
+
   let argline = ""
   let index = 1
   while index <= a:0
@@ -157,9 +156,9 @@ function! s:Search(command, ...)
   return result
 endfunction " }}}
 
-" SearchAlternate(argline, element) {{{
-" Alternate search for non-project src files using vimgrep and &path.
-function! s:SearchAlternate(argline, element)
+function! s:SearchAlternate(argline, element) " {{{
+  " Alternate search for non-project src files using vimgrep and &path.
+
   call eclim#util#EchoInfo("Executing alternate search...")
   if a:argline =~ '-t'
     call eclim#util#EchoError
@@ -247,9 +246,9 @@ function! s:SearchAlternate(argline, element)
   return results
 endfunction " }}}
 
-" BuildPattern() {{{
-" Builds a pattern based on the cursors current position in the file.
-function! s:BuildPattern()
+function! s:BuildPattern() " {{{
+  " Builds a pattern based on the cursors current position in the file.
+
   let class = expand('<cword>')
   " see if the classname element selected is fully qualified.
   let line = getline('.')
@@ -274,9 +273,9 @@ function! s:BuildPattern()
   return class
 endfunction " }}}
 
-" SearchAndDisplay(type, ...) {{{
-" Execute a search and displays the results via quickfix.
-function! eclim#java#search#SearchAndDisplay(type, args)
+function! eclim#java#search#SearchAndDisplay(type, args) " {{{
+  " Execute a search and displays the results via quickfix.
+
   " if running from a non java source file, no SilentUpdate needed.
   if &ft == 'java'
     call eclim#lang#SilentUpdate()
@@ -350,23 +349,14 @@ function! eclim#java#search#SearchAndDisplay(type, args)
   endif
 endfunction " }}}
 
-" ViewDoc(...) {{{
-" View the supplied file in a browser, or if none proved, the file under the
-" cursor.
-function! s:ViewDoc(...)
+function! s:ViewDoc(...) " {{{
+  " View the supplied file in a browser, or if none proved, the file under the
+  " cursor.
   let url = a:0 > 0 ? a:1 : substitute(getline('.'), '\(.\{-}\)|.*', '\1', '')
-
-  " handle javadocs inside of a jar
-  if url =~ '^jar:file:.*!'
-    call eclim#Execute(substitute(s:open_doc, '<url>', url, ''))
-  else
-    call eclim#web#OpenUrl(url)
-  endif
+  call eclim#web#OpenUrl(url)
 endfunction " }}}
 
-" CommandCompleteJavaSearch(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for JavaSearch
-function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPos)
+function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPos) " {{{
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
@@ -397,10 +387,9 @@ function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPo
   return []
 endfunction " }}}
 
-" FindClassDeclaration() {{{
-" Used by non java source files to find the declaration of a classname under
-" the cursor.
-function! eclim#java#search#FindClassDeclaration()
+function! eclim#java#search#FindClassDeclaration() " {{{
+  " Used by non java source files to find the declaration of a classname under
+  " the cursor.
   let line = getline('.')
   let class = substitute(line,
     \ '.\{-}\([0-9a-zA-Z_.]*\%' . col('.') . 'c[0-9a-zA-Z_.]*\).*', '\1', '')

@@ -16,10 +16,13 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
+import java.io.File;
+
 import java.net.URL;
 
 import java.util.ArrayList;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclim.annotation.Command;
@@ -42,6 +45,10 @@ import org.eclipse.jdt.core.search.SearchMatch;
 
 import org.eclipse.jdt.ui.JavaUI;
 
+import org.eclipse.ui.PlatformUI;
+
+import org.eclipse.ui.help.IWorkbenchHelpSystem;
+
 /**
  * Command to search for javadocs.
  *
@@ -63,6 +70,8 @@ import org.eclipse.jdt.ui.JavaUI;
 public class DocSearchCommand
   extends SearchCommand
 {
+  private static final Pattern JAR_URL = Pattern.compile(
+      "^jar:(file|platform):.*\\.jar!/.*", Pattern.CASE_INSENSITIVE);
   private static final Pattern ANDROID_JDK_URL = Pattern.compile(
       ".*android.*?/reference/java.*", Pattern.CASE_INSENSITIVE);
 
@@ -73,6 +82,8 @@ public class DocSearchCommand
     IProject project = ProjectUtils.getProject(
         commandLine.getValue(Options.NAME_OPTION));
     String pattern = commandLine.getValue(Options.PATTERN_OPTION);
+
+    IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench().getHelpSystem();
 
     ArrayList<String> results = new ArrayList<String>();
     for(SearchMatch match : executeSearch(commandLine)){
@@ -113,6 +124,12 @@ public class DocSearchCommand
           !project.hasNature(ANDROID_NATURE))
       {
         continue;
+      }
+
+      // convert any jar urls to a usable eclipse url
+      Matcher jarMatcher = JAR_URL.matcher(url.toExternalForm());
+      if (jarMatcher.matches()){
+        url = helpSystem.resolve(url.toExternalForm(), true);
       }
 
       results.add(url.toString());
