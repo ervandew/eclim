@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,7 @@ public class ValidateCommand
   private static final String NO_GRAMMER = "no grammar found";
   private static final String DOCTYPE_ROOT_NULL = "DOCTYPE root \"null\"";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -59,9 +57,7 @@ public class ValidateCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
     boolean schema = commandLine.hasOption(Options.SCHEMA_OPTION);
 
-    List<Error> errors = validate(project, file, schema, null);
-
-    return errors;
+    return validate(project, file, schema, null);
   }
 
   /**
@@ -81,7 +77,6 @@ public class ValidateCommand
     for(Iterator<Error> ii = errors.iterator(); ii.hasNext();){
       Error error = ii.next();
       // FIXME: hack to ignore errors regarding no defined dtd.
-      // When 1.4 no longer needs to be supported, this can be scrapped.
       if (error.getMessage().indexOf(NO_GRAMMER) != -1 ||
           error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1)
       {
