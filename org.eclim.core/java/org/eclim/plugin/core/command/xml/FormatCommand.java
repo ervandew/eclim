@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,13 @@ package org.eclim.plugin.core.command.xml;
 
 import java.io.FileInputStream;
 import java.io.StringWriter;
+import java.io.Writer;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-import javax.xml.transform.sax.SAXSource;
-
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclim.annotation.Command;
 
@@ -35,6 +34,14 @@ import org.eclim.command.Options;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.util.IOUtils;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 
 import org.xml.sax.InputSource;
 
@@ -54,53 +61,137 @@ import org.xml.sax.InputSource;
 public class FormatCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    String restoreNewline = null;
     FileInputStream in = null;
-    try{
+    try {
       String file = commandLine.getValue(Options.FILE_OPTION);
-      //int lineWidth = commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
-      int indent = commandLine.getIntValue(Options.INDENT_OPTION);
       String format = commandLine.getValue("m");
+      int lineWidth = commandLine.getIntValue(Options.LINE_WIDTH_OPTION);
+      int indent = commandLine.getIntValue(Options.INDENT_OPTION);
 
-      // set the line separator if necessary
-      String newline = System.getProperty("line.separator");
-      if (newline.equals("\r\n") && format.equals("unix")){
-        restoreNewline = newline;
-        System.setProperty("line.separator", "\n");
-      }else if (newline.equals("\n") && format.equals("dos")){
-        restoreNewline = newline;
-        System.setProperty("line.separator", "\r\n");
+      in = new FileInputStream(file);
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      // disable validation since we only want to reformat.
+      factory.setValidating(false);
+      factory.setValidating(false);
+      factory.setFeature("http://xml.org/sax/features/namespaces", false);
+      factory.setFeature("http://xml.org/sax/features/validation", false);
+      factory.setFeature(
+          "http://apache.org/xml/features/nonvalidating/load-dtd-grammar",
+          false);
+      factory.setFeature(
+          "http://apache.org/xml/features/nonvalidating/load-external-dtd",
+          false);
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      Document document = builder.parse(new InputSource(in));
+
+      DOMImplementationRegistry registry =
+        DOMImplementationRegistry .newInstance();
+      DOMImplementationLS impl = (DOMImplementationLS)
+        registry.getDOMImplementation("LS");
+
+      LSSerializer serializer = impl.createLSSerializer();
+      serializer.getDomConfig()
+        .setParameter("format-pretty-print", Boolean.TRUE);
+      if (format.equals("unix")) {
+        serializer.setNewLine("\n");
+      } else if (format.equals("dos")) {
+        serializer.setNewLine("\r\n");
       }
 
-      // javax.xml.transform (indentation issues)
-      TransformerFactory factory = TransformerFactory.newInstance();
-      factory.setAttribute("indent-number", Integer.valueOf(indent));
-      Transformer serializer = factory.newTransformer();
-      serializer.setOutputProperty(OutputKeys.INDENT, "yes");
-      // broken in 1.5
-      /*serializer.setOutputProperty(
-          "{http://xml.apache.org/xslt}indent-amount", String.valueOf(indent));
-      in = new FileInputStream(file);
-      serializer.transform(new SAXSource(new InputSource(in)),
-          new StreamResult(getContext().out));*/
-
-      StringWriter out = new StringWriter();
-      in = new FileInputStream(file);
-      serializer.transform(
-          new SAXSource(new InputSource(in)), new StreamResult(out));
-
-      return out.toString();
-    }finally{
+      // attempt to serialize with the requested indent + line width
+      try{
+        return serialize(document, serializer, indent, lineWidth);
+      }catch(Exception e){
+        // if the reflection hack fails, then just format with the default
+        // indent + line width
+        return serializer.writeToString(document);
+      }
+    } finally {
       IOUtils.closeQuietly(in);
-      if (restoreNewline != null){
-        System.setProperty("line.separator", restoreNewline);
+    }
+  }
+
+  // very gross reflection, all to set the indent + line width
+  private String serialize(
+      Document document, LSSerializer serializer, int indent, int lineWidth)
+    throws Exception
+  {
+    Object ser = getField(serializer, "serializer");
+
+    invokeMethod(serializer, "prepareForSerialization",
+        new Class[]{ser.getClass(), Node.class}, new Object[]{ser, document});
+
+    StringWriter out = new StringWriter();
+    invokeMethod(ser, "setOutputCharStream",
+        new Class[]{Writer.class}, new Object[]{out});
+    invokeMethod(ser, "reset", new Class[0], new Object[0]);
+    invokeMethod(ser, "prepare", new Class[0], new Object[0]);
+
+    Object printer = getField(ser, "_printer");
+
+    // set the indent and line width
+    Object format = getField(printer, "_format");
+    invokeMethod(format, "setIndent",
+        new Class[]{Integer.TYPE}, new Object[]{indent});
+    invokeMethod(format, "setLineWidth",
+        new Class[]{Integer.TYPE}, new Object[]{lineWidth});
+
+    // perform the serialization (from BaseMarkupSerializer.serialize(Document))
+    invokeMethod(ser, "serializeNode",
+        new Class[]{Node.class}, new Object[]{document});
+    invokeMethod(ser, "serializePreRoot", new Class[0], new Object[0]);
+    invokeMethod(printer, "flush", new Class[0], new Object[0]);
+    Exception ex = (Exception)getField(printer, "_exception");
+    if (ex != null){
+      throw ex;
+    }
+
+    return out.toString();
+  }
+
+  @SuppressWarnings("rawtypes")
+  private Object getField(Object obj, String name)
+    throws Exception
+  {
+    Class clazz = obj.getClass();
+    Exception ex = null;
+    while (clazz != null){
+      try{
+        Field field = clazz.getDeclaredField(name);
+        field.setAccessible(true);
+        return field.get(obj);
+      }catch(NoSuchFieldException nsfe){
+        ex = nsfe;
+        clazz = clazz.getSuperclass();
       }
     }
+
+    throw ex;
+  }
+
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  private void invokeMethod(
+      Object obj, String name, Class[] params, Object[] args)
+    throws Exception
+  {
+    Class clazz = obj.getClass();
+    Exception ex = null;
+    while (clazz != null){
+      try{
+        Method method = clazz.getDeclaredMethod(name, params);
+        method.setAccessible(true);
+        method.invoke(obj, args);
+        return;
+      }catch(NoSuchMethodException nsme){
+        ex = nsme;
+        clazz = clazz.getSuperclass();
+      }
+    }
+
+    throw ex;
   }
 }

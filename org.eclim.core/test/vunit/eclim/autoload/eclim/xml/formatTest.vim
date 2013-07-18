@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,14 +22,12 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
   set shiftwidth=2
 endfunction " }}}
 
-" TestFormat() {{{
-function! TestFormat()
+function! TestFormat() " {{{
   edit! xml/format.xml
   call vunit#PeekRedir()
 
@@ -44,16 +42,6 @@ function! TestFormat()
   call vunit#AssertEquals('  <one>one</one>', getline(3))
   call vunit#AssertEquals('  <two/>', getline(4))
   call vunit#AssertEquals('</blah>', getline(5))
-endfunction " }}}
-
-" TestFormatFail() {{{
-function! TestFormatFail()
-  edit! xml/format_fail.xml
-  call vunit#PeekRedir()
-
-  XmlFormat
-
-  call vunit#AssertEquals(1, len(getloclist(0)))
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
