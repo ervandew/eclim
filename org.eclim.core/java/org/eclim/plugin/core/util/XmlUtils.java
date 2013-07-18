@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -170,6 +171,11 @@ public class XmlUtils
             spe.getColumnNumber(),
             false)
         );
+      return errors;
+    }catch(FileNotFoundException fnfe){
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(new Error(
+            "FileNotFoundException: " + fnfe.getMessage(), filename, 1, 1, false));
       return errors;
     }
 
