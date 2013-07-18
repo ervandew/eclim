@@ -32,18 +32,20 @@ endif
 let s:command_validate = '-command xml_validate -p "<project>" -f "<file>"'
 " }}}
 
-" Validate(on_save, ...) {{{
-" Validate the current file.
-function! eclim#xml#validate#Validate(on_save, ...)
+function! eclim#xml#validate#Validate(on_save, ...) " {{{
+  " Optional args:
+  "   bang: '!' or '', where '!' indicates that we should not jump to the
+  "         first error.
   if a:on_save && (!g:EclimXmlValidate || eclim#util#WillWrittenBufferClose())
     return
   endif
 
   if eclim#EclimAvailable()
-    let project = eclim#project#util#GetCurrentProjectName()
-    if project == ""
+    if !eclim#project#util#IsCurrentFileInProject()
       return
     endif
+
+    let project = eclim#project#util#GetCurrentProjectName()
     let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:command_validate
     let command = substitute(command, '<project>', project, '')
