@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,7 +67,6 @@ open files or buffers.
 
   - buffers: search listed buffers
   - quickfix: search the quickfix results
-  - vcsmodified: search files reported by your vcs as modified or untracked.
 
   .. note::
 
@@ -77,6 +76,17 @@ open files or buffers.
     vim.  However, actions you take outside of vim or eclipse (moving/removing
     files, updates from a version control system, etc.) will not be visible
     until you force a project refresh via :ref:`:ProjectRefresh`.
+
+  .. note::
+
+    If you would like to use :LocateFile even when eclimd is not running or for
+    projects not known to eclim, one option would be to install `the silver
+    searcher`_, then install my `ag plugin`_, and configure eclim to use the
+    plugin as the fallback default:
+
+    .. code-block:: vim
+
+        let g:EclimLocateFileNonProjectScope = 'ag'
 
   **Configuration**
 
@@ -116,3 +126,15 @@ open files or buffers.
       search will be case sensitive.
     - 'always': searching will always be case insensitive.
     - 'never': searching will never be case insensitive.
+
+  .. note::
+
+    **Search Filters**: eclim does not yet expose the ability to add filters
+    should you want to ignore certain directories, but you can configure this
+    ability from within Eclipse:
+
+    :menuselection:`<right click on your project> --> Properties --> Resource
+    --> Resource Filters`
+
+.. _the silver searcher: https://github.com/ggreer/the_silver_searcher
+.. _ag plugin: https://github.com/ervandew/ag
