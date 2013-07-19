@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ import java.util.Map;
 
 import org.eclim.Eclim;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -34,46 +36,77 @@ import static org.junit.Assert.*;
  */
 public class ProjectCommandsTest
 {
-  private static final String TEST_PROJECT = "unit_test_create";
+  private static final String TEST_PROJECT = "unit_test";
+  private static final String TEST_PROJECT_CREATE = "unit_test_create";
   private static final String TEST_PROJECT_IMPORT = "unit_test_import";
 
-  @Test
-  public void createProject()
+  @Before
+  public void setUp()
   {
-    // delete the test project if it exists
+    if (!Eclim.projectExists(TEST_PROJECT)){
+      Eclim.execute(new String[]{
+        "project_create",
+        "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT,
+        "-n", "java"
+      });
+    }
+  }
+
+  @After
+  public void tearDown()
+  {
     if (Eclim.projectExists(TEST_PROJECT)){
       Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT});
+
+      // delete the project files + dir
+      File dir = new File(Eclim.getWorkspace() + "/" + TEST_PROJECT);
+      for(File f : dir.listFiles()){
+        f.delete();
+      }
+      dir.delete();
     }
-    assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT));
-
-    Eclim.execute(new String[]{
-      "project_create",
-      "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT,
-      "-n", "java"
-    });
-
-    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
   }
 
   @Test
-  public void closeProject()
+  public void createDeleteProject()
+  {
+    // delete the test project if it exists
+    if (Eclim.projectExists(TEST_PROJECT)){
+      Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT_CREATE});
+    }
+    assertFalse("Project already exists.", Eclim.projectExists(TEST_PROJECT_CREATE));
+
+    Eclim.execute(new String[]{
+      "project_create",
+      "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_CREATE,
+      "-n", "java"
+    });
+
+    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT_CREATE));
+
+    Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT_CREATE});
+
+    assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT_CREATE));
+
+    // delete the project files + dir
+    File dir = new File(Eclim.getWorkspace() + "/" + TEST_PROJECT_CREATE);
+    for(File f : dir.listFiles()){
+      f.delete();
+    }
+    dir.delete();
+  }
+
+  @Test
+  public void openCloseProject()
   {
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     Eclim.execute(new String[]{
       "project_close", "-p", TEST_PROJECT});
-
     assertFalse("Project not closed.", projectOpen());
-  }
-
-  @Test
-  public void openProject()
-  {
-    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
 
     Eclim.execute(new String[]{
       "project_open", "-p", TEST_PROJECT});
-
     assertTrue("Project not opened.", projectOpen());
   }
 
@@ -124,23 +157,6 @@ public class ProjectCommandsTest
     path = new File(Eclim.getWorkspace() + '/' + TEST_PROJECT)
       .getCanonicalPath().replace('\\', '/');
     assertEquals("Wrong project path", path, Eclim.getProjectPath(TEST_PROJECT));
-  }
-
-  @Test
-  public void deleteProject()
-  {
-    assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT));
-
-    Eclim.execute(new String[]{"project_delete", "-p", TEST_PROJECT});
-
-    assertFalse("Project not deleted.", Eclim.projectExists(TEST_PROJECT));
-
-    // delete the project files + dir
-    File dir = new File(Eclim.getWorkspace() + "/" + TEST_PROJECT);
-    for(File f : dir.listFiles()){
-      f.delete();
-    }
-    dir.delete();
   }
 
   @Test
