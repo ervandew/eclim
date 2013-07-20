@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,19 +57,19 @@ public class CodeCompleteCommandTest
     assertEquals("Wrong number of results", 3, results.size());
 
     Map<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "variable1");
+    assertEquals(result.get("menu"), "$variable1");
+    assertEquals(result.get("info"), "$variable1");
+
+    result = results.get(1);
     assertEquals(result.get("completion"), "methodA1(");
     assertEquals(result.get("menu"), "methodA1($str) - TestA");
     assertEquals(result.get("info"), "TestA::methodA1($str)");
 
-    result = results.get(1);
+    result = results.get(2);
     assertEquals(result.get("completion"), "methodA2()");
     assertEquals(result.get("menu"), "methodA2() - TestA");
     assertEquals(result.get("info"), "TestA::methodA2()");
-
-    result = results.get(2);
-    assertEquals(result.get("completion"), "variable1");
-    assertEquals(result.get("menu"), "$variable1");
-    assertEquals(result.get("info"), "$variable1");
   }
 
   @Test

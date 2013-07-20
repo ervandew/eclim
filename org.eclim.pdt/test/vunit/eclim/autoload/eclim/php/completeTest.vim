@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,13 +22,11 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_php'
 endfunction " }}}
 
-" TestCompletePhp() {{{
-function! TestCompletePhp()
+function! TestCompletePhp() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
@@ -40,9 +38,9 @@ function! TestCompletePhp()
   call vunit#PeekRedir()
   echo 'results = ' . string(results)
   call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
-  call vunit#AssertEquals('methodA1(', results[0].word, 'Wrong result.')
-  call vunit#AssertEquals('methodA2()', results[1].word, 'Wrong result.')
-  call vunit#AssertEquals('variable1', results[2].word, 'Wrong result.')
+  call vunit#AssertEquals('variable1', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('methodA1(', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('methodA2()', results[2].word, 'Wrong result.')
 
   call cursor(21, 14)
   let start = eclim#php#complete#CodeComplete(1, '')
@@ -54,8 +52,7 @@ function! TestCompletePhp()
   call vunit#AssertEquals('regular', results[0].word, 'Wrong result.')
 endfunction " }}}
 
-" TestCompletePhpShortTags() {{{
-function! TestCompletePhp()
+function! TestCompletePhpShortTags() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
@@ -67,9 +64,9 @@ function! TestCompletePhp()
   call vunit#PeekRedir()
   echo 'results = ' . string(results)
   call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
-  call vunit#AssertEquals('methodA1(', results[0].word, 'Wrong result.')
-  call vunit#AssertEquals('methodA2()', results[1].word, 'Wrong result.')
-  call vunit#AssertEquals('variable1', results[2].word, 'Wrong result.')
+  call vunit#AssertEquals('variable1', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('methodA1(', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('methodA2()', results[2].word, 'Wrong result.')
 
   call cursor(27, 17)
   let start = eclim#php#complete#CodeComplete(1, '')
@@ -82,8 +79,7 @@ function! TestCompletePhp()
   call vunit#AssertEquals('methodB2()', results[1].word, 'Wrong result.')
 endfunction " }}}
 
-" TestCompleteCss() {{{
-function! TestCompleteCss()
+function! TestCompleteCss() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
@@ -128,8 +124,7 @@ if has('win32') || has('win64')
   finish
 endif
 
-" TestCompleteHtml() {{{
-function! TestCompleteHtml()
+function! TestCompleteHtml() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
