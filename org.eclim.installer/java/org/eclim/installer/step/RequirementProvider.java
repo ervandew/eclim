@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,10 +56,7 @@ public class RequirementProvider
   private static final Logger logger =
     LoggerFactory.getLogger(RequirementProvider.class);
 
-  /**
-   * {@inheritDoc}
-   * @see RequirementProvider#getRequirements()
-   */
+  @Override
   public Requirement[] getRequirements()
   {
     if(Os.isFamily("windows")){
@@ -81,10 +78,7 @@ public class RequirementProvider
     return requirements;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see RequirementProvider#validate(Requirement)
-   */
+  @Override
   public Status validate(Requirement requirement)
   {
     ValidatingRequirement req = (ValidatingRequirement)requirement;
@@ -128,10 +122,10 @@ public class RequirementProvider
       int minor = Integer.parseInt(parts[1]);
       int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 
-      if(major != 4 || minor < 2 || patch < 0){
+      if(major != 4 || minor < 3 || patch < 0){
         return new Status(FAIL,
             Installer.getString(
-              "eclipse.version.invalid", version, "4.2.x (Juno)"));
+              "eclipse.version.invalid", version, "4.3.x (Kepler)"));
       }
 
       return OK_STATUS;
