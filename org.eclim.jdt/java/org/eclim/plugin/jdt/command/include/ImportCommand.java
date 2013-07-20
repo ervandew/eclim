@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -154,27 +154,50 @@ public class ImportCommand
     MultiTextEdit edit = new MultiTextEdit();
     if (node != null && node.getNodeType() == ASTNode.IMPORT_DECLARATION){
       ImportDeclaration imprt = (ImportDeclaration)node;
-      int end = node.getStartPosition() + node.getLength() + lineDelim.length();
-      ASTNode next = NodeFinder.perform(astRoot, end, 1);
 
-      if (next != null && next.getNodeType() == ASTNode.IMPORT_DECLARATION){
+      ASTNode next = getNext(astRoot, node, lineDelim);
+      while (next != null && next.getNodeType() == ASTNode.IMPORT_DECLARATION){
         ImportDeclaration nextImprt = (ImportDeclaration)next;
         if (!ImportUtils.importsInSameGroup(separationLevel, imprt, nextImprt)){
-          edit.addChild(new InsertEdit(end, lineDelim));
+          ASTNode prev = getPrev(astRoot, next, lineDelim);
+          if (prev != null && prev.getNodeType() == ASTNode.IMPORT_DECLARATION){
+            edit.addChild(new InsertEdit(next.getStartPosition(), lineDelim));
+          }
         }
+        next = getNext(astRoot, next, lineDelim);
+        imprt = nextImprt;
       }
 
-      ASTNode prev = NodeFinder.perform(
-          astRoot, offset - (lineDelim.length() + 1), 1);
+      ASTNode prev = getPrev(astRoot, node, lineDelim);
       if (prev != null && prev.getNodeType() == ASTNode.IMPORT_DECLARATION){
         ImportDeclaration prevImprt = (ImportDeclaration)prev;
         if (!ImportUtils.importsInSameGroup(separationLevel, imprt, prevImprt)){
-          end = prev.getStartPosition() + prev.getLength() + lineDelim.length();
+          int end = prev.getStartPosition() + prev.getLength() + lineDelim.length();
           edit.addChild(new InsertEdit(end, lineDelim));
         }
       }
     }
     return edit.getChildrenSize() > 0 ? edit : null;
+  }
+
+  private ASTNode getNext(CompilationUnit astRoot, ASTNode node, String lineDelim)
+  {
+    int offset = node.getStartPosition() + node.getLength() + lineDelim.length();
+    ASTNode next = NodeFinder.perform(astRoot, offset, 1);
+
+    // if the offset is on a blank line, then the compilation unit will be
+    // returned as the node, so advance 1 and try again.
+    while (next != null && next.getNodeType() == ASTNode.COMPILATION_UNIT){
+      next = NodeFinder.perform(astRoot, offset + 1, 1);
+    }
+
+    return next;
+  }
+
+  private ASTNode getPrev(CompilationUnit astRoot, ASTNode node, String lineDelim)
+  {
+    int offset = node.getStartPosition() - (lineDelim.length() + 1);
+    return NodeFinder.perform(astRoot, offset, 1);
   }
 
   private class ChooseImport
