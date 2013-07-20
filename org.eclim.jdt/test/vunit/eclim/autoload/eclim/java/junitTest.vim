@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -40,12 +40,14 @@ function! TestJUnit() " {{{
   call vunit#AssertTrue(getline(4) =~
     \ 'Tests run: 3, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
     \ 'Run full test: Tests run')
-  call vunit#AssertTrue(getline(6) =~ 'Testcase: foo took [0-9.]\+ sec',
-    \ 'Run full test: foo')
-  call vunit#AssertTrue(getline(7) =~ 'Testcase: fooString took [0-9.]\+ sec',
-    \ 'Run full test: fooString')
-  call vunit#AssertTrue(getline(8) =~ 'Testcase: bar took [0-9.]\+ sec',
+
+  let lines = sort(getline(6, 8))
+  call vunit#AssertTrue(lines[0] =~ 'Testcase: bar took [0-9.]\+ sec',
     \ 'Run full test: bar')
+  call vunit#AssertTrue(lines[1] =~ 'Testcase: foo took [0-9.]\+ sec',
+    \ 'Run full test: foo')
+  call vunit#AssertTrue(lines[2] =~ 'Testcase: fooString took [0-9.]\+ sec',
+    \ 'Run full test: fooString')
   bdelete
 
   call cursor(12, 5)
