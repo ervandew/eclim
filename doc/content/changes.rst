@@ -16,6 +16,49 @@
 History of Changes
 ==================
 
+.. _2.3.0:
+.. _1.7.17:
+
+2.3.0 / 1.7.17 (Jul. 21, 2013)
+------------------------------
+
+Java:
+  - :ref:`:NewJarEntry <:NewJarEntry_java>` now accepts up to 3 arguments
+    allowing you to create the jar entry with the path to the jar, path to the
+    source, and the path to the javadocs.
+  - On javadoc search, all results, including results found in jar files, will
+    be fully translated to usable urls to be opened by vim instead of sending
+    jar results back to eclipse to let it open them. With this change your
+    chosen brower on the vim side will always be used.
+  - Fix for import grouping by package on Kepler.
+
+Php:
+  .. warning::
+
+    **Reminder:** The format of the h2 database used for php searching and code
+    completion has changed in **Kepler** which may result in searching / code
+    completion not returning any results, both in eclim and in the standard
+    eclipse php editor.  To fix this you'll need to stop eclipse, remove the old
+    index, and then restart:
+
+    ::
+
+      $ rm -r <your workspace>/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
+
+Scala:
+  - Updated to require 3.0.1 of the Scala IDE which now supports Kepler (for
+    eclim 2.3.0 only). Since this version of the Scala IDE seems to only support
+    Scala 2.10.x now, the option to install 2.9.x version has been removed,
+    however the indigo release of eclim (1.7.17) still supports the Scala 2.9.x
+    version of Scala IDE 3.0.0.
+
+Xml:
+  - :ref:`:XmlFormat <:XmlFormat>` now uses the DOM3 APIs to improve the
+    formatted result, honoring your ``textwidth`` and indent settings.
+
+| :gitlog:`Git Log (2.3.0) <2.2.7...2.3.0>`
+| :gitlog:`Git Log (1.7.17) <1.7.16...1.7.17>`
+
 .. _2.2.7:
 .. _1.7.16:
 
