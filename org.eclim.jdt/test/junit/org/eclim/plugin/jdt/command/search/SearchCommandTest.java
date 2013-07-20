@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class SearchCommandTest
     assertTrue(((String)result.get("filename"))
         .endsWith("/java/lang/NullPointerException.java"));
     assertEquals(result.get("message"), "java.lang.NullPointerException");
-    assertEquals(result.get("line"), 48);
+    assertEquals(result.get("line"), 53);
     assertEquals(result.get("column"), 7);
 
     result = results.get(1);
