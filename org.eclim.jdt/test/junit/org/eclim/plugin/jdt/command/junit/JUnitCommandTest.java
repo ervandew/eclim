@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,11 @@
  */
 package org.eclim.plugin.jdt.command.junit;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang.StringUtils;
-
 import org.eclim.Eclim;
-
 import org.eclim.plugin.jdt.Jdt;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -51,10 +50,14 @@ public class JUnitCommandTest
 
     String[] lines = StringUtils.split(result, '\n');
     assertEquals("Testsuite: org.eclim.test.junit.run.FooTest", lines[1]);
-    assertTrue(lines[3].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
-    assertTrue(lines[4].startsWith("Testcase: foo took "));
-    assertTrue(lines[5].startsWith("Testcase: fooString took "));
-    assertTrue(lines[6].startsWith("Testcase: bar took "));
+    assertTrue(lines[3], lines[3].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
+
+    String[] results = new String[lines.length - 4];
+    System.arraycopy(lines, 4, results, 0, results.length);
+    Arrays.sort(results);
+    assertTrue(results[0], results[0].startsWith("Testcase: bar took "));
+    assertTrue(results[1], results[1].startsWith("Testcase: foo took "));
+    assertTrue(results[2], results[2].startsWith("Testcase: fooString took "));
   }
 
   @Test
@@ -96,12 +99,16 @@ public class JUnitCommandTest
 
     String[] lines = StringUtils.split(result, '\n');
     assertEquals("Testsuite: org.eclim.test.junit.run.BarTest", lines[1]);
-    assertTrue(lines[3].startsWith("Tests run: 1, Failures: 0, Errors: 0"));
-    assertTrue(lines[4].startsWith("Testcase: bar took "));
+    assertTrue(lines[3], lines[3].startsWith("Tests run: 1, Failures: 0, Errors: 0"));
+    assertTrue(lines[4], lines[4].startsWith("Testcase: bar took "));
+
     assertEquals("Testsuite: org.eclim.test.junit.run.FooTest", lines[6]);
-    assertTrue(lines[8].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
-    assertTrue(lines[9].startsWith("Testcase: foo took "));
-    assertTrue(lines[10].startsWith("Testcase: fooString took "));
-    assertTrue(lines[11].startsWith("Testcase: bar took "));
+    assertTrue(lines[8], lines[8].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
+    String[] results = new String[lines.length - 9];
+    System.arraycopy(lines, 9, results, 0, results.length);
+    Arrays.sort(results);
+    assertTrue(results[0], results[0].startsWith("Testcase: bar took "));
+    assertTrue(results[1], results[1].startsWith("Testcase: foo took "));
+    assertTrue(results[2], results[2].startsWith("Testcase: fooString took "));
   }
 }
