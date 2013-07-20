@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,12 +49,12 @@ public class GetElementDocCommandTest
       });
     assertEquals(2, result.size());
     assertEquals(
-        "org.eclim.test.doc.TestPreview\n\n" +
+        "|org[0]|.|eclim[1]|.|test[2]|.|doc[3]|.TestPreview\n\n" +
         "A test class for javadoc previews.\n" +
         "Author:\n\t Eric Van Dewoestine\n", result.get("text"));
     List<Map<String,String>> links =
       (List<Map<String,String>>)result.get("links");
-    assertEquals(0, links.size());
+    assertEquals(4, links.size());
 
     // constructor call: TestPreview(String[])
     result = (Map<String,Object>)Eclim.execute(new String[]{
@@ -63,15 +63,15 @@ public class GetElementDocCommandTest
     });
     assertEquals(2, result.size());
     assertEquals(
-        "org.eclim.test.doc.|TestPreview[0]|.TestPreview(|String[1]|[] args)\n\n" +
+        "|org[0]|.|eclim[1]|.|test[2]|.|doc[3]|.|TestPreview[4]|.TestPreview(|String[5]|[] args)\n\n" +
         "Constructs a new instance from the supplied arguments.\n" +
         "Parameters:\n\targs The arguments.\n", result.get("text"));
     links = (List<Map<String,String>>)result.get("links");
-    assertEquals(2, links.size());
-    assertEquals("TestPreview", links.get(0).get("text"));
-    assertTrue(links.get(0).get("href").startsWith("eclipse-javadoc:"));
-    assertEquals("String", links.get(1).get("text"));
-    assertTrue(links.get(1).get("href").startsWith("eclipse-javadoc:"));
+    assertEquals(6, links.size());
+    assertEquals("TestPreview", links.get(4).get("text"));
+    assertTrue(links.get(4).get("href").startsWith("eclipse-javadoc:"));
+    assertEquals("String", links.get(5).get("text"));
+    assertTrue(links.get(5).get("href").startsWith("eclipse-javadoc:"));
 
     // method call: test()
     result = (Map<String,Object>)Eclim.execute(new String[]{
@@ -80,16 +80,16 @@ public class GetElementDocCommandTest
     });
     assertEquals(2, result.size());
     assertEquals(
-        "|String[0]| org.eclim.test.doc.|TestPreview[1]|.test()\n\n" +
-        "A test method.\nReturns:\n\t a test |String[2]|\n", result.get("text"));
+        "|String[0]| |org[1]|.|eclim[2]|.|test[3]|.|doc[4]|.|TestPreview[5]|.test()\n\n" +
+        "A test method.\nReturns:\n\t a test |String[6]|\n", result.get("text"));
     links = (List<Map<String,String>>)result.get("links");
-    assertEquals(3, links.size());
+    assertEquals(7, links.size());
     assertEquals("String", links.get(0).get("text"));
     assertTrue(links.get(0).get("href").startsWith("eclipse-javadoc:"));
-    assertEquals("TestPreview", links.get(1).get("text"));
-    assertTrue(links.get(1).get("href").startsWith("eclipse-javadoc:"));
-    assertEquals("String", links.get(2).get("text"));
-    assertTrue(links.get(2).get("href").startsWith("eclipse-javadoc:"));
+    assertEquals("TestPreview", links.get(5).get("text"));
+    assertTrue(links.get(5).get("href").startsWith("eclipse-javadoc:"));
+    assertEquals("String", links.get(6).get("text"));
+    assertTrue(links.get(6).get("href").startsWith("eclipse-javadoc:"));
 
     // follow url: String
     result = (Map<String,Object>)Eclim.execute(new String[]{
@@ -97,7 +97,7 @@ public class GetElementDocCommandTest
     });
     assertEquals(2, result.size());
     String text = (String)result.get("text");
-    assertTrue(text.startsWith("java.lang.String\n\nThe String class"));
+    assertTrue(text.startsWith("|java[0]|.|lang[1]|.String\n\nThe String class"));
   }
 
   @Test
@@ -155,7 +155,7 @@ public class GetElementDocCommandTest
     assertEquals(2, result.size());
     text = (String)result.get("text");
     assertTrue(text.startsWith(
-          "java.util.List<|E[0]|>\n\nAn ordered collection"));
+          "|java[0]|.|util[1]|.List<|E[2]|>\n\nAn ordered collection"));
 
     // method call: Map.put
     result = (Map<String,Object>)Eclim.execute(new String[]{
@@ -165,7 +165,7 @@ public class GetElementDocCommandTest
     assertEquals(2, result.size());
     text = (String)result.get("text");
     assertTrue(text.startsWith(
-        "|Object[0]| java.util.|Map[1]|.put(|Object[2]| key, |Object[3]| value)\n\n" +
+        "|Object[0]| |java[1]|.|util[2]|.|Map[3]|.put(|Object[4]| key, |Object[5]| value)\n\n" +
         "Associates the specified value with the specified key in this map"));
   }
 }

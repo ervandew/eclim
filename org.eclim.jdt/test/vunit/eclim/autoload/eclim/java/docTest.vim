@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ function! TestPreview() " {{{
   call vunit#AssertEquals(winnr('$'), 2, 'Class ref: Wrong win nums.')
   winc j
   call vunit#AssertEquals(&previewwindow, 1, 'Class ref: Not preview window.')
-  call vunit#AssertEquals('org.eclim.test.doc.TestPreview', getline(1))
+  call vunit#AssertEquals('|org[0]|.|eclim[1]|.|test[2]|.|doc[3]|.TestPreview', getline(1))
   call vunit#AssertEquals('', getline(2))
   call vunit#AssertEquals('A test class for javadoc previews.', getline(3))
   call vunit#AssertEquals('Author:', getline(4))
@@ -85,7 +85,7 @@ function! TestPreview() " {{{
   winc j
   call vunit#AssertEquals(&previewwindow, 1, 'Constructor ref: Not preview window.')
   call vunit#AssertEquals(
-    \ 'org.eclim.test.doc.|TestPreview[0]|.TestPreview(|String[1]|[] args)',
+    \ '|org[0]|.|eclim[1]|.|test[2]|.|doc[3]|.|TestPreview[4]|.TestPreview(|String[5]|[] args)',
     \ getline(1))
   call vunit#AssertEquals('', getline(2))
   call vunit#AssertEquals('Constructs a new instance from the supplied arguments.', getline(3))
@@ -100,25 +100,25 @@ function! TestPreview() " {{{
   winc j
   call vunit#AssertEquals(&previewwindow, 1, 'Method ref: Not preview window.')
   call vunit#AssertEquals(
-    \ '|String[0]| org.eclim.test.doc.|TestPreview[1]|.test()',
+    \ '|String[0]| |org[1]|.|eclim[2]|.|test[3]|.|doc[4]|.|TestPreview[5]|.test()',
     \ getline(1))
   call vunit#AssertEquals('', getline(2))
   call vunit#AssertEquals('A test method.', getline(3))
   call vunit#AssertEquals('Returns:', getline(4))
-  call vunit#AssertEquals('   a test |String[2]|', getline(5))
+  call vunit#AssertEquals('   a test |String[6]|', getline(5))
 
   " follow link
   call cursor(5, 13)
   exec "normal \<cr>"
   call vunit#AssertEquals(winnr('$'), 2, 'Link: Wrong win nums.')
   call vunit#AssertEquals(&previewwindow, 1, 'Link: Not preview window.')
-  call vunit#AssertEquals('java.lang.String', getline(1))
+  call vunit#AssertEquals('|java[0]|.|lang[1]|.String', getline(1))
   call vunit#AssertTrue(getline(3) =~ '^The String class')
 
   " back
   exec "normal \<c-o>"
   call vunit#AssertEquals(
-    \ '|String[0]| org.eclim.test.doc.|TestPreview[1]|.test()',
+    \ '|String[0]| |org[1]|.|eclim[2]|.|test[3]|.|doc[4]|.|TestPreview[5]|.test()',
     \ getline(1), 'back to method')
 
   " forward
