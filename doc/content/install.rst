@@ -25,7 +25,7 @@ following requirements.
 
 - `Java Development Kit`_ 1.6 or greater
 - `Vim`_ 7.1 or greater
-- `Eclipse 4.2.x (Juno)`_ (eclim 2.2.x), `Eclipse 3.7.x (Indigo)`_ (eclim
+- `Eclipse 4.3.x (Kepler)`_ (eclim 2.2.x), `Eclipse 3.7.x (Indigo)`_ (eclim
   1.7.x), or `Eclipse 3.8`_ (eclim 1.7.13 or greater)
 - Mac and Linux users must also have make and gcc installed.
 
@@ -70,7 +70,7 @@ Download
 You can find the official eclim installer on eclim's sourceforge `downloads
 page`_:
 
-- :eclimdist:`jar` (for Eclipse 4.2.x, Juno)
+- :eclimdist:`jar` (for Eclipse 4.3.x, Kepler)
 - :eclimdist_indigo:`jar` (for Eclipse 3.8 or Eclipse 3.7.x, Indigo)
 
 .. _downloads page: https://sourceforge.net/projects/eclim/files/eclim/
@@ -451,7 +451,7 @@ just need to supply your vim files and eclipse paths as system properties:
 
 .. _java development kit: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _eclipse.org: http://eclipse.org/downloads/
-.. _eclipse 4.2.x (juno): http://eclipse.org/downloads/index.php
+.. _eclipse 4.3.x (kepler): http://eclipse.org/downloads/index.php
 .. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/packages/release/indigo/sr2
 .. _eclipse 3.8: http://download.eclipse.org/eclipse/downloads/drops/R-3.8-201206081200/
 .. _vim: http://www.vim.org/download.php

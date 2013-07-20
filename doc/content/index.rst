@@ -123,6 +123,16 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Jul. 21, 2013
+-------------
+
+The focus of this release is to bring eclim fully up to date with Eclipse Kepler
+support. The installer for eclim 2.3.0 now requires that you install against
+Kepler.
+
+- :ref:`Eclim 2.3.0 <2.3.0>` for Eclipse 4.3 (Kepler).
+- :ref:`Eclim 1.7.17 <1.7.17>` for Eclipse 3.7/3.8 (Indigo).
+
 Jul. 14, 2013
 -------------
 
