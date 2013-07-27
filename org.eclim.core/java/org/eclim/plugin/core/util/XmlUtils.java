@@ -259,7 +259,7 @@ public class XmlUtils
    * @param handler Main DefaultHandler to delegate to (may be null).
    * @param errorHandler DefaultHandler to delegate errors to (may be null).
    * @param entityResolver EntityResolver to delegate to (may be null).
-   * @return
+   * @return DefaultHandler instance.
    */
   private static DefaultHandler getHandler(
       DefaultHandler handler,
