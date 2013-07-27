@@ -2,38 +2,38 @@
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
 <dependencies>
   <feature id="cdt">
-    <dependency id="org.eclipse.cdt" version="8.1.0">
-      <site url="http://download.eclipse.org/releases/juno/"/>
+    <dependency id="org.eclipse.cdt" version="8.2.0">
+      <site url="http://download.eclipse.org/releases/kepler/"/>
     </dependency>
   </feature>
 
   <feature id="dltk">
-    <dependency id="org.eclipse.dltk.core" version="4.0.0">
-      <site url="http://download.eclipse.org/releases/juno/"/>
+    <dependency id="org.eclipse.dltk.core" version="5.0.0">
+      <site url="http://download.eclipse.org/releases/kepler/"/>
     </dependency>
   </feature>
 
   <feature id="dltkruby">
-    <dependency id="org.eclipse.dltk.ruby" version="4.0.0">
-      <site url="http://download.eclipse.org/releases/juno/"/>
+    <dependency id="org.eclipse.dltk.ruby" version="5.0.0">
+      <site url="http://download.eclipse.org/releases/kepler/"/>
     </dependency>
   </feature>
 
   <feature id="jdt">
-    <dependency id="org.eclipse.jdt" version="3.8.0">
-      <site url="http://download.eclipse.org/releases/juno/"/>
+    <dependency id="org.eclipse.jdt" version="3.9.0">
+      <site url="http://download.eclipse.org/releases/kepler/"/>
     </dependency>
   </feature>
 
   <feature id="pdt">
-    <dependency id="org.eclipse.php" version="3.0.1">
-      <site url="http://download.eclipse.org/releases/juno/"/>
+    <dependency id="org.eclipse.php" version="3.2.0">
+      <site url="http://download.eclipse.org/releases/kepler/"/>
     </dependency>
   </feature>
 
   <feature id="wst">
-    <dependency id="org.eclipse.wst.web_ui.feature" version="3.4.0">
-      <site url="http://download.eclipse.org/releases/juno/"/>
+    <dependency id="org.eclipse.wst.web_ui.feature" version="3.5.0">
+      <site url="http://download.eclipse.org/releases/kepler/"/>
     </dependency>
   </feature>
 
