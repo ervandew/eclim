@@ -43,9 +43,16 @@
   let s:undoredo_command = '-command refactor_<operation>'
 " }}}
 
-" CodeComplete(command, findstart, base, [options]) {{{
-" Handles code completion.
-function! eclim#lang#CodeComplete(command, findstart, base, ...)
+function! eclim#lang#CodeComplete(command, findstart, base, ...) " {{{
+  " Optional args:
+  "   options: dict containing one or more of the following:
+  "     temp: 1 to use a temp file, 0 otherwise
+  "     regex: regular expression of characters to walk back over to find the
+  "            starting position of the completion.
+  "     layout: passed through to the eclimd completion for languages that
+  "             support this (typically decides how overloaded method names are
+  "             presented in the completion list).
+
   if !eclim#project#util#IsCurrentFileInProject(0)
     return a:findstart ? -1 : []
   endif
@@ -65,7 +72,8 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...)
       let start -= 1
     endif
 
-    while start > 0 && line[start - 1] =~ '\w'
+    let pattern = get(options, 'regex', '\w')
+    while start > 0 && line[start - 1] =~ pattern
       let start -= 1
     endwhile
 
