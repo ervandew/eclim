@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _2.3.1:
+
+2.3.1 (Jul. 27, 2013)
+---------------------
+
+Installer:
+  - Fixed dependencies to point at the Kepler update site.
+
+| :gitlog:`Git Log (2.3.1) <2.3.0...2.3.1>`
+
 .. _2.3.0:
 .. _1.7.17:
 

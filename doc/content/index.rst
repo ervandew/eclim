@@ -123,6 +123,14 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Jul. 27, 2013
+-------------
+
+The previous eclim installer for Kepler was still pointing at the Juno update
+site. This release remedies that.
+
+- :ref:`Eclim 2.3.1 <2.3.1>` for Eclipse 4.3 (Kepler).
+
 Jul. 21, 2013
 -------------
 
