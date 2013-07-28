@@ -111,7 +111,7 @@ TODO {{{
       - add 'recent' scope to search recently used files?
         - need to keep track of n recently used files
       - Filtering:
-        - Eclipse -> Project -> Properties -> Resource -> Resource Filters
+        - <right click on the project> -> Properties -> Resource -> Resource Filters
         - add ability to configure the eclipse resource filters
 
     - :ProjectCreateWizard - use input()
@@ -552,7 +552,7 @@ NOTES {{{
       install.properties: add the following keys
         - featureList.<plugin>
         - featureList.<plugin>.html
-      dependencies.properties: add feature dependencies
+      dependencies.xml: add feature dependencies
       FeatureProvider: add feature name, etc to constants
       EclipsePluginStep: add feature to FeatureNameComparator
   }}}
