@@ -51,7 +51,7 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "213", "-e", "utf-8"
+        "-o", "242", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 3, results.size());
@@ -82,7 +82,7 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "228", "-e", "utf-8"
+        "-o", "257", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 2, results.size());
@@ -108,7 +108,7 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "294", "-e", "utf-8"
+        "-o", "323", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 1, results.size());
@@ -117,6 +117,50 @@ public class CodeCompleteCommandTest
     assertEquals(result.get("completion"), "regular");
     assertEquals(result.get("menu"), "$regular: mixed");
     assertEquals(result.get("info"), "$regular regular read/write property<br/>Type:  mixed");
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void completeNamespace()
+  {
+    assertTrue("Project doesn't exist.",
+        Eclim.projectExists(Pdt.TEST_PROJECT));
+
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "333", "-e", "utf-8"
+      });
+
+    assertEquals("Wrong number of results", 1, results.size());
+
+    Map<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "Lib");
+    assertEquals(result.get("menu"), "App\\Lib - lib.php");
+    assertEquals(result.get("info"), "App\\Lib");
+
+    results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "347", "-e", "utf-8"
+      });
+
+    assertEquals("Wrong number of results", 3, results.size());
+
+    result = results.get(0);
+    assertEquals(result.get("completion"), "MyFunction()");
+    assertEquals(result.get("menu"), "MyFunction() - App\\Lib");
+    assertEquals(result.get("info"), "App\\Lib::MyFunction()");
+
+    result = results.get(1);
+    assertEquals(result.get("completion"), "MyClass");
+    assertEquals(result.get("menu"), "MyClass - App\\Lib");
+    assertEquals(result.get("info"), "App\\Lib\\MyClass");
+
+    result = results.get(2);
+    assertEquals(result.get("completion"), "MYCONST");
+    assertEquals(result.get("menu"), "MYCONST");
+    assertEquals(result.get("info"), "MYCONST = 'App\\Lib\\MYCONST'");
   }
 
   /**

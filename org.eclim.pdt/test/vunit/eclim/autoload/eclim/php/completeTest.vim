@@ -32,7 +32,7 @@ function! TestCompletePhp()
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(16, 13)
+  call cursor(17, 13)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(12, start, 'Wrong starting column.')
 
@@ -44,7 +44,7 @@ function! TestCompletePhp()
   call vunit#AssertEquals('methodA2()', results[1].word, 'Wrong result.')
   call vunit#AssertEquals('variable1', results[2].word, 'Wrong result.')
 
-  call cursor(21, 14)
+  call cursor(22, 14)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(12, start, 'Wrong starting column.')
   let results = eclim#php#complete#CodeComplete(0, '')
@@ -59,7 +59,7 @@ function! TestCompletePhp()
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(26, 32)
+  call cursor(29, 32)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(31, start, 'Wrong starting column.')
 
@@ -71,7 +71,7 @@ function! TestCompletePhp()
   call vunit#AssertEquals('methodA2()', results[1].word, 'Wrong result.')
   call vunit#AssertEquals('variable1', results[2].word, 'Wrong result.')
 
-  call cursor(27, 17)
+  call cursor(30, 17)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(15, start, 'Wrong starting column.')
   let results = eclim#php#complete#CodeComplete(0, '')
@@ -104,7 +104,7 @@ function! TestCompleteCss()
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
     \ 'Results does not contain font-weight')
 
-  call cursor(26, 20)
+  call cursor(29, 20)
   let start = eclim#html#complete#CodeComplete(1, '')
   call vunit#AssertEquals(15, start, 'Wrong starting column.')
 
@@ -133,7 +133,7 @@ function! TestCompleteHtml()
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(23, 7)
+  call cursor(26, 7)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(5, start, 'Wrong starting column.')
 
