@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,10 +53,6 @@ public class CodeCompleteCommand
   private static final Pattern REMOVE_HEAD =
     Pattern.compile("(s?)<head>.*</head>", Pattern.MULTILINE | Pattern.DOTALL);
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletionCollector(ISourceModule)
-   */
   @Override
   protected ScriptCompletionProposalCollector getCompletionCollector(
       ISourceModule module)
@@ -68,10 +64,6 @@ public class CodeCompleteCommand
     return new PHPCompletionProposalCollector(null /*document*/, module, true);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletion(IScriptCompletionProposal)
-   */
   @Override
   protected String getCompletion(IScriptCompletionProposal proposal)
   {
@@ -84,13 +76,20 @@ public class CodeCompleteCommand
     }else if(completion.startsWith("$")){
       completion = completion.substring(1);
     }
+
+    // handle inconsistency w/ completion of php namespaced results where the
+    // namespace will complete fully, but a function, etc in that namespace will
+    // complete only that member:
+    //   App\Lib being a full completion for 'App\' but,
+    //   MyFunction() begin the completion for 'App\Lib\MyF'
+    int index = completion.lastIndexOf('\\');
+    if (index != -1){
+      completion = completion.substring(index + 1);
+    }
+
     return completion;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getInfo(IScriptCompletionProposal)
-   */
   @Override
   protected String getInfo(IScriptCompletionProposal proposal)
   {

@@ -34,12 +34,8 @@ function! eclim#php#complete#CodeComplete(findstart, base)
     return eclim#html#complete#CodeComplete(a:findstart, a:base)
   endif
 
-  " passing in a regex to fix completion of php namespaces like:
-  "   App\<c-x><c-u>
-  "   App\Lib
   return eclim#lang#CodeComplete(
-    \ s:complete_command, a:findstart, a:base,
-    \ {'temp': 0, 'regex': '\(\w\|\\\)'})
+    \ s:complete_command, a:findstart, a:base, {'temp': 0})
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -8,6 +8,7 @@
   </head>
   <body>
     <?php
+    require_once('lib.php');
     include '../models.php';
 
     echo "Hello World.";
@@ -19,6 +20,8 @@
     $testB = new TestB();
     $testB->methodB1();
     $testB->r;
+    App\;
+    App\Lib\;
     ?>
     <h>
     <h1 style="font">
