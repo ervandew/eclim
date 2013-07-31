@@ -263,6 +263,13 @@ public class JUnitCommand
     junit.setProject(antProject);
     junit.setTaskName("junit");
     junit.setFork(true);
+
+    IProject project = javaProject.getProject();
+    String cwd = getPreferences().getValue(project, "org.eclim.java.junit.cwd");
+    junit.setDir(new File(
+          cwd != null && cwd.trim().length() > 0 ? cwd :
+          ProjectUtils.getPath(project)));
+
     junit.setHaltonerror(halt);
     junit.setHaltonfailure(halt);
     junit.createClasspath().append(classpath);

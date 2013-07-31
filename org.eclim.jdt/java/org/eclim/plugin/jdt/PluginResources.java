@@ -124,6 +124,7 @@ public class PluginResources
       "JDT/Javadoc org.eclim.java.doc.sourcepath\n" +
       "JDT/Javadoc org.eclim.java.doc.packagenames\n" +
       "JDT/JUnit org.eclim.java.junit.output_dir\n" +
+      "JDT/JUnit org.eclim.java.junit.cwd\n" +
       "JDT/JUnit org.eclim.java.junit.jvmargs [] JSON[^-.*]\n" +
       "JDT/JUnit org.eclim.java.junit.sysprops [] JSON[^(-D)?\\S+=.*]\n" +
       "JDT/JUnit org.eclim.java.junit.envvars [] JSON[^\\w+=.*]"
