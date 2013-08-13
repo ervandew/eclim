@@ -22,6 +22,11 @@
 " }}}
 
 " Global Variables {{{
+
+  if !exists("g:EclimJavascriptValidate")
+    let g:EclimJavascriptValidate = 1
+  endif
+
   if !exists("g:EclimJavascriptLintEnabled")
     " enabling by default until jsdt validation is mature enough to use.
     "let g:EclimJavascriptLintEnabled = 0
