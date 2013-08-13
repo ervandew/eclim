@@ -103,6 +103,7 @@ function! eclim#common#buffers#Buffers(bang) " {{{
       \ '<cr> - open buffer with default action',
       \ 'E - open with :edit',
       \ 'S - open in a new split window',
+      \ 'V - open in a new vertically split window',
       \ 'T - open in a new tab',
       \ 'D - delete the buffer',
       \ 'R - refresh the buffer list',

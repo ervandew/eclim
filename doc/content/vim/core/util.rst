@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,6 +78,7 @@ general purpose commands that are useful in and outside the scope of eclim.
 
   - **E** (shift-e) - Open the file with 'edit'.
   - **S** (shift-s) - Open the file with 'split'.
+  - **V** (shift-v) - Open the file with 'vsplit'.
   - **T** (shift-t) - Open the file with 'tabnew'.
   - **D** (shift-d) - Deletes the buffer and removes it from the list.
   - **\?** - View the help buffer.
