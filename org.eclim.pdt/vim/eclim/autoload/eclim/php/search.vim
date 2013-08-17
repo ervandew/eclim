@@ -30,10 +30,7 @@
 " }}}
 
 " Script Varables {{{
-  let s:search_element =
-    \ '-command dltk_search -n "<project>" -f "<file>" ' .
-    \ '-o <offset> -l <length> -e <encoding> -x <context>'
-  let s:search_pattern = '-command php_search'
+  let s:search = '-command php_search'
   let s:buildpaths = '-command dltk_buildpaths -p "<project>"'
   let s:options = ['-p', '-t', '-s', '-x', '-i']
   let s:scopes = ['all', 'project']
@@ -49,16 +46,12 @@
     \ ]
 " }}}
 
-" Search(argline) {{{
-" Executes a search.
-function! eclim#php#search#Search(argline)
+function! eclim#php#search#Search(argline) " {{{
   return eclim#lang#Search(
-    \ s:search_pattern, g:EclimPhpSearchSingleResult, a:argline)
+    \ s:search, g:EclimPhpSearchSingleResult, a:argline)
 endfunction " }}}
 
-" FindInclude() {{{
-" Finds the include file under the cursor
-function eclim#php#search#FindInclude()
+function eclim#php#search#FindInclude() " {{{
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -93,9 +86,7 @@ function eclim#php#search#FindInclude()
   endif
 endfunction " }}}
 
-" SearchContext() {{{
-" Executes a contextual search.
-function! eclim#php#search#SearchContext()
+function! eclim#php#search#SearchContext() " {{{
   if getline('.')[col('.') - 1] == '$'
     call cursor(line('.'), col('.') + 1)
     let cnum = eclim#util#GetCurrentElementColumn()
@@ -121,9 +112,7 @@ function! eclim#php#search#SearchContext()
   call eclim#php#search#Search('-x declarations')
 endfunction " }}}
 
-" CommandCompletePhpSearch(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for PhpSearch
-function! eclim#php#search#CommandCompletePhpSearch(argLead, cmdLine, cursorPos)
+function! eclim#php#search#CommandCompletePhpSearch(argLead, cmdLine, cursorPos) " {{{
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
