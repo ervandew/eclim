@@ -266,9 +266,12 @@ function! eclim#display#signs#Update() " {{{
 
   " remove all existing signs
   let existing = eclim#display#signs#GetExisting()
+  let existingNonEclimSignsLines = []
   for exists in existing
     if exists.name =~ '^\(qf_\)\?\(error\|info\|warning\)$'
       call eclim#display#signs#Unplace(exists.id)
+    else
+      call add(existingNonEclimSignsLines, exists.line)
     endif
   endfor
 
@@ -280,6 +283,11 @@ function! eclim#display#signs#Update() " {{{
   for [list, marker, prefix] in [
       \ [qflist, g:EclimQuickfixSignText, 'qf_'],
       \ [loclist, g:EclimLoclistSignText, '']]
+
+    " Do not place signs where other plugins/user already placed a sign
+    " This fixes some incompatibility issues between Syntastic and Eclim.
+    call filter(list, 'index(existingNonEclimSignsLines, v:val.lnum) == -1')
+
     if g:EclimSignLevel >= 4
       let info = filter(copy(list), 'v:val.type == "" || tolower(v:val.type) == "i"')
       call eclim#display#signs#Define(prefix . 'info', marker, g:EclimInfoHighlight)
