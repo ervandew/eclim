@@ -255,7 +255,7 @@ function! eclim#display#signs#Update() " {{{
   " dictionaries in the location or quickfix list.  It supports 'i' (info), 'w'
   " (warning), and 'e' (error).
 
-  if !has('signs') || !g:EclimSignLevel
+  if !has('signs') || !g:EclimSignLevel || &ft == 'qf'
     return
   endif
 
@@ -274,7 +274,8 @@ function! eclim#display#signs#Update() " {{{
 
   let qflist = filter(g:EclimShowQuickfixSigns ? getqflist() : [],
     \ 'bufnr("%") == v:val.bufnr')
-  let loclist = filter(g:EclimShowLoclistSigns ? getloclist(0) : [],
+  let show_loclist = g:EclimShowLoclistSigns && exists('b:eclim_loclist')
+  let loclist = filter(show_loclist ? getloclist(0) : [],
     \ 'bufnr("%") == v:val.bufnr')
 
   for [list, marker, prefix] in [

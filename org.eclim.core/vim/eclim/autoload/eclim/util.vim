@@ -1135,6 +1135,8 @@ function! eclim#util#SetLocationList(list, ...) " {{{
   if g:EclimShowCurrentError && len(loclist) > 0
     call eclim#util#DelayedCommand('call eclim#util#ShowCurrentError()')
   endif
+
+  let b:eclim_loclist = 1
   call eclim#display#signs#Update()
 endfunction " }}}
 
@@ -1167,6 +1169,7 @@ function! eclim#util#ClearLocationList(...)
     call setloclist(0, [], 'r')
   endif
   call eclim#display#signs#Update()
+  unlet! b:eclim_loclist
 endfunction " }}}
 
 " SetQuickfixList(list, [action]) {{{
