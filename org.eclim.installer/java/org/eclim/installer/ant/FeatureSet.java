@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,9 @@
  */
 package org.eclim.installer.ant;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.tools.ant.types.PatternSet;
 
 import org.formic.InstallContext;
@@ -29,6 +32,8 @@ import org.formic.Installer;
 public class FeatureSet
   extends PatternSet
 {
+  private static final Pattern VERSIONED = Pattern.compile("\\d+$");
+
   public FeatureSet()
   {
     super();
@@ -48,10 +53,21 @@ public class FeatureSet
       String key = keys[ii];
       Boolean value = Boolean.valueOf(context.getValue(key).toString());
       if(value.booleanValue()){
-        String name = "**/org.eclim." + key.substring(key.indexOf('.') + 1);
-        createInclude().setName(name + "/**/*");
-        createInclude().setName(name + "_*/**/*");
+        createFeatureIncludes(key);
+
+        // handle per version features by removing the version suffix.
+        Matcher matcher = VERSIONED.matcher(key);
+        if (matcher.find()){
+          createFeatureIncludes(matcher.replaceFirst(""));
+        }
       }
     }
+  }
+
+  private void createFeatureIncludes(String feature)
+  {
+    String name = "**/org.eclim." + feature.substring(feature.indexOf('.') + 1);
+    createInclude().setName(name + "/**/*");
+    createInclude().setName(name + "_*/**/*");
   }
 }
