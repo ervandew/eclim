@@ -123,6 +123,15 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Sep. 12, 2013
+-------------
+
+This release fixes the extraction of the necessary vim files when installing
+scala support.
+
+- :ref:`Eclim 2.3.2 <2.3.2>` for Eclipse 4.3 (Kepler).
+- :ref:`Eclim 1.7.18 <1.7.18>` for Eclipse 3.7/3.8 (Indigo).
+
 Jul. 27, 2013
 -------------
 
