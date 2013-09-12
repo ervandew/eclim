@@ -16,6 +16,21 @@
 History of Changes
 ==================
 
+.. _2.3.2:
+.. _1.7.18:
+
+2.3.2 / 1.7.18 (Sep. 12, 2013)
+------------------------------
+
+Installer:
+  - Fixed extraction of scala vim files when installing scala support.
+
+Php:
+  - Fixed completion of php namespaces.
+
+| :gitlog:`Git Log (2.3.2) <2.3.1...2.3.2>`
+| :gitlog:`Git Log (1.7.18) <1.7.17...1.7.18>`
+
 .. _2.3.1:
 
 2.3.1 (Jul. 27, 2013)
