@@ -188,7 +188,7 @@ public class ImportCommand
     // if the offset is on a blank line, then the compilation unit will be
     // returned as the node, so advance 1 and try again.
     while (next != null && next.getNodeType() == ASTNode.COMPILATION_UNIT){
-      next = NodeFinder.perform(astRoot, offset++, 1);
+      next = NodeFinder.perform(astRoot, ++offset, 1);
     }
 
     return next;
