@@ -124,9 +124,13 @@ public class RubyProjectManager
   public void refresh(IProject project, IFile file)
     throws Exception
   {
-    ISourceModule module = DltkUtils.getSourceModule(file);
-    if (module != null){
-      module.makeConsistent(new NullProgressMonitor());
+    try{
+      ISourceModule module = DltkUtils.getSourceModule(file);
+      if (module != null){
+        module.makeConsistent(new NullProgressMonitor());
+      }
+    }catch(IllegalArgumentException iae){
+      // ignore
     }
   }
 
