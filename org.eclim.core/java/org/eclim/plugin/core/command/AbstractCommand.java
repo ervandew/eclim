@@ -149,7 +149,7 @@ public abstract class AbstractCommand
         }
 
         if (project != null && project.exists() && file != null){
-          IFile temp = ProjectUtils.getFile(project, file);
+          IFile temp = project.getFile(file);
           if (temp.exists() && temp.getName().startsWith("__eclim_temp_")){
             temp.delete(true, false, null);
           }
