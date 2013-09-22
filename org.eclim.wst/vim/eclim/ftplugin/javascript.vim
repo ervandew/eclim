@@ -24,7 +24,10 @@
 
 " Options {{{
 
-exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#javascript#complete#CodeComplete'
+" tern has better auto completion than eclipse
+if &omnifunc != 'tern#Complete'
+  exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#javascript#complete#CodeComplete'
+endif
 
 " }}}
 
