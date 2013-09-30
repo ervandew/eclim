@@ -21,5 +21,5 @@ Require-Bundle: org.eclim,
   org.eclipse.jface.text,
   org.scala-ide.scala.compiler,
   org.scala-ide.scala.library,
-  org.scala-ide.sdt.aspects,
   org.scala-ide.sdt.core
+Eclim-ClassPath-Bundle: org.scala-ide.sdt.aspects
