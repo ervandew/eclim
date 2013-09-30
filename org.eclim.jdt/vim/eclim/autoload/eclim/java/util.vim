@@ -63,10 +63,13 @@ function! eclim#java#util#GetClassDeclarationPosition(movecursor) " {{{
 endfunction " }}}
 
 function! eclim#java#util#GetFullyQualifiedClassname(...) " {{{
-  if a:0 > 0
-    return eclim#java#util#GetPackage(a:1) . '.' . eclim#java#util#GetClassname(a:1)
-  endif
-  return eclim#java#util#GetPackage() . '.' . eclim#java#util#GetClassname()
+  let package = a:0 > 0 ?
+    \ eclim#java#util#GetPackage(a:1) :
+    \ eclim#java#util#GetPackage()
+  let classname = a:0 > 0 ?
+    \ eclim#java#util#GetClassname(a:1) :
+    \ eclim#java#util#GetClassname()
+  return len(package) ? (package . '.' . classname) : classname
 endfunction " }}}
 
 function! eclim#java#util#GetPackage(...) " {{{
