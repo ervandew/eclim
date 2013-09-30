@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -125,13 +126,10 @@ public class EclimClasspathInitializer
                 fin = new FileInputStream(manifest);
                 HashMap<String,String> headers = new HashMap<String,String>();
                 ManifestElement.parseBundleManifest(fin, headers);
-                String requiredBundles = headers.get("Require-Bundle");
-                for (String bname : requiredBundles.split(",\\s*")){
-                  if (bname.startsWith("org.eclim")){
-                    continue;
-                  }
-                  bundleNames.add(bname);
-                }
+                bundleNames.addAll(
+                  getBundleNamesFromHeader(headers, "Require-Bundle"));
+                bundleNames.addAll(
+                  getBundleNamesFromHeader(headers, "Eclim-ClassPath-Bundle"));
               }catch(Exception e){
                 logger.error("Failed to load manifest: " + manifest, e);
               }finally{
@@ -223,6 +221,22 @@ public class EclimClasspathInitializer
       logger.error("Failed to load eclim classpath container", e);
     }
     return (IClasspathEntry[])list.toArray(new IClasspathEntry[list.size()]);
+  }
+
+  private List<String> getBundleNamesFromHeader(
+      HashMap<String,String> headers, String header)
+  {
+    ArrayList<String> names = new ArrayList<String>();
+    String bundles = headers.get(header);
+    if (bundles != null){
+      for (String bname : bundles.split(",\\s*")){
+        if (bname.startsWith("org.eclim")){
+          continue;
+        }
+        names.add(bname);
+      }
+    }
+    return names;
   }
 
   private void listFiles(File dir, FileFilter filter)

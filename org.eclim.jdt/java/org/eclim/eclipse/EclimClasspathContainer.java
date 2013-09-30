@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,37 +33,25 @@ public class EclimClasspathContainer
     this.entries = entries;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IClasspathContainer#getClasspathEntries()
-   */
+  @Override
   public IClasspathEntry[] getClasspathEntries()
   {
     return entries;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IClasspathContainer#getDescription()
-   */
+  @Override
   public String getDescription()
   {
     return "eclim dependencies";
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IClasspathContainer#getKind()
-   */
+  @Override
   public int getKind()
   {
     return IClasspathContainer.K_DEFAULT_SYSTEM;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IClasspathContainer#getPath()
-   */
+  @Override
   public IPath getPath()
   {
     return path;
