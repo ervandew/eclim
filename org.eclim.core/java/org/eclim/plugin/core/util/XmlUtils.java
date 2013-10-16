@@ -465,7 +465,7 @@ public class XmlUtils
   }
 
   /**
-   * Handler for collecting errors durring parsing and validation of a xml
+   * Handler for collecting errors during parsing and validation of a xml
    * file.
    */
   private static class ErrorAggregator
