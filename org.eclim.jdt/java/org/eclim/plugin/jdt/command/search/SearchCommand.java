@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -177,6 +177,13 @@ public class SearchCommand
         // user requested a contextual search.
         if(context == -1){
           context = getElementContextualContext(element);
+
+        // jdt search doesn't support implementors for method searches, so
+        // switch to declarations.
+        }else if (context == IJavaSearchConstants.IMPLEMENTORS &&
+            element.getElementType() == IJavaElement.METHOD)
+        {
+          context = IJavaSearchConstants.DECLARATIONS;
         }
         pattern = SearchPattern.createPattern(element, context);
       }
@@ -205,6 +212,14 @@ public class SearchCommand
       }
 
       int type = getType(commandLine.getValue(Options.TYPE_OPTION));
+
+      // jdt search doesn't support implementors for method searches, so switch
+      // to declarations.
+      if (type == IJavaSearchConstants.METHOD &&
+          context == IJavaSearchConstants.IMPLEMENTORS)
+      {
+        context = IJavaSearchConstants.DECLARATIONS;
+      }
 
       // hack for inner classes
       Matcher matcher = INNER_CLASS.matcher(pat);
