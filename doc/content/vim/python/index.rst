@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,11 @@ less than ideal candidates for inclusion in eclim.
 After evaluating the eclipse plugins, attention turned to pure python
 solutions, which then lead to the eventual choice: rope_
 
+.. note::
+
+  Eclim comes bundled with a version of rope, so there is nothing extra for you
+  to install once you have met the minimum requirements below.
+
 **Minimum Requirements**:
   - python 2.5 or greater
   - vim compiled with python support
@@ -58,13 +63,22 @@ solutions, which then lead to the eventual choice: rope_
   - :doc:`find element definition </vim/python/search>`
   - :ref:`:PyLint`
 
+**Creating A New Python Project**
+
+Since python support is not provided by eclipse, you can create your project
+with the ``none`` nature:
+
+.. code-block:: vim
+
+  :ProjectCreate my_project -n none
+
 **Configuration**
 
 When using functionality that in turn utilizes rope, eclim attempt to make the
 usage of rope as transparent as possible.  Eclim will automatically create the
-rope project in the same directory as your rope project, resulting in a new
-directory and file (.ropeproject/config.py).  Once that file has been created
-you can then modify it to suit your environment.
+rope project in the same directory as your eclim/eclipse project, resulting in a
+new directory and file (.ropeproject/config.py).  Once that file has been
+created you can then modify it to suit your environment.
 
 For example, lets say you have another python project which is not on your
 python path, but you wish to have **:PyLint**, code completion, etc. recognize
