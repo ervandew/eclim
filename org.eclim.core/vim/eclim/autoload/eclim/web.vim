@@ -205,7 +205,7 @@ function! s:DetermineBrowser() " {{{
         endfor
       endif
     elseif has('mac')
-      let browser = '!open <url>'
+      let browser = '!open "<url>"'
     else
       for name in s:browsers
         if executable(name)
