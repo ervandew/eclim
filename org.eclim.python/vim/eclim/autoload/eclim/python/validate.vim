@@ -23,10 +23,10 @@
 " }}}
 
 " Global Variables {{{
-  " if the user has the pyflakes plugin from vim.org, then disable our
+  " if the user has the syntastic plugin (formerly pyflakes), then disable our
   " validation since the two overlap and may result in errors
   let s:pyflakes_enabled = 1
-  if exists('g:pyflakes_builtins')
+  if exists('g:loaded_syntastic_plugin') || exists('g:pyflakes_builtins')
     let s:pyflakes_enabled = 0
   endif
 " }}}
@@ -124,7 +124,7 @@ function! eclim#python#validate#Validate(on_save)
 endfunction " }}}
 
 " ValidateSyntax() {{{
-function eclim#python#validate#ValidateSyntax()
+function! eclim#python#validate#ValidateSyntax()
   let syntax_error = ''
 
   if has('python')
@@ -157,7 +157,7 @@ EOF
 endfunction " }}}
 
 " PyLint() {{{
-function eclim#python#validate#PyLint()
+function! eclim#python#validate#PyLint()
   let file = expand('%:p')
 
   if !executable('pylint')
