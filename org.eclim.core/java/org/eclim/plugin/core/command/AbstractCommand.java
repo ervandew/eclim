@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.core.command;
 
+import java.io.File;
+
 import java.util.Arrays;
 
 import org.eclim.command.Command;
@@ -30,7 +32,6 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.file.FileUtils;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
 import com.martiansoftware.nailgun.NGContext;
@@ -149,9 +150,9 @@ public abstract class AbstractCommand
         }
 
         if (project != null && project.exists() && file != null){
-          IFile temp = project.getFile(file);
+          File temp = project.getFile(file).getRawLocation().toFile();
           if (temp.exists() && temp.getName().startsWith("__eclim_temp_")){
-            temp.delete(true, false, null);
+            temp.delete();
           }
         }
       }
