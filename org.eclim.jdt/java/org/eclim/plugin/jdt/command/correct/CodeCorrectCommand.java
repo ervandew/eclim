@@ -53,6 +53,8 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 import org.eclipse.jdt.core.refactoring.CompilationUnitChange;
 
+import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+
 import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
 import org.eclipse.jdt.internal.ui.text.correction.CorrectionMessages;
 import org.eclipse.jdt.internal.ui.text.correction.ReorgCorrectionsSubProcessor.ClasspathFixCorrectionProposal;
@@ -75,6 +77,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.RefactoringStatusEntry;
 import org.eclipse.ltk.core.refactoring.TextFileChange;
 
+import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 
 /**
@@ -333,47 +336,69 @@ public class CodeCorrectCommand
       IWorkspace workspace = ResourcesPlugin.getWorkspace();
       workspace.addResourceChangeListener(rcl);
       try{
-        TextEdit edit = null;
+        TextEdit[] edits = new TextEdit[0];
         if (change instanceof TextFileChange){
           TextFileChange fileChange = (TextFileChange)change;
           fileChange.setSaveMode(TextFileChange.FORCE_SAVE);
-          edit = fileChange.getEdit();
+          TextEdit edit = fileChange.getEdit();
+          if (edit instanceof MultiTextEdit){
+            edits = ((MultiTextEdit)edit).getChildren();
+          }else{
+            edits = new TextEdit[]{edit};
+          }
         }
+
         PerformChangeOperation changeOperation = new PerformChangeOperation(change);
         changeOperation.setUndoManager(
             RefactoringCore.getUndoManager(), proposal.getName());
         changeOperation.run(monitor);
 
-        if (edit != null &&
+        if (edits.length > 0 &&
             change instanceof CompilationUnitChange &&
             src.equals(((CompilationUnitChange)change).getCompilationUnit()))
         {
-          int length = edit.getLength();
+          for (TextEdit edit : edits){
+            int offset = edit.getOffset();
+            int length = edit.getLength();
 
-          // for "Create field" and "Create local", the edit length includes
-          // additional existing code that we don't want to reformat.
-          if (proposal instanceof NewVariableCorrectionProposal){
-            String text = src.getBuffer()
-              .getText(edit.getOffset(), edit.getLength());
-            int index = text.indexOf('\n');
-            if (index != -1){
-              length = index;
-              // include the white space up to the next bit of code
-              while(length < text.length()){
-                char next = text.charAt(length);
-                if (next == '\t' || next == '\n' || next == ' '){
-                  length += 1;
-                  continue;
+            // for "Create field" and "Create local" the edit length includes
+            // additional existing code that we don't want to reformat.
+            if (proposal instanceof NewVariableCorrectionProposal) {
+              String text = src.getBuffer()
+                .getText(edit.getOffset(), edit.getLength());
+              int index = text.indexOf('\n');
+              if (index != -1){
+                length = index;
+                // include the white space up to the next bit of code
+                while(length < text.length()){
+                  char next = text.charAt(length);
+                  if (next == '\t' || next == '\n' || next == ' '){
+                    length += 1;
+                    continue;
+                  }
+                  break;
                 }
-                break;
+              }
+            }
+
+            JavaUtils.format(
+                src, CodeFormatter.K_COMPILATION_UNIT, offset, length);
+          }
+        }
+
+        // if the proposal change touched the imports, then run our import
+        // grouping edit after it.
+        if (proposal instanceof ASTRewriteCorrectionProposal){
+          ASTRewriteCorrectionProposal astProposal = (ASTRewriteCorrectionProposal)proposal;
+          if (astProposal.getImportRewrite() != null){
+            TextEdit groupingEdit = ImportUtils.importGroupingEdit(src, getPreferences());
+            if (groupingEdit != null){
+              JavaModelUtil.applyEdit(src, groupingEdit, true, null);
+              if (src.isWorkingCopy()) {
+                src.commitWorkingCopy(false, null);
               }
             }
           }
-
-          JavaUtils.format(
-              src, CodeFormatter.K_COMPILATION_UNIT,
-              edit.getOffset(),
-              length);
         }
 
         return rcl.getChangedFiles();

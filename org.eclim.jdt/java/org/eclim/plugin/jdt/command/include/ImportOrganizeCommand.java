@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@ package org.eclim.plugin.jdt.command.include;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -42,7 +41,6 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.ISourceRange;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ImportDeclaration;
 
 import org.eclipse.jdt.core.search.TypeNameMatch;
 
@@ -55,8 +53,6 @@ import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesSettings;
 
 import org.eclipse.jdt.ui.SharedASTProvider;
 
-import org.eclipse.text.edits.InsertEdit;
-import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 
 /**
@@ -112,7 +108,7 @@ public class ImportOrganizeCommand
     }
 
     // our own support for grouping imports based on package levels.
-    TextEdit groupingEdit = importGroupingEdit(src);
+    TextEdit groupingEdit = ImportUtils.importGroupingEdit(src, getPreferences());
     if (groupingEdit != null){
       if (edit == null){
         edit = groupingEdit;
@@ -132,35 +128,6 @@ public class ImportOrganizeCommand
     }
 
     return null;
-  }
-
-  private TextEdit importGroupingEdit(ICompilationUnit src)
-    throws Exception
-  {
-    int separationLevel = getPreferences().getIntValue(
-          src.getJavaProject().getProject(),
-          "org.eclim.java.import.package_separation_level");
-    CompilationUnit astRoot = SharedASTProvider
-      .getAST(src, SharedASTProvider.WAIT_YES, null);
-
-    @SuppressWarnings("unchecked")
-    List<ImportDeclaration> imports = astRoot.imports();
-    String lineDelim = src.findRecommendedLineSeparator();
-    MultiTextEdit edit = new MultiTextEdit();
-    ImportDeclaration next = null;
-    for (int i = imports.size() - 1; i >= 0; i--){
-      ImportDeclaration imprt = imports.get(i);
-      int end = imprt.getStartPosition() + imprt.getLength() + lineDelim.length();
-      if (next != null &&
-          end == next.getStartPosition() &&
-          !ImportUtils.importsInSameGroup(separationLevel, imprt, next))
-      {
-        edit.addChild(new InsertEdit(end, lineDelim));
-      }
-      next = imprt;
-    }
-
-    return edit.getChildrenSize() > 0 ? edit : null;
   }
 
   private class ChooseImports

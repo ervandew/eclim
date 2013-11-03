@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,16 @@ import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.jdt.core.ICompilationUnit;
+
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+
+import org.eclipse.jdt.ui.SharedASTProvider;
+
+import org.eclipse.text.edits.InsertEdit;
+import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.text.edits.TextEdit;
 
 /**
  * Utilities for working with java imports.
@@ -89,5 +98,34 @@ public class ImportUtils
       }
     }
     return false;
+  }
+
+  public static TextEdit importGroupingEdit(ICompilationUnit src, Preferences preferences)
+    throws Exception
+  {
+    int separationLevel = preferences.getIntValue(
+          src.getJavaProject().getProject(),
+          "org.eclim.java.import.package_separation_level");
+    CompilationUnit astRoot = SharedASTProvider
+      .getAST(src, SharedASTProvider.WAIT_YES, null);
+
+    @SuppressWarnings("unchecked")
+    List<ImportDeclaration> imports = astRoot.imports();
+    String lineDelim = src.findRecommendedLineSeparator();
+    MultiTextEdit edit = new MultiTextEdit();
+    ImportDeclaration next = null;
+    for (int i = imports.size() - 1; i >= 0; i--){
+      ImportDeclaration imprt = imports.get(i);
+      int end = imprt.getStartPosition() + imprt.getLength() + lineDelim.length();
+      if (next != null &&
+          end == next.getStartPosition() &&
+          !ImportUtils.importsInSameGroup(separationLevel, imprt, next))
+      {
+        edit.addChild(new InsertEdit(end, lineDelim));
+      }
+      next = imprt;
+    }
+
+    return edit.getChildrenSize() > 0 ? edit : null;
   }
 }
