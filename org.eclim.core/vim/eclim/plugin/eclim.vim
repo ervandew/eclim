@@ -65,8 +65,8 @@ else
   let g:EclimSignLevel = 0
 endif
 
-if !exists("g:EclimBufferTabTracking")
-  let g:EclimBufferTabTracking = 1
+if !exists("g:EclimBuffersTabTracking")
+  let g:EclimBuffersTabTracking = 1
 endif
 
 if !exists("g:EclimSeparator")
@@ -295,7 +295,7 @@ if g:EclimSignLevel
   augroup END
 endif
 
-if g:EclimBufferTabTracking && exists('*gettabvar')
+if g:EclimBuffersTabTracking && exists('*gettabvar')
   call eclim#common#buffers#TabInit()
   augroup eclim_buffer_tab_tracking
     autocmd!
