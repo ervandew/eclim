@@ -113,6 +113,23 @@ general purpose commands that are useful in and outside the scope of eclim.
   - **g:EclimBuffersSortDirection** (defaults to 'asc')
     Supports one of 'asc' or 'desc'.
 
+  .. _g\:EclimBuffersTabTracking:
+
+  - **g:EclimBuffersTabTracking** (defaults to 1)
+    When set to a non-0 value, eclim will keep track of which tabs buffers are
+    opened on allowing the ``:Buffers`` command to filter the list of buffers to
+    those accessed by the current tab. As noted above, you can still view all
+    buffers with this option enabled by using ``:Buffers!`` ('!' appended).
+
+  .. _g\:EclimBuffersDeleteOnTabClose:
+
+  - **g:EclimBuffersDeleteOnTabClose** (defaults to 0)
+    When set to a non-0 value and ``g:EclimBuffersTabTracking`` is enabled, then
+    eclim will delete any non-active buffers associated with the current tab
+    when that tab is closed. The can be useful if you use a tab per project
+    workflow and would like to close a project's tab and have any buffers for
+    that project deleted as well.
+
 .. _\:BuffersToggle:
 
 - **:BuffersToggle** -

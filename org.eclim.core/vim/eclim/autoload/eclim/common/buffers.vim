@@ -31,6 +31,9 @@ endif
 if !exists('g:EclimBuffersDefaultAction')
   let g:EclimBuffersDefaultAction = g:EclimDefaultFileOpenAction
 endif
+if !exists('g:EclimBuffersDeleteOnTabClose')
+  let g:EclimBuffersDeleteOnTabClose = 0
+endif
 if !exists('g:EclimOnlyExclude')
   let g:EclimOnlyExclude = '^NONE$'
 endif
@@ -214,22 +217,24 @@ function! eclim#common#buffers#TabEnter() " {{{
     call s:SetTabId()
   endif
 
-  if exists('s:tab_count') && s:tab_count > tabpagenr('$')
-    " delete any buffers associated with the closed tab
-    let buffers = eclim#common#buffers#GetBuffers()
-    for buffer in buffers
-      let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
-      " don't delete active buffers, just in case the tab has the wrong
-      " eclim_tab_id
-      if eclim_tab_id == s:tab_prev && buffer.status !~ 'a'
-        try
-          exec 'bdelete ' . buffer.bufnr
-        catch /E89/
-          " ignore since it happens when using bd! on the last buffer for
-          " another tab.
-        endtry
-      endif
-    endfor
+  if g:EclimBuffersDeleteOnTabClose
+    if exists('s:tab_count') && s:tab_count > tabpagenr('$')
+      " delete any buffers associated with the closed tab
+      let buffers = eclim#common#buffers#GetBuffers()
+      for buffer in buffers
+        let eclim_tab_id = getbufvar(buffer.bufnr, 'eclim_tab_id')
+        " don't delete active buffers, just in case the tab has the wrong
+        " eclim_tab_id
+        if eclim_tab_id == s:tab_prev && buffer.status !~ 'a'
+          try
+            exec 'bdelete ' . buffer.bufnr
+          catch /E89/
+            " ignore since it happens when using bd! on the last buffer for
+            " another tab.
+          endtry
+        endif
+      endfor
+    endif
   endif
 endfunction " }}}
 
