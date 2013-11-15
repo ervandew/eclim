@@ -322,8 +322,8 @@ target(name: 'deploy.vim'){
     }
 
     // run plugin specific gant target
-    if (hasVariable("${name}.build.vim")){
-      binding.getVariable("${name}.build.vim")()
+    if (hasVariable("${name}.deploy.vim")){
+      binding.getVariable("${name}.deploy.vim")()
     }
   }
 }
