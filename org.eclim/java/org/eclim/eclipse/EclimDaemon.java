@@ -49,6 +49,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
@@ -132,6 +135,22 @@ public class EclimDaemon
       // wait up to 10 seconds for bundles to activate.
       synchronized(this){
         wait(10000);
+      }
+
+      // headless
+      if (EclimApplication.isEnabled()){
+        logger.info("Waiting on running jobs before starting eclimd...");
+        long timeout = System.currentTimeMillis() + (30 * 1000);
+        IJobManager manager = Job.getJobManager();
+        while(System.currentTimeMillis() < timeout &&
+          jobsRunning(manager))
+        {
+          try{
+            Thread.sleep(1000);
+          }catch(InterruptedException ie){
+            // ignore
+          }
+        }
       }
 
       starting = false;
@@ -376,6 +395,19 @@ public class EclimDaemon
       logger.info("Loaded plugin org.eclim.core");
       notify();
     }
+  }
+
+  private boolean jobsRunning(IJobManager manager)
+  {
+    Job[] jobs = manager.find(null);
+    for (Job job : jobs){
+      if (job.getState() == Job.RUNNING){
+        logger.debug("Job running:" + job);
+        return true;
+      }
+    }
+    logger.info("Jobs finished.");
+    return false;
   }
 
   @SuppressWarnings("unused")
