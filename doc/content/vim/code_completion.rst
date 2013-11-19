@@ -121,7 +121,7 @@ usage less cumbersome:
   their install docs thoroughly.
 
   Once installed, the only required configuration you should need is the
-  following to tell eclim to register its completion to vim's omni complete
+  following which tells eclim to register its completion to vim's omni complete
   which YouCompleteMe will automatically detect and use:
 
   .. code-block:: vim
