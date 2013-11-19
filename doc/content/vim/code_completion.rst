@@ -18,9 +18,12 @@
 Code Completion
 ===============
 
+Usage
+-----
+
 All the code completion functionality provided by eclim (ant, java, etc) makes
 use of the new "User Defined Completion" added to Vim 7.  To initiate code
-completion enter insert mode and type *Ctrl-X Ctrl-U*.  By default Vim will
+completion enter insert mode and type ``Ctrl-X Ctrl-U``.  By default Vim will
 open a popup if there is more than one completion.
 
 .. _g\:EclimCompletionMethod:
@@ -34,24 +37,45 @@ open a popup if there is more than one completion.
 
     let g:EclimCompletionMethod = 'omnifunc'
 
-  When using omnifunc you will use *Ctrl-X Ctrl-O* to start code completion.
+  When using omnifunc you will use ``Ctrl-X Ctrl-O`` to start code completion.
 
 Example with java completion
 
 .. image:: ../images/screenshots/java/completion.png
 
-Once you have started the completion you can use *Ctrl-N* to proceed to the
-next match and *Ctrl-P* to move to the previous match.
+Once you have started the completion you can use ``Ctrl-N`` to proceed to the
+next match and ``Ctrl-P`` to move to the previous match.
 
-If you are like me and you find those key strokes a bit cumbersome, then you
+To find out more about Vim's insert completion execute the following from
+within Vim:
+
+::
+
+  :h ins-completion
+
+Third Party Completion Plugins
+------------------------------
+
+If you are like me and you find the above key strokes a bit cumbersome, then you
 might want to check out one of the following plugins which can make completion
 usage less cumbersome:
 
-- SuperTab_ This plugin's aim is to allow you to use ``<tab>`` for all your
+- SuperTab_: This plugin's aim is to allow you to use ``<tab>`` for all your
   code completion needs.
-- AutoComplPop_ This plugin will automatically open the completion popup
-  for you after you've typed a preconfigured number of characters. You can use
-  AutoComplPop in lieu of, on in conjunction with SuperTab.
+
+  By default supertab will use vim's keyword completion on ``<tab>``, so you
+  probably want to at least add the following setting to your vimrc:
+
+  .. code-block:: vim
+
+    let g:SuperTabDefaultCompletionType = 'context'
+
+  That will tell supertab to use keyword completion unless you are attempting to
+  access a member of an object or class, in which case it will use your user
+  completion method, such as eclim.
+
+- AutoComplPop_: This plugin will automatically open the completion popup
+  for you after you've typed a preconfigured number of characters.
 
   AutoComplPop by default only supports triggering code completion for file types
   who have an omni completion that ships with vim, but you can configure it to
@@ -74,25 +98,37 @@ usage less cumbersome:
           \ 'meets'        : 'MeetsForJavaEclim',
         \ }]
       \ }
-- YouCompleteMe_: Like AutoComplPop, YouCompleteMe will automatically open
-  the completion popup for you and it also adds fuzzy matching of completion
-  results. This plugin does have a compiled component to it so be sure to read
-  their install docs thoroughly.
 
-  Once installed, you'll need to add the following to your vimrc so that eclim
-  and YouCompleteMe play nice together:
+- neocomplcache_: Another completion plugin which will automatically open the
+  completion popup for you as you type. Configuring neocomplecache is a bit
+  easier than AutoComplPop. You just need to tell eclim to register its
+  completion to vim's omni complete, then force neocomplcache to use it. Here
+  is an example for forcing the use of eclim's code completion for the java file
+  type when you attempt to access an object/class member:
 
   .. code-block:: vim
 
     let g:EclimCompletionMethod = 'omnifunc'
 
-To find out more about Vim's insert completion execute the following from
-within Vim:
+    if !exists('g:neocomplcache_force_omni_patterns')
+      let g:neocomplcache_force_omni_patterns = {}
+    endif
+    let g:neocomplcache_force_omni_patterns.java = '\k\.\k*'
 
-::
+- YouCompleteMe_: Yet another completion plugin which will automatically open
+  the completion popup for you and which also adds fuzzy matching of completion
+  results. This plugin does have a compiled component to it so be sure to read
+  their install docs thoroughly.
 
-  :h ins-completion
+  Once installed, the only required configuration you should need is the
+  following to tell eclim to register its completion to vim's omni complete
+  which YouCompleteMe will automatically detect and use:
+
+  .. code-block:: vim
+
+    let g:EclimCompletionMethod = 'omnifunc'
 
 .. _supertab: https://github.com/ervandew/supertab
 .. _autocomplpop: https://bitbucket.org/ns9tks/vim-autocomplpop
+.. _neocomplcache: https://github.com/Shougo/neocomplcache.vim
 .. _youcompleteme: https://github.com/Valloric/YouCompleteMe
