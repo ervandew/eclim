@@ -116,7 +116,7 @@ public class Eclim
 
     String[] arguments = null;
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      String eclimCmd = ECLIM + ".cmd";
+      String eclimCmd = ECLIM + ".bat";
       String drive = eclimCmd.substring(0, 2);
       arguments = new String[3];
       arguments[0] = "cmd.exe";

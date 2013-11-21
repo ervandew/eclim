@@ -248,18 +248,21 @@ target(name: 'deploy.eclipse'){
   }
 
   if (Os.isFamily(Os.FAMILY_WINDOWS)){
+    // remove the current eclimd/eclim/ng files
+    delete{ fileset(dir: '${eclipse}', includes: 'eclim*,ng.exe') }
+
     // the vimfiles will look for eclim and ng in the plugin's bin dir in
     // accordance to the .eclimd_instances file, but third party eclim clients
     // may continue to expect them at the eclipse root, so we'll copy them
     // there.
     copy(todir: '${eclipse}'){
       fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
-          includes: 'eclimd.bat,eclimd.cmd,eclim.bat,eclim.cmd,ng.exe')
+          includes: 'eclimd.bat,eclim.bat,ng.exe')
     }
   }else{
     delete{
       fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
-          includes: '*.bat,*.cmd,*.exe')
+          includes: '*.bat,*.exe')
     }
     replace(file: '${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd',
         token: '#$${eclipse.home}', value: 'ECLIM_ECLIPSE_HOME="${eclipse}"')
@@ -1108,9 +1111,9 @@ eclim = { args, port=null, failonerror=true, dir=null ->
   try {
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
       if (dir == null){
-        eclimCmd = binding.getVariable('eclipse') + '/eclim.cmd'
+        eclimCmd = binding.getVariable('eclipse') + '/eclim.bat'
       }else{
-        eclimCmd = dir + '/eclim.cmd'
+        eclimCmd = dir + '/eclim.bat'
       }
       drive = eclimCmd.substring(0, 2)
       ant.exec(executable: 'cmd.exe', failonerror: failonerror,

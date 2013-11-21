@@ -149,7 +149,7 @@ function! eclim#client#nailgun#GetEclimCommand(home) " {{{
   let command = a:home . 'bin/eclim'
 
   if has('win32') || has('win64') || has('win32unix')
-    let command = command . (has('win95') ? '.bat' : '.cmd')
+    let command = command . '.bat'
   endif
 
   if !filereadable(command)
