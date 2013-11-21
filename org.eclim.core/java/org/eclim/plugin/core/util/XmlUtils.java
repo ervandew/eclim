@@ -17,6 +17,8 @@
 package org.eclim.plugin.core.util;
 
 import java.io.File;
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -158,9 +160,10 @@ public class XmlUtils
     ErrorAggregator errorHandler = new ErrorAggregator(filename);
     EntityResolver entityResolver = new EntityResolver(
         FileUtils.getFullPath(filename));
+    FileInputStream fin = null;
     try{
-      parser.parse(new File(filename),
-          getHandler(handler, errorHandler, entityResolver));
+      fin = new FileInputStream(filename);
+      parser.parse(fin, getHandler(handler, errorHandler, entityResolver));
     }catch(SAXParseException spe){
       ArrayList<Error> errors = new ArrayList<Error>();
       errors.add(
@@ -177,6 +180,8 @@ public class XmlUtils
       errors.add(new Error(
             "FileNotFoundException: " + fnfe.getMessage(), filename, 1, 1, false));
       return errors;
+    }finally{
+      IOUtils.closeQuietly(fin);
     }
 
     return errorHandler.getErrors();
