@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,9 +56,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 public class ProjectNatureRemoveCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -90,6 +88,10 @@ public class ProjectNatureRemoveCommand
       }
     }
 
-    return Services.getMessage("project.nature.removed");
+    if (removed.size() == 0){
+      return Services.getMessage("project.nature.removed.none");
+    }
+    return Services.getMessage(
+        "project.nature.removed", StringUtils.join(removed.toArray()));
   }
 }

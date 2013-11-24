@@ -583,7 +583,30 @@ function! eclim#project#util#ProjectNatureModify(command, args) " {{{
   let args = eclim#util#ParseCmdLine(a:args)
 
   let project = args[0]
+  if eclim#project#util#GetProjectRoot(project) == ''
+    call eclim#util#EchoError('Project not found: ' . project)
+    return
+  endif
+
   let natures = args[1:]
+  if len(natures) == 0
+    call eclim#util#EchoError('Please supply at least one nature alias.')
+    return
+  else
+    let aliases = eclim#project#util#GetNatureAliasesDict()
+    let invalid = []
+    for nature in natures
+      if !has_key(aliases, nature)
+        call add(invalid, nature)
+      endif
+    endfor
+    if len(invalid) > 0
+      call eclim#util#EchoError(
+        \ 'One or more unrecognized nature aliases: ' . join(invalid, ','))
+      return
+    endif
+  endif
+
   let command = a:command == 'add' ? s:command_nature_add : s:command_nature_remove
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<natures>', join(natures, ','), '')
