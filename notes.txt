@@ -411,13 +411,13 @@ TODO {{{
   }}}
 
   Javascript {{{
+    http://eclipse.org/vjet/ (formally an ebay project)
+      - node.js support
+
     http://wiki.eclipse.org/index.php/ATF/JSDT
     http://labs.adobe.com/technologies/jseclipse/
     http://www.aptana.org/ aptana (owners of radrails)
     http://www.eclipse.org/dltk/ dltk (experimental)
-
-    https://www.ebayopensource.org/index.php/VJET/HomePage
-      - node.js support
 
     - javascript code completion
 
