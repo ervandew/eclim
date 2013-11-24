@@ -402,7 +402,7 @@ public class EclimDaemon
     Job[] jobs = manager.find(null);
     for (Job job : jobs){
       if (job.getState() == Job.RUNNING){
-        logger.debug("Job running:" + job);
+        logger.debug("Waiting on job: " + job);
         return true;
       }
     }

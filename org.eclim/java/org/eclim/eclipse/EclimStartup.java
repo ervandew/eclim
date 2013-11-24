@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,16 @@ public class EclimStartup
   @Override
   public void earlyStartup()
   {
+    logger.debug("EclimApplication enabled: {}", EclimApplication.isEnabled());
     if (EclimApplication.isEnabled()){
       final IWorkbench workbench = PlatformUI.getWorkbench();
+      logger.debug("Creating thread to start EclimDaemon...");
       workbench.getDisplay().asyncExec(new Runnable() {
         public void run() {
           try {
             new Thread(){
               public void run(){
+                logger.debug("Starting EclimDaemon...");
                 EclimDaemon.getInstance().start();
               }
             }.start();

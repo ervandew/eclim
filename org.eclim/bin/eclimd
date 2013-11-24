@@ -22,9 +22,12 @@ if [ "$(whoami)" == "root" ] ; then
 fi
 
 usage(){
-  echo "Usage: eclimd [-f eclimrc] [jvmarg ...]"
-  echo "    -f   specify the location of an eclimrc file other than the"
-  echo "         default (~/.eclimrc). Must be the first option supplied."
+  echo "Usage: eclimd [eclimopt ...] [jvmarg ...]"
+  echo "  Note: the following eclim options, if supplied, must precede any jvmargs, etc."
+  echo "  -b/--background  start eclimd in the background."
+  echo "  -d/--debug       enable eclimd's debug logging."
+  echo "  -f/--file <file> specify the location of an eclimrc file other than the"
+  echo "                   default (~/.eclimrc). Must be the first option supplied."
 }
 
 if [ "$1" = "-?" -o "$1" = "-h" -o "$1" = "--help" ] ; then
@@ -193,42 +196,40 @@ build_vmargs(){
 
 ECLIMRC=$HOME/.eclimrc
 
-if [ "$1" = "-f" ] ; then
-  while getopts ":f:" opt ; do
-    case "$opt" in
-      f)
-        if [ -f "$OPTARG" ] ; then
-          ECLIMRC="$OPTARG"
-        else
-          echo "file not found: $OPTARG"
-          exit 1
-        fi
-        shift
-        shift
-        break
-        ;;
-      \?)
-        continue
-        ;;
-      :)
-        echo "missing argument for: -$OPTARG"
-        exit 1
-        ;;
-    esac
-  done
-fi
-
+DEBUG=0
 BACKGROUND=0
-if [ "$1" = "start" ]; then
-  BACKGROUND=1
-  shift
-fi
+while true ; do
+  case "$1" in
+    -d | --debug )
+      DEBUG=1; shift ;;
+    -b | --background )
+      BACKGROUND=1; shift ;;
+    -f | --file )
+      if [ -f "$2" ] ; then
+        ECLIMRC="$2"
+      elif [ -z "$2" -o "${2:0:1}" = '-' ] ; then
+        echo "please supply the path to the eclimrc file to load"
+        exit 1
+      else
+        echo "file not found: $2"
+        exit 1
+      fi
+      shift
+      shift
+      ;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
 
 resolve_eclim_home
 resolve_eclipse_launcher
 
 declare -a ECLIM_VMARGS=("$@")
 build_vmargs
+if [ $DEBUG -eq 1 ] ; then
+  ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" -Dorg.eclim.debug)
+fi
 
 ARGS=(
   "${ECLIM_VMARGS[@]}"
@@ -241,7 +242,6 @@ ARGS=(
 )
 
 if [ $BACKGROUND -eq 1 ]; then
-  shift
   CLASSPATH="" java "${ARGS[@]}" > /dev/null &
 else
   echo java "${ARGS[@]}"

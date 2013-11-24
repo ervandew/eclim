@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 package org.eclim.eclipse;
 
 import java.util.Map;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 
 import org.eclim.logging.Logger;
 
@@ -48,6 +51,11 @@ public class EclimApplication
   public Object start(IApplicationContext context)
     throws Exception
   {
+    if (System.getProperty("org.eclim.debug") != null){
+      logger.info("Enabing debug logging for org.eclim...");
+      LogManager.getLogger("org.eclim").setLevel(Level.DEBUG);
+    }
+
     Map args = context.getArguments();
 
     String[] appArgs = (String[])args.get(IApplicationContext.APPLICATION_ARGS);
@@ -82,6 +90,7 @@ public class EclimApplication
     // Note: starting of EclimDaemon is handled by EclimStartup so that the
     // daemon is started after the workbench is available.
 
+    logger.debug("eclim application loading, starting IDEApplication...");
     return super.start(context);
   }
 
