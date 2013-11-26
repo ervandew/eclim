@@ -28,6 +28,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.Services;
@@ -222,9 +223,28 @@ public class EclimDaemon
     try{
       List<Instance> entries = readInstances();
       if (entries != null){
+        boolean updated = false;
+
+        // remove any stale entries
+        for (Iterator<Instance> i = entries.iterator(); i.hasNext();){
+          Instance entry = i.next();
+          if (!entry.exists()){
+            i.remove();
+            updated = true;
+            logger.info("Removed stale instance entry: " +
+                entry.home + ':' + entry.port);
+          }
+        }
+
+        // register new instance
         Instance instance = new Instance(home, workspace, port);
         if (!entries.contains(instance)){
           entries.add(instance);
+          updated = true;
+        }
+
+        // update the instances file
+        if (updated){
           out = new FileWriter(instances);
           for (Instance entry : entries) {
             out.write(gson.toJson(entry) + '\n');
@@ -422,6 +442,11 @@ public class EclimDaemon
       this.home = home;
       this.workspace = workspace;
       this.port = port;
+    }
+
+    public boolean exists()
+    {
+      return new File(home).exists();
     }
 
     public boolean equals(Object other)
