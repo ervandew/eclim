@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,6 +118,11 @@ public class SrcUpdateCommand
 
         IMarker[] markers = getMarkers(src);
         for(IMarker marker : markers){
+          // skip task markers (FIXME, etc)
+          if (marker.isSubtypeOf(IMarker.TASK)){
+            continue;
+          }
+
           int[] lineColumn = null;
 
           Integer start = (Integer)marker.getAttribute(IMarker.CHAR_START);
@@ -140,7 +145,7 @@ public class SrcUpdateCommand
               filename,
               lineColumn[0],
               lineColumn[1],
-              severity != null && severity.intValue() != IMarker.SEVERITY_ERROR));
+              severity == null || severity.intValue() != IMarker.SEVERITY_ERROR));
         }
 
         Collections.sort(errors, new Comparator<Error>(){
