@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,20 +87,25 @@ public class SrcUpdateCommand
       String filename = src.getResource()
         .getLocation().toOSString().replace('\\', '/');
       FileOffsets offsets = FileOffsets.compile(filename);
-      for(int ii = 0; ii < problems.length; ii++){
+      for(IProblem problem : problems){
+        // exclude TODO, etc
+        if (problem.getID() == IProblem.Task){
+          continue;
+        }
+
         int[] lineColumn =
-          offsets.offsetToLineColumn(problems[ii].getSourceStart());
+          offsets.offsetToLineColumn(problem.getSourceStart());
 
         // one day vim might support ability to mark the offending text.
         /*int[] endLineColumn =
-          offsets.offsetToLineColumn(problems[ii].getSourceEnd());*/
+          offsets.offsetToLineColumn(problem.getSourceEnd());*/
 
         errors.add(new Error(
-            problems[ii].getMessage(),
+            problem.getMessage(),
             filename,
             lineColumn[0],
             lineColumn[1],
-            problems[ii].isWarning()));
+            problem.isWarning()));
       }
 
       boolean checkstyle = "true".equals(getPreferences()
