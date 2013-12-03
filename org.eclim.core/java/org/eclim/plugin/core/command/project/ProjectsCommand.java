@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,13 @@ public class ProjectsCommand
       }
 
       String projectPath = ProjectUtils.getPath(project);
-      info.put("path", projectPath);
+      String canonicalPath = new File(projectPath).getCanonicalPath();
+      if (!canonicalPath.equals(projectPath)){
+        info.put("path", canonicalPath);
+        info.put("link", projectPath);
+      }else{
+        info.put("path", projectPath);
+      }
 
       if (project.isOpen()){
         HashMap<String,String> links = new HashMap<String,String>();

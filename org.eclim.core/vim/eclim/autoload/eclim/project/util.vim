@@ -977,6 +977,10 @@ function! eclim#project#util#GetProject(path) " {{{
       return project
     endif
 
+    if has_key(project, 'link') && path =~ '^' . project.link . pattern
+      return project
+    endif
+
     " check linked folders
     for name in keys(get(project, 'links', {}))
       if path =~ '^' . project.links[name] . pattern
