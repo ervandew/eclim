@@ -6,20 +6,18 @@ target(name: 'org.eclim.python.build.vim'){
     patternset(includes: 'rope-*/rope/**/*')
     mapper(type: 'regexp', from: '^.*?/(.*)', to: '\\1')
   }
+
+  // indent/htmldjango.vim and indent/htmljinja.vim rely on indent/html.vim
+  // from org.eclim.wst, so add that file to our python plugin build since wst
+  // is not a reqirement for python support.
+  copy(todir: '${build.vimfiles}/org.eclim.python'){
+    fileset(dir: 'org.eclim.wst/vim', includes: 'eclim/indent/html.vim')
+  }
 }
 
 target(name: 'org.eclim.python.test'){
   depends('test.init')
   runTests('org.eclim.python'){
     createProject('org.eclim.python', 'eclim_unit_test_python')
-  }
-}
-
-target(name: 'org.eclim.python.build.vim'){
-  // indent/htmldjango.vim and indent/htmljinja.vim rely on indent/html.vim
-  // from org.eclim.wst, so add that file to our python plugin build since wst
-  // is not a reqirement for python support.
-  copy(todir: '${build.vimfiles}/org.eclim.python'){
-    fileset(dir: 'org.eclim.wst/vim', includes: 'eclim/indent/html.vim')
   }
 }
