@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,16 @@ Xml / Dtd / Xsd
 
 Xml
 ======
+
+.. note::
+
+  If you have xml files that do not have a .xml extension then eclipse may not
+  recognize it as an xml file resulting in validation, completion, etc not
+  working. Although the vim side may have the correct file type set, you may
+  still need to add the file's extension to the list of xml content types in the
+  eclipse gui:
+
+  :menuselection:`Preferences --> General --> Content Types --> Text --> XML`
 
 Code Completion
 ---------------
