@@ -16,6 +16,8 @@
  */
 package org.eclim.eclipse;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.log4j.Level;
@@ -23,14 +25,22 @@ import org.apache.log4j.LogManager;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.util.StringUtils;
+
 import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 
 import org.eclipse.equinox.app.IApplicationContext;
 
+import org.eclipse.jface.preference.IPreferenceStore;
+
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import org.eclipse.ui.internal.IPreferenceConstants;
+
 import org.eclipse.ui.internal.ide.application.IDEApplication;
+
+import org.eclipse.ui.internal.util.PrefUtil;
 
 /**
  * Application used to start a headless version of eclipse running the eclim
@@ -89,6 +99,21 @@ public class EclimApplication
 
     // Note: starting of EclimDaemon is handled by EclimStartup so that the
     // daemon is started after the workbench is available.
+    // Note: the user can disable the eclim IStartup class from the eclipse gui
+    // preferences: General > Startup and Shutdown
+    // So, re-enable it if necessary.
+    IPreferenceStore preferences = PrefUtil.getInternalPreferenceStore();
+    String pref = preferences.getString(
+        IPreferenceConstants.PLUGINS_NOT_ACTIVATED_ON_STARTUP);
+    HashSet<String> disabled = new HashSet<String>(
+        Arrays.asList(StringUtils.split(pref, IPreferenceConstants.SEPARATOR)));
+    if (disabled.contains("org.eclim")){
+      logger.debug("re-enable disabled eclim startup extension...");
+      disabled.remove("org.eclim");
+      preferences.setValue(
+          IPreferenceConstants.PLUGINS_NOT_ACTIVATED_ON_STARTUP,
+          StringUtils.join(disabled, IPreferenceConstants.SEPARATOR));
+    }
 
     logger.debug("eclim application loading, starting IDEApplication...");
     return super.start(context);
