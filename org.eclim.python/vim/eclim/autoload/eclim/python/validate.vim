@@ -174,7 +174,11 @@ function! eclim#python#validate#PyLint()
     let django_dir = eclim#python#django#util#GetProjectPath()
     if django_dir != ''
       call add(paths, fnamemodify(django_dir, ':h'))
-      let settings = fnamemodify(django_dir, ':t')
+      if len($DJANGO_SETTINGS_MODULE)
+        let settings = $DJANGO_SETTINGS_MODULE
+      else
+        let settings = fnamemodify(django_dir, ':t')
+      endif
       if has('win32') || has('win64')
         let pylint_env =
           \ 'set DJANGO_SETTINGS_MODULE='. settings . '.settings && '
