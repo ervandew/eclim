@@ -78,13 +78,13 @@ endfunction " }}}
 function eclim#python#django#util#GetSetting(project_dir, name)
   let cwd = getcwd()
   try
-    exec (haslocaldir() ? 'lcd ' : 'cd') . a:project_dir
+    exec (haslocaldir() ? 'lcd ' : 'cd ') . a:project_dir
     let setting = eclim#util#System(
       \ "python -c \"import settings; print(settings." . a:name . ")\"")
     if v:shell_error
       " try going up a dir and using that as a top level namespace
       let ns = fnamemodify(a:project_dir, ':t')
-      exec (haslocaldir() ? 'lcd ' : 'cd') . fnamemodify(a:project_dir, ':h')
+      exec (haslocaldir() ? 'lcd ' : 'cd ') . fnamemodify(a:project_dir, ':h')
       let setting = eclim#util#System(
         \ "python -c \"from " . ns  . " import settings; print(settings." . a:name . ")\"")
       if v:shell_error
