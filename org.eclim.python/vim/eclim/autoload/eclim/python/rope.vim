@@ -47,6 +47,8 @@ ropepath = vim.eval('ropepath')
 if ropepath not in sys.path:
   sys.path.insert(0, ropepath)
 
+# projectroot needs to be defined always
+if True:
   from contextlib import contextmanager
   from rope.base import builtins, pyobjects, pynames
 
@@ -154,22 +156,11 @@ endfunction " }}}
 
 " RopePath() {{{
 " Gets the base directory where the rope code is located.
+if !exists("g:RopePath")
+  " <sfile> does not work inside functions :(
+  let g:RopePath = substitute(expand('<sfile>:p:h'), '\', '/', 'g')
+endif
 function! eclim#python#rope#RopePath()
-  if !exists("g:RopePath")
-    let savewig = &wildignore
-    set wildignore=""
-    let file = findfile('autoload/eclim/python/rope.vim', escape(&runtimepath, ' '))
-    let &wildignore = savewig
-
-    if file == ''
-      echoe 'Unable to determine rope basedir.'
-      return ''
-    endif
-    let basedir = substitute(fnamemodify(file, ':p:h'), '\', '/', 'g')
-
-    let g:RopePath = basedir
-  endif
-
   return g:RopePath
 endfunction " }}}
 
