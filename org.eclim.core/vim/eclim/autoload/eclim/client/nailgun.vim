@@ -189,9 +189,9 @@ function! eclim#client#nailgun#CommandCompleteWorkspaces(argLead, cmdLine, curso
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
-  let instances = eclim#client#nailgun#GetEclimdInstances(0)
+  let instances = eclim#client#nailgun#GetEclimdInstances(1)
   if type(instances) == g:NUMBER_TYPE
-    return dict()
+    return []
   endif
   let workspaces = sort(keys(instances))
   if cmdLine !~ '[^\\]\s$'
