@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2013  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,15 +22,21 @@
 "
 " }}}
 
-" Init(project) {{{
-function! eclim#python#rope#Init(project)
+" Global Variables {{{
+if !exists("g:RopePath")
+  " The base directory where the rope code is located.
+  let g:RopePath = substitute(expand('<sfile>:p:h'), '\', '/', 'g')
+endif
+" }}}
+
+function! eclim#python#rope#Init(project) " {{{
   if !has('python')
     call eclim#util#EchoError(
       \ "This functionality requires 'python' support compiled into vim.")
     return 0
   endif
 
-  let ropepath = eclim#python#rope#RopePath()
+  let ropepath = g:RopePath
   if ropepath == ''
     return 0
   endif
@@ -152,20 +158,9 @@ EOF
   return 1
 endfunction " }}}
 
-" RopePath() {{{
-" Gets the base directory where the rope code is located.
-if !exists("g:RopePath")
-  " <sfile> does not work inside functions :(
-  let g:RopePath = substitute(expand('<sfile>:p:h'), '\', '/', 'g')
-endif
-function! eclim#python#rope#RopePath()
-  return g:RopePath
-endfunction " }}}
-
-" Completions(project, filename, offset, encoding) {{{
-" Attempts to suggest code completions for a given project path, project
-" relative file path and offset.
-function! eclim#python#rope#Completions(project, filename, offset, encoding)
+function! eclim#python#rope#Completions(project, filename, offset, encoding) " {{{
+  " Attempts to suggest code completions for a given project path, project
+  " relative file path and offset.
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -221,8 +216,7 @@ EOF
   return results
 endfunction " }}}
 
-" Find(project, filename, offset, encoding, context) {{{
-function! eclim#python#rope#Find(project, filename, offset, encoding, context)
+function! eclim#python#rope#Find(project, filename, offset, encoding, context) " {{{
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -303,9 +297,8 @@ EOF
   return results
 endfunction " }}}
 
-" GetOffset() {{{
-" Gets the character offset for the current cursor position.
-function! eclim#python#rope#GetOffset()
+function! eclim#python#rope#GetOffset() " {{{
+  " Gets the character offset for the current cursor position.
   " NOTE: rope doesn't recognize dos line endings as 2 characters, so just
   " handle as a single character.  It uses true character offsets, vs eclipse
   " which uses bytes.
@@ -324,9 +317,8 @@ function! eclim#python#rope#GetOffset()
   return offset
 endfunction " }}}
 
-" GetSourceDirs(project) {{{
-" Attempts to determine the source directories for the supplied project.
-function! eclim#python#rope#GetSourceDirs(project)
+function! eclim#python#rope#GetSourceDirs(project) " {{{
+  " Attempts to determine the source directories for the supplied project.
   if !eclim#python#rope#Init(a:project)
     return []
   endif
@@ -353,9 +345,8 @@ EOF
 
 endfunction " }}}
 
-" Validate(project, filename) {{{
-" Attempts to validate the supplied file.
-function! eclim#python#rope#Validate(project, filename)
+function! eclim#python#rope#Validate(project, filename) " {{{
+  " Attempts to validate the supplied file.
   if !eclim#python#rope#Init(a:project)
     return []
   endif
