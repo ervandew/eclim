@@ -138,7 +138,9 @@ function! s:EchoLevel(message, level, highlight)
 
   exec "echohl " . a:highlight
   redraw
-  if mode() == 'n'
+  if mode() == 'n' || mode() == 'c'
+    " Note: in command mode, the message won't display, but the user can view
+    " it using :messages
     for line in messages
       echom line
     endfor
@@ -1118,7 +1120,7 @@ function! eclim#util#SetLocationList(list, ...) " {{{
     call setloclist(0, loclist, a:1)
   endif
 
-  let projectName = eclim#project#util#GetCurrentProjectName()
+  silent let projectName = eclim#project#util#GetCurrentProjectName()
   if projectName != ''
     " setbufvar seems to have the side affect of changing to the buffer's dir
     " when autochdir is set.

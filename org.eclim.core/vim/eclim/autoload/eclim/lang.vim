@@ -314,7 +314,7 @@ function! eclim#lang#SilentUpdate(...) " {{{
   " cursor moving on update and breaking code completion:
   " http://sourceforge.net/tracker/index.php?func=detail&aid=1995319&group_id=145869&atid=763323
   let pos = getpos('.')
-  let file = eclim#project#util#GetProjectRelativeFilePath()
+  silent let file = eclim#project#util#GetProjectRelativeFilePath()
   if file != ''
     try
       if a:0 && a:1 && g:EclimTempFilesEnable

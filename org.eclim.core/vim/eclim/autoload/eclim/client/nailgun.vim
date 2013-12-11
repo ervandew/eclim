@@ -34,14 +34,14 @@ function! eclim#client#nailgun#ChooseEclimdInstance(...) " {{{
   " prompting the user.  If the optional 'dir' argument is supplied and that dir
   " is a subdirectory of one of the workspaces, then that workspace will be
   " returned.
-  " Option args:
+  " Optional args:
   "   dir
 
-  let instances = eclim#client#nailgun#GetEclimdInstances(1)
-  if type(instances) == g:NUMBER_TYPE
+  if !eclim#EclimAvailable()
     return
   endif
 
+  let instances = eclim#client#nailgun#GetEclimdInstances()
   if len(instances) == 1
     return instances[keys(instances)[0]]
   endif
@@ -87,13 +87,11 @@ function! eclim#client#nailgun#ChooseEclimdInstance(...) " {{{
   call eclim#util#Echo('No eclimd instances found running.')
 endfunction " }}}
 
-function! eclim#client#nailgun#GetEclimdInstances(...) " {{{
-  " Returns a dict with eclimd instances or a number (0) if no
-  " instances are found.
-  let echo = a:0 ? a:1 : 1
+function! eclim#client#nailgun#GetEclimdInstances() " {{{
+  " Returns a dict with eclimd instances.
   let instances = {}
-  let dotinstances = eclim#UserHome() . '/.eclim/.eclimd_instances'
-  if filereadable(dotinstances)
+  if eclim#EclimAvailable()
+    let dotinstances = eclim#UserHome() . '/.eclim/.eclimd_instances'
     let lines = readfile(dotinstances)
     for line in lines
       if line !~ '^{'
@@ -102,14 +100,8 @@ function! eclim#client#nailgun#GetEclimdInstances(...) " {{{
       let values = eval(line)
       let instances[values.workspace] = values
     endfor
-    return instances
   endif
-  if echo
-    call eclim#util#Echo(printf(
-      \ 'No eclimd instances found running (eclimd created file not found %s)',
-      \ eclim#UserHome() . '/.eclim/.eclimd_instances'))
-  endif
-  return 0
+  return instances
 endfunction " }}}
 
 function! eclim#client#nailgun#Execute(instance, command, ...) " {{{
@@ -189,10 +181,7 @@ function! eclim#client#nailgun#CommandCompleteWorkspaces(argLead, cmdLine, curso
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
-  let instances = eclim#client#nailgun#GetEclimdInstances(1)
-  if type(instances) == g:NUMBER_TYPE
-    return []
-  endif
+  let instances = eclim#client#nailgun#GetEclimdInstances()
   let workspaces = sort(keys(instances))
   if cmdLine !~ '[^\\]\s$'
     call filter(workspaces, 'v:val =~ "^' . argLead . '"')

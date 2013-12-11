@@ -38,12 +38,6 @@
   let s:command_settings_update = '-command settings_update -s "<settings>"'
   let s:command_shutdown = "-command shutdown"
   let s:connect= '^connect: .*$'
-
-  " list of commands that may fail using system() call, so using a temp file
-  " instead.
-  let s:exec_commands = ['java_complete']
-
-  let g:eclimd_running = 1
 " }}}
 
 function! eclim#Execute(command, ...) " {{{
@@ -63,15 +57,9 @@ function! eclim#Execute(command, ...) " {{{
     return
   endif
 
-  " eclimd appears to be down, so exit early if in an autocmd
-  if !g:eclimd_running && expand('<abuf>') != ''
-    " check for file created by eclimd to signal that it is running.
-    if !eclim#EclimAvailable()
-      return
-    endif
+  if !eclim#EclimAvailable()
+    return
   endif
-
-  let g:eclimd_running = 1
 
   let command = '-editor vim ' . a:command
 
@@ -134,9 +122,6 @@ function! eclim#Execute(command, ...) " {{{
   if retcode || error != ''
     if g:EclimShowErrors
       if error =~ s:connect
-        " eclimd is not running, disable further eclimd calls
-        let g:eclimd_running = 0
-
         " if we are not in an autocmd or the autocmd is for an acwrite buffer,
         " alert the user that eclimd is not running.
         if expand('<abuf>') == '' || &buftype == 'acwrite'
@@ -174,9 +159,19 @@ function! eclim#Enable() " {{{
   endif
 endfunction " }}}
 
-function! eclim#EclimAvailable() " {{{
+function! eclim#EclimAvailable(...) " {{{
+  " Optional args:
+  "   echo: Whether or not to echo an error if eclim is not available
+  "         (default: 1)
   let instances = eclim#UserHome() . '/.eclim/.eclimd_instances'
-  return filereadable(instances)
+  let available = filereadable(instances)
+  let echo = a:0 ? a:1 : 1
+  if echo && !available && expand('<abuf>') == ''
+    call eclim#util#EchoError(printf(
+      \ 'No eclimd instances found running (eclimd created file not found %s)',
+      \ eclim#UserHome() . '/.eclim/.eclimd_instances'))
+  endif
+  return available
 endfunction " }}}
 
 function! eclim#PingEclim(echo, ...) " {{{

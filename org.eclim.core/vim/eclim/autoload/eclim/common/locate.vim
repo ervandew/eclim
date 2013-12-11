@@ -96,7 +96,7 @@ function! eclim#common#locate#LocateFile(action, file, ...)
     return
   endif
 
-  if scope == 'project' && (project == '' || !eclim#EclimAvailable())
+  if scope == 'project' && (project == '' || !eclim#EclimAvailable(0))
     let scope = g:EclimLocateFileNonProjectScope
   endif
 
@@ -635,7 +635,7 @@ function! eclim#common#locate#LocateFileFromFileList(pattern, file) " {{{
   if has('win32unix')
     let file = eclim#cygwin#WindowsPath(file)
   endif
-  if eclim#EclimAvailable()
+  if eclim#EclimAvailable(0)
     let command = substitute(s:LocateFileCommand(a:pattern), '<scope>', 'list', '')
     let command .= ' -f "' . file . '"'
     let results = eclim#Execute(command, {'workspace': b:workspace})

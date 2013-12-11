@@ -107,7 +107,14 @@ function! s:Search(command, ...) " {{{
 
     if !in_project
       " build a pattern search and execute it
-      return s:SearchAlternate('-p ' . s:BuildPattern() . ' ' . argline, 1)
+      let results = s:SearchAlternate('-p ' . s:BuildPattern() . ' ' . argline, 1)
+      " kind of gross. if there was no alternate result and eclimd is not
+      " running, then make sure a message is echoed to the user so they know
+      " that eclimd not running *may* be the cause of no results.
+      if len(results) == 0 && !eclim#EclimAvailable()
+        return 0
+      endif
+      return results
     endif
 
     let project = eclim#project#util#GetCurrentProjectName()
