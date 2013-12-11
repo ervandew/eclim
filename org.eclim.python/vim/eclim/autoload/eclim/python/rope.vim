@@ -47,106 +47,106 @@ ropepath = vim.eval('ropepath')
 if ropepath not in sys.path:
   sys.path.insert(0, ropepath)
 
-  from contextlib import contextmanager
-  from rope.base import builtins, pyobjects, pynames
+from contextlib import contextmanager
+from rope.base import builtins, pyobjects, pynames
 
-  @contextmanager
-  def projectroot():
-    cwd = os.getcwd()
-    try:
-      # change working directory to the project root to prevent any modules in the
-      # same dir as the file we are working on from colliding with core python
-      # modules.
-      os.chdir(vim.eval('a:project'))
-      yield
-    finally:
-      os.chdir(cwd)
+@contextmanager
+def projectroot():
+  cwd = os.getcwd()
+  try:
+    # change working directory to the project root to prevent any modules in the
+    # same dir as the file we are working on from colliding with core python
+    # modules.
+    os.chdir(vim.eval('a:project'))
+    yield
+  finally:
+    os.chdir(cwd)
 
-  def byteOffsetToCharOffset(filename, offset, encoding):
-    with(projectroot()):
-      f = file(filename)
-      ba = f.read(offset)
-      u = unicode(ba, encoding or 'utf8')
-      u = u.replace('\r\n', '\n') # rope ignore \r, so don't count them.
-      return len(u)
+def byteOffsetToCharOffset(filename, offset, encoding):
+  with(projectroot()):
+    f = file(filename)
+    ba = f.read(offset)
+    u = unicode(ba, encoding or 'utf8')
+    u = u.replace('\r\n', '\n') # rope ignore \r, so don't count them.
+    return len(u)
 
-  def kind(proposal):
-    pyname = proposal.pyname
-    if hasattr(pyname, 'get_object'):
-      pyobject = pyname.get_object()
-      if isinstance(pyobject, pyobjects.AbstractClass):
-        return 'c'
+def kind(proposal):
+  pyname = proposal.pyname
+  if hasattr(pyname, 'get_object'):
+    pyobject = pyname.get_object()
+    if isinstance(pyobject, pyobjects.AbstractClass):
+      return 'c'
 
-      if isinstance(pyobject, pyobjects.AbstractFunction):
-        return 'f'
+    if isinstance(pyobject, pyobjects.AbstractFunction):
+      return 'f'
 
-    return proposal.scope[0]
+  return proposal.scope[0]
 
-  def parameters(proposal):
-    pyname = proposal.pyname
-    if isinstance(pyname, pynames.ImportedName):
-      pyname = pyname._get_imported_pyname()
-    if hasattr(pyname, 'get_object'):
-      pyobject = pyname.get_object()
-      if isinstance(pyobject, builtins.BuiltinFunction):
-        params = pyobject.get_param_names()
-        if params and params[0] == 'self':
-          params = params[1:]
-        return ', '.join(params)
+def parameters(proposal):
+  pyname = proposal.pyname
+  if isinstance(pyname, pynames.ImportedName):
+    pyname = pyname._get_imported_pyname()
+  if hasattr(pyname, 'get_object'):
+    pyobject = pyname.get_object()
+    if isinstance(pyobject, builtins.BuiltinFunction):
+      params = pyobject.get_param_names()
+      if params and params[0] == 'self':
+        params = params[1:]
+      return ', '.join(params)
 
-      if isinstance(pyobject, pyobjects.AbstractFunction):
-        args = [(a.id, a.col_offset) for a in pyobject.arguments.args]
-        defaults = []
-        for d in pyobject.arguments.defaults:
-          value = _defaultValue(d)
-          defaults.append((value, d.col_offset))
+    if isinstance(pyobject, pyobjects.AbstractFunction):
+      args = [(a.id, a.col_offset) for a in pyobject.arguments.args]
+      defaults = []
+      for d in pyobject.arguments.defaults:
+        value = _defaultValue(d)
+        defaults.append((value, d.col_offset))
 
-        params = StringIO()
-        for ii, arg in enumerate(args):
-          if arg[0] == 'self':
-            continue
+      params = StringIO()
+      for ii, arg in enumerate(args):
+        if arg[0] == 'self':
+          continue
 
-          if len(params.getvalue()) > 0:
-            params.write(', ')
-          if defaults:
-            if defaults[0][1] > arg[1]:
-              if (ii == len(args) - 1) or (args[ii + 1][1] > defaults[0][1]):
-                arg = (arg[0], arg[1], defaults[0][0])
-                defaults.pop(0)
-          if len(arg) > 2:
-            params.write('%s=%s' % (arg[0], arg[2]))
-          else:
-            params.write(arg[0])
+        if len(params.getvalue()) > 0:
+          params.write(', ')
+        if defaults:
+          if defaults[0][1] > arg[1]:
+            if (ii == len(args) - 1) or (args[ii + 1][1] > defaults[0][1]):
+              arg = (arg[0], arg[1], defaults[0][0])
+              defaults.pop(0)
+        if len(arg) > 2:
+          params.write('%s=%s' % (arg[0], arg[2]))
+        else:
+          params.write(arg[0])
 
-        if pyobject.arguments.vararg:
-          if len(params.getvalue()) > 0:
-            params.write(', ')
-          params.write('*args')
+      if pyobject.arguments.vararg:
+        if len(params.getvalue()) > 0:
+          params.write(', ')
+        params.write('*args')
 
-        if pyobject.arguments.kwarg:
-          if len(params.getvalue()) > 0:
-            params.write(', ')
-          params.write('**kwargs')
+      if pyobject.arguments.kwarg:
+        if len(params.getvalue()) > 0:
+          params.write(', ')
+        params.write('**kwargs')
 
-        return params.getvalue()
-    return ''
+      return params.getvalue()
+  return ''
 
-  def _defaultValue(default, nested=False):
-    value = None
-    for attr in ('id', 'n', 's', 'elts', 'keys'):
-      if hasattr(default, attr):
-        value = getattr(default, attr)
-        if attr == 's' and not nested:
-          value = repr(value)
-        elif attr == 'elts':
-          value = repr(tuple([_defaultValue(v, nested=True) for v in value]))
-        elif attr == 'keys':
-          value = repr(dict([
-            (_defaultValue(k, nested=True), _defaultValue(v, nested=True))
-            for k, v in zip(value, getattr(default, 'values'))
-          ]))
-        break
-    return value
+def _defaultValue(default, nested=False):
+  value = None
+  for attr in ('id', 'n', 's', 'elts', 'keys'):
+    if hasattr(default, attr):
+      value = getattr(default, attr)
+      if attr == 's' and not nested:
+        value = repr(value)
+      elif attr == 'elts':
+        value = repr(tuple([_defaultValue(v, nested=True) for v in value]))
+      elif attr == 'keys':
+        value = repr(dict([
+          (_defaultValue(k, nested=True), _defaultValue(v, nested=True))
+          for k, v in zip(value, getattr(default, 'values'))
+        ]))
+      break
+  return value
 EOF
 
   return 1
@@ -154,22 +154,11 @@ endfunction " }}}
 
 " RopePath() {{{
 " Gets the base directory where the rope code is located.
+if !exists("g:RopePath")
+  " <sfile> does not work inside functions :(
+  let g:RopePath = substitute(expand('<sfile>:p:h'), '\', '/', 'g')
+endif
 function! eclim#python#rope#RopePath()
-  if !exists("g:RopePath")
-    let savewig = &wildignore
-    set wildignore=""
-    let file = findfile('autoload/eclim/python/rope.vim', escape(&runtimepath, ' '))
-    let &wildignore = savewig
-
-    if file == ''
-      echoe 'Unable to determine rope basedir.'
-      return ''
-    endif
-    let basedir = substitute(fnamemodify(file, ':p:h'), '\', '/', 'g')
-
-    let g:RopePath = basedir
-  endif
-
   return g:RopePath
 endfunction " }}}
 
