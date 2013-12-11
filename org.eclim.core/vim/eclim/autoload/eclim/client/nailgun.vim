@@ -37,11 +37,8 @@ function! eclim#client#nailgun#ChooseEclimdInstance(...) " {{{
   " Option args:
   "   dir
 
-  let instances = eclim#client#nailgun#GetEclimdInstances()
+  let instances = eclim#client#nailgun#GetEclimdInstances(1)
   if type(instances) == g:NUMBER_TYPE
-    call eclim#util#Echo(printf(
-      \ 'No eclimd instances found running (eclimd created file not found %s)',
-      \ eclim#UserHome() . '/.eclim/.eclimd_instances'))
     return
   endif
 
@@ -90,7 +87,10 @@ function! eclim#client#nailgun#ChooseEclimdInstance(...) " {{{
   call eclim#util#Echo('No eclimd instances found running.')
 endfunction " }}}
 
-function! eclim#client#nailgun#GetEclimdInstances() " {{{
+function! eclim#client#nailgun#GetEclimdInstances(...) " {{{
+  " Returns a dict with eclimd instances or a number (0) if no
+  " instances are found.
+  let echo = a:0 ? a:1 : 1
   let instances = {}
   let dotinstances = eclim#UserHome() . '/.eclim/.eclimd_instances'
   if filereadable(dotinstances)
@@ -104,6 +104,12 @@ function! eclim#client#nailgun#GetEclimdInstances() " {{{
     endfor
     return instances
   endif
+  if echo
+    call eclim#util#Echo(printf(
+      \ 'No eclimd instances found running (eclimd created file not found %s)',
+      \ eclim#UserHome() . '/.eclim/.eclimd_instances'))
+  endif
+  return 0
 endfunction " }}}
 
 function! eclim#client#nailgun#Execute(instance, command, ...) " {{{
@@ -183,7 +189,10 @@ function! eclim#client#nailgun#CommandCompleteWorkspaces(argLead, cmdLine, curso
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
 
-  let instances = eclim#client#nailgun#GetEclimdInstances()
+  let instances = eclim#client#nailgun#GetEclimdInstances(1)
+  if type(instances) == g:NUMBER_TYPE
+    return []
+  endif
   let workspaces = sort(keys(instances))
   if cmdLine !~ '[^\\]\s$'
     call filter(workspaces, 'v:val =~ "^' . argLead . '"')

@@ -539,7 +539,7 @@ function! eclim#project#util#ProjectList(workspace) " {{{
 endfunction " }}}
 
 function! eclim#project#util#ProjectNatures(project) " {{{
-  " Prints nature info one or all projects.
+  " Prints nature info of one or all projects.
 
   let command = s:command_natures
   if a:project != ''
@@ -550,14 +550,16 @@ function! eclim#project#util#ProjectNatures(project) " {{{
     endif
   else
     let projects = []
-    let instances = eclim#client#nailgun#GetEclimdInstances()
-    for workspace in keys(instances)
-      let results = eclim#Execute(command, {'instance': instances[workspace]})
-      if type(results) != g:LIST_TYPE
-        continue
-      endif
-      let projects += results
-    endfor
+    let instances = eclim#client#nailgun#GetEclimdInstances(1)
+    if type(instances) == g:DICT_TYPE
+      for workspace in keys(instances)
+        let results = eclim#Execute(command, {'instance': instances[workspace]})
+        if type(results) != g:LIST_TYPE
+          continue
+        endif
+        let projects += results
+      endfor
+    endif
   endif
 
   if len(projects) == 0
@@ -913,14 +915,15 @@ function! eclim#project#util#GetProjectRelativeFilePath(...) " {{{
   return result
 endfunction " }}}
 
-function! eclim#project#util#GetProjects() " {{{
+function! eclim#project#util#GetProjects(...) " {{{
   " Returns a list of project dictionaries containing the following properties:
   "   workspace: The path of the workspace the project belongs to.
   "   name: The name of the project.
   "   path: The root path of the project.
   "   links: List of linked paths.
+  let echo = a:0 ? a:1 : 1
 
-  let instances = eclim#client#nailgun#GetEclimdInstances()
+  let instances = eclim#client#nailgun#GetEclimdInstances(echo)
   if type(instances) != g:DICT_TYPE
     let s:workspace_projects = {}
     return []
@@ -990,7 +993,7 @@ function! eclim#project#util#GetProject(path) " {{{
     let pattern .= '\c'
   endif
 
-  let projects = eclim#project#util#GetProjects()
+  let projects = eclim#project#util#GetProjects(0) " silent (invoked during shutdown)
 
   " sort projects depth wise by path to properly support nested projects.
   call sort(projects, 's:ProjectSortPathDepth')
@@ -1043,14 +1046,16 @@ function! eclim#project#util#GetProjectNames(...) " {{{
   if a:0 > 0 && a:1 != ''
     let projects = []
     let command = s:command_project_list . ' -n ' . a:1
-    let instances = eclim#client#nailgun#GetEclimdInstances()
-    for workspace in keys(instances)
-      let results = eclim#Execute(command, {'instance': instances[workspace]})
-      if type(results) != g:LIST_TYPE
-        continue
-      endif
-      let projects += results
-    endfor
+    let instances = eclim#client#nailgun#GetEclimdInstances(1)
+    if type(instances) == g:DICT_TYPE
+      for workspace in keys(instances)
+        let results = eclim#Execute(command, {'instance': instances[workspace]})
+        if type(results) != g:LIST_TYPE
+          continue
+        endif
+        let projects += results
+      endfor
+    endif
 
     call map(projects, "v:val.name")
     return projects
@@ -1159,7 +1164,7 @@ function! eclim#project#util#IsCurrentFileInProject(...) " {{{
   if eclim#project#util#GetCurrentProjectName() == ''
     if (a:0 == 0 || a:1) && g:eclimd_running
       call eclim#util#EchoError('Unable to determine the project. ' .
-        \ 'Check that the current file is in a valid project.')
+        \ 'Check that the current file is in a valid project and eclimd is running.')
     endif
     return 0
   endif
