@@ -773,7 +773,9 @@ function! eclim#project#util#ProjectTab(project) " {{{
     let is_project = 0
     let dir = expand(project, ':p')
     if !isdirectory(dir)
-      call eclim#util#EchoError("No project '" . project . "' found.")
+      if eclim#EclimAvailable(0)
+        call eclim#util#EchoError("No project '" . project . "' found.")
+      endif
       return
     endif
     let project = fnamemodify(substitute(dir, '/$', '', ''), ':t')
