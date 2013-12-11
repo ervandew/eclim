@@ -40,7 +40,7 @@ function! eclim#xml#validate#Validate(on_save, ...) " {{{
     return
   endif
 
-  if eclim#EclimAvailable()
+  if eclim#EclimAvailable(0)
     if !eclim#project#util#IsCurrentFileInProject()
       return
     endif

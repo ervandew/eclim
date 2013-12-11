@@ -541,6 +541,10 @@ endfunction " }}}
 function! eclim#project#util#ProjectNatures(project) " {{{
   " Prints nature info of one or all projects.
 
+  if !eclim#EclimAvailable()
+    return
+  endif
+
   let command = s:command_natures
   if a:project != ''
     let command .= ' -p "' . a:project . '"'
@@ -550,16 +554,14 @@ function! eclim#project#util#ProjectNatures(project) " {{{
     endif
   else
     let projects = []
-    let instances = eclim#client#nailgun#GetEclimdInstances(1)
-    if type(instances) == g:DICT_TYPE
-      for workspace in keys(instances)
-        let results = eclim#Execute(command, {'instance': instances[workspace]})
-        if type(results) != g:LIST_TYPE
-          continue
-        endif
-        let projects += results
-      endfor
-    endif
+    let instances = eclim#client#nailgun#GetEclimdInstances()
+    for workspace in keys(instances)
+      let results = eclim#Execute(command, {'instance': instances[workspace]})
+      if type(results) != g:LIST_TYPE
+        continue
+      endif
+      let projects += results
+    endfor
   endif
 
   if len(projects) == 0
@@ -915,19 +917,13 @@ function! eclim#project#util#GetProjectRelativeFilePath(...) " {{{
   return result
 endfunction " }}}
 
-function! eclim#project#util#GetProjects(...) " {{{
+function! eclim#project#util#GetProjects() " {{{
   " Returns a list of project dictionaries containing the following properties:
   "   workspace: The path of the workspace the project belongs to.
   "   name: The name of the project.
   "   path: The root path of the project.
   "   links: List of linked paths.
-  let echo = a:0 ? a:1 : 1
-
-  let instances = eclim#client#nailgun#GetEclimdInstances(echo)
-  if type(instances) != g:DICT_TYPE
-    let s:workspace_projects = {}
-    return []
-  endif
+  let instances = eclim#client#nailgun#GetEclimdInstances()
 
   if keys(s:workspace_projects) != keys(instances)
     let s:workspace_projects = {}
@@ -993,7 +989,7 @@ function! eclim#project#util#GetProject(path) " {{{
     let pattern .= '\c'
   endif
 
-  let projects = eclim#project#util#GetProjects(0) " silent (invoked during shutdown)
+  let projects = eclim#project#util#GetProjects()
 
   " sort projects depth wise by path to properly support nested projects.
   call sort(projects, 's:ProjectSortPathDepth')
@@ -1046,16 +1042,14 @@ function! eclim#project#util#GetProjectNames(...) " {{{
   if a:0 > 0 && a:1 != ''
     let projects = []
     let command = s:command_project_list . ' -n ' . a:1
-    let instances = eclim#client#nailgun#GetEclimdInstances(1)
-    if type(instances) == g:DICT_TYPE
-      for workspace in keys(instances)
-        let results = eclim#Execute(command, {'instance': instances[workspace]})
-        if type(results) != g:LIST_TYPE
-          continue
-        endif
-        let projects += results
-      endfor
-    endif
+    let instances = eclim#client#nailgun#GetEclimdInstances()
+    for workspace in keys(instances)
+      let results = eclim#Execute(command, {'instance': instances[workspace]})
+      if type(results) != g:LIST_TYPE
+        continue
+      endif
+      let projects += results
+    endfor
 
     call map(projects, "v:val.name")
     return projects
@@ -1161,10 +1155,20 @@ function! eclim#project#util#IsCurrentFileInProject(...) " {{{
   " Optional args:
   "   echo_error (default: 1): when non-0, echo an error to the user if project
   "                            could not be determined.
-  if eclim#project#util#GetCurrentProjectName() == ''
-    if (a:0 == 0 || a:1) && g:eclimd_running
+
+  let echo = a:0 ? a:1 : 1
+  if !echo
+    silent let project = eclim#project#util#GetCurrentProjectName()
+  else
+    let project = eclim#project#util#GetCurrentProjectName()
+  endif
+
+  if project == ''
+    " if eclimd isn't available, then that could be the reason the project
+    " couldn't be determined, so don't hide that message with this one.
+    if echo && eclim#EclimAvailable(0)
       call eclim#util#EchoError('Unable to determine the project. ' .
-        \ 'Check that the current file is in a valid project and eclimd is running.')
+        \ 'Check that the current file is in a valid project.')
     endif
     return 0
   endif
@@ -1200,7 +1204,9 @@ function! eclim#project#util#RefreshFile() " {{{
 endfunction " }}}
 
 function! eclim#project#util#UnableToDetermineProject() " {{{
-  if g:eclimd_running
+  " if eclimd isn't available, then that could be the reason the project
+  " couldn't be determined, so don't hide that message with this one.
+  if eclim#EclimAvailable(0)
     call eclim#util#EchoError("Unable to determine the project. " .
       \ "Please specify a project name or " .
       \ "execute from a valid project directory.")
