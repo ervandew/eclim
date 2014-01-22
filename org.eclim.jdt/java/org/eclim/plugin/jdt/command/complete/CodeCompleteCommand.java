@@ -70,6 +70,7 @@ public class CodeCompleteCommand
     int offset = getOffset(commandLine);
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    JavaUtils.enableVisibilityCheck();
 
     CompletionProposalCollector collector =
       new CompletionProposalCollector(src);
