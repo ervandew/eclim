@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,7 +132,10 @@ public class PluginResources
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,
       "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-7]\n" +
-      "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+"
+      "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+\n" +
+      "JDT/CodeComplete org.eclipse.jdt.core.codeComplete.camelCaseMatch (enabled|disabled)\n" +
+      "JDT/CodeComplete org.eclipse.jdt.core.codeComplete.deprecationCheck (enabled|disabled)\n" +
+      "JDT/CodeComplete org.eclipse.jdt.core.codeComplete.visibilityCheck (enabled|disabled)"
     );
   }
 
