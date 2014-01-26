@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,11 +39,11 @@ The power of Eclipse in your favorite editor.
 What is it?
 ==================
 
-Eclim provides the ability to access Eclipse_ features (code completion,
-searching, code validation, and :doc:`many more </features>`) via the command
-line or a local network connection, allowing those features to be integrated
-with your favorite editor. Eclim provides an integration with Vim_, but
-:doc:`third party clients </relatedprojects>` have been created to add eclim
+Eclim provides the ability to access Eclipse_ code editing features (code
+completion, searching, code validation, and :doc:`many more </features>`) via
+the command line or a local network connection, allowing those features to be
+integrated with your favorite editor. Eclim provides an integration with Vim_,
+but :doc:`third party clients </relatedprojects>` have been created to add eclim
 support to other editors as well (emacs, sublime text 2, textmate).
 
 There are three primary usage scenarios in which eclim is designed to be used:
