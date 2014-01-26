@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -330,18 +330,12 @@ function! s:BufferDelete() " {{{
   let buffer = b:eclim_buffers[index]
   call remove(b:eclim_buffers, index)
 
-  let winnr = bufwinnr(buffer.bufnr)
-  if winnr != -1
-    " if active in a window, go to the window to delete the buffer since that
-    " keeps eclim's prevention of closing the last non-utility window working
-    " properly.
-    let curwin = winnr()
-    exec winnr . 'winc w'
-    bdelete
-    exec curwin . 'winc w'
-  else
-    exec 'bd ' . buffer.bufnr
-  endif
+  let winnr = winnr()
+  " make sure the autocmds are executed in the following order
+  noautocmd exec 'bd ' . buffer.bufnr
+  doautocmd BufDelete
+  doautocmd BufEnter
+  exec winnr . 'winc w'
 endfunction " }}}
 
 function! s:BufferEntryToLine(buffer, filelength) " {{{
