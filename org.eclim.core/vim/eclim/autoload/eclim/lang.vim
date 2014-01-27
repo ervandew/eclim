@@ -225,16 +225,29 @@ function! eclim#lang#Search(command, singleResultAction, argline)
 
 endfunction " }}}
 
+function! eclim#lang#isFiletypeValidationEnabled(lang) " {{{
+    " global setting
+    if !g:EclimFileTypeValidate
+      return 0
+    endif
+    " per lang setting
+    exec 'let validate = g:Eclim' . toupper(a:lang[0]) . a:lang[1:] . 'Validate'
+    return validate
+endfunction " }}}
+
+function! eclim#lang#disableSyntasticIfValidationIsEnabled(lang) " {{{
+  if exists('g:loaded_syntastic_plugin') && eclim#lang#isFiletypeValidationEnabled(a:lang)
+    exec 'let validate = g:syntastic_' . tolower(a:lang) . '_checkers = []'
+  endif
+endfunction " }}}
+
 function! eclim#lang#UpdateSrcFile(lang, ...) " {{{
   " Updates the src file on the server w/ the changes made to the current file.
   " Optional arg:
   "   validate: when 1 force the validation to execute, when 0 prevent it.
 
   if !a:0
-    " per lang setting
-    exec 'let validate = g:Eclim' . toupper(a:lang[0]) . a:lang[1:] . 'Validate'
-    " global setting
-    let validate = validate && g:EclimFileTypeValidate
+    let validate = eclim#lang#isFiletypeValidationEnabled(lang)
   else
     " arg override
     let validate = a:1
