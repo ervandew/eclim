@@ -42,10 +42,7 @@ endif
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#php#complete#CodeComplete'
 
-" disable syntastic
-if exists('g:loaded_syntastic_plugin') && !g:EclimPhpSyntasticEnabled
-  let g:syntastic_php_checkers = []
-endif
+call eclim#lang#disableSyntasticIfValidationIsEnabled('php')
 
 " }}}
 
