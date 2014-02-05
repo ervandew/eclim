@@ -138,7 +138,13 @@
         classpathref="gant-classpath"/>
 
     <property name="target" value="deploy"/>
-    <gant file="ant/build.gant" target="${target}" inheritAll="true"/>
+    <gant
+        file="ant/build.gant"
+        target="${target}"
+        inheritAll="true"
+        useCache="true"
+        cacheDir="build/temp/gant"
+      />
   </target>
 
 </project>
