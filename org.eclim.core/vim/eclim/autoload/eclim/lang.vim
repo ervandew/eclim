@@ -257,7 +257,7 @@ function! eclim#lang#UpdateSrcFile(lang, ...) " {{{
   "   validate: when 1 force the validation to execute, when 0 prevent it.
 
   if !a:0
-    let validate = eclim#lang#IsFiletypeValidationEnabled(lang)
+    let validate = eclim#lang#IsFiletypeValidationEnabled(a:lang)
   else
     " arg override
     let validate = a:1
