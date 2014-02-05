@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -97,10 +97,7 @@ if g:EclimJavaCompilerAutoDetect
   endif
 endif
 
-" disable syntastic
-if exists('g:loaded_syntastic_plugin') && !g:EclimJavaSyntasticEnabled
-  let g:syntastic_java_checkers = []
-endif
+call eclim#lang#DisableSyntasticIfValidationIsEnabled('java')
 
 " }}}
 

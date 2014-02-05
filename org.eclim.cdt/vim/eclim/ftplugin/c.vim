@@ -1,10 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -31,6 +29,10 @@ if !exists("g:EclimCSyntasticEnabled")
   let g:EclimCSyntasticEnabled = 0
 endif
 
+if !exists("g:EclimCppSyntasticEnabled")
+  let g:EclimCppSyntasticEnabled = 0
+endif
+
 if !exists('g:EclimCCallHierarchyDefaultAction')
   let g:EclimCCallHierarchyDefaultAction = g:EclimDefaultFileOpenAction
 endif
@@ -41,10 +43,7 @@ endif
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#c#complete#CodeComplete'
 
-" disable syntastic
-if exists('g:loaded_syntastic_plugin') && !g:EclimCSyntasticEnabled
-  let g:syntastic_c_checkers = []
-endif
+call eclim#lang#DisableSyntasticIfValidationIsEnabled('c', &ft)
 
 " }}}
 
