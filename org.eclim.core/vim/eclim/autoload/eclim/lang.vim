@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -225,19 +225,29 @@ function! eclim#lang#Search(command, singleResultAction, argline)
 
 endfunction " }}}
 
-function! eclim#lang#isFiletypeValidationEnabled(lang) " {{{
-    " global setting
-    if !g:EclimFileTypeValidate
-      return 0
-    endif
-    " per lang setting
-    exec 'let validate = g:Eclim' . toupper(a:lang[0]) . a:lang[1:] . 'Validate'
-    return validate
+function! eclim#lang#IsFiletypeValidationEnabled(lang) " {{{
+  " global setting
+  if !g:EclimFileTypeValidate
+    return 0
+  endif
+  " per lang setting
+  exec 'let validate = g:Eclim' . toupper(a:lang[0]) . a:lang[1:] . 'Validate'
+  return validate
 endfunction " }}}
 
-function! eclim#lang#disableSyntasticIfValidationIsEnabled(lang) " {{{
-  if exists('g:loaded_syntastic_plugin') && eclim#lang#isFiletypeValidationEnabled(a:lang)
-    exec 'let validate = g:syntastic_' . tolower(a:lang) . '_checkers = []'
+function! eclim#lang#DisableSyntasticIfValidationIsEnabled(lang, ...) " {{{
+  "Optional arg:
+  "  syntastic lang: The syntastic lang string if it doesn't match eclim's lang.
+
+  if exists('g:loaded_syntastic_plugin') &&
+   \ eclim#lang#IsFiletypeValidationEnabled(a:lang)
+    let lang = a:0 ? a:1 : a:lang
+    exec 'let syntastic_enabled = ' .
+      \ 'g:Eclim' . toupper(lang[0]) . lang[1:] . 'SyntasticEnabled'
+
+    if !syntastic_enabled
+      exec 'let g:syntastic_' . tolower(lang) . '_checkers = []'
+    endif
   endif
 endfunction " }}}
 
@@ -247,7 +257,7 @@ function! eclim#lang#UpdateSrcFile(lang, ...) " {{{
   "   validate: when 1 force the validation to execute, when 0 prevent it.
 
   if !a:0
-    let validate = eclim#lang#isFiletypeValidationEnabled(lang)
+    let validate = eclim#lang#IsFiletypeValidationEnabled(lang)
   else
     " arg override
     let validate = a:1
