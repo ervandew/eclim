@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,15 +35,12 @@ public class MvnDependency
     super(org, name, version, path);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Dependency#resolveArtifact()
-   */
+  @Override
   public String resolveArtifact()
   {
     StringBuffer buffer = new StringBuffer();
     buffer.append(getOrganization().replace(".", SEPARATOR)).append(SEPARATOR)
-      .append(getName().replace(".", SEPARATOR)).append(SEPARATOR)
+      .append(getName()).append(SEPARATOR)
       .append(getVersion()).append(SEPARATOR)
       .append(toString());
 
