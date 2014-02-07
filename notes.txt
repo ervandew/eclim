@@ -181,6 +181,9 @@ TODO {{{
       - project create
         - handle dependent projects
         - specify toolchain (command to list toolchains with a configuration)
+          - eclipse may have the notion of a "preferred" toolchain, so that
+            should be taken into consideration when determining the default
+            toolchain to use (see #278).
         - specify project type (executable, shared library, static library, makefile project)
         - makefile creation
       - edit project config
@@ -687,6 +690,15 @@ NOTES {{{
 
     - Patch 7.3.468: QuickFixCmdPre/Post now fired for cfile, lfile, etc.
     - Patch 7.3.598: new autocmd: CompleteDone
+
+  }}}
+
+  Gant {{{
+
+    https://github.com/Gant/Gant
+
+    $ ./gradlew :gant:test
+    $ ./gradlew :gant:jar
 
   }}}
 
