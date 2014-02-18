@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -111,6 +111,21 @@ in there:
   $ vim user.properties
   eclipse.home=/opt/eclipse
   vim.files=${user.home}/.vim/bundle/eclim
+
+.. note::
+
+  The eclim vim help files, used by the :ref:`:EclimHelp <:EclimHelp>` command,
+  are not built by default. To build these you first need to install sphinx_,
+  then run the following command:
+
+  ::
+
+    $ ant vimdocs
+
+  This target also supports the ``vim.files`` property if you want the docs
+  deployed to a directory other than the default location.
+
+.. _sphinx: http://sphinx-doc.org
 
 .. end-build
 
@@ -227,7 +242,7 @@ All of that and more can be found in the
 .. _eclim development group: http://groups.google.com/group/eclim-dev
 .. _guide to forking: http://help.github.com/forking/
 .. _git-format-patch: http://www.kernel.org/pub/software/scm/git/docs/git-format-patch.html
-.. _sphinx: http://sphinx.pocoo.org
+.. _sphinx: http://sphinx-doc.org
 .. _plantuml: http://plantuml.sourceforge.net/
 .. _graphviz: http://www.graphviz.org/
 .. _formic: http://github.com/ervandew/formic
