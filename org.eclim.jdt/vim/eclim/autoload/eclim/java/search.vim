@@ -295,6 +295,14 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
     let argline = '-p ' . argline
   endif
 
+  " check if an action was supplied
+  let action = g:EclimJavaSearchSingleResult
+  if argline =~ '-a '
+    let action = matchlist(argline, '-a \(\w\+\)')[1]
+    " remove action from arguments list
+    let argline = substitute(argline, '-a \w\+', '', '')
+  endif
+
   let results = s:Search(a:type, argline)
   if type(results) != g:LIST_TYPE
     return
@@ -311,10 +319,10 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
         endif
 
       " single result in another file.
-      elseif len(results) == 1 && g:EclimJavaSearchSingleResult != "lopen"
+      elseif len(results) == 1 && action != "lopen"
         let entry = getloclist(0)[0]
         let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-        call eclim#util#GoToBufferWindowOrOpen(name, g:EclimJavaSearchSingleResult)
+        call eclim#util#GoToBufferWindowOrOpen(name, action)
         call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
         call eclim#display#signs#Update()
         call cursor(entry.lnum, entry.col)

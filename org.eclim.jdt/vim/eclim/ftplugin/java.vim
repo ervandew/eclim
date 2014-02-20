@@ -195,8 +195,8 @@ if !exists(":JavaSearch")
     \ JavaSearch :call eclim#java#search#SearchAndDisplay('java_search', '<args>')
 endif
 if !exists(":JavaSearchContext")
-  command -buffer JavaSearchContext
-    \ :call eclim#java#search#SearchAndDisplay('java_search', '')
+  command -buffer -nargs=? JavaSearchContext
+    \ :call eclim#java#search#SearchAndDisplay('java_search', '<args>')
 endif
 if !exists(":JavaDocSearch")
   command -buffer -nargs=*
