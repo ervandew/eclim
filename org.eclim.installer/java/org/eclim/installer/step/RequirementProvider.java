@@ -16,9 +16,7 @@
  */
 package org.eclim.installer.step;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 
 import java.util.ArrayList;
@@ -26,8 +24,6 @@ import java.util.Collections;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -88,9 +84,6 @@ public class RequirementProvider
   private class EclipseRequirement
     extends ValidatingRequirement
   {
-    private final Pattern VERSION =
-      Pattern.compile(".*Release\\s+(([0-9]+\\.)+[0-9]).*");
-
     public EclipseRequirement ()
     {
       super("eclipse");
@@ -101,16 +94,7 @@ public class RequirementProvider
       String eclipseHome = (String)
         Installer.getContext().getValue("eclipse.home");
       eclipseHome = eclipseHome.replace('\\', '/');
-      // probably a better way
-      File file = new File(eclipseHome + "/readme/readme_eclipse.html");
-      String version = null;
-      if (file.exists()){
-        version = versionFromReadme(file);
-      }
-
-      if (version == null){
-        version = versionFromPlugins(eclipseHome);
-      }
+      String version = versionFromPlugins(eclipseHome);
 
       if (version == null){
         return new Status(
@@ -129,29 +113,6 @@ public class RequirementProvider
       }
 
       return OK_STATUS;
-    }
-
-    public String versionFromReadme(File file)
-    {
-      BufferedReader reader = null;
-      try{
-        reader = new BufferedReader(new FileReader(file));
-        String line = null;
-        for(int ii = 0; ii < 30; ii++){
-          line = reader.readLine();
-          Matcher matcher = VERSION.matcher(line);
-          if (matcher.matches()){
-            return matcher.group(1);
-          }
-        }
-      }catch(Exception e){
-        logger.error("Error checking eclipse version.", e);
-      }finally{
-        IOUtils.closeQuietly(reader);
-      }
-      logger.warn(
-          "Error checking eclipse version via readme. File does not exist: ", file);
-      return null;
     }
 
     public String versionFromPlugins(String eclipseHome)
