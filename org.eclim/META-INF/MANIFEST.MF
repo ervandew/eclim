@@ -38,6 +38,8 @@ Export-Package: org.apache.commons.cli,
   org.eclim.util.vim,
   org.eclipse.swt.widgets,
   com.google.gson,
+  com.google.gson.reflect,
+  com.google.gson.stream,
   com.martiansoftware.nailgun,
   org.scannotation
 Require-Bundle: javax.inject,

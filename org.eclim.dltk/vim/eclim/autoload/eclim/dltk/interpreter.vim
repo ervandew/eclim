@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -100,6 +100,25 @@ function s:InterpreterAddRemove(nature, type, path, action) " {{{
     return 1
   endif
   return 0
+endfunction " }}}
+
+function! eclim#dltk#interpreter#CommandCompleteInterpreterAdd(argLead, cmdLine, cursorPos) " {{{
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseCmdLine(cmdLine)[1:]
+  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
+
+  if argLead == '-' && args[0] == '-'
+    return ['-n']
+  endif
+
+  if len(args) == 0 ||
+   \ len(args) == 3 ||
+   \ (len(args) == 1 && argLead !~ '^-\|^$') ||
+   \ (len(args) == 2 && argLead == '')
+    return eclim#util#CommandCompleteFile(a:argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  return []
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -545,7 +545,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.adt");
       NAMES.add("featureList.cdt");
       NAMES.add("featureList.pdt");
-      NAMES.add("featureList.python");
+      NAMES.add("featureList.pydev");
       NAMES.add("featureList.sdt210");
     }
 

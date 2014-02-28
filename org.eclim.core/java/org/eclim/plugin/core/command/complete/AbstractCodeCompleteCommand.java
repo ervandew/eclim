@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@ package org.eclim.plugin.core.command.complete;
 
 import java.util.ArrayList;
 
+import java.util.Collections;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.command.CommandLine;
@@ -35,6 +37,8 @@ import org.eclipse.jface.text.ITextViewer;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+
+import org.eclipse.jface.text.source.ISourceViewer;
 
 /**
  * Abstract command for code completion.
@@ -75,6 +79,7 @@ public abstract class AbstractCodeCompleteCommand
     if(COMPACT.equals(layout) && results.size() > 0){
       results = compact(results);
     }
+    Collections.sort(results);
     return results;
   }
 
@@ -138,7 +143,7 @@ public abstract class AbstractCodeCompleteCommand
    * @param file The file.
    * @return The ITextViewer.
    */
-  protected ITextViewer getTextViewer(
+  protected ISourceViewer getTextViewer(
       CommandLine commandLine, String project, String file)
     throws Exception
   {

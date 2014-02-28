@@ -58,26 +58,6 @@ function eclim#ruby#interpreter#AddInterpreter(args) " {{{
   return 0
 endfunction " }}}
 
-function! eclim#ruby#interpreter#CommandCompleteInterpreterAdd(argLead, cmdLine, cursorPos) " {{{
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let args = eclim#util#ParseCmdLine(cmdLine)[1:]
-  let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
-  echom 'cmdLine: |' . cmdLine . '| argLead: |' . argLead . '| args: ' . string(args)
-
-  if argLead == '-' && args[0] == '-'
-    return ['-n']
-  endif
-
-  if len(args) == 0 ||
-   \ len(args) == 3 ||
-   \ (len(args) == 1 && argLead !~ '^-\|^$') ||
-   \ (len(args) == 2 && argLead == '')
-    return eclim#util#CommandCompleteFile(a:argLead, a:cmdLine, a:cursorPos)
-  endif
-
-  return []
-endfunction " }}}
-
 function! eclim#ruby#interpreter#CommandCompleteInterpreterPath(argLead, cmdLine, cursorPos) " {{{
   " Custom command completion for ruby interpreter paths.
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)

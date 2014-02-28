@@ -93,6 +93,10 @@
     <antcall target="gant"> <param name="target" value="org.eclim.adt.test"/> </antcall>
   </target>
 
+  <target name="test.pydev">
+    <antcall target="gant"> <param name="target" value="org.eclim.pydev.test"/> </antcall>
+  </target>
+
   <target name="dist">
     <antcall target="gant"> <param name="target" value="dist"/> </antcall>
   </target>

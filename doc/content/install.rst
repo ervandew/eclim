@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -278,10 +278,6 @@ install eclim features whose third party dependecies are already present in
 your eclipse installation.  So before installing eclim, you must make sure that
 you've already installed the necessary dependencies (for a full list of
 dependencies, you can reference eclim's `installer dependencies`_ file).
-
-On exception to this is eclim's python plugin which currently does not rely
-on any eclipse features, so to enable the installation of that plugin, just add
-``-DfeatureList.python=true`` to the install command above.
 
 **Required Properties:**
 

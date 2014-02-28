@@ -42,7 +42,7 @@ public class FeatureProvider
   public static final String[] FEATURES = {
     "jdt", "adt", "wst", "cdt",
     "dltk", "dltkruby", "pdt",
-    "python", "sdt210"
+    "pydev", "sdt210"
   };
 
   private static final String[][] FEATURES_DEPENDS = {
@@ -66,15 +66,7 @@ public class FeatureProvider
     boolean[] enabled = new boolean[FEATURES.length];
     for (int ii = 0; ii < FEATURES.length; ii++){
       enabled[ii] = false;
-
-      if (FEATURES[ii].equals("python")){
-        String path = Installer.getProject()
-          .replaceProperties("${vim.files}/eclim/autoload/eclim/python");
-        enabled[ii] = new File(path).exists();
-        continue;
-      }else{
-        enabled[ii] = info.getUninstalledDependencies(FEATURES[ii]).size() == 0;
-      }
+      enabled[ii] = info.getUninstalledDependencies(FEATURES[ii]).size() == 0;
     }
 
     ArrayList<Feature> features = new ArrayList<Feature>();

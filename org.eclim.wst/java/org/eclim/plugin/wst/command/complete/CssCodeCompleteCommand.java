@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ import org.eclim.plugin.core.util.ProjectUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 
-import org.eclipse.jface.text.ITextViewer;
-
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+
+import org.eclipse.jface.text.source.ISourceViewer;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -70,7 +70,7 @@ public class CssCodeCompleteCommand
   }
 
   @Override
-  protected ITextViewer getTextViewer(
+  protected ISourceViewer getTextViewer(
       CommandLine commandLine, String project, String file)
     throws Exception
   {

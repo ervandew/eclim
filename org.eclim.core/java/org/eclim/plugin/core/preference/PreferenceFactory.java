@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.core.preference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +35,8 @@ public class PreferenceFactory
 {
   private static final Pattern JSON_ARRAY =
     Pattern.compile("^JSON\\[(.*)\\]$");
+  private static final Pattern JSON_OBJECT =
+    Pattern.compile("^JSON\\{\\}$");
 
   /**
    * Adds options via the supplied options string that contains new line
@@ -88,11 +93,15 @@ public class PreferenceFactory
         preference.setDefaultValue(attrs[2]);
         if (attrs[3] != null && !attrs[3].trim().equals(StringUtils.EMPTY)){
           Matcher jsonArrayMatcher = JSON_ARRAY.matcher(attrs[3]);
+          Matcher jsonObjectMatcher = JSON_OBJECT.matcher(attrs[3]);
           if (jsonArrayMatcher.matches()){
             String pattern = jsonArrayMatcher.group(1);
             preference.setValidator(new JsonValidator(
                   String[].class,
                   pattern.length() != 0 ? new RegexValidator(pattern) : null));
+          }else if (jsonObjectMatcher.matches()){
+            Map<String,String> map = new HashMap<String,String>();
+            preference.setValidator(new JsonValidator(map.getClass(), null));
           }else{
             preference.setValidator(new RegexValidator(attrs[3]));
           }

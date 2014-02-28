@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,16 @@ import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.ITextInputListener;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.ITextOperationTarget;
-import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.IUndoManager;
 import org.eclipse.jface.text.IViewportListener;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.TextSelection;
+
+import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.IAnnotationHover;
+import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
@@ -45,7 +50,7 @@ import org.eclipse.swt.graphics.Point;
  * @author Eric Van Dewoestine
  */
 public class DummyTextViewer
-  implements ITextViewer
+  implements ISourceViewer
 {
   public IDocument document;
   public ISelectionProvider selectionProvider;
@@ -56,6 +61,8 @@ public class DummyTextViewer
     selectionProvider = new DummySelectionProvider(
         new TextSelection(document, offset, length));
   }
+
+  // ITextViewer
 
   public StyledText getTextWidget()
   {
@@ -115,6 +122,7 @@ public class DummyTextViewer
 
   public void setDocument(IDocument document)
   {
+    this.document = document;
   }
 
   public IDocument getDocument()
@@ -239,5 +247,56 @@ public class DummyTextViewer
   public int getTopInset()
   {
     return -1;
+  }
+
+  // ISourceViewer
+
+  private IAnnotationModel annotationModel;
+
+  public void configure(SourceViewerConfiguration configuration)
+  {
+  }
+
+  public void setAnnotationHover(IAnnotationHover annotationHover)
+  {
+  }
+
+  public void setDocument(IDocument document, IAnnotationModel annotationModel)
+  {
+    this.document = document;
+    this.annotationModel = annotationModel;
+  }
+
+  public void setDocument(
+      IDocument document, IAnnotationModel annotationModel,
+      int modelRangeOffset, int modelRangeLength)
+  {
+    this.document = document;
+    this.annotationModel = annotationModel;
+  }
+
+  public IAnnotationModel getAnnotationModel()
+  {
+    return annotationModel;
+  }
+
+  public void setRangeIndicator(Annotation rangeIndicator)
+  {
+  }
+
+  public void setRangeIndication(int offset, int length, boolean moveCursor)
+  {
+  }
+
+  public IRegion getRangeIndication()
+  {
+    return null;
+  }
+
+  public void removeRangeIndication()
+  {
+  }
+
+  public void showAnnotations(boolean show){
   }
 }

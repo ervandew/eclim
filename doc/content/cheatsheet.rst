@@ -289,12 +289,13 @@ Php Commands
 Python Commands
 -----------------
 
-- :ref:`:PythonFindDefinition <:PythonFindDefinition>` -
-  Find the element under the cursor.
+- :ref:`:PythonSearch <:PythonSearch>` -
+  Find the element under the cursor or, if requested, all references to that
+  element.
 - :ref:`:PythonSearchContext <:PythonSearchContext>` -
-  Find the element under the cursor based on its context.
-- :ref:`:Validate <:Validate_python>` - Validates the current file using pyflakes_.
-- :ref:`:PyLint <:PyLint>` - Runs pylint_ on the current file.
+  Find the element under the cursor or its references based on the current
+  context in the file.
+- :ref:`:Validate <:Validate_python>` - Validates the current file.
 - :ref:`:DjangoManage <:DjangoManage>` -
   Invokes django's manage.py from any file in the same directory as your
   manage.py or in any of the child directories.
@@ -403,5 +404,4 @@ Misc. Commands
   Display a short description of the refactoring to be undone / redone.
 - :ref:`:OpenUrl <:OpenUrl>` [url] - Opens a url in your configured web browser.
 
-.. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes
 .. _pylint: http://www.logilab.org/857

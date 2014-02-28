@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,31 +16,41 @@
 Python Search
 =============
 
-.. _\:PythonFindDefinition:
+.. _\:PythonSearch:
 
 Element Search
 --------------
 
 Element searching allows you to place the cursor over just about any element in
 a source file (method call, class name, constant) and perform a search for that
-element by issuing the command **:PythonFindDefinition**.
+element by issuing the command **:PythonSearch**. By default this command will
+search for declarations, but you can specify that you want to search for
+references using:
+
+.. code-block:: vim
+
+  :PythonSearch -x references
 
 If only one result is found and that result is in the current source file, the
-cursor will be moved to the element found.  Otherwise, on single result
-matches, the value of :ref:`g:EclimPythonSearchSingleResult` will be consulted
-for the action to take.  If there are multiple results, the location list will
-be opened with the list of results.
+cursor will be moved to the element found. Otherwise, on single result matches,
+the value of :ref:`g:EclimPythonSearchSingleResult` will be consulted for the
+action to take. If there are multiple results, the location list will be opened
+with the list of results.
+
+.. note::
+
+  **:PythonSearch** does not currently support searching for patterns.
+  Attempting to supply a pattern to search for will result in an error.
 
 .. _\:PythonSearchContext:
 
 As a convenience eclim also provides the command **:PythonSearchContext**.
 This command accepts no arguments and will perform the appropriate search
-depending on the context of the element.
+depending on the context of the element:
 
 - If the cursor is on the declaration of a class, function, or method then it
   will search for all occurrences.
 - Otherwise, it will search for the declaration of the element.
-
 
 Configuration
 -------------

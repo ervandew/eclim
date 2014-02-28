@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,10 +79,6 @@ public class UnattendedInstallTask
         log("Eclim features to be installed:");
         for(Feature feature : features){
           boolean enabled = feature.isEnabled();
-          if ("python".equals(feature.getKey())){
-            enabled = "true".equals(Installer.getContext().getValue("featureList.python"));
-          }
-
           if (enabled){
             enabled = dependenciesEnabled(feature, featureMap);
           }

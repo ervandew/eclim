@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,11 +54,8 @@ the nature accordingly:
   :ProjectCreate /path/to/my_cpp_project -n c++
   :ProjectCreate /path/to/my_java_project -n java
   :ProjectCreate /path/to/my_php_project -n php
-  :ProjectCreate /path/to/my_python_project -n none
+  :ProjectCreate /path/to/my_python_project -n python
   :ProjectCreate /path/to/my_ruby_project -n ruby
-
-The only odd ball in the bunch is the creation of the python project which
-currently uses the 'none' nature.
 
 The path supplied to the :ref:`:ProjectCreate <:ProjectCreate>` command will be
 the path to the root of your project.  This path may or may not exist.  If it
@@ -73,7 +70,7 @@ you with commands to manage this file:
 * php, ruby - :doc:`.buildpath file </vim/dltk/buildpath>`
 * c, c++ - ``.cproject``, managed via the :ref:`:CProjectConfigs
   <:CProjectConfigs>` command
-* python - ``.ropeproject`` (see the :ref:`rope docs <python-rope>`)
+* python - :doc:`.pydevproject file </vim/python/path>`
 
 Once you've created your project you can use the **:ProjectList** command to
 list the available projects and you should see your newly created one in the
@@ -103,7 +100,7 @@ details:
 * :doc:`java and android </vim/java/classpath>`
 * :doc:`php and ruby </vim/dltk/buildpath>`
 * :ref:`c and c++ <:CProjectConfigs>`
-* :ref:`python <python-rope>`
+* :doc:`python </vim/python/path>`
 
 For the purpose of this example we will assume that you will store your source
 files at\:

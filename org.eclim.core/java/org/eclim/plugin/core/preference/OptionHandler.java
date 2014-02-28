@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2012  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 
 /**
- * Defines methods for persisting and retrieving preferences / options.
+ * Defines methods for persisting and retrieving eclipse plugin options.
  *
  * @author Eric Van Dewoestine
  */

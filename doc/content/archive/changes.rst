@@ -591,7 +591,7 @@ Eclim:
 Python:
   - Added support for :doc:`code completion </vim/python/complete>`.
   - Added support for :doc:`finding an element definition </vim/python/search>`.
-  - Improved :ref:`:PyLint` support.
+  - Improved :PyLint support.
 
 :gitlog:`Git Log (1.4.3) <1.4.2...1.4.3>`
 
@@ -786,7 +786,7 @@ Javascript:
 Python:
   - Added basic :doc:`python validation </vim/python/validate>` using pyflakes_
     and the python compiler.
-  - Added support for pylint_ using new :ref:`:PyLint` command.
+  - Added support for pylint_ using new :PyLint command.
 
 Vcs:
   - Added :VcsInfo, :ViewvcAnnotate, :ViewvcChangeSet, and :ViewvcDiff.

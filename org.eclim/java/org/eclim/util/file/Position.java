@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,10 @@
  */
 package org.eclim.util.file;
 
+import java.text.Collator;
+
+import java.util.Locale;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -26,6 +30,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
  * @author Eric Van Dewoestine
  */
 public class Position
+  implements Comparable<Position>
 {
   private String filename;
   private int offset = 0;
@@ -161,10 +166,6 @@ public class Position
     return this.message;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Object#equals(Object)
-   */
   @Override
   public boolean equals(Object obj)
   {
@@ -184,5 +185,18 @@ public class Position
       .append(line, rhs.getLine())
       .append(column, rhs.getColumn())
       .isEquals();
+  }
+
+  @Override
+  public int compareTo(Position o)
+  {
+    if (!getFilename().equals(o.getFilename())){
+      return Collator.getInstance(Locale.US)
+        .compare(getFilename(), o.getFilename());
+    }
+    if (getLine() != o.getLine()){
+      return getLine() - o.getLine();
+    }
+    return getColumn() - o.getColumn();
   }
 }

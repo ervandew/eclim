@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,17 +86,17 @@ JavaScript
 
 Php
 -------------------------
-- Code completion.
+- Context sensitive code completion.
 - Searching.
 - Source code validation.
 
 Python
 -------------------------
 - Context sensitive code completion.
-- Find element definition support.
+- Find element definition/references support.
+- Source code validation.
 - Regular expression testing.
 - Django functionality.
-- Validation via python compiler, pyflakes_, and pylint_.
 
 Ruby
 -------------------------

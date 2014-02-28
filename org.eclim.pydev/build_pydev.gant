@@ -1,0 +1,28 @@
+feature_pydev = 'org.python.pydev.feature'
+
+target(name: 'org.eclim.pydev.test'){
+  depends('test.init')
+  runTests('org.eclim.pydev'){
+    createProject('org.eclim.pydev', 'eclim_unit_test_python')
+  }
+}
+
+target(name: 'org.eclim.pydev.classpath'){
+  fileset(dir: '${eclipse}'){
+    include(name: 'dropins/**/plugins/com.aptana.shared_core*/*.jar')
+    include(name: 'dropins/**/plugins/com.python.pydev*/*.jar')
+    include(name: 'dropins/**/plugins/org.python.pydev*/*.jar')
+    include(name: 'plugins/com.aptana.shared_core*/*.jar')
+    include(name: 'plugins/com.python.pydev*/*.jar')
+    include(name: 'plugins/org.python.pydev*/*.jar')
+  }
+}
+
+target(name: 'org.eclim.pydev.build.vim'){
+  // indent/htmldjango.vim and indent/htmljinja.vim rely on indent/html.vim
+  // from org.eclim.wst, so add that file to our pydev plugin build since wst
+  // is not a reqirement of pydev.
+  copy(todir: '${build.vimfiles}/org.eclim.pydev'){
+    fileset(dir: 'org.eclim.wst/vim', includes: 'eclim/indent/html.vim')
+  }
+}

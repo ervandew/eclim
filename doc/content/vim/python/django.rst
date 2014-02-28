@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2009  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,10 +41,6 @@ Configuration
 -------------
 
 :doc:`Vim Settings </vim/settings>`
-
-.. _g\:EclimPythonInterpreter:
-
-- **g:EclimPythonInterpreter** = 'python'
 
 .. _g\:EclimDjangoAdmin:
 
@@ -90,7 +86,7 @@ Ex.
 **Contextually locate file**
 
 The command **:DjangoContextOpen** supports executing **:DjangoViewOpen**,
-**:DjangoTemplateOpen**, or **:PythonFindDefinition** depending on the context
+**:DjangoTemplateOpen**, or **:PythonSearchContext** depending on the context
 of the text under the cursor.
 
 .. _htmldjango:
@@ -119,7 +115,7 @@ allow proper matchit.vim support for django default and user defined tags.
 
 Using the :ref:`g:HtmlDjangoUserBodyElements` setting along with the
 pre-configured default list of body elements, eclim includes support for auto
-completion of ending template tags when you type an '{%e' or '{% e'.
+completion of ending template tags when you type an ``{%e`` or ``{% e``.
 
 .. _\:DjangoFind:
 
@@ -181,7 +177,8 @@ attempt to locate the relevant resource depending on what is under the cursor.
   Note: this functionality requires that
   **g:EclimDjangoStaticPaths** is set to a list of absolute
   or django project relative (relative to directory containing manage.py
-  and settings.py) directories.
+  and settings.py) directories, though it will fallback to using eclim's locate
+  file functionality.
 
   Ex.
 
@@ -245,6 +242,34 @@ Configuration
   .. code-block:: vim
 
     let g:EclimDjangoStaticPaths = ["../static/"]
+
+.. _g\:EclimDjangoStaticPattern:
+
+- **g:EclimDjangoStaticPattern** -
+  If you have a custom tag to load static files, then eclim by default may not
+  be able to determine that it should be attempting to search for the static
+  file referenced by that custom tag. In this case you can set
+  g:EclimDjangoStaticPattern to a vim regular expression which matches your
+  custom tag. For example, if you have a custom tag called ``static`` to load
+  static files like so:
+
+  .. code-block:: html
+
+    {% static 'lib/somefile.js' %}
+
+  Then you could set g:EclimDjangoStaticPattern to:
+
+  .. code-block:: vim
+
+    let g:EclimDjangoStaticPattern = "{%\\s*static(['\"]<element>['\"]"
+
+  Note that this pattern allows either ``'`` or ``"`` to quote the static file
+  path and since we are doing this we need to use double quotes around the
+  pattern which in turn means that we need to double escape back slashes (note
+  the double backslashes when matching 0 or more spaces: ``\\s*``). Also note
+  that the ``<element>`` portion of the pattern will be replaced with the path
+  of the static file that eclim extracted while the cursor was over that portion
+  of the tag.
 
 .. _g\:EclimDjangoFindAction:
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2013  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,10 @@
  */
 package org.eclim.plugin.core.command.complete;
 
+import java.text.Collator;
+
+import java.util.Locale;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +34,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Eric Van Dewoestine
  */
 public class CodeCompleteResult
+  implements Comparable<CodeCompleteResult>
 {
   private static final Pattern FIRST_LINE =
     Pattern.compile("(\\.\\s|\\.<|<br|<BR|<p|<P)");
@@ -187,5 +192,12 @@ public class CodeCompleteResult
       .append(completion)
       .append(menu)
       .toHashCode();
+  }
+
+  @Override
+  public int compareTo(CodeCompleteResult o)
+  {
+    return Collator.getInstance(Locale.US)
+      .compare(getCompletion(), o.getCompletion());
   }
 }

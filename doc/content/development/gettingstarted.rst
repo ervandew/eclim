@@ -83,7 +83,7 @@ below showing what will be built vs what will be skipped:
   [echo] Plugins:
   [echo]   org.eclim.cdt
   [echo]   org.eclim.jdt
-  [echo]   org.eclim.python
+  [echo]   org.eclim.pydev
   [echo]   org.eclim.sdt
   [echo]   org.eclim.wst
 

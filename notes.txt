@@ -482,8 +482,6 @@ TODO {{{
       - refactor -> rename: Alt+Shift+R
 
     - jython?
-
-    - modify :DjangoFind to account for django provided tags and filters.
   }}}
 
   Ruby {{{

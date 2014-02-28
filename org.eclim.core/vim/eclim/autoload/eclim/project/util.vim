@@ -651,7 +651,7 @@ function! eclim#project#util#ProjectSettings(project) " {{{
     return
   endif
 
-  let content = ['# Settings for project: eclim', '']
+  let content = ['# Settings for project: ' . project, '']
   let path = ''
   for setting in settings
     if setting.path != path
@@ -864,9 +864,11 @@ function! eclim#project#util#GetCurrentProjectName() " {{{
   return len(project) > 0 ? project.name : ''
 endfunction " }}}
 
-function! eclim#project#util#GetCurrentProjectRoot() " {{{
-  " Gets the project root dir for the project that the current file is in.
-  let project = eclim#project#util#GetProject(expand('%:p'))
+function! eclim#project#util#GetCurrentProjectRoot(...) " {{{
+  " Gets the project root dir for the project that the current or supplied
+  " file is in.
+  let path = len(a:000) > 0 ? a:000[0] : expand('%:p')
+  let project = eclim#project#util#GetProject(path)
   return len(project) > 0 ? project.path : ''
 endfunction " }}}
 
