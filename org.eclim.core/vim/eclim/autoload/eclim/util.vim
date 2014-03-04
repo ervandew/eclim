@@ -1567,4 +1567,28 @@ function! eclim#util#ParseCommandCompletionResults(argLead, results)
   return results
 endfunction " }}}
 
+" GetSingleResultAction(argline, default) {{{
+" Parses an argument line and returns the single result action
+" specified by -a <action>. If the argument does not exist then
+" the function returns the default value.
+function! eclim#util#GetSingleResultAction(argline, default)
+  let action = a:default
+  if a:argline =~ '-a '
+    let action = matchlist(a:argline, '-a \(\w\+\)')[1]
+  endif
+  return action
+endfunction "}}}
+
+" RemoveSingleResultActionFromArguments(argline) {{{
+" Removes the -a <action> parameter from the argument line and returns
+" the shortened argument line. If the line does not contain an action
+" then the function simply returns the argument line as it is.
+function! eclim#util#RemoveSingleResultActionFromArguments(argline)
+  let args = a:argline
+  if args =~ '-a '
+    let args = substitute(args, '-a \w\+', '', '')
+  endif
+  return args
+endfunction "}}}
+
 " vim:ft=vim:fdm=marker

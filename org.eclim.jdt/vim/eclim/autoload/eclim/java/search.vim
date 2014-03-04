@@ -303,13 +303,10 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
     let argline = '-p ' . argline
   endif
 
-  " check if an action was supplied
-  let action = g:EclimJavaSearchSingleResult
-  if argline =~ '-a '
-    let action = matchlist(argline, '-a \(\w\+\)')[1]
-    " remove action from arguments list
-    let argline = substitute(argline, '-a \w\+', '', '')
-  endif
+  " get the action to take when the search returns only one result
+  let action = eclim#util#GetSingleResultAction(
+    \ argline, g:EclimJavaSearchSingleResult)
+  let argline = eclim#util#RemoveSingleResultActionFromArguments(argline)
 
   let results = s:Search(a:type, argline)
   if type(results) != g:LIST_TYPE
