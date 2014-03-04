@@ -351,7 +351,7 @@ function! eclim#lang#SilentUpdate(...) " {{{
           if a:0 < 2 || a:2
             let savepatchmode = &patchmode
             set patchmode=
-            exec 'silent noautocmd write! ' . escape(tempfile, ' ')
+            exec 'silent noautocmd keepalt write! ' . escape(tempfile, ' ')
             let &patchmode = savepatchmode
           endif
         endif
