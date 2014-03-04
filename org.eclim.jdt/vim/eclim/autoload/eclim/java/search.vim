@@ -424,6 +424,37 @@ function! eclim#java#search#CommandCompleteJavaSearchContext(argLead, cmdLine, c
   return ['-a']
 endfunction " }}}
 
+function! eclim#java#search#CommandCompleteJavaDocSearch(argLead, cmdLine, cursorPos) " {{{
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+  if cmdLine =~ '-s\s\+[a-z]*$'
+    let scopes = deepcopy(s:scopes)
+    call filter(scopes, 'v:val =~ "^' . argLead . '"')
+    return scopes
+  elseif cmdLine =~ '-t\s\+[a-z]*$'
+    let types = deepcopy(s:types)
+    call filter(types, 'v:val =~ "^' . argLead . '"')
+    return types
+  elseif cmdLine =~ '-x\s\+[a-z]*$'
+    let contexts = deepcopy(s:contexts)
+    call filter(contexts, 'v:val =~ "^' . argLead . '"')
+    return contexts
+  elseif cmdLine =~ '\s\+[-]\?$'
+    let options = deepcopy(s:options)
+    let index = 0
+    for option in options
+      if a:cmdLine =~ option || option =~ '-a'
+        call remove(options, index)
+      else
+        let index += 1
+      endif
+    endfor
+    return options
+  endif
+  return []
+endfunction " }}}
+
 function! eclim#java#search#FindClassDeclaration() " {{{
   " Used by non java source files to find the declaration of a classname under
   " the cursor.

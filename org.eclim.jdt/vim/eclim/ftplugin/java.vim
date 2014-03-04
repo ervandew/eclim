@@ -201,7 +201,7 @@ if !exists(":JavaSearchContext")
 endif
 if !exists(":JavaDocSearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearch
+    \ -complete=customlist,eclim#java#search#CommandCompleteJavaDocSearch
     \ JavaDocSearch :call eclim#java#search#SearchAndDisplay('java_docsearch', '<args>')
 endif
 
