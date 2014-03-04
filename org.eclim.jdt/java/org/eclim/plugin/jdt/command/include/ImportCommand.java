@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,21 +159,21 @@ public class ImportCommand
       while (next != null && next.getNodeType() == ASTNode.IMPORT_DECLARATION){
         ImportDeclaration nextImprt = (ImportDeclaration)next;
         if (!ImportUtils.importsInSameGroup(separationLevel, imprt, nextImprt)){
-          ASTNode prev = getPrev(astRoot, next, lineDelim);
-          if (prev != null && prev.getNodeType() == ASTNode.IMPORT_DECLARATION){
-            edit.addChild(new InsertEdit(next.getStartPosition(), lineDelim));
-          }
+          int end = imprt.getStartPosition() + imprt.getLength() + lineDelim.length();
+          addLineDelim(astRoot, edit, end, lineDelim);
         }
         next = getNext(astRoot, next, lineDelim);
         imprt = nextImprt;
       }
 
+      // reset imprt ref back to the one we are importing.
+      imprt = (ImportDeclaration)node;
       ASTNode prev = getPrev(astRoot, node, lineDelim);
       if (prev != null && prev.getNodeType() == ASTNode.IMPORT_DECLARATION){
         ImportDeclaration prevImprt = (ImportDeclaration)prev;
         if (!ImportUtils.importsInSameGroup(separationLevel, imprt, prevImprt)){
           int end = prev.getStartPosition() + prev.getLength() + lineDelim.length();
-          edit.addChild(new InsertEdit(end, lineDelim));
+          addLineDelim(astRoot, edit, end, lineDelim);
         }
       }
     }
@@ -198,6 +198,23 @@ public class ImportCommand
   {
     int offset = node.getStartPosition() - (lineDelim.length() + 1);
     return NodeFinder.perform(astRoot, offset, 1);
+  }
+
+  /**
+   * Add an InsertEdit to add a new blank line if one doesn't already exist.
+   *
+   * @param astRoot The CompilationUnit to modify.
+   * @param edit The MultiTextEdit to add the new InsertEdit to.
+   * @param offset The offset to add the new blank line at.
+   * @param lineDelim The line delimiter to use.
+   */
+  private void addLineDelim(
+      CompilationUnit astRoot, MultiTextEdit edit, int offset, String lineDelim)
+  {
+    ASTNode node = NodeFinder.perform(astRoot, offset, 1);
+    if (node != null && node.getNodeType() == ASTNode.IMPORT_DECLARATION){
+      edit.addChild(new InsertEdit(offset, lineDelim));
+    }
   }
 
   private class ChooseImport
