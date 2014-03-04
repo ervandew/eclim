@@ -280,6 +280,14 @@ function! s:BuildPattern() " {{{
   return class
 endfunction " }}}
 
+function! eclim#java#search#SearchContextAndDisplay(args) " {{{
+  let argline = '-a ' . g:EclimJavaSearchSingleResult
+  if a:args =~ '-a '
+    let argline = matchstr(a:args, '-a \w\+')
+  endif
+  call eclim#java#search#SearchAndDisplay('java_search', argline)
+endfunction " }}}
+
 function! eclim#java#search#SearchAndDisplay(type, args) " {{{
   " Execute a search and displays the results via quickfix.
 
