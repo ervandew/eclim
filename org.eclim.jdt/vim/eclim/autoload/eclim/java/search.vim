@@ -41,7 +41,7 @@
     \ '-command <search> -n "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <length> <args>'
   let s:search_pattern = '-command <search>'
-  let s:options = ['-p', '-t', '-x', '-s', '-i']
+  let s:options = ['-p', '-t', '-x', '-s', '-i', '-a']
   let s:contexts = ['all', 'declarations', 'implementors', 'references']
   let s:scopes = ['all', 'project']
   let s:types = [
@@ -56,6 +56,7 @@
     \ 'method',
     \ 'package',
     \ 'type']
+  let s:actions = ['split', 'vsplit', 'edit', 'tabnew', 'lopen']
 
   let s:search_alt_all = '\<<element>\>'
   let s:search_alt_references = s:search_alt_all
@@ -388,6 +389,10 @@ function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPo
     let types = deepcopy(s:types)
     call filter(types, 'v:val =~ "^' . argLead . '"')
     return types
+  elseif cmdLine =~ '-a\s\+[a-z]*$'
+    let actions = deepcopy(s:actions)
+    call filter(actions, 'v:val =~ "^' . argLead . '"')
+    return actions
   elseif cmdLine =~ '-x\s\+[a-z]*$'
     let contexts = deepcopy(s:contexts)
     call filter(contexts, 'v:val =~ "^' . argLead . '"')
