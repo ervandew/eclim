@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2013 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2014 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@ package eclim.plugin.sdt.command.complete
 
 import java.text.Collator
 
-import java.util.Comparator
 import java.util.Locale
 
 import scala.collection.JavaConversions
