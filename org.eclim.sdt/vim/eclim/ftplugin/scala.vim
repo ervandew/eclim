@@ -54,6 +54,11 @@ if !exists(":ScalaSearch")
     \ ScalaSearch :call eclim#scala#search#Search('<args>')
 endif
 
+if !exists(":ScalaImport")
+  command -buffer -nargs=0
+    \ ScalaImport :call eclim#scala#import#Import()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker
