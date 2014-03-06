@@ -14,6 +14,7 @@ target(name: 'org.eclim.sdt.classpath'){
   fileset(dir: '${eclipse}'){
     include(name: 'dropins/**/plugins/org.scala-ide.*.jar')
     include(name: 'plugins/org.scala-ide.*.jar')
+    include(name: 'plugins/org.scala-refactoring.*.jar')
   }
   fileset(dir: 'build/temp/lib/scala', erroronmissingdir: false){
     include(name: '**/*.jar')

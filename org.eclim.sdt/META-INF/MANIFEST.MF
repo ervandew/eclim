@@ -19,7 +19,9 @@ Require-Bundle: org.eclim,
   org.eclipse.jdt.core,
   org.eclipse.jdt.ui,
   org.eclipse.jface.text,
+  org.eclipse.ltk.core.refactoring,
   org.scala-ide.scala.compiler,
   org.scala-ide.scala.library,
-  org.scala-ide.sdt.core
+  org.scala-ide.sdt.core,
+  org.scala-refactoring.library
 Eclim-ClassPath-Bundle: org.scala-ide.sdt.aspects

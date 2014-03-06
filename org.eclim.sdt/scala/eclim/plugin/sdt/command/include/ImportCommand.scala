@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2013 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2014 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,47 +16,132 @@
  */
 package eclim.plugin.sdt.command.include
 
+import scala.collection.JavaConversions
+
+import scala.tools.eclipse.ScalaWordFinder
+
+import scala.tools.eclipse.javaelements.ScalaSourceFile
+
+import scala.tools.eclipse.refactoring.EditorHelpers
+
+import scala.tools.refactoring.implementations.AddImportStatement
+
 import eclim.plugin.sdt.util.ScalaUtils
 
 import org.eclim.annotation.Command
+
 import org.eclim.command.CommandLine
 import org.eclim.command.Options
+
 import org.eclim.plugin.core.command.AbstractCommand
 
+import org.eclim.plugin.core.util.ProjectUtils
+
+import org.eclim.plugin.jdt.command.include.ImportUtils
+
+import org.eclim.util.file.Position;
+
 import org.eclipse.core.runtime.NullProgressMonitor
+
 import org.eclipse.jdt.core.IJavaElement
+
 import org.eclipse.jdt.core.search.IJavaSearchConstants
 import org.eclipse.jdt.core.search.SearchEngine
 import org.eclipse.jdt.core.search.TypeNameMatch
+
+import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
 import org.eclipse.jdt.internal.corext.util.TypeNameMatchCollector
 
-import scala.collection.JavaConversions
-
 /**
- * Command which provides import proposals.
+ * Command to add an import to a scala source file.
  *
  * @author Fangmin Lv
+ * @author Eric Van Dewoestine
  */
 @Command(
   name = "scala_import",
-  options = "REQUIRED p project ARG,REQUIRED f file ARG,REQUIRED o offset ARG,REQUIRED e encoding ARG,REQUIRED t type ARG"
+  options = "REQUIRED p project ARG,REQUIRED f file ARG,REQUIRED o offset ARG,REQUIRED e encoding ARG,OPTIONAL t type ARG"
 )
 class ImportCommand
   extends AbstractCommand
 {
+  // TODO:
+  //   - insert the import in order
+  //   - add support for package grouping
   override def execute(commandLine: CommandLine): Object = {
-    val project = commandLine.getValue(Options.PROJECT_OPTION)
+    val projectName = commandLine.getValue(Options.PROJECT_OPTION)
     val file = commandLine.getValue(Options.FILE_OPTION)
     val offset = getOffset(commandLine)
-    val missType = commandLine.getValue(Options.TYPE_OPTION)
-    val src = ScalaUtils.getSourceFile(project, file)
+    val importType = commandLine.getValue(Options.TYPE_OPTION)
+    val src = ScalaUtils.getSourceFile(projectName, file)
+    val project = src.getJavaProject.getProject
 
-    val resultCollector = new java.util.ArrayList[TypeNameMatch]
-    val scope = SearchEngine.createJavaSearchScope(Array[IJavaElement](src.getJavaProject))
-    val typesToSearch = Array(missType.toArray)
-    new SearchEngine().searchAllTypeNames(null, typesToSearch, scope,
-        new TypeNameMatchCollector(resultCollector), IJavaSearchConstants.WAIT_UNTIL_READY_TO_SEARCH, new NullProgressMonitor)
-    val ret = JavaConversions.asScalaBuffer(resultCollector) map { typeFound => typeFound.getFullyQualifiedName() }
-    JavaConversions.bufferAsJavaList(ret)
+    if (importType == null){
+      val region = ScalaWordFinder.findWord(src.getContents, offset)
+      val searchType = src.getBuffer.getText(region.getOffset, region.getLength)
+      val resultCollector = new java.util.ArrayList[TypeNameMatch]
+      val scope = SearchEngine.createJavaSearchScope(Array[IJavaElement](src.getJavaProject))
+      val typesToSearch = Array(searchType.toArray)
+      new SearchEngine().searchAllTypeNames(
+        null,
+        typesToSearch,
+        scope,
+        new TypeNameMatchCollector(resultCollector),
+        IJavaSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
+        new NullProgressMonitor)
+
+      val results = JavaConversions.asScalaBuffer(resultCollector).view.map { typeFound =>
+        typeFound.getFullyQualifiedName()
+      }.filter { fqn => !ImportUtils.isImportExcluded(project, fqn)}.sorted
+
+      if (results.length == 1){
+        addImport(file, offset, src, results.head)
+      }else{
+        JavaConversions.seqAsJavaList(results)
+      }
+    }else{
+      addImport(file, offset, src, importType)
+    }
+  }
+
+  def addImport(file: String, offset: Int, src: ScalaSourceFile, imprt: String) = {
+    // first see if the import already exists
+    val existing = src.getImport(imprt)
+    if (existing.exists){
+      "Import already exists: " + imprt
+    }else{
+      var exception = None : Option[Throwable]
+      val oldLength = src.getBuffer.getLength
+      val changes = src.withSourceFile { (sourceFile, compiler) =>
+         val r = new compiler.Response[compiler.Tree]
+         compiler.askLoadedTyped(sourceFile, r)
+         (r.get match {
+           case Right(error) =>
+             exception = Some(error)
+             None
+           case _ =>
+             compiler.askOption {() =>
+               val refactoring = new AddImportStatement { val global = compiler }
+               refactoring.addImport(src.file, imprt)
+             }
+         }) getOrElse Nil
+      }(Nil)
+      val project = src.getJavaProject.getProject
+      val document = ProjectUtils.getDocument(project, file)
+      val ifile = ProjectUtils.getFile(project, file)
+      val edit = EditorHelpers.createTextFileChange(ifile, changes).getEdit
+      JavaModelUtil.applyEdit(src, edit, true, null)
+
+      exception match {
+        case Some(value) => throw value
+        case None =>
+          var newOffset = offset
+          if (edit.getOffset < newOffset){
+            newOffset += src.getBuffer.getLength - oldLength
+          }
+          Position.fromOffset(
+              ProjectUtils.getFilePath(project, file), null, newOffset, 0);
+      }
+    }
   }
 }
