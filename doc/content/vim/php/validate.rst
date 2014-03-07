@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,10 @@ Configuration
 
 - **g:EclimPhpValidate** (Default: 1) -
   If set to 0, disables source code validation.
+
+  .. include:: /vim/validation.rst
+     :start-after: begin-disable
+     :end-before: end-disable
 
 - **g:EclimPhpHtmlValidate** (Default: 0) -
   If set to a non 0 value, enables validating html markup in the php file.

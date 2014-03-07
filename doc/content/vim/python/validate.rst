@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,10 @@ Configuration
 
 - **g:EclimPythonValidate** (Default 1) -
   If set to 0, disables python validation when saving the file.
+
+  .. include:: /vim/validation.rst
+     :start-after: begin-disable
+     :end-before: end-disable
 
 - **g:EclimValidateSortResults** (Default: 'occurrence') -
   If set to 'severity', the validation results will be sorted by severity
