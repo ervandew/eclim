@@ -63,6 +63,13 @@ points to the base url of the javadoc (http, file, etc).
     </attributes>
   </classpathentry>
 
+If you would like to set the javadoc url for your project's source files, you
+will instead need to set the ``org.eclipse.jdt.ui.project_javadoc_location``
+option via :ref:`:ProjectSettings`. Also note that the javadocs for your source
+files are not generated automatically, so if you would like to use
+**:JavaDocSearch** to open your project's javadocs, you will first need to
+generate those javadocs as described in the next section.
+
 .. _\:Javadoc:
 
 Executing javadoc
@@ -116,3 +123,5 @@ Configuration
   separated list of project relative source directories which you want javadoc
   to be executed against.  When unset, all your configured source directories
   will be used.
+- **org.eclipse.jdt.ui.project_javadoc_location** -
+  URL where your project's javadocs can be found.
