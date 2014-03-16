@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.plugin.jdt.preference;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -47,19 +50,16 @@ public class OptionHandler
   implements org.eclim.plugin.core.preference.OptionHandler
 {
   private static final String NATURE = "org.eclipse.jdt.core.javanature";
+  private static final String PROJECT_JAVADOC =
+    JavaUI.ID_PLUGIN + ".project_javadoc_location";
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.preference.OptionHandler#getNature()
-   */
+  @Override
   public String getNature()
   {
     return NATURE;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Map<String, String> getValues()
     throws Exception
   {
@@ -71,9 +71,7 @@ public class OptionHandler
     return options;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Map<String, String> getValues(IProject project)
     throws Exception
   {
@@ -88,6 +86,9 @@ public class OptionHandler
     Map<String, String> options = new Hashtable<String, String>();
     options.putAll(coreOptions);
     options.putAll(getUIValues(project));
+
+    URL javadoc = JavaUI.getProjectJavadocLocation(javaProject);
+    options.put(PROJECT_JAVADOC, javadoc != null ? javadoc.toString() : "");
 
     return options;
   }
@@ -128,16 +129,14 @@ public class OptionHandler
     return options;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setOption(String name, String value)
     throws Exception
   {
     @SuppressWarnings("unchecked")
     Map<String, String> options = JavaCore.getOptions();
 
-    if(name.equals(JavaCore.COMPILER_SOURCE)){
+    if (name.equals(JavaCore.COMPILER_SOURCE)){
       JavaUtils.setCompilerSourceCompliance(value);
     }else if (name.startsWith(JavaUI.ID_PLUGIN)){
       Preferences.getInstance()
@@ -148,9 +147,7 @@ public class OptionHandler
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setOption(IProject project, String name, String value)
     throws Exception
   {
@@ -169,6 +166,17 @@ public class OptionHandler
     if(current == null || !current.equals(value)){
       if(name.equals(JavaCore.COMPILER_SOURCE)){
         JavaUtils.setCompilerSourceCompliance(javaProject, value);
+      }else if (name.equals(PROJECT_JAVADOC)){
+        if (value != null && value.trim().length() == 0){
+          value = null;
+        }
+        try{
+          JavaUI.setProjectJavadocLocation(
+              javaProject, value != null ? new URL(value) : null);
+        }catch(MalformedURLException mue){
+          throw new IllegalArgumentException(
+              PROJECT_JAVADOC + ": Invalid javadoc url: " + mue.getMessage());
+        }
       }else if (name.startsWith(JavaUI.ID_PLUGIN)){
         Preferences.getInstance()
           .setPreference(JavaUI.ID_PLUGIN, project, name, value);

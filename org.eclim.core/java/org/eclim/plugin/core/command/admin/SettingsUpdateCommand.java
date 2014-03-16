@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import org.eclim.Services;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Error;
 import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
@@ -61,7 +62,7 @@ public class SettingsUpdateCommand
 
     FileReader in = null;
     File file = new File(settings);
-    ArrayList<String> errors = new ArrayList<String>();
+    ArrayList<Error> errors = new ArrayList<Error>();
     try{
       in = new FileReader(file);
       JsonStreamParser parser = new JsonStreamParser(in);
@@ -74,7 +75,7 @@ public class SettingsUpdateCommand
         try{
           preferences.setValue(name, value);
         }catch(IllegalArgumentException iae){
-          errors.add(iae.getMessage());
+          errors.add(new Error(iae.getMessage(), null, 0, 0));
         }
       }
     }finally{

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,23 @@ public class Error
   private int endLine;
   private int endColumn;
   private boolean warning;
+
+  /**
+   * Constructs a new instance from the supplied values.
+   *
+   * @param message The error message.
+   * @param filename The file containing the error.
+   * @param line The line where the error occured.
+   * @param column The column where the error occured.
+   */
+  public Error (
+      String message,
+      String filename,
+      int line,
+      int column)
+  {
+    this(message, filename, line, column, -1, -1, false);
+  }
 
   /**
    * Constructs a new instance from the supplied values.
