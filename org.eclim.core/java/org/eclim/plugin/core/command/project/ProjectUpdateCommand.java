@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,9 +67,7 @@ public class ProjectUpdateCommand
   private static final Logger logger =
     Logger.getLogger(ProjectUpdateCommand.class);
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -79,7 +77,7 @@ public class ProjectUpdateCommand
     IProject project = ProjectUtils.getProject(name);
 
     if(settings != null){
-      List<String> errors = updateSettings(project, settings);
+      List<Error> errors = updateSettings(project, settings);
       if (errors.size() > 0){
         return errors;
       }
@@ -100,12 +98,12 @@ public class ProjectUpdateCommand
    * @param settings The temp settings file.
    * @return List of errors or an empty List if none.
    */
-  private List<String> updateSettings(IProject project, String settings)
+  private List<Error> updateSettings(IProject project, String settings)
     throws Exception
   {
     FileReader in = null;
     File file = new File(settings);
-    ArrayList<String> errors = new ArrayList<String>();
+    ArrayList<Error> errors = new ArrayList<Error>();
     try{
       in = new FileReader(file);
       JsonStreamParser parser = new JsonStreamParser(in);
@@ -118,7 +116,7 @@ public class ProjectUpdateCommand
         try{
           preferences.setValue(project, name, value);
         }catch(IllegalArgumentException iae){
-          errors.add(iae.getMessage());
+          errors.add(new Error(iae.getMessage(), null, 0, 0));
         }
       }
     }finally{
