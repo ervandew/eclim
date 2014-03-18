@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
  */
 package org.eclim.plugin.core.command.xml;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.annotation.Command;
@@ -46,9 +45,6 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ValidateCommand
   extends AbstractCommand
 {
-  private static final String NO_GRAMMER = "no grammar found";
-  private static final String DOCTYPE_ROOT_NULL = "DOCTYPE root \"null\"";
-
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -73,16 +69,6 @@ public class ValidateCommand
       String project, String file, boolean schema, DefaultHandler handler)
     throws Exception
   {
-    List<Error> errors = XmlUtils.validateXml(project, file, schema, handler);
-    for(Iterator<Error> ii = errors.iterator(); ii.hasNext();){
-      Error error = ii.next();
-      // FIXME: hack to ignore errors regarding no defined dtd.
-      if (error.getMessage().indexOf(NO_GRAMMER) != -1 ||
-          error.getMessage().indexOf(DOCTYPE_ROOT_NULL) != -1)
-      {
-        ii.remove();
-      }
-    }
-    return errors;
+    return XmlUtils.validateXml(project, file, schema, handler);
   }
 }

@@ -17,7 +17,6 @@
 package org.eclim.plugin.core.util;
 
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,6 +33,8 @@ import java.util.List;
 
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -59,6 +60,7 @@ import org.eclim.util.IOUtils;
 
 import org.eclim.util.file.FileUtils;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import org.xml.sax.Attributes;
@@ -143,27 +145,35 @@ public class XmlUtils
       DefaultHandler handler)
     throws Exception
   {
-    SAXParserFactory factory = SAXParserFactory.newInstance();
-    factory.setNamespaceAware(true);
-    factory.setValidating(true);
-    if(schema){
-      factory.setFeature("http://apache.org/xml/features/validation/schema", true);
-      factory.setFeature(
-          "http://apache.org/xml/features/validation/schema-full-checking", true);
-    }
-
-    SAXParser parser = factory.newSAXParser();
-
-    filename = ProjectUtils.getFilePath(project, filename);
-    filename = filename.replace('\\', '/');
-
-    ErrorAggregator errorHandler = new ErrorAggregator(filename);
-    EntityResolver entityResolver = new EntityResolver(
-        FileUtils.getFullPath(filename));
     FileInputStream fin = null;
     try{
+      filename = ProjectUtils.getFilePath(project, filename);
+      filename = filename.replace('\\', '/');
+
+      // check if the file has doctype info (would be nice to have a way to
+      // detect this without parsing the whole file).
+      DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+        .newDocumentBuilder();
+      Document doc = builder.parse(new File(filename));
+
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      factory.setValidating(doc.getDoctype() != null);
+      factory.setNamespaceAware(true);
+      if(schema){
+        factory.setFeature("http://apache.org/xml/features/validation/schema", true);
+        factory.setFeature(
+            "http://apache.org/xml/features/validation/schema-full-checking", true);
+      }
+
+      SAXParser parser = factory.newSAXParser();
+
+      ErrorAggregator errorHandler = new ErrorAggregator(filename);
+      EntityResolver entityResolver = new EntityResolver(
+          FileUtils.getFullPath(filename));
       fin = new FileInputStream(filename);
       parser.parse(fin, getHandler(handler, errorHandler, entityResolver));
+
+      return errorHandler.getErrors();
     }catch(SAXParseException spe){
       ArrayList<Error> errors = new ArrayList<Error>();
       errors.add(
@@ -183,8 +193,6 @@ public class XmlUtils
     }finally{
       IOUtils.closeQuietly(fin);
     }
-
-    return errorHandler.getErrors();
   }
 
   /**
