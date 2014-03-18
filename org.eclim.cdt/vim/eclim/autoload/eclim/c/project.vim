@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -308,8 +308,10 @@ endfunction " }}}
 " s:GetLang() {{{
 function! s:GetLang()
   let lang_line = getline(search('^\s\+Tool:', 'bnW'))
-  if lang_line =~ 'assembl\c'
+  if lang_line =~? 'assembl'
     return 'assembly'
+  elseif lang_line =~? 'c++\|cpp'
+    return "c++"
   endif
   return 'c'
 endfunction " }}}
