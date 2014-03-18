@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Target;
 
 import org.eclim.annotation.Command;
 
@@ -50,9 +51,7 @@ import org.eclipse.ant.internal.ui.model.AntProjectNode;
 public class TargetsCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -65,7 +64,7 @@ public class TargetsCommand
     Project antProject = projectNode.getProject();
 
     @SuppressWarnings("unchecked")
-    Map<String,Object> targets = antProject.getTargets();
+    Map<String,Target> targets = antProject.getTargets();
     for (String target : targets.keySet()){
       if(target.trim().length() > 0){
         results.add(target);
