@@ -246,7 +246,14 @@ function! eclim#lang#DisableSyntasticIfValidationIsEnabled(lang, ...) " {{{
       \ 'g:Eclim' . toupper(lang[0]) . lang[1:] . 'SyntasticEnabled'
 
     if !syntastic_enabled
-      exec 'let g:syntastic_' . tolower(lang) . '_checkers = []'
+      if !exists('g:syntastic_mode_map')
+        let g:syntastic_mode_map = {'passive_filetypes': []}
+      elseif !has_key(g:syntastic_mode_map, 'passive_filetypes')
+        let g:syntastic_mode_map.passive_filetypes = []
+      endif
+      if index(g:syntastic_mode_map.passive_filetypes, lang) == -1
+        call add(g:syntastic_mode_map.passive_filetypes, lang)
+      endif
     endif
   endif
 endfunction " }}}
