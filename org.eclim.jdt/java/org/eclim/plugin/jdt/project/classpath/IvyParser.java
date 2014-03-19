@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Implementation of {@link Parser} for parsing an
- * <a href="http://jayasoft.org/ivy/doc/ivyfile">ivy.xml</a> file.
+ * <a href="http://ant.apache.org/ivy/">ivy.xml</a> file.
  *
  * @author Eric Van Dewoestine
  */
@@ -48,40 +48,34 @@ public class IvyParser
 
   private static XPathExpression xpath;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Dependency[] parse(Document document)
     throws Exception
   {
-    try{
-      if(xpath == null){
-        xpath = XmlUtils.createXPathExpression(
-            "/ivy-module/dependencies/dependency");
-      }
-
-      if(JavaCore.getClasspathVariable(IVY_REPO) == null){
-        throw new IllegalStateException(
-            Services.getMessage("ivy.repo.not.set", IVY_REPO));
-      }
-      IPath path = new Path(IVY_REPO);
-
-      NodeList results = (NodeList)
-        xpath.evaluate(document, XPathConstants.NODESET);
-      Dependency[] dependencies = new Dependency[results.getLength()];
-      for(int ii = 0; ii < results.getLength(); ii++){
-        Element element = (Element)results.item(ii);
-        dependencies[ii] = new IvyDependency(
-            element.getAttribute(ORG),
-            element.getAttribute(NAME),
-            element.getAttribute(REVISION),
-            path);
-        dependencies[ii].setVariable(true);
-      }
-
-      return dependencies;
-    }catch(IllegalStateException iae){
-      throw iae;
+    if(xpath == null){
+      xpath = XmlUtils.createXPathExpression(
+          "/ivy-module/dependencies/dependency");
     }
+
+    if(JavaCore.getClasspathVariable(IVY_REPO) == null){
+      throw new IllegalStateException(
+          Services.getMessage("ivy.repo.not.set", IVY_REPO));
+    }
+    IPath path = new Path(IVY_REPO);
+
+    NodeList results = (NodeList)
+      xpath.evaluate(document, XPathConstants.NODESET);
+    Dependency[] dependencies = new Dependency[results.getLength()];
+    for(int ii = 0; ii < results.getLength(); ii++){
+      Element element = (Element)results.item(ii);
+      dependencies[ii] = new IvyDependency(
+          element.getAttribute(ORG),
+          element.getAttribute(NAME),
+          element.getAttribute(REVISION),
+          path);
+      dependencies[ii].setVariable(true);
+    }
+
+    return dependencies;
   }
 }

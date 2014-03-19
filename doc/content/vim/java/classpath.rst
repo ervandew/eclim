@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -258,12 +258,16 @@ users).
   ``.classpath`` for your project every time you save your pom.xml file.  Any
   entries found in the pom.xml that are not in the ``.classpath`` will be added,
   any entries that differ in version will be updated, and any stale entries
-  deleted. This behavior can be disabled by adding the following setting to your
-  vimrc:
+  deleted.
+  
+  .. note::
 
-  .. code-block:: vim
+    This behavior can be disabled by adding the following setting to your
+    vimrc:
 
-    let g:EclimMavenPomClasspathUpdate = 0
+    .. code-block:: vim
+
+      let g:EclimMavenPomClasspathUpdate = 0
 
   .. note::
 
@@ -325,13 +329,22 @@ differ in version will be updated, and any stale entries deleted.
   Once you have performed the initial setup, updating the Eclipse ``.classpath``
   file is as easy as saving your ivy.xml file (``:w``) and letting eclim do the
   rest.
+  
+  .. note::
+
+    This behavior can be disabled by adding the following setting to your
+    vimrc:
+
+    .. code-block:: vim
+
+      let g:EclimIvyClasspathUpdate = 0
 
   .. note::
 
-    This will update your project's ``.classpath`` file accordingly, but it will
-    not download any newly added jars. For that you'll need to have a target in
-    your ant build file which you can run that will force ivy to download
-    dependencies. Something like the example from the ivy docs:
+    This feature will update your project's ``.classpath`` file accordingly, but
+    it will not download any newly added jars. For that you'll need to have a
+    target in your ant build file that will force ivy to download dependencies.
+    Something like the example from the ivy docs:
 
     .. code-block:: xml
 

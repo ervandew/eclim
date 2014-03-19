@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,8 +136,12 @@ public class JavaProjectManager
     if(buildfile != null){
       String filename = FileUtils.getBaseName(buildfile);
       Parser parser = PARSERS.get(filename);
-      IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
-      errors = setClasspath(javaProject, entries, dotclasspath);
+      try{
+        IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
+        errors = setClasspath(javaProject, entries, dotclasspath);
+      }catch(IllegalStateException ise){
+        errors.add(new Error(ise.getMessage(), buildfile, 1, 1, false));
+      }
 
     // .classpath updated.
     }else{

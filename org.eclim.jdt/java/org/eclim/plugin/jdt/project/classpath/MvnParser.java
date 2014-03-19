@@ -54,61 +54,57 @@ public class MvnParser
   public Dependency[] parse(Document document)
     throws Exception
   {
-    try{
-      if(xpath == null){
-        xpath = XmlUtils.createXPathExpression(
-            "/project/dependencies/dependency");
-      }
-
-      if(JavaCore.getClasspathVariable(MVN_REPO) == null){
-        throw new IllegalStateException(
-            Services.getMessage("mvn.repo.not.set", MVN_REPO));
-      }
-      IPath path = new Path(MVN_REPO);
-
-      NodeList results = (NodeList)
-        xpath.evaluate(document, XPathConstants.NODESET);
-      ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
-      for(int ii = 0; ii < results.getLength(); ii++){
-        Element element = (Element)results.item(ii);
-
-        NodeList group = element.getElementsByTagName(GROUP_ID);
-        NodeList artifact = element.getElementsByTagName(ARTIFACT_ID);
-        NodeList ver = element.getElementsByTagName(VERSION);
-        if (group == null || group.getLength() < 1 ||
-            artifact == null || artifact.getLength() < 1 ||
-            ver == null || ver.getLength() < 1)
-        {
-          continue;
-        }
-
-        Node groupId = group.item(0).getFirstChild();
-        Node artifactId = artifact.item(0).getFirstChild();
-        Node version = ver.item(0).getFirstChild();
-        if (groupId == null || artifactId == null || version == null){
-          continue;
-        }
-
-        String groupIdValue = groupId.getNodeValue().trim();
-        String artifactIdValue = artifactId.getNodeValue().trim();
-        String versionValue = version.getNodeValue().trim();
-        if (groupIdValue.length() == 0 ||
-            artifactIdValue.length() == 0 ||
-            versionValue.length() == 0)
-        {
-          continue;
-        }
-
-        Dependency dependency = new MvnDependency(
-            groupIdValue, artifactIdValue, versionValue, path);
-        dependency.setVariable(true);
-        dependencies.add(dependency);
-      }
-
-      return (Dependency[])
-        dependencies.toArray(new Dependency[dependencies.size()]);
-    }catch(IllegalStateException iae){
-      throw iae;
+    if(xpath == null){
+      xpath = XmlUtils.createXPathExpression(
+          "/project/dependencies/dependency");
     }
+
+    if(JavaCore.getClasspathVariable(MVN_REPO) == null){
+      throw new IllegalStateException(
+          Services.getMessage("mvn.repo.not.set", MVN_REPO));
+    }
+    IPath path = new Path(MVN_REPO);
+
+    NodeList results = (NodeList)
+      xpath.evaluate(document, XPathConstants.NODESET);
+    ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
+    for(int ii = 0; ii < results.getLength(); ii++){
+      Element element = (Element)results.item(ii);
+
+      NodeList group = element.getElementsByTagName(GROUP_ID);
+      NodeList artifact = element.getElementsByTagName(ARTIFACT_ID);
+      NodeList ver = element.getElementsByTagName(VERSION);
+      if (group == null || group.getLength() < 1 ||
+          artifact == null || artifact.getLength() < 1 ||
+          ver == null || ver.getLength() < 1)
+      {
+        continue;
+      }
+
+      Node groupId = group.item(0).getFirstChild();
+      Node artifactId = artifact.item(0).getFirstChild();
+      Node version = ver.item(0).getFirstChild();
+      if (groupId == null || artifactId == null || version == null){
+        continue;
+      }
+
+      String groupIdValue = groupId.getNodeValue().trim();
+      String artifactIdValue = artifactId.getNodeValue().trim();
+      String versionValue = version.getNodeValue().trim();
+      if (groupIdValue.length() == 0 ||
+          artifactIdValue.length() == 0 ||
+          versionValue.length() == 0)
+      {
+        continue;
+      }
+
+      Dependency dependency = new MvnDependency(
+          groupIdValue, artifactIdValue, versionValue, path);
+      dependency.setVariable(true);
+      dependencies.add(dependency);
+    }
+
+    return (Dependency[])
+      dependencies.toArray(new Dependency[dependencies.size()]);
   }
 }

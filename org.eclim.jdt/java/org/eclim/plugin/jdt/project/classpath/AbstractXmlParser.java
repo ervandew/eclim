@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,7 @@ public abstract class AbstractXmlParser
 {
   private static DocumentBuilderFactory factory;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Dependency[] parse(String filename)
     throws Exception
   {
