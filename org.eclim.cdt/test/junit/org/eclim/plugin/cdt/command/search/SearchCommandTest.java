@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,6 +122,26 @@ public class SearchCommandTest
     assertEquals(result.get("message"), "");
     assertEquals(result.get("line"), 11);
     assertEquals(result.get("column"), 3);
+
+    // puts
+    results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "c_search", "-n", Cdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "154", "-l", "4", "-e", "utf-8", "-x", "declarations"
+      });
+
+    result = results.get(0);
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+      assertTrue(((String)result.get("filename"))
+          .endsWith("/include/stdio.h"));
+      assertEquals(result.get("message"), "");
+    }else{
+      assertEquals(result.get("filename"), "/usr/include/stdio.h");
+      assertEquals(result.get("message"), "");
+      assertEquals(result.get("column"), 12);
+      int line = ((Integer)result.get("line")).intValue();
+      assertTrue(line > 650 && line < 750);
+    }
 
     // EXIT_SUCCESS
     results = (List<Map<String,Object>>)

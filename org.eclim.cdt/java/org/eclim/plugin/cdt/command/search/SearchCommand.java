@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,15 +49,20 @@ import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNodeSelector;
+import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexFileLocation;
+import org.eclipse.cdt.core.index.IIndexMacro;
 import org.eclipse.cdt.core.index.IIndexManager;
+import org.eclipse.cdt.core.index.IndexFilter;
 
 import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.model.ISourceReference;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 
 import org.eclipse.cdt.internal.ui.search.CSearchElement;
@@ -66,6 +71,8 @@ import org.eclipse.cdt.internal.ui.search.CSearchMessages;
 import org.eclipse.cdt.internal.ui.search.CSearchPatternQuery;
 import org.eclipse.cdt.internal.ui.search.CSearchQuery;
 import org.eclipse.cdt.internal.ui.search.CSearchResult;
+
+import org.eclipse.cdt.internal.ui.viewsupport.IndexUI;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -120,10 +127,7 @@ public class SearchCommand
   public static final String TYPE_TYPEDEF = "typedef";
   public static final String TYPE_MACRO = "macro";
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -247,7 +251,10 @@ public class SearchCommand
   {
     LinkedHashSet<IName> names = new LinkedHashSet<IName>();
     IIndex index = CCorePlugin.getIndexManager().getIndex(
-        scope, IIndexManager.ADD_DEPENDENCIES | IIndexManager.ADD_DEPENDENT);
+        scope,
+        IIndexManager.ADD_DEPENDENCIES |
+        IIndexManager.ADD_DEPENDENT |
+        IIndexManager.ADD_EXTENSION_FRAGMENTS_NAVIGATION);
     index.acquireReadLock();
     try{
       IASTTranslationUnit ast = src.getAST(index,
@@ -305,6 +312,33 @@ public class SearchCommand
           }
           if ((flags & IIndex.FIND_REFERENCES) != 0){
             CollectionUtils.addAll(names, ast.getReferences(binding));
+          }
+
+          if ((flags & IIndex.FIND_DECLARATIONS) != 0 ||
+              (flags & IIndex.FIND_DEFINITIONS) != 0)
+          {
+            // also try to find macros (now required for stdlib EXIT_SUCCESS)
+            // gleaned from navigationFallBack in
+            // org.eclipse.cdt.internal.ui.search.actions.OpenDeclarationJob
+            IndexFilter filter = IndexFilter.getDeclaredBindingFilter(
+                ast.getLinkage().getLinkageID(), false);
+            IIndexMacro[] macros = index.findMacros(
+                binding.getName().toCharArray(),
+                filter,
+                new NullProgressMonitor());
+            for (IIndexMacro macro : macros) {
+              ICElement element = IndexUI.getCElementForMacro(
+                  src.getCProject(), index, macro);
+              if (element != null) {
+                ISourceReference ref = (ISourceReference)element;
+                FileLocation location = new FileLocation(
+                    ref.getTranslationUnit().getPath().toPortableString(),
+                    ref.getSourceRange().getStartPos(),
+                    ref.getSourceRange().getLength(),
+                    ref.getSourceRange().getStartLine());
+                names.add(new Name(location));
+              }
+            }
           }
         }
       }
@@ -422,5 +456,111 @@ public class SearchCommand
       return CSearchPatternQuery.FIND_MACRO;
     }
     return CSearchPatternQuery.FIND_ALL_TYPES;
+  }
+
+  private class Name
+    implements IName
+  {
+    private IASTFileLocation fileLocation;
+
+    public Name(IASTFileLocation fileLocation)
+    {
+      this.fileLocation = fileLocation;
+    }
+
+    @Override
+    public char[] getSimpleID()
+    {
+      return null;
+    }
+
+    @Override
+    public char[] toCharArray()
+    {
+      return null;
+    }
+
+    @Override
+    public boolean isDeclaration()
+    {
+      return false;
+    }
+
+    @Override
+    public boolean isReference()
+    {
+      return false;
+    }
+
+    @Override
+    public boolean isDefinition()
+    {
+      return false;
+    }
+
+    @Override
+    public IASTFileLocation getFileLocation()
+    {
+      return fileLocation;
+    }
+  }
+
+  private class FileLocation
+    implements IASTFileLocation
+  {
+    private String fileName;
+    private int offset;
+    private int length;
+    private int line;
+
+    public FileLocation(String fileName, int offset, int length, int line)
+    {
+      this.fileName = fileName;
+      this.offset = offset;
+      this.length = length;
+      this.line = line;
+    }
+
+    @Override
+    public IASTFileLocation asFileLocation()
+    {
+      return this;
+    }
+
+    @Override
+    public String getFileName()
+    {
+      return fileName;
+    }
+
+    @Override
+    public int getNodeOffset()
+    {
+      return offset;
+    }
+
+    @Override
+    public int getNodeLength()
+    {
+      return length;
+    }
+
+    @Override
+    public int getStartingLineNumber()
+    {
+      return line;
+    }
+
+    @Override
+    public int getEndingLineNumber()
+    {
+      return 0;
+    }
+
+    @Override
+    public IASTPreprocessorIncludeStatement getContextInclusionStatement()
+    {
+      return null;
+    }
   }
 }

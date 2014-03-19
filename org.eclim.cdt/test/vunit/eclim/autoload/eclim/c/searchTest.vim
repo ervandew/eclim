@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Test case for search.vim
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,13 +19,11 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_c'
 endfunction " }}}
 
-" TestFindInclude() {{{
-function! TestFindInclude()
+function! TestFindInclude() " {{{
   edit! src/test_search_vunit.c
   call vunit#PeekRedir()
 
@@ -58,8 +53,7 @@ function! TestFindInclude()
   call vunit#AssertEquals(name, 'src/test.h', 'Wrong result file.')
 endfunction " }}}
 
-" TestSearchElement() {{{
-function! TestSearchElement()
+function! TestSearchElement() " {{{
   edit! src/test_search_vunit.c
   call vunit#PeekRedir()
 
@@ -78,6 +72,23 @@ function! TestSearchElement()
     call vunit#AssertEquals(name, '/usr/include/stdlib.h', 'Wrong result file.')
   endif
   call vunit#AssertTrue(getline('.') =~ '#define\s\+EXIT_SUCCESS', 'Wrong line: ' . getline('.'))
+  bdelete
+
+  " puts
+  call cursor(12, 3)
+  :CSearchContext
+  call vunit#PeekRedir()
+
+  let results = getloclist(0)
+  echo string(results)
+  call vunit#AssertEquals(1, len(results), 'Wrong number of results.')
+  let name = bufname(results[0].bufnr)
+  if has('win32') || has('win64')
+    call vunit#AssertTrue(name =~ '\\include\\stdio\.h', 'Wrong result file: ' . name)
+  else
+    call vunit#AssertEquals(name, '/usr/include/stdio.h', 'Wrong result file.')
+  endif
+  call vunit#AssertTrue(getline('.') =~ 'extern\s\+int\s\+puts\>', 'Wrong line: ' . getline('.'))
   bdelete
 
   " testFunction (definition)
@@ -157,8 +168,7 @@ function! TestSearchElement()
   bdelete
 endfunction " }}}
 
-" TestSearchFunction() {{{
-function! TestSearchFunction()
+function! TestSearchFunction() " {{{
   edit! src/test_search_vunit.c
   call vunit#PeekRedir()
 
@@ -174,8 +184,7 @@ function! TestSearchFunction()
   call vunit#AssertEquals(results[0].col, 5, 'Wrong line number.')
 endfunction " }}}
 
-" TestSearchStruct() {{{
-function! TestSearchStruct()
+function! TestSearchStruct() " {{{
   edit! src/test_search_vunit.c
   call vunit#PeekRedir()
 
