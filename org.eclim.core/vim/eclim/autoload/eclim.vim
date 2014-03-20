@@ -37,6 +37,7 @@
   let s:command_settings = '-command settings'
   let s:command_settings_update = '-command settings_update -s "<settings>"'
   let s:command_shutdown = "-command shutdown"
+  let s:command_jobs = '-command jobs'
   let s:connect= '^connect: .*$'
 " }}}
 
@@ -334,6 +335,31 @@ function! eclim#UserHome() " {{{
     let home = expand('$USERPROFILE')
   endif
   return substitute(home, '\', '/', 'g')
+endfunction " }}}
+
+function! eclim#WaitOnRunningJobs(timeout) " {{{
+  " Args:
+  "   timeout: max time to wait in milliseconds
+  let running = 1
+  let waited = 0
+  while running && waited < a:timeout
+    let jobs = eclim#Execute(s:command_jobs)
+    if type(jobs) == g:LIST_TYPE
+      let running = 0
+      for job in jobs
+        if job.status == 'running'
+          call eclim#util#EchoDebug('Wait on job: ' . job.job)
+          let running = 1
+          let waited += 300
+          sleep 300m
+          break
+        endif
+      endfor
+    endif
+  endwhile
+  if running
+    call eclim#util#EchoDebug('Timeout exceeded waiting on jobs')
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
