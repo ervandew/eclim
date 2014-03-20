@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -42,6 +42,12 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
 
   if project == ''
     call eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  Validate
+  if len(getloclist(0)) > 0
+    call eclim#util#EchoError('Test case contains validation errors.')
     return
   endif
 
