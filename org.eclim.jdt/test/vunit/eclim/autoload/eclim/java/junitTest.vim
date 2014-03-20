@@ -30,10 +30,24 @@ function! TestJUnit() " {{{
   edit! src/org/eclim/test/junit/run/FooTest.java
   call vunit#PeekRedir()
 
+  " some previous test causes class files to be removed, so we need to build the
+  " project to ensure the class files we need are present.
+  ProjectBuild
+
   call cursor(1, 1)
-  silent JUnit
+  JUnit
   call vunit#AssertEquals(winnr('$'), 2, 'Run full test: windows')
   winc j
+
+  call vunit#PeekRedir()
+  echo "##############"
+  let lnum = 1
+  while lnum <= line('$')
+    echo getline(lnum)
+    let lnum += 1
+  endwhile
+  echo "##############"
+
   call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run full test: name')
   call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.FooTest',
     \ 'Run full test: Testsuite')
