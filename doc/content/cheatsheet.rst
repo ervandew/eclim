@@ -97,11 +97,9 @@ Project Commands
 Android Commands
 -----------------
 
-.. _\:AndroidReload:
-
-- :AndroidReload - Reloads the Android SDK environment in the running
-  eclimd/eclipse instance. Useful if you've made changes to the SDK outside of
-  eclipse (installed a new target platform, etc).
+- :ref:`:AndroidReload <:AndroidReload>` - Reloads the Android SDK environment in the
+  running eclimd/eclipse instance. Useful if you've made changes to the SDK
+  outside of eclipse (installed a new target platform, etc).
 
 
 Ant Commands
