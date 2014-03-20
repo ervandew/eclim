@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.project.ProjectManagement;
+
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
@@ -44,15 +46,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 public class ProjectBuildCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
 
     IProject project = ProjectUtils.getProject(name, true);
+    ProjectManagement.refresh(project, commandLine);
     project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 
     return Services.getMessage("project.built", name);
