@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,8 +39,6 @@ autocmd BufRead ivy.xml
   \ call EclimSetXmlFileType({'ivy-module': 'ivy'})
 autocmd BufRead pom.xml
   \ call EclimSetXmlFileType({'project': 'mvn_pom'})
-autocmd BufRead project.xml
-  \ call EclimSetXmlFileType({'project': 'maven_project'})
 autocmd BufRead struts-config.xml
   \ call EclimSetXmlFileType({'struts-config': 'strutsconfig'})
 autocmd BufRead *.tld

@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -941,7 +941,7 @@ Eclim:
 
 Java:
   - Maven dependency searching now expanded to ivy files via
-    :ref:`:IvyDependencySearch <:IvyDependencySearch>`.
+    :IvyDependencySearch.
   - Fixed junit support to handle execution via maven 1.x and 2.x.
 
 Xml:
@@ -1049,8 +1049,7 @@ Eclim:
     project.xml in favor of new maven support.
   - Added :ref:`:Maven <:Maven>` and :ref:`:Mvn <:Mvn>` commands for executing
     maven 1.x and 2.x.
-  - Added :ref:`:MavenDependencySearch <:MavenDependencySearch>` and
-    :ref:`:MvnDependencySearch <:MvnDependencySearch>`
+  - Added :MavenDependencySearch and :MvnDependencySearch
     for searching for and adding dependencies to your maven pom file.
   - <anchor id="upgrade_1.2.0"/>
     Re-organized eclim files within the vim runtime path.

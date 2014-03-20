@@ -281,13 +281,6 @@ users).
 
       :Mvn dependency:resolve
 
-* Search Online Maven Repository
-
-  Eclim also provides the command **:MvnDependencySearch**
-  (**:MavenDependencySearch** for 1.x) which allows you to
-  search for dependencies in the online maven repository as described in the
-  :ref:`maven documentation <:MvnDependencySearch>`.
-
 .. _classpath-ivy:
 
 Ivy
@@ -367,14 +360,6 @@ differ in version will be updated, and any stale entries deleted.
         <attribute name="eclim.preserve" value="true"/>
       </attributes>
     </classpathentry>
-
-.. _\:IvyDependencySearch:
-
-* Search Online Maven Repository
-
-  Eclim also provides the command **:IvyDependencySearch** which allows you to
-  search for dependencies in the online maven repository as described in the
-  :ref:`maven documentation <:MvnDependencySearch>`.
 
 .. _ivy: http://jayasoft.org/ivy
 .. _maven: http://maven.apache.org
