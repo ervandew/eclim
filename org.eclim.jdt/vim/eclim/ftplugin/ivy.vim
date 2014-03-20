@@ -51,10 +51,6 @@ if !exists(":IvyRepo")
   command -nargs=1 -complete=dir -buffer IvyRepo
     \ :call eclim#java#ant#ivy#SetRepo('<args>')
 endif
-if !exists(":IvyDependencySearch")
-  command -nargs=1 -buffer IvyDependencySearch
-    \ :call eclim#java#maven#Search('<args>', 'ivy')
-endif
 " }}}
 
 " vim:ft=vim:fdm=marker

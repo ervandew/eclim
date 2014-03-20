@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -154,10 +154,6 @@ Ivy Commands
 - :ref:`:IvyRepo <:IvyRepo>` <path> -
   Sets the necessary IVY_REPO classpath variable for supporting automatic
   updates to .classpath files upon ivy.xml updates.
-- :ref:`:IvyDependencySearch <:IvyDependencySearch>` <artifact> -
-  Searches online repository and opens a window with results that can be added
-  to the current ivy file by hitting <Enter> on a result.  Available when
-  editing an ``ivy.xml`` file.
 
 
 Java Commands
@@ -265,14 +261,6 @@ Maven Commands
 - :ref:`:MvnRepo <:MvnRepo>` -
   Sets the necessary M2_REPO classpath variable for maven's (2.x) eclipse
   support.
-- :ref:`:MavenDependencySearch <:MavenDependencySearch>` <artifact> -
-  Searches online repository and opens a window with results that can be
-  added to the current project file by hitting <Enter> on a result.
-  Available when editing a maven 1.x ``project.xml`` file.
-- :ref:`:MvnDependencySearch <:MvnDependencySearch>` <artifact> -
-  Searches online repository and opens a window with results that can be
-  added to the current pom file by hitting <Enter> on a result.
-  Available when editing a maven 2.x ``pom.xml`` file.
 
 
 Php Commands

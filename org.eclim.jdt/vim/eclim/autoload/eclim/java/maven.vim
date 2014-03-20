@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/maven/dependency.html
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,142 +20,8 @@
 " }}}
 
 " Script Variables {{{
-  let s:update_command = '-command project_update -p "<project>" -b "<build>"'
-
-  let s:command_search =
-    \ '-command maven_dependency_search ' .
-    \ '-p "<project>" -f "<file>" -t "<type>" -s <query>'
-
-  let s:dependency_template{'maven'} =
-    \ "\t<dependency>\n" .
-    \ "\t\t<groupId>${groupId}</groupId>\n" .
-    \ "\t\t<artifactId>${artifactId}</artifactId>\n" .
-    \ "\t\t<version>${version}</version>\n" .
-    \ "\t</dependency>"
-
-  let s:dependency_template{'mvn'} =
-    \ "\t<dependency>\n" .
-    \ "\t\t<groupId>${groupId}</groupId>\n" .
-    \ "\t\t<artifactId>${artifactId}</artifactId>\n" .
-    \ "\t\t<version>${version}</version>\n" .
-    \ "\t\t<scope>compile</scope>\n" .
-    \ "\t</dependency>"
-
-  let s:dependency_template{'ivy'} =
-    \ "\t<dependency org=\"${groupId}\" name=\"${artifactId}\" rev=\"${version}\"/>"
+let s:update_command = '-command project_update -p "<project>" -b "<build>"'
 " }}}
-
-function! eclim#java#maven#Search(query, type) " {{{
-  " Searches online maven repository.
-
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
-  endif
-
-  update
-
-  let filename = substitute(expand('%:p'), '\', '/', 'g')
-  let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#project#util#GetProjectRelativeFilePath()
-
-  let command = s:command_search
-  let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', file, '')
-  let command = substitute(command, '<type>', a:type, '')
-  let command = substitute(command, '<query>', a:query, '')
-
-  let results = eclim#Execute(command)
-  if type(results) != g:LIST_TYPE
-    return
-  endif
-
-  let content = []
-  let groupId = ''
-  for result in results
-    if result.groupId != groupId
-      let groupId = result.groupId
-      call add(content, result.groupId)
-    endif
-    if result.existing
-      let result.artifactId = '//' . result.artifactId
-    endif
-    call add(content, "\t" . result.artifactId . ' (' . result.version . ')')
-  endfor
-
-  let window_name = "Dependency_Search_Results"
-  call eclim#util#TempWindowClear(window_name)
-
-  if len(content)
-    call eclim#util#TempWindow(window_name, content)
-
-    let b:filename = filename
-    let b:type = a:type
-    setlocal ft=dependency_search_results
-    syntax match Statement /^\w\+.*$/
-    syntax match Identifier /(.\{-})/
-    syntax match Comment /^\s*\/\/.*$/
-
-    nnoremap <silent> <buffer> <cr> :call <SID>AddDependency(b:type)<cr>
-  else
-    call eclim#util#Echo('No results found.')
-  endif
-endfunction " }}}
-
-function! s:AddDependency(type) " {{{
-  let line = getline('.')
-  if line =~ '^\s\+.*(.*)$' && line !~ '^\s*//'
-    let artifact = substitute(line, '\s\+\(.*\) (.*)$', '\1', '')
-    let vrsn = substitute(line, '.*(\(.*\))$', '\1', '')
-    let group = getline(search('^\w\+', 'bnW'))
-
-    let results_winnr = winnr()
-    exec bufwinnr(b:filename) . "winc w"
-
-    call s:InsertDependency(a:type, group, artifact, vrsn)
-    exec results_winnr . "winc w"
-
-    " mark dependency as added
-    let line = substitute(line, '^\(\s*\)', '\1//', '')
-
-    setlocal modifiable
-    setlocal noreadonly
-    call setline(line('.'), line)
-    setlocal nomodifiable
-    setlocal readonly
-  endif
-endfunction " }}}
-
-function! s:InsertDependency(type, group, artifact, vrsn) " {{{
-  let depend = deepcopy(s:dependency_template{a:type})
-  let depend = substitute(depend, '\${groupId}', a:group, '')
-  let depend = substitute(depend, '\${artifactId}', a:artifact, '')
-  let depend = substitute(depend, '\${version}', a:vrsn, '')
-  let dependency = split(depend, '\n')
-
-  let lnum = search('</dependencies>', 'cnw')
-  let insertDependenciesNode = 0
-  if !lnum
-    let lnum = search('<build>', 'cnw')
-    if !lnum
-      call eclim#util#EchoError('No <dependencies> node found.')
-      return
-    endif
-    let insertDependenciesNode = 1
-  endif
-
-  let indent = substitute(getline(lnum), '^\(\s*\).*', '\1', '')
-  call map(dependency, 'indent . v:val')
-
-  if insertDependenciesNode
-    call append(lnum - 1, indent . '</dependencies>')
-    call append(lnum - 1, indent . '<dependencies>')
-    let lnum += 1
-  endif
-
-  call append(lnum - 1, dependency)
-
-  retab
-endfunction " }}}
 
 function! eclim#java#maven#SetClasspathVariable(cmd, variable, args) " {{{
   let instance = eclim#client#nailgun#ChooseEclimdInstance()
