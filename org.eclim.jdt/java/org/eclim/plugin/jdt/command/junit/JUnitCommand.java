@@ -109,7 +109,6 @@ public class JUnitCommand
 
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
     JUnitTask junit = createJUnitTask(javaProject, debug, halt);
-    junit.setFork(true);
 
     String[] vmargs =
       getPreferences().getArrayValue(project, "org.eclim.java.junit.jvmargs");
