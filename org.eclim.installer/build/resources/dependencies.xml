@@ -38,13 +38,13 @@
   </feature>
 
   <feature id="adt">
-    <dependency id="com.android.ide.eclipse.adt" version="22.0.0">
+    <dependency id="com.android.ide.eclipse.adt" version="22.6.1">
       <site url="https://dl-ssl.google.com/android/eclipse/"/>
     </dependency>
   </feature>
 
   <feature id="pydev">
-    <dependency id="org.python.pydev.feature" version="3.3.3">
+    <dependency id="org.python.pydev.feature" version="3.4.1">
       <site url="http://pydev.org/updates"/>
     </dependency>
   </feature>
