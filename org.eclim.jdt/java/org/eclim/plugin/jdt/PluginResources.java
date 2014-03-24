@@ -133,7 +133,7 @@ public class PluginResources
     );
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,
-      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-7]\n" +
+      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-8]\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+\n" +
       "JDT/Javadoc " + JavaUI.ID_PLUGIN + ".project_javadoc_location\n" +
       "JDT/CodeComplete org.eclipse.jdt.core.codeComplete.camelCaseMatch (enabled|disabled)\n" +
