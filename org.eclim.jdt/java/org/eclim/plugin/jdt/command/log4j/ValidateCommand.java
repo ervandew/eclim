@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,9 +56,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ValidateCommand
   extends org.eclim.plugin.core.command.xml.ValidateCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -116,20 +114,14 @@ public class ValidateCommand
       this.file = ProjectUtils.getFilePath(project.getProject(), file);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see org.xml.sax.helpers.DefaultHandler#setDocumentLocator(Locator)
-     */
+    @Override
     public void setDocumentLocator(Locator locator)
     {
       super.setDocumentLocator(locator);
       this.locator = locator;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see org.xml.sax.helpers.DefaultHandler#startElement(String,String,String,Attributes)
-     */
+    @Override
     public void startElement(
         String uri, String localName, String qName, Attributes atts)
       throws SAXException

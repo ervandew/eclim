@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,10 +150,14 @@ public class XmlUtils
       filename = ProjectUtils.getFilePath(project, filename);
       filename = filename.replace('\\', '/');
 
+      EntityResolver entityResolver = new EntityResolver(
+          FileUtils.getFullPath(filename));
+
       // check if the file has doctype info (would be nice to have a way to
       // detect this without parsing the whole file).
       DocumentBuilder builder = DocumentBuilderFactory.newInstance()
         .newDocumentBuilder();
+      builder.setEntityResolver(entityResolver);
       Document doc = builder.parse(new File(filename));
 
       SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -168,8 +172,6 @@ public class XmlUtils
       SAXParser parser = factory.newSAXParser();
 
       ErrorAggregator errorHandler = new ErrorAggregator(filename);
-      EntityResolver entityResolver = new EntityResolver(
-          FileUtils.getFullPath(filename));
       fin = new FileInputStream(filename);
       parser.parse(fin, getHandler(handler, errorHandler, entityResolver));
 
