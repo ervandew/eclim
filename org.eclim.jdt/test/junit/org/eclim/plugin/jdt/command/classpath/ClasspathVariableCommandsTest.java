@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,8 @@ public class ClasspathVariableCommandsTest
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
+    Eclim.execute(new String[]{
+      "java_classpath_variable_create", "-n", TEST_VARIABLE, "-p", TEST_PATH});
     assertTrue("Variable does not exist.", variableExists());
 
     Eclim.execute(new String[]{
