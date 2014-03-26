@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclim.Eclim;
+import org.eclim.EclimTestCase;
 
 import org.eclim.plugin.jdt.Jdt;
 
@@ -35,12 +36,18 @@ import static org.junit.Assert.*;
  * @author Eric Van Dewoestine
  */
 public class RenameCommandTest
+  extends EclimTestCase
 {
   @Test
   @SuppressWarnings("unchecked")
   public void executeRenameField()
     throws Exception
   {
+    modifies(Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/TestN1.java");
+    modifies(Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java");
+
     String p = Eclim.resolveFile(Jdt.TEST_PROJECT, "");
 
     String tn1Contents = Eclim.fileToString(
@@ -121,6 +128,11 @@ public class RenameCommandTest
   public void executeRenameMethod()
     throws Exception
   {
+    modifies(Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/TestN1.java");
+    modifies(Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java");
+
     String p = Eclim.resolveFile(Jdt.TEST_PROJECT, "");
 
     String tn1Contents = Eclim.fileToString(
@@ -199,6 +211,11 @@ public class RenameCommandTest
   public void executeRenameType()
     throws Exception
   {
+    modifies(Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/TestN1.java");
+    modifies(Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java");
+
     String p = Eclim.resolveFile(Jdt.TEST_PROJECT, "");
 
     String tn1Contents = Eclim.fileToString(
@@ -276,6 +293,28 @@ public class RenameCommandTest
         "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java");
     assertEquals("Wrong diff results",
         tn2Contents.replaceAll("TestN1", "TestR1"), tn2NewContents);
+
+    // rename it back
+    result = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/n1/TestR1.java",
+        "-n", "TestN1", "-o", "60", "-l", "6", "-e", "utf-8",
+      });
+
+    assertFalse(new File(Eclim.resolveFile(
+            Jdt.TEST_PROJECT,
+            "src/org/eclim/test/refactoring/rename/n1/TestR1.java")).exists());
+
+    tn1NewContents = Eclim.fileToString(
+        Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/TestN1.java");
+    assertEquals("Wrong new contents", tn1Contents, tn1NewContents);
+
+    tn2NewContents = Eclim.fileToString(
+        Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java");
+    assertEquals("Wrong diff results", tn2Contents, tn2NewContents);
   }
 
   @Test
@@ -285,10 +324,10 @@ public class RenameCommandTest
   {
     String p = Eclim.resolveFile(Jdt.TEST_PROJECT, "");
 
-    String tr1Contents = Eclim.fileToString(
+    String tn1Contents = Eclim.fileToString(
         Jdt.TEST_PROJECT,
-        "src/org/eclim/test/refactoring/rename/n1/TestR1.java");
-    assertTrue("package 'n1' not found", tr1Contents.indexOf(
+        "src/org/eclim/test/refactoring/rename/n1/TestN1.java");
+    assertTrue("package 'n1' not found", tn1Contents.indexOf(
           "package org.eclim.test.refactoring.rename.n1;") != -1);
 
     String tn2Contents = Eclim.fileToString(
@@ -331,7 +370,7 @@ public class RenameCommandTest
       "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java"),
     });
     assertEquals("Wrong diff results",
-        tn2Contents.replaceAll("n1\\.TestR1", "r1.TestR1"), diff);
+        tn2Contents.replaceAll("n1\\.TestN1", "r1.TestN1"), diff);
 
     // rename
     List<Map<String,String>> result = (List<Map<String,String>>)
@@ -342,9 +381,9 @@ public class RenameCommandTest
         "-o", "42", "-l", "2", "-e", "utf-8",
       });
 
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestR1.java",
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
         result.get(0).get("from"));
-    assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/TestR1.java",
+    assertEquals(p + "src/org/eclim/test/refactoring/rename/r1/TestN1.java",
         result.get(0).get("to"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2",
         result.get(1).get("from"));
@@ -357,12 +396,12 @@ public class RenameCommandTest
 
     assertFalse(new File(Eclim.resolveFile(
             Jdt.TEST_PROJECT,
-            "src/org/eclim/test/refactoring/rename/n1/TestR1.java")).exists());
+            "src/org/eclim/test/refactoring/rename/n1/TestN1.java")).exists());
     String tn1NewContents = Eclim.fileToString(
         Jdt.TEST_PROJECT,
-        "src/org/eclim/test/refactoring/rename/r1/TestR1.java");
+        "src/org/eclim/test/refactoring/rename/r1/TestN1.java");
     assertEquals("Wrong new contents",
-        tr1Contents.replaceAll("n1", "r1"), tn1NewContents);
+        tn1Contents.replaceAll("n1", "r1"), tn1NewContents);
 
     assertFalse(new File(Eclim.resolveFile(
             Jdt.TEST_PROJECT,
@@ -372,5 +411,30 @@ public class RenameCommandTest
         "src/org/eclim/test/refactoring/rename/r1/n2/TestN2.java");
     assertEquals("Wrong new contents",
         tn2Contents.replaceAll("n1", "r1"), tn2NewContents);
+
+    // rename it back
+    result = (List<Map<String,String>>)
+      Eclim.execute(new String[]{
+        "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
+        "-f", "src/org/eclim/test/refactoring/rename/r1/n2/TestN2.java",
+        "-n", "org.eclim.test.refactoring.rename.n1",
+        "-o", "42", "-l", "2", "-e", "utf-8",
+      });
+
+    assertFalse(new File(Eclim.resolveFile(
+            Jdt.TEST_PROJECT,
+            "src/org/eclim/test/refactoring/rename/r1/TestN1.java")).exists());
+    tn1NewContents = Eclim.fileToString(
+        Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/TestN1.java");
+    assertEquals("Wrong new contents", tn1Contents, tn1NewContents);
+
+    assertFalse(new File(Eclim.resolveFile(
+            Jdt.TEST_PROJECT,
+            "src/org/eclim/test/refactoring/rename/r1/n2/TestN1.java")).exists());
+    tn2NewContents = Eclim.fileToString(
+        Jdt.TEST_PROJECT,
+        "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java");
+    assertEquals("Wrong new contents", tn2Contents, tn2NewContents);
   }
 }

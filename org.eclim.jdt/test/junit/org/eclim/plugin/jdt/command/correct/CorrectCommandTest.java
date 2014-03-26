@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import org.eclim.Eclim;
+import org.eclim.EclimTestCase;
 
 import org.eclim.plugin.jdt.Jdt;
 
@@ -37,6 +38,7 @@ import static org.junit.Assert.*;
  * @author Eric Van Dewoestine
  */
 public class CorrectCommandTest
+  extends EclimTestCase
 {
   private static final String TEST_FILE =
     "src/org/eclim/test/correct/TestCorrect.java";
@@ -46,8 +48,10 @@ public class CorrectCommandTest
 
   @Test
   @SuppressWarnings("unchecked")
-  public void suggest()
+  public void unresolvedType()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
@@ -65,24 +69,7 @@ public class CorrectCommandTest
       (List<Map<String,Object>>)result.get("corrections");
     assertEquals(0, results.get(0).get("index"));
     assertEquals("Import 'ArrayList' (java.util)", results.get(0).get("description"));
-  }
 
-  @Test
-  @SuppressWarnings("unchecked")
-  public void apply()
-  {
-    assertTrue("Java project doesn't exist.",
-        Eclim.projectExists(Jdt.TEST_PROJECT));
-
-    Map<String,Object> result = (Map<String,Object>)
-      Eclim.execute(new String[]{
-        "java_correct", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE,
-        "-l", "5", "-o", "74", "-e", "utf-8"
-      });
-
-    List<Map<String,Object>> results =
-      (List<Map<String,Object>>)result.get("corrections");
     int apply = -1;
     for(Map<String,Object> r : results){
       if (r.get("description").equals("Import 'ArrayList' (java.util)")){
@@ -111,8 +98,10 @@ public class CorrectCommandTest
 
   @Test
   @SuppressWarnings("unchecked")
-  public void suggestPackage()
+  public void incorrectPackage()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE_PACKAGE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
@@ -136,14 +125,6 @@ public class CorrectCommandTest
     assertEquals(
         "...\npackage org.eclim.test.correct;\n...\n",
         results.get(1).get("preview"));
-  }
-
-  @Test
-  @SuppressWarnings("unchecked")
-  public void applyPackage()
-  {
-    assertTrue("Java project doesn't exist.",
-        Eclim.projectExists(Jdt.TEST_PROJECT));
 
     List<Map<String,String>> changes = (List<Map<String,String>>)
       Eclim.execute(new String[]{

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package org.eclim.plugin.jdt.command.doc;
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
+import org.eclim.EclimTestCase;
 
 import org.eclim.plugin.jdt.Jdt;
 
@@ -32,6 +33,7 @@ import static org.junit.Assert.*;
  * @author Eric Van Dewoestine
  */
 public class CommentCommandTest
+  extends EclimTestCase
 {
   private static final String TEST_FILE =
     "src/org/eclim/test/doc/TestComment.java";
@@ -56,21 +58,8 @@ public class CommentCommandTest
   @Test
   public void method1()
   {
-    assertTrue("Java project doesn't exist.",
-        Eclim.projectExists(Jdt.TEST_PROJECT));
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
 
-    Eclim.execute(new String[]{
-      "javadoc_comment", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "158", "-e", "utf-8"
-    });
-
-    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    assertTrue("Incorrect comment generated.", COMMENT_1.matcher(contents).find());
-  }
-
-  @Test
-  public void method2()
-  {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
@@ -83,5 +72,22 @@ public class CommentCommandTest
     System.out.println("'" + COMMENT_2 + "'");
     System.out.println("'" + contents.substring(56, 158) + "'");
     assertTrue("Incorrect comment generated.", COMMENT_2.matcher(contents).find());
+  }
+
+  @Test
+  public void method2()
+  {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
+
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    Eclim.execute(new String[]{
+      "javadoc_comment", "-p", Jdt.TEST_PROJECT,
+      "-f", TEST_FILE, "-o", "158", "-e", "utf-8"
+    });
+
+    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    assertTrue("Incorrect comment generated.", COMMENT_1.matcher(contents).find());
   }
 }

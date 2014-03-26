@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package org.eclim.plugin.jdt.command.impl;
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
+import org.eclim.EclimTestCase;
 
 import org.eclim.plugin.jdt.Jdt;
 
@@ -32,17 +33,20 @@ import static org.junit.Assert.*;
  * @author Eric Van Dewoestine
  */
 public class ConstructorCommandTest
+  extends EclimTestCase
 {
   private static final String TEST_FILE =
     "src/org/eclim/test/impl/TestConstructor.java";
   private static final String TEST_ENUM_FILE =
     "src/org/eclim/test/impl/TestConstructorEnum.java";
-  private static final String TEST_SUPER_FILE =
-    "src/org/eclim/test/impl/TestConstructorSuper.java";
+  private static final String TEST_CHILD_FILE =
+    "src/org/eclim/test/impl/TestConstructorChild.java";
 
   @Test
   public void emptyConstructor()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_ENUM_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
@@ -60,30 +64,34 @@ public class ConstructorCommandTest
   @Test
   public void argConstructor()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_SUPER_FILE,
+      "-f", TEST_FILE,
       "-o", "1", "-e", "utf-8", "-r", "[\"id\", \"name\"]"
     });
 
-    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_SUPER_FILE);
+    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Constructor not found.",
-        Pattern.compile("public TestConstructorSuper\\(int id, String name\\)")
+        Pattern.compile("public TestConstructor\\(int id, String name\\)")
         .matcher(contents).find());
   }
 
   @Test
   public void nestedConstructor()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "255", "-e", "utf-8"
+      "-f", TEST_FILE, "-o", "207", "-e", "utf-8"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -95,24 +103,29 @@ public class ConstructorCommandTest
   @Test
   public void nestedArgConstructor()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "255", "-e", "utf-8", "-r", "[\"subName\"]"
+      "-f", TEST_FILE, "-o", "207", "-e", "utf-8", "-r", "[\"subName\"]"
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Constructor not found.",
         Pattern.compile(
-          "public TestInner\\(String subName\\)\\s*\\{\\s*this\\.subName = subName;\\s*\\}")
+          "public TestInner\\(String subName\\)\\s*" +
+          "\\{\\s*this\\.subName = subName;\\s*\\}")
         .matcher(contents).find());
   }
 
   @Test
   public void enumConstructor()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_ENUM_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
@@ -130,15 +143,16 @@ public class ConstructorCommandTest
   @Test
   public void anonymousConstructor()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
     String result = (String)Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "217", "-e", "utf-8", "-r", "[\"number\"]"
+      "-f", TEST_FILE, "-o", "198", "-e", "utf-8", "-r", "[\"number\"]"
     });
 
-    System.out.println(result);
     assertEquals(
         "Anonymous classes cannot contain explicitly declared constructors.", result);
   }
@@ -146,29 +160,34 @@ public class ConstructorCommandTest
   @Test
   public void superConstructor()
   {
+    modifies(Jdt.TEST_PROJECT, TEST_CHILD_FILE);
+
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
+    // now test the subclass constructors
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "1", "-e", "utf-8", "-s"
+      "-f", TEST_CHILD_FILE, "-o", "1", "-e", "utf-8", "-s"
     });
 
-    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_CHILD_FILE);
     assertTrue("Constructor not found.",
         Pattern.compile(
-          "public TestConstructor\\(int id, String name\\)\\s*\\{\\s*super\\(id, name\\);\\s*\\}")
+          "public TestConstructorChild\\(int id, String name\\)\\s*" +
+          "\\{\\s*super\\(id, name\\);\\s*\\}")
         .matcher(contents).find());
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "1", "-e", "utf-8", "-s", "-r", "[\"names\"]"
+      "-f", TEST_CHILD_FILE, "-o", "1", "-e", "utf-8", "-s", "-r", "[\"names\"]"
     });
 
-    contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
+    contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_CHILD_FILE);
     assertTrue("Constructor not found.",
         Pattern.compile(
-          "public TestConstructor\\(Set<String> names\\)\\s*\\{\\s*this\\.names = names;\\s*\\}")
+          "public TestConstructorChild\\(Set<String> names\\)\\s*" +
+          "\\{\\s*this\\.names = names;\\s*\\}")
         .matcher(contents).find());
   }
 }

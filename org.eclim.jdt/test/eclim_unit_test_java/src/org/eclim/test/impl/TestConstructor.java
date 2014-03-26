@@ -4,9 +4,9 @@ import java.util.Comparator;
 import java.util.Set;
 
 public class TestConstructor
-  extends TestConstructorSuper
 {
-  private Set<String> names;
+  private int id;
+  private String name;
 
   private Comparator c = new Comparator(){
 
