@@ -38,7 +38,7 @@
   </feature>
 
   <feature id="adt">
-    <dependency id="com.android.ide.eclipse.adt" version="22.6.1">
+    <dependency id="com.android.ide.eclipse.adt" version="22.6.2">
       <site url="https://dl-ssl.google.com/android/eclipse/"/>
     </dependency>
   </feature>
@@ -50,8 +50,8 @@
   </feature>
 
   <feature id="sdt210">
-    <dependency id="org.scala-ide.sdt.feature" version="3.0.1" match="v-2_10">
-      <site url="http://download.scala-ide.org/sdk/e38/scala210/stable/site"/>
+    <dependency id="org.scala-ide.sdt.feature" version="3.0.2" match="v-2_10">
+      <site url="http://download.scala-ide.org/sdk/helium/e38/scala210/stable/site"/>
     </dependency>
   </feature>
 </dependencies>
