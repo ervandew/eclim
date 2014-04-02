@@ -68,7 +68,7 @@ public class AddInterpreterCommand
       if (commandLine.hasOption(Options.NAME_OPTION)){
         info.setName(commandLine.getValue(Options.NAME_OPTION));
       }else{
-        info.setName(FileUtils.getFileName(path));
+        info.setName(FileUtils.getBaseName(path).replace(".exe", ""));
       }
 
       IInterpreterInfo[] updated = new IInterpreterInfo[existing.length + 1];
