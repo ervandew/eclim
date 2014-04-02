@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -102,6 +102,11 @@ function! eclim#display#signs#UnplaceAll(list) " {{{
 endfunction " }}}
 
 function! eclim#display#signs#Toggle(name, line) " {{{
+  if !g:EclimSignLevel
+    call eclim#util#Echo('Eclim signs have been disabled.')
+    return
+  endif
+
   " Toggle a sign on the current line.
   if a:line > 0
     let existing = eclim#display#signs#GetExisting(a:name)
@@ -129,6 +134,11 @@ endfunction " }}}
 function! eclim#display#signs#ViewSigns(name) " {{{
   " Open a window to view all placed signs with the given name in the current
   " buffer.
+
+  if !g:EclimSignLevel
+    call eclim#util#Echo('Eclim signs have been disabled.')
+    return
+  endif
 
   let filename = expand('%:p')
   let signs = eclim#display#signs#GetExisting(a:name)
@@ -181,6 +191,10 @@ function! eclim#display#signs#GetExisting(...) " {{{
   "
   " Optionally a sign name may be supplied to only retrieve signs of that name.
 
+  if !has('signs') || !g:EclimSignLevel
+    return []
+  endif
+
   let bufnr = bufnr('%')
 
   redir => signs
@@ -204,6 +218,10 @@ endfunction " }}}
 function! eclim#display#signs#HasExisting(...) " {{{
   " Determines if there are any existing signs.
   " Optionally a sign name may be supplied to only test for signs of that name.
+
+  if !has('signs') || !g:EclimSignLevel
+    return 0
+  endif
 
   let bufnr = bufnr('%')
 
