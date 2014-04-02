@@ -120,6 +120,12 @@ TODO {{{
       - :verbose set completefunc?
       - is the current file in a src path
 
+    - Flat or additionally filtered project tree view:
+      https://groups.google.com/d/msg/eclim-user/qzOMkyIndSk/Wb9T2GUMCrQJ
+      > In the window of "ProjectTree", Is there a way to hide any empty folder and
+      > only show a fatten view  of current project. Just like the "Package
+      > Presentation -> Flat" does in Eclipse
+
     - update nailgun to pass signals from client to server
       - support ctrl-c on client killing process on server for :Java and :JUnit
         - extend task and override createWatchdog() giving us a handle to the
