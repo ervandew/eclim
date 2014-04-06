@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,6 +15,71 @@
 
 History of Changes
 ==================
+
+.. _2.3.3:
+
+2.3.3 (Apr. 06, 2014)
+---------------------
+
+Installer:
+  - Fixed running of the installer with Java 8.
+
+Eclimd:
+  - Starting eclimd in the background is not done using the ``-b`` flag now
+    instead of passing a ``start`` flag.
+  - Eclimd debug logging can now be enabled at startup using the ``--debug``
+    flag.
+
+Ant:
+  - Fixed ant target completion for newer ant versions (those that require java
+    5).
+
+C/C++:
+  - Fixed adding of includes etc. in the C++ sections of **:CProjectConfig**.
+  - Fixed searching to include macro results.
+  - TODO/FIXME markers are now ignored by validation.
+
+Html:
+  - Fixed indentation after unclosed ``<br>`` and ``<input>`` tags.
+
+Java:
+  - Fixed possible infinite loop when adding imports using **:JavaImport**.
+  - Fixed an edge case which caused an additional empty line to be added between
+    imports that should be grouped together when using **:JavaImport**.
+  - Fixed **:Java** command if the main class has no package declaration.
+  - Fixed issue with large portions of code being re-formatted when applying a
+    correction suggestion.
+  - TODO/FIXME markers are now ignored by validation.
+  - Some of the eclipse java code completion settings are now available via
+    **:ProjectSettings**.
+
+Javascript:
+  - Let tern supersede eclim's limited javascript completion.
+
+Maven/Ivy:
+  - Removed dependency searching since the search provider no longer exists.
+
+Python:
+  - Eclim's python support been re-written to use pydev instead of rope.
+
+    .. note::
+
+      Any exiting eclim python projects you have should be re-created with the
+      new ``python`` nature:
+
+      ::
+
+        :ProjectCreate /path/to/project -n python
+
+Scala:
+  - Disabled use of temp files which could cause some validation errors.
+  - Added support for :ref:`automated imports <:ScalaImport>`.
+
+Xml:
+  - Fixed validation of xml files with no dtd/schema to not raise errors on
+    missing dtd for non-english users.
+
+| :gitlog:`Git Log (2.3.3) <2.3.2...2.3.3>`
 
 .. _2.3.2:
 .. _1.7.18:

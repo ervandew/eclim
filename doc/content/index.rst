@@ -123,6 +123,23 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Apr. 06, 2014
+-------------
+
+This release includes many bug fixes and refinements as well as a rewrite of
+eclim's python support to utilize pydev instead of rope.
+
+- :ref:`Eclim 2.3.3 <2.3.3>`
+
+.. warning::
+
+  Any exiting eclim python projects you have should be re-created with the new
+  ``python`` nature:
+
+  ::
+
+    :ProjectCreate /path/to/project -n python
+
 Sep. 12, 2013
 -------------
 
