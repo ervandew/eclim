@@ -50,7 +50,7 @@
   </feature>
 
   <feature id="sdt210">
-    <dependency id="org.scala-ide.sdt.feature" version="3.0.2" match="v-2_10">
+    <dependency id="org.scala-ide.sdt.feature" version="3.0.3" match="v-2_10">
       <site url="http://download.scala-ide.org/sdk/helium/e38/scala210/stable/site"/>
     </dependency>
   </feature>
