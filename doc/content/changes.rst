@@ -25,8 +25,8 @@ Installer:
   - Fixed running of the installer with Java 8.
 
 Eclimd:
-  - Starting eclimd in the background is not done using the ``-b`` flag now
-    instead of passing a ``start`` flag.
+  - Starting eclimd in the background is now done using the ``-b`` flag instead
+    of passing a ``start`` argument.
   - Eclimd debug logging can now be enabled at startup using the ``--debug``
     flag.
 
