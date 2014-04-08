@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,9 +52,7 @@ public class ArchiveReadCommand
   private static final String URI_PREFIX = "file://";
   private static final Pattern WIN_PATH = Pattern.compile("^/[a-zA-Z]:/.*");
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String execute(CommandLine commandLine)
     throws Exception
   {
@@ -65,9 +63,10 @@ public class ArchiveReadCommand
       String file = commandLine.getValue(Options.FILE_OPTION);
 
       fsManager = VFS.getManager();
-      FileObject fileObject = fsManager.resolveFile(file);
+      FileObject fileObject = fsManager.resolveFile(file.replace("%", "%25"));
       FileObject tempFile = fsManager.resolveFile(
-          SystemUtils.JAVA_IO_TMPDIR + "/eclim/" + fileObject.getName().getPath());
+          SystemUtils.JAVA_IO_TMPDIR + "/eclim/" +
+          fileObject.getName().getPath().replace("%", "%25"));
 
       // the vfs file cache isn't very intelligent, so clear it.
       fsManager.getFilesCache().clear(fileObject.getFileSystem());

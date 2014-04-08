@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ public class FileOffsets
   {
     try{
       FileSystemManager fsManager = VFS.getManager();
-      FileObject file = fsManager.resolveFile(filename);
+      FileObject file = fsManager.resolveFile(filename.replace("%", "%25"));
 
       // disable caching (the cache seems to become invalid at some point
       // causing vfs errors).

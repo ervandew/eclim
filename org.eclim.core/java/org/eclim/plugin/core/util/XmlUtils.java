@@ -606,7 +606,7 @@ public class XmlUtils
         location = TEMP_PREFIX + location;
 
         FileSystemManager fsManager = VFS.getManager();
-        FileObject tempFile = fsManager.resolveFile(location);
+        FileObject tempFile = fsManager.resolveFile(location.replace("%", "%25"));
 
         // check if temp file already exists.
         if(!tempFile.exists() || tempFile.getContent().getSize() == 0){
