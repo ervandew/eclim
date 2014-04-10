@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -143,8 +143,8 @@ etc, as well as those defined by the antcontrib_ project.
 .. _\:AntUserDoc:
 
 If you have other tasks that you wish to add to this plugin, you can do so by
-defining the global variable **g:AntUserDocs**.  The value of this variable is
-expected to be a map of element names to the url where the documentation for
+defining the global variable **g:EclimAntUserDocs**. The value of this variable
+is expected to be a map of element names to the url where the documentation for
 that element can be found.  The url also supports a substitution variable,
 <element> which will be substituted with the lower case version of the element
 name.
@@ -155,7 +155,7 @@ The following is an example which adds the tasks from the apache cactus project.
 
   let s:cactus =
     \ 'http://jakarta.apache.org/cactus/integration/ant/task_<element>.html'
-  let g:AntUserDocs = {
+  let g:EclimAntUserDocs = {
       \  'cactifywar'     : s:cactus,
       \  'cactifyear'     : s:cactus,
       \  'cactus'         : s:cactus,

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,13 +23,13 @@
 " }}}
 
 " Global Varables {{{
-if !exists("g:AntDocDefaultUrl")
-  let g:AntDocDefaultUrl =
+if !exists("g:EclimAntDocDefaultUrl")
+  let g:EclimAntDocDefaultUrl =
     \ 'http://www.google.com/search?btnI=1&q=allintitle%3A<element>+task+%7C+type+site%3Aant.apache.org'
 endif
 
-if !exists("g:AntUserDocs")
-  let g:AntUserDocs = {}
+if !exists("g:EclimAntUserDocs")
+  let g:EclimAntUserDocs = {}
 endif
 " }}}
 
@@ -138,10 +138,9 @@ let s:element_docs = {
   \ }
 " }}}
 
-" FindDoc(element) {{{
-" Open the url to the documentation for the supplied element name or if not
-" provided, the element name under the cursor.
-function! eclim#java#ant#doc#FindDoc(element)
+function! eclim#java#ant#doc#FindDoc(element) " {{{
+  " Open the url to the documentation for the supplied element name or if not
+  " provided, the element name under the cursor.
   let element = a:element
   if element == ''
     let col = eclim#util#GetCurrentElementColumn()
@@ -155,10 +154,10 @@ function! eclim#java#ant#doc#FindDoc(element)
 
   if has_key(s:element_docs, element)
     let url = s:element_docs[element]
-  elseif has_key(g:AntUserDocs, element)
-    let url = g:AntUserDocs[element]
+  elseif has_key(g:EclimAntUserDocs, element)
+    let url = g:EclimAntUserDocs[element]
   else
-    let url = g:AntDocDefaultUrl
+    let url = g:EclimAntDocDefaultUrl
   endif
 
   "let url = escape(url, '&%#')
