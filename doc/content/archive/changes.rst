@@ -375,7 +375,7 @@ Java:
     signatures.
   - Updated :ref:`:JavaImport` and :JavaImportSort to honor eclipse's
     import order preference and added the ability to edit that preference via
-    :ref:`:ProjectSettings` and :ref:`:EclimSettings`.
+    :ref:`:ProjectSettings` and **:EclimSettings**.
   - Added initial :doc:`refactoring </vim/java/refactor>` support.
 
 :gitlog:`Git Log (1.5.2) <1.5.1...1.5.2>`
@@ -442,7 +442,7 @@ Ruby:
 
 Java:
   - Added ability to configure java indentation globally via
-    :ref:`:EclimSettings` or per project using :ref:`:ProjectSettings`.
+    **:EclimSettings** or per project using :ref:`:ProjectSettings`.
 
 :gitlog:`Git Log (1.5.0) <1.4.9...1.5.0>`
 
@@ -1204,7 +1204,7 @@ Eclipse:
 
 Eclim:
   - Added support for global settings/preferences via new
-    :ref:`:EclimSettings <:EclimSettings>` command.
+    **:Settings** command.
 
 Java:
   - Delegate method creation.

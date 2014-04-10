@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,12 +31,12 @@ Commands
 - **:ShutdownEclim** -
   Shuts down the current running eclimd instance.
 
-.. _\:EclimSettings:
+.. _\:WorkspaceSettings:
 
-- **:EclimSettings** -
-  Allows you to view / edit the global :doc:`settings </vim/settings>`.
-  For project level settings see the :ref:`:ProjectSettings` command on the
-  :doc:`project documentation page </vim/core/project>`.
+- **:WorkspaceSettings** -
+  Allows you to view / edit the global workspace :doc:`settings
+  </vim/settings>`. For project level settings see the :ref:`:ProjectSettings`
+  command on the :doc:`project documentation page </vim/core/project>`.
 
 .. _\:EclimDisable:
 

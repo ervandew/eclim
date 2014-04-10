@@ -25,7 +25,8 @@ Global Commands
 
 - :ref:`:PingEclim <:PingEclim>` - Pings eclimd server.
 - :ref:`:ShutdownEclim <:ShutdownEclim>` - Shuts down eclimd server.
-- :ref:`:EclimSettings <:EclimSettings>` - View / edit global settings.
+- :ref:`:WorkspaceSettings <:WorkspaceSettings>` -
+  View / edit global workspace settings.
 - :ref:`:EclimDisable <:EclimDisable>` -
   Temporarily disables communication with eclimd.
 - :ref:`:EclimEnable <:EclimEnable>` - Re-enables communication with eclimd.

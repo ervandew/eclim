@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -147,9 +147,9 @@ endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call eclim#ShutdownEclim()
 endif
-if !exists(":EclimSettings")
+if !exists(":WorkspaceSettings")
   command -nargs=? -complete=customlist,eclim#client#nailgun#CommandCompleteWorkspaces
-    \ EclimSettings :call eclim#Settings('<args>')
+    \ WorkspaceSettings :call eclim#Settings('<args>')
 endif
 if !exists(":EclimDisable")
   command EclimDisable :call eclim#Disable()

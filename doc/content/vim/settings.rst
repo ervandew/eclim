@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,13 @@ settings.
 
 There are two types of settings available:
 
-- **Eclim global / project settings.**
+- **Global workspace / project settings.**
 
   These are settings that reside in your Eclipse workspace and are used to
-  control certain aspects of the eclim server's behavior.  These settings
+  control certain aspects of the eclim server's behavior. These settings
   can be viewed and modified using one of the following commands:
 
-  - :ref:`:EclimSettings`
+  - :ref:`:WorkspaceSettings`
   - :ref:`:ProjectSettings`
 
 - **Vim global variable settings.**
@@ -37,7 +37,7 @@ There are two types of settings available:
   These are your typical global Vim variables which can be set within your
   vimrc file.
 
-Givin these two types, you may be ask, why do we need two? Or, when a new
+Given these two types, you may be ask, why do we need two? Or, when a new
 setting is added, how do you decide which type to make it?
 
 The reasoning behind having two types is that there are some settings that may

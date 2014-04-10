@@ -307,7 +307,7 @@ function! eclim#Settings(workspace) " {{{
     call add(content, '# }')
   endif
 
-  call eclim#util#TempWindow("Eclim_Global_Settings", content)
+  call eclim#util#TempWindow("Workspace_Settings", content)
   setlocal buftype=acwrite
   setlocal filetype=jproperties
   setlocal noreadonly

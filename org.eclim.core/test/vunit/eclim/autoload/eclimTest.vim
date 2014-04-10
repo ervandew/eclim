@@ -52,7 +52,7 @@ function! TestPing() " {{{
 endfunction " }}}
 
 function! TestSettings() " {{{
-  exec 'EclimSettings ' . g:TestEclimWorkspace
+  exec 'WorkspaceSettings ' . g:TestEclimWorkspace
   call vunit#AssertEquals('Eclim_Global_Settings', expand('%'),
     \ "Didn't open settings window.")
   close

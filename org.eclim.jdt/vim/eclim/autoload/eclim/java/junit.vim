@@ -126,7 +126,7 @@ function! eclim#java#junit#JUnitResult(test) " {{{
   if path == ''
     call eclim#util#EchoWarning(
       \ "Output directory setting for 'junit' not set. " .
-      \ "Use :EclimSettings or :ProjectSettings to set it.")
+      \ "Use :WorkspaceSettings or :ProjectSettings to set it.")
     return
   endif
 
@@ -239,7 +239,7 @@ function! eclim#java#junit#CommandCompleteResult(argLead, cmdLine, cursorPos) " 
   if path == ''
     call eclim#util#EchoWarning(
       \ "Output directory setting for 'junit' not set. " .
-      \ "Use :EclimSettings or :ProjectSettings to set it.")
+      \ "Use :WorkspaceSettings or :ProjectSettings to set it.")
     return []
   endif
 

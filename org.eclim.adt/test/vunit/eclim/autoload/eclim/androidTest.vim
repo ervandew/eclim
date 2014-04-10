@@ -32,7 +32,7 @@ function! TestAndroidReload() " {{{
 endfunction " }}}
 
 function! TestAndroidSdkSetting() " {{{
-  EclimSettings
+  WorkspaceSettings
   call cursor(1, 1)
 
   call vunit#AssertTrue(
