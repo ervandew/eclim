@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _2.3.4:
+
+2.3.4 (Apr. 12, 2014)
+---------------------
+
+Project:
+  - Fixed the ``projects`` command result on Windows.
+
+| :gitlog:`Git Log (2.3.4) <2.3.3...2.3.4>`
+
 .. _2.3.3:
 
 2.3.3 (Apr. 06, 2014)
