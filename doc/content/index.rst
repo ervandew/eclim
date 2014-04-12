@@ -123,6 +123,14 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Apr. 12, 2014
+-------------
+
+Eclim has been updated to fix an issue on Windows that could prevent many
+features from working.
+
+- :ref:`Eclim 2.3.4 <2.3.4>`
+
 Apr. 06, 2014
 -------------
 
