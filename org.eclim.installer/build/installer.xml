@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2013  Eric Van Dewoestine
+  Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -202,12 +202,6 @@
 
     <eclim:installiu repository="file://${temp}/update-site" iu="org.eclim"/>
 
-    <replace
-        file="${eclim.home}/bin/native/linux/eclimd.desktop"
-        token="$${eclipse.home}" value="${eclipse.local}"/>
-    <replace
-        file="${eclim.home}/bin/native/linux/eclimd"
-        token="$${eclipse.home}" value="${eclipse.local}"/>
     <if>
       <os family="windows"/>
       <then>
@@ -220,6 +214,12 @@
         <replace file="${eclim.home}/bin/eclimd"
             token="#$${eclipse.home}"
             value="ECLIM_ECLIPSE_HOME=&quot;${eclipse.home}&quot;"/>
+        <replace
+            file="${eclim.home}/bin/native/linux/eclimd.desktop"
+            token="$${eclipse.home}" value="${eclipse.local}"/>
+        <replace
+            file="${eclim.home}/bin/native/linux/eclimd"
+            token="$${eclipse.home}" value="${eclipse.local}"/>
 
         <chmod perm="755">
           <fileset dir="${eclim.home}/bin">
