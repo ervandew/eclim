@@ -26,7 +26,7 @@
     \ '-command <search> -n "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <length> <args>'
   let s:search_pattern = '-command <search>'
-  let s:options = ['-p', '-t', '-x', '-s', '-i']
+  let s:options = ['-p', '-t', '-x', '-s', '-i', '-a']
   let s:contexts = ['all', 'declarations', 'implementors', 'references']
   let s:scopes = ['all', 'project']
   let s:types = [
@@ -41,6 +41,7 @@
     \ 'method',
     \ 'package',
     \ 'type']
+  let s:actions = ['split', 'vsplit', 'edit', 'tabnew', 'lopen']
 
   let s:search_alt_all = '\<<element>\>'
   let s:search_alt_references = s:search_alt_all
@@ -265,6 +266,14 @@ function! s:BuildPattern() " {{{
   return class
 endfunction " }}}
 
+function! eclim#java#search#SearchContextAndDisplay(args) " {{{
+  let argline = '-a ' . g:EclimJavaSearchSingleResult
+  if a:args =~ '-a '
+    let argline = matchstr(a:args, '-a \w\+')
+  endif
+  call eclim#java#search#SearchAndDisplay('java_search', argline)
+endfunction " }}}
+
 function! eclim#java#search#SearchAndDisplay(type, args) " {{{
   " Execute a search and displays the results via quickfix.
 
@@ -279,6 +288,11 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
   if argline =~ '^\s*\w'
     let argline = '-p ' . argline
   endif
+
+  " get the action to take when the search returns only one result
+  let action = eclim#util#GetSingleResultAction(
+    \ argline, g:EclimJavaSearchSingleResult)
+  let argline = eclim#util#RemoveSingleResultActionFromArguments(argline)
 
   let results = s:Search(a:type, argline)
   if type(results) != g:LIST_TYPE
@@ -296,10 +310,10 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
         endif
 
       " single result in another file.
-      elseif len(results) == 1 && g:EclimJavaSearchSingleResult != "lopen"
+      elseif len(results) == 1 && action != "lopen"
         let entry = getloclist(0)[0]
         let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-        call eclim#util#GoToBufferWindowOrOpen(name, g:EclimJavaSearchSingleResult)
+        call eclim#util#GoToBufferWindowOrOpen(name, action)
         call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
         call eclim#display#signs#Update()
         call cursor(entry.lnum, entry.col)
@@ -360,6 +374,10 @@ function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPo
     let types = deepcopy(s:types)
     call filter(types, 'v:val =~ "^' . argLead . '"')
     return types
+  elseif cmdLine =~ '-a\s\+[a-z]*$'
+    let actions = deepcopy(s:actions)
+    call filter(actions, 'v:val =~ "^' . argLead . '"')
+    return actions
   elseif cmdLine =~ '-x\s\+[a-z]*$'
     let contexts = deepcopy(s:contexts)
     call filter(contexts, 'v:val =~ "^' . argLead . '"')
@@ -369,6 +387,49 @@ function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPo
     let index = 0
     for option in options
       if a:cmdLine =~ option
+        call remove(options, index)
+      else
+        let index += 1
+      endif
+    endfor
+    return options
+  endif
+  return []
+endfunction " }}}
+
+function! eclim#java#search#CommandCompleteJavaSearchContext(argLead, cmdLine, cursorPos) " {{{
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+  if cmdLine =~ '-a\s\+[a-z]*$'
+    let actions = deepcopy(s:actions)
+    call filter(actions, 'v:val =~ "^' . argLead . '"')
+    return actions
+  endif
+  return ['-a']
+endfunction " }}}
+
+function! eclim#java#search#CommandCompleteJavaDocSearch(argLead, cmdLine, cursorPos) " {{{
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+  if cmdLine =~ '-s\s\+[a-z]*$'
+    let scopes = deepcopy(s:scopes)
+    call filter(scopes, 'v:val =~ "^' . argLead . '"')
+    return scopes
+  elseif cmdLine =~ '-t\s\+[a-z]*$'
+    let types = deepcopy(s:types)
+    call filter(types, 'v:val =~ "^' . argLead . '"')
+    return types
+  elseif cmdLine =~ '-x\s\+[a-z]*$'
+    let contexts = deepcopy(s:contexts)
+    call filter(contexts, 'v:val =~ "^' . argLead . '"')
+    return contexts
+  elseif cmdLine =~ '\s\+[-]\?$'
+    let options = deepcopy(s:options)
+    let index = 0
+    for option in options
+      if a:cmdLine =~ option || option =~ '-a'
         call remove(options, index)
       else
         let index += 1

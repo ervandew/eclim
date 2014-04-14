@@ -168,12 +168,13 @@ if !exists(":JavaSearch")
     \ JavaSearch :call eclim#java#search#SearchAndDisplay('java_search', '<args>')
 endif
 if !exists(":JavaSearchContext")
-  command -buffer JavaSearchContext
-    \ :call eclim#java#search#SearchAndDisplay('java_search', '')
+  command -buffer -nargs=?
+    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearchContext
+    \ JavaSearchContext :call eclim#java#search#SearchContextAndDisplay('<args>')
 endif
 if !exists(":JavaDocSearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearch
+    \ -complete=customlist,eclim#java#search#CommandCompleteJavaDocSearch
     \ JavaDocSearch :call eclim#java#search#SearchAndDisplay('java_docsearch', '<args>')
 endif
 
