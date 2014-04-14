@@ -1630,12 +1630,12 @@ endfunction " }}}
 
 function! eclim#util#ExtractCmdArgs(argline, extract) " {{{
   " Extracts one or more args from the given argline.
-  " The 'extract' arg here is a list of args in the for '-x' where the -x arg
+  " The 'extract' arg here is a list of args in the form '-x' where the -x arg
   " would be extracted. You can also use the getopts like syntax of '-x:'
   " (trailing colon) to indicate that you want the arg to the -x option to be
   " extracted as well.
   "
-  " Returns a tuple with a list of the extracted args the updated argline.
+  " Returns a tuple with a list of the extracted args and the updated argline.
   let extract = type(a:extract) == g:LIST_TYPE ? a:extract : [a:extract]
   let args = eclim#util#ParseCmdLine(a:argline)
   let extracted_args = []
