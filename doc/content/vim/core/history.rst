@@ -29,7 +29,7 @@ adding the following to your vimrc:
 
 .. code-block:: vim
 
-  let g:EclimProjectKeepLocalHistory = 1
+  let g:EclimKeepLocalHistory = 1
 
 
 .. _\:History:
@@ -76,9 +76,9 @@ Eclipse Settings
 
 :doc:`Vim Settings </vim/settings>`
 
-.. _g\:EclimProjectKeepLocalHistory:
+.. _g\:EclimKeepLocalHistory:
 
-- **g:EclimProjectKeepLocalHistory (Default: 0)** -
+- **g:EclimKeepLocalHistory (Default: 0)** -
   Controls whether writes in vim will update the eclipse local history. This is
   disabled by default unless gvim was started from the eclipse gui, in which
   case eclim will honor the default eclipse editor behavior and update the

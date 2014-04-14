@@ -19,14 +19,6 @@
 "
 " }}}
 
-" Global Variables {{{
-
-if !exists("g:EclimScalaValidate")
-  let g:EclimScalaValidate = 1
-endif
-
-" }}}
-
 " Options {{{
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#scala#complete#CodeComplete'

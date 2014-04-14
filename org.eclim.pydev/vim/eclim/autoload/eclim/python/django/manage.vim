@@ -19,12 +19,6 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists('g:EclimDjangoAdmin')
-  let g:EclimDjangoAdmin = 'django-admin.py'
-endif
-" }}}
-
 " Script Variables {{{
 let s:manage_commands = []
 let s:app_commands = [

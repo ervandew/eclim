@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Test case for eclim.vim
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,7 +29,7 @@ endfunction " }}}
 
 function! TestGetEclimCommand() " {{{
   let instance = eclim#client#nailgun#ChooseEclimdInstance()
-  let result = eclim#client#nailgun#GetEclimCommand(instance.home)
+  let [retcode, result] = eclim#client#nailgun#GetEclimCommand(instance.home)
   call vunit#AssertTrue(result =~ '\<eclim\>', "Invalid eclim command.")
 endfunction " }}}
 
@@ -51,9 +48,16 @@ function! TestPing() " {{{
   "endtry
 endfunction " }}}
 
-function! TestSettings() " {{{
+function! TestWorkspaceSettings() " {{{
   exec 'WorkspaceSettings ' . g:TestEclimWorkspace
-  call vunit#AssertEquals('Eclim_Global_Settings', expand('%'),
+  call vunit#AssertEquals('Workspace_Settings', expand('%'),
+    \ "Didn't open settings window.")
+  close
+endfunction " }}}
+
+function! TestVimSettings() " {{{
+  VimSettings
+  call vunit#AssertEquals('Vim_Settings', expand('%'),
     \ "Didn't open settings window.")
   close
 endfunction " }}}

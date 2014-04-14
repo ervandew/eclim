@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/search.html
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -20,18 +17,6 @@
 " You should have received a copy of the GNU General Public License
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
-" }}}
-
-" Global Varables {{{
-  if !exists("g:EclimJavaDocSearchSingleResult")
-    " possible values ('open', 'lopen')
-    let g:EclimJavaDocSearchSingleResult = "open"
-  endif
-
-  if !exists("g:EclimJavaSearchSingleResult")
-    " possible values ('split', 'edit', 'lopen')
-    let g:EclimJavaSearchSingleResult = g:EclimDefaultFileOpenAction
-  endif
 " }}}
 
 " Script Varables {{{
@@ -202,7 +187,7 @@ function! s:SearchAlternate(argline, element) " {{{
     " narrow down to, hopefully, a distribution path for a narrower search.
     let response = eclim#util#PromptList(
       \ "Multiple type matches. Please choose the relevant file.",
-      \ files, g:EclimInfoHighlight)
+      \ files, g:EclimHighlightInfo)
     if response == -1
       return
     endif

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,6 +26,15 @@
 if !exists(":EclimValidate")
   command EclimValidate :call <SID>Validate()
 endif
+" }}}
+
+" Global Variables {{{
+let g:NUMBER_TYPE = 0
+let g:STRING_TYPE = 1
+let g:FUNCREF_TYPE = 2
+let g:LIST_TYPE = 3
+let g:DICT_TYPE = 4
+let g:FLOAT_TYPE = 5
 " }}}
 
 " Script Variables {{{
@@ -165,6 +174,9 @@ function! s:Init() " {{{
   "endfor
 
   "exec 'set runtimepath+=' .  basedir . '/eclim/after'
+
+  " load settings before any calls to register them.
+  call eclim#LoadVimSettings()
 
   " need to be manually sourced
   runtime! eclim/plugin/*.vim

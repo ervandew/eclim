@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/hierarchy.html
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,20 +19,13 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists('g:EclimJavaHierarchyDefaultAction')
-  let g:EclimJavaHierarchyDefaultAction = g:EclimDefaultFileOpenAction
-endif
-" }}}
-
 " Script Variables {{{
 let s:command_hierarchy =
   \ '-command java_hierarchy -p "<project>" -f "<file>" -o <offset> -e <encoding>'
 
 " }}}
 
-" Hierarchy() {{{
-function! eclim#java#hierarchy#Hierarchy()
+function! eclim#java#hierarchy#Hierarchy() " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -94,8 +84,7 @@ function! eclim#java#hierarchy#Hierarchy()
     \ :call eclim#help#BufferHelp(b:hierarchy_help, 'vertical', 40)<cr>
 endfunction " }}}
 
-" s:FormatHierarchy(hierarchy, lines, indent) {{{
-function! s:FormatHierarchy(hierarchy, lines, info, indent)
+function! s:FormatHierarchy(hierarchy, lines, info, indent) " {{{
   call add(a:lines, a:indent . a:hierarchy.name)
   call add(a:info, a:hierarchy.qualified)
   let indent = eclim#util#GetIndent(1)
@@ -104,8 +93,7 @@ function! s:FormatHierarchy(hierarchy, lines, info, indent)
   endfor
 endfunction " }}}
 
-" s:Open(action) {{{
-function! s:Open(action)
+function! s:Open(action) " {{{
   let line = line('.')
   if line > len(b:hierarchy_info)
     return

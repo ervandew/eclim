@@ -31,6 +31,17 @@ Commands
 - **:ShutdownEclim** -
   Shuts down the current running eclimd instance.
 
+.. _\:VimSettings:
+
+- **:VimSettings** -
+  Allows you to view and edit all of eclim's vim client settings. Settings
+  edited here will be stored at ``$HOME/.eclim/.eclim_settings``.
+
+  .. note::
+
+    If you have any ``g:EclimXXX`` settings in your vimrc or equivalent, those
+    will take precedence over any settings edited using **:VimSettings**.
+
 .. _\:WorkspaceSettings:
 
 - **:WorkspaceSettings** -
@@ -100,62 +111,50 @@ The following is a list of some of the common Vim variables available.
 
 .. _g\:EclimLogLevel:
 
-- **g:EclimLogLevel** (Default: 4)
+- **g:EclimLogLevel** (Default: 'info')
 
-  Much like the Vim 'verbose' option, this variable allows you to
-  control the level of output from eclim as follows\:
+  This variable allows you to control the level of output from eclim as
+  follows\:
 
-  - <= 0: No output.
-  - >= 1: Fatal errors.
-  - >= 2: Errors.
-  - >= 3: Warning messages.
-  - >= 4: Info messages.
-  - >= 5: Debug messages.
-  - >= 6: Trace messages.
+  - 'trace' - Show all trace, debug, info, warning, and error messages.
+  - 'debug' - Show all debug, info, warning, and error messages.
+  - 'info' - Show all info, warning, and error messages.
+  - 'warning' - Show only warning, and error messages.
+  - 'error' - Show only error messages.
+  - 'off' - Don't display any messages.
 
   Each level also has a corresponding variable to set the highlighting group
   used for the text.
 
-  .. _g\:EclimFatalHighlight:
+  .. _g\:EclimHighlightError:
 
-  - **g:EclimFatalHighlight** (Default: "Error")
+  - **g:EclimHighlightError** (Default: "Error")
 
-  .. _g\:EclimErrorHighlight:
+  .. _g\:EclimHighlightWarning:
 
-  - **g:EclimErrorHighlight** (Default: "Error")
+  - **g:EclimHighlightWarning** (Default: "WarningMsg")
 
-  .. _g\:EclimWarningHighlight:
+  .. _g\:EclimHighlightInfo:
 
-  - **g:EclimWarningHighlight** (Default: "WarningMsg")
+  - **g:EclimHighlightInfo** (Default: "Statement")
 
-  .. _g\:EclimInfoHighlight:
+  .. _g\:EclimHighlightDebug:
 
-  - **g:EclimInfoHighlight** (Default: "Statement")
+  - **g:EclimHighlightDebug** (Default: "Normal")
 
-  .. _g\:EclimDebugHighlight:
+  .. _g\:EclimHighlightTrace:
 
-  - **g:EclimDebugHighlight** (Default: "Normal")
-
-  .. _g\:EclimTraceHighlight:
-
-  - **g:EclimTraceHighlight** (Default: "Normal")
+  - **g:EclimHighlightTrace** (Default: "Normal")
 
 .. _g\:EclimSignLevel:
 
-- **g:EclimSignLevel** (Default: 5)
+- **g:EclimSignLevel** (Default: 'info')
 
   Behaves just like **g:EclimLogLevel** except this applies
   to placing of Vim signs for displaying validation errors / warnings,
-  or marking :[vim]grep matches.
+  or marking quickfix/location list entries.
 
   The resulting signs also use the same highlighting variables above.
-
-.. _g\:EclimEchoHighlight:
-
-- **g:EclimEchoHighlight** (Default: "Statement")
-
-  Determines which highlight group will be used for informative
-  messages.
 
 .. _g\:EclimBrowser:
 

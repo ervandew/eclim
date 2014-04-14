@@ -1,10 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -19,23 +17,6 @@
 " You should have received a copy of the GNU General Public License
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
-" }}}
-
-" Global Variables {{{
-
-  if !exists("g:EclimJavascriptValidate")
-    let g:EclimJavascriptValidate = 1
-  endif
-
-  if !exists("g:EclimJavascriptLintEnabled")
-    " enabling by default until jsdt validation is mature enough to use.
-    "let g:EclimJavascriptLintEnabled = 0
-    let g:EclimJavascriptLintEnabled = 1
-  endif
-
-  if !exists('g:EclimJavascriptLintConf')
-    let g:EclimJavascriptLintConf = eclim#UserHome() . '/.jslrc'
-  endif
 " }}}
 
 " Script Variables {{{

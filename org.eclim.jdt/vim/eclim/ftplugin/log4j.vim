@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/log4j/index.html
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,14 +22,6 @@
 runtime! ftplugin/xml.vim
 runtime! indent/xml.vim
 runtime eclim/ftplugin/java-xml.vim
-
-" Global Variables {{{
-
-if !exists("g:EclimLog4jValidate")
-  let g:EclimLog4jValidate = 1
-endif
-
-" }}}
 
 " Autocmds {{{
 

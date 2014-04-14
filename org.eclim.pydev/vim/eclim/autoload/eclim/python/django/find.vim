@@ -19,18 +19,6 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists('g:EclimDjangoFindAction')
-  let g:EclimDjangoFindAction = g:EclimDefaultFileOpenAction
-endif
-if !exists('g:EclimDjangoStaticPaths')
-  let g:EclimDjangoStaticPaths = []
-endif
-if !exists('g:EclimDjangoStaticPattern')
-  let g:EclimDjangoStaticPattern = ''
-endif
-" }}}
-
 function! eclim#python#django#find#FindFilterOrTag(project_dir, element, type) " {{{
   " Finds and opens the supplied filter or tag definition.
 

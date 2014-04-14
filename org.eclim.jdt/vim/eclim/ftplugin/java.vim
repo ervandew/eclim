@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/index.html
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
@@ -20,30 +17,6 @@
 " You should have received a copy of the GNU General Public License
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
-" }}}
-
-" Global Variables {{{
-
-if !exists("g:EclimJavaValidate")
-  let g:EclimJavaValidate = 1
-endif
-
-if !exists("g:EclimJavaSetCommonOptions")
-  let g:EclimJavaSetCommonOptions = 1
-endif
-
-if !exists("g:EclimJavaCompilerAutoDetect")
-  let g:EclimJavaCompilerAutoDetect = 1
-endif
-
-if !exists("g:EclimJavaSyntasticEnabled")
-  let g:EclimJavaSyntasticEnabled = 0
-endif
-
-if !exists('g:EclimJavaCallHierarchyDefaultAction')
-  let g:EclimJavaCallHierarchyDefaultAction = g:EclimDefaultFileOpenAction
-endif
-
 " }}}
 
 " Options {{{

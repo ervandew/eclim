@@ -19,18 +19,6 @@
 "
 " }}}
 
-" Global Variables {{{
-
-if !exists("g:EclimPythonValidate")
-  let g:EclimPythonValidate = 1
-endif
-
-if !exists("g:EclimPythonSyntasticEnabled")
-  let g:EclimPythonSyntasticEnabled = 0
-endif
-
-" }}}
-
 " Options {{{
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#python#complete#CodeComplete'

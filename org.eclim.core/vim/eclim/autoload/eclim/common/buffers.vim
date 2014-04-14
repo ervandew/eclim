@@ -21,27 +21,6 @@
 "
 " }}}
 
-" Global Variables {{{
-if !exists('g:EclimBuffersSort')
-  let g:EclimBuffersSort = 'file'
-endif
-if !exists('g:EclimBuffersSortDirection')
-  let g:EclimBuffersSortDirection = 'asc'
-endif
-if !exists('g:EclimBuffersDefaultAction')
-  let g:EclimBuffersDefaultAction = g:EclimDefaultFileOpenAction
-endif
-if !exists('g:EclimBuffersDeleteOnTabClose')
-  let g:EclimBuffersDeleteOnTabClose = 0
-endif
-if !exists('g:EclimOnlyExclude')
-  let g:EclimOnlyExclude = '^NONE$'
-endif
-if !exists('g:EclimOnlyExcludeFixed')
-  let g:EclimOnlyExcludeFixed = 1
-endif
-" }}}
-
 " ScriptVariables {{{
   let s:eclim_tab_id = 0
 " }}}

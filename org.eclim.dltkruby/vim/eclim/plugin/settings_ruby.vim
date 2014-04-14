@@ -19,26 +19,21 @@
 "
 " }}}
 
-" Autocmds {{{
+" Global Varables {{{
+  call eclim#AddVimSetting(
+    \ 'Lang/Ruby', 'g:EclimRubySearchSingleResult', g:EclimDefaultFileOpenAction,
+    \ 'Sets the command to use when opening a single result from a ruby search.')
 
-if g:EclimXsdValidate
-  augroup eclim_xsd_validate
-    autocmd! BufWritePost <buffer>
-    autocmd BufWritePost <buffer> call eclim#lang#Validate('xsd', 1)
-  augroup END
-endif
+  call eclim#AddVimSetting(
+    \ 'Lang/Ruby', 'g:EclimRubyValidate', 1,
+    \ 'Sets whether or not to validate ruby files on save.',
+    \ '\(0\|1\)')
 
-" disable plain xml validation.
-augroup eclim_xml
-  autocmd! BufWritePost <buffer>
-augroup END
-
-" }}}
-
-" Command Declarations {{{
-
-command! -nargs=0 -buffer Validate :call eclim#lang#Validate('xsd', 0)
-
+  call eclim#AddVimSetting(
+    \ 'Lang/Ruby', 'g:EclimRubySyntasticEnabled', 0,
+    \ "Only enable this if you want both eclim and syntastic to validate your ruby files.\n" .
+    \ "If you want to use syntastic instead of eclim, simply disable RubyValidate.",
+    \ '\(0\|1\)')
 " }}}
 
 " vim:ft=vim:fdm=marker

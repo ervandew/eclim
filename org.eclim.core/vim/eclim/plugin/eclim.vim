@@ -27,46 +27,214 @@
 " }}}
 
 " Global Variables {{{
-let g:NUMBER_TYPE = 0
-let g:STRING_TYPE = 1
-let g:FUNCREF_TYPE = 2
-let g:LIST_TYPE = 3
-let g:DICT_TYPE = 4
-let g:FLOAT_TYPE = 5
 
-if !exists("g:EclimLogLevel")
-  let g:EclimLogLevel = 4
+" at least one ubuntu user had serious performance issues using the python
+" client, so we are only going to default to python on windows machines
+" where there is an actual potential benefit to using it.
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimNailgunClient',
+  \ has('python') && (has('win32') || has('win64')) ? 'python' : 'external',
+  \ 'Sets the eclim nailgun client to use when communicating with eclimd.',
+  \ '\(external\|python\)')
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimLogLevel', 'info',
+  \ 'Sets the eclim logging level within vim.',
+  \ '\(trace\|debug\|info\|warning\|error\|off\)')
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimHighlightTrace', 'Normal',
+  \ 'Sets the vim highlight group to be used for trace messages.')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimHighlightDebug', 'Normal',
+  \ 'Sets the vim highlight group to be used for debug messages.')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimHighlightInfo', 'Statement',
+  \ 'Sets the vim highlight group to be used for info messages/signs.')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimHighlightWarning', 'WarningMsg',
+  \ 'Sets the vim highlight group to be used for warning messages/signs.')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimHighlightError', 'Error',
+  \ 'Sets the vim highlight group to be used for error messages/signs.')
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimMenus', 1,
+  \ 'When enabled, eclim will generate gvim menu items for eclim commands',
+  \ '\(0\|1\)')
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimDefaultFileOpenAction', 'split',
+  \ "The global default action used to open files from various eclim commands.\n" .
+  \ "Any command that provides a setting for their open action will use this\n" .
+  \ "value as their default unless otherwise overridden.")
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimCompletionMethod', 'completefunc',
+  \ "Determines whether eclim's various completion functions are registed\n" .
+  \ "to vim's completefunc (<c-x><c-u>) or omnifunc (<c-x><c-o>).",
+  \ '\(completefunc\|omnifunc\)')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimValidateSortResults', 'occurrence',
+  \ 'Sets how validation results from the various language validators will be sorted',
+  \ '\(occurrence\|severity\)')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimTempFilesEnable', 1,
+  \ 'Should eclim ever use temp files for code completion, etc.',
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimFileTypeValidate', 1,
+  \ "Allows you to disable all eclim lang validators at once.",
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimRefactorDiffOrientation', 'vertical',
+  \ "When viewing a diff for a refactoring, should the diff split be\n" .
+  \ "vertical or horizontal.",
+  \ '\(horizontal\|vertical\)')
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimShowCurrentError', 1,
+  \ "When enabled, eclim with echo the quickfix/location list message,\n" .
+  \ "if any, for the line under the cursor.",
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimShowCurrentErrorBalloon', 1,
+  \ "When enabled, eclim will display a balloon popup (gvim only) containing\n" .
+  \ "the quickfix/location list message, if any, for the line under the cursor.",
+  \ '\(0\|1\)')
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimLargeFileEnabled', 0,
+  \ "When enabled, eclim will disable some vim features to speed up\n" .
+  \ "opening, navigating, etc, large files.",
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimLargeFileSize', 5,
+  \ "The minimum size of the file in mb before the file is considered\n" .
+  \ "large enough to apply large file settings (if enabled).",
+  \ '\d\+')
+
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimMakeLCD', 1,
+  \ "When set to a non-0 value, all eclim based make commands\n" .
+  \ "(:Ant, :Maven, :Mvn, etc) will change to the current file's\n" .
+  \ "project root before executing.",
+  \ '\(0\|1\)')
+
+call eclim#AddVimSetting(
+  \ 'Core/Signs', 'g:EclimSignLevel', has('signs') ? 'info' : 'off',
+  \ 'Sets the level of signs (markers) that will be placed by eclim.',
+  \ '\(info\|warning\|error\|off\)')
+
+call eclim#AddVimSetting(
+  \ 'Core/Signs', 'g:EclimShowQuickfixSigns', 1,
+  \ 'Determines if a sign is placed on lines found in the quickfix list.',
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core/Signs', 'g:EclimShowLoclistSigns', 1,
+  \ 'Determines if a sign is placed on lines found in the location list.',
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core/Signs', 'g:EclimQuickfixSignText', '>',
+  \ 'Sets the one or two character text used for quickfix list signs.',
+  \ '.\{1,2}')
+call eclim#AddVimSetting(
+  \ 'Core/Signs', 'g:EclimLoclistSignText', '>>',
+  \ 'Sets the one or two character text used for location list signs.',
+  \ '.\{1,2}')
+call eclim#AddVimSetting(
+  \ 'Core/Signs', 'g:EclimUserSignText', '#',
+  \ 'Sets the one or two character text used for user placed signs.',
+  \ '.\{1,2}')
+call eclim#AddVimSetting(
+  \ 'Core/Signs', 'g:EclimHighlightUserSign', g:EclimHighlightInfo,
+  \ 'Sets the vim highlight group to be used for user placed signs.')
+
+call eclim#AddVimSetting(
+  \ 'Core/:Buffers', 'g:EclimBuffersTabTracking', 1,
+  \ "When enabled, eclim will keep track of which tabs buffers have\n" .
+  \ "been opened on, allowing the :Buffers command to limit results\n" .
+  \ "based on the current tab.",
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core/:Buffers', 'g:EclimBuffersSort', 'file',
+  \ 'Determines how the results are sorted in the :Buffers window.',
+  \ '\(file\|path\|bufnr\)')
+call eclim#AddVimSetting(
+  \ 'Core/:Buffers', 'g:EclimBuffersSortDirection', 'asc',
+  \ 'Determines the direction of the sort in the :Buffers window.',
+  \ '\(asc\|desc\)')
+call eclim#AddVimSetting(
+  \ 'Core/:Buffers', 'g:EclimBuffersDefaultAction', g:EclimDefaultFileOpenAction,
+  \ 'Sets the default command used to open selected entries in the :Buffers window.')
+call eclim#AddVimSetting(
+  \ 'Core/:Buffers', 'g:EclimBuffersDeleteOnTabClose', 0,
+  \ "When buffer tab tracking is enabled, this determines if all the\n" .
+  \ "buffers associated with a tab are deleted whenthat tab is closed.",
+  \ '\(0\|1\)')
+
+call eclim#AddVimSetting(
+  \ 'Core/:Only', 'g:EclimOnlyExclude', '^NONE$',
+  \ "Vim regex pattern to match against buffer names that when matched,\n" .
+  \ "will not be closed upon calling eclim's :Only command.")
+call eclim#AddVimSetting(
+  \ 'Core/:Only', 'g:EclimOnlyExcludeFixed', 1,
+  \ "When running eclim's :Only command, should 'fixed' windows (quickfix,\n" .
+  \ "project tree, tag list, etc) be preserved (excluded from being closed).",
+  \ '\(0\|1\)')
+
+call eclim#AddVimSetting(
+  \ 'Core/:History', 'g:EclimKeepLocalHistory', exists('g:vimplugin_running'),
+  \ 'Whether or not to update the eclipse local history for project files.',
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core/:History', 'g:EclimHistoryDiffOrientation', 'vertical',
+  \ "When viewing a diff from the history buffer, should the diff split be\n" .
+  \ "vertical or horizontal.",
+  \ '\(horizontal\|vertical\)')
+
+call eclim#AddVimSetting(
+  \ 'Core/:LocateFile', 'g:EclimLocateFileDefaultAction', g:EclimDefaultFileOpenAction,
+  \ 'The default action to use when opening files from :LocateFile')
+call eclim#AddVimSetting(
+  \ 'Core/:LocateFile', 'g:EclimLocateFileScope', 'project',
+  \ 'The default search scope when searching from the context of a project.')
+call eclim#AddVimSetting(
+  \ 'Core/:LocateFile', 'g:EclimLocateFileNonProjectScope', 'workspace',
+  \ 'The default search scope when searching from outside the context of a project.')
+call eclim#AddVimSetting(
+  \ 'Core/:LocateFile', 'g:EclimLocateFileFuzzy', 1,
+  \ 'Whether or not to use fuzzy matching when searching.',
+  \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core/:LocateFile', 'g:EclimLocateFileCaseInsensitive', 'lower',
+  \ 'Sets under what condition will the search be case insensitive.',
+  \ '\(lower\|never\|always\)')
+call eclim#AddVimSetting(
+  \ 'Core/:LocateFile', 'g:EclimLocateFileCaseInsensitive', 'lower',
+  \ 'Sets under what condition will the search be case insensitive.',
+  \ '\(lower\|never\|always\)')
+
+call eclim#AddVimSetting(
+  \ 'Lang/Xml', 'g:EclimXmlValidate', 1,
+  \ 'Whether or not to validate xml files on save.',
+  \ '\(0\|1\)')
+
+if !exists('g:EclimLocateUserScopes')
+  let g:EclimLocateUserScopes = []
 endif
 
-if !exists("g:EclimTraceHighlight")
-  let g:EclimTraceHighlight = "Normal"
-endif
-if !exists("g:EclimDebugHighlight")
-  let g:EclimDebugHighlight = "Normal"
-endif
-if !exists("g:EclimInfoHighlight")
-  let g:EclimInfoHighlight = "Statement"
-endif
-if !exists("g:EclimWarningHighlight")
-  let g:EclimWarningHighlight = "WarningMsg"
-endif
-if !exists("g:EclimErrorHighlight")
-  let g:EclimErrorHighlight = "Error"
-endif
-if !exists("g:EclimFatalHighlight")
-  let g:EclimFatalHighlight = "Error"
+if !exists("g:EclimLocationListHeight")
+  let g:EclimLocationListHeight = 10
 endif
 
-if has("signs")
-  if !exists("g:EclimSignLevel")
-    let g:EclimSignLevel = 5
-  endif
-else
-  let g:EclimSignLevel = 0
+if !exists("g:EclimMakeQfFilter")
+  let g:EclimMakeQfFilter = 1
 endif
 
-if !exists("g:EclimBuffersTabTracking")
-  let g:EclimBuffersTabTracking = 1
+if !exists("g:EclimTemplatesDisabled")
+  " Disabled for now.
+  let g:EclimTemplatesDisabled = 1
 endif
 
 if !exists("g:EclimSeparator")
@@ -75,6 +243,7 @@ if !exists("g:EclimSeparator")
     let g:EclimSeparator = '\'
   endif
 endif
+
 let g:EclimQuote = "['\"]"
 
 if !exists("g:EclimTempDir")
@@ -85,57 +254,8 @@ if !exists("g:EclimTempDir")
   if g:EclimTempDir == '$TEMP' && has('unix')
     let g:EclimTempDir = '/tmp'
   endif
-  " FIXME: mac?
 
   let g:EclimTempDir = substitute(g:EclimTempDir, '\', '/', 'g')
-endif
-
-if !exists("g:EclimShowCurrentError")
-  let g:EclimShowCurrentError = 1
-endif
-
-if !exists("g:EclimShowCurrentErrorBalloon")
-  let g:EclimShowCurrentErrorBalloon = 1
-endif
-
-if !exists("g:EclimValidateSortResults")
-  let g:EclimValidateSortResults = 'occurrence'
-endif
-
-if !exists("g:EclimDefaultFileOpenAction")
-  let g:EclimDefaultFileOpenAction = 'split'
-endif
-
-if !exists("g:EclimCompletionMethod")
-  let g:EclimCompletionMethod = 'completefunc'
-endif
-
-if !exists("g:EclimLocationListHeight")
-  let g:EclimLocationListHeight = 10
-endif
-
-if !exists("g:EclimMakeLCD")
-  let g:EclimMakeLCD = 1
-endif
-
-if !exists("g:EclimMakeQfFilter")
-  let g:EclimMakeQfFilter = 1
-endif
-
-if !exists("g:EclimMenus")
-  let g:EclimMenus = 1
-endif
-
-if !exists("g:EclimTemplatesDisabled")
-  " Disabled for now.
-  let g:EclimTemplatesDisabled = 1
-endif
-
-if !exists('g:EclimLargeFileEnabled')
-  let g:EclimLargeFileEnabled = 0
-endif
-if !exists('g:EclimLargeFileSize')
-  let g:EclimLargeFileSize = 5
 endif
 " }}}
 
@@ -146,6 +266,9 @@ if !exists(":PingEclim")
 endif
 if !exists(":ShutdownEclim")
   command ShutdownEclim :call eclim#ShutdownEclim()
+endif
+if !exists(":VimSettings")
+  command VimSettings :call eclim#VimSettings()
 endif
 if !exists(":WorkspaceSettings")
   command -nargs=? -complete=customlist,eclim#client#nailgun#CommandCompleteWorkspaces
@@ -282,7 +405,7 @@ if g:EclimMakeQfFilter
   augroup END
 endif
 
-if g:EclimSignLevel
+if g:EclimSignLevel != 'off'
   augroup eclim_qf
     autocmd WinEnter,BufWinEnter * call eclim#display#signs#Update()
     if has('gui_running')

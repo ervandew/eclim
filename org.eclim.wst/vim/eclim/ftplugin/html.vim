@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/html/index.html
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
@@ -20,18 +17,6 @@
 " You should have received a copy of the GNU General Public License
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
-" }}}
-
-" Global Variables {{{
-
-if !exists("g:EclimHtmlValidate")
-  let g:EclimHtmlValidate = 1
-endif
-
-if !exists("g:EclimHtmlSyntasticEnabled")
-  let g:EclimHtmlSyntasticEnabled = 0
-endif
-
 " }}}
 
 " Options {{{

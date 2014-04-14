@@ -19,26 +19,6 @@
 "
 " }}}
 
-" Global Variables {{{
-
-if !exists("g:EclimCValidate")
-  let g:EclimCValidate = 1
-endif
-
-if !exists("g:EclimCSyntasticEnabled")
-  let g:EclimCSyntasticEnabled = 0
-endif
-
-if !exists("g:EclimCppSyntasticEnabled")
-  let g:EclimCppSyntasticEnabled = 0
-endif
-
-if !exists('g:EclimCCallHierarchyDefaultAction')
-  let g:EclimCCallHierarchyDefaultAction = g:EclimDefaultFileOpenAction
-endif
-
-" }}}
-
 " Options {{{
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#c#complete#CodeComplete'

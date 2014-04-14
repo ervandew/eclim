@@ -32,6 +32,15 @@
   let s:show_current_error_displaying = 0
 
   let s:command_setting = '-command setting -s <setting>'
+
+  let s:log_levels = {
+      \ 'trace': 5,
+      \ 'debug': 4,
+      \ 'info': 3,
+      \ 'warning': 2,
+      \ 'error': 1,
+      \ 'off': 0,
+    \ }
 " }}}
 
 " Balloon(message) {{{
@@ -83,50 +92,42 @@ function! eclim#util#DelayedCommand(command, ...)
   exec 'augroup END'
 endfunction " }}}
 
-" EchoTrace(message, [time_elapsed]) {{{
-function! eclim#util#EchoTrace(message, ...)
+function! eclim#util#EchoTrace(message, ...) " {{{
+  " Optional args:
+  "   time_elapsed
+  let message = a:message
   if a:0 > 0
-    call s:EchoLevel('(' . a:1 . 's) ' . a:message, 6, g:EclimTraceHighlight)
-  else
-    call s:EchoLevel(a:message, 6, g:EclimTraceHighlight)
+    let message = '(' . a:1 . 's) ' . message
   endif
+  call s:EchoLevel(message, 'trace', g:EclimHighlightTrace)
 endfunction " }}}
 
-" EchoDebug(message) {{{
-function! eclim#util#EchoDebug(message)
-  call s:EchoLevel(a:message, 5, g:EclimDebugHighlight)
+function! eclim#util#EchoDebug(message) " {{{
+  call s:EchoLevel(a:message, 'debug', g:EclimHighlightDebug)
 endfunction " }}}
 
-" EchoInfo(message) {{{
-function! eclim#util#EchoInfo(message)
-  call s:EchoLevel(a:message, 4, g:EclimInfoHighlight)
+function! eclim#util#EchoInfo(message) " {{{
+  call s:EchoLevel(a:message, 'info', g:EclimHighlightInfo)
 endfunction " }}}
 
-" EchoWarning(message) {{{
-function! eclim#util#EchoWarning(message)
-  call s:EchoLevel(a:message, 3, g:EclimWarningHighlight)
+function! eclim#util#EchoWarning(message) " {{{
+  call s:EchoLevel(a:message, 'warning', g:EclimHighlightWarning)
 endfunction " }}}
 
-" EchoError(message) {{{
-function! eclim#util#EchoError(message)
-  call s:EchoLevel(a:message, 2, g:EclimErrorHighlight)
+function! eclim#util#EchoError(message) " {{{
+  call s:EchoLevel(a:message, 'error', g:EclimHighlightError)
 endfunction " }}}
 
-" EchoFatal(message) {{{
-function! eclim#util#EchoFatal(message)
-  call s:EchoLevel(a:message, 1, g:EclimFatalHighlight)
-endfunction " }}}
+function! s:EchoLevel(message, level, highlight) " {{{
+  " Echos the supplied message at the supplied level with the specified
+  " highlight.
 
-" s:EchoLevel(message) {{{
-" Echos the supplied message at the supplied level with the specified
-" highlight.
-function! s:EchoLevel(message, level, highlight)
   " don't echo if the message is 0, which signals an eclim#Execute failure.
   if type(a:message) == g:NUMBER_TYPE && a:message == 0
     return
   endif
 
-  if g:EclimLogLevel < a:level
+  if s:log_levels[g:EclimLogLevel] < s:log_levels[a:level]
     return
   endif
 
@@ -153,11 +154,10 @@ function! s:EchoLevel(message, level, highlight)
   echohl None
 endfunction " }}}
 
-" Echo(message) {{{
-" Echos a message using the info highlight regardless of what log level is set.
-function! eclim#util#Echo(message)
-  if a:message != "0" && g:EclimLogLevel > 0
-    exec "echohl " . g:EclimInfoHighlight
+function! eclim#util#Echo(message) " {{{
+  " Echos a message using the info highlight regardless of what log level is set.
+  if a:message != "0"
+    exec "echohl " . g:EclimHighlightInfo
     redraw
     for line in split(a:message, '\n')
       echom line
@@ -858,7 +858,9 @@ function! s:ParseLocationEntry(entry)
     let col = entry.column
     let message = entry.message
     let type = ''
-    if has_key(entry, 'warning')
+    if has_key(entry, 'type')
+      let type = entry.type[0]
+    elseif has_key(entry, 'warning')
       let type = entry.warning ? 'w' : 'e'
     endif
 
@@ -905,7 +907,7 @@ function! eclim#util#Prompt(prompt, ...)
     return remove(g:EclimTestPromptQueue, 0)
   endif
 
-  let highlight = g:EclimInfoHighlight
+  let highlight = g:EclimHighlightInfo
   if a:0 > 0
     if type(a:1) == g:FUNCREF_TYPE
       let Validator = a:1
@@ -984,7 +986,7 @@ function! eclim#util#PromptList(prompt, list, ...)
     let index = index + 1
   endfor
 
-  exec "echohl " . (a:0 ? a:1 : g:EclimInfoHighlight)
+  exec "echohl " . (a:0 ? a:1 : g:EclimHighlightInfo)
   try
     " clear any previous messages
     redraw
@@ -1024,7 +1026,7 @@ function! eclim#util#PromptConfirm(prompt, ...)
     return choice =~ '\c\s*\(y\(es\)\?\)\s*'
   endif
 
-  exec "echohl " . (a:0 ? a:1 : g:EclimInfoHighlight)
+  exec "echohl " . (a:0 ? a:1 : g:EclimHighlightInfo)
   try
     " clear any previous messages
     redraw

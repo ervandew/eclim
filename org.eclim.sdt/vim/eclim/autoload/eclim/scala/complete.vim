@@ -19,16 +19,6 @@
 "
 " }}}
 
-" Global Varables {{{
-  if !exists("g:EclimScalaCompleteLayout")
-    if &completeopt !~ 'preview' && &completeopt =~ 'menu'
-      let g:EclimScalaCompleteLayout = 'standard'
-    else
-      let g:EclimScalaCompleteLayout = 'compact'
-    endif
-  endif
-" }}}
-
 " Script Varables {{{
   let s:complete_command =
     \ '-command scala_complete -p "<project>" -f "<file>" ' .

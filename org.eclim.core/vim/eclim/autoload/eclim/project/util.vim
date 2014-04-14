@@ -241,7 +241,7 @@ function! eclim#project#util#ProjectRename(args) " {{{
   else
     let response = eclim#util#PromptConfirm(
       \ printf("Rename project '%s' to '%s'", project, name),
-      \ g:EclimInfoHighlight)
+      \ g:EclimHighlightInfo)
   endif
 
   if response == 1
@@ -275,7 +275,7 @@ function! eclim#project#util#ProjectMove(args) " {{{
   else
     let response = eclim#util#PromptConfirm(
       \ printf("Move project '%s' to '%s'", project, dir),
-      \ g:EclimInfoHighlight)
+      \ g:EclimHighlightInfo)
   endif
 
   if response == 1

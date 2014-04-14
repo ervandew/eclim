@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/classpath.html
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
@@ -30,12 +27,6 @@ runtime! indent/xml.vim
 augroup eclim_xml
   autocmd! BufWritePost <buffer>
 augroup END
-
-" Global Variables {{{
-if !exists("g:EclimIvyClasspathUpdate")
-  let g:EclimIvyClasspathUpdate = 1
-endif
-" }}}
 
 " Autocmds {{{
 if g:EclimIvyClasspathUpdate

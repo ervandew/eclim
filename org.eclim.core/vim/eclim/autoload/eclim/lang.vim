@@ -1,10 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Common language functionality (validation, completion, etc.) abstracted
-"   into re-usable functions.
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
@@ -21,20 +17,6 @@
 " You should have received a copy of the GNU General Public License
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
-" }}}
-
-" Global Varables {{{
-  if !exists('g:EclimTempFilesEnable')
-    let g:EclimTempFilesEnable = 1
-  endif
-
-  if !exists('g:EclimFileTypeValidate')
-    let g:EclimFileTypeValidate = 1
-  endif
-
-  if !exists('g:EclimRefactorDiffOrientation')
-    let g:EclimRefactorDiffOrientation = 'vertical'
-  endif
 " }}}
 
 " Script Variables {{{
@@ -595,7 +577,7 @@ endfunction " }}}
 " RefactorPrompt(prompt) {{{
 " Issues the standard prompt for language refactorings.
 function! eclim#lang#RefactorPrompt(prompt)
-  exec "echohl " . g:EclimInfoHighlight
+  exec "echohl " . g:EclimHighlightInfo
   try
     " clear any previous messages
     redraw

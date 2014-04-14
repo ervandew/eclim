@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Implements the :LocateFile functionality.
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -23,31 +20,6 @@
 " }}}
 
 " Global Variables {{{
-if !exists('g:EclimLocateFileDefaultAction')
-  let g:EclimLocateFileDefaultAction = g:EclimDefaultFileOpenAction
-endif
-
-if !exists('g:EclimLocateFileScope')
-  let g:EclimLocateFileScope = 'project'
-endif
-
-if !exists('g:EclimLocateFileNonProjectScope')
-  let g:EclimLocateFileNonProjectScope = 'workspace'
-endif
-
-if !exists('g:EclimLocateFileFuzzy')
-  let g:EclimLocateFileFuzzy = 1
-endif
-
-if !exists('g:EclimLocateFileCaseInsensitive')
-  " one of: 'lower', 'never', 'always'
-  let g:EclimLocateFileCaseInsensitive = 'lower'
-endif
-
-if !exists('g:EclimLocateUserScopes')
-  let g:EclimLocateUserScopes = []
-endif
-
 let g:eclim_locate_default_updatetime = &updatetime
 
 " disable autocomplpop in the locate prompt
@@ -79,14 +51,13 @@ let s:help = [
   \ ]
 " }}}
 
-" LocateFile(action, file, [scope]) {{{
-" Locates a file using the specified action for opening the file when found.
-"   action - '' (use user default), 'split', 'edit', etc.
-"   file - 'somefile.txt',
-"          '', (kick off completion mode),
-"          '<cursor>' (locate the file under the cursor)
-"   scope - optional scope to search in (project, workspace, buffers, etc.)
-function! eclim#common#locate#LocateFile(action, file, ...)
+function! eclim#common#locate#LocateFile(action, file, ...) " {{{
+  " Locates a file using the specified action for opening the file when found.
+  "   action - '' (use user default), 'split', 'edit', etc.
+  "   file - 'somefile.txt',
+  "          '', (kick off completion mode),
+  "          '<cursor>' (locate the file under the cursor)
+  "   scope - optional scope to search in (project, workspace, buffers, etc.)
   let project = eclim#project#util#GetCurrentProjectName()
   let scope = a:0 > 0 ? a:1 : g:EclimLocateFileScope
 
@@ -159,7 +130,7 @@ function! eclim#common#locate#LocateFile(action, file, ...)
   " More than one result.
   elseif len(results) > 1
     let message = "Multiple results, choose the file to open"
-    let response = eclim#util#PromptList(message, results, g:EclimInfoHighlight)
+    let response = eclim#util#PromptList(message, results, g:EclimHighlightInfo)
     if response == -1
       return
     endif

@@ -16,6 +16,19 @@
 History of Changes
 ==================
 
+.. _2.3.5:
+
+2.3.5 (XXX. XX, 2014)
+---------------------
+
+Eclim:
+  - **:EclimSettings** renamed to **:WorkspaceSettings** to better reflect what
+    is being edited.
+  - Added :ref:`:VimSettings <:VimSettings>` command to make viewing/editing of
+    eclim's vim client settings easier.
+
+| :gitlog:`Git Log (2.3.5) <2.3.4...2.3.5>`
+
 .. _2.3.4:
 
 2.3.4 (Apr. 12, 2014)

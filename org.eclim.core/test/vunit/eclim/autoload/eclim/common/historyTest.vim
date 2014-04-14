@@ -25,7 +25,7 @@
 " SetUp() {{{
 function! SetUp()
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test'
-  let g:EclimProjectKeepLocalHistory = 1
+  let g:EclimKeepLocalHistory = 1
   runtime plugin/project.vim
 endfunction " }}}
 

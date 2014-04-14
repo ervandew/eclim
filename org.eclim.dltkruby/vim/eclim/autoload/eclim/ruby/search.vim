@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/ruby/search.html
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -20,13 +17,6 @@
 " You should have received a copy of the GNU General Public License
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
-" }}}
-
-" Global Varables {{{
-  if !exists("g:EclimRubySearchSingleResult")
-    " possible values ('split', 'edit', 'lopen')
-    let g:EclimRubySearchSingleResult = g:EclimDefaultFileOpenAction
-  endif
 " }}}
 
 " Script Varables {{{
@@ -49,16 +39,12 @@
     \ ]
 " }}}
 
-" Search(argline) {{{
-" Executes a search.
-function! eclim#ruby#search#Search(argline)
+function! eclim#ruby#search#Search(argline) " {{{
   return eclim#lang#Search(
     \ s:search_pattern, g:EclimRubySearchSingleResult, a:argline)
 endfunction " }}}
 
-" SearchContext() {{{
-" Executes a contextual search.
-function! eclim#ruby#search#SearchContext()
+function! eclim#ruby#search#SearchContext() " {{{
   if getline('.')[col('.') - 1] == '$'
     call cursor(line('.'), col('.') + 1)
     let cnum = eclim#util#GetCurrentElementColumn()
@@ -75,9 +61,7 @@ function! eclim#ruby#search#SearchContext()
   call eclim#ruby#search#Search('-x declarations')
 endfunction " }}}
 
-" CommandCompleteRubySearch(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for RubySearch
-function! eclim#ruby#search#CommandCompleteRubySearch(argLead, cmdLine, cursorPos)
+function! eclim#ruby#search#CommandCompleteRubySearch(argLead, cmdLine, cursorPos) " {{{
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')

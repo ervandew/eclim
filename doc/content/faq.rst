@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ log level at any time by running:
 
 .. code-block:: vim
 
-  :let g:EclimLogLevel = 10
+  :let g:EclimLogLevel = 'trace'
 
 in vim, which in this case sets the logging to verbose (the default log level
 is 4).  After setting the log level any external commands that are run or
@@ -310,7 +310,7 @@ details which you can do by enabling eclim debugging in vim:
 
 .. code-block:: vim
 
-  :let g:EclimLogLevel = 10
+  :let g:EclimLogLevel = 'trace'
 
 Then you can perform the same action that triggered the error again. This time
 you should receive the full stack trace of the error.

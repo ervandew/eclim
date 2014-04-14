@@ -25,6 +25,7 @@
 function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
   set completeopt-=preview
+  let g:EclimJavaCompleteLayout = 'standard'
   call eclim#WaitOnRunningJobs(3000)
 endfunction " }}}
 

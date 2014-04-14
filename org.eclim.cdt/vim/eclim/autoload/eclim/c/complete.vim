@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/c/complete.html
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,25 +19,13 @@
 "
 " }}}
 
-" Global Varables {{{
-  if !exists("g:EclimCCompleteLayout")
-    if &completeopt !~ 'preview' && &completeopt =~ 'menu'
-      let g:EclimCCompleteLayout = 'standard'
-    else
-      let g:EclimCCompleteLayout = 'compact'
-    endif
-  endif
-" }}}
-
 " Script Varables {{{
   let s:complete_command =
     \ '-command c_complete -p "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <layout>'
 " }}}
 
-" CodeComplete(findstart, base) {{{
-" Handles code completion.
-function! eclim#c#complete#CodeComplete(findstart, base)
+function! eclim#c#complete#CodeComplete(findstart, base) " {{{
   return eclim#lang#CodeComplete(
     \ s:complete_command, a:findstart, a:base,
     \ {'temp': 0, 'layout': g:EclimCCompleteLayout})

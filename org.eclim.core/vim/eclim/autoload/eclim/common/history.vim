@@ -1,10 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -21,12 +19,6 @@
 "
 " }}}
 
-" Global Variables {{{
-  if !exists('g:EclimHistoryDiffOrientation')
-    let g:EclimHistoryDiffOrientation = 'vertical'
-  endif
-" }}}
-
 " Script Variables {{{
 let s:command_add = '-command history_add -p "<project>" -f "<file>"'
 let s:command_list = '-command history_list -p "<project>" -f "<file>"'
@@ -35,10 +27,9 @@ let s:command_revision =
 let s:command_clear = '-command history_clear -p "<project>" -f "<file>"'
 " }}}
 
-" AddHistory() {{{
-" Adds the current state of the file to the eclipse local history (should be
-" invoked prior to saving to disk).
-function! eclim#common#history#AddHistory()
+function! eclim#common#history#AddHistory() " {{{
+  " Adds the current state of the file to the eclipse local history (should be
+  " invoked prior to saving to disk).
   if !filereadable(expand('%')) || !eclim#project#util#IsCurrentFileInProject(0)
     return
   endif
@@ -51,9 +42,8 @@ function! eclim#common#history#AddHistory()
   call eclim#Execute(command)
 endfunction " }}}
 
-" History() {{{
-" Opens a temporary buffer with a list of local history revisions.
-function! eclim#common#history#History()
+function! eclim#common#history#History() " {{{
+  " Opens a temporary buffer with a list of local history revisions.
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -79,10 +69,10 @@ function! eclim#common#history#History()
   call eclim#util#TempWindow('[History]', lines)
 
   setlocal modifiable noreadonly
-  if !g:EclimProjectKeepLocalHistory
+  if !g:EclimKeepLocalHistory
     call append(line('$'),
-      \ '" Note: local history is current disabled: ' .
-      \ 'g:EclimProjectKeepLocalHistory = ' . g:EclimProjectKeepLocalHistory)
+      \ '" Note: local history is currently disabled: ' .
+      \ 'g:EclimKeepLocalHistory = ' . g:EclimKeepLocalHistory)
   endif
   call append(line('$'), '" use ? to view help')
   setlocal nomodifiable readonly
@@ -118,9 +108,8 @@ function! eclim#common#history#History()
     \ :call eclim#help#BufferHelp(b:history_help, 'vertical', 50)<cr>
 endfunction " }}}
 
-" HistoryClear(bang) {{{
-" Clear the history for the current file.
-function! eclim#common#history#HistoryClear(bang)
+function! eclim#common#history#HistoryClear(bang) " {{{
+  " Clear the history for the current file.
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -128,9 +117,8 @@ function! eclim#common#history#HistoryClear(bang)
   call s:Clear(a:bang == '', expand('%:p'))
 endfunction " }}}
 
-" s:View([cmd]) {{{
-" View the contents of the revision under the cursor.
-function s:View(...)
+function s:View(...) " {{{
+  " View the contents of the revision under the cursor.
   if line('.') == 1 || line('.') > len(b:history_revisions)
     return
   endif
@@ -185,10 +173,9 @@ function s:View(...)
   endif
 endfunction " }}}
 
-" s:Diff() {{{
-" Diff the contents of the revision under the cursor against the current
-" contents.
-function s:Diff()
+function s:Diff() " {{{
+  " Diff the contents of the revision under the cursor against the current
+  " contents.
   let hist_buf = bufnr('%')
   let winend = winnr('$')
   let winnum = 1
@@ -218,8 +205,7 @@ function s:Diff()
   endif
 endfunction " }}}
 
-" s:DiffNextPrev(dir, count) {{{
-function s:DiffNextPrev(dir, count)
+function s:DiffNextPrev(dir, count) " {{{
   let winnr = winnr()
   if eclim#util#GoToBufferWindow('[History]')
     let num = v:count > 0 ? v:count : a:count
@@ -235,9 +221,8 @@ function s:DiffNextPrev(dir, count)
   endif
 endfunction " }}}
 
-" s:Revert() {{{
-" Revert the file to the revision under the cursor.
-function s:Revert()
+function s:Revert() " {{{
+  " Revert the file to the revision under the cursor.
   if line('.') == 1 || line('.') > len(b:history_revisions)
     return
   endif
@@ -277,13 +262,13 @@ function s:Revert()
   endif
 endfunction " }}}
 
-" s:Clear(prompt, [filename]) {{{
-" Clear the history.
-function s:Clear(prompt, ...)
+function s:Clear(prompt, ...) " {{{
+  " Optional args:
+  "   filename
   let response = 1
   if a:prompt
     let response = eclim#util#PromptConfirm(
-      \ 'Clear local history?', g:EclimInfoHighlight)
+      \ 'Clear local history?', g:EclimHighlightInfo)
   endif
 
   if response == 1
@@ -305,8 +290,7 @@ function s:Clear(prompt, ...)
   endif
 endfunction " }}}
 
-" s:Syntax() {{{
-function! s:Syntax()
+function! s:Syntax() " {{{
   set ft=eclim_history
   hi link HistoryFile Identifier
   hi link HistoryCurrentEntry Constant
@@ -314,8 +298,7 @@ function! s:Syntax()
   syntax match Comment /^".*/
 endfunction " }}}
 
-" s:HighlightEntry(index) {{{
-function s:HighlightEntry(index)
+function s:HighlightEntry(index) " {{{
   let winnr = winnr()
   if eclim#util#GoToBufferWindow('[History]')
     let b:history_current_entry = a:index

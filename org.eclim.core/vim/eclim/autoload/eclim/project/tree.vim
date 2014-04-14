@@ -1,8 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
@@ -29,9 +27,6 @@
         \ {'pattern': '.*', 'name': 'Tab', 'action': 'tablast | tabnew'},
         \ {'pattern': '.*', 'name': 'Edit', 'action': 'edit'},
       \ ]
-  endif
-  if !exists('g:EclimProjectTreePathEcho')
-    let g:EclimProjectTreePathEcho = 1
   endif
 " }}}
 
