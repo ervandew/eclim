@@ -125,7 +125,7 @@ function! eclim#python#django#find#FindFilterTagFile(project_dir, file, element)
   call eclim#util#EchoError('Could not find tag/filter file "' . a:file . '.py"')
 endfunction " }}}
 
-function! eclim#python#django#find#FindSettingDefinition(project_dir, value) " {{{
+function! eclim#python#django#find#FindSettingDefinition(argline, project_dir, value) " {{{
   " Finds and opens the definition for the supplied setting middleware,
   " context processor, or template loader.
   let file = substitute(a:value, '\(.*\)\..*', '\1', '')
@@ -145,7 +145,10 @@ function! eclim#python#django#find#FindSettingDefinition(project_dir, value) " {
     endif
 
     if found != ''
-      call eclim#util#GoToBufferWindowOrOpen(found, g:EclimDjangoFindAction)
+      let [action_args, argline] = eclim#util#ExtractCmdArgs(a:argline, '-a:')
+      let action = len(action_args) == 2 ? action_args[1] : g:EclimDjangoFindAction
+
+      call eclim#util#GoToBufferWindowOrOpen(found, action)
       call search('\(def\|class\)\s\+' . def . '\>', 'cw')
       return 1
     endif
@@ -170,7 +173,7 @@ function! eclim#python#django#find#FindStaticFile(project_dir, file) " {{{
   call eclim#common#locate#LocateFile(g:EclimDjangoFindAction, a:file)
 endfunction " }}}
 
-function! eclim#python#django#find#FindTemplate(project_dir, template) " {{{
+function! eclim#python#django#find#FindTemplate(argline, project_dir, template) " {{{
   " Finds and opens the supplied template definition.
 
   " First try searching the configured template dirs (including installed apps)
@@ -216,7 +219,10 @@ function! eclim#python#django#find#FindTemplate(project_dir, template) " {{{
   endif
 
   if file != ''
-    call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
+    let [action_args, argline] = eclim#util#ExtractCmdArgs(a:argline, '-a:')
+    let action = len(action_args) == 2 ? action_args[1] : g:EclimDjangoFindAction
+
+    call eclim#util#GoToBufferWindowOrOpen(file, action)
     let b:eclim_django_project = a:project_dir
     return 1
   endif
@@ -224,7 +230,7 @@ function! eclim#python#django#find#FindTemplate(project_dir, template) " {{{
   call eclim#util#EchoError('Could not find the template "' . a:template . '"')
 endfunction " }}}
 
-function! eclim#python#django#find#FindView(project_dir, view) " {{{
+function! eclim#python#django#find#FindView(argline, project_dir, view) " {{{
   " Finds and opens the supplied view.
   let view = a:view
   let function = ''
@@ -271,7 +277,10 @@ function! eclim#python#django#find#FindView(project_dir, view) " {{{
   endfor
 
   if file != ''
-    call eclim#util#GoToBufferWindowOrOpen(file, g:EclimDjangoFindAction)
+    let [action_args, argline] = eclim#util#ExtractCmdArgs(a:argline, '-a:')
+    let action = len(action_args) == 2 ? action_args[1] : g:EclimDjangoFindAction
+
+    call eclim#util#GoToBufferWindowOrOpen(file, action)
     if function != ''
       let found = search('def\s\+' . function . '\>', 'cws')
       if !found
@@ -336,7 +345,7 @@ function! eclim#python#django#find#TemplateFind() " {{{
     \ 'valid tag, filter, or template reference.')
 endfunction " }}}
 
-function! eclim#python#django#find#ContextFind() " {{{
+function! eclim#python#django#find#ContextFind(argline) " {{{
   " Execute DjangoViewOpen, DjangoTemplateOpen, or PythonSearchContext based on
   " the context of the text under the cursor.
   if getline('.') =~ "['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]"
@@ -344,17 +353,23 @@ function! eclim#python#django#find#ContextFind() " {{{
         \ search("reverse\\_s*(\\_s*['\"][^'\" ]*\\%" . col('.') . "c[^'\" ]*['\"]", 'nw') ||
         \ search('urlpatterns\s\+=\s\+patterns(', 'nw'))
       return eclim#python#django#find#FindView(
-        \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
+        \ a:argline, eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     elseif expand('%:t') == 'settings.py'
       return eclim#python#django#find#FindSettingDefinition(
-        \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
+        \ a:argline, eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     else
       return eclim#python#django#find#FindTemplate(
-        \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
+        \ a:argline, eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
     endif
   else
-    PythonSearchContext
+    exec 'PythonSearchContext ' . a:argline
   endif
+endfunction " }}}
+
+function! eclim#python#django#find#CommandCompleteAction(argLead, cmdLine, cursorPos) " {{{
+  let options_map = {'-a': ['split', 'vsplit', 'edit', 'tabnew', 'lopen']}
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, options_map)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

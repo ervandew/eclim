@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ Pattern Search
 Pattern searching provides a means to widen a search beyond a single element.  A
 pattern search can be executed using the command
 
-**:JavaSearch** -p <pattern> [-t <type> -x <context> -s <scope> -i]
+**:JavaSearch** -p <pattern> [-t <type> -x <context> -s <scope> -i -a <action>]
 
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.
@@ -82,6 +82,8 @@ of the pattern to search for.
 
 - -i: Ignore case when searching.
 
+- -a: The vim command to use to open the result (edit, split, vsplit, etc).
+
 Eclim also provides a shortcut when issuing a pattern search for a type.  You
 may simply invoke **:JavaSearch** supplying only the pattern.
 
@@ -98,7 +100,6 @@ To shorten things even more, there is support for camel case searching as well.
 However, please note that camel case searching does not permit wild card
 characters ('*', '?').
 
-
 Element Search
 --------------
 
@@ -114,8 +115,9 @@ cursor will be moved to the element found.
 .. _\:JavaSearchContext:
 
 As a convenience eclim also provides the command **:JavaSearchContext**.  This
-command accepts no arguments and will perform the appropriate search depending
-on the context of the element.
+command accepts only the optional ``-a`` argument described above, and will
+perform the appropriate search depending on the context of the element under the
+cursor.
 
 - If the cursor is on a class or interface declaration, the command will search
   for all classes / interfaces that implement / extend the element.
@@ -198,7 +200,6 @@ suggestions.
   This is most noticable when searching for 'implementors', 'references', and
   'all'.  The number of and depth of the directories in your Vim 'path' option
   may also impact performance.
-
 
 Configuration
 -------------

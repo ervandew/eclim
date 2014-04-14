@@ -164,17 +164,17 @@ endif
 
 if !exists(":JavaSearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearch
+    \ -complete=customlist,eclim#java#search#CommandCompleteSearch
     \ JavaSearch :call eclim#java#search#SearchAndDisplay('java_search', '<args>')
 endif
 if !exists(":JavaSearchContext")
   command -buffer -nargs=?
-    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearchContext
+    \ -complete=customlist,eclim#java#search#CommandCompleteSearchContext
     \ JavaSearchContext :call eclim#java#search#SearchAndDisplay('java_search', '<args>')
 endif
 if !exists(":JavaDocSearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#java#search#CommandCompleteJavaSearch
+    \ -complete=customlist,eclim#java#search#CommandCompleteSearch
     \ JavaDocSearch :call eclim#java#search#SearchAndDisplay('java_docsearch', '<args>')
 endif
 

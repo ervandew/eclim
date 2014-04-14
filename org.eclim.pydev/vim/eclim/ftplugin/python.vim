@@ -44,21 +44,27 @@ endif
 
 if !exists(":PythonSearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#python#search#CommandCompletePythonSearch
+    \ -complete=customlist,eclim#python#search#CommandCompleteSearch
     \ PythonSearch :call eclim#python#search#Search('<args>')
-  command -buffer PythonSearchContext :call eclim#python#search#SearchContext()
+  command -buffer -nargs=*
+    \ -complete=customlist,eclim#python#search#CommandCompleteSearchContext
+    \ PythonSearchContext :call eclim#python#search#SearchContext('<args>')
 endif
 
-if !exists(':DjangoTemplateOpen')
-  command -buffer DjangoTemplateOpen :call eclim#python#django#find#FindTemplate(
-    \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
-endif
-if !exists(':DjangoViewOpen')
-  command -buffer DjangoViewOpen :call eclim#python#django#find#FindView(
-    \ eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
-endif
 if !exists(':DjangoContextOpen')
-  command -buffer DjangoContextOpen :call eclim#python#django#find#ContextFind()
+  command -buffer -nargs=*
+    \ -complete=customlist,eclim#python#django#find#CommandCompleteAction
+    \ DjangoContextOpen :call eclim#python#django#find#ContextFind('<args>')
+  command -buffer -nargs=*
+    \ -complete=customlist,eclim#python#django#find#CommandCompleteAction
+    \ DjangoViewOpen
+    \ :call eclim#python#django#find#FindView(
+      \ '<args>', eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
+  command -buffer -nargs=*
+    \ -complete=customlist,eclim#python#django#find#CommandCompleteAction
+    \ DjangoTemplateOpen
+    \ :call eclim#python#django#find#FindTemplate(
+      \ '<args>', eclim#python#django#util#GetProjectPath(), eclim#util#GrabUri())
 endif
 
 " }}}

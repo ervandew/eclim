@@ -24,19 +24,14 @@
     \ '-command dltk_search -n "<project>" -f "<file>" ' .
     \ '-o <offset> -l <length> -e <encoding> -x <context>'
   let s:search_pattern = '-command ruby_search'
-  let s:options = ['-p', '-t', '-s', '-x', '-i']
-  let s:scopes = ['all', 'project']
-  let s:types = [
-      \ 'class',
-      \ 'method',
-      \ 'function',
-      \ 'field'
-    \ ]
-  let s:contexts = [
-      \ 'all',
-      \ 'declarations',
-      \ 'references'
-    \ ]
+  let s:options_map = {
+      \ '-a': ['split', 'vsplit', 'edit', 'tabnew', 'lopen'],
+      \ '-s': ['all', 'project'],
+      \ '-i': [],
+      \ '-p': [],
+      \ '-t': ['class', 'method', 'function', 'field'],
+      \ '-x': ['all', 'declarations', 'references'],
+    \ }
 " }}}
 
 function! eclim#ruby#search#Search(argline) " {{{
@@ -44,7 +39,7 @@ function! eclim#ruby#search#Search(argline) " {{{
     \ s:search_pattern, g:EclimRubySearchSingleResult, a:argline)
 endfunction " }}}
 
-function! eclim#ruby#search#SearchContext() " {{{
+function! eclim#ruby#search#SearchContext(argline) " {{{
   if getline('.')[col('.') - 1] == '$'
     call cursor(line('.'), col('.') + 1)
     let cnum = eclim#util#GetCurrentElementColumn()
@@ -54,42 +49,22 @@ function! eclim#ruby#search#SearchContext() " {{{
   endif
 
   if getline('.') =~ '\<\(module\|class\|def\)\s\+\%' . cnum . 'c'
-    call eclim#ruby#search#Search('-x references')
+    call eclim#ruby#search#Search(a:argline . ' -x references')
     return
   endif
 
-  call eclim#ruby#search#Search('-x declarations')
+  call eclim#ruby#search#Search(a:argline . ' -x declarations')
 endfunction " }}}
 
-function! eclim#ruby#search#CommandCompleteRubySearch(argLead, cmdLine, cursorPos) " {{{
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  if cmdLine =~ '-s\s\+[a-z]*$'
-    let scopes = deepcopy(s:scopes)
-    call filter(scopes, 'v:val =~ "^' . argLead . '"')
-    return scopes
-  elseif cmdLine =~ '-t\s\+[a-z]*$'
-    let types = deepcopy(s:types)
-    call filter(types, 'v:val =~ "^' . argLead . '"')
-    return types
-  elseif cmdLine =~ '-x\s\+[a-z]*$'
-    let contexts = deepcopy(s:contexts)
-    call filter(contexts, 'v:val =~ "^' . argLead . '"')
-    return contexts
-  elseif cmdLine =~ '\s\+[-]\?$'
-    let options = deepcopy(s:options)
-    let index = 0
-    for option in options
-      if a:cmdLine =~ option
-        call remove(options, index)
-      else
-        let index += 1
-      endif
-    endfor
-    return options
-  endif
-  return []
+function! eclim#ruby#search#CommandCompleteSearch(argLead, cmdLine, cursorPos) " {{{
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, s:options_map)
+endfunction " }}}
+
+function! eclim#ruby#search#CommandCompleteSearchContext(argLead, cmdLine, cursorPos) " {{{
+  let options_map = {'-a': s:options_map['-a']}
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, options_map)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

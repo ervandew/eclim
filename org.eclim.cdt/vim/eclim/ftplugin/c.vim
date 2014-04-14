@@ -42,12 +42,14 @@ command! -nargs=0 -buffer Validate :call eclim#lang#UpdateSrcFile('c', 1)
 
 if !exists(":CSearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#c#search#CommandCompleteCSearch
+    \ -complete=customlist,eclim#c#search#CommandCompleteSearch
     \ CSearch :call eclim#c#search#Search('<args>')
 endif
 
 if !exists(":CSearchContext")
-  command -buffer CSearchContext :call eclim#c#search#SearchContext()
+  command -buffer -nargs=*
+    \ -complete=customlist,eclim#c#search#CommandCompleteSearchContext
+    \ CSearchContext :call eclim#c#search#SearchContext('<args>')
 endif
 
 if !exists(":CCallHierarchy")

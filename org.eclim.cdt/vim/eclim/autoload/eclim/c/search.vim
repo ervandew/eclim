@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   see http://eclim.org/vim/c/search.html
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
@@ -26,39 +23,33 @@
   let s:search = '-command c_search'
   let s:includepaths = '-command c_includepaths -p "<project>"'
   let s:sourcepaths = '-command c_sourcepaths -p "<project>"'
-  let s:options = ['-p', '-t', '-s', '-x', '-i']
-  let s:scopes = ['all', 'project']
-  let s:types = [
-      \ 'class_struct',
-      \ 'function',
-      \ 'variable',
-      \ 'union',
-      \ 'method',
-      \ 'field',
-      \ 'enum',
-      \ 'enumerator',
-      \ 'namespace',
-      \ 'typedef',
-      \ 'macro'
-    \ ]
-  let s:contexts = [
-      \ 'all',
-      \ 'declarations',
-      \ 'definitions',
-      \ 'references'
-    \ ]
+  let s:options_map = {
+      \ '-a': ['split', 'vsplit', 'edit', 'tabnew', 'lopen'],
+      \ '-s': ['all', 'project'],
+      \ '-i': [],
+      \ '-p': [],
+      \ '-t': [
+        \ 'class_struct',
+        \ 'function',
+        \ 'variable',
+        \ 'union',
+        \ 'method',
+        \ 'field',
+        \ 'enum',
+        \ 'enumerator',
+        \ 'namespace',
+        \ 'typedef',
+        \ 'macro'
+      \ ],
+      \ '-x': ['all', 'declarations', 'definitions', 'references'],
+    \ }
 " }}}
 
-" Search(argline) {{{
-" Executes a search.
-function! eclim#c#search#Search(argline)
-  return eclim#lang#Search(
-    \ s:search, g:EclimCSearchSingleResult, a:argline)
+function! eclim#c#search#Search(argline) " {{{
+  return eclim#lang#Search(s:search, g:EclimCSearchSingleResult, a:argline)
 endfunction " }}}
 
-" FindInclude() {{{
-" Finds the include file under the cursor
-function eclim#c#search#FindInclude()
+function eclim#c#search#FindInclude(argline) " {{{
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -83,12 +74,33 @@ function eclim#c#search#FindInclude()
   if !empty(results)
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
 
+    let [action_args, argline] = eclim#util#ExtractCmdArgs(a:argline, '-a:')
+    let action = len(action_args) == 2 ? action_args[1] : g:EclimCSearchSingleResult
+
     " single result in another file.
-    if len(results) == 1 && g:EclimCSearchSingleResult != "lopen"
+    if len(results) == 1 && action != "lopen"
       let entry = getloclist(0)[0]
-      call eclim#util#GoToBufferWindowOrOpen
-        \ (bufname(entry.bufnr), g:EclimCSearchSingleResult)
+      call eclim#util#GoToBufferWindowOrOpen(bufname(entry.bufnr), action)
       call eclim#display#signs#Update()
+
+    " multiple results and user specified an action other than lopen
+    elseif len(results) && len(action_args) && action != 'lopen'
+      let locs = getloclist(0)
+      let files = map(copy(locs),  'printf(' .
+        \ '"%s|%s col %s| %s", ' .
+        \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
+      let response = eclim#util#PromptList(
+        \ 'Please choose the file to ' . action,
+        \ files, g:EclimHighlightInfo)
+      if response == -1
+        return
+      endif
+      let entry = locs[response]
+      let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+      call eclim#util#GoToBufferWindowOrOpen(name, action)
+      call eclim#display#signs#Update()
+      call cursor(entry.lnum, entry.col)
+
     else
       exec 'lopen ' . g:EclimLocationListHeight
     endif
@@ -97,9 +109,7 @@ function eclim#c#search#FindInclude()
   endif
 endfunction " }}}
 
-" SearchContext() {{{
-" Executes a contextual search.
-function! eclim#c#search#SearchContext()
+function! eclim#c#search#SearchContext(argline) " {{{
   if getline('.')[col('.') - 1] == '$'
     call cursor(line('.'), col('.') + 1)
     let cnum = eclim#util#GetCurrentElementColumn()
@@ -109,47 +119,25 @@ function! eclim#c#search#SearchContext()
   endif
 
   if getline('.') =~ '#include\s*[<"][A-Za-z0-9.]*\%' . cnum . 'c'
-    call eclim#c#search#FindInclude()
+    call eclim#c#search#FindInclude(a:argline)
     return
   "elseif getline('.') =~ '\<\(class\|????\)\s\+\%' . cnum . 'c'
-  "  call eclim#c#search#Search('-x references')
+  "  call eclim#c#search#Search(a:argline . ' -x references')
     return
   endif
 
-  call eclim#c#search#Search('-x context')
+  call eclim#c#search#Search(a:argline . ' -x context')
 endfunction " }}}
 
-" CommandCompleteCSearch(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for CSearch
-function! eclim#c#search#CommandCompleteCSearch(argLead, cmdLine, cursorPos)
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  if cmdLine =~ '-s\s\+[a-z]*$'
-    let scopes = deepcopy(s:scopes)
-    call filter(scopes, 'v:val =~ "^' . argLead . '"')
-    return scopes
-  elseif cmdLine =~ '-t\s\+[a-z]*$'
-    let types = deepcopy(s:types)
-    call filter(types, 'v:val =~ "^' . argLead . '"')
-    return types
-  elseif cmdLine =~ '-x\s\+[a-z]*$'
-    let contexts = deepcopy(s:contexts)
-    call filter(contexts, 'v:val =~ "^' . argLead . '"')
-    return contexts
-  elseif cmdLine =~ '\s\+[-]\?$'
-    let options = deepcopy(s:options)
-    let index = 0
-    for option in options
-      if a:cmdLine =~ option
-        call remove(options, index)
-      else
-        let index += 1
-      endif
-    endfor
-    return options
-  endif
-  return []
+function! eclim#c#search#CommandCompleteSearch(argLead, cmdLine, cursorPos) " {{{
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, s:options_map)
+endfunction " }}}
+
+function! eclim#c#search#CommandCompleteSearchContext(argLead, cmdLine, cursorPos) " {{{
+  let options_map = {'-a': s:options_map['-a']}
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, options_map)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

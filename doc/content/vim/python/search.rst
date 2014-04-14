@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,12 @@ If only one result is found and that result is in the current source file, the
 cursor will be moved to the element found. Otherwise, on single result matches,
 the value of :ref:`g:EclimPythonSearchSingleResult` will be consulted for the
 action to take. If there are multiple results, the location list will be opened
-with the list of results.
+with the list of results. You can also force the action to use for the current
+search by suppling the ``-a <action>`` arg:
+
+.. code-block:: vim
+
+  :PythonSearch -x references -a edit
 
 .. note::
 
@@ -45,8 +50,9 @@ with the list of results.
 .. _\:PythonSearchContext:
 
 As a convenience eclim also provides the command **:PythonSearchContext**.
-This command accepts no arguments and will perform the appropriate search
-depending on the context of the element:
+This command accepts only the optional ``-a`` argument described above, and will
+perform the appropriate search depending on the context of the element under the
+cursor.
 
 - If the cursor is on the declaration of a class, function, or method then it
   will search for all occurrences.

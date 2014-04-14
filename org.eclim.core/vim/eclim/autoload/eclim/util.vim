@@ -1555,9 +1555,7 @@ function! eclim#util#WillWrittenBufferClose()
   return histget("cmd") =~ s:buffer_write_closing_commands
 endfunction " }}}
 
-" CommandCompleteFile(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for files.
-function! eclim#util#CommandCompleteFile(argLead, cmdLine, cursorPos)
+function! eclim#util#CommandCompleteFile(argLead, cmdLine, cursorPos) " {{{
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
   let argLead = substitute(a:argLead, cmdTail . '$', '', '')
   let results = split(eclim#util#Glob(argLead . '*', 1), '\n')
@@ -1568,9 +1566,7 @@ function! eclim#util#CommandCompleteFile(argLead, cmdLine, cursorPos)
   return eclim#util#ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
-" CommandCompleteDir(argLead, cmdLine, cursorPos) {{{
-" Custom command completion for directories.
-function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos)
+function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos) " {{{
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let args = eclim#util#ParseCmdLine(cmdLine)
   let argLead = cmdLine =~ '\s$' ? '' : args[len(args) - 1]
@@ -1588,6 +1584,30 @@ function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos)
     endif
   endfor
   return eclim#util#ParseCommandCompletionResults(argLead, results)
+endfunction " }}}
+
+function! eclim#util#CommandCompleteOptions(argLead, cmdLine, cursorPos, options_map) " {{{
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let cmdTail = strpart(a:cmdLine, a:cursorPos)
+  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
+  for [key, values] in items(a:options_map)
+    if cmdLine =~ key . '\s\+[a-z]*$'
+      return filter(copy(values), 'v:val =~ "^' . argLead . '"')
+    endif
+  endfor
+  if cmdLine =~ '\s\+[-]\?$'
+    let options = keys(a:options_map)
+    let index = 0
+    for option in options
+      if a:cmdLine =~ option
+        call remove(options, index)
+      else
+        let index += 1
+      endif
+    endfor
+    return options
+  endif
+  return []
 endfunction " }}}
 
 function! eclim#util#ParseCmdLine(args) " {{{

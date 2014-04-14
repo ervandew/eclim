@@ -21,48 +21,38 @@
 
 " Script Varables {{{
   let s:search = '-command python_search'
-  let s:options = ['-x']
-  let s:contexts = ['declarations', 'references']
+  let s:options = ['-a', '-x']
+  let s:options_map = {
+      \ '-a': ['split', 'vsplit', 'edit', 'tabnew', 'lopen'],
+      \ '-x': ['declarations', 'references'],
+    \ }
 " }}}
 
 function! eclim#python#search#Search(argline) " {{{
-  return eclim#lang#Search(
-    \ s:search, g:EclimPythonSearchSingleResult, a:argline)
+  return eclim#lang#Search(s:search, g:EclimPythonSearchSingleResult, a:argline)
 endfunction " }}}
 
-function! eclim#python#search#SearchContext() " {{{
+function! eclim#python#search#SearchContext(argline) " {{{
   let line = getline('.')
   let col = col('.')
-  let args = ''
+  let args = a:argline
   if line =~ '\<\(def\|class\)\>\s\+\w*\%' . col . 'c'
-    let args = '-x references'
+    let args .= ' -x references'
   elseif line =~ '\%' . col . 'c\w*\_s*=[^=]'
-    let args = '-x references'
+    let args .= ' -x references'
   endif
   call eclim#python#search#Search(args)
 endfunction " }}}
 
-function! eclim#python#search#CommandCompletePythonSearch(argLead, cmdLine, cursorPos) " {{{
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  if cmdLine =~ '-x\s\+[a-z]*$'
-    let contexts = deepcopy(s:contexts)
-    call filter(contexts, 'v:val =~ "^' . argLead . '"')
-    return contexts
-  elseif cmdLine =~ '\s\+[-]\?$'
-    let options = deepcopy(s:options)
-    let index = 0
-    for option in options
-      if a:cmdLine =~ option
-        call remove(options, index)
-      else
-        let index += 1
-      endif
-    endfor
-    return options
-  endif
-  return []
+function! eclim#python#search#CommandCompleteSearch(argLead, cmdLine, cursorPos) " {{{
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, s:options_map)
+endfunction " }}}
+
+function! eclim#python#search#CommandCompleteSearchContext(argLead, cmdLine, cursorPos) " {{{
+  let options_map = {'-a': s:options_map['-a']}
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, options_map)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

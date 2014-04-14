@@ -117,14 +117,16 @@ function! eclim#lang#CodeComplete(command, findstart, base, ...) " {{{
   endif
 endfunction " }}}
 
-" Search(command, singleResultAction, argline) {{{
-" Executes a search.
-function! eclim#lang#Search(command, singleResultAction, argline)
+function! eclim#lang#Search(command, singleResultAction, argline) " {{{
   let argline = a:argline
   "if argline == ''
   "  call eclim#util#EchoError('You must supply a search pattern.')
   "  return
   "endif
+
+  " check for user supplied open action
+  let [action_args, argline] = eclim#util#ExtractCmdArgs(argline, '-a:')
+  let action = len(action_args) == 2 ? action_args[1] : a:singleResultAction
 
   " check if pattern supplied without -p.
   if argline !~ '^\s*-[a-z]' && argline !~ '^\s*$'
@@ -184,14 +186,32 @@ function! eclim#lang#Search(command, singleResultAction, argline)
       endif
 
     " single result in another file.
-    elseif len(results) == 1 && a:singleResultAction != "lopen"
+    elseif len(results) == 1 && action != "lopen"
       let entry = getloclist(0)[0]
-      call eclim#util#GoToBufferWindowOrOpen
-        \ (bufname(entry.bufnr), a:singleResultAction)
+      let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+      call eclim#util#GoToBufferWindowOrOpen(name, action)
       call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
       call eclim#display#signs#Update()
-
       call cursor(entry.lnum, entry.col)
+
+    " multiple results and user specified an action other than lopen
+    elseif len(results) && len(action_args) && action != 'lopen'
+      let locs = getloclist(0)
+      let files = map(copy(locs),  'printf(' .
+        \ '"%s|%s col %s| %s", ' .
+        \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
+      let response = eclim#util#PromptList(
+        \ 'Please choose the file to ' . action,
+        \ files, g:EclimHighlightInfo)
+      if response == -1
+        return
+      endif
+      let entry = locs[response]
+      let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+      call eclim#util#GoToBufferWindowOrOpen(name, action)
+      call eclim#display#signs#Update()
+      call cursor(entry.lnum, entry.col)
+
     else
       exec 'lopen ' . g:EclimLocationListHeight
     endif
@@ -204,7 +224,6 @@ function! eclim#lang#Search(command, singleResultAction, argline)
       call eclim#util#EchoInfo("Pattern '" . searchedFor . "' not found.")
     endif
   endif
-
 endfunction " }}}
 
 function! eclim#lang#IsFiletypeValidationEnabled(lang) " {{{

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ Pattern Search
 Pattern searching provides a means to widen a search beyond a single
 element.  A pattern search can be executed using the command
 
-**:CSearch** -p <pattern> [-t <type> -s <scope> -x <context> -i]
+**:CSearch** -p <pattern> [-t <type> -s <scope> -x <context> -i -a <action>]
 
 All of the results will be placed into the current window's location list (:help
 location-list) so that you can easily navigate the results.
@@ -84,6 +84,7 @@ of the pattern to search for.
 
 - -i: Ignore case when searching.
 
+- -a: The vim command to use to open the result (edit, split, vsplit, etc).
 
 Element Search
 --------------
@@ -102,15 +103,15 @@ be opened with the list of results.
 
 .. _\:CSearchContext:
 
-As a convenience eclim also provides the command **:CSearchContext**.  This
-command accepts no arguments and will perform the appropriate search depending
-on the context of the element under the cursor.
+As a convenience eclim also provides the command **:CSearchContext**. This
+command accepts only the optional ``-a`` argument described above, and will
+perform the appropriate search depending on the context of the element under the
+cursor.
 
 - If the cursor is on an #include name, it will search the configured include
   path for the file.
 - Otherwise, it will search for the definition of the element (if the cursor
   is on the definition, then it will search for the declaration).
-
 
 Configuration
 -------------

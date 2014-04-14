@@ -21,11 +21,16 @@
 
 " Script Varables {{{
   let s:search = '-command scala_search'
+  let s:options_map = {'-a': ['split', 'vsplit', 'edit', 'tabnew', 'lopen']}
 " }}}
 
 function! eclim#scala#search#Search(argline) " {{{
-  return eclim#lang#Search(
-    \ s:search, g:EclimScalaSearchSingleResult, a:argline)
+  return eclim#lang#Search(s:search, g:EclimScalaSearchSingleResult, a:argline)
+endfunction " }}}
+
+function! eclim#scala#search#CommandCompleteSearch(argLead, cmdLine, cursorPos) " {{{
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, s:options_map)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

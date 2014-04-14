@@ -26,23 +26,26 @@
     \ '-command <search> -n "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <length> <args>'
   let s:search_pattern = '-command <search>'
-  let s:search_options = ['-p', '-t', '-x', '-s', '-i']
-  let s:open_options = ['-a']
-  let s:contexts = ['all', 'declarations', 'implementors', 'references']
-  let s:scopes = ['all', 'project']
-  let s:types = [
-    \ 'annotation',
-    \ 'class',
-    \ 'classOrEnum',
-    \ 'classOrInterface',
-    \ 'constructor',
-    \ 'enum',
-    \ 'field',
-    \ 'interface',
-    \ 'method',
-    \ 'package',
-    \ 'type']
-  let s:actions = ['split', 'vsplit', 'edit', 'tabnew', 'lopen']
+  let s:options_map = {
+      \ '-p': [],
+      \ '-i': [],
+      \ '-a': ['split', 'vsplit', 'edit', 'tabnew', 'lopen'],
+      \ '-s': ['all', 'project'],
+      \ '-x': ['all', 'declarations', 'implementors', 'references'],
+      \ '-t': [
+        \ 'annotation',
+        \ 'class',
+        \ 'classOrEnum',
+        \ 'classOrInterface',
+        \ 'constructor',
+        \ 'enum',
+        \ 'field',
+        \ 'interface',
+        \ 'method',
+        \ 'package',
+        \ 'type',
+      \ ],
+    \ }
 
   let s:search_alt_all = '\<<element>\>'
   let s:search_alt_references = s:search_alt_all
@@ -373,56 +376,22 @@ function! s:ViewDoc(...) " {{{
   call eclim#web#OpenUrl(url)
 endfunction " }}}
 
-function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPos) " {{{
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  if cmdLine =~ '-s\s\+[a-z]*$'
-    let scopes = deepcopy(s:scopes)
-    call filter(scopes, 'v:val =~ "^' . argLead . '"')
-    return scopes
-  elseif cmdLine =~ '-t\s\+[a-z]*$'
-    let types = deepcopy(s:types)
-    call filter(types, 'v:val =~ "^' . argLead . '"')
-    return types
-  elseif cmdLine =~ '-a\s\+[a-z]*$'
-    let actions = deepcopy(s:actions)
-    call filter(actions, 'v:val =~ "^' . argLead . '"')
-    return actions
-  elseif cmdLine =~ '-x\s\+[a-z]*$'
-    let contexts = deepcopy(s:contexts)
-    call filter(contexts, 'v:val =~ "^' . argLead . '"')
-    return contexts
-  elseif cmdLine =~ '\s\+[-]\?$'
-    let options = deepcopy(s:search_options)
-    " omit the -a args on a javadoc search since that opens externally
-    if cmdLine !~ '^JavaDocS'
-      let options += s:open_options
-    endif
-
-    let index = 0
-    for option in options
-      if a:cmdLine =~ option
-        call remove(options, index)
-      else
-        let index += 1
-      endif
-    endfor
-    return options
+function! eclim#java#search#CommandCompleteSearch(argLead, cmdLine, cursorPos) " {{{
+  let options_map = s:options_map
+  " omit the -a args on a javadoc search since those results are opened in a
+  " browser
+  if a:cmdLine =~ '^JavaDocS'
+    let options_map = copy(options_map)
+    unlet options_map['-a']
   endif
-  return []
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, options_map)
 endfunction " }}}
 
-function! eclim#java#search#CommandCompleteJavaSearchContext(argLead, cmdLine, cursorPos) " {{{
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  if cmdLine =~ '-a\s\+[a-z]*$'
-    let actions = deepcopy(s:actions)
-    call filter(actions, 'v:val =~ "^' . argLead . '"')
-    return actions
-  endif
-  return s:open_options
+function! eclim#java#search#CommandCompleteSearchContext(argLead, cmdLine, cursorPos) " {{{
+  let options_map = {'-a': s:options_map['-a']}
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, options_map)
 endfunction " }}}
 
 function! eclim#java#search#FindClassDeclaration() " {{{

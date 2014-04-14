@@ -42,12 +42,14 @@ command! -nargs=0 -buffer Validate :call eclim#lang#UpdateSrcFile('ruby', 1)
 
 if !exists(":RubySearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#ruby#search#CommandCompleteRubySearch
+    \ -complete=customlist,eclim#ruby#search#CommandCompleteSearch
     \ RubySearch :call eclim#ruby#search#Search('<args>')
 endif
 
 if !exists(":RubySearchContext")
-  command -buffer RubySearchContext :call eclim#ruby#search#SearchContext()
+  command -buffer -nargs=*
+    \ -complete=customlist,eclim#ruby#search#CommandCompleteSearchContext
+    \ RubySearchContext :call eclim#ruby#search#SearchContext('<args>')
 endif
 
 " }}}

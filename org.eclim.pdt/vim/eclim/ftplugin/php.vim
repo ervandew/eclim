@@ -46,12 +46,14 @@ command! -nargs=0 -buffer Validate :call eclim#php#util#UpdateSrcFile(0)
 
 if !exists(":PhpSearch")
   command -buffer -nargs=*
-    \ -complete=customlist,eclim#php#search#CommandCompletePhpSearch
+    \ -complete=customlist,eclim#php#search#CommandCompleteSearch
     \ PhpSearch :call eclim#php#search#Search('<args>')
 endif
 
 if !exists(":PhpSearchContext")
-  command -buffer PhpSearchContext :call eclim#php#search#SearchContext()
+  command -buffer -nargs=*
+    \ -complete=customlist,eclim#php#search#CommandCompleteSearchContext
+    \ PhpSearchContext :call eclim#php#search#SearchContext('<args>')
 endif
 
 " }}}
