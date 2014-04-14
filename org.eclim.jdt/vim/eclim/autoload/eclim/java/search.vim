@@ -26,7 +26,8 @@
     \ '-command <search> -n "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <length> <args>'
   let s:search_pattern = '-command <search>'
-  let s:options = ['-p', '-t', '-x', '-s', '-i', '-a']
+  let s:search_options = ['-p', '-t', '-x', '-s', '-i']
+  let s:open_options = ['-a']
   let s:contexts = ['all', 'declarations', 'implementors', 'references']
   let s:scopes = ['all', 'project']
   let s:types = [
@@ -266,14 +267,6 @@ function! s:BuildPattern() " {{{
   return class
 endfunction " }}}
 
-function! eclim#java#search#SearchContextAndDisplay(args) " {{{
-  let argline = '-a ' . g:EclimJavaSearchSingleResult
-  if a:args =~ '-a '
-    let argline = matchstr(a:args, '-a \w\+')
-  endif
-  call eclim#java#search#SearchAndDisplay('java_search', argline)
-endfunction " }}}
-
 function! eclim#java#search#SearchAndDisplay(type, args) " {{{
   " Execute a search and displays the results via quickfix.
 
@@ -289,10 +282,9 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
     let argline = '-p ' . argline
   endif
 
-  " get the action to take when the search returns only one result
-  let action = eclim#util#GetSingleResultAction(
-    \ argline, g:EclimJavaSearchSingleResult)
-  let argline = eclim#util#RemoveSingleResultActionFromArguments(argline)
+  " check for user supplied open action
+  let [action_args, argline] = eclim#util#ExtractCmdArgs(argline, '-a:')
+  let action = len(action_args) == 2 ? action_args[1] : g:EclimJavaSearchSingleResult
 
   let results = s:Search(a:type, argline)
   if type(results) != g:LIST_TYPE
@@ -309,14 +301,33 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
           lfirst
         endif
 
-      " single result in another file.
-      elseif len(results) == 1 && action != "lopen"
+      " single result in another file
+      elseif len(results) == 1 && action != 'lopen'
         let entry = getloclist(0)[0]
         let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
         call eclim#util#GoToBufferWindowOrOpen(name, action)
         call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
         call eclim#display#signs#Update()
         call cursor(entry.lnum, entry.col)
+
+      " multiple results and user specified an action other than lopen
+      elseif len(results) && len(action_args) && action != 'lopen'
+        let locs = getloclist(0)
+        let files = map(copy(locs),  'printf(' .
+          \ '"%s|%s col %s| %s", ' .
+          \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
+        let response = eclim#util#PromptList(
+          \ 'Please choose the file to ' . action,
+          \ files, g:EclimHighlightInfo)
+        if response == -1
+          return
+        endif
+        let entry = locs[response]
+        let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+        call eclim#util#GoToBufferWindowOrOpen(name, action)
+        call eclim#display#signs#Update()
+        call cursor(entry.lnum, entry.col)
+
       else
         exec 'lopen ' . g:EclimLocationListHeight
       endif
@@ -325,7 +336,7 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
       let filename = expand('%:p')
       call eclim#util#TempWindowClear(window_name)
 
-      if len(results) == 1 && g:EclimJavaDocSearchSingleResult == "open"
+      if len(results) == 1 && g:EclimJavaDocSearchSingleResult == 'open'
         let entry = results[0]
         call s:ViewDoc(entry)
       else
@@ -383,7 +394,12 @@ function! eclim#java#search#CommandCompleteJavaSearch(argLead, cmdLine, cursorPo
     call filter(contexts, 'v:val =~ "^' . argLead . '"')
     return contexts
   elseif cmdLine =~ '\s\+[-]\?$'
-    let options = deepcopy(s:options)
+    let options = deepcopy(s:search_options)
+    " omit the -a args on a javadoc search since that opens externally
+    if cmdLine !~ '^JavaDocS'
+      let options += s:open_options
+    endif
+
     let index = 0
     for option in options
       if a:cmdLine =~ option
@@ -406,38 +422,7 @@ function! eclim#java#search#CommandCompleteJavaSearchContext(argLead, cmdLine, c
     call filter(actions, 'v:val =~ "^' . argLead . '"')
     return actions
   endif
-  return ['-a']
-endfunction " }}}
-
-function! eclim#java#search#CommandCompleteJavaDocSearch(argLead, cmdLine, cursorPos) " {{{
-  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
-  let cmdTail = strpart(a:cmdLine, a:cursorPos)
-  let argLead = substitute(a:argLead, cmdTail . '$', '', '')
-  if cmdLine =~ '-s\s\+[a-z]*$'
-    let scopes = deepcopy(s:scopes)
-    call filter(scopes, 'v:val =~ "^' . argLead . '"')
-    return scopes
-  elseif cmdLine =~ '-t\s\+[a-z]*$'
-    let types = deepcopy(s:types)
-    call filter(types, 'v:val =~ "^' . argLead . '"')
-    return types
-  elseif cmdLine =~ '-x\s\+[a-z]*$'
-    let contexts = deepcopy(s:contexts)
-    call filter(contexts, 'v:val =~ "^' . argLead . '"')
-    return contexts
-  elseif cmdLine =~ '\s\+[-]\?$'
-    let options = deepcopy(s:options)
-    let index = 0
-    for option in options
-      if a:cmdLine =~ option || option =~ '-a'
-        call remove(options, index)
-      else
-        let index += 1
-      endif
-    endfor
-    return options
-  endif
-  return []
+  return s:open_options
 endfunction " }}}
 
 function! eclim#java#search#FindClassDeclaration() " {{{

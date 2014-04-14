@@ -1590,19 +1590,16 @@ function! eclim#util#CommandCompleteDir(argLead, cmdLine, cursorPos)
   return eclim#util#ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
-" ParseCmdLine(args) {{{
-" Parses the supplied argument line into a list of args.
-function! eclim#util#ParseCmdLine(args)
+function! eclim#util#ParseCmdLine(args) " {{{
+  " Parses the supplied argument line into a list of args.
   let args = split(a:args, '[^\\]\s\zs')
   call map(args, 'substitute(v:val, "\\([^\\\\]\\)\\s\\+$", "\\1", "")')
-
   return args
 endfunction " }}}
 
-" ParseCommandCompletionResults(args) {{{
-" Bit of a hack for vim's lack of support for escaped spaces in custom
-" completion.
-function! eclim#util#ParseCommandCompletionResults(argLead, results)
+function! eclim#util#ParseCommandCompletionResults(argLead, results) " {{{
+  " Bit of a hack for vim's lack of support for escaped spaces in custom
+  " completion.
   let results = a:results
   if stridx(a:argLead, ' ') != -1
     let removePrefix = escape(substitute(a:argLead, '\(.*\s\).*', '\1', ''), '\')
@@ -1611,28 +1608,41 @@ function! eclim#util#ParseCommandCompletionResults(argLead, results)
   return results
 endfunction " }}}
 
-" GetSingleResultAction(argline, default) {{{
-" Parses an argument line and returns the single result action
-" specified by -a <action>. If the argument does not exist then
-" the function returns the default value.
-function! eclim#util#GetSingleResultAction(argline, default)
-  let action = a:default
-  if a:argline =~ '-a '
-    let action = matchlist(a:argline, '-a \(\w\+\)')[1]
-  endif
-  return action
-endfunction "}}}
+function! eclim#util#ExtractCmdArgs(argline, extract) " {{{
+  " Extracts one or more args from the given argline.
+  " The 'extract' arg here is a list of args in the for '-x' where the -x arg
+  " would be extracted. You can also use the getopts like syntax of '-x:'
+  " (trailing colon) to indicate that you want the arg to the -x option to be
+  " extracted as well.
+  "
+  " Returns a tuple with a list of the extracted args the updated argline.
+  let extract = type(a:extract) == g:LIST_TYPE ? a:extract : [a:extract]
+  let args = eclim#util#ParseCmdLine(a:argline)
+  let extracted_args = []
+  let remaining_args = []
+  let extract_next = 0
+  for arg in args
+    if extract_next
+      call add(extracted_args, arg)
+      let extract_next = 0
+      continue
+    endif
+    for e in extract
+      let has_value = 0
+      if e =~ ':$'
+        let e = e[:-2]
+        let has_value = 1
+      endif
+      if arg == e
+        call add(extracted_args, arg)
+        let extract_next = has_value
+      else
+        call add(remaining_args, arg)
+      endif
+    endfor
+  endfor
 
-" RemoveSingleResultActionFromArguments(argline) {{{
-" Removes the -a <action> parameter from the argument line and returns
-" the shortened argument line. If the line does not contain an action
-" then the function simply returns the argument line as it is.
-function! eclim#util#RemoveSingleResultActionFromArguments(argline)
-  let args = a:argline
-  if args =~ '-a '
-    let args = substitute(args, '-a \w\+', '', '')
-  endif
-  return args
+  return [extracted_args, join(remaining_args)]
 endfunction "}}}
 
 " vim:ft=vim:fdm=marker
