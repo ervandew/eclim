@@ -662,7 +662,7 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     exec 'compiler ' . a:compiler
     let make_cmd = substitute(&makeprg, '\$\*', a:args, '')
 
-    if g:EclimMakeLCD
+    if g:EclimMakeLCD && eclim#EclimAvailable(0)
       let w:quickfix_dir = getcwd()
       let dir = eclim#project#util#GetCurrentProjectRoot()
       if dir != ''
