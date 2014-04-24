@@ -606,6 +606,14 @@ function! eclim#util#ListContains(list, element)
   return 0
 endfunction " }}}
 
+function! eclim#util#ListDedupe(list) " {{{
+  " assumes the list is presorted.
+  if exists('*uniq')
+    return uniq(copy(a:list))
+  endif
+  return filter(copy(a:list), 'index(a:list, v:val, v:key + 1) == -1')
+endfunction " }}}
+
 function! eclim#util#Make(bang, args) " {{{
   " Executes make using the supplied arguments.
 

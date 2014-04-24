@@ -350,8 +350,8 @@ function! eclim#lang#SilentUpdate(...) " {{{
     try
       if a:0 && a:1 && g:EclimTempFilesEnable
         " don't create temp files if no server is available to clean them up.
-        let project = eclim#project#util#GetCurrentProjectName()
-        let workspace = eclim#project#util#GetProjectWorkspace(project)
+        let project = eclim#project#util#GetProject(expand('%:p'))
+        let workspace = len(project) > 0 ? project.workspace : ''
         if workspace != '' && eclim#PingEclim(0, workspace)
           let prefix = '__eclim_temp_'
           let file = fnamemodify(file, ':h') . '/' . prefix . fnamemodify(file, ':t')

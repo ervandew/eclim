@@ -875,14 +875,26 @@ endfunction " }}}
 
 function! eclim#project#util#GetProjectWorkspace(name) " {{{
   " Gets the workspace that a project belongs to.
-  let project = {}
-  for p in eclim#project#util#GetProjects()
-    if p.name == a:name
-      let project = p
-      break
-    endif
+
+  " ensure s:workspace_projects is initialized
+  call eclim#project#util#GetProjects()
+
+  " loop through each workspace since the same project name could be used in
+  " more than one workspace.
+  let workspaces = []
+  for [workspace, projects] in items(s:workspace_projects)
+    for p in projects
+      if p.name == a:name
+        call add(workspaces, workspace)
+        break
+      endif
+    endfor
   endfor
-  return get(project, 'workspace', '')
+
+  if len(workspaces) > 1
+    return workspaces
+  endif
+  return len(workspaces) ? workspaces[0] : ''
 endfunction " }}}
 
 function! eclim#project#util#GetProjectRelativeFilePath(...) " {{{
@@ -1056,13 +1068,12 @@ function! eclim#project#util#GetProjectNames(...) " {{{
       let projects += results
     endfor
 
-    call map(projects, "v:val.name")
-    return projects
+    let names = map(projects, "v:val.name")
+  else
+    let names = map(eclim#project#util#GetProjects(), 'v:val.name')
   endif
 
-  let names = map(eclim#project#util#GetProjects(), 'v:val.name')
-  call sort(names)
-  return names
+  return eclim#util#ListDedupe(sort(names))
 endfunction " }}}
 
 function! eclim#project#util#GetProjectNatureAliases(...) " {{{

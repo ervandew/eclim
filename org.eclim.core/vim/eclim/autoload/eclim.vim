@@ -78,12 +78,27 @@ function! eclim#Execute(command, ...) " {{{
   let options = a:0 ? a:1 : {}
   let instance = get(options, 'instance', {})
   if len(instance) == 0
-    let workspace = ''
-
     let project = get(options, 'project', '')
     if project != ''
       let workspace = eclim#project#util#GetProjectWorkspace(project)
+      if type(workspace) == g:LIST_TYPE
+        let workspaces = workspace
+        unlet workspace
+        let response = eclim#util#PromptList(
+          \ 'Muliple workspaces found, please choose the target workspace',
+          \ workspaces, g:EclimHighlightInfo)
+
+        " user cancelled, error, etc.
+        if response < 0
+          return
+        endif
+
+        let workspace = workspaces[response]
+      endif
+    else
+      let workspace = ''
     endif
+
     if workspace == ''
       let workspace = get(options, 'workspace', '')
     endif

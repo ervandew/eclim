@@ -116,7 +116,7 @@ function! eclim#common#locate#LocateFile(action, file, ...) " {{{
     let b:project = project
     let results = s:LocateFileFunction(scope)(pattern)
   finally
-    unlet! b:workspce
+    unlet! b:workspace
     unlet! b:project
   endtry
 
@@ -421,7 +421,6 @@ function! s:ChooseScope() " {{{
     return
   endif
 
-  let workspace = ''
   let project = ''
   let locate_in = scope
 
@@ -444,6 +443,20 @@ function! s:ChooseScope() " {{{
     endwhile
     let locate_in = project
     let workspace = eclim#project#util#GetProjectWorkspace(project)
+    if type(workspace) == g:LIST_TYPE
+      let workspaces = workspace
+      unlet workspace
+      let response = eclim#util#PromptList(
+        \ 'Muliple workspaces found, please choose the target workspace',
+        \ workspaces, g:EclimHighlightInfo)
+
+      " user cancelled, error, etc.
+      if response < 0
+        return
+      endif
+
+      let workspace = workspaces[response]
+    endif
 
   elseif scope == 'workspace'
     let project = ''
@@ -452,6 +465,8 @@ function! s:ChooseScope() " {{{
       return
     endif
     let workspace = instance.workspace
+  else
+    let workspace = ''
   endif
 
   call s:CloseScopeChooser()
