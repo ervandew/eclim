@@ -139,7 +139,7 @@ function! s:EchoLevel(message, level, highlight) " {{{
 
   exec "echohl " . a:highlight
   redraw
-  if mode() == 'n' || mode() == 'c'
+  if mode() == 'n' || mode() == 'c' || s:log_levels[a:level] > s:log_levels['info']
     " Note: in command mode, the message won't display, but the user can view
     " it using :messages
     for line in messages
@@ -148,7 +148,8 @@ function! s:EchoLevel(message, level, highlight) " {{{
   else
     " if we aren't in normal mode then use regular 'echo' since echom
     " messages won't be displayed while the current mode is displayed in
-    " vim's command line.
+    " vim's command line (but still use echom above for debug/verbose messages
+    " so the user can get at them with :messages).
     echo join(messages, "\n") . "\n"
   endif
   echohl None
