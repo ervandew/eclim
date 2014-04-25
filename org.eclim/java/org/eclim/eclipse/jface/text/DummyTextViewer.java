@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.eclim.eclipse.jface.text;
+
+import org.eclim.eclipse.EclimPlugin;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IEventConsumer;
@@ -54,6 +56,7 @@ public class DummyTextViewer
 {
   public IDocument document;
   public ISelectionProvider selectionProvider;
+  private StyledText textWidget;
 
   public DummyTextViewer (IDocument document, int offset, int length)
   {
@@ -66,7 +69,11 @@ public class DummyTextViewer
 
   public StyledText getTextWidget()
   {
-    return null;
+    // needed by at least pydev when completing top level functions (see #307)
+    if (textWidget == null){
+      textWidget = new StyledText(EclimPlugin.getShell(), 0);
+    }
+    return textWidget;
   }
 
   public void setUndoManager(IUndoManager undoManager)

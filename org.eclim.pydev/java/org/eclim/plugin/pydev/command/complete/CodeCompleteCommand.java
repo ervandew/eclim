@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013  Eric Van Dewoestine
+ * Copyright (C) 2013 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
+import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
@@ -41,12 +42,15 @@ import org.python.pydev.core.docutils.PySelection;
 import org.python.pydev.editor.IPySyntaxHighlightingAndCodeCompletionEditor;
 import org.python.pydev.editor.PyEditConfigurationWithoutEditor;
 
+import org.python.pydev.editor.codecompletion.CompletionError;
 import org.python.pydev.editor.codecompletion.PyContentAssistant;
 import org.python.pydev.editor.codecompletion.PythonCompletionProcessor;
 
 import org.python.pydev.plugin.nature.PythonNature;
 
 import org.python.pydev.ui.ColorAndStyleCache;
+
+import com.python.pydev.analysis.CtxInsensitiveImportComplProposal;
 
 /**
  * Command to perform python code completion.
@@ -80,6 +84,19 @@ public class CodeCompleteCommand
     ICompletionProposal[] results =
       processor.computeCompletionProposals(viewer, offset);
     return results;
+  }
+
+  @Override
+  protected CodeCompleteResult createCodeCompletionResult(
+      ICompletionProposal proposal)
+  {
+    if (proposal instanceof CompletionError){
+      return null;
+    }
+    if (proposal instanceof CtxInsensitiveImportComplProposal){
+      return null;
+    }
+    return super.createCodeCompletionResult(proposal);
   }
 
   @Override

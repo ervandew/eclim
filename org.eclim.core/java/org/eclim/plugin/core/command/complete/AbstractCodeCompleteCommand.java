@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ public abstract class AbstractCodeCompleteCommand
       for (ICompletionProposal proposal : proposals){
         if(acceptProposal(proposal)){
           CodeCompleteResult ccresult = createCodeCompletionResult(proposal);
-          if(!results.contains(ccresult)){
+          if(ccresult != null && !results.contains(ccresult)){
             results.add(ccresult);
           }
         }
