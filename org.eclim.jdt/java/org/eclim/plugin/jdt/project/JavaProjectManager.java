@@ -134,10 +134,8 @@ public class JavaProjectManager
 
     // ivy.xml, pom.xml, etc updated.
     if(buildfile != null){
-      String filename = FileUtils.getBaseName(buildfile);
-      Parser parser = PARSERS.get(filename);
       try{
-        IClasspathEntry[] entries = merge(javaProject, parser.parse(buildfile));
+        IClasspathEntry[] entries = mergeWithBuildfile(javaProject, buildfile);
         errors = setClasspath(javaProject, entries, dotclasspath);
       }catch(IllegalStateException ise){
         errors.add(new Error(ise.getMessage(), buildfile, 1, 1, false));
@@ -406,28 +404,38 @@ public class JavaProjectManager
   }
 
   /**
-   * Merges the supplied project's classpath with the specified dependencies.
+   * Merge the supplied project's classpath with entries found in the specified
+   * build file.
    *
    * @param project The project.
-   * @param dependencies The dependencies.
+   * @param buildfile The path to the build file (pom.xml, ivy.xml, etc)
    * @return The classpath entries.
    */
-  protected IClasspathEntry[] merge(
-      IJavaProject project, Dependency[] dependencies)
+  protected IClasspathEntry[] mergeWithBuildfile(
+      IJavaProject project, String buildfile)
     throws Exception
   {
+    String filename = FileUtils.getBaseName(buildfile);
+    Parser parser = PARSERS.get(filename);
+    String var = parser.getClasspathVar();
+    Dependency[] dependencies = parser.parse(buildfile);
+
     IWorkspaceRoot root = project.getProject().getWorkspace().getRoot();
     ArrayList<IClasspathEntry> results = new ArrayList<IClasspathEntry>();
 
     // load the results with all the non library entries.
     IClasspathEntry[] entries = project.getRawClasspath();
-    for(int ii = 0; ii < entries.length; ii++){
-      if (entries[ii].getEntryKind() != IClasspathEntry.CPE_LIBRARY &&
-          entries[ii].getEntryKind() != IClasspathEntry.CPE_VARIABLE)
+    for(IClasspathEntry entry : entries){
+      if (entry.getEntryKind() != IClasspathEntry.CPE_LIBRARY &&
+          entry.getEntryKind() != IClasspathEntry.CPE_VARIABLE)
       {
-        results.add(entries[ii]);
-      } else if (preserve(entries[ii])){
-        results.add(entries[ii]);
+        results.add(entry);
+      }else{
+        IPath path = entry.getPath();
+        String prefix = path != null ? path.segment(0) : null;
+        if ((!var.equals(prefix)) || preserve(entry)){
+          results.add(entry);
+        }
       }
     }
 

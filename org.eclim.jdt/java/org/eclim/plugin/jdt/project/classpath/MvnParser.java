@@ -51,6 +51,12 @@ public class MvnParser
   private static XPathExpression xpath;
 
   @Override
+  public String getClasspathVar()
+  {
+    return MVN_REPO;
+  }
+
+  @Override
   public Dependency[] parse(Document document)
     throws Exception
   {

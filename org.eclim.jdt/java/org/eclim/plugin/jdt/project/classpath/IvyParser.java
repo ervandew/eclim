@@ -49,6 +49,12 @@ public class IvyParser
   private static XPathExpression xpath;
 
   @Override
+  public String getClasspathVar()
+  {
+    return IVY_REPO;
+  }
+
+  @Override
   public Dependency[] parse(Document document)
     throws Exception
   {
