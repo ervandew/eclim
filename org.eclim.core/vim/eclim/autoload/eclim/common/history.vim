@@ -140,7 +140,8 @@ function s:View(...) " {{{
     endif
 
     let cmd = len(a:000) > 0 ? a:000[0] : 'split'
-    call eclim#util#GoToBufferWindowOrOpen(current . '_' . revision, cmd)
+    call eclim#util#GoToBufferWindowOrOpen(
+      \ current . '_' . revision, 'keepalt ' . cmd)
 
     setlocal modifiable
     setlocal noreadonly
@@ -162,7 +163,7 @@ function s:View(...) " {{{
     setlocal noswapfile
     setlocal nobuflisted
     setlocal buftype=nofile
-    setlocal bufhidden=delete
+    setlocal bufhidden=wipe
     doautocmd BufReadPost
 
     call s:HighlightEntry(entry)

@@ -32,7 +32,7 @@ function! eclim#common#util#DiffLastSaved()
   if &modified
     let winnum = winnr()
     let filetype=&ft
-    vertical botright new | r #
+    vertical new | r #
     1,1delete _
 
     diffthis

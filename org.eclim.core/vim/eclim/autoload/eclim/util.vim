@@ -1438,10 +1438,9 @@ function! eclim#util#System(cmd, ...)
   return result
 endfunction " }}}
 
-" TempWindow(name, lines, [options]) {{{
-" Opens a temp window w/ the given name and contents which is readonly unless
-" specified otherwise.
-function! eclim#util#TempWindow(name, lines, ...)
+function! eclim#util#TempWindow(name, lines, ...) " {{{
+  " Opens a temp window w/ the given name and contents which is readonly unless
+  " specified otherwise.
   let options = a:0 > 0 ? a:1 : {}
   let filename = expand('%:p')
   let winnr = winnr()
@@ -1457,13 +1456,13 @@ function! eclim#util#TempWindow(name, lines, ...)
 
   if bufwinnr(bufname) == -1
     let height = get(options, 'height', 10)
-    silent! noautocmd exec "botright " . height . "sview " . name
+    silent! noautocmd exec "keepalt botright " . height . "sview " . name
     setlocal nowrap
     setlocal winfixheight
     setlocal noswapfile
     setlocal nobuflisted
     setlocal buftype=nofile
-    setlocal bufhidden=delete
+    setlocal bufhidden=wipe
     silent doautocmd WinEnter
   else
     let temp_winnr = bufwinnr(bufname)
@@ -1512,9 +1511,8 @@ function! eclim#util#TempWindow(name, lines, ...)
   endif
 endfunction " }}}
 
-" TempWindowClear(name) {{{
-" Clears the contents of the temp window with the given name.
-function! eclim#util#TempWindowClear(name)
+function! eclim#util#TempWindowClear(name) " {{{
+  " Clears the contents of the temp window with the given name.
   let name = eclim#util#EscapeBufferName(a:name)
   if bufwinnr(name) != -1
     let curwinnr = winnr()

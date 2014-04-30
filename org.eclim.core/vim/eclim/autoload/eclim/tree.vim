@@ -1,9 +1,6 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Filesystem explorer.
-"
-" License:
+" License: {{{
 "
 " Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
@@ -110,7 +107,7 @@ function! eclim#tree#Tree(name, roots, aliases, expand, filters) " {{{
   setlocal noswapfile
   setlocal nobuflisted
   setlocal buftype=nofile
-  setlocal bufhidden=delete
+  setlocal bufhidden=wipe
   setlocal foldmethod=manual
   setlocal foldtext=getline(v:foldstart)
   setlocal sidescrolloff=0
@@ -1108,7 +1105,7 @@ function! s:UpdateLine(pattern, substitution) " {{{
 endfunction " }}}
 
 function! eclim#tree#DisplayActionChooser(file, actions, executeFunc) " {{{
-  new
+  keepalt new
   let height = len(a:actions) + 1
 
   exec 'resize ' . height
@@ -1131,7 +1128,7 @@ function! eclim#tree#DisplayActionChooser(file, actions, executeFunc) " {{{
   setlocal nomodifiable
   setlocal noswapfile
   setlocal buftype=nofile
-  setlocal bufhidden=delete
+  setlocal bufhidden=wipe
 endfunction "}}}
 
 function! eclim#tree#ActionExecute(executeFunc) " {{{

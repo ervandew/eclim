@@ -1,11 +1,8 @@
 " Author:  Eric Van Dewoestine
 "
-" Description: {{{
-"   Utility functions for working with vim windows.
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -97,9 +94,9 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
   endif
 
   if relative_window != 0
-    let wincmd = relative_window . 'winc w | ' . relative_window_loc . ' '
+    let wincmd = relative_window . 'winc w | keepalt ' . relative_window_loc . ' '
   else
-    let wincmd = g:VerticalToolWindowPosition . ' ' . g:VerticalToolWindowWidth
+    let wincmd = 'keepalt ' . g:VerticalToolWindowPosition . ' ' . g:VerticalToolWindowWidth
   endif
 
   let escaped = substitute(
