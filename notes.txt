@@ -303,6 +303,11 @@ TODO {{{
         returning to vim.
       - add ability to supply jvm args, system properties, env vars, etc.
 
+    - Add simple :Jar command
+      - compile the project, alert if any compilation errors
+      - jar up the project's class files
+      - add option for the location of the project's manifest file if any
+
     - add support for generating toString, equals, hasCode methods
       https://github.com/ervandew/eclim/issues/212
 
