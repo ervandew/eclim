@@ -123,6 +123,13 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+May 07, 2014
+-------------
+
+Release of eclim for indigo users.
+
+- :ref:`Eclim 1.7.19 <1.7.19>`
+
 Apr. 12, 2014
 -------------
 

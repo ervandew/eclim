@@ -29,6 +29,17 @@ Eclim:
 
 | :gitlog:`Git Log (2.3.5) <2.3.4...2.3.5>`
 
+.. _1.7.19:
+
+1.7.19 (May 07, 2014)
+---------------------
+
+Indigo release which includes most of the changes from 2.3.3 and 2.3.4,
+excluding the new pydev support. This will most likely be the final eclim
+release for indigo.
+
+| :gitlog:`Git Log (1.7.19) <1.7.18...1.7.19>`
+
 .. _2.3.4:
 
 2.3.4 (Apr. 12, 2014)
