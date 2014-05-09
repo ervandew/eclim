@@ -58,6 +58,12 @@ function! eclim#Execute(command, ...) " {{{
   "   }
 
   if exists('g:EclimDisabled')
+    " if we are not in an autocmd or the autocmd is for an acwrite buffer,
+    " alert the user that eclimd is disabled.
+    if expand('<abuf>') == '' || &buftype == 'acwrite'
+      call eclim#util#EchoWarning(
+        \ "eclim is currently disabled. use :EclimEnable to enable it.")
+    endif
     return
   endif
 
