@@ -133,6 +133,10 @@
     <antcall target="gant"> <param name="target" value="patch.revert"/> </antcall>
   </target>
 
+  <target name="test.groovy">                                                                                                                                                                                 
+    <antcall target="gant"> <param name="target" value="org.eclim.groovy.plugin.compile"/> </antcall>
+  </target>
+
   <target name="gant">
     <path id="gant-classpath">
       <fileset dir="ant/lib" includes="*.jar"/>
