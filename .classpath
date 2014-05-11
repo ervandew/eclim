@@ -33,6 +33,8 @@
   <classpathentry kind="src" path="org.eclim.sdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.vimplugin/java"/>
   <classpathentry kind="src" path="org.eclim.wst/java"/>
+  <classpathentry kind="src" path="org.eclim.groovy/groovy"/>
   <classpathentry kind="src" path="org.eclim.wst/test/junit"/>
+  <classpathentry kind="con" path="GROOVY_SUPPORT"/>
   <classpathentry exported="true" kind="src" path="/formic"/>
 </classpath>

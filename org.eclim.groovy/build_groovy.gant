@@ -1,0 +1,31 @@
+feature_groovy = 'org.codehaus.groovy.jdt.patch'
+
+target(name: 'org.eclim.groovy.plugin.compile'){
+  mkdir(dir: '${build.classes}/org.eclim.groovy')
+  javac(
+    srcdir: 'org.eclim.groovy/groovy',
+        destdir: '${build.classes}/org.eclim.groovy',
+        debug: 'on',
+        optimize: false,
+        target: '1.6',
+        source: '1.6',
+        failonerror: true,
+        includeantruntime: false) {
+    classpath {
+      fileset(dir: '${eclipse}'){
+        include(name: 'dropins/**/plugins/*groovy*.jar')
+        include(name: 'plugins/*.jar')
+        include(name: 'org.eclipse.jface*.jar')
+        include(name:'org.eclipse.equinox.common*.jar')
+        include(name: 'plugins/*core*.jar')
+        include(name: 'plugins/*jdt*.jar')
+      }      
+      fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')
+      fileset(dir: 'build/temp/lib/groovy', erroronmissingdir: false){
+        include(name: '**/*.jar')
+      }
+    }
+
+
+  }
+}
