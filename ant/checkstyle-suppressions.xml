@@ -6,6 +6,7 @@
 
 <suppressions>
   <suppress files="com/martiansoftware" checks="\w*"/>
+  <suppress files="org/eclim/eclipse/jface" checks="\w*"/>
   <suppress files="org/vimplugin" checks="\w*"/>
   <suppress files="BufferedReader.java" checks="\w*"/>
 </suppressions>

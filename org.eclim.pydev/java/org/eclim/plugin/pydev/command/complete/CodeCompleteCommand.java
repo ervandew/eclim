@@ -127,7 +127,8 @@ public class CodeCompleteCommand
     }
 
     @Override
-    public File getEditorFile() {
+    public File getEditorFile()
+    {
       return file;
     }
 

@@ -159,7 +159,10 @@ public class ImportCommand
       while (next != null && next.getNodeType() == ASTNode.IMPORT_DECLARATION){
         ImportDeclaration nextImprt = (ImportDeclaration)next;
         if (!ImportUtils.importsInSameGroup(separationLevel, imprt, nextImprt)){
-          int end = imprt.getStartPosition() + imprt.getLength() + lineDelim.length();
+          int end =
+            imprt.getStartPosition() +
+            imprt.getLength() +
+            lineDelim.length();
           addLineDelim(astRoot, edit, end, lineDelim);
         }
         next = getNext(astRoot, next, lineDelim);

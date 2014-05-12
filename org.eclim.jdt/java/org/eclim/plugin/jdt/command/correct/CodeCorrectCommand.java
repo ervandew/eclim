@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -389,9 +389,11 @@ public class CodeCorrectCommand
         // if the proposal change touched the imports, then run our import
         // grouping edit after it.
         if (proposal instanceof ASTRewriteCorrectionProposal){
-          ASTRewriteCorrectionProposal astProposal = (ASTRewriteCorrectionProposal)proposal;
+          ASTRewriteCorrectionProposal astProposal =
+            (ASTRewriteCorrectionProposal)proposal;
           if (astProposal.getImportRewrite() != null){
-            TextEdit groupingEdit = ImportUtils.importGroupingEdit(src, getPreferences());
+            TextEdit groupingEdit =
+              ImportUtils.importGroupingEdit(src, getPreferences());
             if (groupingEdit != null){
               JavaModelUtil.applyEdit(src, groupingEdit, true, null);
               if (src.isWorkingCopy()) {

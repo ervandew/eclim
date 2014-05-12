@@ -136,9 +136,12 @@ public class PluginResources
       "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-8]\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+\n" +
       "JDT/Javadoc " + JavaUI.ID_PLUGIN + ".project_javadoc_location\n" +
-      "JDT/CodeComplete org.eclipse.jdt.core.codeComplete.camelCaseMatch (enabled|disabled)\n" +
-      "JDT/CodeComplete org.eclipse.jdt.core.codeComplete.deprecationCheck (enabled|disabled)\n" +
-      "JDT/CodeComplete org.eclipse.jdt.core.codeComplete.visibilityCheck (enabled|disabled)"
+      "JDT/CodeComplete " +
+        "org.eclipse.jdt.core.codeComplete.camelCaseMatch (enabled|disabled)\n" +
+      "JDT/CodeComplete " +
+        "org.eclipse.jdt.core.codeComplete.deprecationCheck (enabled|disabled)\n" +
+      "JDT/CodeComplete " +
+        "org.eclipse.jdt.core.codeComplete.visibilityCheck (enabled|disabled)"
     );
   }
 
