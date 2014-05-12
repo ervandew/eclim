@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -245,6 +245,8 @@ you will fall into one of two groups:
        switch windows (ex. ctrl-w j).
      - Ctrl+X: in eclipse this cuts a selection to the clipboard, but in gvim
        this is needed to start various insert completions (ex. ctrl-x ctrl-u).
+     - Delete: prevent the eclipse delete key binding from suppressing delete
+       attempts in the embedded gvim.
 
 .. _FeedKeys:
 
