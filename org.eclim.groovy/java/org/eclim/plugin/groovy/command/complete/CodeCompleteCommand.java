@@ -24,7 +24,7 @@ import org.codehaus.groovy.eclipse.codeassist.requestor.GroovyCompletionProposal
 
 import org.codehaus.groovy.eclipse.editor.GroovyEditor;
 
-import org.codehaus.jdt.groovy.core.dom.GroovyCompilationUnit;
+import org.codehaus.jdt.groovy.model.GroovyCompilationUnit;
 
 import org.eclim.annotation.Command;
 

@@ -8,8 +8,7 @@ Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclim.plugin.Plugin
 Bundle-ClassPath: .,
-  eclim.groovy.jar,
-  lib/groovy-eclipse-batch-2.1.5-03.jar
+  eclim.groovy.jar
 Require-Bundle: org.eclim,
   org.eclim.core,
   org.eclim.jdt,
@@ -20,5 +19,6 @@ Require-Bundle: org.eclim,
   org.eclipse.jdt.core,
   org.eclipse.jdt.groovy.core,
   org.eclipse.ui,
+  org.eclipse.ui.ide,
   org.codehaus.groovy.eclipse.codeassist.completion,
   org.codehaus.groovy.eclipse.ui
