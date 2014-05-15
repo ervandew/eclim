@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,14 +16,16 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
@@ -55,20 +57,25 @@ import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
-  private static final Comparator<CodeCompleteResult> COMPLETION_COMPARATOR =
+  protected static final Comparator<CodeCompleteResult> COMPLETION_COMPARATOR =
     new CompletionComparator();
 
-  private static String COMPACT = "compact";
-  //private static String STANDARD = "standard";
+  private ThreadLocal<CompletionProposalCollector> collector =
+    new ThreadLocal<CompletionProposalCollector>();
 
   @Override
-  public Object execute(CommandLine commandLine)
+  protected Object getResponse(List<CodeCompleteResult> results)
+  {
+    CompletionProposalCollector collector = this.collector.get();
+    return new CodeCompleteResponse(
+        results, collector.getError(), collector.getImports());
+  }
+
+  @Override
+  protected List<CodeCompleteResult> getCompletionResults(
+      CommandLine commandLine, String project, String file, int offset)
     throws Exception
   {
-    String project = commandLine.getValue(Options.PROJECT_OPTION);
-    String file = commandLine.getValue(Options.FILE_OPTION);
-    int offset = getOffset(commandLine);
-
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
     CompletionProposalCollector collector =
@@ -78,47 +85,46 @@ public class CodeCompleteCommand
     IJavaCompletionProposal[] proposals =
       collector.getJavaCompletionProposals();
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
-    for(int ii = 0; ii < proposals.length; ii++){
-      results.add(
-          createCompletionResult(collector, ii, proposals[ii]));
+    for(IJavaCompletionProposal proposal : proposals){
+      results.add(createCompletionResult(proposal));
     }
     Collections.sort(results, COMPLETION_COMPARATOR);
 
-    String layout = commandLine.getValue(Options.LAYOUT_OPTION);
-    if(COMPACT.equals(layout) && results.size() > 0){
-      results = compact(results);
-    }
+    this.collector.set(collector);
 
-    return new CodeCompleteResponse(
-        results, collector.getError(), collector.getImports());
+    return results;
   }
 
   /**
    * Create a CodeCompleteResult from the supplied CompletionProposal.
    *
-   * @param collector The completion collector.
-   * @param index The index of the proposal in the results.
    * @param proposal The proposal.
    *
    * @return The result.
    */
   protected CodeCompleteResult createCompletionResult(
-      CompletionProposalCollector collector,
-      int index,
       IJavaCompletionProposal proposal)
+    throws Exception
   {
     String completion = null;
     String menu = proposal.getDisplayString();
 
+    int kind = -1;
     if(proposal instanceof JavaCompletionProposal){
       JavaCompletionProposal lazy = (JavaCompletionProposal)proposal;
       completion = lazy.getReplacementString();
     }else if(proposal instanceof LazyJavaCompletionProposal){
       LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)proposal;
       completion = lazy.getReplacementString();
+      Method getProposal = LazyJavaCompletionProposal.class
+        .getDeclaredMethod("getProposal");
+      getProposal.setAccessible(true);
+      CompletionProposal cproposal = (CompletionProposal)getProposal.invoke(lazy);
+      if (cproposal != null){
+        kind = cproposal.getKind();
+      }
     }
 
-    int kind = collector.getProposal(index).getKind();
     switch(kind){
       case CompletionProposal.METHOD_REF:
         int length = completion.length();
@@ -133,7 +139,7 @@ public class CodeCompleteCommand
         if (menu.lastIndexOf(')') > menu.lastIndexOf('(') + 1 &&
             completion.charAt(length - 1) == ')')
         {
-          completion = completion.substring(0, completion.length() - 1);
+          completion = completion.substring(0, completion.lastIndexOf('(') + 1);
         }
         break;
       case CompletionProposal.TYPE_REF:

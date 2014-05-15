@@ -17,8 +17,8 @@
 package org.eclim.plugin.core.command.complete;
 
 import java.util.ArrayList;
-
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -59,6 +59,35 @@ public abstract class AbstractCodeCompleteCommand
     String file = commandLine.getValue(Options.FILE_OPTION);
     int offset = getOffset(commandLine);
 
+    List<CodeCompleteResult> results =
+      getCompletionResults(commandLine, project, file, offset);
+
+    String layout = commandLine.getValue(Options.LAYOUT_OPTION);
+    if(COMPACT.equals(layout) && results.size() > 0){
+      results = compact(results);
+    }
+    Collections.sort(results);
+    return getResponse(results);
+  }
+
+  protected Object getResponse(List<CodeCompleteResult> results)
+  {
+    return results;
+  }
+
+  /**
+   * Gets the list of CodeCompletionResult objects.
+   *
+   * @param commandLine The current command line.
+   * @param project The project name.
+   * @param file  The project relative file name.
+   * @param offset The offset in the file.
+   * @return The completion results.
+   */
+  protected List<CodeCompleteResult> getCompletionResults(
+      CommandLine commandLine, String project, String file, int offset)
+    throws Exception
+  {
     ICompletionProposal[] proposals =
       getCompletionProposals(commandLine, project, file, offset);
 
@@ -74,26 +103,7 @@ public abstract class AbstractCodeCompleteCommand
         }
       }
     }
-
-    String layout = commandLine.getValue(Options.LAYOUT_OPTION);
-    if(COMPACT.equals(layout) && results.size() > 0){
-      results = compact(results);
-    }
-    Collections.sort(results);
     return results;
-  }
-
-  /**
-   * Constructs a new CodeCompleteResult for the supplied proposal.
-   *
-   * @param proposal The ICompletionProposal.
-   * @return The CodeCompleteResult.
-   */
-  protected CodeCompleteResult createCodeCompletionResult(
-      ICompletionProposal proposal)
-  {
-    return new CodeCompleteResult(
-        getCompletion(proposal), getMenu(proposal), getInfo(proposal));
   }
 
   /**
@@ -141,7 +151,7 @@ public abstract class AbstractCodeCompleteCommand
    * @param commandLine The current command line.
    * @param project The project the file is in.
    * @param file The file.
-   * @return The ITextViewer.
+   * @return The ISourceViewer.
    */
   protected ISourceViewer getTextViewer(
       CommandLine commandLine, String project, String file)
@@ -161,6 +171,19 @@ public abstract class AbstractCodeCompleteCommand
   protected boolean acceptProposal(ICompletionProposal proposal)
   {
     return true;
+  }
+
+  /**
+   * Constructs a new CodeCompleteResult for the supplied proposal.
+   *
+   * @param proposal The ICompletionProposal.
+   * @return The CodeCompleteResult.
+   */
+  protected CodeCompleteResult createCodeCompletionResult(
+      ICompletionProposal proposal)
+  {
+    return new CodeCompleteResult(
+        getCompletion(proposal), getMenu(proposal), getInfo(proposal));
   }
 
   /**
@@ -209,7 +232,7 @@ public abstract class AbstractCodeCompleteCommand
    * @return The compacted results.
    */
   protected ArrayList<CodeCompleteResult> compact(
-      ArrayList<CodeCompleteResult> results)
+      List<CodeCompleteResult> results)
   {
     ArrayList<CodeCompleteResult> compactResults =
       new ArrayList<CodeCompleteResult>();

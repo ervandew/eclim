@@ -43,6 +43,12 @@
     </dependency>
   </feature>
 
+  <feature id="groovy">
+    <dependency id="org.codehaus.groovy.eclipse.feature" version="2.8.0">
+      <site url="http://dist.springsource.org/release/GRECLIPSE/e4.3/"/>
+    </dependency>
+  </feature>
+
   <feature id="pydev">
     <dependency id="org.python.pydev.feature" version="3.4.1">
       <site url="http://pydev.org/updates"/>

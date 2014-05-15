@@ -12,6 +12,7 @@ Bundle-ClassPath: .,
   ${eclim.lib.jars}
 Export-Package: org.eclim.plugin.jdt,
   org.eclim.plugin.jdt.command,
+  org.eclim.plugin.jdt.command.complete,
   org.eclim.plugin.jdt.command.include,
   org.eclim.plugin.jdt.command.search,
   org.eclim.plugin.jdt.preference,

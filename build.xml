@@ -77,14 +77,6 @@
     <antcall target="gant"> <param name="target" value="org.eclim.pdt.test"/> </antcall>
   </target>
 
-  <target name="test.python">
-    <antcall target="gant"> <param name="target" value="org.eclim.python.test"/> </antcall>
-  </target>
-
-  <target name="test.sdt">
-    <antcall target="gant"> <param name="target" value="org.eclim.sdt.test"/> </antcall>
-  </target>
-
   <target name="test.wst">
     <antcall target="gant"> <param name="target" value="org.eclim.wst.test"/> </antcall>
   </target>
@@ -93,8 +85,16 @@
     <antcall target="gant"> <param name="target" value="org.eclim.adt.test"/> </antcall>
   </target>
 
+  <target name="test.groovy">
+    <antcall target="gant"> <param name="target" value="org.eclim.groovy.test"/> </antcall>
+  </target>
+
   <target name="test.pydev">
     <antcall target="gant"> <param name="target" value="org.eclim.pydev.test"/> </antcall>
+  </target>
+
+  <target name="test.sdt">
+    <antcall target="gant"> <param name="target" value="org.eclim.sdt.test"/> </antcall>
   </target>
 
   <target name="dist" depends="clean">
@@ -131,10 +131,6 @@
 
   <target name="patch.revert">
     <antcall target="gant"> <param name="target" value="patch.revert"/> </antcall>
-  </target>
-
-  <target name="test.groovy">                                                                                                                                                                                 
-    <antcall target="gant"> <param name="target" value="org.eclim.groovy.plugin.compile"/> </antcall>
   </target>
 
   <target name="gant">
