@@ -311,8 +311,8 @@ endif
 if !exists(":SwapWords")
   command SwapWords :call eclim#common#util#SwapWords()
 endif
-if !exists(":SwapTypedArguments")
-  command SwapTypedArguments :call eclim#common#util#SwapTypedArguments()
+if !exists(":SwapAround")
+  command -nargs=1 SwapAround :call eclim#common#util#SwapAround('<args>')
 endif
 if !exists(":LocateFile")
   command -nargs=? LocateFile :call eclim#common#locate#LocateFile('', '<args>')
