@@ -19,7 +19,11 @@ package org.eclim.plugin.groovy;
 import org.codehaus.jdt.groovy.model.GroovyNature;
 
 import org.eclim.plugin.AbstractPluginResources;
+
+import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.project.ProjectNatureFactory;
+
+import org.eclim.plugin.groovy.project.GroovyProjectManager;
 
 import org.eclipse.jdt.core.JavaCore;
 
@@ -32,12 +36,21 @@ public final class PluginResources
   public static final String GROOVY_BUNDLE_BASENAME =
     "org/eclim/plugin/groovy/messages";
 
+  /**
+   * The eclipse nature id for this plugin.
+   */
+  public static final String NATURE = GroovyNature.GROOVY_NATURE;
+
   @Override
   public void initialize(String name)
   {
     super.initialize(name);
-    ProjectNatureFactory.addNature("groovy", GroovyNature.GROOVY_NATURE);
-    ProjectNatureFactory.addNature("java", JavaCore.NATURE_ID);
+
+    ProjectNatureFactory.addNature("groovy", new String[]{
+      NATURE,
+      JavaCore.NATURE_ID,
+    });
+    ProjectManagement.addProjectManager(NATURE, new GroovyProjectManager());
   }
 
   @Override

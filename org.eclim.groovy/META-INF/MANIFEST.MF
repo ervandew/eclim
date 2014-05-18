@@ -20,5 +20,6 @@ Require-Bundle: org.eclim,
   org.eclipse.jdt.groovy.core,
   org.eclipse.ui,
   org.eclipse.ui.ide,
+  org.codehaus.groovy.eclipse.core,
   org.codehaus.groovy.eclipse.codeassist.completion,
   org.codehaus.groovy.eclipse.ui
