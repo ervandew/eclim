@@ -136,7 +136,9 @@ public class CodeCompleteCommand
           length--;
         }
         // trim off the trailing paren if the method takes any arguments.
-        if (menu.lastIndexOf(')') > menu.lastIndexOf('(') + 1 &&
+        // Note: using indexOf instead of lastIndexOf to account for groovy
+        // completion menu text.
+        if (menu.indexOf(')') > menu.indexOf('(') + 1 &&
             completion.charAt(length - 1) == ')')
         {
           completion = completion.substring(0, completion.lastIndexOf('(') + 1);
