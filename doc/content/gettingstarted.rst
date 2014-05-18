@@ -52,6 +52,7 @@ the nature accordingly:
   :ProjectCreate /path/to/my_java_project -n android
   :ProjectCreate /path/to/my_c_project -n c
   :ProjectCreate /path/to/my_cpp_project -n c++
+  :ProjectCreate /path/to/my_groovy_project -n groovy
   :ProjectCreate /path/to/my_java_project -n java
   :ProjectCreate /path/to/my_php_project -n php
   :ProjectCreate /path/to/my_python_project -n python

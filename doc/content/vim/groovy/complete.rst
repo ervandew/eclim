@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,35 +13,13 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Documentation
-=============
+Groovy Code Completion
+======================
 
-Core Functionality
---------------------
+Groovy code completion uses the standard
+:doc:`Vim code completion mechanism </vim/code_completion>` like so:
 
-.. toctree::
-   :maxdepth: 1
+.. code-block:: groovy
 
-   ../eclimd
-
-.. toctree::
-   :maxdepth: 2
-
-   core/index
-
-Supported Languages
--------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   c/index
-   html/index
-   groovy/index
-   java/index
-   javascript/index
-   php/index
-   python/index
-   ruby/index
-   scala/index
-   xml/index
+   list = ['foo', 'bar', 'baz']
+   list.s<C-X><C-U>

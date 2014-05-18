@@ -27,6 +27,9 @@ Eclim:
   - Added :ref:`:VimSettings <:VimSettings>` command to make viewing/editing of
     eclim's vim client settings easier.
 
+Groovy:
+  - :doc:`Groovy support </vim/groovy/index>` added.
+
 | :gitlog:`Git Log (2.3.5) <2.3.4...2.3.5>`
 
 .. _1.7.19:
