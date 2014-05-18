@@ -320,6 +320,15 @@ Ruby Commands
   List the available ruby interpreters.
 
 
+Scala Commands
+-----------------
+
+- :ref:`:ScalaSearch <:ScalaSearch>` -
+  Search for the definition of the element under the cursor.
+- :ref:`:ScalaImport <:ScalaImport>` - Import the type under the cursor.
+- :ref:`:Validate <:Validate_scala>` - Manually runs source code validation.
+
+
 WebXml Commands
 -----------------
 
