@@ -111,7 +111,7 @@ function! eclim#python#django#manage#Manage(args) " {{{
     else
       let path = eclim#python#django#util#GetProjectPath()
       let engine = eclim#python#django#util#GetSqlEngine(path)
-      let dialect = has_key(s:sql_dialects, engine) ? s:sql_dialects[engine] : 'plsql'
+      let dialect = has_key(s:sql_dialects, engine) ? s:sql_dialects[engine] : 'plsql.vim'
 
       let filename = expand('%')
       let name = '__' . action . '__'
