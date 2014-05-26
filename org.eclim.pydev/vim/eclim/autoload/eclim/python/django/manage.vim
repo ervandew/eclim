@@ -48,6 +48,7 @@ let s:sql_dialects = {
     \ 'mysql': 'mysql.vim',
     \ 'postgresql': 'plsql.vim',
     \ 'sqlite3': 'sql.vim',
+    \ 'oracle': 'sqloracle.vim',
   \ }
 
 " }}}
