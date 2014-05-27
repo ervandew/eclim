@@ -129,7 +129,7 @@ function! eclim#client#nailgun#Execute(instance, command, ...) " {{{
     let command = substitute(command, '\^', '^^', 'g')
   endif
 
-  let eclim = result . ' --nailgun-port ' . a:instance.port . ' ' . command
+  let eclim = result . ' --nailgun-server localhost --nailgun-port ' . a:instance.port . ' ' . command
   if exec
     let eclim = '!' . eclim
   endif
