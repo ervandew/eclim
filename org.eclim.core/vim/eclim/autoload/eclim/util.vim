@@ -618,16 +618,6 @@ endfunction " }}}
 function! eclim#util#Make(bang, args) " {{{
   " Executes make using the supplied arguments.
 
-  " tpope/vim-rake/plugin/rake.vim will execute :Make if it exists, so mimic
-  " Rake's behavior here if that's the case.
-  if b:current_compiler == 'rake'
-    " See tpope/vim-rage/plugin/rake.vim s:Rake(bang,arg)
-    exec 'make! ' . a:args
-    if a:bang !=# '!'
-      exec 'cwindow'
-    endif
-    return
-  endif
   let makefile = findfile('makefile', '.;')
   let makefile2 = findfile('Makefile', '.;')
   if len(makefile2) > len(makefile)
@@ -679,8 +669,18 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
       endif
     endif
 
+    " use dispatch if available
+    if exists(':Dispatch') == 2
+      call eclim#util#EchoTrace('dispatch: ' . make_cmd)
+      " since dispatch is intended to run the make cmd in the background, make
+      " sure the errorformat doesn't suppress all the non-error output so the
+      " user can see the full build output in the quickfix window.
+      let &l:errorformat=substitute(&errorformat, '\M,%-G%.%#$', '', '')
+      exec 'Dispatch' . a:bang . ' _ ' . a:args
+
     " windows machines where 'tee' is available
-    if (has('win32') || has('win64')) && (executable('tee') || executable('wtee'))
+    elseif (has('win32') || has('win64')) &&
+         \ (executable('tee') || executable('wtee'))
       doautocmd QuickFixCmdPre make
       let resultfile = eclim#util#Exec(make_cmd, 2)
       if filereadable(resultfile)
