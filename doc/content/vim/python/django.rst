@@ -188,6 +188,10 @@ Contextual Find
 
       let g:EclimDjangoStaticPaths = ["../static/"]
 
+  Like the **:Django*Open** commands, **:DjangoFind** supports an optional ``-a
+  <action>`` argument to specify the vim command used to open the resulting
+  file.
+
 Configuration
 -------------
 
