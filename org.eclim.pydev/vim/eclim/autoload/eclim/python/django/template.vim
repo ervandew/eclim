@@ -19,7 +19,7 @@
 "
 " }}}
 
-function eclim#python#django#template#CompleteTag(tag_prefix, tag_suffix, body_elements) " {{{
+function! eclim#python#django#template#CompleteTag(tag_prefix, tag_suffix, body_elements) " {{{
   let line = getline('.')
   let match_start = '.*' . a:tag_prefix . '\%' . col('.') . 'c'
   if line =~ match_start . '\(\s\|' . a:tag_suffix . '\|$\)'
@@ -50,7 +50,7 @@ function eclim#python#django#template#CompleteTag(tag_prefix, tag_suffix, body_e
   return 'e'
 endfunction " }}}
 
-function s:GetTagComplete(line, tag_prefix, tag_suffix, body_elements) " {{{
+function! s:GetTagComplete(line, tag_prefix, tag_suffix, body_elements) " {{{
   let start_tag = a:tag_prefix . '\(end\)\@!\(\w\+\)\s*\([^}]\+\)\?' . a:tag_suffix
   let pairpos = searchpairpos(start_tag, '', '{%', 'bnW')
   if pairpos[0]
@@ -87,7 +87,7 @@ function s:GetTagComplete(line, tag_prefix, tag_suffix, body_elements) " {{{
   return ''
 endfunction " }}}
 
-function s:ExtractTags(line, tag_prefix, tag_suffix, body_elements) " {{{
+function! s:ExtractTags(line, tag_prefix, tag_suffix, body_elements) " {{{
   " Extracts a list of open tag names from the current line.
   let line = a:line
   let tags = []
