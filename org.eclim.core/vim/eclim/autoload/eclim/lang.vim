@@ -284,15 +284,15 @@ function! eclim#lang#UpdateSrcFile(lang, ...) " {{{
        \ g:EclimProjectProblemsUpdateOnSave
         let command = command . ' -b'
       endif
-    endif
 
-    let result = eclim#Execute(command)
-    if type(result) == g:LIST_TYPE && len(result) > 0
-      let errors = eclim#util#ParseLocationEntries(
-        \ result, g:EclimValidateSortResults)
-      call eclim#util#SetLocationList(errors)
-    else
-      call eclim#util#ClearLocationList('global')
+      let result = eclim#Execute(command)
+      if type(result) == g:LIST_TYPE && len(result) > 0
+        let errors = eclim#util#ParseLocationEntries(
+          \ result, g:EclimValidateSortResults)
+        call eclim#util#SetLocationList(errors)
+      else
+        call eclim#util#ClearLocationList('global')
+      endif
     endif
 
     call eclim#project#problems#ProblemsUpdate('save')
