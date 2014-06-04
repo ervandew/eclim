@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ statements.  For all of these commands, instead of just running the command in a
 shell, **:DjangoManage** will run the command and populate a new buffer with the
 resulting output and set the proper file type.
 
-
 Configuration
 -------------
 
@@ -44,148 +43,150 @@ Configuration
 
 .. _g\:EclimDjangoAdmin:
 
-- **g:EclimDjangoAdmin** = 'django-admin.py'
-
+- **g:EclimDjangoAdmin** (Default: 'django-admin.py') -
+  This setting specifies the location of your ``django-admin.py`` file. By
+  default it will attempt to locate it in your system path, but you can
+  optionally set an absolute path for eclim to use. Eclim currently only needs
+  access to this script when running ``:DjangoManage startproject <project_name>
+  [destination]``. All other **:DjangoManage** commands will use your project's
+  ``manage.py``.
 
 Django python support
 ---------------------
 
 .. _\:DjangoTemplateOpen:
 
-**Locating templates**
+Locating templates
+  The command **:DjangoTemplateOpen** supports finding and opening a template
+  referenced under the cursor.
 
-The command **:DjangoTemplateOpen** supports finding and opening a template
-referenced under the cursor.
+  Ex.
 
-Ex.
+  .. code-block:: python
 
-.. code-block:: python
-
-  # w/ cursor on 'mytemplates/mytemplate.html'
-  return render_to_response('mytemplates/mytemplate.html', ...)
+    # w/ cursor on 'mytemplates/mytemplate.html'
+    return render_to_response('mytemplates/mytemplate.html', ...)
 
 
 .. _\:DjangoViewOpen:
 
-**Locating views**
+Locating views
+  The command **:DjangoViewOpen** supports finding and opening a view referenced
+  under the cursor.
 
-The command **:DjangoViewOpen** supports finding and opening a view referenced
-under the cursor.
+  Ex.
 
-Ex.
+  .. code-block:: python
 
-.. code-block:: python
-
-    # w/ cursor on 'myproject.myapp.views' or 'my_view' on the second line.
-    urlpatterns = patterns('myproject.myapp.views',
-        (r'^$', 'my_view'),
-    )
+      # w/ cursor on 'myproject.myapp.views' or 'my_view' on the second line.
+      urlpatterns = patterns('myproject.myapp.views',
+          (r'^$', 'my_view'),
+      )
 
 .. _\:DjangoContextOpen:
 
-**Contextually locate file**
+Contextually locate file
+  The command **:DjangoContextOpen** supports executing **:DjangoViewOpen**,
+  **:DjangoTemplateOpen**, or **:PythonSearchContext** depending on the context
+  of the text under the cursor.
 
-The command **:DjangoContextOpen** supports executing **:DjangoViewOpen**,
-**:DjangoTemplateOpen**, or **:PythonSearchContext** depending on the context
-of the text under the cursor.
+Specifying the open command to use
+  All of the above **:Django*Open** commands support an optional ``-a`` argument
+  to specify the vim command used to open the result:
+
+  - -a: The vim command to use to open the result (edit, split, tabnew, etc).
 
 .. _htmldjango:
 
 Django html template support
 ----------------------------
 
-**Syntax**
+Syntax
+  Vim ships with a syntax file for django html template files, but eclim builds on
+  that base to support highlighting of user defined tags and filters (see the
+  configuration section below.
 
-Vim ships with a syntax file for django html template files, but eclim builds on
-that base to support highlighting of user defined tags and filters (see the
-configuration section below.
+Indent
+  Using the same settings as the enhanced syntax file, eclim also ships with an
+  indent script which provides indentation support all of the default django tags
+  and any user defined tags that have been configured.
 
-**Indent**
+Match It
+  Again, using the same set of variables, eclim sets the necessary variables to
+  allow proper matchit.vim support for django default and user defined tags.
 
-Using the same settings as the enhanced syntax file, eclim also ships with an
-indent script which provides indentation support all of the default django tags
-and any user defined tags that have been configured.
-
-**Match It**
-
-Again, using the same set of variables, eclim sets the necessary variables to
-allow proper matchit.vim support for django default and user defined tags.
-
-**End Tag Completion**
-
-Using the :ref:`g:HtmlDjangoUserBodyElements` setting along with the
-pre-configured default list of body elements, eclim includes support for auto
-completion of ending template tags when you type an ``{%e`` or ``{% e``.
+End Tag Completion
+  Using the :ref:`g:HtmlDjangoUserBodyElements` setting along with the
+  pre-configured default list of body elements, eclim includes support for auto
+  completion of ending template tags when you type an ``{%e`` or ``{% e``.
 
 .. _\:DjangoFind:
 
-**Contextual Find**
+Contextual Find
+  While editing django html templates, the command **:DjangoFind** which will
+  attempt to locate the relevant resource depending on what is under the cursor.
 
-While editing django html templates, the command **:DjangoFind** which will
-attempt to locate the relevant resource depending on what is under the cursor.
+  - If on a user defined tag, attempt to find the tag definition within the python
+    tag definition file.
 
-- If on a user defined tag, attempt to find the tag definition within the python
-  tag definition file.
+    Ex.
 
-  Ex.
+    ::
 
-  ::
+      {# w/ cursor on 'mytag' #}
+      {% mytag somearg %}
 
-    {# w/ cursor on 'mytag' #}
-    {% mytag somearg %}
+  - If on a user defined filter, attempt to find the filter definition within the
+    python filter definition file.
 
-- If on a user defined filter, attempt to find the filter definition within the
-  python filter definition file.
+    Ex.
 
-  Ex.
+    ::
 
-  ::
+      {# w/ cursor on 'myfilter' #}
+      {{ somevalue|myfilter }}
 
-    {# w/ cursor on 'myfilter' #}
-    {{ somevalue|myfilter }}
+  - If on the tag/filter definition portion of of a 'load' tag, attempt to
+    find the definition file.
 
-- If on the tag/filter definition portion of of a 'load' tag, attempt to
-  find the definition file.
+    Ex.
 
-  Ex.
+    ::
 
-  ::
+      {# w/ cursor on 'mytags' #}
+      {% load mytags %}
 
-    {# w/ cursor on 'mytags' #}
-    {% load mytags %}
+  - If on a reference to a template for ethier an 'extends' or 'include' tag,
+    attempt to find that template file.
 
-- If on a reference to a template for ethier an 'extends' or 'include' tag,
-  attempt to find that template file.
+    Ex.
 
-  Ex.
+    ::
 
-  ::
+      {# w/ cursor on 'include/mytemplate.html' #}
+      {% include "include/mytemplate.html" %}
 
-    {# w/ cursor on 'include/mytemplate.html' #}
-    {% include "include/mytemplate.html" %}
+  - If on static file reference, as defined in a 'src' or 'href' attribute
+    of an element, attempt to find that static file.
 
-- If on static file reference, as defined in a 'src' or 'href' attribute
-  of an element, attempt to find that static file.
+    Ex.
 
-  Ex.
+    ::
 
-  ::
+      {# w/ cursor on '/css/my.css' #}
+      <link rel="stylesheet" href="/css/my.css" type="text/css" />
 
-    {# w/ cursor on '/css/my.css' #}
-    <link rel="stylesheet" href="/css/my.css" type="text/css" />
+    Note: this functionality requires that
+    **g:EclimDjangoStaticPaths** is set to a list of absolute
+    or django project relative (relative to directory containing manage.py
+    and settings.py) directories, though it will fallback to using eclim's locate
+    file functionality.
 
-  Note: this functionality requires that
-  **g:EclimDjangoStaticPaths** is set to a list of absolute
-  or django project relative (relative to directory containing manage.py
-  and settings.py) directories, though it will fallback to using eclim's locate
-  file functionality.
+    Ex.
 
-  Ex.
+    .. code-block:: vim
 
-  .. code-block:: vim
-
-    let g:EclimDjangoStaticPaths = ["../static/"]
-
+      let g:EclimDjangoStaticPaths = ["../static/"]
 
 Configuration
 -------------
