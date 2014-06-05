@@ -19,12 +19,15 @@
 "
 " }}}
 
-function eclim#python#django#template#CompleteTag(tag_prefix, tag_suffix, body_elements) " {{{
+function! eclim#python#django#template#CompleteTag(tag_prefix, tag_suffix, body_elements) " {{{
   let line = getline('.')
   let match_start = '.*' . a:tag_prefix . '\%' . col('.') . 'c'
   if line =~ match_start . '\(\s\|' . a:tag_suffix . '\|$\)'
     let [start_line, start_col, tags] = s:GetTagComplete(
       \ line('.'), a:tag_prefix, a:tag_suffix, a:body_elements)
+    if start_line == 0
+      return 'e'
+    endif
 
     let prefix = substitute(line, '.*\(' . match_start . '\).*', '\1', '')
     let start = searchpos('{%', 'bn')[1]
@@ -35,22 +38,25 @@ function eclim#python#django#template#CompleteTag(tag_prefix, tag_suffix, body_e
     let start -= indent
 
     if len(tags) == 1
-      call eclim#util#Complete(start, [prefix . 'e', prefix . tags[0] . ' %}'])
-      return ''
+      " Append suffix, if it's not there already.
+      let compl_suffix = (line !~ match_start . a:tag_suffix ? ' %}' : ' ')
+      return (eclim#util#Complete(start, [prefix . 'e', prefix . tags[0] . compl_suffix])
+            \ ? '' : 'e')
+
     elseif len(tags)
       if line !~ match_start . a:tag_suffix
         call map(tags, 'prefix . (v:val != "elif" ? v:val . " %}" : v:val . " ")')
       elseif line !~ match_start . '\s'
         call map(tags, 'v:val . " "')
       endif
-      call eclim#util#Complete(start, [prefix . 'e'] + reverse(tags))
-      return ''
+      return (eclim#util#Complete(start, [prefix . 'e'] + reverse(tags))
+            \ ? '' : 'e')
     endif
   endif
   return 'e'
 endfunction " }}}
 
-function s:GetTagComplete(line, tag_prefix, tag_suffix, body_elements) " {{{
+function! s:GetTagComplete(line, tag_prefix, tag_suffix, body_elements) " {{{
   let start_tag = a:tag_prefix . '\(end\)\@!\(\w\+\)\s*\([^}]\+\)\?' . a:tag_suffix
   let pairpos = searchpairpos(start_tag, '', '{%', 'bnW')
   if pairpos[0]
@@ -84,10 +90,10 @@ function s:GetTagComplete(line, tag_prefix, tag_suffix, body_elements) " {{{
       call setpos('.', pos)
     endtry
   endif
-  return ''
+  return [0, 0, '']
 endfunction " }}}
 
-function s:ExtractTags(line, tag_prefix, tag_suffix, body_elements) " {{{
+function! s:ExtractTags(line, tag_prefix, tag_suffix, body_elements) " {{{
   " Extracts a list of open tag names from the current line.
   let line = a:line
   let tags = []

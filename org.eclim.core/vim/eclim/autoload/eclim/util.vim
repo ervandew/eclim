@@ -1055,13 +1055,26 @@ function! eclim#util#PromptConfirm(prompt, ...)
   return response =~ '\c\s*\(y\(es\)\?\)\s*'
 endfunction " }}}
 
+" Complete(start, completions) {{{
+" Returns 1 if completion has been setup/triggered, 0 if not (because it is
+" active already) and any input trigger would need to be inserted by the
+" caller.
 function! eclim#util#Complete(start, completions) " {{{
   if !exists('##CompleteDone')
-    return complete(a:start, a:completions)
+    call complete(a:start, a:completions)
+    return 1
   endif
 
   let b:eclim_complete_temp_start = a:start
   let b:eclim_complete_temp_completions = a:completions
+
+  " If the temporary completion is active already, stop here and indicate
+  " that the trigger needs to be inserted manually by returning 0.
+  " (e.g. '{% e<BS>e' in a Django template)
+  if &completefunc == 'eclim#util#CompleteTemp'
+    return 0
+  endif
+
   let b:eclim_complete_temp_func = &completefunc
   let b:eclim_complete_temp_opt = &completeopt
   augroup eclim_complete_temp
@@ -1071,6 +1084,7 @@ function! eclim#util#Complete(start, completions) " {{{
   setlocal completefunc=eclim#util#CompleteTemp
   setlocal completeopt=menuone,longest
   call feedkeys("\<c-x>\<c-u>", "n")
+  return 1
 endfunction " }}}
 
 function! eclim#util#CompleteTemp(findstart, base) " {{{
