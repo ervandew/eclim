@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class HtmlCodeCompleteCommandTest
     assertEquals("Wrong number of errors.", 2, results.size());
 
     Map<String,Object> result = results.get(0);
-    assertEquals(result.get("completion"), "href");
+    assertEquals(result.get("completion"), "href=\"");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"),
         "<p><b>Attribute : </b>href</p><p><b>Data Type : </b>URI</p>");

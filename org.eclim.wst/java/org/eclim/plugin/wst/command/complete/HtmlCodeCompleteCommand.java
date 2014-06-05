@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,11 @@ import org.eclim.command.CommandLine;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
+import org.eclipse.jface.text.templates.TemplateProposal;
+
 import org.eclipse.wst.html.ui.internal.contentassist.HTMLContentAssistProcessor;
+
+import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 
 /**
  * Command to handle html code completion requests.
@@ -52,7 +56,32 @@ public class HtmlCodeCompleteCommand
   @Override
   protected boolean acceptProposal(ICompletionProposal proposal)
   {
+    if (proposal instanceof TemplateProposal){
+      return false;
+    }
     String display = proposal.getDisplayString();
-    return !display.toLowerCase().startsWith("close with");
+    return
+      !display.toLowerCase().startsWith("close with") &&
+      !display.toLowerCase().startsWith("end with");
+  }
+
+  @Override
+  protected String getCompletion(ICompletionProposal proposal)
+  {
+    if (proposal instanceof CustomCompletionProposal){
+      CustomCompletionProposal completion = (CustomCompletionProposal)proposal;
+      String replacement = completion.getReplacementString();
+      // strip off trailing " on attribute completions
+      if (replacement.endsWith("\"")){
+        return replacement.substring(0, replacement.length() - 1);
+      }
+      // strip off closing tag so the user doesn't have to then move back to the
+      // end of the start tag to keep typing.
+      if (replacement.indexOf("</") != -1){
+        return replacement.substring(0, replacement.indexOf("</"));
+      }
+      return replacement;
+    }
+    return proposal.getDisplayString();
   }
 }
