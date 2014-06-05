@@ -637,7 +637,7 @@ NOTES {{{
 
     Others
       $ vim ~/.xinitrc
-      /usr/local/java/eclipse/eclimd start
+      /usr/local/java/eclipse/eclimd -b
   }}}
 
   Linux distro eclim dependency packages  {{{

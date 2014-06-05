@@ -379,7 +379,7 @@ The last step is to start Xvfb followed by eclimd:
 ::
 
   $ Xvfb :1 -screen 0 1024x768x24 &
-  $ DISPLAY=:1 ./eclipse/eclimd start
+  $ DISPLAY=:1 ./eclipse/eclimd -b
 
 When starting Xvfb you may receive some errors regarding font paths and
 possibly dbus and hal, but as long as Xvfb continues to run, you should be
