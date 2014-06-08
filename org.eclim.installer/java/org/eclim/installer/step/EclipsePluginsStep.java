@@ -547,6 +547,7 @@ public class EclipsePluginsStep
       NAMES.add("featureList.pdt");
       NAMES.add("featureList.pydev");
       NAMES.add("featureList.sdt210");
+      NAMES.add("featureList.groovy");
     }
 
     public int compare(String ob1, String ob2)
