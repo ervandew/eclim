@@ -6,3 +6,10 @@ target(name: 'org.eclim.groovy.classpath'){
     include(name: 'plugins/*groovy*.jar')
   }
 }
+
+target(name: 'org.eclim.groovy.test'){
+  depends('test.init')
+  runTests('org.eclim.groovy'){
+    createProject('org.eclim.groovy', 'eclim_unit_test_groovy')
+  }
+}
