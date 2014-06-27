@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ import java.io.FilenameFilter;
 import org.eclim.Services;
 
 import org.eclim.eclipse.EclimDaemon;
-import org.eclim.eclipse.EclimPlugin;
 
 import org.eclim.logging.Logger;
 
@@ -69,10 +68,7 @@ public class CorePlugin
     return plugin;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Plugin#activate(BundleContext)
-   */
+  @Override
   public void activate(BundleContext context)
   {
     super.activate(context);
@@ -105,9 +101,7 @@ public class CorePlugin
 
       Bundle bundle = Platform.getBundle(plugin);
       if(bundle == null){
-        String diagnosis = EclimPlugin.getDefault().diagnose(plugin);
-        String message =
-          Services.getMessage("plugin.load.failed", plugin, diagnosis);
+        String message = Services.getMessage("plugin.load.failed", plugin);
         logger.error(message);
         //throw new RuntimeException(message);
       }else{
@@ -127,10 +121,7 @@ public class CorePlugin
         new FrameworkEvent(FrameworkEvent.INFO, getBundle(), null));
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.osgi.framework.BundleActivator#stop(BundleContext)
-   */
+  @Override
   public void stop(BundleContext context)
     throws Exception
   {
@@ -148,10 +139,7 @@ public class CorePlugin
     ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IResourceChangeListener#resourceChanged(IResourceChangeEvent)
-   */
+  @Override
   public void resourceChanged(IResourceChangeEvent event)
   {
     int type = event.getType();
