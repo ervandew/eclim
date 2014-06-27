@@ -79,7 +79,7 @@ call eclim#AddVimSetting(
   \ 'Sets how validation results from the various language validators will be sorted',
   \ '\(occurrence\|severity\)')
 call eclim#AddVimSetting(
-  \ 'Core', 'g:EclimTempFilesEnable', 1,
+  \ 'Core', 'g:EclimTempFilesEnable', 0,
   \ 'Should eclim ever use temp files for code completion, etc.',
   \ '\(0\|1\)')
 call eclim#AddVimSetting(
