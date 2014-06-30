@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2011 - 2013  Eric Van Dewoestine
+" Copyright (C) 2011 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ function! TestValidate()
 
   call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
   call vunit#AssertEquals(9, results[0].lnum, 'Wrong line num.')
-  call vunit#AssertEquals(5, results[0].col, 'Wrong col num.')
+  call vunit#AssertEquals(10, results[0].col, 'Wrong col num.')
   call vunit#AssertEquals(
     \ "value foo is not a member of eclim.test.TestScala",
     \ results[0].text, 'Wrong result.')

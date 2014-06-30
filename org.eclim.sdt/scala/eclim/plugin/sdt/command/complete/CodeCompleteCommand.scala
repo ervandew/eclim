@@ -24,11 +24,6 @@ import scala.collection.JavaConversions
 
 import scala.collection.mutable.ListBuffer
 
-import scala.tools.eclipse.ScalaWordFinder
-
-import scala.tools.eclipse.completion.CompletionProposal
-import scala.tools.eclipse.completion.ScalaCompletions
-
 import eclim.plugin.sdt.util.ScalaUtils
 
 import org.eclim.annotation.Command
@@ -41,6 +36,11 @@ import org.eclim.plugin.core.command.AbstractCommand
 import org.eclim.plugin.core.command.complete.CodeCompleteResult
 
 import org.eclim.plugin.core.util.ProjectUtils
+
+import org.scalaide.core.completion.CompletionProposal
+import org.scalaide.core.completion.ScalaCompletions
+
+import org.scalaide.util.internal.ScalaWordFinder
 
 /**
  * Command which provides completion proposals.
@@ -65,10 +65,9 @@ class CodeCompleteCommand
 
     val chars = ProjectUtils.getDocument(project, file).get.toCharArray
     val region = ScalaWordFinder.findCompletionPoint(chars, offset)
-    val empty: List[CompletionProposal] = List()
     val proposals = src.withSourceFile {
       COMPLETIONS.findCompletions(region)(offset, src)
-    }(empty)
+    }.getOrElse(List())
 
     val results: ListBuffer[CodeCompleteResult] = ListBuffer()
     for (proposal <- proposals.sortBy(p => (-p.relevance, p.completion))){
@@ -79,7 +78,7 @@ class CodeCompleteCommand
       // for short desc, shorten all fully qualified Types to just the type.
       val shortDescription = description.replaceAll(
           "[a-zA-Z]\\w*[\\w.]*\\.(\\w+[^.])", "$1")
-      completion = if (proposal.paramTypes.size > 0)
+      completion = if (proposal.paramTypes.head.size > 0)
         completion + "(" else completion
       results += new CodeCompleteResult(
         completion, shortDescription, description)

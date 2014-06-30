@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2014 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,17 +19,6 @@ package eclim.plugin.sdt.command.search
 import java.io.File
 
 import scala.collection.JavaConversions
-
-import scala.tools.eclipse.ScalaWordFinder
-
-import scala.tools.eclipse.hyperlink.text.Hyperlink
-
-import scala.tools.eclipse.hyperlink.text.detector.ScalaDeclarationHyperlinkComputer
-
-import scala.tools.eclipse.javaelements.ScalaClassFile
-import scala.tools.eclipse.javaelements.ScalaCompilationUnit
-import scala.tools.eclipse.javaelements.ScalaSelectionEngine
-import scala.tools.eclipse.javaelements.ScalaSelectionRequestor
 
 import eclim.plugin.sdt.util.ScalaUtils
 
@@ -54,6 +43,18 @@ import org.eclipse.jdt.core.IPackageFragmentRoot
 import org.eclipse.jdt.core.search.SearchMatch
 
 import org.eclipse.jface.text.hyperlink.IHyperlink
+
+import org.scalaide.core.hyperlink.Hyperlink
+
+import org.scalaide.core.hyperlink.detector.ScalaDeclarationHyperlinkComputer
+
+import org.scalaide.core.internal.jdt.model.ScalaClassFile
+import org.scalaide.core.internal.jdt.model.ScalaCompilationUnit
+
+import org.scalaide.core.internal.jdt.search.ScalaSelectionEngine
+import org.scalaide.core.internal.jdt.search.ScalaSelectionRequestor
+
+import org.scalaide.util.internal.ScalaWordFinder
 
 /**
  * Command to handle scala search requests.

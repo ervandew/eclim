@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2013 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2014 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ package eclim.plugin.sdt.util
 
 import org.eclim.plugin.jdt.util.JavaUtils
 
-import scala.tools.eclipse.javaelements.ScalaSourceFile
+import org.scalaide.core.internal.jdt.model.ScalaSourceFile
 
 /**
  * Utility methods for working with scala files / projects.
@@ -46,7 +46,7 @@ object ScalaUtils
    */
   def refreshSourceFile(src: ScalaSourceFile): ScalaSourceFile = {
     if (src != null){
-      src.scalaProject.doWithPresentationCompiler(_.askReload(src, src.getContents))
+      src.scalaProject.presentationCompiler.apply(_.askReload(src, src.getContents))
     }
     src
   }

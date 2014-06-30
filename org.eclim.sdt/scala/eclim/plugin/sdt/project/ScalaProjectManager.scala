@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2012 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2014 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,6 @@
  */
 package eclim.plugin.sdt.project
 
-import scala.tools.eclipse.Nature
-import scala.tools.eclipse.ScalaPlugin
-
-import scala.tools.eclipse.javaelements.ScalaSourceFile
-
 import eclim.plugin.sdt.PluginResources
 
 import eclim.plugin.sdt.util.ScalaUtils
@@ -36,6 +31,12 @@ import org.eclipse.core.resources.IProject
 import org.eclipse.core.runtime.NullProgressMonitor
 
 import org.eclipse.jdt.core.JavaCore
+
+import org.scalaide.core.ScalaPlugin
+
+import org.scalaide.core.internal.jdt.model.ScalaSourceFile
+
+import org.scalaide.core.internal.project.Nature
 
 /**
  * {@link ProjectManager} for scala projects.

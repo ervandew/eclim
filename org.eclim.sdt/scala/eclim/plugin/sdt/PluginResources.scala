@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2012 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2014 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package eclim.plugin.sdt
 
+import eclim.plugin.sdt.project.ScalaProjectManager
+
 import org.eclim.Services
 
 import org.eclim.plugin.AbstractPluginResources
@@ -23,9 +25,7 @@ import org.eclim.plugin.AbstractPluginResources
 import org.eclim.plugin.core.project.ProjectManagement
 import org.eclim.plugin.core.project.ProjectNatureFactory
 
-import eclim.plugin.sdt.project.ScalaProjectManager
-
-import scala.tools.eclipse.ScalaPlugin
+import org.scalaide.core.ScalaPlugin
 
 /**
  * Implementation of AbstractPluginResources.

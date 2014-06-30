@@ -1,47 +1,19 @@
 feature_sdt = 'org.scala-ide.sdt.feature'
 
-target(name: 'org.eclim.sdt.classpath.prepare'){
-  unjar(dest: 'build/temp/lib/scala'){
-    fileset(dir: '${eclipse}'){
-      include(name: 'dropins/**/plugins/org.scala-ide.scala.*.jar')
-      include(name: 'plugins/org.scala-ide.scala.*.jar')
-    }
-    patternset{
-      include(name: '**/*.jar')
-      exclude(name: '**/*-src.jar')
-    }
-  }
-}
-
 target(name: 'org.eclim.sdt.classpath'){
   fileset(dir: '${eclipse}'){
     include(name: 'dropins/**/plugins/org.scala-ide.*.jar')
+    include(name: 'dropins/**/plugins/org.scala-lang.*.jar')
+    include(name: 'dropins/**/plugins/org.scala-refactoring.*.jar')
     include(name: 'plugins/org.scala-ide.*.jar')
+    include(name: 'plugins/org.scala-lang.*.jar')
     include(name: 'plugins/org.scala-refactoring.*.jar')
-  }
-  fileset(dir: 'build/temp/lib/scala'){
-    include(name: '**/*.jar')
   }
 }
 
 target(name: 'org.eclim.sdt.plugin.compile'){
-  path(id: 'scala-libs'){
-    fileset(dir: 'build/temp/lib/scala', erroronmissingdir: false){
-      include(name: '**/*.jar')
-    }
-  }
-
-  pathconvert(
-    pathsep: '${line.separator}\t',
-    property: 'jars',
-    refid: 'scala-libs')
-  {
-    mapper{ flattenmapper() }
-  }
-  echo('Scala libs:\n\t${jars}')
-
   taskdef(resource: 'scala/tools/ant/antlib.xml'){
-    classpath(refid: 'scala-libs')
+    classpath(refid: 'classpath')
   }
 
   mkdir(dir: '${build.classes}/org.eclim.sdt')

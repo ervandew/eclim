@@ -18,12 +18,6 @@ package eclim.plugin.sdt.command.include
 
 import scala.collection.JavaConversions
 
-import scala.tools.eclipse.ScalaWordFinder
-
-import scala.tools.eclipse.javaelements.ScalaSourceFile
-
-import scala.tools.eclipse.refactoring.EditorHelpers
-
 import scala.tools.refactoring.implementations.AddImportStatement
 
 import eclim.plugin.sdt.util.ScalaUtils
@@ -51,6 +45,12 @@ import org.eclipse.jdt.core.search.TypeNameMatch
 
 import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
 import org.eclipse.jdt.internal.corext.util.TypeNameMatchCollector
+
+import org.scalaide.core.internal.jdt.model.ScalaSourceFile
+
+import org.scalaide.util.internal.ScalaWordFinder
+
+import org.scalaide.util.internal.eclipse.EditorUtils
 
 /**
  * Command to add an import to a scala source file.
@@ -125,11 +125,11 @@ class ImportCommand
                refactoring.addImport(src.file, imprt)
              }
          }) getOrElse Nil
-      }(Nil)
+      }.getOrElse(List())
       val project = src.getJavaProject.getProject
       val document = ProjectUtils.getDocument(project, file)
       val ifile = ProjectUtils.getFile(project, file)
-      val edit = EditorHelpers.createTextFileChange(ifile, changes).getEdit
+      val edit = EditorUtils.createTextFileChange(ifile, changes).getEdit
       JavaModelUtil.applyEdit(src, edit, true, null)
 
       exception match {
