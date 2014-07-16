@@ -219,6 +219,14 @@ if !exists(":Checkstyle")
   command -nargs=0 -buffer Checkstyle :call eclim#java#src#Checkstyle()
 endif
 
+if !exists(":JavaDebug")
+  command -nargs=+ -buffer JavaDebug :call eclim#java#debug#Debug(<f-args>)
+endif
+
+if !exists(":JavaBreakpoint")
+  command -nargs=0 -buffer JavaBreakpoint :call eclim#java#debug#Breakpoint()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker
