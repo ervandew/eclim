@@ -120,6 +120,12 @@ call eclim#AddVimSetting(
   \ "(:Ant, :Maven, :Mvn, etc) will change to the current file's\n" .
   \ "project root before executing.",
   \ '\(0\|1\)')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimMakeDispatchEnabled', 1,
+  \ "When tpope/vim-dispatch is installed and this option is set\n" .
+  \ "to a non-0 value, then eclim will run its make based commands\n" .
+  \ "(:Ant, :Maven, :Mvn, etc) via dispatch.",
+  \ '\(0\|1\)')
 
 call eclim#AddVimSetting(
   \ 'Core/Signs', 'g:EclimSignLevel', has('signs') ? 'info' : 'off',

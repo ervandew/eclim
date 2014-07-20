@@ -669,8 +669,8 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
       endif
     endif
 
-    " use dispatch if available
-    if exists(':Dispatch') == 2
+    " use dispatch if available and not disabled
+    if exists(':Dispatch') == 2 && g:EclimMakeDispatchEnabled
       call eclim#util#EchoTrace('dispatch: ' . make_cmd)
       " since dispatch is intended to run the make cmd in the background, make
       " sure the errorformat doesn't suppress all the non-error output so the
