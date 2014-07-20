@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ function! TestJUnit() " {{{
   call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.FooTest',
     \ 'Run full test: Testsuite')
   call vunit#AssertTrue(getline(4) =~
-    \ 'Tests run: 3, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: [0-9.]\+ sec',
     \ 'Run full test: Tests run')
 
   let lines = sort(getline(6, 8))
@@ -73,7 +73,7 @@ function! TestJUnit() " {{{
   call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.FooTest',
     \ 'Run test: Testsuite')
   call vunit#AssertTrue(getline(4) =~
-    \ 'Tests run: 1, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: [0-9.]\+ sec',
     \ 'Run test: Tests run')
   call vunit#AssertTrue(getline(6) =~ 'Testcase: foo took [0-9.]\+ sec',
     \ 'Run test: foo')
@@ -89,7 +89,7 @@ function! TestJUnit() " {{{
   call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.FooTest',
     \ 'Run class test: Testsuite')
   call vunit#AssertTrue(getline(4) =~
-    \ 'Tests run: 1, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: [0-9.]\+ sec',
     \ 'Run class test: Tests run')
   call vunit#AssertTrue(getline(6) =~ 'Testcase: fooString took [0-9.]\+ sec',
     \ 'Run class test: fooString')
@@ -104,12 +104,12 @@ function! TestJUnit() " {{{
   call vunit#AssertEquals(getline(2), 'Testsuite: org.eclim.test.junit.run.BarTest',
     \ 'Run pattern: Testsuite 1')
   call vunit#AssertTrue(getline(4) =~
-    \ 'Tests run: 1, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: [0-9.]\+ sec',
     \ 'Run pattern: Tests run 1')
   call vunit#AssertEquals(getline(9), 'Testsuite: org.eclim.test.junit.run.FooTest',
     \ 'Run pattern: Testsuite 2')
   call vunit#AssertTrue(getline(11) =~
-    \ 'Tests run: 3, Failures: 0, Errors: 0, Time elapsed: [0-9.]\+ sec',
+    \ 'Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: [0-9.]\+ sec',
     \ 'Run pattern: Tests run 2')
   bdelete
 endfunction " }}}
