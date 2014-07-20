@@ -34,6 +34,8 @@ runtime! indent/css.vim
 setlocal indentexpr=EclimGetHtmlIndent(v:lnum)
 setlocal indentkeys+=>,},0),0},),;,0{,!^F,o,O
 
+let s:noindent = ['br', 'img', 'input']
+
 " EclimGetHtmlIndent(lnum) {{{
 function! EclimGetHtmlIndent(lnum)
   let line = line('.')
@@ -92,20 +94,17 @@ function! EclimGetHtmlIndent(lnum)
       let adj = indent(prevlnum)
     endif
 
-    " handle <br> tags without '/>'
-    if prevline =~? '<br\s*>'
+    " handle non-parent tags without '/>'
+    " NOTE: the '?' in this regex is to combat issues with php
+    let noindent_pattern = '<\(' . join(s:noindent, '\|') . '\)[^/?]\{-}>'
+    if prevline =~? noindent_pattern
       let line = tolower(prevline)
       let occurrences = 0
-      while line =~ '<br\s*>'
+      while line =~ noindent_pattern
         let occurrences += 1
-        let line = substitute(line, '<br\s*>', '', '')
+        let line = substitute(line, noindent_pattern, '', '')
       endwhile
       let adj = 0 - (&sw * occurrences)
-
-    " handle <input> tags without '/>' NOTE: the '?' in this regex is to
-    " compat issues with php
-    elseif prevline =~? '<input[^/?]\{-}>' " FIXME: handle wrapped input tag
-      let adj = 0 - &sw
     endif
   endif
   return IndentAnything() + adj
