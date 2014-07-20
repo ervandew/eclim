@@ -2,7 +2,7 @@
 "
 " License: " {{{
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -94,11 +94,26 @@ function! TestValidate() " {{{
   echo 'results = ' . string(results)
 
   call vunit#AssertEquals(len(results), 4, 'Wrong number of results for linked resource.')
-  call vunit#AssertEquals(10, results[0].lnum, 'Wrong line num for linked resource.')
-  call vunit#AssertEquals(9, results[0].col, 'Wrong col num for linked resource.')
+  call vunit#AssertEquals(10, results[0].lnum, 'Wrong line num for linked resource error 1.')
+  call vunit#AssertEquals(9, results[0].col, 'Wrong col num for linked resource error 1.')
   call vunit#AssertEquals(
-    \ 'Syntax error on token ".", invalid VariableDeclarator',
-    \ results[0].text, 'Wrong result for linked resource.')
+    \ 'Syntax error, insert "new ClassType ( )" to complete Expression',
+    \ results[0].text, 'Wrong result for linked resource error 1.')
+  call vunit#AssertEquals(15, results[1].lnum, 'Wrong line num for linked resource error 2.')
+  call vunit#AssertEquals(5, results[1].col, 'Wrong col num for linked resource error 2.')
+  call vunit#AssertEquals(
+    \ 'ArrayList is a raw type. References to generic type ArrayList<E> should be parameterized',
+    \ results[1].text, 'Wrong result for linked resource error 2.')
+  call vunit#AssertEquals(15, results[2].lnum, 'Wrong line num for linked resource error 3.')
+  call vunit#AssertEquals(26, results[2].col, 'Wrong col num for linked resource error 3.')
+  call vunit#AssertEquals(
+    \ 'ArrayList is a raw type. References to generic type ArrayList<E> should be parameterized',
+    \ results[1].text, 'Wrong result for linked resource error 3.')
+  call vunit#AssertEquals(16, results[3].lnum, 'Wrong line num for linked resource error 4.')
+  call vunit#AssertEquals(10, results[3].col, 'Wrong col num for linked resource error 4.')
+  call vunit#AssertEquals(
+    \ 'The method a() is undefined for the type ArrayList',
+    \ results[3].text, 'Wrong result for linked resource error 4.')
 endfunction " }}}
 
 function! TestCheckstyleManual() " {{{
