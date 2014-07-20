@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class DocSearchCommandTest
 
     normalize(results);
     assertEquals(results.get(0),
-        "http://download.oracle.com/javase/${version}/docs/api/java/awt/List.html");
+        "http://docs.oracle.com/javase/${version}/docs/api/java/awt/List.html");
   }
 
   @Test
@@ -71,10 +71,10 @@ public class DocSearchCommandTest
 
     normalize(results);
     assertEquals(results.get(0),
-        "http://download.oracle.com/javase/${version}/docs/api/" +
+        "http://docs.oracle.com/javase/${version}/docs/api/" +
         "java/util/ArrayList.html");
     assertEquals(results.get(1),
-        "http://download.oracle.com/javase/${version}/docs/api/" +
+        "http://docs.oracle.com/javase/${version}/docs/api/" +
         "java/util/Arrays.ArrayList.html");
   }
 
@@ -94,7 +94,7 @@ public class DocSearchCommandTest
 
     normalize(results);
     assertEquals(results.get(0),
-        "http://download.oracle.com/javase/${version}/docs/api/" +
+        "http://docs.oracle.com/javase/${version}/docs/api/" +
         "java/lang/System.html#currentTimeMillis()");
   }
 
@@ -103,8 +103,8 @@ public class DocSearchCommandTest
     for (int ii = 0; ii < results.size(); ii++){
       results.set(ii, results.get(ii)
           .replaceAll(
-            "download.oracle.com/javase/(.*?)/docs",
-            "download.oracle.com/javase/\\${version}/docs"));
+            "docs.oracle.com/javase/(.*?)/docs",
+            "docs.oracle.com/javase/\\${version}/docs"));
     }
   }
 }
