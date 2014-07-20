@@ -28,6 +28,10 @@ usage(){
   echo "  -d/--debug       enable eclimd's debug logging."
   echo "  -f/--file <file> specify the location of an eclimrc file other than the"
   echo "                   default (~/.eclimrc). Must be the first option supplied."
+  echo ""
+  echo "Note: eclimd also supports running the eclipse garbage collector to"
+  echo "      to remove stale bundles after upgrades, etc.:"
+  echo "  $ eclimd gc"
 }
 
 if [ "$1" = "-?" -o "$1" = "-h" -o "$1" = "--help" ] ; then
@@ -196,6 +200,7 @@ build_vmargs(){
   fi
 }
 
+APPLICATION=org.eclim.application
 ECLIMRC=$HOME/.eclimrc
 
 DEBUG=0
@@ -219,6 +224,9 @@ while true ; do
       shift
       shift
       ;;
+    gc )
+      APPLICATION=org.eclipse.equinox.p2.garbagecollector.application
+      shift ;;
     -- ) shift; break ;;
     * ) break ;;
   esac
@@ -240,7 +248,7 @@ ARGS=(
   -debug
   -clean
   -refresh
-  -application org.eclim.application
+  -application $APPLICATION
 )
 
 if [ -z "$JAVA" ] ; then
