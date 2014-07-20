@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@ package org.eclim.command;
 import java.util.ArrayList;
 
 import org.eclim.Services;
+
+import org.eclim.plugin.PluginResources;
 
 import org.eclipse.core.runtime.Platform;
 
@@ -52,7 +54,10 @@ public class ReloadCommand
     bundles.add(Platform.getBundle("org.eclim.core"));
     framework.refreshBundles(bundles, new FrameworkListener[0]);
 
-    return Services.getMessage("plugins.reloaded");
+    // avoid Services.getMessage due to race condition on reload which can
+    // result in a ConcurrentModificationException.
+    PluginResources resources = Services.getPluginResources("org.eclim");
+    return resources.getMessage("plugins.reloaded");
   }
 
   @Override
