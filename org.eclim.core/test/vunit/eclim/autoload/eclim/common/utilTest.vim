@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,15 +28,15 @@ function! TestDiffLastSaved() " {{{
   call append(1, 'some new content')
   DiffLastSaved
 
-  call vunit#AssertEquals(&diff, 1)
-  call vunit#AssertEquals(line('$'), 2)
+  call vunit#AssertEquals(&diff, 1, 'diff mode not enabled')
+  call vunit#AssertEquals(line('$'), 2, 'last line is not line 2')
   call vunit#AssertEquals(getline(1), 'file in project root')
   call vunit#AssertEquals(getline(2), 'some new content')
 
   winc l
 
-  call vunit#AssertEquals(&diff, 1)
-  call vunit#AssertEquals(line('$'), 1)
+  call vunit#AssertEquals(&diff, 1, 'diff mode not enabled')
+  call vunit#AssertEquals(line('$'), 1, 'last line is not line 1')
   call vunit#AssertEquals(getline(1), 'file in project root')
 
   bdelete!
