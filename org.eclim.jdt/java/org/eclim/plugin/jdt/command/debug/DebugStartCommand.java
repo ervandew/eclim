@@ -20,28 +20,26 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.DebugOptions;
+import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
 /**
- * Command to manage an existing debug session.
+ * Command to start a debug session using a configuration.
  */
 @Command(
-  name = "java_debug_control",
+  name = "java_debug_start",
   options =
-    "REQUIRED a action ARG"
+    "REQUIRED n target_name ARG," +
+    "REQUIRED h host ARG," +
+    "REQUIRED p port ARG," +
+    "REQUIRED v vim_instance_name ARG"
 )
-public class DebugCommand extends AbstractCommand
+public class DebugStartCommand extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(DebugCommand.class);
-
-  private static final String ACTION_STOP = "stop";
-
-  private static final String ACTION_SUSPEND = "suspend";
-
-  private static final String ACTION_RESUME = "resume";
+  private static final Logger logger = Logger.getLogger(DebugStartCommand.class);
 
   @Override
   public Object execute(CommandLine commandLine) throws Exception
@@ -50,17 +48,27 @@ public class DebugCommand extends AbstractCommand
       logger.info("Command: " + commandLine);
     }
 
-    String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
-    if (action.equals(ACTION_STOP)) {
-      DebuggerContext.getInstance().stop();
+    String debugTargetName = commandLine.getValue(Options.NAME_OPTION);
+    String host = commandLine.getValue(DebugOptions.HOST_OPTION);
+    String port = commandLine.getValue(DebugOptions.PORT_OPTION);
+    String vimInstanceId = commandLine.getValue(DebugOptions.VIM_INSTANCE_OPTION);
 
-    } else if (action.equals(ACTION_SUSPEND)) {
-      DebuggerContext.getInstance().suspend();
-
-    } else if (action.equals(ACTION_RESUME)) {
-      DebuggerContext.getInstance().resume();
+    if (host == null || host.equals("")) {
+      throw new IllegalArgumentException("Invalid host");
     }
 
+    if (port == null || port.equals("")) {
+      throw new IllegalArgumentException("Invalid port");
+    }
+
+    try {
+      Integer.parseInt(port);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Invalid port: " + port);
+    }
+
+    DebuggerContext.getInstance().start(debugTargetName,
+        host, port, vimInstanceId);
     return null;
   }
 }

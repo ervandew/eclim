@@ -16,44 +16,49 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclim.logging.Logger;
 
-import org.eclim.util.CommandExecutor;
+import org.eclim.plugin.core.util.VimClient;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
 
 import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.ISourceLocator;
+import org.eclipse.debug.core.model.IVariable;
 
-import org.eclipse.jdt.core.dom.Message;
-
-import org.eclipse.jdt.debug.core.IJavaBreakpoint;
-import org.eclipse.jdt.debug.core.IJavaBreakpointListener;
-import org.eclipse.jdt.debug.core.IJavaDebugTarget;
-import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
-import org.eclipse.jdt.debug.core.IJavaThread;
-import org.eclipse.jdt.debug.core.IJavaType;
-import org.eclipse.jdt.debug.core.JDIDebugModel;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 
 import org.eclipse.jdt.internal.launching.SocketAttachConnector;
 
+import org.eclipse.jdt.launching.sourcelookup.JavaSourceLocator;
+
 /**
- * Maintains the state of currently active debug session.
+ * Maintains the state of currently active debug session and exposes methods to
+ * interact it.
+ *
+ * <p>
  * This class exposes a singleton instance of the context that can be
  * reinitialized for each session. This is to allow maitaining the state of a
- * single session across several VIM invocations.
+ * single session across several VIM invocations. At this time, there can only
+ * be one debug session active at any point of time.
  */
-public class DebuggerContext {
+public class DebuggerContext
+{
   private static final Logger logger = Logger.getLogger(DebuggerContext.class);
 
   private static final String KEY_HOSTNAME = "hostname";
@@ -70,153 +75,115 @@ public class DebuggerContext {
    */
   private IDebugTarget debugTarget;
 
-  /**
-   * VIM server instance to connect to send commands.
-   *
-   * TODO Pass this as argument from VIM and set in createDebugTarget?
-   */
-  private String vimInstanceId = "default";
+  private VimClient vimClient;
 
-  private DebuggerContext() {
-    JDIDebugModel.addJavaBreakpointListener(new BreakpointListener());
+  private IVariable[] vars;
+
+  private DebuggerContext()
+  {
+    DebugPlugin.getDefault().addDebugEventListener(new DebugEventSetListener());
   }
 
-  public static DebuggerContext getInstance() {
+  public static DebuggerContext getInstance()
+  {
     return context;
+  }
+
+  public IDebugTarget getDebugTarget()
+  {
+    return debugTarget;
+  }
+
+  public VimClient getVimClient()
+  {
+    return vimClient;
   }
 
   /**
    * Starts the debug session by creating the debug target with given parameters.
    */
-  public void createDebugTarget(String debugTargetName, String host,
-      String port) throws CoreException {
+  public void start(String debugTargetName, String host,
+      String port, String vimInstanceId) throws CoreException
+  {
 
     if (logger.isInfoEnabled()) {
-      logger.info("Creating debug target " + debugTargetName + " at "
-          + host + ":" + port);
+      logger.info("Creating debug target: " + debugTargetName + " at " +
+          host + ":" + port + " . VIM instance: " + vimInstanceId);
     }
 
-    // TODO Figure out how to build launch configuration
-    //ILaunchConfiguration config = DebugPlugin.getDefault().getLaunchManager()
-    //  .getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_SOCKET_ATTACH_VM_CONNECTOR);
     ILaunchConfiguration config = null;
 
-    ILaunch launch = new Launch(config, ILaunchManager.DEBUG_MODE, null);
+    // TODO This is a hack to create source locator. Using all projects in the
+    // workspace.
+    IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+    IJavaProject[] jProjects = new IJavaProject[projects.length];
+    for (int i = 0; i < projects.length; i++) {
+      jProjects[i] = JavaCore.create(projects[i]);
+    }
+    // TODO Switch to newer approach of source code lookup
+    ISourceLocator srcLocator = new JavaSourceLocator(jProjects, true);
+
+    ILaunch launch = new Launch(config, ILaunchManager.DEBUG_MODE, srcLocator);
     IProgressMonitor monitor = null;
     Map<String, String> args = new HashMap<String, String>();
     args.put(KEY_HOSTNAME, host);
     args.put(KEY_PORT, port);
 
     SocketAttachConnector connector = new SocketAttachConnector();
-    connector.connect(args, monitor, launch);
+    try {
+      connector.connect(args, monitor, launch);
+    } catch (CoreException e) {
+      throw new RuntimeException("Debug VM not available at " + host + ":" +
+          port + ". Check hostname and port number.");
+    }
 
     this.debugTarget = launch.getDebugTarget();
+    this.vimClient = new VimClient(vimInstanceId);
   }
 
-  // TODO
-  public void stop() {
+  /**
+   * Suspends the debug session.
+   */
+  public void suspend() throws DebugException
+  {
+    if (logger.isInfoEnabled()) {
+      logger.info("Suspending debug session");
+    }
+    debugTarget.suspend();
+  }
 
+  /**
+   * Terminates the debug session.
+   */
+  public void stop() throws DebugException
+  {
+    if (logger.isInfoEnabled()) {
+      logger.info("Stopping debug session");
+    }
+    debugTarget.terminate();
+
+    debugTarget = null;
+    vimClient = null;
   }
 
   /**
    * Resumes execution from the current breakpoint.
    */
-  public void resume() throws DebugException {
+  public void resume() throws DebugException
+  {
     if (logger.isInfoEnabled()) {
       logger.info("Resuming breakpoint");
     }
     debugTarget.resume();
   }
 
-  /**
-   * Listener to respond to breakpoint related events.
-   */
-  private class BreakpointListener implements IJavaBreakpointListener {
-    @Override
-    public void addingBreakpoint(IJavaDebugTarget target,
-        IJavaBreakpoint breakpoint) {
-    }
+  public void setVariables(IVariable[] vars)
+  {
+    this.vars = vars;
+  }
 
-    @Override
-    public void breakpointHasCompilationErrors(IJavaLineBreakpoint breakpoint,
-        Message[] msg) {
-    }
-
-    @Override
-    public void breakpointHasRuntimeException(IJavaLineBreakpoint breakpoint,
-        DebugException ex) {
-    }
-
-    @Override
-    public int breakpointHit(IJavaThread thread, IJavaBreakpoint breakpoint) {
-      try {
-        String fileName = breakpoint.getMarker().getResource().getRawLocation()
-          .toOSString();
-        int lineNum = ((IJavaLineBreakpoint) breakpoint).getLineNumber();
-        if (logger.isInfoEnabled()) {
-          logger.info("Breakpoint hit: " + breakpoint.getTypeName() + " at "
-              + lineNum);
-        }
-
-        // TODO Is there a better way to do this?
-        String[] cmd = {
-          "vim",
-          "--servername",
-          vimInstanceId,
-          "--remote-tab",
-          "+" + lineNum,
-          fileName
-        };
-
-        if (logger.isInfoEnabled()) {
-          logger.info("Executing external cmd: " + Arrays.asList(cmd));
-        }
-
-        CommandExecutor.execute(cmd, 60);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-
-      return IJavaBreakpointListener.SUSPEND;
-    }
-
-    @Override
-    public void breakpointInstalled(IJavaDebugTarget target,
-        IJavaBreakpoint breakpoint) {
-
-      try {
-        int lineNum = ((IJavaLineBreakpoint) breakpoint).getLineNumber();
-
-        if (logger.isInfoEnabled()) {
-          logger.info("Breakpoint installed: " + breakpoint.getTypeName()
-              + " at " + lineNum);
-        }
-      } catch (CoreException e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    @Override
-    public void breakpointRemoved(IJavaDebugTarget target,
-        IJavaBreakpoint breakpoint) {
-
-      try {
-        int lineNum = ((IJavaLineBreakpoint) breakpoint).getLineNumber();
-
-        if (logger.isInfoEnabled()) {
-          logger.info("Breakpoint removed: " + breakpoint.getTypeName()
-              + " at " + lineNum);
-        }
-      } catch (CoreException e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    @Override
-    public int installingBreakpoint(IJavaDebugTarget target,
-        IJavaBreakpoint breakpoint, IJavaType type) {
-
-      return 0;
-    }
+  public IVariable[] getVariables()
+  {
+    return this.vars;
   }
 }

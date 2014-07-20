@@ -16,81 +16,66 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.DebugOptions;
-import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclipse.core.runtime.CoreException;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointManager;
 
-import org.eclipse.core.runtime.Path;
-
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.JavaCore;
-
-import org.eclipse.jdt.debug.core.JDIDebugModel;
+import org.eclipse.debug.core.model.IBreakpoint;
 
 /**
- * Command to add, remove breakpoint.
+ * Command to manage existing breakpoints.
  */
 @Command(
-  name = "java_breakpoint",
+  name = "java_debug_breakpoint",
   options =
-    "REQUIRED p project ARG," +
-    "REQUIRED f file ARG," +
-    "REQUIRED l line_num ARG"
+    "REQUIRED a action ARG"
 )
-public class BreakpointCommand extends AbstractCommand {
+public class BreakpointCommand extends AbstractCommand
+{
   private static final Logger logger = Logger.getLogger(BreakpointCommand.class);
 
+  private static final String GET_ALL = "get_all";
+
+  private static final String DELETE_ALL = "delete_all";
+
   @Override
-  public Object execute(CommandLine commandLine) throws Exception {
+  public Object execute(CommandLine commandLine) throws Exception
+  {
     if (logger.isInfoEnabled()) {
       logger.info("Command: " + commandLine);
     }
 
-    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-    String fileName = commandLine.getValue(Options.FILE_OPTION);
-    int lineNum = Integer.parseInt(commandLine.getValue(
-          DebugOptions.LINE_NUM_OPTION));
-
-    addLineBreakpoint(projectName, fileName, lineNum);
+    String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
+    if (action.equalsIgnoreCase(GET_ALL)) {
+      return getAllBreakpoints();
+    } else if (action.equalsIgnoreCase(DELETE_ALL)) {
+      deleteAllBreakpoints();
+    } else {
+      throw new RuntimeException("Invalid breakpoint action: " + action);
+    }
 
     return null;
   }
 
-  private void addLineBreakpoint(String projectName, String fileName,
-      int lineNum) throws Exception {
-
-    IResource res = getBreakpointResource(projectName, fileName);
-    Map<String, Object> attrMap = new HashMap<String, Object>();
-
-    JDIDebugModel.createLineBreakpoint(res, fileName, lineNum, -1, -1, 0, true,
-        attrMap);
-
-    if (logger.isInfoEnabled()) {
-      logger.info("Created breakpoint: " + fileName + " at " + lineNum);
-    }
+  private IBreakpoint[] getAllBreakpoints() throws CoreException
+  {
+    return DebugPlugin.getDefault().getBreakpointManager().getBreakpoints();
   }
 
-  private IResource getBreakpointResource(String projectName, String fileName)
-    throws Exception {
-
-    IProject project = ProjectUtils.getProject(projectName);
-    IJavaElement element = JavaCore.create(project)
-      .findElement(new Path(fileName));
-
-    return element.getCorrespondingResource();
+  private void deleteAllBreakpoints() throws CoreException
+  {
+    IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
+      .getBreakpointManager();
+    breakpointMgr.removeBreakpoints(breakpointMgr.getBreakpoints(), true);
   }
 }

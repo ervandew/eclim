@@ -19,20 +19,35 @@ package org.eclim.command;
 /**
  * Class for defining debugger related eclim command line options.
  */
-public class DebugOptions {
+public class DebugOptions
+{
   /**
    * Debugger action such as start, stop, resume.
    */
   public static final String ACTION_OPTION = "a";
 
   /**
-   * Used to connect to remote VM.
-   * The value should be of the form hostname:port or IP:port.
+   * Hostname or IP of remote VM to connect.
    */
-  public static final String CONNECTION_OPTION = "c";
+  public static final String HOST_OPTION = "h";
+
+  /**
+   * Port number of remote VM to connect.
+   */
+  public static final String PORT_OPTION = "p";
 
   /**
    * Line number on which to set breakpoint.
    */
   public static final String LINE_NUM_OPTION = "l";
+
+  /**
+   * Delete all breakpoints.
+   */
+  public static final String DELETE_ALL_BKPOINTS_OPTION = "d";
+
+  /**
+   * VIM server instance name.
+   */
+  public static final String VIM_INSTANCE_OPTION = "v";
 }

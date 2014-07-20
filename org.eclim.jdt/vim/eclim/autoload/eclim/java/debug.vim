@@ -23,28 +23,71 @@
 " }}}
 
 " Script Variables {{{
-let s:command_debug =
-  \ '-command java_debug -a "<action>" -n "<target_name>" -c "<connection>"'
+let s:command_start =
+  \ '-command java_debug_start -n "<target_name>" -h "<host>" -p "<port>" -v "<vim_servername>"'
+
+let s:command_control =
+  \ '-command java_debug_control -a "<action>"'
+
+let s:command_toggle_breakpoint =
+  \ '-command java_debug_toggle_breakpoint -p "<project>" -f "<file>" -l "<line_num>"'
+
 let s:command_breakpoint =
-  \ '-command java_breakpoint -p "<project>" -f "<file>" -l "<line_num>"'
+  \ '-command java_debug_breakpoint -a "<action>"'
+
+let s:command_step =
+  \ '-command java_debug_step -a "<action>"'
+
+let s:command_vars =
+  \ '-command java_debug_vars'
 " }}}
 
-function! eclim#java#debug#Debug(action, connection) " {{{
+function! eclim#java#debug#DebugStart(host, port) " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  if (v:servername == '')
+    call eclim#util#EchoError("Error: To debug, start VIM in server mode.
+          \ Usage: vim --servername <name>")
+    return
+  endif
+
+  if (a:host == '')
+    call eclim#util#EchoError("Error: Specify host.")
+    return
+  endif
+
+  if (a:port == '')
+    call eclim#util#EchoError("Error: Specify port.")
+    return
+  endif
+
+  let file = eclim#lang#SilentUpdate()
+
+  let command = s:command_start
+  let command = substitute(command, '<target_name>', file, '')
+  let command = substitute(command, '<host>', a:host, '')
+  let command = substitute(command, '<port>', a:port, '')
+  let command = substitute(command, '<vim_servername>', v:servername, '')
+
+  let result = eclim#Execute(command)
+endfunction " }}}
+
+function! eclim#java#debug#DebugControl(action) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   let file = eclim#lang#SilentUpdate()
 
-  let command = s:command_debug
+  let command = s:command_control
   let command = substitute(command, '<action>', a:action, '')
-  let command = substitute(command, '<target_name>', file, '')
-  let command = substitute(command, '<connection>', a:connection, '')
 
   let result = eclim#Execute(command)
 endfunction " }}}
 
-function! eclim#java#debug#Breakpoint() " {{{
+function! eclim#java#debug#Breakpoint(action) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -54,11 +97,61 @@ function! eclim#java#debug#Breakpoint() " {{{
   let line_num = line('.')
 
   let command = s:command_breakpoint
+  let command = substitute(command, '<action>', a:action, '')
+
+  let result = eclim#Execute(command)
+endfunction " }}}
+
+function! eclim#java#debug#ToggleBreakpoint() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#lang#SilentUpdate()
+  let line_num = line('.')
+
+  let command = s:command_toggle_breakpoint
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<line_num>', line_num, '')
 
   let result = eclim#Execute(command)
+endfunction " }}}
+
+function! eclim#java#debug#Step(action) " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let command = s:command_step
+  let command = substitute(command, '<action>', a:action, '')
+
+  let result = eclim#Execute(command)
+  call eclim#util#Echo(string(result))
+endfunction " }}}
+
+function! eclim#java#debug#Vars() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let command = s:command_vars
+
+  let results = eclim#Execute(command)
+
+  let window_name = "Debug Variables"
+  let filename = expand('%:p')
+  call eclim#util#TempWindowClear(window_name)
+
+  call eclim#util#TempWindow(
+        \ window_name, results, {'height': g:EclimLocationListHeight})
+
+  "nnoremap <silent> <buffer> <cr> :call <SID>ViewDoc()<cr>
+  augroup temp_window
+    autocmd! BufWinLeave <buffer>
+    call eclim#util#GoToBufferWindowRegister(filename)
+  augroup END
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
