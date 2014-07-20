@@ -32,6 +32,8 @@ import static org.junit.Assert.*;
  * Test case for ListInterpretersCommand, AddInterpreterCommand, and
  * RemoveInterpreterCommand.
  *
+ * Note: this test expects that an interpreter has already been added.
+ *
  * @author Eric Van Dewoestine
  */
 public class ListInterpretersCommandTest

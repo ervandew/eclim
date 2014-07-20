@@ -29,6 +29,8 @@ import static org.junit.Assert.*;
 /**
  * Test case for InterpreterCommand.
  *
+ * Note: this test expects that a 2.7 interpreter has already been added.
+ *
  * @author Eric Van Dewoestine
  */
 public class InterpreterCommandTest
