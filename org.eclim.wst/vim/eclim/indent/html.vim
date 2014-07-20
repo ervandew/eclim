@@ -34,7 +34,9 @@ runtime! indent/css.vim
 setlocal indentexpr=EclimGetHtmlIndent(v:lnum)
 setlocal indentkeys+=>,},0),0},),;,0{,!^F,o,O
 
-let s:noindent = ['br', 'img', 'input']
+if !exists('g:EclimHtmlUnclosedTags')
+  let g:EclimHtmlUnclosedTags = ['br', 'img', 'input']
+endif
 
 " EclimGetHtmlIndent(lnum) {{{
 function! EclimGetHtmlIndent(lnum)
@@ -96,7 +98,9 @@ function! EclimGetHtmlIndent(lnum)
 
     " handle non-parent tags without '/>'
     " NOTE: the '?' in this regex is to combat issues with php
-    let noindent_pattern = '<\(' . join(s:noindent, '\|') . '\)[^/?]\{-}>'
+    let noindent = exists('b:EclimHtmlUnclosedTags') ?
+      \ b:EclimHtmlUnclosedTags : g:EclimHtmlUnclosedTags
+    let noindent_pattern = '<\(' . join(noindent, '\|') . '\)[^/?]\{-}>'
     if prevline =~? noindent_pattern
       let line = tolower(prevline)
       let occurrences = 0
