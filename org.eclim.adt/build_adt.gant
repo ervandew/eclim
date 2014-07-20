@@ -1,4 +1,4 @@
-feature_adt = 'com.android.ide.eclipse.adt'
+feature_adt = 'com.android.ide.eclipse.adt.feature'
 
 target(name: 'org.eclim.adt.classpath.prepare'){
   (version, srcDir) = adtInfo()

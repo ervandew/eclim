@@ -38,7 +38,7 @@
   </feature>
 
   <feature id="adt">
-    <dependency id="com.android.ide.eclipse.adt" version="23.0.0">
+    <dependency id="com.android.ide.eclipse.adt.feature" version="23.0.2">
       <site url="https://dl-ssl.google.com/android/eclipse/"/>
     </dependency>
   </feature>
