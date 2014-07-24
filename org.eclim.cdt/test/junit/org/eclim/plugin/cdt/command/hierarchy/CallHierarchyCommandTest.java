@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,17 +74,17 @@ public class CallHierarchyCommandTest
 
     result = nestedCalls.get(0);
     position = (Map<String,Object>)result.get("position");
-    assertEquals(result.get("name"), "main()");
-    assertEquals(path + "main.c", position.get("filename"));
-    assertEquals(6, position.get("line"));
-    assertEquals(28, position.get("column"));
-
-    result = nestedCalls.get(1);
-    position = (Map<String,Object>)result.get("position");
     assertEquals(result.get("name"), "fun3(int)");
     assertEquals(path + "mod2.c", position.get("filename"));
     assertEquals(7, position.get("line"));
     assertEquals(10, position.get("column"));
+
+    result = nestedCalls.get(1);
+    position = (Map<String,Object>)result.get("position");
+    assertEquals(result.get("name"), "main()");
+    assertEquals(path + "main.c", position.get("filename"));
+    assertEquals(6, position.get("line"));
+    assertEquals(28, position.get("column"));
 
     result = calls.get(1);
     position = (Map<String,Object>)result.get("position");
@@ -128,6 +128,13 @@ public class CallHierarchyCommandTest
 
     result = calls.get(0);
     position = (Map<String,Object>)result.get("position");
+    assertEquals(result.get("name"), "fun2(int)");
+    assertEquals(path + "mod2.c", position.get("filename"));
+    assertEquals(6, position.get("line"));
+    assertEquals(3, position.get("column"));
+
+    result = calls.get(1);
+    position = (Map<String,Object>)result.get("position");
     List<Map<String,Object>> nestedCalls =
       (List<Map<String,Object>>)result.get("callees");
     assertEquals(result.get("name"), "fun1(int)");
@@ -142,13 +149,6 @@ public class CallHierarchyCommandTest
     assertEquals(path + "mod1.c", position.get("filename"));
     assertEquals(5, position.get("line"));
     assertEquals(10, position.get("column"));
-
-    result = calls.get(1);
-    position = (Map<String,Object>)result.get("position");
-    assertEquals(result.get("name"), "fun2(int)");
-    assertEquals(path + "mod2.c", position.get("filename"));
-    assertEquals(6, position.get("line"));
-    assertEquals(3, position.get("column"));
 
     result = calls.get(2);
     position = (Map<String,Object>)result.get("position");

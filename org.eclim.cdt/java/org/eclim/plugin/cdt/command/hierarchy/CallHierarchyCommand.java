@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -336,16 +336,12 @@ public class CallHierarchyCommand
     public IIndexName name;
     public ICElement element;
     public IResource resource;
-    public String location;
 
     public Call(IIndexName name, ICElement element)
     {
       this.name = name;
       this.element = element;
       this.resource = element.getResource();
-      this.location =
-        element.getResource().getLocation().toOSString() +
-        element.getElementName();
     }
 
     public Call(IIndexName name, ICElement element, IResource resource)
@@ -357,7 +353,20 @@ public class CallHierarchyCommand
     @Override
     public int compareTo(Call o)
     {
-      int result = COLLATOR.compare(location, o.location);
+      int result = 0;
+      if (resource != null && o.resource != null){
+        String location1 =
+          resource.getLocation().toOSString() +
+          element.getElementName();
+        String location2 =
+          resource.getLocation().toOSString() +
+          element.getElementName();
+        result = COLLATOR.compare(location1, location2);
+      }else if (resource != null && o.resource == null){
+        result = -1;
+      }else if (resource == null && o.resource != null){
+        result = 1;
+      }
       if (result == 0){
         return name.getNodeOffset() - o.name.getNodeOffset();
       }
