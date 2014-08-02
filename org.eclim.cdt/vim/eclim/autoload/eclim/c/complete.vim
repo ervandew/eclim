@@ -26,6 +26,10 @@
 " }}}
 
 function! eclim#c#complete#CodeComplete(findstart, base) " {{{
+  if a:findstart && getline('.') =~ '#include\s\+<'
+    call eclim#lang#SilentUpdate(0)
+    return stridx(getline('.'), '<')
+  endif
   return eclim#lang#CodeComplete(
     \ s:complete_command, a:findstart, a:base,
     \ {'temp': 0, 'layout': g:EclimCCompleteLayout})

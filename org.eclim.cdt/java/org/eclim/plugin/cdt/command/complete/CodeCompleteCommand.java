@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,10 +75,6 @@ import org.eclipse.ui.part.FileEditorInput;
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletionProposals(CommandLine,String,String,int)
-   */
   @Override
   protected ICompletionProposal[] getCompletionProposals(
       CommandLine commandLine, String projectName, String file, int offset)
@@ -117,10 +113,6 @@ public class CodeCompleteCommand
       computeCompletionProposals.invoke(ca, viewer, offset);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
-   */
   @Override
   protected String getCompletion(ICompletionProposal proposal)
   {
@@ -132,18 +124,16 @@ public class CodeCompleteCommand
            completion.charAt(completion.length() - 1) == ')'))
       {
         completion = completion.substring(0, completion.length() - 1);
-      } else if (completion.charAt(0) == '<'){
-        completion = completion.substring(1, completion.length());
+
+      // include completions
+      } else if (completion.endsWith("/>")){
+        completion = completion.substring(0, completion.length() - 1);
       }
       return completion;
     }
     return super.getCompletion(proposal);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getMenu(ICompletionProposal)
-   */
   @Override
   protected String getMenu(ICompletionProposal proposal)
   {
@@ -151,10 +141,6 @@ public class CodeCompleteCommand
     return menu != null ? menu : StringUtils.EMPTY;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getInfo(ICompletionProposal)
-   */
   @Override
   protected String getInfo(ICompletionProposal proposal)
   {
