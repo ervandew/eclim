@@ -983,7 +983,7 @@ function! eclim#util#PromptList(prompt, list, ...)
     return -1
   endif
 
-  " only one elment, no need to choose.
+  " only one element, no need to choose.
   if len(a:list) == 1
     return 0
   endif
