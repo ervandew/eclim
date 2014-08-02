@@ -115,8 +115,8 @@ call eclim#AddVimSetting(
   \ '\d\+')
 
 call eclim#AddVimSetting(
-  \ 'Core', 'g:EclimPromptListStartValue', 0,
-  \ 'The start value for list prompts.',
+  \ 'Core', 'g:EclimPromptListStartIndex', 0,
+  \ 'The starting index to use for list based prompts.',
   \ '\(0\|1\)')
 
 call eclim#AddVimSetting(

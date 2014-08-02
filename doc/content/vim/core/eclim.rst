@@ -206,8 +206,9 @@ The following is a list of some of the common Vim variables available.
   When set to a non-0 value, enabled auto generation of gvim menus (under
   Plugin.eclim) for each eclim command available for the current buffer.
 
-.. _g\:EclimPromptListStartValue:
+.. _g\:EclimPromptListStartIndex:
 
-- ** g:EclimPromptListStartValue (Default: 0)
+- ** g:EclimPromptListStartIndex (Default: 0)
 
-  Will create 0 or 1 based list when the user is prompted for a choice.
+  Defines whether to use 0 or 1 based indexing when the user is
+  prompted to choose from a list of choices.

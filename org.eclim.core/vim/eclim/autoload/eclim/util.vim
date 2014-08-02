@@ -989,7 +989,7 @@ function! eclim#util#PromptList(prompt, list, ...)
   endif
 
   let prompt = ""
-  let index = g:EclimPromptListStartValue
+  let index = g:EclimPromptListStartIndex
   for item in a:list
     let prompt = prompt . index . ") " . item . "\n"
     let index = index + 1
@@ -1009,10 +1009,10 @@ function! eclim#util#PromptList(prompt, list, ...)
       let response = input(a:prompt . ": ")
     endtry
     while response !~ '\(^$\|^[0-9]\+$\)' ||
-        \ response < g:EclimPromptListStartValue ||
+        \ response < g:EclimPromptListStartIndex ||
         \ response > maxindex
       let response = input("You must choose a value between " .
-        \ g:EclimPromptListStartValue . " and " . maxindex .
+        \ g:EclimPromptListStartIndex . " and " . maxindex .
         \ ". (Ctrl-C to cancel): ")
     endwhile
   finally
@@ -1024,7 +1024,7 @@ function! eclim#util#PromptList(prompt, list, ...)
     return -1
   endif
 
-  return response - g:EclimPromptListStartValue
+  return response - g:EclimPromptListStartIndex
 endfunction " }}}
 
 " PromptConfirm(prompt, [highlight]) {{{
