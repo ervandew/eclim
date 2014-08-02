@@ -115,6 +115,11 @@ call eclim#AddVimSetting(
   \ '\d\+')
 
 call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimPromptListStartValue', 0,
+  \ 'The start value for list prompts.',
+  \ '\(0\|1\)')
+
+call eclim#AddVimSetting(
   \ 'Core', 'g:EclimMakeLCD', 1,
   \ "When set to a non-0 value, all eclim based make commands\n" .
   \ "(:Ant, :Maven, :Mvn, etc) will change to the current file's\n" .

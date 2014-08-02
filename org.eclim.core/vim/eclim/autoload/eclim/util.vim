@@ -983,17 +983,18 @@ function! eclim#util#PromptList(prompt, list, ...)
     return -1
   endif
 
-  " only one elment, no need to choose.
+  " only one element, no need to choose.
   if len(a:list) == 1
     return 0
   endif
 
   let prompt = ""
-  let index = 0
+  let index = g:EclimPromptListStartValue
   for item in a:list
     let prompt = prompt . index . ") " . item . "\n"
     let index = index + 1
   endfor
+  let maxindex = index - 1
 
   exec "echohl " . (a:0 ? a:1 : g:EclimHighlightInfo)
   try
@@ -1008,10 +1009,11 @@ function! eclim#util#PromptList(prompt, list, ...)
       let response = input(a:prompt . ": ")
     endtry
     while response !~ '\(^$\|^[0-9]\+$\)' ||
-        \ response < 0 ||
-        \ response > (len(a:list) - 1)
+        \ response < g:EclimPromptListStartValue ||
+        \ response > maxindex
       let response = input("You must choose a value between " .
-        \ 0 . " and " . (len(a:list) - 1) . ". (Ctrl-C to cancel): ")
+        \ g:EclimPromptListStartValue . " and " . maxindex .
+        \ ". (Ctrl-C to cancel): ")
     endwhile
   finally
     echohl None
@@ -1022,7 +1024,7 @@ function! eclim#util#PromptList(prompt, list, ...)
     return -1
   endif
 
-  return response
+  return response - g:EclimPromptListStartValue
 endfunction " }}}
 
 " PromptConfirm(prompt, [highlight]) {{{
