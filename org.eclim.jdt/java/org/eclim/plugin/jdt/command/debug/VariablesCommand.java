@@ -32,7 +32,9 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
 
 import org.eclipse.jdt.debug.core.IJavaArray;
+import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaObject;
+import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
@@ -57,31 +59,89 @@ public class VariablesCommand extends AbstractCommand
     List<String> result = new ArrayList<String>();
 
     IVariable[] vars = DebuggerContext.getInstance().getVariables();
-    if (vars != null) {
-      for (IVariable var : vars) {
-        result.add(var.getName() + " : " + var.getValue().getValueString());
-        printVar(var);
-      }
-    }
+    processVars(vars, result, 0);
 
     return result;
   }
 
-  private void printVar(IVariable var) throws DebugException
+  private void processVars(IVariable[] vars, List<String> result, int level)
+      throws DebugException
   {
-    IJavaVariable jvar = (IJavaVariable) var;
-    IJavaValue jvalue = (IJavaValue) jvar.getValue();
-    logger.info(jvar.getJavaType() + " " + jvar.getName() + " " +
-        jvar.getValue().getValueString() + " " + jvalue.getClass().getName());
-    if (jvalue instanceof IJavaArray) {
-      logger.info("ijavaarr found");
-      IJavaArray jarr = (IJavaArray) jvalue;
-      if (jarr.getSize() > 0) {
-        logger.info("array value " + jarr.getSize() + " " +
-            jarr.getValue(0).getValueString());
-      }
-    } else if (jvalue instanceof IJavaObject) {
-      logger.info("fond ijavaobject: " + ((IJavaObject) jvalue).toString());
+    if (vars == null) {
+      return;
     }
+
+    // Indent nested variables
+    String prefix = getIndentation(level);
+
+    // Defensive code to protect from too many nesting
+    if (level >= 4) {
+      result.add(prefix + " STOP STOP STOP");
+      logger.info("Too much nesting");
+      return;
+    }
+
+    for (IVariable var : vars) {
+      IJavaVariable jvar = (IJavaVariable) var;
+      if (jvar.isSynthetic()) {
+        continue;
+      }
+
+      result.add(prefix + " " + var.getName() + " : " + var.getValue().getValueString());
+      /*result.add(prefix + " " + var.getName() + " : " + var.getValue().getValueString() + " --> " + ((IJavaVariable) var).isSynthetic()
+          + " --> " + var.getValue().getClass().getName() + " " + jvar.getJavaType().getName() + " " + jvar.getJavaType().getSignature());
+      logger.info(prefix + " " + var.getName() + " : " + var.getValue().getValueString());
+      */
+      IJavaValue value = (IJavaValue) var.getValue();
+
+      if (!processNestedVar(value)) {
+        continue;
+      }
+      if (value instanceof IJavaObject) {
+        if (value.hasVariables()) {
+          processVars(value.getVariables(), result, level + 1);
+        }
+      }
+    }
+  }
+
+  private boolean processNestedVar(IJavaValue value) throws DebugException {
+    boolean nesting = true;
+
+    if ((value instanceof IJavaArray) ||
+        (value instanceof IJavaClassObject))
+    {
+
+      nesting = false;
+    } else {
+      IJavaType type = value.getJavaType();
+      String typeName = type.getName();
+
+      // TODO Instead of listing what to ignore, find them out by looking at
+      // the source locator for class names that are not present.
+      if (typeName.equals("java.util.List") ||
+          typeName.equals("java.util.Map") ||
+          typeName.equals("java.lang.String"))
+      {
+        nesting = false;
+      }
+    }
+
+    return nesting;
+  }
+
+  private String getIndentation(int level) {
+    if (level == 0) {
+      return "";
+    }
+
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("  ");
+    for (int i = 0; i < level; i++) {
+      sb.append("-");
+    }
+
+    return sb.toString();
   }
 }

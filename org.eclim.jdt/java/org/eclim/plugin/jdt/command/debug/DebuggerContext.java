@@ -49,7 +49,7 @@ import org.eclipse.jdt.launching.sourcelookup.JavaSourceLocator;
 
 /**
  * Maintains the state of currently active debug session and exposes methods to
- * interact it.
+ * interact with it.
  *
  * <p>
  * This class exposes a singleton instance of the context that can be
@@ -153,12 +153,26 @@ public class DebuggerContext
   }
 
   /**
-   * Terminates the debug session.
+   * Disconnects the debug session.
    */
   public void stop() throws DebugException
   {
     if (logger.isInfoEnabled()) {
       logger.info("Stopping debug session");
+    }
+    debugTarget.disconnect();
+
+    debugTarget = null;
+    vimClient = null;
+  }
+
+  /**
+   * Terminates the debug session.
+   */
+  public void terminate() throws DebugException
+  {
+    if (logger.isInfoEnabled()) {
+      logger.info("Terminating debug session");
     }
     debugTarget.terminate();
 

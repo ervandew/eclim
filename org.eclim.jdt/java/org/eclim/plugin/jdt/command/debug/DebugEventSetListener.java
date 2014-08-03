@@ -24,8 +24,6 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.ISourceLocator;
 
-import org.eclipse.jdt.core.ICompilationUnit;
-
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
@@ -77,7 +75,7 @@ public class DebugEventSetListener implements IDebugEventSetListener
         ISourceLocator srcLocator = DebuggerContext.getInstance().getDebugTarget()
           .getLaunch().getSourceLocator();
         Object src = srcLocator.getSourceElement(topStackFrame);
-        String fileName = (((CompilationUnit )src).getResource()
+        String fileName = (((CompilationUnit) src).getResource()
             .getRawLocation().toOSString());
 
         int lineNum = topStackFrame.getLineNumber();

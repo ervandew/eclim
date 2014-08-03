@@ -39,6 +39,8 @@ public class DebugCommand extends AbstractCommand
 
   private static final String ACTION_STOP = "stop";
 
+  private static final String ACTION_TERMINATE = "terminate";
+
   private static final String ACTION_SUSPEND = "suspend";
 
   private static final String ACTION_RESUME = "resume";
@@ -51,14 +53,21 @@ public class DebugCommand extends AbstractCommand
     }
 
     String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
+    DebuggerContext debuggerContext = DebuggerContext.getInstance();
+
     if (action.equals(ACTION_STOP)) {
-      DebuggerContext.getInstance().stop();
+      debuggerContext.stop();
+
+    } else if (action.equals(ACTION_TERMINATE)) {
+      debuggerContext.terminate();
 
     } else if (action.equals(ACTION_SUSPEND)) {
-      DebuggerContext.getInstance().suspend();
+      debuggerContext.suspend();
 
     } else if (action.equals(ACTION_RESUME)) {
-      DebuggerContext.getInstance().resume();
+      debuggerContext.resume();
+    } else {
+      throw new IllegalArgumentException("action: " + action);
     }
 
     return null;
