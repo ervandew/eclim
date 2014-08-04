@@ -23,6 +23,8 @@
 " }}}
 
 " Script Variables {{{
+let s:breakpoint_sign_name = 'breakpoint_mark'
+
 let s:command_start =
   \ '-command java_debug_start -n "<target_name>" -h "<host>" -p "<port>" -v "<vim_servername>"'
 
@@ -85,6 +87,11 @@ function! eclim#java#debug#DebugControl(action) " {{{
   let command = substitute(command, '<action>', a:action, '')
 
   let result = eclim#Execute(command)
+
+  if ((a:action == 'stop') || (a:action == 'terminate'))
+    " TODO Check if defined before undefining
+    "call eclim#display#signs#Undefine(s:breakpoint_sign_name)
+  endif
 endfunction " }}}
 
 function! eclim#java#debug#Breakpoint(action) " {{{
@@ -99,7 +106,22 @@ function! eclim#java#debug#Breakpoint(action) " {{{
   let command = s:command_breakpoint
   let command = substitute(command, '<action>', a:action, '')
 
-  let result = eclim#Execute(command)
+  call eclim#java#debug#DisplayPositions(eclim#Execute(command))
+endfunction " }}}
+
+function! eclim#java#debug#DisplayPositions(results) " {{{
+  if (type(a:results) != g:LIST_TYPE)
+    return
+  endif
+
+  if empty(a:results)
+    echo "No breakpoints"
+    return
+  endif
+
+  call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
+  let locs = getloclist(0)
+  exec 'lopen ' . g:EclimLocationListHeight
 endfunction " }}}
 
 function! eclim#java#debug#ToggleBreakpoint() " {{{
@@ -117,6 +139,9 @@ function! eclim#java#debug#ToggleBreakpoint() " {{{
   let command = substitute(command, '<line_num>', line_num, '')
 
   let result = eclim#Execute(command)
+
+  call eclim#display#signs#Define(s:breakpoint_sign_name, '*', '')
+  call eclim#display#signs#Toggle(s:breakpoint_sign_name, line_num)
 endfunction " }}}
 
 function! eclim#java#debug#Step(action) " {{{
@@ -146,6 +171,10 @@ function! eclim#java#debug#Vars() " {{{
 
   call eclim#util#TempWindow(
         \ window_name, results, {'height': g:EclimLocationListHeight})
+
+  setlocal foldmethod=expr
+  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
+  setlocal foldtext=eclim#display#fold#NeatFoldText()
 
   "nnoremap <silent> <buffer> <cr> :call <SID>ViewDoc()<cr>
   augroup temp_window

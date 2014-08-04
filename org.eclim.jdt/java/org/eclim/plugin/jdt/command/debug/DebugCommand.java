@@ -55,6 +55,11 @@ public class DebugCommand extends AbstractCommand
     String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
     DebuggerContext debuggerContext = DebuggerContext.getInstance();
 
+    if (debuggerContext == null) {
+      logger.info("No debug session available");
+      return null;
+    }
+
     if (action.equals(ACTION_STOP)) {
       debuggerContext.stop();
 

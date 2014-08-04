@@ -87,14 +87,14 @@ public class VariablesCommand extends AbstractCommand
         continue;
       }
 
-      result.add(prefix + " " + var.getName() + " : " + var.getValue().getValueString());
-      /*result.add(prefix + " " + var.getName() + " : " + var.getValue().getValueString() + " --> " + ((IJavaVariable) var).isSynthetic()
-          + " --> " + var.getValue().getClass().getName() + " " + jvar.getJavaType().getName() + " " + jvar.getJavaType().getSignature());
-      logger.info(prefix + " " + var.getName() + " : " + var.getValue().getValueString());
-      */
+      // TODO Create an object and send it over to VIM.
+      // Do text formatting in VIM.
+      result.add(prefix + " " + var.getName() + " : " +
+          var.getValue().getValueString());
+
       IJavaValue value = (IJavaValue) var.getValue();
 
-      if (!processNestedVar(value)) {
+      if (!includeNestedVar(value)) {
         continue;
       }
       if (value instanceof IJavaObject) {
@@ -105,7 +105,16 @@ public class VariablesCommand extends AbstractCommand
     }
   }
 
-  private boolean processNestedVar(IJavaValue value) throws DebugException {
+  /**
+   * Determines whether nested variables should be returned as part of result
+   * set. Most times, we don't want to return fields that are part of Class
+   * that are not part of the source code. For e.g., java.lang.String contains
+   * fields that the application debugger doesn't care about. We only need to
+   * return the value of the string in this case.
+   *
+   */
+  private boolean includeNestedVar(IJavaValue value) throws DebugException
+  {
     boolean nesting = true;
 
     if ((value instanceof IJavaArray) ||
@@ -130,17 +139,23 @@ public class VariablesCommand extends AbstractCommand
     return nesting;
   }
 
-  private String getIndentation(int level) {
+  /**
+   * Returns the prefix string to use to simulate indentation.
+   */
+  private String getIndentation(int level)
+  {
     if (level == 0) {
       return "";
     }
 
     StringBuilder sb = new StringBuilder();
 
+    // Add a base indent since the fold level 0 has it
     sb.append("  ");
     for (int i = 0; i < level; i++) {
-      sb.append("-");
+      sb.append(" ");
     }
+    sb.append("|__");
 
     return sb.toString();
   }

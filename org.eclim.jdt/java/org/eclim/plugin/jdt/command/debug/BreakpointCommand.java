@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
+import java.util.ArrayList;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -25,12 +27,15 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.util.file.Position;
+
 import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.debug.core.model.ILineBreakpoint;
 
 /**
  * Command to manage existing breakpoints.
@@ -57,7 +62,15 @@ public class BreakpointCommand extends AbstractCommand
 
     String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
     if (action.equalsIgnoreCase(GET_ALL)) {
-      return getAllBreakpoints();
+      IBreakpoint[] breakpoints = getAllBreakpoints();
+      ArrayList<Position> positions = new ArrayList<Position>();
+      if (breakpoints != null) {
+        for (IBreakpoint breakpoint : breakpoints) {
+          positions.add(createPosition((ILineBreakpoint) breakpoint));
+        }
+      }
+
+      return positions;
     } else if (action.equalsIgnoreCase(DELETE_ALL)) {
       deleteAllBreakpoints();
     } else {
@@ -77,5 +90,13 @@ public class BreakpointCommand extends AbstractCommand
     IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
       .getBreakpointManager();
     breakpointMgr.removeBreakpoints(breakpointMgr.getBreakpoints(), true);
+  }
+
+  private Position createPosition(ILineBreakpoint breakpoint)
+    throws CoreException
+  {
+    String fileName = breakpoint.getMarker().getResource().getRawLocation()
+      .toOSString();
+    return Position.fromLineColumn(fileName, "", breakpoint.getLineNumber(), 1);
   }
 }
