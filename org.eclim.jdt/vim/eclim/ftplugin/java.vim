@@ -243,6 +243,10 @@ if !exists(":JavaDebugVars")
   command -nargs=0 -buffer JavaDebugVars :call eclim#java#debug#Vars()
 endif
 
+if !exists(":JavaDebugStackFrame")
+  command -nargs=0 -buffer JavaDebugStackFrame :call eclim#java#debug#StackFrame()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

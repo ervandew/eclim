@@ -42,6 +42,9 @@ let s:command_step =
 
 let s:command_vars =
   \ '-command java_debug_vars'
+
+let s:command_stackframe =
+  \ '-command java_debug_stackframe'
 " }}}
 
 function! eclim#java#debug#DebugStart(host, port) " {{{
@@ -98,10 +101,6 @@ function! eclim#java#debug#Breakpoint(action) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
-
-  let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#lang#SilentUpdate()
-  let line_num = line('.')
 
   let command = s:command_breakpoint
   let command = substitute(command, '<action>', a:action, '')
@@ -176,7 +175,36 @@ function! eclim#java#debug#Vars() " {{{
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
   setlocal foldtext=eclim#display#fold#NeatFoldText()
 
-  "nnoremap <silent> <buffer> <cr> :call <SID>ViewDoc()<cr>
+  augroup temp_window
+    autocmd! BufWinLeave <buffer>
+    call eclim#util#GoToBufferWindowRegister(filename)
+  augroup END
+endfunction " }}}
+
+function! eclim#java#debug#StackFrame() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let command = s:command_stackframe
+  let results = eclim#Execute(command)
+
+  if empty(results)
+    echo "No stack frames"
+    return
+  endif
+
+  let window_name = "Stack Frames"
+  let filename = expand('%:p')
+  call eclim#util#TempWindowClear(window_name)
+
+  call eclim#util#TempWindow(
+        \ window_name, results, {'height': g:EclimLocationListHeight})
+
+  setlocal foldmethod=expr
+  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
+  setlocal foldtext=eclim#display#fold#NeatFoldText()
+
   augroup temp_window
     autocmd! BufWinLeave <buffer>
     call eclim#util#GoToBufferWindowRegister(filename)

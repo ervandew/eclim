@@ -34,9 +34,10 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaObject;
-import org.eclipse.jdt.debug.core.IJavaType;
-import org.eclipse.jdt.debug.core.IJavaValue;
-import org.eclipse.jdt.debug.core.IJavaVariable;
+
+import org.eclipse.jdt.internal.debug.core.model.JDIType;
+import org.eclipse.jdt.internal.debug.core.model.JDIValue;
+import org.eclipse.jdt.internal.debug.core.model.JDIVariable;
 
 /**
  * Command to get variables visible in the current stack frame.
@@ -56,12 +57,17 @@ public class VariablesCommand extends AbstractCommand
       logger.info("Command: " + commandLine);
     }
 
+    try {
     List<String> result = new ArrayList<String>();
 
     IVariable[] vars = DebuggerContext.getInstance().getVariables();
     processVars(vars, result, 0);
 
     return result;
+    } catch (Exception e) {
+      logger.error("hehe", e);
+      throw new RuntimeException(e);
+    }
   }
 
   private void processVars(IVariable[] vars, List<String> result, int level)
@@ -76,14 +82,18 @@ public class VariablesCommand extends AbstractCommand
 
     // Defensive code to protect from too many nesting
     if (level >= 4) {
-      result.add(prefix + " STOP STOP STOP");
-      logger.info("Too much nesting");
+      result.add(prefix + " Nesting terminated");
       return;
     }
 
     for (IVariable var : vars) {
-      IJavaVariable jvar = (IJavaVariable) var;
+      JDIVariable jvar = (JDIVariable) var;
       if (jvar.isSynthetic()) {
+        continue;
+      }
+
+      JDIValue value = (JDIValue) var.getValue();
+      if (ignoreVar(jvar)) {
         continue;
       }
 
@@ -92,9 +102,7 @@ public class VariablesCommand extends AbstractCommand
       result.add(prefix + " " + var.getName() + " : " +
           var.getValue().getValueString());
 
-      IJavaValue value = (IJavaValue) var.getValue();
-
-      if (!includeNestedVar(value)) {
+      if (value == null || !includeNestedVar(value)) {
         continue;
       }
       if (value instanceof IJavaObject) {
@@ -106,6 +114,25 @@ public class VariablesCommand extends AbstractCommand
   }
 
   /**
+   * Igmores final primitive variables.
+   */
+  private boolean ignoreVar(JDIVariable var) throws DebugException
+  {
+    if (var.isFinal()) {
+      JDIValue value = (JDIValue) var.getValue();
+      JDIType type = (JDIType) value.getJavaType();
+      // TODO Add tools.jar to access com.sun classes
+      // Use underlying type to ignore final var that are primitive only
+      if (logger.isInfoEnabled()) {
+        logger.info("Ignoring var: " + var.getName() + " " + type.getName());
+      }
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Determines whether nested variables should be returned as part of result
    * set. Most times, we don't want to return fields that are part of Class
    * that are not part of the source code. For e.g., java.lang.String contains
@@ -113,7 +140,7 @@ public class VariablesCommand extends AbstractCommand
    * return the value of the string in this case.
    *
    */
-  private boolean includeNestedVar(IJavaValue value) throws DebugException
+  private boolean includeNestedVar(JDIValue value) throws DebugException
   {
     boolean nesting = true;
 
@@ -123,16 +150,25 @@ public class VariablesCommand extends AbstractCommand
 
       nesting = false;
     } else {
-      IJavaType type = value.getJavaType();
-      String typeName = type.getName();
+      JDIType type = (JDIType) value.getJavaType();
+      // TODO Add tools.jar to access com.sun classes
+      //type.getUnderlyingType();
 
-      // TODO Instead of listing what to ignore, find them out by looking at
-      // the source locator for class names that are not present.
-      if (typeName.equals("java.util.List") ||
-          typeName.equals("java.util.Map") ||
-          typeName.equals("java.lang.String"))
-      {
+      if (type == null) {
         nesting = false;
+      } else {
+        String typeName = type.getName();
+        logger.info("found --" + typeName + "--");
+
+        // TODO Instead of listing what to ignore, find them out by looking at
+        // the source locator for class names that are not present.
+        if (typeName.equals("java.util.List") ||
+            typeName.equals("java.util.Map") ||
+            typeName.equals("java.lang.String"))
+        {
+          logger.info("Skipping because: " + typeName);
+          nesting = false;
+        }
       }
     }
 

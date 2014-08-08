@@ -29,20 +29,15 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclim.util.file.FileUtils;
-
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-
-import org.eclipse.core.runtime.Path;
 
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IType;
 
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
@@ -83,12 +78,13 @@ public class ToggleBreakpointCommand extends AbstractCommand
       int lineNum) throws Exception
   {
 
-    IResource res = getBreakpointResource(projectName, fileName);
+    ICompilationUnit compUnit = JavaUtils.getCompilationUnit(projectName, fileName);
+    // TODO How to find out right type from this array?
+    IType type = compUnit.getTypes()[0];
+    IResource res = compUnit.getResource();
     Map<String, Object> attrMap = new HashMap<String, Object>();
 
-    // Get the string before the file extension
-    String typeName = FileUtils.removeExtension(fileName);
-
+    String typeName = type.getFullyQualifiedName();
     IJavaLineBreakpoint breakpoint = JDIDebugModel.lineBreakpointExists(res,
         typeName, lineNum);
 
@@ -104,16 +100,5 @@ public class ToggleBreakpointCommand extends AbstractCommand
     if (logger.isInfoEnabled()) {
       logger.info("Created breakpoint: " + fileName + " at " + lineNum);
     }
-  }
-
-  private IResource getBreakpointResource(String projectName, String fileName)
-    throws Exception
-  {
-
-    IProject project = ProjectUtils.getProject(projectName);
-    IJavaElement element = JavaCore.create(project)
-      .findElement(new Path(fileName));
-
-    return element.getCorrespondingResource();
   }
 }

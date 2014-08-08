@@ -76,6 +76,17 @@ Right now, it only shows values for primitive variables. Support for viewing obj
 
   :JavaDebugVars
 
+.. _\:JavaDebugVars:
+
+Stack Frames
+------------
+To view the current stack frames, run **:JavaDebugStackFrame** command. It will open a temporary window and display the stack frames
+of all threads.
+
+.. code-block:: vim
+
+  :JavaDebugStackFrame
+
 .. _\:JavaDebugControl:
 
 Control

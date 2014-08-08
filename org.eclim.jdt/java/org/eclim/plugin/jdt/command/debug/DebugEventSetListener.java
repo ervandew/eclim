@@ -21,10 +21,8 @@ import org.eclim.logging.Logger;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.IDebugEventSetListener;
 
-import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.ISourceLocator;
 
-import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 import org.eclipse.jdt.internal.core.CompilationUnit;
@@ -47,8 +45,8 @@ public class DebugEventSetListener implements IDebugEventSetListener
       int kind = event.getKind();
       int detail = event.getDetail();
 
-      if (logger.isInfoEnabled()) {
-        logger.info("Got event from src: " + src.getClass().getName() +
+      if (logger.isDebugEnabled()) {
+        logger.debug("Got event from src: " + src.getClass().getName() +
             " " + kind + " " + detail);
       }
 
@@ -80,21 +78,17 @@ public class DebugEventSetListener implements IDebugEventSetListener
 
         int lineNum = topStackFrame.getLineNumber();
 
-        DebuggerContext.getInstance().setVariables(topStackFrame.getVariables());
-        DebuggerContext.getInstance().getVimClient().jumpToFilePosition(fileName,
-            lineNum);
-
-      } else if (detail == DebugEvent.BREAKPOINT) {
-        IBreakpoint[] allBreakpoints = thread.getBreakpoints();
-        IJavaLineBreakpoint breakpoint = (IJavaLineBreakpoint) allBreakpoints[0];
-        String fileName = breakpoint.getMarker().getResource().getRawLocation()
-          .toOSString();
-        int lineNum = ((IJavaLineBreakpoint) breakpoint).getLineNumber();
         if (logger.isInfoEnabled()) {
-          logger.info("Breakpoint hit: " + breakpoint.getTypeName() + " at " +
-              lineNum);
+          if (detail == DebugEvent.BREAKPOINT) {
+            logger.info("Breakpoint hit: " + fileName + " at " +
+                lineNum);
+          }
         }
 
+        DebuggerContext.getInstance().setStackFrames(thread,
+            thread.getStackFrames());
+        DebuggerContext.getInstance().setVariables(thread,
+            topStackFrame.getVariables());
         DebuggerContext.getInstance().getVimClient().jumpToFilePosition(fileName,
             lineNum);
       }
