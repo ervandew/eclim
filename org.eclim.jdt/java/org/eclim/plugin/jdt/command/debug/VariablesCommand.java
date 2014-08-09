@@ -182,7 +182,6 @@ public class VariablesCommand
     for (int i = 0; i < level; i++) {
       sb.append(" ");
     }
-    sb.append("|__");
 
     return sb.toString();
   }
