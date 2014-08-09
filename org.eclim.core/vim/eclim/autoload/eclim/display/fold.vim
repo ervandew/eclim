@@ -36,8 +36,9 @@ function! eclim#display#fold#GetNeatFold(lnum) " {{{
         return '-1'
     endif
 
-    let this_indent = IndentLevel(a:lnum)
-    let next_indent = IndentLevel(NextNonBlankLine(a:lnum))
+    let this_indent = eclim#display#fold#IndentLevel(a:lnum)
+    let next_line = eclim#display#fold#NextNonBlankLine(a:lnum)
+    let next_indent = eclim#display#fold#IndentLevel(next_line)
 
     if next_indent == this_indent
         return this_indent
