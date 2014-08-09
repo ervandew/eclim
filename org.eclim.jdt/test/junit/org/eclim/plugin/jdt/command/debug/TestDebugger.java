@@ -16,24 +16,41 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 public class TestDebugger {
   public static void main(String[] args) {
-    System.out.println("here");
-    System.out.println("there");
+    System.out.println("Starting to build family ...");
 
-    List<Integer> l = new ArrayList<Integer>();
-    l.add(1);
+    Adult bob = new Adult("Bob", Sex.MALE);
+    Adult alice = new Adult("Alice", Sex.FEMALE);
 
-    Parent p = new Parent(true, "par", 100);
-    p.run();
+    boolean isMarried = alice.isMarried();
 
-    int x = 1;
-    int y = 100;
+    bob.gotMarried(alice);
+    alice.gotMarried(bob);
+    isMarried = alice.isMarried();
 
-    x = x + 1;
-    System.out.println("x = " + x);
+    Collection<Child> children = alice.getChildren();
+
+    Child tom = new Child("Tom", Sex.MALE);
+    bob.addChild(tom);
+    alice.addChild(tom);
+
+    children = alice.getChildren();
+
+    tom.addToys();
+    Map<String, Integer> tomToys = tom.getToysMap();
+
+    Child lisa = new Child("Lisa", Sex.FEMALE);
+    bob.addChild(lisa);
+    alice.addChild(lisa);
+
+    children = alice.getChildren();
+
+    Map<String, Integer> lisaToys = lisa.getToysMap();
+
+    System.out.println("Done ...");
   }
 }

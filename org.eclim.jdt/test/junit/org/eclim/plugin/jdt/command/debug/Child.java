@@ -16,21 +16,25 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-public class Parent {
-  private boolean check;
+import java.util.HashMap;
+import java.util.Map;
 
-  private String name;
+public class Child extends Person
+{
+  private Map<String, Integer> toysMap = new HashMap<String, Integer>();
 
-  private int id;
-
-  public Parent(boolean check, String name, int id) {
-    this.check = check;
-    this.name = name;
-    this.id = id;
+  public Child(String name, Sex sex)
+  {
+    super(name, sex);
   }
 
-  public void run() {
-    id += 1;
-    System.out.println("new id = " + id);
+  public void addToys() {
+    toysMap.put("Ball", 2);
+    toysMap.put("Bat", 1);
+    toysMap.put("Car", 1);
+  }
+
+  public Map<String, Integer> getToysMap() {
+    return toysMap;
   }
 }
