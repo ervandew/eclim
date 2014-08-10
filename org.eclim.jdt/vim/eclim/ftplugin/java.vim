@@ -219,6 +219,34 @@ if !exists(":Checkstyle")
   command -nargs=0 -buffer Checkstyle :call eclim#java#src#Checkstyle()
 endif
 
+if !exists(":JavaDebugStart")
+  command -nargs=+ -buffer JavaDebugStart :call eclim#java#debug#DebugStart(<f-args>)
+endif
+
+if !exists(":JavaDebugControl")
+  command -nargs=1 -buffer JavaDebugControl :call eclim#java#debug#DebugControl('<args>')
+endif
+
+if !exists(":JavaDebugBreakpoint")
+  command -nargs=1 -buffer JavaDebugBreakpoint :call eclim#java#debug#Breakpoint('<args>')
+endif
+
+if !exists(":JavaDebugToggleBreakpoint")
+  command -nargs=0 -buffer JavaDebugToggleBreakpoint :call eclim#java#debug#ToggleBreakpoint()
+endif
+
+if !exists(":JavaDebugStep")
+  command -nargs=1 -buffer JavaDebugStep :call eclim#java#debug#Step('<args>')
+endif
+
+if !exists(":JavaDebugVars")
+  command -nargs=0 -buffer JavaDebugVars :call eclim#java#debug#Vars()
+endif
+
+if !exists(":JavaDebugStackFrame")
+  command -nargs=0 -buffer JavaDebugStackFrame :call eclim#java#debug#StackFrame()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker
