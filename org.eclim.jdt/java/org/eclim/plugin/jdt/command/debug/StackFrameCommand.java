@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,17 +43,14 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
   name = "java_debug_stackframe",
   options = ""
 )
-public class StackFrameCommand extends AbstractCommand
+public class StackFrameCommand
+  extends AbstractCommand
 {
   private static final Logger logger = Logger.getLogger(StackFrameCommand.class);
 
   @Override
   public Object execute(CommandLine commandLine) throws Exception
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Command: " + commandLine);
-    }
-
     List<String> results = new ArrayList<String>();
 
     Map<IThread, IStackFrame[]> stackFrameMap = DebuggerContext.getInstance()
@@ -92,9 +89,7 @@ public class StackFrameCommand extends AbstractCommand
         IJavaStackFrame.class);
     if (frame != null) {
       String dec = frame.getDeclaringTypeName();
-      if (logger.isDebugEnabled()) {
-        logger.debug("Declaring type name = " + dec);
-      }
+      logger.debug("Declaring type name = " + dec);
 
       if (frame.isObsolete()) {
         result.append(dec);
@@ -104,17 +99,13 @@ public class StackFrameCommand extends AbstractCommand
 
       boolean javaStratum = true;
       javaStratum = frame.getReferenceType().getDefaultStratum().equals("Java");
-      if (logger.isDebugEnabled()) {
-        logger.debug("Stratum = " + javaStratum);
-      }
+      logger.debug("Stratum = " + javaStratum);
 
       if (javaStratum) {
         // receiver name
         String rec = frame.getReceivingTypeName();
         result.append(getQualifiedName(rec));
-        if (logger.isDebugEnabled()) {
-          logger.debug("Recv type name = " + rec);
-        }
+        logger.debug("Recv type name = " + rec);
 
         // append declaring type name if different
         if (!dec.equals(rec)) {

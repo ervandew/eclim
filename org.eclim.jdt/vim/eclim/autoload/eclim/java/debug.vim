@@ -26,7 +26,7 @@
 let s:breakpoint_sign_name = 'breakpoint_mark'
 
 let s:command_start =
-  \ '-command java_debug_start -n "<target_name>" -h "<host>" -p "<port>" -v "<vim_servername>"'
+  \ '-command java_debug_start -p "<project>" -h "<host>" -n "<port>" -v "<vim_servername>"'
 
 let s:command_control =
   \ '-command java_debug_control -a "<action>"'
@@ -59,24 +59,23 @@ function! eclim#java#debug#DebugStart(host, port) " {{{
   endif
 
   if (a:host == '')
-    call eclim#util#EchoError("Error: Specify host.")
+    call eclim#util#EchoError("Error: Please specify a host.")
     return
   endif
 
   if (a:port == '')
-    call eclim#util#EchoError("Error: Specify port.")
+    call eclim#util#EchoError("Error: Please specify a port.")
     return
   endif
 
-  let file = eclim#lang#SilentUpdate()
-
+  let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_start
-  let command = substitute(command, '<target_name>', file, '')
+  let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<host>', a:host, '')
   let command = substitute(command, '<port>', a:port, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
-
   let result = eclim#Execute(command)
+  call eclim#util#Echo(result)
 endfunction " }}}
 
 function! eclim#java#debug#DebugControl(action) " {{{
@@ -150,9 +149,7 @@ function! eclim#java#debug#Step(action) " {{{
 
   let command = s:command_step
   let command = substitute(command, '<action>', a:action, '')
-
-  let result = eclim#Execute(command)
-  call eclim#util#Echo(string(result))
+  call eclim#Execute(command)
 endfunction " }}}
 
 function! eclim#java#debug#Vars() " {{{
@@ -169,7 +166,7 @@ function! eclim#java#debug#Vars() " {{{
   call eclim#util#TempWindowClear(window_name)
 
   call eclim#util#TempWindow(
-        \ window_name, results, {'height': g:EclimLocationListHeight})
+    \ window_name, results, {'height': g:EclimLocationListHeight})
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
@@ -190,7 +187,7 @@ function! eclim#java#debug#StackFrame() " {{{
   let results = eclim#Execute(command)
 
   if empty(results)
-    echo "No stack frames"
+    call eclim#util#Echo("No stack frames")
     return
   endif
 
@@ -199,7 +196,7 @@ function! eclim#java#debug#StackFrame() " {{{
   call eclim#util#TempWindowClear(window_name)
 
   call eclim#util#TempWindow(
-        \ window_name, results, {'height': g:EclimLocationListHeight})
+    \ window_name, results, {'height': g:EclimLocationListHeight})
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)

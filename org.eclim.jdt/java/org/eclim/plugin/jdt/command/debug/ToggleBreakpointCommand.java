@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,12 @@ package org.eclim.plugin.jdt.command.debug;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclim.Services;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.DebugOptions;
 import org.eclim.command.Options;
-
-import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
@@ -52,30 +51,23 @@ import org.eclipse.jdt.debug.core.JDIDebugModel;
     "REQUIRED f file ARG," +
     "REQUIRED l line_num ARG"
 )
-public class ToggleBreakpointCommand extends AbstractCommand
+public class ToggleBreakpointCommand
+  extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(
-      ToggleBreakpointCommand.class);
-
   @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  public Object execute(CommandLine commandLine)
+    throws Exception
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Command: " + commandLine);
-    }
-
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String fileName = commandLine.getValue(Options.FILE_OPTION);
-    int lineNum = Integer.parseInt(commandLine.getValue(
-          DebugOptions.LINE_NUM_OPTION));
+    int lineNum = commandLine.getIntValue(Options.LINE_OPTION);
 
-    toggleBreakpoint(projectName, fileName, lineNum);
-
-    return null;
+    return toggleBreakpoint(projectName, fileName, lineNum);
   }
 
-  private void toggleBreakpoint(String projectName, String fileName,
-      int lineNum) throws Exception
+  private String toggleBreakpoint(
+      String projectName, String fileName, int lineNum)
+    throws Exception
   {
 
     ICompilationUnit compUnit = JavaUtils.getCompilationUnit(projectName, fileName);
@@ -85,20 +77,18 @@ public class ToggleBreakpointCommand extends AbstractCommand
     Map<String, Object> attrMap = new HashMap<String, Object>();
 
     String typeName = type.getFullyQualifiedName();
-    IJavaLineBreakpoint breakpoint = JDIDebugModel.lineBreakpointExists(res,
-        typeName, lineNum);
+    IJavaLineBreakpoint breakpoint = JDIDebugModel.lineBreakpointExists(
+        res, typeName, lineNum);
 
     if (breakpoint == null) {
-      JDIDebugModel.createLineBreakpoint(res, typeName, lineNum, -1, -1, 0, true,
-          attrMap);
-    } else {
-      IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
-        .getBreakpointManager();
-      breakpointMgr.removeBreakpoint(breakpoint, true);
+      JDIDebugModel.createLineBreakpoint(
+          res, typeName, lineNum, -1, -1, 0, true, attrMap);
+      return Services.getMessage("debugging.breakpoint.added");
     }
 
-    if (logger.isInfoEnabled()) {
-      logger.info("Created breakpoint: " + fileName + " at " + lineNum);
-    }
+    IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
+      .getBreakpointManager();
+    breakpointMgr.removeBreakpoint(breakpoint, true);
+    return Services.getMessage("debugging.breakpoint.removed");
   }
 }

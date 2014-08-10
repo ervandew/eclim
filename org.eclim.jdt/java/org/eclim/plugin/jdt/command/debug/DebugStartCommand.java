@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,59 +16,42 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
+import org.eclim.Services;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.DebugOptions;
 import org.eclim.command.Options;
-
-import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.util.ProjectUtils;
+
 /**
- * Command to start a debug session using a configuration.
+ * Command to start a debug session.
  */
 @Command(
   name = "java_debug_start",
   options =
-    "REQUIRED n target_name ARG," +
+    "REQUIRED p project ARG," +
     "REQUIRED h host ARG," +
-    "REQUIRED p port ARG," +
+    "REQUIRED n port ARG," +
     "REQUIRED v vim_instance_name ARG"
 )
-public class DebugStartCommand extends AbstractCommand
+public class DebugStartCommand
+  extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(DebugStartCommand.class);
-
   @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  public Object execute(CommandLine commandLine)
+    throws Exception
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Command: " + commandLine);
-    }
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    String vimInstanceId = commandLine.getValue(Options.VIM_INSTANCE_OPTION);
+    String host = commandLine.getValue(Options.HOST_OPTION);
+    int port = commandLine.getIntValue(Options.PORT_NUMBER_OPTION);
 
-    String debugTargetName = commandLine.getValue(Options.NAME_OPTION);
-    String host = commandLine.getValue(DebugOptions.HOST_OPTION);
-    String port = commandLine.getValue(DebugOptions.PORT_OPTION);
-    String vimInstanceId = commandLine.getValue(DebugOptions.VIM_INSTANCE_OPTION);
-
-    if (host == null || host.equals("")) {
-      throw new IllegalArgumentException("Invalid host");
-    }
-
-    if (port == null || port.equals("")) {
-      throw new IllegalArgumentException("Invalid port");
-    }
-
-    try {
-      Integer.parseInt(port);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid port: " + port);
-    }
-
-    DebuggerContext.getInstance().start(debugTargetName,
-        host, port, vimInstanceId);
-    return null;
+    DebuggerContext.getInstance().start(
+        ProjectUtils.getProject(projectName), host, port, vimInstanceId);
+    return Services.getMessage("debuggging.session.started");
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ import org.eclipse.jdt.internal.debug.core.model.JDIThread;
  * Handler for events triggered during a debug session.
  * Events include thread suspension due to breakpoint or stepping action.
  */
-public class DebugEventSetListener implements IDebugEventSetListener
+public class DebugEventSetListener
+  implements IDebugEventSetListener
 {
   private static final Logger logger = Logger.getLogger(
       DebugEventSetListener.class);
@@ -45,10 +46,8 @@ public class DebugEventSetListener implements IDebugEventSetListener
       int kind = event.getKind();
       int detail = event.getDetail();
 
-      if (logger.isDebugEnabled()) {
-        logger.debug("Got event from src: " + src.getClass().getName() +
-            " " + kind + " " + detail);
-      }
+      logger.debug("Got event from src: " + src.getClass().getName() +
+          " " + kind + " " + detail);
 
       try {
         if (src.getClass().equals(JDIThread.class)) {
@@ -78,11 +77,8 @@ public class DebugEventSetListener implements IDebugEventSetListener
 
         int lineNum = topStackFrame.getLineNumber();
 
-        if (logger.isInfoEnabled()) {
-          if (detail == DebugEvent.BREAKPOINT) {
-            logger.info("Breakpoint hit: " + fileName + " at " +
-                lineNum);
-          }
+        if (detail == DebugEvent.BREAKPOINT) {
+          logger.debug("Breakpoint hit: " + fileName + " at " + lineNum);
         }
 
         DebuggerContext.getInstance().setStackFrames(thread,

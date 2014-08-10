@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,8 +24,11 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.util.VimClient;
 
+import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclim.util.CollectionUtils;
+
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -108,39 +112,47 @@ public class DebuggerContext
   /**
    * Starts the debug session by creating the debug target with given parameters.
    */
-  public void start(String debugTargetName, String host,
-      String port, String vimInstanceId) throws CoreException
+  public void start(
+      IProject project,
+      String host,
+      int port,
+      String vimInstanceId)
+    throws Exception
   {
-
-    if (logger.isInfoEnabled()) {
-      logger.info("Creating debug target: " + debugTargetName + " at " +
-          host + ":" + port + " . VIM instance: " + vimInstanceId);
-    }
+    logger.info(
+        "Starting debug session at " + host + ":" + port +
+        " for vim instance: " + vimInstanceId);
 
     ILaunchConfiguration config = null;
 
-    // TODO This is a hack to create source locator. Using all projects in the
-    // workspace.
-    IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-    IJavaProject[] jProjects = new IJavaProject[projects.length];
-    for (int i = 0; i < projects.length; i++) {
-      jProjects[i] = JavaCore.create(projects[i]);
+    ArrayList<IProject> projects = new ArrayList<IProject>();
+    projects.add(project);
+    CollectionUtils.addAll(projects, project.getReferencedProjects());
+    CollectionUtils.addAll(projects, project.getReferencingProjects());
+
+    ArrayList<IJavaProject> javaProjects = new ArrayList<IJavaProject>();
+    for (IProject p : projects) {
+      if (p.hasNature(JavaCore.NATURE_ID)){
+        javaProjects.add(JavaUtils.getJavaProject(p));
+      }
     }
     // TODO Switch to newer approach of source code lookup
-    ISourceLocator srcLocator = new JavaSourceLocator(jProjects, true);
+    ISourceLocator srcLocator = new JavaSourceLocator(
+        javaProjects.toArray(new IJavaProject[javaProjects.size()]), true);
 
     ILaunch launch = new Launch(config, ILaunchManager.DEBUG_MODE, srcLocator);
     IProgressMonitor monitor = null;
     Map<String, String> args = new HashMap<String, String>();
     args.put(KEY_HOSTNAME, host);
-    args.put(KEY_PORT, port);
+    args.put(KEY_PORT, String.valueOf(port));
 
     SocketAttachConnector connector = new SocketAttachConnector();
     try {
       connector.connect(args, monitor, launch);
     } catch (CoreException e) {
-      throw new RuntimeException("Debug VM not available at " + host + ":" +
-          port + ". Check hostname and port number.");
+      throw new RuntimeException(
+          "Debug VM not available at " + host + ":" + port + ". " +
+          "Check hostname and port number.");
     }
 
     this.debugTarget = launch.getDebugTarget();
@@ -152,9 +164,7 @@ public class DebuggerContext
    */
   public void suspend() throws DebugException
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Suspending debug session");
-    }
+    logger.info("Suspending debug session");
 
     if (debugTarget != null) {
       debugTarget.suspend();
@@ -166,9 +176,7 @@ public class DebuggerContext
    */
   public void stop() throws DebugException
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Stopping debug session");
-    }
+    logger.info("Stopping debug session");
 
     if (debugTarget != null) {
       debugTarget.disconnect();
@@ -182,9 +190,7 @@ public class DebuggerContext
    */
   public void terminate() throws DebugException
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Terminating debug session");
-    }
+    logger.info("Terminating debug session");
     if (debugTarget != null) {
       debugTarget.terminate();
     }
@@ -197,9 +203,7 @@ public class DebuggerContext
    */
   public void resume() throws DebugException
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Resuming breakpoint");
-    }
+    logger.debug("Resuming breakpoint");
     if (debugTarget != null) {
       debugTarget.resume();
     }

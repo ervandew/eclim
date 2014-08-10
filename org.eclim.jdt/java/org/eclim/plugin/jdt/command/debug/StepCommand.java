@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ package org.eclim.plugin.jdt.command.debug;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.DebugOptions;
+import org.eclim.command.Options;
 
 import org.eclim.logging.Logger;
 
@@ -37,33 +37,25 @@ import org.eclipse.debug.core.model.IThread;
   options =
     "REQUIRED a action ARG,"
 )
-public class StepCommand extends AbstractCommand
+public class StepCommand
+  extends AbstractCommand
 {
   private static final Logger logger = Logger.getLogger(StepCommand.class);
 
   private static final String ACTION_INTO = "into";
-
   private static final String ACTION_OVER = "over";
-
   private static final String ACTION_RETURN = "return";
 
   @Override
   public Object execute(CommandLine commandLine) throws Exception
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Command: " + commandLine);
-    }
-
     IThread steppingThread = getSteppingThread();
     if (steppingThread == null) {
-      if (logger.isDebugEnabled()) {
-        logger.debug("No thread avaiable for stepping");
-      }
-
+      logger.debug("No thread avaiable for stepping");
       return null;
     }
 
-    String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
+    String action = commandLine.getValue(Options.ACTION_OPTION);
 
     if (action.equals(ACTION_INTO)) {
       steppingThread.stepInto();
@@ -89,7 +81,7 @@ public class StepCommand extends AbstractCommand
     IThread[] threads = DebuggerContext.getInstance().getDebugTarget().getThreads();
     for (IThread thread : threads) {
       if (thread.canStepInto()) {
-        logger.info("Stepping thread = " + thread.getName());
+        logger.debug("Stepping thread = " + thread.getName());
         return thread;
       }
     }

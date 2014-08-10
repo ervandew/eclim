@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,7 @@ package org.eclim.plugin.jdt.command.debug;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.DebugOptions;
-
-import org.eclim.logging.Logger;
+import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
@@ -33,26 +31,18 @@ import org.eclim.plugin.core.command.AbstractCommand;
   options =
     "REQUIRED a action ARG"
 )
-public class DebugCommand extends AbstractCommand
+public class DebugCommand
+  extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(DebugCommand.class);
-
   private static final String ACTION_STOP = "stop";
-
   private static final String ACTION_TERMINATE = "terminate";
-
   private static final String ACTION_SUSPEND = "suspend";
-
   private static final String ACTION_RESUME = "resume";
 
   @Override
   public Object execute(CommandLine commandLine) throws Exception
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Command: " + commandLine);
-    }
-
-    String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
+    String action = commandLine.getValue(Options.ACTION_OPTION);
     DebuggerContext debuggerContext = DebuggerContext.getInstance();
 
     if (action.equals(ACTION_STOP)) {

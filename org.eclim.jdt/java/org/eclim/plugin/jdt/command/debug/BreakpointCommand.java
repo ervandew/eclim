@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.DebugOptions;
-
-import org.eclim.logging.Logger;
+import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
@@ -45,22 +43,16 @@ import org.eclipse.debug.core.model.ILineBreakpoint;
   options =
     "REQUIRED a action ARG"
 )
-public class BreakpointCommand extends AbstractCommand
+public class BreakpointCommand
+  extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(BreakpointCommand.class);
-
   private static final String GET_ALL = "get_all";
-
   private static final String DELETE_ALL = "delete_all";
 
   @Override
   public Object execute(CommandLine commandLine) throws Exception
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Command: " + commandLine);
-    }
-
-    String action = commandLine.getValue(DebugOptions.ACTION_OPTION);
+    String action = commandLine.getValue(Options.ACTION_OPTION);
     if (action.equalsIgnoreCase(GET_ALL)) {
       IBreakpoint[] breakpoints = getAllBreakpoints();
       ArrayList<Position> positions = new ArrayList<Position>();

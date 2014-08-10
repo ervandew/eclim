@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,7 @@ public class Options
   public static final String FOLDER_OPTION = "f";
   public static final String HELP = "help";
   public static final String HALT_OPTION = "h";
+  public static final String HOST_OPTION = "h";
   public static final String INDENT_OPTION = "i";
   public static final String INDEXED_OPTION = "i";
   public static final String JARS_OPTION = "j";
@@ -78,6 +79,7 @@ public class Options
   public static final String PATH_OPTION = "p";
   public static final String PATTERN_OPTION = "p";
   public static final String PEEK_OPTION = "p";
+  public static final String PORT_NUMBER_OPTION = "n";
   public static final String PROJECT_OPTION = "p";
   public static final String PROPERTIES_OPTION = "r";
   public static final String REVISION_OPTION = "r";
@@ -97,6 +99,7 @@ public class Options
   public static final String VALUES_OPTION = "v";
   public static final String VARIABLE_OPTION = "v";
   public static final String VERSION_OPTION = "v";
+  public static final String VIM_INSTANCE_OPTION = "v";
 
   private static final String ANY = "ANY";
   private static final String ARG = "ARG";

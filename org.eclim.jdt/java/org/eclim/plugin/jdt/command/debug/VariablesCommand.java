@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,32 +46,25 @@ import org.eclipse.jdt.internal.debug.core.model.JDIVariable;
   name = "java_debug_vars",
   options = ""
 )
-public class VariablesCommand extends AbstractCommand
+public class VariablesCommand
+  extends AbstractCommand
 {
   private static final Logger logger = Logger.getLogger(VariablesCommand.class);
 
   @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  public Object execute(CommandLine commandLine)
+    throws Exception
   {
-    if (logger.isInfoEnabled()) {
-      logger.info("Command: " + commandLine);
-    }
-
-    try {
     List<String> result = new ArrayList<String>();
 
     IVariable[] vars = DebuggerContext.getInstance().getVariables();
     processVars(vars, result, 0);
 
     return result;
-    } catch (Exception e) {
-      logger.error("hehe", e);
-      throw new RuntimeException(e);
-    }
   }
 
   private void processVars(IVariable[] vars, List<String> result, int level)
-      throws DebugException
+    throws DebugException
   {
     if (vars == null) {
       return;
@@ -123,9 +116,7 @@ public class VariablesCommand extends AbstractCommand
       JDIType type = (JDIType) value.getJavaType();
       // TODO Add tools.jar to access com.sun classes
       // Use underlying type to ignore final var that are primitive only
-      if (logger.isInfoEnabled()) {
-        logger.info("Ignoring var: " + var.getName() + " " + type.getName());
-      }
+      logger.debug("Ignoring var: " + var.getName() + " " + type.getName());
       return true;
     }
 
@@ -158,7 +149,7 @@ public class VariablesCommand extends AbstractCommand
         nesting = false;
       } else {
         String typeName = type.getName();
-        logger.info("found --" + typeName + "--");
+        logger.debug("found --" + typeName + "--");
 
         // TODO Instead of listing what to ignore, find them out by looking at
         // the source locator for class names that are not present.
@@ -166,7 +157,7 @@ public class VariablesCommand extends AbstractCommand
             typeName.equals("java.util.Map") ||
             typeName.equals("java.lang.String"))
         {
-          logger.info("Skipping because: " + typeName);
+          logger.debug("Skipping: " + typeName);
           nesting = false;
         }
       }
