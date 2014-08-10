@@ -1,5 +1,12 @@
 feature_jdt = 'org.eclipse.jdt'
 
+target(name: 'org.eclim.jdt.classpath'){
+  fileset(dir: '${eclipse}'){
+    include(name: 'dropins/**/plugins/org.eclipse.jdt.debug_*/*.jar')
+    include(name: 'plugins/org.eclipse.jdt.debug_*/*.jar')
+  }
+}
+
 target(name: 'org.eclim.jdt.build.eclipse'){
   // build the eclim testng listener
   mkdir(dir: '${build.classes}/testng')
