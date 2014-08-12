@@ -132,7 +132,7 @@ public class DebuggerContext
 
     ArrayList<IJavaProject> javaProjects = new ArrayList<IJavaProject>();
     for (IProject p : projects) {
-      if (p.hasNature(JavaCore.NATURE_ID)){
+      if (p.exists() && p.hasNature(JavaCore.NATURE_ID)){
         javaProjects.add(JavaUtils.getJavaProject(p));
       }
     }
