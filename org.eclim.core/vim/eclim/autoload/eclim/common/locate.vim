@@ -269,9 +269,11 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace) " {{{
   call s:LocateFileCompletionAutocmdDeferred()
 
   imap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection("n")<cr>
+  imap <buffer> <silent> <c-j> <c-r>=<SID>LocateFileSelection("n")<cr>
   imap <buffer> <silent> <down> <c-r>=<SID>LocateFileSelection("n")<cr>
   imap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection("p")<cr>
   imap <buffer> <silent> <up> <c-r>=<SID>LocateFileSelection("p")<cr>
+  imap <buffer> <silent> <c-k> <c-r>=<SID>LocateFileSelection("p")<cr>
   exec 'imap <buffer> <silent> <cr> ' .
     \ '<c-r>=<SID>LocateFileSelect("' . a:action . '")<cr>'
   imap <buffer> <silent> <c-e> <c-r>=<SID>LocateFileSelect('edit')<cr>
