@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,13 +30,33 @@
 function! eclim#php#util#IsPhpCode(lnum) " {{{
   " Determines if the code under the cursor is php code (in a php block).
 
-  " FIXME: may get confused if either of these occur in a comment.
-  "        can fix with searchpos and checking syntax name on result.
-  let phpstart = search('<?\(php\|=\)\?', 'bcnW')
-  if phpstart > 0
-    let phpend = search('?>', 'bnW')
-  endif
-  return phpstart > 0 && phpstart <= a:lnum && (phpend == 0 || phpend < phpstart)
+  let pos = getpos('.')
+  try
+    let phpstart = searchpos('<?\(php\|=\)\?', 'bcW')
+    while phpstart[0]
+      let synname = synIDattr(synIDtrans(synID(phpstart[0], phpstart[1], 1)), "name")
+      if synname !~ '\(Comment\|String\)'
+        break
+      endif
+      let phpstart = searchpos('<?\(php\|=\)\?', 'bW')
+    endwhile
+
+    if phpstart[0] > 0
+      call setpos('.', pos)
+      let phpend = searchpos('?>', 'bW')
+      while phpend[0] > phpstart[0]
+        let synname = synIDattr(synIDtrans(synID(phpend[0], phpend[1], 1)), "name")
+        if synname !~ '\(Comment\|String\)'
+          break
+        endif
+        let phpend = searchpos('?>', 'bW')
+      endwhile
+    endif
+
+    return phpstart[0] > 0 && phpstart[0] <= a:lnum && (phpend[0] == 0 || phpend[0] < phpstart[0])
+  finally
+    call setpos('.', pos)
+  endtry
 endfunction " }}}
 
 function! eclim#php#util#UpdateSrcFile(on_save) " {{{
