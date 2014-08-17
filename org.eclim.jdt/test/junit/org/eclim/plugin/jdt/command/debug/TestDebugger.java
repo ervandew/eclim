@@ -23,6 +23,9 @@ public class TestDebugger {
   public static void main(String[] args) {
     System.out.println("Starting to build family ...");
 
+    FamilyService familyService = new FamilyService();
+    familyService.submitChore();
+
     Adult bob = new Adult("Bob", Sex.MALE);
     Adult alice = new Adult("Alice", Sex.FEMALE);
 
@@ -50,6 +53,8 @@ public class TestDebugger {
     children = alice.getChildren();
 
     Map<String, Integer> lisaToys = lisa.getToysMap();
+
+    familyService.shutdown();
 
     System.out.println("Done ...");
   }
