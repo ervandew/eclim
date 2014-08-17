@@ -45,6 +45,9 @@ let s:command_vars =
 
 let s:command_stackframe =
   \ '-command java_debug_stackframe'
+
+let s:command_status =
+  \ '-command java_debug_status'
 " }}}
 
 function! eclim#java#debug#DebugStart(host, port) " {{{
@@ -206,6 +209,30 @@ function! eclim#java#debug#StackFrame() " {{{
     autocmd! BufWinLeave <buffer>
     call eclim#util#GoToBufferWindowRegister(filename)
   augroup END
+endfunction " }}}
+
+function! eclim#java#debug#Status() " {{{
+  let command = s:command_status
+  let results = eclim#Execute(command)
+
+  let status = results.status
+  let threads = results.threads
+  let vars = results.variables
+
+  let window_name = "Threads"
+  call eclim#util#TempWindowClear(window_name)
+  call eclim#util#TempWindow(
+    \ window_name, [status] + threads, {'height': g:EclimLocationListHeight})
+
+  setlocal foldmethod=expr
+  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
+  setlocal foldtext=eclim#display#fold#NeatFoldText()
+
+  vsplit window "Variables"
+  setlocal modifiable
+  setlocal noreadonly
+  silent 1,$delete _
+  call append(0, vars) 
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -46,6 +46,8 @@ import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+
 import org.eclipse.jdt.internal.launching.SocketAttachConnector;
 
 import org.eclipse.jdt.launching.sourcelookup.JavaSourceLocator;
@@ -66,6 +68,11 @@ public class DebuggerContext
 
   private static final String KEY_HOSTNAME = "hostname";
   private static final String KEY_PORT = "port";
+
+  /**
+   * Name of this context obtained by concatenating user input.
+   */
+  private String name;
 
   /**
    * Singleton instance of the context.
@@ -92,6 +99,10 @@ public class DebuggerContext
   public static DebuggerContext getInstance()
   {
     return context;
+  }
+
+  public String getName() {
+    return this.name;
   }
 
   public VariableContext getVariableContext() {
@@ -158,6 +169,7 @@ public class DebuggerContext
           "Check hostname and port number.");
     }
 
+    this.name = project.getName() + " - " + host + ":" + port;
     this.debugTarget = launch.getDebugTarget();
     this.vimClient = new VimClient(vimInstanceId);
   }
