@@ -42,9 +42,6 @@ import org.eclipse.debug.core.Launch;
 
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISourceLocator;
-import org.eclipse.debug.core.model.IStackFrame;
-import org.eclipse.debug.core.model.IThread;
-import org.eclipse.debug.core.model.IVariable;
 
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -75,6 +72,10 @@ public class DebuggerContext
    */
   private static final DebuggerContext context = new DebuggerContext();
 
+  private final VariableContext varCtx = new VariableContext();
+
+  private final ThreadContext threadCtx = new ThreadContext();
+
   /**
    * Debug target for currently active session. This is reinitialized by
    * <code>createDebugTarget</code>.
@@ -82,12 +83,6 @@ public class DebuggerContext
   private IDebugTarget debugTarget;
 
   private VimClient vimClient;
-
-  private Map<IThread, IStackFrame[]> stackFramesMap =
-    new HashMap<IThread, IStackFrame[]>();
-
-  private Map<IThread, IVariable[]> varsMap =
-    new HashMap<IThread, IVariable[]>();
 
   private DebuggerContext()
   {
@@ -97,6 +92,14 @@ public class DebuggerContext
   public static DebuggerContext getInstance()
   {
     return context;
+  }
+
+  public VariableContext getVariableContext() {
+    return varCtx;
+  }
+
+  public ThreadContext getThreadContext() {
+    return threadCtx;
   }
 
   public IDebugTarget getDebugTarget()
@@ -182,7 +185,7 @@ public class DebuggerContext
       debugTarget.disconnect();
     }
 
-    reset();
+    clear();
   }
 
   /**
@@ -195,7 +198,7 @@ public class DebuggerContext
       debugTarget.terminate();
     }
 
-    reset();
+    clear();
   }
 
   /**
@@ -209,35 +212,10 @@ public class DebuggerContext
     }
   }
 
-  private void reset() {
+  private void clear() {
     debugTarget = null;
     vimClient = null;
-    varsMap.clear();
-    stackFramesMap.clear();
-  }
-
-  public void setStackFrames(IThread thread, IStackFrame[] stackFrames)
-  {
-    this.stackFramesMap.put(thread, stackFrames);
-  }
-
-  public void setVariables(IThread thread, IVariable[] vars)
-  {
-    this.varsMap.put(thread, vars);
-  }
-
-  public Map<IThread, IStackFrame[]> getStackFramesMap()
-  {
-    return this.stackFramesMap;
-  }
-
-  public IVariable[] getVariables()
-  {
-    // TODO Take thread ID as input and return its variables
-    for (Map.Entry<IThread, IVariable[]> entry : varsMap.entrySet()) {
-      return entry.getValue();
-    }
-
-    return null;
+    varCtx.clear();
+    threadCtx.clear();
   }
 }

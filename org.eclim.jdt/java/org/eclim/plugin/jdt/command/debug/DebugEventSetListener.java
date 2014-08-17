@@ -54,6 +54,7 @@ public class DebugEventSetListener
           handleThreadEvent((JDIThread) src, kind, detail);
         }
       } catch (Exception e) {
+        logger.error("Listener failed", e);
         throw new RuntimeException(e);
       }
     }
@@ -81,13 +82,18 @@ public class DebugEventSetListener
           logger.debug("Breakpoint hit: " + fileName + " at " + lineNum);
         }
 
-        DebuggerContext.getInstance().setStackFrames(thread,
+        DebuggerContext.getInstance().getThreadContext().update(thread,
             thread.getStackFrames());
-        DebuggerContext.getInstance().setVariables(thread,
+        DebuggerContext.getInstance().getVariableContext().update(thread,
             topStackFrame.getVariables());
         DebuggerContext.getInstance().getVimClient().jumpToFilePosition(fileName,
             lineNum);
       }
+    } else if (kind == DebugEvent.CREATE) {
+      DebuggerContext.getInstance().getThreadContext().update(thread,
+          null);
+    } else if (kind == DebugEvent.TERMINATE) {
+      DebuggerContext.getInstance().getThreadContext().remove(thread);
     }
   }
 }
