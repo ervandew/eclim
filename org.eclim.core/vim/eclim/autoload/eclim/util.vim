@@ -1455,9 +1455,18 @@ function! eclim#util#System(cmd, ...)
 endfunction " }}}
 
 function! eclim#util#TempWindow(name, lines, ...) " {{{
+  let options = a:0 > 0 ? a:1 : {}
+  call eclim#util#TempSplitWindow(a:name, 0, a:lines, options)
+endfunction " }}}
+
+function! eclim#util#TempVerticalSplitWindow(name, lines, ...) " {{{
+  let options = a:0 > 0 ? a:1 : {}
+  call eclim#util#TempSplitWindow(a:name, 1, a:lines, options)
+endfunction " }}}
+
+function! eclim#util#TempSplitWindow(name, vertical_split, lines, options) " {{{
   " Opens a temp window w/ the given name and contents which is readonly unless
   " specified otherwise.
-  let options = a:0 > 0 ? a:1 : {}
   let filename = expand('%:p')
   let winnr = winnr()
 
@@ -1471,8 +1480,14 @@ function! eclim#util#TempWindow(name, lines, ...) " {{{
   let col = 1
 
   if bufwinnr(bufname) == -1
-    let height = get(options, 'height', 10)
-    silent! noautocmd exec "keepalt botright " . height . "sview " . name
+    let height = get(a:options, 'height', 10)
+    if a:vertical_split == 1
+      let split_cmd = "vert sview "
+    else 
+      let split_cmd = "sview "
+    endif
+
+    silent! noautocmd exec "keepalt botright " . height . split_cmd . name
     setlocal nowrap
     setlocal winfixheight
     setlocal noswapfile
@@ -1485,7 +1500,7 @@ function! eclim#util#TempWindow(name, lines, ...) " {{{
     if temp_winnr != winnr()
       exec temp_winnr . 'winc w'
       silent doautocmd WinEnter
-      if get(options, 'preserveCursor', 0)
+      if get(a:options, 'preserveCursor', 0)
         let line = line('.')
         let col = col('.')
       endif
@@ -1506,7 +1521,7 @@ function! eclim#util#TempWindow(name, lines, ...) " {{{
 
   call cursor(line, col)
 
-  if get(options, 'readonly', 1)
+  if get(a:options, 'readonly', 1)
     setlocal nomodified
     setlocal nomodifiable
     setlocal readonly

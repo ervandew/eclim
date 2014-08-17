@@ -77,8 +77,11 @@ function! eclim#java#debug#DebugStart(host, port) " {{{
   let command = substitute(command, '<host>', a:host, '')
   let command = substitute(command, '<port>', a:port, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
-  let result = eclim#Execute(command)
-  call eclim#util#Echo(result)
+  let results = eclim#Execute(command)
+  
+  if type(results) == g:DICT_TYPE
+    call eclim#java#debug#DisplayStatus(results)
+  endif
 endfunction " }}}
 
 function! eclim#java#debug#DebugControl(action) " {{{
@@ -214,12 +217,15 @@ endfunction " }}}
 function! eclim#java#debug#Status() " {{{
   let command = s:command_status
   let results = eclim#Execute(command)
+  call eclim#java#debug#DisplayStatus(results)
+endfunction " }}}
 
-  let status = results.status
-  let threads = results.threads
-  let vars = results.variables
+function! eclim#java#debug#DisplayStatus(results) " {{{
+  let status = a:results.status
+  let threads = a:results.threads
+  let vars = a:results.variables
 
-  let window_name = "Threads"
+  let window_name = "Debug Threads"
   call eclim#util#TempWindowClear(window_name)
   call eclim#util#TempWindow(
     \ window_name, [status] + threads, {'height': g:EclimLocationListHeight})
@@ -228,11 +234,15 @@ function! eclim#java#debug#Status() " {{{
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
   setlocal foldtext=eclim#display#fold#NeatFoldText()
 
-  vsplit window "Variables"
-  setlocal modifiable
-  setlocal noreadonly
-  silent 1,$delete _
-  call append(0, vars) 
+  let window_name = "Debug Variables"
+  call eclim#util#TempWindowClear(window_name)
+  "call eclim#util#TempVerticalSplitWindow(
+  call eclim#util#TempWindow(
+    \ window_name, vars, {'height': g:EclimLocationListHeight})
+
+  setlocal foldmethod=expr
+  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
+  setlocal foldtext=eclim#display#fold#NeatFoldText()
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

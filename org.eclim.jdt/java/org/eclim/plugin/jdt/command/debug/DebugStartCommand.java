@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-import org.eclim.Services;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -52,6 +50,7 @@ public class DebugStartCommand
 
     DebuggerContext.getInstance().start(
         ProjectUtils.getProject(projectName), host, port, vimInstanceId);
-    return Services.getMessage("debuggging.session.started");
+
+    return DebuggerContext.getInstance().getStatus();
   }
 }

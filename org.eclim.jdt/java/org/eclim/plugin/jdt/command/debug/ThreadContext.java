@@ -92,17 +92,17 @@ public class ThreadContext
       IStackFrame[] stackFrames = entry.getValue();
 
       String status = thread.isSuspended() ? SUSPENDED : RUNNING;
-      results.add("Thread-" + threadName +
+      // Add 2 spaces for indentation
+      results.add("  Thread-" + threadName +
           " (" + status  + ")");
 
       if (stackFrames != null) {
         for (IStackFrame stackFrame : stackFrames) {
           // TODO Do formatting in VIM
-          results.add("  " + getStackFrameText(stackFrame));
+          // Add 4 spaces for indentation under thread
+          results.add("    " + getStackFrameText(stackFrame));
         }
       }
-
-      results.add("");
     }
   }
 
@@ -115,7 +115,6 @@ public class ThreadContext
         IJavaStackFrame.class);
     if (frame != null) {
       String dec = frame.getDeclaringTypeName();
-      logger.debug("Declaring type name = " + dec);
 
       if (frame.isObsolete()) {
         result.append(dec);
@@ -125,13 +124,11 @@ public class ThreadContext
 
       boolean javaStratum = true;
       javaStratum = frame.getReferenceType().getDefaultStratum().equals("Java");
-      logger.debug("Stratum = " + javaStratum);
 
       if (javaStratum) {
         // receiver name
         String rec = frame.getReceivingTypeName();
         result.append(getQualifiedName(rec));
-        logger.debug("Recv type name = " + rec);
 
         // append declaring type name if different
         if (!dec.equals(rec)) {

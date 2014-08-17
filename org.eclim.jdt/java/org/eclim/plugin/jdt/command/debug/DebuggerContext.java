@@ -46,8 +46,6 @@ import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import org.eclipse.jdt.debug.core.IJavaDebugTarget;
-
 import org.eclipse.jdt.internal.launching.SocketAttachConnector;
 
 import org.eclipse.jdt.launching.sourcelookup.JavaSourceLocator;
@@ -68,6 +66,12 @@ public class DebuggerContext
 
   private static final String KEY_HOSTNAME = "hostname";
   private static final String KEY_PORT = "port";
+
+  // Connection status
+  private static final String CONNECTED = "Connected";
+  private static final String DISCONNECTED = "Disconnected";
+  private static final String SUSPENDED = "Suspended";
+  private static final String TERMINATED = "Terminated";
 
   /**
    * Name of this context obtained by concatenating user input.
@@ -229,5 +233,27 @@ public class DebuggerContext
     vimClient = null;
     varCtx.clear();
     threadCtx.clear();
+  }
+
+  public Map<String, Object> getStatus() {
+    Map<String, Object> statusMap = new HashMap<String, Object>();
+
+    DebuggerContext ctx = DebuggerContext.getInstance();
+    IDebugTarget debugTarget = ctx.getDebugTarget();
+
+    String status = CONNECTED;
+    if (debugTarget.isDisconnected()) {
+      status = DISCONNECTED;
+    } else if (debugTarget.isSuspended()) {
+      status = SUSPENDED;
+    } else if (debugTarget.isTerminated()) {
+      status = TERMINATED;
+    }
+
+    statusMap.put("status", ctx.getName() + " (" + status + ")");
+    statusMap.put("threads", ctx.getThreadContext().get());
+    statusMap.put("variables", ctx.getVariableContext().get());
+
+    return statusMap;
   }
 }

@@ -16,16 +16,11 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.core.command.AbstractCommand;
-
-import org.eclipse.debug.core.model.IDebugTarget;
 
 /**
  * Command to retrieve status of all active debug sessions.
@@ -37,34 +32,10 @@ import org.eclipse.debug.core.model.IDebugTarget;
 public class DebugStatusCommand
   extends AbstractCommand
 {
-  private static final String CONNECTED = "Connected";
-  private static final String DISCONNECTED = "Disconnected";
-  private static final String SUSPENDED = "Suspended";
-  private static final String TERMINATED = "Terminated";
-
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-
-    Map<String, Object> statusMap = new HashMap<String, Object>();
-
-    DebuggerContext ctx = DebuggerContext.getInstance();
-    IDebugTarget debugTarget = ctx.getDebugTarget();
-
-    String status = CONNECTED;
-    if (debugTarget.isDisconnected()) {
-      status = DISCONNECTED;
-    } else if (debugTarget.isSuspended()) {
-      status = SUSPENDED;
-    } else if (debugTarget.isTerminated()) {
-      status = TERMINATED;
-    }
-
-    statusMap.put("status", ctx.getName() + " (" + status + ")");
-    statusMap.put("threads", ctx.getThreadContext().get());
-    statusMap.put("variables", ctx.getVariableContext().get());
-
-    return statusMap;
+    return DebuggerContext.getInstance().getStatus();
   }
 }
