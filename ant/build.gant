@@ -484,6 +484,7 @@ target(name: 'javadoc'){
 target(name: 'docs'){
   depends('init')
 
+  property(file: 'org.eclim.installer/build/resources/install.properties')
   property(name: 'sphinx.args', value: '')
   mkdir(dir: 'build/doc/site')
 
@@ -509,6 +510,7 @@ target(name: 'docs'){
   replace(dir: 'build/doc/site', includes: '**/*.html'){
     replacefilter(token: 'eclim_release_indigo', value: '${eclim.release.indigo}')
     replacefilter(token: 'eclim_release', value: '${eclim.release}')
+    replacefilter(token: 'eclipse_version', value: '${eclipse.version}')
   }
 
   // support for google sitemap
