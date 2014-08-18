@@ -19,7 +19,8 @@
   <property file="user.properties"/>
 
   <target name="clean" description="Deletes the build directory.">
-    <antcall target="gant"> <param name="target" value="clean"/> </antcall>
+    <delete dir="build"/>
+    <delete file="org.eclim/nailgun/ng"/>
   </target>
 
   <target name="build" description="Build eclim without deploying">

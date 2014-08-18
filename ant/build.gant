@@ -148,11 +148,6 @@ target(name: 'init'){
   }
 }
 
-target(name: 'clean'){
-  delete(dir: 'build')
-  delete(file: 'org.eclim/nailgun/ng')
-}
-
 target(name: 'build'){
   depends('build.eclipse', 'build.vim')
 }
