@@ -78,7 +78,8 @@ public class StepCommand
    */
   private IThread getSteppingThread() throws DebugException
   {
-    IThread[] threads = DebuggerContext.getInstance().getDebugTarget().getThreads();
+    DebuggerContext ctx = DebuggerContextManager.getDefault();
+    IThread[] threads = ctx.getDebugTarget().getThreads();
     for (IThread thread : threads) {
       if (thread.canStepInto()) {
         logger.debug("Stepping thread = " + thread.getName());

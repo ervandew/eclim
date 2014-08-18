@@ -16,25 +16,39 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-import org.eclim.annotation.Command;
+import java.util.Map;
 
-import org.eclim.command.CommandLine;
-
-import org.eclim.plugin.core.command.AbstractCommand;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Command to get stack frames of suspended threads.
+ * Tracks all active debugging sessions.
  */
-@Command(
-  name = "java_debug_stackframe",
-  options = ""
-)
-public class StackFrameCommand
-  extends AbstractCommand
+public class DebuggerContextManager
 {
-  @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  private static Map<String, DebuggerContext> ctxMap =
+    new ConcurrentHashMap<String, DebuggerContext>();
+
+  // TODO Temp hack until multiple debugging sessions are supported.
+  public static DebuggerContext getDefault() {
+    for (Map.Entry<String, DebuggerContext> entry : ctxMap.entrySet()) {
+      return entry.getValue();
+    }
+
+    return null;
+  }
+
+  public static DebuggerContext get(String name)
   {
-    return DebuggerContextManager.getDefault().getThreadContext().get();
+    return ctxMap.get(name);
+  }
+
+  public static void add(DebuggerContext ctx)
+  {
+    ctxMap.put(ctx.getId(), ctx);
+  }
+
+  public static void remove(String id)
+  {
+    ctxMap.remove(id);
   }
 }

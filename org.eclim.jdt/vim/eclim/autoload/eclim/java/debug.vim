@@ -77,11 +77,9 @@ function! eclim#java#debug#DebugStart(host, port) " {{{
   let command = substitute(command, '<host>', a:host, '')
   let command = substitute(command, '<port>', a:port, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
-  let results = eclim#Execute(command)
+  let result = eclim#Execute(command)
   
-  if type(results) == g:DICT_TYPE
-    call eclim#java#debug#DisplayStatus(results)
-  endif
+  call eclim#util#Echo(result)
 endfunction " }}}
 
 function! eclim#java#debug#DebugControl(action) " {{{
@@ -99,6 +97,10 @@ function! eclim#java#debug#DebugControl(action) " {{{
   if ((a:action == 'stop') || (a:action == 'terminate'))
     " TODO Check if defined before undefining
     "call eclim#display#signs#Undefine(s:breakpoint_sign_name)
+  endif
+
+  if type(result) == g:STRING_TYPE
+    call eclim#util#Echo(result)
   endif
 endfunction " }}}
 
@@ -217,7 +219,9 @@ endfunction " }}}
 function! eclim#java#debug#Status() " {{{
   let command = s:command_status
   let results = eclim#Execute(command)
-  call eclim#java#debug#DisplayStatus(results)
+  if type(results) == g:DICT_TYPE
+    call eclim#java#debug#DisplayStatus(results)
+  endif
 endfunction " }}}
 
 function! eclim#java#debug#DisplayStatus(results) " {{{

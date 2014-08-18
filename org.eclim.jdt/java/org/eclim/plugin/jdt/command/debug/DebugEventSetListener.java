@@ -64,14 +64,21 @@ public class DebugEventSetListener
     throws Exception
   {
 
+    DebuggerContext ctx = DebuggerContextManager.getDefault();
+    if (ctx == null) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("No debugging session present");
+      }
+      return;
+    }
+
     if (kind == DebugEvent.SUSPEND) {
       if ((detail == DebugEvent.STEP_END) ||
           (detail == DebugEvent.BREAKPOINT))
       {
-
         IJavaStackFrame topStackFrame = (IJavaStackFrame) thread.getTopStackFrame();
-        ISourceLocator srcLocator = DebuggerContext.getInstance().getDebugTarget()
-          .getLaunch().getSourceLocator();
+        ISourceLocator srcLocator = ctx.getDebugTarget().getLaunch()
+          .getSourceLocator();
         Object src = srcLocator.getSourceElement(topStackFrame);
         String fileName = (((CompilationUnit) src).getResource()
             .getRawLocation().toOSString());
@@ -82,18 +89,17 @@ public class DebugEventSetListener
           logger.debug("Breakpoint hit: " + fileName + " at " + lineNum);
         }
 
-        DebuggerContext.getInstance().getThreadContext().update(thread,
-            thread.getStackFrames());
-        DebuggerContext.getInstance().getVariableContext().update(thread,
-            topStackFrame.getVariables());
-        DebuggerContext.getInstance().getVimClient().jumpToFilePosition(fileName,
-            lineNum);
+        ctx.getThreadContext().update(thread, thread.getStackFrames());
+        ctx.getVariableContext().update(thread, topStackFrame.getVariables());
+        ctx.getVimClient().refreshDebugStatus();
+        ctx.getVimClient().jumpToFilePosition(fileName, lineNum);
       }
     } else if (kind == DebugEvent.CREATE) {
-      DebuggerContext.getInstance().getThreadContext().update(thread,
-          null);
+      ctx.getThreadContext().update(thread, null);
+      ctx.getVimClient().refreshDebugStatus();
     } else if (kind == DebugEvent.TERMINATE) {
-      DebuggerContext.getInstance().getThreadContext().remove(thread);
+      ctx.getThreadContext().remove(thread);
+      ctx.getVimClient().refreshDebugStatus();
     }
   }
 }

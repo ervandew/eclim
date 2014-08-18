@@ -46,10 +46,13 @@ public class VimClient
     this.vimBaseCmd = "vim --servername " + instanceId;
   }
 
+  public String getId() {
+    return instanceId;
+  }
+
   public void jumpToFilePosition(String fileName, int lineNum)
     throws Exception
   {
-
     String[] cmd = {
       "vim",
       "--servername",
@@ -59,9 +62,23 @@ public class VimClient
       fileName,
     };
 
-    if (logger.isInfoEnabled()) {
-      logger.info("Executing external cmd: " + Arrays.asList(cmd));
-    }
+    logger.info("Jumping to file: " + Arrays.asList(cmd));
+
+    CommandExecutor.execute(cmd, TIMEOUT);
+  }
+
+  public void refreshDebugStatus()
+    throws Exception
+  {
+    String[] cmd = {
+      "vim",
+      "--servername",
+      instanceId,
+      "--remote-send",
+      ":JavaDebugStatus<CR>",
+    };
+
+    logger.info("Refreshing debug status: " + Arrays.asList(cmd));
 
     CommandExecutor.execute(cmd, TIMEOUT);
   }

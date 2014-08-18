@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
+import org.eclim.Services;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -43,19 +45,26 @@ public class DebugCommand
   public Object execute(CommandLine commandLine) throws Exception
   {
     String action = commandLine.getValue(Options.ACTION_OPTION);
-    DebuggerContext debuggerContext = DebuggerContext.getInstance();
+    DebuggerContext ctx = DebuggerContextManager.getDefault();
+    if (ctx == null) {
+      return Services.getMessage("debugging.session.absent");
+    }
 
     if (action.equals(ACTION_STOP)) {
-      debuggerContext.stop();
+      ctx.stop();
+      DebuggerContextManager.remove(ctx.getId());
+      return Services.getMessage("debugging.session.stopped");
 
     } else if (action.equals(ACTION_TERMINATE)) {
-      debuggerContext.terminate();
+      ctx.terminate();
+      DebuggerContextManager.remove(ctx.getId());
+      return Services.getMessage("debugging.session.stopped");
 
     } else if (action.equals(ACTION_SUSPEND)) {
-      debuggerContext.suspend();
+      ctx.suspend();
 
     } else if (action.equals(ACTION_RESUME)) {
-      debuggerContext.resume();
+      ctx.resume();
     } else {
       throw new IllegalArgumentException("action: " + action);
     }

@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
@@ -53,12 +54,6 @@ import org.eclipse.jdt.launching.sourcelookup.JavaSourceLocator;
 /**
  * Maintains the state of currently active debug session and exposes methods to
  * interact with it.
- *
- * <p>
- * This class exposes a singleton instance of the context that can be
- * reinitialized for each session. This is to allow maitaining the state of a
- * single session across several VIM invocations. At this time, there can only
- * be one debug session active at any point of time.
  */
 public class DebuggerContext
 {
@@ -73,73 +68,57 @@ public class DebuggerContext
   private static final String SUSPENDED = "Suspended";
   private static final String TERMINATED = "Terminated";
 
-  /**
-   * Name of this context obtained by concatenating user input.
-   */
-  private String name;
+  private IProject project;
+
+  private String host;
+
+  private int port;
 
   /**
-   * Singleton instance of the context.
+   * ID of this context obtained by concatenating user input.
+   * This should be unique across all active contexts.
    */
-  private static final DebuggerContext context = new DebuggerContext();
+  private String id;
 
   private final VariableContext varCtx = new VariableContext();
 
   private final ThreadContext threadCtx = new ThreadContext();
 
   /**
-   * Debug target for currently active session. This is reinitialized by
-   * <code>createDebugTarget</code>.
+   * Debug target for currently active session.
    */
   private IDebugTarget debugTarget;
 
   private VimClient vimClient;
 
-  private DebuggerContext()
-  {
-    DebugPlugin.getDefault().addDebugEventListener(new DebugEventSetListener());
-  }
-
-  public static DebuggerContext getInstance()
-  {
-    return context;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public VariableContext getVariableContext() {
-    return varCtx;
-  }
-
-  public ThreadContext getThreadContext() {
-    return threadCtx;
-  }
-
-  public IDebugTarget getDebugTarget()
-  {
-    return debugTarget;
-  }
-
-  public VimClient getVimClient()
-  {
-    return vimClient;
-  }
+  private IDebugEventSetListener listener = new DebugEventSetListener();
 
   /**
    * Starts the debug session by creating the debug target with given parameters.
    */
-  public void start(
+  public DebuggerContext(
       IProject project,
       String host,
       int port,
       String vimInstanceId)
     throws Exception
   {
+    this.project = project;
+    this.host = host;
+    this.port = port;
+    this.id = project.getName() + " - " + host + ":" + port;
+    this.vimClient = new VimClient(vimInstanceId);
+  }
+
+  public void start()
+    throws Exception
+  {
     logger.info(
         "Starting debug session at " + host + ":" + port +
-        " for vim instance: " + vimInstanceId);
+        " for vim instance: " + vimClient.getId());
+
+    // Setup listener before connecting to VM so that events are not missed
+    DebugPlugin.getDefault().addDebugEventListener(listener);
 
     ILaunchConfiguration config = null;
 
@@ -173,9 +152,7 @@ public class DebuggerContext
           "Check hostname and port number.");
     }
 
-    this.name = project.getName() + " - " + host + ":" + port;
     this.debugTarget = launch.getDebugTarget();
-    this.vimClient = new VimClient(vimInstanceId);
   }
 
   /**
@@ -229,17 +206,11 @@ public class DebuggerContext
   }
 
   private void clear() {
-    debugTarget = null;
-    vimClient = null;
-    varCtx.clear();
-    threadCtx.clear();
+    DebugPlugin.getDefault().removeDebugEventListener(listener);
   }
 
   public Map<String, Object> getStatus() {
     Map<String, Object> statusMap = new HashMap<String, Object>();
-
-    DebuggerContext ctx = DebuggerContext.getInstance();
-    IDebugTarget debugTarget = ctx.getDebugTarget();
 
     String status = CONNECTED;
     if (debugTarget.isDisconnected()) {
@@ -250,10 +221,32 @@ public class DebuggerContext
       status = TERMINATED;
     }
 
-    statusMap.put("status", ctx.getName() + " (" + status + ")");
-    statusMap.put("threads", ctx.getThreadContext().get());
-    statusMap.put("variables", ctx.getVariableContext().get());
+    statusMap.put("status", getId() + " (" + status + ")");
+    statusMap.put("threads", getThreadContext().get());
+    statusMap.put("variables", getVariableContext().get());
 
     return statusMap;
+  }
+
+  public String getId() {
+    return this.id;
+  }
+
+  public VariableContext getVariableContext() {
+    return varCtx;
+  }
+
+  public ThreadContext getThreadContext() {
+    return threadCtx;
+  }
+
+  public IDebugTarget getDebugTarget()
+  {
+    return debugTarget;
+  }
+
+  public VimClient getVimClient()
+  {
+    return vimClient;
   }
 }

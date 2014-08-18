@@ -36,6 +36,6 @@ public class VariablesCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    return DebuggerContext.getInstance().getVariableContext().get();
+    return DebuggerContextManager.getDefault().getVariableContext().get();
   }
 }

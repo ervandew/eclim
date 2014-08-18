@@ -247,10 +247,6 @@ if !exists(":JavaDebugStackFrame")
   command -nargs=0 -buffer JavaDebugStackFrame :call eclim#java#debug#StackFrame()
 endif
 
-if !exists(":JavaDebugStatus")
-  command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#Status()
-endif
-
 " }}}
 
 " vim:ft=vim:fdm=marker

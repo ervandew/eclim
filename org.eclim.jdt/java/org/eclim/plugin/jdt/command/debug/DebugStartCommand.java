@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
+import org.eclim.Services;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -48,9 +50,15 @@ public class DebugStartCommand
     String host = commandLine.getValue(Options.HOST_OPTION);
     int port = commandLine.getIntValue(Options.PORT_NUMBER_OPTION);
 
-    DebuggerContext.getInstance().start(
+    DebuggerContext ctx = new DebuggerContext(
         ProjectUtils.getProject(projectName), host, port, vimInstanceId);
 
-    return DebuggerContext.getInstance().getStatus();
+    DebuggerContextManager.add(ctx);
+    // Start context only after adding to context manager. There are other
+    // classes that lookup the context once the context is started and events
+    // are fired.
+    ctx.start();
+
+    return Services.getMessage("debuggging.session.started");
   }
 }

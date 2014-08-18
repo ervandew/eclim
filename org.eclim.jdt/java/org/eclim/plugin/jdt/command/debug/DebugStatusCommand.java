@@ -36,6 +36,7 @@ public class DebugStatusCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    return DebuggerContext.getInstance().getStatus();
+    DebuggerContext ctx = DebuggerContextManager.getDefault();
+    return ctx != null ? ctx.getStatus() : null;
   }
 }
