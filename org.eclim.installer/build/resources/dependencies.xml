@@ -43,7 +43,7 @@
     </dependency>
   </feature>
 
-  <feature id="groovy">
+  <feature id="groovy" status="unreleased">
     <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.0">
       <site url="http://dist.springsource.org/release/GRECLIPSE/e4.4/"/>
     </dependency>
@@ -55,8 +55,8 @@
     </dependency>
   </feature>
 
-  <feature id="sdt210">
-    <dependency id="org.scala-ide.sdt.feature" version="4.0.0" match="v-2_11">
+  <feature id="sdt211" status="unreleased">
+    <dependency id="org.scala-ide.sdt.feature" version="4.0.0" match="m2-2_11">
       <site url="http://download.scala-ide.org/sdk/lithium/e44/scala211/dev/site"/>
     </dependency>
   </feature>

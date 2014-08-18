@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@ public class EclipseInfo
   private static final String FEATURE = "  Feature: ";
 
   private Map<String,Feature> installedFeatures;
+  private Map<String,String> featureStatuses = new HashMap<String,String>();
   private Map<String,List<Dependency>> dependencies =
     new HashMap<String,List<Dependency>>();
 
@@ -86,6 +87,11 @@ public class EclipseInfo
     NodeList features = root.getElementsByTagName("feature");
     for(int i = 0; i < features.getLength(); i++){
       Element feature = (Element)features.item(i);
+      String id = feature.getAttribute("id");
+      String status = feature.getAttribute("status");
+      if (status != null && status.length() > 0){
+        featureStatuses.put(id, status);
+      }
       List<Dependency> dependencies = new ArrayList<Dependency>();
       NodeList deps = feature.getElementsByTagName("dependency");
       for(int j = 0; j < deps.getLength(); j++){
@@ -99,7 +105,7 @@ public class EclipseInfo
               node.getAttribute("match"),
               this.installedFeatures.get(node.getAttribute("id"))));
       }
-      this.dependencies.put(feature.getAttribute("id"), dependencies);
+      this.dependencies.put(id, dependencies);
     }
   }
 
@@ -116,6 +122,11 @@ public class EclipseInfo
   public boolean hasFeature(String name)
   {
     return this.installedFeatures.containsKey(name);
+  }
+
+  public String getStatus(String plugin)
+  {
+    return featureStatuses.get(plugin);
   }
 
   public List<Dependency> getDependencies(String plugin)
