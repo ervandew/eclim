@@ -28,8 +28,8 @@ let s:command_start =
 
 let s:command_control = '-command java_debug_control -a "<action>"'
 
-let s:command_toggle_breakpoint =
-  \ '-command java_debug_toggle_breakpoint ' . 
+let s:command_breakpoint_toggle =
+  \ '-command java_debug_breakpoint_toggle ' .
   \ '-p "<project>" -f "<file>" -l "<line_num>"'
 
 let s:command_breakpoint = '-command java_debug_breakpoint -a "<action>"'
@@ -123,7 +123,7 @@ function! eclim#java#debug#DisplayPositions(results) " {{{
   exec 'lopen ' . g:EclimLocationListHeight
 endfunction " }}}
 
-function! eclim#java#debug#ToggleBreakpoint() " {{{
+function! eclim#java#debug#BreakpointToggle() " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -132,7 +132,7 @@ function! eclim#java#debug#ToggleBreakpoint() " {{{
   let file = eclim#lang#SilentUpdate()
   let line_num = line('.')
 
-  let command = s:command_toggle_breakpoint
+  let command = s:command_breakpoint_toggle
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<line_num>', line_num, '')

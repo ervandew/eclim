@@ -231,8 +231,8 @@ if !exists(":JavaDebugBreakpoint")
   command -nargs=1 -buffer JavaDebugBreakpoint :call eclim#java#debug#Breakpoint('<args>')
 endif
 
-if !exists(":JavaDebugToggleBreakpoint")
-  command -nargs=0 -buffer JavaDebugToggleBreakpoint :call eclim#java#debug#ToggleBreakpoint()
+if !exists(":JavaDebugBreakpointToggle")
+  command -nargs=0 -buffer JavaDebugBreakpointToggle :call eclim#java#debug#BreakpointToggle()
 endif
 
 if !exists(":JavaDebugStep")

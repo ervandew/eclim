@@ -45,13 +45,13 @@ import org.eclipse.jdt.debug.core.JDIDebugModel;
  * Command to add, remove a specific breakpoint.
  */
 @Command(
-  name = "java_debug_toggle_breakpoint",
+  name = "java_debug_breakpoint_toggle",
   options =
     "REQUIRED p project ARG," +
     "REQUIRED f file ARG," +
     "REQUIRED l line_num ARG"
 )
-public class ToggleBreakpointCommand
+public class BreakpointToggleCommand
   extends AbstractCommand
 {
   @Override
