@@ -59,6 +59,6 @@ public class DebugStartCommand
     // are fired.
     ctx.start();
 
-    return Services.getMessage("debuggging.session.started");
+    return Services.getMessage("debugging.session.started");
   }
 }
