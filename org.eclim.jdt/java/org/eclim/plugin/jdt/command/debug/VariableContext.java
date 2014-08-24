@@ -138,7 +138,6 @@ public class VariableContext
       JDIType type = (JDIType) value.getJavaType();
       // TODO Add tools.jar to access com.sun classes
       // Use underlying type to ignore final var that are primitive only
-      logger.debug("Ignoring var: " + var.getName() + " " + type.getName());
       return true;
     }
 

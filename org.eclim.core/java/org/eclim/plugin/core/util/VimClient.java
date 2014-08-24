@@ -46,7 +46,8 @@ public class VimClient
     this.vimBaseCmd = "vim --servername " + instanceId;
   }
 
-  public String getId() {
+  public String getId()
+  {
     return instanceId;
   }
 
@@ -57,10 +58,10 @@ public class VimClient
       "vim",
       "--servername",
       instanceId,
-      "--remote-tab",
-      "+" + lineNum,
-      fileName,
+      "--remote-send",
+      ":JavaDebugGoToFile " + fileName + " " + lineNum + "<CR>",
     };
+
 
     logger.info("Jumping to file: " + Arrays.asList(cmd));
 

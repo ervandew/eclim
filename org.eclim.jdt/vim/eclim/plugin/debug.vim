@@ -21,6 +21,10 @@
 
 " Options {{{
 
+if !exists(":JavaDebugGoToFile")
+  command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
+endif
+
 if !exists(":JavaDebugStatus")
   command -nargs=0 JavaDebugStatus :call eclim#java#debug#Status()
 endif

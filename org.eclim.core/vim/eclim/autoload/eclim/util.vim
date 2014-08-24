@@ -558,6 +558,28 @@ function! eclim#util#GoToBufferWindowOrOpen(name, cmd)
   endif
 endfunction " }}}
 
+" GoToTabAwareBufferWindowOrOpen(name, cmd) {{{
+" Gives focus to the window containing the buffer for the supplied file even
+" if it is in a different tab. If none is found, then opens the file using the
+" supplied command.
+function! eclim#util#GoToTabAwareBufferWindowOrOpen(name, cmd)
+  let name = eclim#util#EscapeBufferName(a:name)
+  let bufnr = bufnr('^' . name . '$')
+  if bufnr != -1
+    exec 'sb ' . bufnr
+    call eclim#util#DelayedCommand('doautocmd WinEnter')
+  else
+    let cmd = a:cmd
+    " if splitting and the buffer is a unamed empty buffer, then switch to an
+    " edit.
+    if cmd == 'split' && expand('%') == '' &&
+     \ !&modified && line('$') == 1 && getline(1) == ''
+      let cmd = 'edit'
+    endif
+    silent exec cmd . ' ' . escape(eclim#util#Simplify(a:name), ' ')
+  endif
+endfunction " }}}
+
 " GoToBufferWindowRegister(buf) {{{
 " Registers the autocmd for returning the user to the supplied buffer when the
 " current buffer is closed.
@@ -1470,12 +1492,19 @@ function! eclim#util#TempWindow(name, lines, ...) " {{{
   let line = 1
   let col = 1
 
+  if get(options, 'singleWinOnly', 0)
+    if (bufnr(bufname) != -1 && bufwinnr(bufname) == -1)
+      " Pass the unescaped name as it will be escaped in the function
+      call eclim#util#DeleteBuffer(a:name)
+    endif
+  endif
+
   if bufwinnr(bufname) == -1
     let orient = get(options, 'orientation', 'horizontal')
     if orient == 'vertical'
-      let width = get(options, 'width', 30)
-      let split_cmd = "topleft vertical " . width . " sview "
-      call eclim#display#window#VerticalToolWindowOpen(name, -1)
+      let width = get(options, 'width', 50)
+      let split_cmd = "belowright vertical " . width . " sview "
+      silent! noautocmd exec "keepalt " . split_cmd . name
     else
       let height = get(options, 'height', 10)
       let split_cmd = "botright " . height . " sview "
@@ -1546,6 +1575,15 @@ function! eclim#util#TempWindowClear(name) " {{{
     setlocal noreadonly
     silent 1,$delete _
     exec curwinnr . "winc w"
+  endif
+endfunction " }}}
+
+function! eclim#util#DeleteBuffer(name) " {{{
+  " Deletes the buffer with given name and closes window holding it.
+  let name = eclim#util#EscapeBufferName(a:name)
+  let bufnr = bufnr(name)
+  if bufnr != -1
+    exec 'bd' . bufnr
   endif
 endfunction " }}}
 

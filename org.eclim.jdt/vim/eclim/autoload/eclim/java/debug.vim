@@ -20,7 +20,16 @@
 " }}}
 
 " Script Variables {{{
-let s:breakpoint_sign_name = 'breakpoint_mark'
+" TODO This needs to be maintained per thread. We can use debug session id +
+" thread id as key
+let s:debug_step_prev_file = ''
+let s:debug_step_prev_line = ''
+
+let s:debug_step_sign_name = 'debug_step'
+let s:breakpoint_sign_name = 'breakpoint'
+
+let s:variables_win_name = 'Debug Variables'
+let s:threads_win_name = 'Debug Threads'
 
 let s:command_start =
   \ '-command java_debug_start -p "<project>" ' .
@@ -64,6 +73,8 @@ function! eclim#java#debug#DebugStart(host, port) " {{{
     return
   endif
 
+  call eclim#display#signs#DefineLineHL(s:debug_step_sign_name, 'DebugBreak')
+
   let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_start
   let command = substitute(command, '<project>', project, '')
@@ -90,7 +101,30 @@ function! eclim#java#debug#DebugControl(action) " {{{
   if ((a:action == 'stop') || (a:action == 'terminate'))
     " TODO Check if defined before undefining
     "call eclim#display#signs#Undefine(s:breakpoint_sign_name)
+
+    " Auto close the debug status window
+    call eclim#util#DeleteBuffer(s:variables_win_name)
+    call eclim#util#DeleteBuffer(s:threads_win_name)
+
+    " Remove the sign from previous location
+    if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
+      call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
+        \ bufnr(s:debug_step_prev_file))
+    endif
+
+    let s:debug_step_prev_line = ''
+    let s:debug_step_prev_file = ''
+  elseif (a:action == 'resume')
+    " Remove the sign from previous location. This is needed here even though it
+    " is done in GoToFile function. There may be a time gap until the next
+    " breakpoint is hit or the program terminates. We don't want to highligh
+    " the current line until then.
+    if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
+      call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
+        \ bufnr(s:debug_step_prev_file))
+    endif
   endif
+
 
   if type(result) == g:STRING_TYPE
     call eclim#util#Echo(result)
@@ -130,17 +164,17 @@ function! eclim#java#debug#BreakpointToggle() " {{{
 
   let project = eclim#project#util#GetCurrentProjectName()
   let file = eclim#lang#SilentUpdate()
-  let line_num = line('.')
+  let line = line('.')
 
   let command = s:command_breakpoint_toggle
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
-  let command = substitute(command, '<line_num>', line_num, '')
+  let command = substitute(command, '<line>', line, '')
 
   let result = eclim#Execute(command)
 
   call eclim#display#signs#Define(s:breakpoint_sign_name, '*', '')
-  call eclim#display#signs#Toggle(s:breakpoint_sign_name, line_num)
+  call eclim#display#signs#Toggle(s:breakpoint_sign_name, line)
 endfunction " }}}
 
 function! eclim#java#debug#Step(action) " {{{
@@ -222,21 +256,48 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
   let threads = a:results.threads
   let vars = a:results.variables
 
-  let window_name = "Debug Threads"
+  " Store current position and restore in the end so that creation of new
+  " window does not end up moving the cursor
+  let cur_bufnr = bufnr('%')
+  let cur_line = line('.')
+  let cur_col = col('.')
+
   call eclim#util#TempWindow(
-    \ window_name, [status] + threads, {'orientation': 'vertical'})
+    \ s:threads_win_name, [status] + threads,
+    \ {'orientation': 'horizontal', 'singleWinOnly' : 0})
+  setlocal foldmethod=expr
+  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
+  setlocal foldtext=eclim#display#fold#NeatFoldText()
+
+  call eclim#util#TempWindow(
+    \ s:variables_win_name, vars,
+    \ {'orientation': 'vertical', 'singleWinOnly' : 0})
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
   setlocal foldtext=eclim#display#fold#NeatFoldText()
 
-  let window_name = "Debug Variables"
-  call eclim#util#TempWindow(
-    \ window_name, vars, {'orientation': 'vertical'})
+  " Restore position
+  call eclim#util#GoToBufferWindow(cur_bufnr)
+  call cursor(cur_line, 1)
+endfunction " }}}
 
-  setlocal foldmethod=expr
-  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
-  setlocal foldtext=eclim#display#fold#NeatFoldText()
+function! eclim#java#debug#GoToFile(file, line) " {{{
+  " Remove the sign from previous location
+  if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
+    call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
+      \ bufnr(s:debug_step_prev_file))
+  endif
+
+  let s:debug_step_prev_file = a:file
+  let s:debug_step_prev_line = a:line
+  call eclim#util#GoToTabAwareBufferWindowOrOpen(a:file, "tabnew")
+  call cursor(a:line, '^')
+
+  " TODO sign id is line number. Can conflict with other signs while
+  " unplacing
+  call eclim#display#signs#PlaceInBuffer(s:debug_step_sign_name,
+    \ bufnr(a:file), a:line)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

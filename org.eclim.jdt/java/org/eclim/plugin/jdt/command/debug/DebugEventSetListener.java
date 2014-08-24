@@ -91,8 +91,10 @@ public class DebugEventSetListener
 
         ctx.getThreadContext().update(thread, thread.getStackFrames());
         ctx.getVariableContext().update(thread, topStackFrame.getVariables());
-        ctx.getVimClient().refreshDebugStatus();
         ctx.getVimClient().jumpToFilePosition(fileName, lineNum);
+        // Call refresh after jumping to file. Otherwise, it causes the sign to
+        // not get placed for some reason.
+        ctx.getVimClient().refreshDebugStatus();
       }
     } else if (kind == DebugEvent.CREATE) {
       ctx.getThreadContext().update(thread, null);

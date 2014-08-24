@@ -40,14 +40,24 @@ function! eclim#display#signs#Define(name, text, highlight) " {{{
   exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
 endfunction " }}}
 
+function! eclim#display#signs#DefineLineHL(name, highlight) " {{{
+  " Defines a new sign name or updates an existing one.
+  exec "sign define " . a:name . " linehl=" . a:highlight
+endfunction " }}}
+
 function! eclim#display#signs#Place(name, line) " {{{
   " Places a sign in the current buffer.
+  call eclim#display#signs#PlaceInBuffer(a:name, bufnr('%'), a:line)
+endfunction " }}}
+
+function! eclim#display#signs#PlaceInBuffer(name, buffer_num, line) " {{{
+  " Places a sign in the given buffer.
   if a:line > 0
     let lastline = line('$')
     let line = a:line <= lastline ? a:line : lastline
     let id = a:name == 'placeholder' ? 999999 : line
     exec "sign place " . id . " line=" . line . " name=" . a:name .
-      \ " buffer=" . bufnr('%')
+      \ " buffer=" . a:buffer_num
   endif
 endfunction " }}}
 
@@ -71,7 +81,12 @@ endfunction " }}}
 
 function! eclim#display#signs#Unplace(id) " {{{
   " Un-places a sign in the current buffer.
-  exec 'sign unplace ' . a:id . ' buffer=' . bufnr('%')
+  call eclim#display#signs#UnplaceFromBuffer(a:id, bufnr('%'))
+endfunction " }}}
+
+function! eclim#display#signs#UnplaceFromBuffer(id, buffer_num) " {{{
+  " Un-places a sign from the given buffer
+  exec 'sign unplace ' . a:id . ' buffer=' . a:buffer_num
 endfunction " }}}
 
 function! eclim#display#signs#UnplaceAll(list) " {{{
