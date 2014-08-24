@@ -118,6 +118,10 @@
     <antcall target="gant"> <param name="target" value="vimdocs"/> </antcall>
   </target>
 
+  <target name="eclipse.gc">
+    <antcall target="gant"> <param name="target" value="eclipse.gc"/> </antcall>
+  </target>
+
   <target name="eclipse.docs">
     <antcall target="gant"> <param name="target" value="eclipse.docs"/> </antcall>
   </target>

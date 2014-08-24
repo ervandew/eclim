@@ -684,8 +684,29 @@ target(name: 'plugin.create'){
   }
 }
 
+target(name: 'eclipse.gc'){
+  launcher = null
+  new File("${eclipseHome}/plugins")
+    .eachFileMatch(~/org.eclipse.equinox.launcher_.*\.jar/){ file ->
+      launcher = file.getAbsolutePath()
+    }
+
+  if (launcher == null){
+    fail("Unable to find the eclipse launch in ${eclipseHome}/plugins")
+  }
+  echo('Running eclipse garbage collection...')
+  java(jar: launcher, fork: true, failonerror: true){
+    jvmarg(value: '-Xmx256m')
+    arg(value: '-debug')
+    arg(value: '-clean')
+    arg(value: '-refresh')
+    arg(value: '-application')
+    arg(value: 'org.eclipse.equinox.p2.garbagecollector.application')
+  }
+  echo('Finished eclipse garbage collection.')
+}
+
 target(name: 'eclipse.docs'){
-  eclipseHome = binding.getVariable('eclipse')
   new File("${eclipseHome}/plugins").eachFileMatch(~/.*\.doc\..*\.jar/){ file ->
     docDir = file.getName().replaceFirst('_.*', '')
     unjar(src: file.getPath(), dest: '${eclipse.local}/docs/' + docDir)
@@ -693,7 +714,6 @@ target(name: 'eclipse.docs'){
 }
 
 target(name: 'eclipse.src'){
-  eclipseHome = binding.getVariable('eclipse')
   property(name: 'src.dir', value: "${eclipseHome}/plugins")
   srcDir = binding.getVariable('src.dir')
 
@@ -709,7 +729,6 @@ target(name: 'patch'){
   depends(init)
 
   patchPlugins(){ plugin ->
-    eclipseHome = binding.getVariable('eclipse')
     resolved = patchPluginResolve(plugin)
 
     if (resolved != null){
@@ -1303,7 +1322,6 @@ def patchPluginResolve(plugin){
     return pluginDir
   }
 
-  eclipseHome = binding.getVariable('eclipse')
   ant.echo(message:
     "WARN: No plugin jar file or dir found for '${plugin}' in '${eclipseHome}'.")
   return null
