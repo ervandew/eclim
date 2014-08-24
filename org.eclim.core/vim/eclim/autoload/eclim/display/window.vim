@@ -68,7 +68,6 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
     endif
   endif
 
-
   let relative_window = 0
   let relative_window_loc = 'below'
   if taglist_window != -1 || len(g:VerticalToolBuffers) > 0
@@ -88,6 +87,9 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
         elseif getbufvar(toolbuf, 'weight') > a:weight
           let relative_window = bufwinnr(toolbuf)
           let relative_window_loc = 'below'
+        elseif getbufvar(toolbuf, 'weight') < a:weight
+          let relative_window = bufwinnr(toolbuf)
+          let relative_window_loc = 'above'
         endif
       endif
     endfor
