@@ -23,7 +23,7 @@ Requirements
 Before beginning the installation, first confirm that you have met the
 following requirements.
 
-- `Java Development Kit`_ 1.6 or greater
+- `Java Development Kit`_ 1.7 or greater
 - `Vim`_ 7.1 or greater
 - `Eclipse eclipse_version`_
 - Mac and Linux users must also have make and gcc installed.

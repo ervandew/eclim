@@ -123,6 +123,17 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Aug 24, 2014
+-------------
+
+Eclim has **finally** been released with Eclipse Luna support. Please note
+however that scala support is disabled in this release. I tried waiting for a
+final release of ScalaIDE 4.0.0 for Luna, but I don't want to hold up the rest
+of eclim any longer. If you want to use eclim's scala support, you'll need to
+install the ScalaIDE 4.0.0 milestone and build eclim from the master git branch.
+
+- :ref:`Eclim 2.4.0 <2.4.0>`
+
 May 07, 2014
 -------------
 
