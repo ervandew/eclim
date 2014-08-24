@@ -369,7 +369,8 @@ public class JavaCommand
     }
 
     @Override
-    public synchronized void complete() throws IOException
+    public synchronized void complete()
+      throws IOException
     {
       getContext().out.flush();
       getContext().err.flush();

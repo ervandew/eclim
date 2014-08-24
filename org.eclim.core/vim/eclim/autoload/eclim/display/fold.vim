@@ -1,11 +1,8 @@
 " Author:  Kannan Rajah
 "
-" Description: {{{
-"   Utility funtions to create nice folds.
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,50 +19,46 @@
 "
 " }}}
 
-" Script Variables {{{
-
-" }}}
-
-" The default VIM fold shows the first line of a block separately.
-" But we want to show it with its contents. This is more compact and
-" easier to read.
-" Code is taken from:
-" http://learnvimscriptthehardway.stevelosh.com/chapters/49.html
 function! eclim#display#fold#GetNeatFold(lnum) " {{{
-    if getline(a:lnum) =~? '\v^\s*$'
-        return '-1'
-    endif
+  " The default VIM fold shows the first line of a block separately.
+  " But we want to show it with its contents. This is more compact and
+  " easier to read.
+  " Code is taken from:
+  " http://learnvimscriptthehardway.stevelosh.com/chapters/49.html
+  if getline(a:lnum) =~? '\v^\s*$'
+    return '-1'
+  endif
 
-    let this_indent = eclim#display#fold#IndentLevel(a:lnum)
-    let next_line = eclim#display#fold#NextNonBlankLine(a:lnum)
-    let next_indent = eclim#display#fold#IndentLevel(next_line)
+  let this_indent = eclim#display#fold#IndentLevel(a:lnum)
+  let next_line = eclim#display#fold#NextNonBlankLine(a:lnum)
+  let next_indent = eclim#display#fold#IndentLevel(next_line)
 
-    if next_indent == this_indent
-        return this_indent
-    elseif next_indent < this_indent
-        return this_indent
-    elseif next_indent > this_indent
-        return '>' . next_indent
-    endif
+  if next_indent == this_indent
+    return this_indent
+  elseif next_indent < this_indent
+    return this_indent
+  elseif next_indent > this_indent
+    return '>' . next_indent
+  endif
 endfunction " }}}
 
 function! eclim#display#fold#IndentLevel(lnum) " {{{
-    return indent(a:lnum) / &shiftwidth
+  return indent(a:lnum) / &shiftwidth
 endfunction " }}}
 
 function! eclim#display#fold#NextNonBlankLine(lnum) " {{{
-    let numlines = line('$')
-    let current = a:lnum + 1
+  let numlines = line('$')
+  let current = a:lnum + 1
 
-    while current <= numlines
-        if getline(current) =~? '\v\S'
-            return current
-        endif
+  while current <= numlines
+    if getline(current) =~? '\v\S'
+      return current
+    endif
 
-        let current += 1
-    endwhile
+    let current += 1
+  endwhile
 
-    return -2
+  return -2
 endfunction " }}}
 
 function! eclim#display#fold#NeatFoldText() " {{{

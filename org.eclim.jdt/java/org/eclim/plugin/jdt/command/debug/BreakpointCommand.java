@@ -50,7 +50,8 @@ public class BreakpointCommand
   private static final String DELETE_ALL = "delete_all";
 
   @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  public Object execute(CommandLine commandLine)
+    throws Exception
   {
     String action = commandLine.getValue(Options.ACTION_OPTION);
     if (action.equalsIgnoreCase(GET_ALL)) {
@@ -72,12 +73,14 @@ public class BreakpointCommand
     return null;
   }
 
-  private IBreakpoint[] getAllBreakpoints() throws CoreException
+  private IBreakpoint[] getAllBreakpoints()
+    throws CoreException
   {
     return DebugPlugin.getDefault().getBreakpointManager().getBreakpoints();
   }
 
-  private void deleteAllBreakpoints() throws CoreException
+  private void deleteAllBreakpoints()
+    throws CoreException
   {
     IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
       .getBreakpointManager();

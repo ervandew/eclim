@@ -29,7 +29,8 @@ public class DebuggerContextManager
     new ConcurrentHashMap<String, DebuggerContext>();
 
   // TODO Temp hack until multiple debugging sessions are supported.
-  public static DebuggerContext getDefault() {
+  public static DebuggerContext getDefault()
+  {
     for (Map.Entry<String, DebuggerContext> entry : ctxMap.entrySet()) {
       return entry.getValue();
     }

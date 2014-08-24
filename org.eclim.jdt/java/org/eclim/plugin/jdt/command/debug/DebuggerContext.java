@@ -158,7 +158,8 @@ public class DebuggerContext
   /**
    * Suspends the debug session.
    */
-  public void suspend() throws DebugException
+  public void suspend()
+    throws DebugException
   {
     logger.info("Suspending debug session");
 
@@ -170,7 +171,8 @@ public class DebuggerContext
   /**
    * Disconnects the debug session.
    */
-  public void stop() throws DebugException
+  public void stop()
+    throws DebugException
   {
     logger.info("Stopping debug session");
 
@@ -184,7 +186,8 @@ public class DebuggerContext
   /**
    * Terminates the debug session.
    */
-  public void terminate() throws DebugException
+  public void terminate()
+    throws DebugException
   {
     logger.info("Terminating debug session");
     if (debugTarget != null) {
@@ -197,7 +200,8 @@ public class DebuggerContext
   /**
    * Resumes execution from the current breakpoint.
    */
-  public void resume() throws DebugException
+  public void resume()
+    throws DebugException
   {
     logger.debug("Resuming breakpoint");
     if (debugTarget != null) {
@@ -205,11 +209,13 @@ public class DebuggerContext
     }
   }
 
-  private void clear() {
+  private void clear()
+  {
     DebugPlugin.getDefault().removeDebugEventListener(listener);
   }
 
-  public Map<String, Object> getStatus() {
+  public Map<String, Object> getStatus()
+  {
     Map<String, Object> statusMap = new HashMap<String, Object>();
 
     String status = CONNECTED;
@@ -228,15 +234,18 @@ public class DebuggerContext
     return statusMap;
   }
 
-  public String getId() {
+  public String getId()
+  {
     return this.id;
   }
 
-  public VariableContext getVariableContext() {
+  public VariableContext getVariableContext()
+  {
     return varCtx;
   }
 
-  public ThreadContext getThreadContext() {
+  public ThreadContext getThreadContext()
+  {
     return threadCtx;
   }
 

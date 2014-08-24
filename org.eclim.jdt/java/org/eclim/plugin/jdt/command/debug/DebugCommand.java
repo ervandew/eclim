@@ -42,7 +42,8 @@ public class DebugCommand
   private static final String ACTION_RESUME = "resume";
 
   @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  public Object execute(CommandLine commandLine)
+    throws Exception
   {
     String action = commandLine.getValue(Options.ACTION_OPTION);
     DebuggerContext ctx = DebuggerContextManager.getDefault();

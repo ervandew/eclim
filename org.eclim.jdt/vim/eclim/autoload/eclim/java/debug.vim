@@ -1,11 +1,8 @@
 " Author:  Kannan Rajah
 "
-" Description: {{{
-"   see http://eclim.org/vim/java/debug.html
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,28 +23,24 @@
 let s:breakpoint_sign_name = 'breakpoint_mark'
 
 let s:command_start =
-  \ '-command java_debug_start -p "<project>" -h "<host>" -n "<port>" -v "<vim_servername>"'
+  \ '-command java_debug_start -p "<project>" ' .
+  \ '-h "<host>" -n "<port>" -v "<vim_servername>"'
 
-let s:command_control =
-  \ '-command java_debug_control -a "<action>"'
+let s:command_control = '-command java_debug_control -a "<action>"'
 
 let s:command_toggle_breakpoint =
-  \ '-command java_debug_toggle_breakpoint -p "<project>" -f "<file>" -l "<line_num>"'
+  \ '-command java_debug_toggle_breakpoint ' . 
+  \ '-p "<project>" -f "<file>" -l "<line_num>"'
 
-let s:command_breakpoint =
-  \ '-command java_debug_breakpoint -a "<action>"'
+let s:command_breakpoint = '-command java_debug_breakpoint -a "<action>"'
 
-let s:command_step =
-  \ '-command java_debug_step -a "<action>"'
+let s:command_step = '-command java_debug_step -a "<action>"'
 
-let s:command_vars =
-  \ '-command java_debug_vars'
+let s:command_vars = '-command java_debug_vars'
 
-let s:command_stackframe =
-  \ '-command java_debug_stackframe'
+let s:command_stackframe = '-command java_debug_stackframe'
 
-let s:command_status =
-  \ '-command java_debug_status'
+let s:command_status = '-command java_debug_status'
 " }}}
 
 function! eclim#java#debug#DebugStart(host, port) " {{{
@@ -78,7 +71,7 @@ function! eclim#java#debug#DebugStart(host, port) " {{{
   let command = substitute(command, '<port>', a:port, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
   let result = eclim#Execute(command)
-  
+
   call eclim#util#Echo(result)
 endfunction " }}}
 

@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclim.logging.Logger;
-
 import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.debug.core.model.IStackFrame;
@@ -37,8 +35,6 @@ import org.eclipse.jdt.debug.core.IJavaThread;
  */
 public class ThreadContext
 {
-  private static final Logger logger = Logger.getLogger(ThreadContext.class);
-
   // Thread status
   private static final String RUNNING = "Running";
   private static final String SUSPENDED = "Suspended";
@@ -81,7 +77,7 @@ public class ThreadContext
     threadMap.remove(threadId);
     stackFrameMap.remove(threadId);
   }
-  
+
   private void process()
     throws DebugException
   {

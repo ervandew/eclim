@@ -33,7 +33,8 @@ public class StackFrameCommand
   extends AbstractCommand
 {
   @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  public Object execute(CommandLine commandLine)
+    throws Exception
   {
     return DebuggerContextManager.getDefault().getThreadContext().get();
   }

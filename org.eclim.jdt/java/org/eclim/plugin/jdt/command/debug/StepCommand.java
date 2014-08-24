@@ -47,7 +47,8 @@ public class StepCommand
   private static final String ACTION_RETURN = "return";
 
   @Override
-  public Object execute(CommandLine commandLine) throws Exception
+  public Object execute(CommandLine commandLine)
+    throws Exception
   {
     IThread steppingThread = getSteppingThread();
     if (steppingThread == null) {
@@ -76,7 +77,8 @@ public class StepCommand
    * TODO Should determine based on user selection. Now, it assumes only one
    * thread can be in the suspended state and returns it.
    */
-  private IThread getSteppingThread() throws DebugException
+  private IThread getSteppingThread()
+    throws DebugException
   {
     DebuggerContext ctx = DebuggerContextManager.getDefault();
     IThread[] threads = ctx.getDebugTarget().getThreads();

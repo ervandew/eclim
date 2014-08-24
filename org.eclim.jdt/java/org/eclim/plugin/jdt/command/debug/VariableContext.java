@@ -51,12 +51,14 @@ public class VariableContext
   private Map<Long, List<String>> resultsMap =
     new HashMap<Long, List<String>>();
 
-  public synchronized void clear() {
+  public synchronized void clear()
+  {
     varsMap.clear();
     resultsMap.clear();
   }
 
-  public synchronized List<String> get() {
+  public synchronized List<String> get()
+  {
     // TODO Take thread id as input and return corresponding variables
     // Use IJavaThread.getThreadObject.getUniqueId
     for (Map.Entry<Long, List<String>> entry : resultsMap.entrySet()) {
@@ -69,10 +71,9 @@ public class VariableContext
   public synchronized void update(IThread thread, IVariable[] vars)
     throws DebugException
   {
-
     long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
     varsMap.put(threadId, vars);
-    
+
     List<String> results = resultsMap.get(threadId);
     if (results == null) {
       results = new ArrayList<String>();
@@ -129,7 +130,8 @@ public class VariableContext
   /**
    * Igmores final primitive variables.
    */
-  private boolean ignoreVar(JDIVariable var) throws DebugException
+  private boolean ignoreVar(JDIVariable var)
+    throws DebugException
   {
     if (var.isFinal()) {
       JDIValue value = (JDIValue) var.getValue();
@@ -151,7 +153,8 @@ public class VariableContext
    * return the value of the string in this case.
    *
    */
-  private boolean includeNestedVar(JDIValue value) throws DebugException
+  private boolean includeNestedVar(JDIValue value)
+    throws DebugException
   {
     boolean nesting = true;
 

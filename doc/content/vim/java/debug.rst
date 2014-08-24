@@ -27,22 +27,24 @@ This command requires a hostname/IP and the port number on which the debug serve
 
   :JavaDebugStart localhost 5000
 
-.. _\:JavaDebugToggleBreakpoint:
+.. _\:JavaDebugBreakpointToggle:
 
 Add/remove a single breakpoint
 ------------------------------
-To add a breakpoint, simply open the file, position the cursor on the desired line and run **:JavaDebugToggleBreakpoint** command.
-To remove the breakpoint, run the same command again.
+To add a breakpoint, simply open the file, position the cursor on the desired
+line and run **:JavaDebugBreakpointToggle** command.  To remove the breakpoint,
+run the same command again.
 
 .. code-block:: vim
 
-  :JavaDebugToggleBreakpoint
+  :JavaDebugBreakpointToggle
 
 .. _\:JavaDebugBreakpoint:
 
 Retrieve/Delete all breakpoints
 -------------------------------
-To get all existing breakpoints or delete all existing breakpoints, run **:JavaBreakpoint** command with an action.
+To get all existing breakpoints or delete all existing breakpoints, run
+**:JavaBreakpoint** command with an action.
 
 .. code-block:: vim
 
@@ -53,7 +55,8 @@ To get all existing breakpoints or delete all existing breakpoints, run **:JavaB
 
 Step
 ----
-There are 3 ways to step through code using **:JavaDebugStep** command and an action argument.
+There are 3 ways to step through code using **:JavaDebugStep** command and an
+action argument.
 #. over: Step over current line
 #. into: Step into a function
 #. return: Return from current function
@@ -68,9 +71,11 @@ There are 3 ways to step through code using **:JavaDebugStep** command and an ac
 
 Variables
 ---------
-When a breakpoint is hit, or a thread is suspended, you can retrieve the variables available in the current stack frame
-using **:JavaDebugVars** command. It will open a temporary window and display the variables in it.
-Right now, it only shows values for primitive variables. Support for viewing objects and the their fields will be added soon.
+When a breakpoint is hit, or a thread is suspended, you can retrieve the
+variables available in the current stack frame using **:JavaDebugVars** command.
+It will open a temporary window and display the variables in it.  Right now, it
+only shows values for primitive variables. Support for viewing objects and the
+their fields will be added soon.
 
 .. code-block:: vim
 
@@ -80,8 +85,8 @@ Right now, it only shows values for primitive variables. Support for viewing obj
 
 Stack Frames
 ------------
-To view the current stack frames, run **:JavaDebugStackFrame** command. It will open a temporary window and display the stack frames
-of all threads.
+To view the current stack frames, run **:JavaDebugStackFrame** command. It will
+open a temporary window and display the stack frames of all threads.
 
 .. code-block:: vim
 
@@ -91,8 +96,9 @@ of all threads.
 
 Control
 -------
-To suspend, resume or stop the debug session, you can use **:JavaDebugControl** command.
-             
+To suspend, resume or stop the debug session, you can use **:JavaDebugControl**
+command.
+
 .. code-block:: vim
 
   :JavaDebugControl suspend
