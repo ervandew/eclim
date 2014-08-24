@@ -135,8 +135,7 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
    \ (!exists('g:Tlist_Use_Horiz_Window') || !g:Tlist_Use_Horiz_Window)
     augroup eclim_vertical_tool_windows_move_taglist
       autocmd!
-      exec 'autocmd BufWinEnter ' . eclim#util#EscapeBufferName(g:TagList_title) .
-        \ ' call s:MoveRelativeTo()'
+      autocmd BufWinEnter * if bufname('%') == g:TagList_title | call s:MoveRelativeTo() | endif
     augroup END
   endif
   if exists(':TagbarOpen')
