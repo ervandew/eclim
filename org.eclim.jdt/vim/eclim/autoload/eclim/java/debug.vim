@@ -223,19 +223,16 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
   let vars = a:results.variables
 
   let window_name = "Debug Threads"
-  call eclim#util#TempWindowClear(window_name)
   call eclim#util#TempWindow(
-    \ window_name, [status] + threads, {'height': g:EclimLocationListHeight})
+    \ window_name, [status] + threads, {'orientation': 'vertical'})
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
   setlocal foldtext=eclim#display#fold#NeatFoldText()
 
   let window_name = "Debug Variables"
-  call eclim#util#TempWindowClear(window_name)
-  "call eclim#util#TempVerticalSplitWindow(
   call eclim#util#TempWindow(
-    \ window_name, vars, {'height': g:EclimLocationListHeight})
+    \ window_name, vars, {'orientation': 'vertical'})
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
