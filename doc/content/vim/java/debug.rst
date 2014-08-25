@@ -67,42 +67,61 @@ action argument.
   :JavaDebugStep over
   :JavaDebugStep return
 
-.. _\:JavaDebugVars:
+.. _\:JavaDebugStatus:
 
-Variables
----------
-When a breakpoint is hit, or a thread is suspended, you can retrieve the
-variables available in the current stack frame using **:JavaDebugVars** command.
-It will open a temporary window and display the variables in it.  Right now, it
-only shows values for primitive variables. Support for viewing objects and the
-their fields will be added soon.
+Status
+------
+When a debugging session is started, a status window is automatically opened at
+the bottom in a horizontal split window. It has 2 panes:
+- Debug Threads: The left pane shows active threads along with its stack frames.
 
-.. code-block:: vim
+- Debug Variables: The rigt pane shows the variables available for the thread
+  selected on the left pane. Variables can be seen only for suspended threads.
+  If there are suspended threads, then one of them is automatically selected and
+  its variables displayed.
 
-  :JavaDebugVars
+  As of now, there is only suport for displaying primitive variables. Support for
+  viewing objects will be added soon.
 
-.. _\:JavaDebugVars:
-
-Stack Frames
-------------
-To view the current stack frames, run **:JavaDebugStackFrame** command. It will
-open a temporary window and display the stack frames of all threads.
+If for some reason, the status window is not updated, you can manually refresh it
+by running **:JavaDebugStatus** command.
 
 .. code-block:: vim
 
-  :JavaDebugStackFrame
+  :JavaDebugStatus
 
-.. _\:JavaDebugControl:
+.. _\:JavaDebugStop:
 
-Control
--------
-To suspend, resume or stop the debug session, you can use **:JavaDebugControl**
-command.
+Stop
+-----
+To stop a debug session, you can use **:JavaDebugStop** command.
 
 .. code-block:: vim
 
-  :JavaDebugControl suspend
-  :JavaDebugControl resume
-  :JavaDebugControl stop
+  :JavaDebugStop
+
+.. _\:JavaDebugSuspend:
+
+Suspend
+--------
+To suspend execution of a thread, you can use **:JavaDebugThreadSuspend** command.
+Right now, it suspends a random thread. We will soon expose functionality to
+suspend a specific thread or threads.
+
+.. code-block:: vim
+
+  :JavaDebugThreadSuspend
+
+.. _\:JavaDebugResume:
+
+Resume
+------
+To resume execution of a thread, you can use **:JavaDebugThreadResume** command.
+Right now, it resumes a random suspended thread. We will soon expose functionality
+to resume a specific thread or threads.
+
+.. code-block:: vim
+
+  :JavaDebugThreadSuspend
 
 .. _eclim-user: http://groups.google.com/group/eclim-user

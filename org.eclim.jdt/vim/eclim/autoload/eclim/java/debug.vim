@@ -35,7 +35,11 @@ let s:command_start =
   \ '-command java_debug_start -p "<project>" ' .
   \ '-h "<host>" -n "<port>" -v "<vim_servername>"'
 
-let s:command_control = '-command java_debug_control -a "<action>"'
+let s:command_stop = '-command java_debug_stop'
+
+let s:command_thread_suspend = '-command java_debug_thread_suspend'
+
+let s:command_thread_resume = '-command java_debug_thread_resume'
 
 let s:command_breakpoint_toggle =
   \ '-command java_debug_breakpoint_toggle ' .
@@ -86,49 +90,65 @@ function! eclim#java#debug#DebugStart(host, port) " {{{
   call eclim#util#Echo(result)
 endfunction " }}}
 
-function! eclim#java#debug#DebugControl(action) " {{{
+function! eclim#java#debug#DebugStop() " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   let file = eclim#lang#SilentUpdate()
 
-  let command = s:command_control
-  let command = substitute(command, '<action>', a:action, '')
-
+  let command = s:command_stop
   let result = eclim#Execute(command)
 
-  if ((a:action == 'stop') || (a:action == 'terminate'))
-    " TODO Check if defined before undefining
-    "call eclim#display#signs#Undefine(s:breakpoint_sign_name)
+  " Auto close the debug status window
+  call eclim#util#DeleteBuffer(s:variables_win_name)
+  call eclim#util#DeleteBuffer(s:threads_win_name)
 
-    " Auto close the debug status window
-    call eclim#util#DeleteBuffer(s:variables_win_name)
-    call eclim#util#DeleteBuffer(s:threads_win_name)
-
-    " Remove the sign from previous location
-    if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
-      call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
-        \ bufnr(s:debug_step_prev_file))
-    endif
-
-    let s:debug_step_prev_line = ''
-    let s:debug_step_prev_file = ''
-  elseif (a:action == 'resume')
-    " Remove the sign from previous location. This is needed here even though it
-    " is done in GoToFile function. There may be a time gap until the next
-    " breakpoint is hit or the program terminates. We don't want to highligh
-    " the current line until then.
-    if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
-      call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
-        \ bufnr(s:debug_step_prev_file))
-    endif
+  " Remove the sign from previous location
+  if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
+    call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
+      \ bufnr(s:debug_step_prev_file))
   endif
 
+  let s:debug_step_prev_line = ''
+  let s:debug_step_prev_file = ''
 
-  if type(result) == g:STRING_TYPE
-    call eclim#util#Echo(result)
+  call eclim#util#Echo(result)
+endfunction " }}}
+
+function! eclim#java#debug#DebugThreadSuspend() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
   endif
+
+  let file = eclim#lang#SilentUpdate()
+
+  let command = s:command_thread_suspend
+  let result = eclim#Execute(command)
+
+  call eclim#util#Echo(result)
+endfunction " }}}
+
+function! eclim#java#debug#DebugThreadResume() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let file = eclim#lang#SilentUpdate()
+
+  let command = s:command_thread_resume
+  let result = eclim#Execute(command)
+
+  " Remove the sign from previous location. This is needed here even though it
+  " is done in GoToFile function. There may be a time gap until the next
+  " breakpoint is hit or the program terminates. We don't want to highligh
+  " the current line until then.
+  if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
+    call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
+      \ bufnr(s:debug_step_prev_file))
+  endif
+
+  call eclim#util#Echo(result)
 endfunction " }}}
 
 function! eclim#java#debug#Breakpoint(action) " {{{

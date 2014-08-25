@@ -223,8 +223,16 @@ if !exists(":JavaDebugStart")
   command -nargs=+ -buffer JavaDebugStart :call eclim#java#debug#DebugStart(<f-args>)
 endif
 
-if !exists(":JavaDebugControl")
-  command -nargs=1 -buffer JavaDebugControl :call eclim#java#debug#DebugControl('<args>')
+if !exists(":JavaDebugStop")
+  command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
+endif
+
+if !exists(":JavaDebugThreadSuspend")
+  command -nargs=0 -buffer JavaDebugThreadSuspend :call eclim#java#debug#DebugThreadSuspend()
+endif
+
+if !exists(":JavaDebugThreadResume")
+  command -nargs=0 -buffer JavaDebugThreadResume :call eclim#java#debug#DebugThreadResume()
 endif
 
 if !exists(":JavaDebugBreakpoint")

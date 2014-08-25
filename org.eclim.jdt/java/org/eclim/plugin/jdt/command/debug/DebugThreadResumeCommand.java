@@ -21,55 +21,29 @@ import org.eclim.Services;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
 /**
- * Command to manage an existing debug session.
+ * Command to resume one or more threads.
  */
 @Command(
-  name = "java_debug_control",
-  options =
-    "REQUIRED a action ARG"
+  name = "java_debug_thread_resume",
+  options = ""
 )
-public class DebugCommand
+public class DebugThreadResumeCommand
   extends AbstractCommand
 {
-  private static final String ACTION_STOP = "stop";
-  private static final String ACTION_TERMINATE = "terminate";
-  private static final String ACTION_SUSPEND = "suspend";
-  private static final String ACTION_RESUME = "resume";
-
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    String action = commandLine.getValue(Options.ACTION_OPTION);
     DebuggerContext ctx = DebuggerContextManager.getDefault();
     if (ctx == null) {
       return Services.getMessage("debugging.session.absent");
     }
 
-    if (action.equals(ACTION_STOP)) {
-      ctx.stop();
-      DebuggerContextManager.remove(ctx.getId());
-      return Services.getMessage("debugging.session.stopped");
-
-    } else if (action.equals(ACTION_TERMINATE)) {
-      ctx.terminate();
-      DebuggerContextManager.remove(ctx.getId());
-      return Services.getMessage("debugging.session.stopped");
-
-    } else if (action.equals(ACTION_SUSPEND)) {
-      ctx.suspend();
-
-    } else if (action.equals(ACTION_RESUME)) {
-      ctx.resume();
-    } else {
-      throw new IllegalArgumentException("action: " + action);
-    }
-
-    return null;
+    ctx.resume();
+    return Services.getMessage("debugging.thread.resumed");
   }
 }
