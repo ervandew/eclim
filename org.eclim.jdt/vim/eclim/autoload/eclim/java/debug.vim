@@ -39,7 +39,7 @@ let s:command_control = '-command java_debug_control -a "<action>"'
 
 let s:command_breakpoint_toggle =
   \ '-command java_debug_breakpoint_toggle ' .
-  \ '-p "<project>" -f "<file>" -l "<line_num>"'
+  \ '-p "<project>" -f "<file>" -l "<line>"'
 
 let s:command_breakpoint = '-command java_debug_breakpoint -a "<action>"'
 
@@ -174,7 +174,13 @@ function! eclim#java#debug#BreakpointToggle() " {{{
   let result = eclim#Execute(command)
 
   call eclim#display#signs#Define(s:breakpoint_sign_name, '*', '')
-  call eclim#display#signs#Toggle(s:breakpoint_sign_name, line)
+
+  if (result == "1")
+    call eclim#display#signs#Place(s:breakpoint_sign_name, line)
+  else
+    call eclim#display#signs#Unplace(line)
+  endif
+
 endfunction " }}}
 
 function! eclim#java#debug#Step(action) " {{{

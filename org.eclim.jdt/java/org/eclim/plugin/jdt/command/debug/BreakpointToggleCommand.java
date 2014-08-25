@@ -19,8 +19,6 @@ package org.eclim.plugin.jdt.command.debug;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclim.Services;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -54,6 +52,9 @@ import org.eclipse.jdt.debug.core.JDIDebugModel;
 public class BreakpointToggleCommand
   extends AbstractCommand
 {
+  private static final String BKPOINT_ADDED = "1";
+  private static final String BKPOINT_REMOVED = "0";
+
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -83,12 +84,12 @@ public class BreakpointToggleCommand
     if (breakpoint == null) {
       JDIDebugModel.createLineBreakpoint(
           res, typeName, lineNum, -1, -1, 0, true, attrMap);
-      return Services.getMessage("debugging.breakpoint.added");
+      return BKPOINT_ADDED;
     }
 
     IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
       .getBreakpointManager();
     breakpointMgr.removeBreakpoint(breakpoint, true);
-    return Services.getMessage("debugging.breakpoint.removed");
+    return BKPOINT_REMOVED;
   }
 }
