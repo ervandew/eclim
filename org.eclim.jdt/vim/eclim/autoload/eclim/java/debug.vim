@@ -177,8 +177,10 @@ function! eclim#java#debug#BreakpointToggle() " {{{
 
   if (result == "1")
     call eclim#display#signs#Place(s:breakpoint_sign_name, line)
+    call eclim#util#Echo("Breakpoint added")
   else
     call eclim#display#signs#Unplace(line)
+    call eclim#util#Echo("Breakpoint removed")
   endif
 
 endfunction " }}}
