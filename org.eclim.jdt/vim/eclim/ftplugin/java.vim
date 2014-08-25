@@ -247,12 +247,8 @@ if !exists(":JavaDebugStep")
   command -nargs=1 -buffer JavaDebugStep :call eclim#java#debug#Step('<args>')
 endif
 
-if !exists(":JavaDebugVars")
-  command -nargs=0 -buffer JavaDebugVars :call eclim#java#debug#Vars()
-endif
-
-if !exists(":JavaDebugStackFrame")
-  command -nargs=0 -buffer JavaDebugStackFrame :call eclim#java#debug#StackFrame()
+if !exists(":JavaDebugStatus")
+  command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#DebugStatus()
 endif
 
 " }}}

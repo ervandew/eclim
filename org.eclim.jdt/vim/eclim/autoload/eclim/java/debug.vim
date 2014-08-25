@@ -49,10 +49,6 @@ let s:command_breakpoint = '-command java_debug_breakpoint -a "<action>"'
 
 let s:command_step = '-command java_debug_step -a "<action>"'
 
-let s:command_vars = '-command java_debug_vars'
-
-let s:command_stackframe = '-command java_debug_stackframe'
-
 let s:command_status = '-command java_debug_status'
 " }}}
 
@@ -213,62 +209,6 @@ function! eclim#java#debug#Step(action) " {{{
   let command = s:command_step
   let command = substitute(command, '<action>', a:action, '')
   call eclim#Execute(command)
-endfunction " }}}
-
-function! eclim#java#debug#Vars() " {{{
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
-  endif
-
-  let command = s:command_vars
-
-  let results = eclim#Execute(command)
-
-  let window_name = "Debug Variables"
-  let filename = expand('%:p')
-  call eclim#util#TempWindowClear(window_name)
-
-  call eclim#util#TempWindow(
-    \ window_name, results, {'height': g:EclimLocationListHeight})
-
-  setlocal foldmethod=expr
-  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
-  setlocal foldtext=eclim#display#fold#NeatFoldText()
-
-  augroup temp_window
-    autocmd! BufWinLeave <buffer>
-    call eclim#util#GoToBufferWindowRegister(filename)
-  augroup END
-endfunction " }}}
-
-function! eclim#java#debug#StackFrame() " {{{
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
-  endif
-
-  let command = s:command_stackframe
-  let results = eclim#Execute(command)
-
-  if empty(results)
-    call eclim#util#Echo("No stack frames")
-    return
-  endif
-
-  let window_name = "Stack Frames"
-  let filename = expand('%:p')
-  call eclim#util#TempWindowClear(window_name)
-
-  call eclim#util#TempWindow(
-    \ window_name, results, {'height': g:EclimLocationListHeight})
-
-  setlocal foldmethod=expr
-  setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
-  setlocal foldtext=eclim#display#fold#NeatFoldText()
-
-  augroup temp_window
-    autocmd! BufWinLeave <buffer>
-    call eclim#util#GoToBufferWindowRegister(filename)
-  augroup END
 endfunction " }}}
 
 function! eclim#java#debug#Status() " {{{

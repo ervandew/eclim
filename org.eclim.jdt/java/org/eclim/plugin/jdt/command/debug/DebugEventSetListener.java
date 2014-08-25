@@ -46,8 +46,10 @@ public class DebugEventSetListener
       int kind = event.getKind();
       int detail = event.getDetail();
 
-      logger.debug("Got event from src: " + src.getClass().getName() +
-          " " + kind + " " + detail);
+      if (logger.isDebugEnabled()) {
+        logger.debug("Got event from src: " + src.getClass().getName() +
+            " " + kind + " " + detail);
+      }
 
       try {
         if (src.getClass().equals(JDIThread.class)) {
@@ -80,13 +82,19 @@ public class DebugEventSetListener
         ISourceLocator srcLocator = ctx.getDebugTarget().getLaunch()
           .getSourceLocator();
         Object src = srcLocator.getSourceElement(topStackFrame);
+        if (!(src instanceof CompilationUnit)) {
+          return;
+        }
+
         String fileName = (((CompilationUnit) src).getResource()
             .getRawLocation().toOSString());
 
         int lineNum = topStackFrame.getLineNumber();
 
-        if (detail == DebugEvent.BREAKPOINT) {
-          logger.debug("Breakpoint hit: " + fileName + " at " + lineNum);
+        if (logger.isDebugEnabled()) {
+          if (detail == DebugEvent.BREAKPOINT) {
+            logger.debug("Breakpoint hit: " + fileName + " at " + lineNum);
+          }
         }
 
         ctx.getThreadContext().update(thread, thread.getStackFrames());
