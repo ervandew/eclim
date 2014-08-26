@@ -258,11 +258,12 @@ endif
 let g:EclimQuote = "['\"]"
 
 if !exists("g:EclimTempDir")
-  let g:EclimTempDir = expand('$TMP')
-  if g:EclimTempDir == '$TMP'
-    let g:EclimTempDir = expand('$TEMP')
-  endif
-  if g:EclimTempDir == '$TEMP' && has('unix')
+  " NOTE: `expand("$FOO")` might spawn a new shell.
+  if len($TMP)
+    let g:EclimTempDir = $TMP
+  elseif len($TEMP)
+    let g:EclimTempDir = $TEMP
+  elseif has('unix')
     let g:EclimTempDir = '/tmp'
   endif
 

@@ -551,11 +551,12 @@ function! eclim#SaveVimSettings() " {{{
 endfunction " }}}
 
 function! eclim#UserHome() " {{{
-  let home = expand('$HOME')
   if has('win32unix')
     let home = eclim#cygwin#WindowsHome()
   elseif has('win32') || has('win64')
     let home = expand('$USERPROFILE')
+  else
+    let home = $HOME
   endif
   return substitute(home, '\', '/', 'g')
 endfunction " }}}
