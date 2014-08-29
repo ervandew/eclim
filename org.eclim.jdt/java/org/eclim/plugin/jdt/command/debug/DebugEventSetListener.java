@@ -19,9 +19,12 @@ package org.eclim.plugin.jdt.command.debug;
 import org.eclim.logging.Logger;
 
 import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.IDebugEventSetListener;
 
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISourceLocator;
+import org.eclipse.debug.core.model.IThread;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
@@ -51,9 +54,19 @@ public class DebugEventSetListener
             " " + kind + " " + detail);
       }
 
+      DebuggerContext ctx = DebuggerContextManager.getDefault();
+      if (ctx == null) {
+        if (logger.isDebugEnabled()) {
+          logger.debug("No debugging session present");
+        }
+        return;
+      }
+
       try {
         if (src.getClass().equals(JDIThread.class)) {
-          handleThreadEvent((JDIThread) src, kind, detail);
+          handleThreadEvent(ctx, (JDIThread) src, kind, detail);
+        } else if (src.getClass().equals(IDebugTarget.class)) {
+          handleDebugTargetEvent(ctx, (IDebugTarget) src, kind, detail);
         }
       } catch (Exception e) {
         logger.error("Listener failed", e);
@@ -62,18 +75,13 @@ public class DebugEventSetListener
     }
   }
 
-  private void handleThreadEvent(JDIThread thread, int kind, int detail)
+  private void handleThreadEvent(
+      DebuggerContext ctx,
+      JDIThread thread,
+      int kind,
+      int detail)
     throws Exception
   {
-
-    DebuggerContext ctx = DebuggerContextManager.getDefault();
-    if (ctx == null) {
-      if (logger.isDebugEnabled()) {
-        logger.debug("No debugging session present");
-      }
-      return;
-    }
-
     if (kind == DebugEvent.SUSPEND) {
       if ((detail == DebugEvent.STEP_END) ||
           (detail == DebugEvent.BREAKPOINT))
@@ -100,9 +108,18 @@ public class DebugEventSetListener
         ctx.getThreadContext().update(thread, thread.getStackFrames());
         ctx.getVariableContext().update(thread, topStackFrame.getVariables());
         ctx.getVimClient().jumpToFilePosition(fileName, lineNum);
+
         // Call refresh after jumping to file. Otherwise, it causes the sign to
         // not get placed for some reason.
         ctx.getVimClient().refreshDebugStatus();
+      } else if (detail == DebugEvent.CLIENT_REQUEST) {
+        ctx.getThreadContext().update(thread, thread.getStackFrames());
+
+        // Protect against variable information unavailable for native methods
+        try {
+          ctx.getVariableContext().update(thread,
+              thread.getTopStackFrame().getVariables());
+        } catch (DebugException e) {}
       }
     } else if (kind == DebugEvent.CREATE) {
       ctx.getThreadContext().update(thread, null);
@@ -110,6 +127,52 @@ public class DebugEventSetListener
     } else if (kind == DebugEvent.TERMINATE) {
       ctx.getThreadContext().remove(thread);
       ctx.getVimClient().refreshDebugStatus();
+    } else if (kind == DebugEvent.RESUME) {
+      if (detail == DebugEvent.CLIENT_REQUEST) {
+        ctx.getThreadContext().update(thread, null);
+        ctx.getVariableContext().update(thread, null);
+        ctx.getVimClient().refreshDebugStatus();
+      }
+    }
+  }
+
+  private void handleDebugTargetEvent(
+      DebuggerContext ctx,
+      IDebugTarget debugTarget,
+      int kind,
+      int detail)
+    throws Exception
+  {
+    if (kind == DebugEvent.SUSPEND) {
+      if (detail == DebugEvent.CLIENT_REQUEST) {
+        IThread[] threads = debugTarget.getThreads();
+        if (threads == null) {
+          return;
+        }
+
+        for (IThread thread : threads) {
+          IJavaStackFrame topStackFrame = (IJavaStackFrame) thread
+            .getTopStackFrame();
+
+          ctx.getThreadContext().update(thread, thread.getStackFrames());
+
+          // Protect against variable information unavailable for native methods
+          try {
+            ctx.getVariableContext().update(
+                thread,
+                topStackFrame
+                .getVariables());
+          } catch (DebugException e) {}
+        }
+
+        ctx.getVimClient().refreshDebugStatus();
+      }
+    } else if (kind == DebugEvent.RESUME) {
+      if (detail == DebugEvent.CLIENT_REQUEST) {
+        ctx.getThreadContext().removeStackFrames();
+        ctx.getVariableContext().removeVariables();
+        ctx.getVimClient().refreshDebugStatus();
+      }
     }
   }
 }

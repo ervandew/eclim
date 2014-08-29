@@ -78,6 +78,12 @@ public class ThreadContext
     stackFrameMap.remove(threadId);
   }
 
+  public synchronized void removeStackFrames() {
+    for (long threadId : stackFrameMap.keySet()) {
+      stackFrameMap.put(threadId, null);
+    }
+  }
+
   private void process()
     throws DebugException
   {
@@ -90,6 +96,7 @@ public class ThreadContext
       String status = thread.isSuspended() ? SUSPENDED : RUNNING;
       // Add 2 spaces for indentation
       results.add("  Thread-" + threadName +
+          ":" + threadId  +
           " (" + status  + ")");
 
       if (stackFrames != null) {
@@ -179,5 +186,25 @@ public class ThreadContext
   private String getQualifiedName(String rec)
   {
     return rec;
+  }
+
+  /**
+   * Suspends the given thread.
+   */
+  public void suspend(long threadId) throws DebugException {
+    IThread thread = threadMap.get(threadId);
+    if (thread != null) {
+      thread.suspend();
+    }
+  }
+
+  /**
+   * Resumes execution of the given thread.
+   */
+  public void resume(long threadId) throws DebugException {
+    IThread thread = threadMap.get(threadId);
+    if (thread != null) {
+      thread.resume();
+    }
   }
 }

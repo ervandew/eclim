@@ -21,6 +21,7 @@ import org.eclim.Services;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
+import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
@@ -29,7 +30,8 @@ import org.eclim.plugin.core.command.AbstractCommand;
  */
 @Command(
   name = "java_debug_thread_resume",
-  options = ""
+  options =
+    "OPTIONAL t thread_id ARG"
 )
 public class DebugThreadResumeCommand
   extends AbstractCommand
@@ -43,7 +45,13 @@ public class DebugThreadResumeCommand
       return Services.getMessage("debugging.session.absent");
     }
 
-    ctx.resume();
-    return Services.getMessage("debugging.thread.resumed");
+    String threadId = commandLine.getValue(Options.THREAD_ID_OPTION);
+    if (threadId == null) {
+      ctx.resume();
+      return Services.getMessage("debugging.session.resumed");
+    } else {
+      ctx.getThreadContext().resume(Long.parseLong(threadId));
+      return Services.getMessage("debugging.thread.resumed");
+    }
   }
 }

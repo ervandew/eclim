@@ -37,9 +37,13 @@ let s:command_start =
 
 let s:command_stop = '-command java_debug_stop'
 
-let s:command_thread_suspend = '-command java_debug_thread_suspend'
+let s:command_session_suspend = '-command java_debug_thread_suspend'
+let s:command_thread_suspend = '-command java_debug_thread_suspend ' .
+  \ '-t "<thread_id>"'
 
-let s:command_thread_resume = '-command java_debug_thread_resume'
+let s:command_session_resume = '-command java_debug_thread_resume'
+let s:command_thread_resume = '-command java_debug_thread_resume ' .
+  \ '-t "<thread_id>"'
 
 let s:command_breakpoint_toggle =
   \ '-command java_debug_breakpoint_toggle ' .
@@ -51,6 +55,41 @@ let s:command_step = '-command java_debug_step -a "<action>"'
 
 let s:command_status = '-command java_debug_status'
 " }}}
+
+function! eclim#java#debug#DefineStatusWinCommands() " {{{
+  if !exists(":JavaDebugStop")
+    command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
+  endif
+
+  if !exists(":JavaDebugThreadSuspend")
+    command -nargs=? -buffer JavaDebugThreadSuspend 
+      \ :call eclim#java#debug#DebugThreadSuspend(<f-args>)
+  endif
+
+  if !exists(":JavaDebugThreadResume")
+    command -nargs=? -buffer JavaDebugThreadResume 
+      \ :call eclim#java#debug#DebugThreadResume(<f-args>)
+  endif
+
+  if !exists(":JavaDebugBreakpoint")
+    command -nargs=1 -buffer JavaDebugBreakpoint 
+      \ :call eclim#java#debug#Breakpoint('<args>')
+  endif
+
+  if !exists(":JavaDebugStep")
+    command -nargs=1 -buffer JavaDebugStep :call eclim#java#debug#Step('<args>')
+  endif
+
+  if !exists(":JavaDebugStatus")
+    command -nargs=0 -buffer JavaDebugStatus 
+      \ :call eclim#java#debug#Status()
+  endif
+
+  if !exists(":JavaDebugGoToFile")
+    command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
+  endif
+
+endfunction " }}}
 
 function! eclim#java#debug#DebugStart(host, port) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
@@ -112,27 +151,51 @@ function! eclim#java#debug#DebugStop() " {{{
   call eclim#util#Echo(result)
 endfunction " }}}
 
-function! eclim#java#debug#DebugThreadSuspend() " {{{
+function! eclim#java#debug#DebugThreadSuspend(...) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   let file = eclim#lang#SilentUpdate()
 
-  let command = s:command_thread_suspend
+  if a:0 == 0
+    let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
+  else
+    let thread_id = a:1
+  endif
+
+  if thread_id != ""
+    let command = s:command_thread_suspend
+    let command = substitute(command, '<thread_id>', thread_id, '')
+  else
+    let command = s:command_session_suspend
+  endif
+
   let result = eclim#Execute(command)
 
   call eclim#util#Echo(result)
 endfunction " }}}
 
-function! eclim#java#debug#DebugThreadResume() " {{{
+function! eclim#java#debug#DebugThreadResume(...) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   let file = eclim#lang#SilentUpdate()
 
-  let command = s:command_thread_resume
+  if a:0 == 0
+    let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
+  else
+    let thread_id = a:1
+  endif
+
+  if thread_id != ""
+    let command = s:command_thread_resume
+    let command = substitute(command, '<thread_id>', thread_id, '')
+  else
+    let command = s:command_session_resume
+  endif
+
   let result = eclim#Execute(command)
 
   " Remove the sign from previous location. This is needed here even though it
@@ -236,6 +299,9 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
   setlocal foldtext=eclim#display#fold#NeatFoldText()
+  setlocal foldlevel=1
+  setlocal nonu
+  call eclim#java#debug#DefineStatusWinCommands()
 
   call eclim#util#TempWindow(
     \ s:variables_win_name, vars,
@@ -244,6 +310,8 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
   setlocal foldtext=eclim#display#fold#NeatFoldText()
+  setlocal nonu
+  call eclim#java#debug#DefineStatusWinCommands()
 
   " Restore position
   call eclim#util#GoToBufferWindow(cur_bufnr)
@@ -266,6 +334,31 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
   " unplacing
   call eclim#display#signs#PlaceInBuffer(s:debug_step_sign_name,
     \ bufnr(a:file), a:line)
+endfunction " }}}
+
+function! eclim#java#debug#GetThreadIdUnderCursor() " {{{
+  " Check if we are in the right window
+  if (bufname("%") != s:threads_win_name)
+    return
+  endif
+
+  let line = line(".")
+  " Ignore the first line as it is the status
+  if (line == 1)
+    return ""
+  endif
+
+  let line_arr = split(getline("."), '(')
+  if (len(line_arr) > 1)
+    let thread_info_arr = split(line_arr[0], ':')   
+    if (len(thread_info_arr) == 2)
+      " trim any white space before returning the thread id
+      return substitute(thread_info_arr[1], "^\\s\\+\\|\\s\\+$","","g")
+    endif
+  endif
+
+  " Did not find a valid thread id
+  return ""
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

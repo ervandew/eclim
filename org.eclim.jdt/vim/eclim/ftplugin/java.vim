@@ -228,11 +228,11 @@ if !exists(":JavaDebugStop")
 endif
 
 if !exists(":JavaDebugThreadSuspend")
-  command -nargs=0 -buffer JavaDebugThreadSuspend :call eclim#java#debug#DebugThreadSuspend()
+  command -nargs=? -buffer JavaDebugThreadSuspend :call eclim#java#debug#DebugThreadSuspend(<f-args>)
 endif
 
 if !exists(":JavaDebugThreadResume")
-  command -nargs=0 -buffer JavaDebugThreadResume :call eclim#java#debug#DebugThreadResume()
+  command -nargs=? -buffer JavaDebugThreadResume :call eclim#java#debug#DebugThreadResume(<f-args>)
 endif
 
 if !exists(":JavaDebugBreakpoint")
@@ -248,7 +248,11 @@ if !exists(":JavaDebugStep")
 endif
 
 if !exists(":JavaDebugStatus")
-  command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#DebugStatus()
+  command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#Status()
+endif
+
+if !exists(":JavaDebugGoToFile")
+  command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
 endif
 
 " }}}

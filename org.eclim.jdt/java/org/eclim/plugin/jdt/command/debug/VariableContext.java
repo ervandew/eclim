@@ -84,6 +84,12 @@ public class VariableContext
     process(varsMap.get(threadId), results, 0);
   }
 
+  public synchronized void removeVariables() {
+    for (long threadId : varsMap.keySet()) {
+      varsMap.put(threadId, null);
+    }
+  }
+
   private void process(IVariable[] vars, List<String> results, int level)
     throws DebugException
   {
