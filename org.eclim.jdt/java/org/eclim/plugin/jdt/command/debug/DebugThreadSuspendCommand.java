@@ -25,6 +25,9 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
+import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
+
 /**
  * Command to suspend one or more threads.
  */

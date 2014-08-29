@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.debug;
+package org.eclim.plugin.jdt.command.debug.context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +23,8 @@ import java.util.Map;
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.util.VimClient;
+
+import org.eclim.plugin.jdt.command.debug.event.DebugEventSetListener;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 

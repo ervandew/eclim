@@ -14,32 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.debug;
-
-import org.eclim.annotation.Command;
-
-import org.eclim.command.CommandLine;
-
-import org.eclim.plugin.core.command.AbstractCommand;
+package org.eclim.plugin.jdt.command.debug.event;
 
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
-import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
+
+import org.eclipse.jdt.internal.debug.core.model.JDIDebugElement;
 
 /**
- * Command to retrieve status of all active debug sessions.
+ * Abstract debug event handler.
  */
-@Command(
-  name = "java_debug_status",
-  options = ""
-)
-public class DebugStatusCommand
-  extends AbstractCommand
+public abstract class DebugEventHandler
 {
-  @Override
-  public Object execute(CommandLine commandLine)
-    throws Exception
-  {
-    DebuggerContext ctx = DebuggerContextManager.getDefault();
-    return ctx != null ? ctx.getStatus() : null;
-  }
+  protected abstract void handle(
+      DebuggerContext ctx,
+      JDIDebugElement element,
+      int kind,
+      int detail)
+    throws Exception;
 }

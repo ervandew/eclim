@@ -24,6 +24,9 @@ import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
+import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
+
 /**
  * Command to stop an existing debug session.
  */

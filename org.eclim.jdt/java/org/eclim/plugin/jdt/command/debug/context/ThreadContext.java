@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.debug;
+package org.eclim.plugin.jdt.command.debug.context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +78,8 @@ public class ThreadContext
     stackFrameMap.remove(threadId);
   }
 
-  public synchronized void removeStackFrames() {
+  public synchronized void removeStackFrames()
+  {
     for (long threadId : stackFrameMap.keySet()) {
       stackFrameMap.put(threadId, null);
     }
@@ -100,11 +101,19 @@ public class ThreadContext
           " (" + status  + ")");
 
       if (stackFrames != null) {
-        for (IStackFrame stackFrame : stackFrames) {
-          // TODO Do formatting in VIM
-          // Add 4 spaces for indentation under thread
-          results.add("    " + getStackFrameText(stackFrame));
-        }
+        // Protect against invalid stack frame. When debug session is resumed,
+        // all threads are resumed first. Then notification is sent for each
+        // thread. While processing for one thread, we might end up using old
+        // stack frames for some other thread, that are no longer valid.
+        // This should not happen normally since we have a handler for debug
+        // target itself, but this is being defensive.
+        try {
+          for (IStackFrame stackFrame : stackFrames) {
+            // TODO Do formatting in VIM
+            // Add 4 spaces for indentation under thread
+            results.add("    " + getStackFrameText(stackFrame));
+          }
+        } catch (DebugException e) {}
       }
     }
   }
@@ -191,7 +200,9 @@ public class ThreadContext
   /**
    * Suspends the given thread.
    */
-  public void suspend(long threadId) throws DebugException {
+  public void suspend(long threadId)
+    throws DebugException
+  {
     IThread thread = threadMap.get(threadId);
     if (thread != null) {
       thread.suspend();
@@ -201,7 +212,9 @@ public class ThreadContext
   /**
    * Resumes execution of the given thread.
    */
-  public void resume(long threadId) throws DebugException {
+  public void resume(long threadId)
+    throws DebugException
+  {
     IThread thread = threadMap.get(threadId);
     if (thread != null) {
       thread.resume();

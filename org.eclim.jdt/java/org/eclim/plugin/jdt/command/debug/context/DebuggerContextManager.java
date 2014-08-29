@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.debug;
+package org.eclim.plugin.jdt.command.debug.context;
 
 import java.util.Map;
 

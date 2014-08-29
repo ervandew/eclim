@@ -14,74 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.debug;
+package org.eclim.plugin.jdt.command.debug.event;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
+
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.IDebugEventSetListener;
 
-import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISourceLocator;
-import org.eclipse.debug.core.model.IThread;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 import org.eclipse.jdt.internal.core.CompilationUnit;
 
+import org.eclipse.jdt.internal.debug.core.model.JDIDebugElement;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
 
 /**
- * Handler for events triggered during a debug session.
- * Events include thread suspension due to breakpoint or stepping action.
+ * Event handler for a thread.
  */
-public class DebugEventSetListener
-  implements IDebugEventSetListener
+public class ThreadEventHandler extends DebugEventHandler
 {
-  private static final Logger logger = Logger.getLogger(
-      DebugEventSetListener.class);
+  private static final Logger logger =
+    Logger.getLogger(ThreadEventHandler.class);
 
-  public void handleDebugEvents(DebugEvent[] events)
-  {
-    for (DebugEvent event : events) {
-      Object src = event.getSource();
-      int kind = event.getKind();
-      int detail = event.getDetail();
-
-      if (logger.isDebugEnabled()) {
-        logger.debug("Got event from src: " + src.getClass().getName() +
-            " " + kind + " " + detail);
-      }
-
-      DebuggerContext ctx = DebuggerContextManager.getDefault();
-      if (ctx == null) {
-        if (logger.isDebugEnabled()) {
-          logger.debug("No debugging session present");
-        }
-        return;
-      }
-
-      try {
-        if (src.getClass().equals(JDIThread.class)) {
-          handleThreadEvent(ctx, (JDIThread) src, kind, detail);
-        } else if (src.getClass().equals(IDebugTarget.class)) {
-          handleDebugTargetEvent(ctx, (IDebugTarget) src, kind, detail);
-        }
-      } catch (Exception e) {
-        logger.error("Listener failed", e);
-        throw new RuntimeException(e);
-      }
-    }
-  }
-
-  private void handleThreadEvent(
+  protected void handle(
       DebuggerContext ctx,
-      JDIThread thread,
+      JDIDebugElement element,
       int kind,
       int detail)
     throws Exception
   {
+    JDIThread thread = (JDIThread) element;
     if (kind == DebugEvent.SUSPEND) {
       if ((detail == DebugEvent.STEP_END) ||
           (detail == DebugEvent.BREAKPOINT))
@@ -131,46 +97,6 @@ public class DebugEventSetListener
       if (detail == DebugEvent.CLIENT_REQUEST) {
         ctx.getThreadContext().update(thread, null);
         ctx.getVariableContext().update(thread, null);
-        ctx.getVimClient().refreshDebugStatus();
-      }
-    }
-  }
-
-  private void handleDebugTargetEvent(
-      DebuggerContext ctx,
-      IDebugTarget debugTarget,
-      int kind,
-      int detail)
-    throws Exception
-  {
-    if (kind == DebugEvent.SUSPEND) {
-      if (detail == DebugEvent.CLIENT_REQUEST) {
-        IThread[] threads = debugTarget.getThreads();
-        if (threads == null) {
-          return;
-        }
-
-        for (IThread thread : threads) {
-          IJavaStackFrame topStackFrame = (IJavaStackFrame) thread
-            .getTopStackFrame();
-
-          ctx.getThreadContext().update(thread, thread.getStackFrames());
-
-          // Protect against variable information unavailable for native methods
-          try {
-            ctx.getVariableContext().update(
-                thread,
-                topStackFrame
-                .getVariables());
-          } catch (DebugException e) {}
-        }
-
-        ctx.getVimClient().refreshDebugStatus();
-      }
-    } else if (kind == DebugEvent.RESUME) {
-      if (detail == DebugEvent.CLIENT_REQUEST) {
-        ctx.getThreadContext().removeStackFrames();
-        ctx.getVariableContext().removeVariables();
         ctx.getVimClient().refreshDebugStatus();
       }
     }

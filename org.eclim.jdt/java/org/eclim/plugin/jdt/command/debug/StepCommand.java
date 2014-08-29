@@ -25,6 +25,9 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
+import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
+
 import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.debug.core.model.IThread;
