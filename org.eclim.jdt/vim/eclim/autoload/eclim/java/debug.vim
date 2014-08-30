@@ -52,6 +52,7 @@ let s:command_breakpoint_toggle =
 let s:command_breakpoint = '-command java_debug_breakpoint -a "<action>"'
 
 let s:command_step = '-command java_debug_step -a "<action>"'
+let s:command_step_thread = '-command java_debug_step -a "<action>" -t "<thread_id>"'
 
 let s:command_status = '-command java_debug_status'
 " }}}
@@ -77,7 +78,7 @@ function! eclim#java#debug#DefineStatusWinCommands() " {{{
   endif
 
   if !exists(":JavaDebugStep")
-    command -nargs=1 -buffer JavaDebugStep :call eclim#java#debug#Step('<args>')
+    command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
   endif
 
   if !exists(":JavaDebugStatus")
@@ -158,12 +159,7 @@ function! eclim#java#debug#DebugThreadSuspend(...) " {{{
 
   let file = eclim#lang#SilentUpdate()
 
-  if a:0 == 0
-    let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
-  else
-    let thread_id = a:1
-  endif
-
+  let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
   if thread_id != ""
     let command = s:command_thread_suspend
     let command = substitute(command, '<thread_id>', thread_id, '')
@@ -183,12 +179,7 @@ function! eclim#java#debug#DebugThreadResume(...) " {{{
 
   let file = eclim#lang#SilentUpdate()
 
-  if a:0 == 0
-    let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
-  else
-    let thread_id = a:1
-  endif
-
+  let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
   if thread_id != ""
     let command = s:command_thread_resume
     let command = substitute(command, '<thread_id>', thread_id, '')
@@ -269,9 +260,20 @@ function! eclim#java#debug#Step(action) " {{{
     return
   endif
 
-  let command = s:command_step
+  let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
+  if thread_id != ""
+    let command = s:command_step_thread
+    let command = substitute(command, '<thread_id>', thread_id, '')
+  else
+    let command = s:command_step
+  endif
+
   let command = substitute(command, '<action>', a:action, '')
-  call eclim#Execute(command)
+  let result = eclim#Execute(command)
+
+  if type(result) == g:STRING_TYPE
+    call eclim#util#Echo(result)
+  endif
 endfunction " }}}
 
 function! eclim#java#debug#Status() " {{{
@@ -284,8 +286,18 @@ endfunction " }}}
 
 function! eclim#java#debug#DisplayStatus(results) " {{{
   let status = a:results.status
-  let threads = a:results.threads
-  let vars = a:results.variables
+
+  if has_key(a:results,  'threads')
+    let threads = a:results.threads
+  else
+    let threads = []
+  endif
+
+  if has_key(a:results,  'variables')
+    let vars = a:results.variables
+  else 
+    let vars = []
+  endif
 
   " Store current position and restore in the end so that creation of new
   " window does not end up moving the cursor

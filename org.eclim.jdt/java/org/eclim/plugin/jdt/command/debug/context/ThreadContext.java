@@ -17,10 +17,11 @@
 package org.eclim.plugin.jdt.command.debug.context;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.debug.core.DebugException;
 
@@ -39,20 +40,54 @@ public class ThreadContext
   private static final String RUNNING = "Running";
   private static final String SUSPENDED = "Suspended";
 
-  private Map<Long, IThread> threadMap = new HashMap<Long, IThread>();
+  /**
+   * Thread that is being currently stepped through. There can be more than one
+   * thread suspended in some breakpoint ready to be stepped through. But only
+   * one of them can be stepped through at a time. This field holds that
+   * thread.
+   */
+  private IThread steppingThread = null;
+
+  private Map<Long, IThread> threadMap = new ConcurrentHashMap<Long, IThread>();
 
   private Map<Long, IStackFrame[]> stackFrameMap =
-    new HashMap<Long, IStackFrame[]>();
+    new ConcurrentHashMap<Long, IStackFrame[]>();
 
   private List<String> results = new ArrayList<String>();
 
-  public synchronized void clear()
+  public synchronized IThread getSteppingThread()
   {
-    stackFrameMap.clear();
-    results.clear();
+    if (steppingThread != null) {
+      // Check if it is still valid thread and in suspended state
+      if (steppingThread.isSuspended()) {
+        return steppingThread;
+      }
+    }
+
+    // Find the first suspended thread and set it as stepping thread
+    for (Map.Entry<Long, IThread> entry : threadMap.entrySet()) {
+      if (entry.getValue().isSuspended()) {
+        steppingThread = entry.getValue();
+      }
+    }
+
+    return steppingThread;
   }
 
-  public List<String> get()
+  /**
+   * Explicitly sets the stepping thread.
+   */
+  public synchronized void setSteppingThread(IThread thread)
+  {
+    this.steppingThread = thread;
+  }
+
+  public IThread getThread(long threadId)
+  {
+    return threadMap.get(threadId);
+  }
+
+  public synchronized List<String> get()
   {
     return results;
   }
@@ -63,7 +98,9 @@ public class ThreadContext
 
     long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
     threadMap.put(threadId, thread);
-    stackFrameMap.put(threadId, stackFrames);
+    if (stackFrames != null) {
+      stackFrameMap.put(threadId, stackFrames);
+    }
 
     results.clear();
 
@@ -80,19 +117,16 @@ public class ThreadContext
 
   public synchronized void removeStackFrames()
   {
-    for (long threadId : stackFrameMap.keySet()) {
-      stackFrameMap.put(threadId, null);
-    }
+    stackFrameMap.clear();
   }
 
   private void process()
     throws DebugException
   {
-    for (Map.Entry<Long, IStackFrame[]> entry : stackFrameMap.entrySet()) {
+    for (Map.Entry<Long, IThread> entry : threadMap.entrySet()) {
       long threadId = entry.getKey();
       IThread thread = threadMap.get(threadId);
       String threadName = thread.getName();
-      IStackFrame[] stackFrames = entry.getValue();
 
       String status = thread.isSuspended() ? SUSPENDED : RUNNING;
       // Add 2 spaces for indentation
@@ -100,6 +134,7 @@ public class ThreadContext
           ":" + threadId  +
           " (" + status  + ")");
 
+      IStackFrame[] stackFrames = stackFrameMap.get(threadId);
       if (stackFrames != null) {
         // Protect against invalid stack frame. When debug session is resumed,
         // all threads are resumed first. Then notification is sent for each

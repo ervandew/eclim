@@ -17,7 +17,6 @@
 package org.eclim.plugin.jdt.command.debug.context;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,27 +44,30 @@ public class VariableContext
 {
   private static final Logger logger = Logger.getLogger(VariableContext.class);
 
+  private ThreadContext threadCtx;
+
   private Map<Long, IVariable[]> varsMap =
     new HashMap<Long, IVariable[]>();
 
   private Map<Long, List<String>> resultsMap =
     new HashMap<Long, List<String>>();
 
-  public synchronized void clear()
+
+  public VariableContext(ThreadContext threadCtx)
   {
-    varsMap.clear();
-    resultsMap.clear();
+    this.threadCtx = threadCtx;
   }
 
   public synchronized List<String> get()
+    throws DebugException
   {
-    // TODO Take thread id as input and return corresponding variables
-    // Use IJavaThread.getThreadObject.getUniqueId
-    for (Map.Entry<Long, List<String>> entry : resultsMap.entrySet()) {
-      return entry.getValue();
+    IThread thread = threadCtx.getSteppingThread();
+    if (thread == null) {
+      return null;
+    } else {
+      return resultsMap.get(((IJavaThread) thread).getThreadObject()
+          .getUniqueId());
     }
-
-    return Collections.emptyList();
   }
 
   public synchronized void update(IThread thread, IVariable[] vars)
@@ -178,7 +180,6 @@ public class VariableContext
         nesting = false;
       } else {
         String typeName = type.getName();
-        logger.debug("found --" + typeName + "--");
 
         // TODO Instead of listing what to ignore, find them out by looking at
         // the source locator for class names that are not present.
@@ -186,7 +187,6 @@ public class VariableContext
             typeName.equals("java.util.Map") ||
             typeName.equals("java.lang.String"))
         {
-          logger.debug("Skipping: " + typeName);
           nesting = false;
         }
       }

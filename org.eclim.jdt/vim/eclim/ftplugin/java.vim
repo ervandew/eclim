@@ -244,7 +244,7 @@ if !exists(":JavaDebugBreakpointToggle")
 endif
 
 if !exists(":JavaDebugStep")
-  command -nargs=1 -buffer JavaDebugStep :call eclim#java#debug#Step('<args>')
+  command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
 endif
 
 if !exists(":JavaDebugStatus")

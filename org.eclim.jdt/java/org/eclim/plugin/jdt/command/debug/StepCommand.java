@@ -16,19 +16,18 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
+import org.eclim.Services;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.logging.Logger;
-
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
-
-import org.eclipse.debug.core.DebugException;
+import org.eclim.plugin.jdt.command.debug.context.ThreadContext;
 
 import org.eclipse.debug.core.model.IThread;
 
@@ -38,13 +37,12 @@ import org.eclipse.debug.core.model.IThread;
 @Command(
   name = "java_debug_step",
   options =
-    "REQUIRED a action ARG,"
+    "REQUIRED a action ARG," +
+    "OPTIONAL t thread_id ARG,"
 )
 public class StepCommand
   extends AbstractCommand
 {
-  private static final Logger logger = Logger.getLogger(StepCommand.class);
-
   private static final String ACTION_INTO = "into";
   private static final String ACTION_OVER = "over";
   private static final String ACTION_RETURN = "return";
@@ -53,10 +51,26 @@ public class StepCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    IThread steppingThread = getSteppingThread();
+    DebuggerContext ctx = DebuggerContextManager.getDefault();
+    ThreadContext threadCtx = ctx.getThreadContext();
+
+    String threadId = commandLine.getValue(Options.THREAD_ID_OPTION);
+    IThread steppingThread = null;
+    if (threadId == null) {
+      steppingThread = threadCtx.getSteppingThread();
+    } else {
+      steppingThread = threadCtx.getThread(Long.parseLong(threadId));
+    }
+
     if (steppingThread == null) {
-      logger.debug("No thread avaiable for stepping");
-      return null;
+      return Services.getMessage("debugging.stepping.thread.absent");
+    } else if (!steppingThread.isSuspended()) {
+      return Services.getMessage("debugging.stepping.thread.not.suspended");
+    }
+
+    if (steppingThread != null) {
+      // Set this thread to be the stepping thread
+      threadCtx.setSteppingThread(steppingThread);
     }
 
     String action = commandLine.getValue(Options.ACTION_OPTION);
@@ -69,27 +83,6 @@ public class StepCommand
 
     } else if (action.equals(ACTION_RETURN)) {
       steppingThread.stepReturn();
-    }
-
-    return null;
-  }
-
-  /**
-   * Returns the thread that needs to be stepped through.
-   *
-   * TODO Should determine based on user selection. Now, it assumes only one
-   * thread can be in the suspended state and returns it.
-   */
-  private IThread getSteppingThread()
-    throws DebugException
-  {
-    DebuggerContext ctx = DebuggerContextManager.getDefault();
-    IThread[] threads = ctx.getDebugTarget().getThreads();
-    for (IThread thread : threads) {
-      if (thread.canStepInto()) {
-        logger.debug("Stepping thread = " + thread.getName());
-        return thread;
-      }
     }
 
     return null;

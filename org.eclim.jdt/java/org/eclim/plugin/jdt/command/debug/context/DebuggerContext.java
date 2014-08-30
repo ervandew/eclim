@@ -82,9 +82,8 @@ public class DebuggerContext
    */
   private String id;
 
-  private final VariableContext varCtx = new VariableContext();
-
-  private final ThreadContext threadCtx = new ThreadContext();
+  private final ThreadContext threadCtx;
+  private final VariableContext varCtx;
 
   /**
    * Debug target for currently active session.
@@ -110,6 +109,9 @@ public class DebuggerContext
     this.port = port;
     this.id = project.getName() + " - " + host + ":" + port;
     this.vimClient = new VimClient(vimInstanceId);
+
+    this.threadCtx = new ThreadContext();
+    this.varCtx = new VariableContext(threadCtx);
   }
 
   public void start()
@@ -135,7 +137,6 @@ public class DebuggerContext
         javaProjects.add(JavaUtils.getJavaProject(p));
       }
     }
-    // TODO Switch to newer approach of source code lookup
     ISourceLocator srcLocator = new JavaSourceLocator(
         javaProjects.toArray(new IJavaProject[javaProjects.size()]), true);
 
@@ -217,6 +218,7 @@ public class DebuggerContext
   }
 
   public Map<String, Object> getStatus()
+    throws DebugException
   {
     Map<String, Object> statusMap = new HashMap<String, Object>();
 
