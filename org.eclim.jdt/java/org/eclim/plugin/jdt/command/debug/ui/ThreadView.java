@@ -30,6 +30,10 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 /**
  * UI model for displaying threads.
+ *
+ * <p>
+ * The formatting code is borrowed from Eclipse JDT UI.
+ * @see org.eclipse.jdt.internal.debug.ui.JDIModelPresentation
  */
 public class ThreadView
 {
@@ -77,7 +81,6 @@ public class ThreadView
         // target itself, but this is being defensive.
         try {
           for (IStackFrame stackFrame : stackFrames) {
-            // TODO Do formatting in VIM
             // Add 4 spaces for indentation under thread
             results.add("    " + getStackFrameText(stackFrame));
           }
@@ -108,12 +111,12 @@ public class ThreadView
       if (javaStratum) {
         // receiver name
         String rec = frame.getReceivingTypeName();
-        result.append(getQualifiedName(rec));
+        result.append(ViewUtils.getQualifiedName(rec));
 
         // append declaring type name if different
         if (!dec.equals(rec)) {
           result.append('(');
-          result.append(getQualifiedName(dec));
+          result.append(ViewUtils.getQualifiedName(dec));
           result.append(')');
         }
         // append a dot separator and method name
@@ -121,12 +124,12 @@ public class ThreadView
         result.append(frame.getMethodName());
         List<String> args = frame.getArgumentTypeNames();
         if (args.isEmpty()) {
-          result.append("()"); //$NON-NLS-1$
+          result.append("()");
         } else {
           result.append('(');
           Iterator<String> iter = args.iterator();
           while (iter.hasNext()) {
-            result.append(getQualifiedName(iter.next()));
+            result.append(ViewUtils.getQualifiedName(iter.next()));
             if (iter.hasNext()) {
               result.append(", ");
             } else if (frame.isVarArgs()) {
@@ -158,10 +161,5 @@ public class ThreadView
 
     }
     return null;
-  }
-
-  private String getQualifiedName(String rec)
-  {
-    return rec;
   }
 }
