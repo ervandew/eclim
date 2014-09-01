@@ -23,7 +23,7 @@ public class Adult extends Person
 {
   private boolean married = false;
 
-  private Adult spouse;
+  private String spouse;
 
   private Collection<Child> children = new ArrayList<Child>();
 
@@ -32,7 +32,7 @@ public class Adult extends Person
   }
 
   public void gotMarried(Adult adult) {
-    this.spouse = adult;
+    this.spouse = adult.getName();
     this.married = true;
   }
 
@@ -44,7 +44,7 @@ public class Adult extends Person
     children.add(child);
   }
 
-  public Adult getSpouse() {
+  public String getSpouse() {
     return spouse;
   }
 

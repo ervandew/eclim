@@ -310,8 +310,10 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
     \ {'orientation': 'horizontal', 'singleWinOnly' : 0})
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
-  setlocal foldtext=eclim#display#fold#NeatFoldText()
-  setlocal foldlevel=1
+  setlocal foldtext=eclim#display#fold#SimpleFoldText()
+  setlocal foldlevel=2
+  " Avoid the ugly - symbol on folded lines
+  setlocal fillchars=fold:\  
   setlocal nonu
   call eclim#java#debug#DefineStatusWinCommands()
 
@@ -321,7 +323,9 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
-  setlocal foldtext=eclim#display#fold#NeatFoldText()
+  setlocal foldtext=eclim#display#fold#SimpleFoldText()
+  " Avoid the ugly - symbol on folded lines
+  setlocal fillchars=fold:\  
   setlocal nonu
   call eclim#java#debug#DefineStatusWinCommands()
 

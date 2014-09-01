@@ -41,6 +41,16 @@ public class ThreadView
   private static final String RUNNING = "Running";
   private static final String SUSPENDED = "Suspended";
 
+  private static final String SUSPENDED_THREAD_PREFIX =
+    ViewUtils.NON_LEAF_NODE_INDENT +
+    ViewUtils.EXPANDED_TREE_SYMBOL;
+
+  private static final String RUNNING_THREAD_PREFIX = ViewUtils.LEAF_NODE_INDENT;
+
+  private static final String STACK_FRAME_PREFIX =
+    ViewUtils.LEAF_NODE_INDENT +
+    ViewUtils.LEAF_NODE_INDENT;
+
   private List<String> results = new ArrayList<String>();
 
   public synchronized List<String> get()
@@ -65,9 +75,17 @@ public class ThreadView
       IThread thread = threadMap.get(threadId);
       String threadName = thread.getName();
 
-      String status = thread.isSuspended() ? SUSPENDED : RUNNING;
-      // Add 2 spaces for indentation
-      results.add("  Thread-" + threadName +
+      String prefix = null;
+      String status = null;
+      if (thread.isSuspended()) {
+        prefix = SUSPENDED_THREAD_PREFIX;
+        status = SUSPENDED;
+      } else {
+        prefix = RUNNING_THREAD_PREFIX;
+        status = RUNNING;
+      }
+
+      results.add(prefix + "Thread-" + threadName +
           ":" + threadId  +
           " (" + status  + ")");
 
@@ -81,8 +99,7 @@ public class ThreadView
         // target itself, but this is being defensive.
         try {
           for (IStackFrame stackFrame : stackFrames) {
-            // Add 4 spaces for indentation under thread
-            results.add("    " + getStackFrameText(stackFrame));
+            results.add(getStackFrameText(stackFrame));
           }
         } catch (DebugException e) {}
       }
@@ -92,7 +109,8 @@ public class ThreadView
   private String getStackFrameText(IStackFrame stackFrame)
     throws DebugException
   {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
+    result.append(STACK_FRAME_PREFIX);
 
     IJavaStackFrame frame = (IJavaStackFrame) stackFrame.getAdapter(
         IJavaStackFrame.class);

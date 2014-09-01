@@ -26,6 +26,8 @@ import org.eclim.plugin.core.util.VimClient;
 
 import org.eclim.plugin.jdt.command.debug.event.DebugEventSetListener;
 
+import org.eclim.plugin.jdt.command.debug.ui.ViewUtils;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclim.util.CollectionUtils;
@@ -231,7 +233,8 @@ public class DebuggerContext
       status = TERMINATED;
     }
 
-    statusMap.put("status", getId() + " (" + status + ")");
+    statusMap.put("status", ViewUtils.EXPANDED_TREE_SYMBOL + getId() +
+        " (" + status + ")");
     statusMap.put("threads", getThreadContext().get());
     statusMap.put("variables", getVariableContext().get());
 

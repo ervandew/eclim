@@ -26,6 +26,13 @@ import java.util.StringTokenizer;
  */
 public class ViewUtils
 {
+  public static final String EXPANDED_TREE_SYMBOL = "▾ ";
+  public static final String COLLAPSED_TREE_SYMBOL = "▸ ";
+
+  // Non leaf node will have the tree symbol appended to it
+  public static final String NON_LEAF_NODE_INDENT = "  ";
+  public static final String LEAF_NODE_INDENT = "    ";
+
   public static final String UNKNOWN = "<Unknown>";
 
   public static final String NO_EXPLICIT_RETURN_VALUE = "No explicit return value";

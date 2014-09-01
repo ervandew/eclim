@@ -72,4 +72,9 @@ function! eclim#display#fold#NeatFoldText() " {{{
   return foldtextstart . repeat(foldchar, winwidth(0)-foldtextlength) . foldtextend
 endfunction " }}}
 
+function! eclim#display#fold#SimpleFoldText() " {{{
+  let line = substitute(getline(v:foldstart), '▾', '▸', 'g')
+  return line
+endfunction " }}}
+
 " vim:ft=vim:fdm=marker

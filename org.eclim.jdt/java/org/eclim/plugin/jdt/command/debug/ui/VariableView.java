@@ -83,15 +83,24 @@ public class VariableView
     process(vars, results, 0);
   }
 
-  private void process(IVariable[] vars, List<String> results, int level)
+  /**
+   * Process the variables and adds them to the result set.
+   * Some variables may be excluded because they are not important for
+   * deugging purposes.
+   * @see #ignoreVar method.
+   *
+   * @param vars variables
+   * @param results final results containing the variable text
+   * @param level current nesting level in the tree hierarchy
+   * @return true if atleast one variable was added to result set;
+   * false otherwise. This is used to determine if a tree node has child nodes.
+   */
+  private boolean process(IVariable[] vars, List<String> results, int level)
     throws DebugException
   {
     if (vars == null) {
-      return;
+      return false;
     }
-
-    // Indent nested variables
-    String prefix = getIndentation(level);
 
     // Defensive code to protect from too many nesting
     /*if (level >= 25) {
@@ -99,6 +108,7 @@ public class VariableView
       return;
     }*/
 
+    boolean varAdded = false;
     for (IVariable var : vars) {
       JDIVariable jvar = (JDIVariable) var;
       if (jvar.isSynthetic()) {
@@ -110,19 +120,39 @@ public class VariableView
         continue;
       }
 
-      //results.add(prefix + " " + var.getName() + " : " +
-      //    var.getValue().getValueString());
+      varAdded = true;
 
-      results.add(prefix + " " + getVariableText(jvar));
-      if (value == null || !includeNestedVar(value)) {
+      // Check if we need to look for any nested variables
+      if (value == null ||
+          !includeNestedVar(value) ||
+          !(value instanceof IJavaObject) ||
+          !value.hasVariables())
+      {
+
+        String prefix = getIndentation(level, true);
+        results.add(prefix + getVariableText(jvar));
         continue;
       }
-      if (value instanceof IJavaObject) {
-        if (value.hasVariables()) {
-          process(value.getVariables(), results, level + 1);
-        }
+
+      // Add a placeholder value before processing child variables.
+      // The actual value will be added back to this placeholder location
+      // with the right prefix based on whether child variables were added or
+      // not.
+      int curIdx = results.size();
+      results.add(null);
+
+      String prefix = null;
+      if (process(value.getVariables(), results, level + 1)) {
+        prefix = getIndentation(level, false);
+      } else {
+        prefix = getIndentation(level, true);
       }
+
+      // Replace the NULL value with actual variable text
+      results.set(curIdx, prefix + getVariableText(jvar));
     }
+
+    return varAdded;
   }
 
   /**
@@ -190,18 +220,28 @@ public class VariableView
   /**
    * Returns the prefix string to use to simulate indentation.
    */
-  private String getIndentation(int level)
+  private String getIndentation(int level, boolean isLeafNode)
   {
     if (level == 0) {
-      return "";
+      if (isLeafNode) {
+        return ViewUtils.NON_LEAF_NODE_INDENT;
+      } else {
+        return ViewUtils.EXPANDED_TREE_SYMBOL;
+      }
     }
 
     StringBuilder sb = new StringBuilder();
 
-    // Add a base indent since the fold level 0 has it
-    sb.append("  ");
-    for (int i = 0; i < level; i++) {
-      sb.append(" ");
+    for (int i = 0; i < level - 1; i++) {
+      sb.append(ViewUtils.LEAF_NODE_INDENT);
+    }
+
+    // Special indent for last level since the tree symbol is involved
+    if (isLeafNode) {
+      sb.append(ViewUtils.LEAF_NODE_INDENT);
+    } else {
+      sb.append(ViewUtils.NON_LEAF_NODE_INDENT +
+          ViewUtils.EXPANDED_TREE_SYMBOL);
     }
 
     return sb.toString();
@@ -219,7 +259,7 @@ public class VariableView
       javaValue = (IJavaValue) var.getValue();
     } catch (DebugException e1) {}
 
-    StringBuffer buff = new StringBuffer();
+    StringBuilder buff = new StringBuilder();
     buff.append(varLabel);
 
     // Add declaring type name if required
@@ -308,7 +348,7 @@ public class VariableView
     }
     boolean isObject = isObjectValue(signature);
     boolean isArray = value instanceof IJavaArray;
-    StringBuffer buffer = new StringBuffer();
+    StringBuilder buffer = new StringBuilder();
     if (isUnknown(signature)) {
       buffer.append(signature);
     } else if (isObject && !isString && (refTypeName.length() > 0)) {
@@ -358,7 +398,7 @@ public class VariableView
     return buffer.toString().trim();
   }
 
-  private StringBuffer appendUnsignedText(IJavaValue value, StringBuffer buffer)
+  private StringBuilder appendUnsignedText(IJavaValue value, StringBuilder buffer)
     throws DebugException
   {
     String unsignedText = getValueUnsignedText(value);
@@ -459,7 +499,7 @@ public class VariableView
     if (firstBracket < 0) {
       return typeName;
     }
-    StringBuffer buffer = new StringBuffer(typeName);
+    StringBuilder buffer = new StringBuilder(typeName);
     buffer.insert(firstBracket + 1, Integer.toString(arrayIndex));
     return buffer.toString();
   }
@@ -479,7 +519,7 @@ public class VariableView
     return false;
   }
 
-  private StringBuffer appendHexText(IJavaValue value, StringBuffer buffer)
+  private StringBuilder appendHexText(IJavaValue value, StringBuilder buffer)
     throws DebugException
   {
     String hexText = getValueHexText(value);
@@ -498,7 +538,7 @@ public class VariableView
       return null;
     }
 
-    StringBuffer buff = new StringBuffer();
+    StringBuilder buff = new StringBuilder();
     long longValue;
     char sigValue = sig.charAt(0);
     try {
@@ -549,7 +589,7 @@ public class VariableView
     return buff.toString();
   }
 
-  private StringBuffer appendCharText(IJavaValue value, StringBuffer buffer)
+  private StringBuilder appendCharText(IJavaValue value, StringBuilder buffer)
     throws DebugException
   {
     String charText = getValueCharText(value);
@@ -601,7 +641,7 @@ public class VariableView
         return null;
     }
     char charValue = (char)longValue;
-    StringBuffer charText = new StringBuffer();
+    StringBuilder charText = new StringBuilder();
     if (Character.getType(charValue) == Character.CONTROL) {
       Character ctrl = new Character((char) (charValue + 64));
       charText.append('^');
