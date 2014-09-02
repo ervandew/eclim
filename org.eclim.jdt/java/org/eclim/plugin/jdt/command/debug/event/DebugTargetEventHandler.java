@@ -55,13 +55,20 @@ public class DebugTargetEventHandler extends DebugEventHandler
 
           ctx.getThreadContext().update(thread, thread.getStackFrames());
 
-          // Protect against variable information unavailable for native methods
-          try {
-            ctx.getVariableContext().update(
-                thread,
-                topStackFrame
-                .getVariables());
-          } catch (DebugException e) {}
+          String fileName = getFileNameInFrame(ctx, topStackFrame);
+
+          // Do not update variables when suspended in a class file.
+          // This causes the variable set to explode causing OOM.
+          if (fileName != null) {
+            // Protect against variable information unavailable for native
+            // methods
+            try {
+              ctx.getVariableContext().update(
+                  thread,
+                  topStackFrame
+                  .getVariables());
+            } catch (DebugException e) {}
+          }
         }
 
         ctx.getVimClient().refreshDebugStatus();

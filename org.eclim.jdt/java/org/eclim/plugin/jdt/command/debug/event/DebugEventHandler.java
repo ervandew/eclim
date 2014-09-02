@@ -18,6 +18,12 @@ package org.eclim.plugin.jdt.command.debug.event;
 
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 
+import org.eclipse.debug.core.model.ISourceLocator;
+
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
+
+import org.eclipse.jdt.internal.core.CompilationUnit;
+
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugElement;
 
 /**
@@ -31,4 +37,26 @@ public abstract class DebugEventHandler
       int kind,
       int detail)
     throws Exception;
+
+  /**
+   * Returns the file name associated with the given stack frame.
+   *
+   * @param ctx debugger context
+   * @param stackFrame stack frame
+   * @return file name if applicable; null otherwise
+   */
+  protected String getFileNameInFrame(DebuggerContext ctx,
+      IJavaStackFrame stackFrame)
+  {
+    ISourceLocator srcLocator = ctx.getDebugTarget().getLaunch()
+      .getSourceLocator();
+    Object src = srcLocator.getSourceElement(stackFrame);
+    String fileName = null;
+    if (src instanceof CompilationUnit) {
+      fileName = (((CompilationUnit) src).getResource()
+          .getRawLocation().toOSString());
+    }
+
+    return fileName;
+  }
 }
