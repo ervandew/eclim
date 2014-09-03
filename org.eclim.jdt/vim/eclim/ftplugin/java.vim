@@ -235,8 +235,12 @@ if !exists(":JavaDebugThreadResume")
   command -nargs=? -buffer JavaDebugThreadResume :call eclim#java#debug#DebugThreadResume(<f-args>)
 endif
 
-if !exists(":JavaDebugBreakpoint")
-  command -nargs=1 -buffer JavaDebugBreakpoint :call eclim#java#debug#Breakpoint('<args>')
+if !exists(":JavaDebugBreakpointGet")
+  command -nargs=? -buffer JavaDebugBreakpointGet :call eclim#java#debug#BreakpointGet(<f-args>)
+endif
+
+if !exists(":JavaDebugBreakpointRemove")
+  command -nargs=? -buffer JavaDebugBreakpointRemove :call eclim#java#debug#BreakpointRemove(<f-args>)
 endif
 
 if !exists(":JavaDebugBreakpointToggle")

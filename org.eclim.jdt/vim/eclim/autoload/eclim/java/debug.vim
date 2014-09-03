@@ -49,7 +49,13 @@ let s:command_breakpoint_toggle =
   \ '-command java_debug_breakpoint_toggle ' .
   \ '-p "<project>" -f "<file>" -l "<line>"'
 
-let s:command_breakpoint = '-command java_debug_breakpoint -a "<action>"'
+let s:command_breakpoint_get = '-command java_debug_breakpoint_get'
+let s:command_breakpoint_get_file =
+  \ '-command java_debug_breakpoint_get -f "<file>"'
+
+let s:command_breakpoint_remove = '-command java_debug_breakpoint_remove'
+let s:command_breakpoint_remove_file =
+  \ '-command java_debug_breakpoint_remove -f "<file>"'
 
 let s:command_step = '-command java_debug_step -a "<action>"'
 let s:command_step_thread = '-command java_debug_step -a "<action>" -t "<thread_id>"'
@@ -70,11 +76,6 @@ function! eclim#java#debug#DefineStatusWinCommands() " {{{
   if !exists(":JavaDebugThreadResume")
     command -nargs=? -buffer JavaDebugThreadResume 
       \ :call eclim#java#debug#DebugThreadResume(<f-args>)
-  endif
-
-  if !exists(":JavaDebugBreakpoint")
-    command -nargs=1 -buffer JavaDebugBreakpoint 
-      \ :call eclim#java#debug#Breakpoint('<args>')
   endif
 
   if !exists(":JavaDebugStep")
@@ -201,15 +202,47 @@ function! eclim#java#debug#DebugThreadResume(...) " {{{
   call eclim#util#Echo(result)
 endfunction " }}}
 
-function! eclim#java#debug#Breakpoint(action) " {{{
+function! eclim#java#debug#BreakpointGet(...) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
-  let command = s:command_breakpoint
-  let command = substitute(command, '<action>', a:action, '')
+  if a:0 > 0
+    let file = expand(a:1 . ":p")
+  else 
+    let file = ""
+  endif
+
+  if file != ""
+    let command = s:command_breakpoint_get_file
+    let command = substitute(command, '<file>', file, '')
+  else
+    let command = s:command_breakpoint_get
+  endif
 
   call eclim#java#debug#DisplayPositions(eclim#Execute(command))
+
+endfunction " }}}
+
+function! eclim#java#debug#BreakpointRemove(...) " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  if a:0 > 0
+    let file = expand(a:1 . ":p")
+  else 
+    let file = ""
+  endif
+
+  if file != ""
+    let command = s:command_breakpoint_remove_file
+    let command = substitute(command, '<file>', file, '')
+  else
+    let command = s:command_breakpoint_remove
+  endif
+
+  call eclim#Execute(command)
 endfunction " }}}
 
 function! eclim#java#debug#DisplayPositions(results) " {{{
@@ -223,7 +256,6 @@ function! eclim#java#debug#DisplayPositions(results) " {{{
   endif
 
   call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
-  let locs = getloclist(0)
   exec 'lopen ' . g:EclimLocationListHeight
 endfunction " }}}
 
