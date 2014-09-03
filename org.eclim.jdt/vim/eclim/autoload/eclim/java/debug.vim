@@ -343,7 +343,7 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
 
   let s:debug_step_prev_file = a:file
   let s:debug_step_prev_line = a:line
-  call eclim#util#GoToTabAwareBufferWindowOrOpen(a:file, "tabnew")
+  call eclim#util#GoToBufferWindowOrOpen(a:file, "edit")
   call cursor(a:line, '^')
 
   " TODO sign id is line number. Can conflict with other signs while
