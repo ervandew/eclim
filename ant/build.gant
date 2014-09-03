@@ -32,6 +32,16 @@ ant.property(file: 'ant/build.properties')
 ant.defaultexcludes(add: '**/*.swp')
 ant.defaultexcludes(add: '**/*.bak')
 
+if (System.getProperty('user.name') == 'root'){
+  ant.fail('''
+    Abort:
+
+    #####
+    Building eclim as root is highly discouraged.
+    #####
+  ''')
+}
+
 gitAvailable = getGitAvailable()
 
 eclipseHome = binding.getVariable(getEclipseHomeProp())
@@ -682,6 +692,27 @@ target(name: 'plugin.create'){
     )
     println "    * updated .classpath"
   }
+}
+
+target(name: 'eclipse.init'){
+  launcher = null
+  new File("${eclipseHome}/plugins")
+    .eachFileMatch(~/org.eclipse.equinox.launcher_.*\.jar/){ file ->
+      launcher = file.getAbsolutePath()
+    }
+
+  if (launcher == null){
+    fail("Unable to find the eclipse launch in ${eclipseHome}/plugins")
+  }
+  echo('Running eclipse initilization...')
+  java(jar: launcher, fork: true, failonerror: true){
+    jvmarg(value: '-Xmx256m')
+    arg(value: '-debug')
+    arg(value: '-clean')
+    arg(value: '-refresh')
+    arg(value: '-initialize')
+  }
+  echo('Finished eclipse initialization.')
 }
 
 target(name: 'eclipse.gc'){

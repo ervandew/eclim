@@ -31,16 +31,6 @@ Checking out the code and building it.
 
   $ git clone git://github.com/ervandew/eclim.git
 
-.. note::
-
-  If you are still using Eclipse 3.7 (Indigo) you will need to checkout the
-  eclim indigo branch before attempting to build eclim:
-
-  ::
-
-    $ cd eclim
-    $ git checkout indigo
-
 2. Build eclim:
 ^^^^^^^^^^^^^^^
 
@@ -49,6 +39,35 @@ Checking out the code and building it.
   $ cd eclim
   $ ant -Declipse.home=/your/eclipse/home/dir
 
+This will build and deploy eclim to your eclipse and vim directories.
+
+.. warning::
+
+  Building eclim as root is highly discouraged. If your eclipse install is only
+  writable as root, you can supply the ``eclipse.local`` property to tell eclim
+  where your eclipse user local directory is located and eclimd will be
+  installed there (make sure to replace ``<version>`` portion of the path below
+  accordingly):
+
+  ::
+
+    $ ant \
+        -Declipse.home=/opt/eclipse \
+        -Declipse.local=$HOME/.eclipse/org.eclipse.platform_<version>
+
+  If you do not yet have a ``.eclipse`` directory in your home directory, you
+  can run either of the following commands to create it:
+
+  ::
+
+    $ ant -Declipse.home=/opt/eclipse eclipse.init
+
+  or
+
+  ::
+
+    $ /path/to/eclipse/eclipse -initialize
+
 .. note::
 
   If your eclipse home path contains a space, be sure to quote it:
@@ -56,8 +75,6 @@ Checking out the code and building it.
   ::
 
     > ant "-Declipse.home=C:/Program Files/eclipse"
-
-This will build and deploy eclim to your eclipse and vim directories.
 
 .. note::
 
@@ -88,18 +105,7 @@ below showing what will be built vs what will be skipped:
   [echo]   org.eclim.wst
 
 In this case we can see that four eclim plugins will be skipped along with the
-eclipse feature that would be required to build those plugins. If you see an
-eclipse feature in that list that you know you have, it may be the case that you
-installed it as a regular user, so that feature was installed in your user local
-eclipse directory. In that case you will need to notify the build of that
-directory so it can examine it as well (just replace the ``<version>`` portion
-below with the actual version found in your ~/.eclipse directory):
-
-::
-
-  $ ant \
-      -Declipse.home=/opt/eclipse \
-      -Declipse.local=$HOME/.eclipse/org.eclipse.platform_<version>
+eclipse feature that would be required to build those plugins.
 
 If you don't want to supply the eclipse home directory, or any other
 properties, on the command line every time you build eclim, you can create a
@@ -110,6 +116,7 @@ in there:
 
   $ vim user.properties
   eclipse.home=/opt/eclipse
+  eclipse.local=${user.home}/.eclipse/org.eclipse.platform_<version>
   vim.files=${user.home}/.vim/bundle/eclim
 
 .. note::
@@ -125,7 +132,19 @@ in there:
   This target also supports the ``vim.files`` property if you want the docs
   deployed to a directory other than the default location.
 
+  .. warning::
+
+    Debian/Ubuntu users: The debian version of sphinx has unfortunately been
+    patched to behave differently than the upstream version, resulting in one or
+    more eclim supplied sphinx extensions not loading. Another issue you may run
+    into is the docutils package, which sphinx depends on, is outdated on
+    debian/ubuntu, resulting in another set of errors.
+
+    So to get around these issues you'll need to install sphinx using pip_ or
+    similar.
+
 .. _sphinx: http://sphinx-doc.org
+.. _pip: http://pip.readthedocs.org/en/latest/index.html
 
 .. end-build
 

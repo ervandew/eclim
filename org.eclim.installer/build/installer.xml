@@ -32,7 +32,7 @@
     - Standard target to install the app.
     - Note: Must be named "installer".
     -->
-  <target name="installer">
+  <target name="installer" depends="validate-not-root">
     <formic:installer property="install.complete"
         resources="resources.install" steps="resources.steps">
       <formic:path name="main">
@@ -88,11 +88,26 @@
         value="${eclim.plugins}/org.eclim_${eclim.version}"/>
   </target>
 
+  <target name="validate-not-root">
+    <if>
+      <equals arg1="${user.name}" arg2="root"/>
+      <then>
+        <fail>
+Abort:
+
+####
+Running the eclim installer as root is highly discouraged.
+####
+        </fail>
+      </then>
+    </if>
+  </target>
+
   <!--
     - Simple validation mostly intended as a sanity check for unattended
     - installs.
     -->
-  <target name="validate">
+  <target name="validate" depends="validate-not-root">
     <if>
       <not>
         <and>
@@ -105,13 +120,13 @@
       </not>
       <then>
         <fail>
-          One or more required properties have not been set:
+One or more required properties have not been set:
 
-          eclipse.home:  ${eclipse.home}
-          vim.files:     ${vim.files}
+eclipse.home:  ${eclipse.home}
+vim.files:     ${vim.files}
 
-          You may omit vim.files if you set vim.skip=true, resulting in the
-          vim files being excluded from the install.
+You may omit vim.files if you set vim.skip=true, resulting in the
+vim files being excluded from the install.
         </fail>
       </then>
     </if>
