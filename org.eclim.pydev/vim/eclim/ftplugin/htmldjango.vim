@@ -38,6 +38,7 @@ let g:HtmlDjangoBodyElements = [
     \ ['autoescape', 'endautoescape'],
     \ ['block', 'endblock'],
     \ ['blocktrans', 'plural', 'endblocktrans'],
+    \ ['cache', 'endcache'],
     \ ['comment', 'endcomment'],
     \ ['filter', 'endfilter'],
     \ ['for', 'empty', 'endfor'],
