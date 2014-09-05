@@ -220,7 +220,8 @@ if !exists(":Checkstyle")
 endif
 
 if !exists(":JavaDebugStart")
-  command -nargs=+ -buffer JavaDebugStart :call eclim#java#debug#DebugStart(<f-args>)
+  command -nargs=+ -buffer JavaDebugStart 
+    \ :call eclim#java#debug#DebugStart(<f-args>)
 endif
 
 if !exists(":JavaDebugStop")
@@ -228,24 +229,60 @@ if !exists(":JavaDebugStop")
 endif
 
 if !exists(":JavaDebugThreadSuspend")
-  command -nargs=? -buffer JavaDebugThreadSuspend :call eclim#java#debug#DebugThreadSuspend(<f-args>)
+  command -nargs=0 -buffer JavaDebugThreadSuspend
+    \ :call eclim#java#debug#DebugThreadSuspend()
+endif
+
+if !exists(":JavaDebugThreadSuspendAll")
+  command -nargs=0 -buffer JavaDebugThreadSuspendAll
+    \ :call eclim#java#debug#DebugThreadSuspendAll()
 endif
 
 if !exists(":JavaDebugThreadResume")
-  command -nargs=? -buffer JavaDebugThreadResume :call eclim#java#debug#DebugThreadResume(<f-args>)
+  command -nargs=0 -buffer JavaDebugThreadResume
+    \ :call eclim#java#debug#DebugThreadResume()
+endif
+
+if !exists(":JavaDebugThreadResumeAll")
+  command -nargs=0 -buffer JavaDebugThreadResumeAll
+    \ :call eclim#java#debug#DebugThreadResumeAll()
+endif
+
+if !exists(":JavaDebugBreakpointAdd")
+  command -nargs=0 -buffer JavaDebugBreakpointAdd
+    \ :call eclim#java#debug#BreakpointAdd()
 endif
 
 if !exists(":JavaDebugBreakpointGet")
-  command -nargs=? -buffer JavaDebugBreakpointGet :call eclim#java#debug#BreakpointGet(<f-args>)
+  command -nargs=? -buffer JavaDebugBreakpointGet
+    \ :call eclim#java#debug#BreakpointGet(<f-args>)
+endif
+
+if !exists(":JavaDebugBreakpointGetAll")
+  command -nargs=0 -buffer JavaDebugBreakpointGetAll
+    \ :call eclim#java#debug#BreakpointGetAll()
 endif
 
 if !exists(":JavaDebugBreakpointRemove")
-  command -nargs=? -buffer JavaDebugBreakpointRemove :call eclim#java#debug#BreakpointRemove(<f-args>)
+  command -nargs=? -buffer JavaDebugBreakpointRemove
+    \ :call eclim#java#debug#BreakpointRemove(<f-args>)
 endif
 
-if !exists(":JavaDebugBreakpointToggle")
-  command -nargs=0 -buffer JavaDebugBreakpointToggle :call eclim#java#debug#BreakpointToggle()
+if !exists(":JavaDebugBreakpointRemoveFile")
+  command -nargs=? -buffer JavaDebugBreakpointRemoveFile
+    \ :call eclim#java#debug#BreakpointRemoveFile(<f-args>)
 endif
+
+if !exists(":JavaDebugBreakpointRemoveAll")
+  command -nargs=0 -buffer JavaDebugBreakpointRemoveAll
+    \ :call eclim#java#debug#BreakpointRemoveAll()
+endif
+
+" TODO Change toggle to enable/disable breakpoint
+"if !exists(":JavaDebugBreakpointToggle")
+"  command -nargs=0 -buffer JavaDebugBreakpointToggle
+"    \ :call eclim#java#debug#BreakpointToggle()
+"endif
 
 if !exists(":JavaDebugStep")
   command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)

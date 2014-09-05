@@ -23,10 +23,15 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
+import org.eclim.logging.Logger;
+
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
+import org.eclim.plugin.jdt.command.debug.context.ThreadContext;
+
+import org.eclipse.jdt.debug.core.IJavaThread;
 
 /**
  * Command to resume one or more threads.
@@ -39,6 +44,9 @@ import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
 public class DebugThreadResumeCommand
   extends AbstractCommand
 {
+  private static final Logger logger =
+    Logger.getLogger(DebugThreadResumeCommand.class);
+
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -48,12 +56,30 @@ public class DebugThreadResumeCommand
       return Services.getMessage("debugging.session.absent");
     }
 
-    String threadId = commandLine.getValue(Options.THREAD_ID_OPTION);
-    if (threadId == null) {
+    ThreadContext threadCtx = ctx.getThreadContext();
+    String threadIdStr = commandLine.getValue(Options.THREAD_ID_OPTION);
+    long threadId;
+
+    if (threadIdStr == null) {
       ctx.resume();
       return Services.getMessage("debugging.session.resumed");
     } else {
-      ctx.getThreadContext().resume(Long.parseLong(threadId));
+      // Select the currently stepping thread if an empty thread ID is given.
+      if (threadIdStr.isEmpty()) {
+        IJavaThread steppingThread = (IJavaThread) threadCtx.getSteppingThread();
+        if (steppingThread != null) {
+          threadId = steppingThread.getThreadObject().getUniqueId();
+        } else {
+          return Services.getMessage("debugging.resume.thread.absent");
+        }
+      } else {
+        threadId = Long.parseLong(threadIdStr);
+      }
+
+      if (logger.isDebugEnabled()) {
+        logger.debug("Resuming thread ID: " + threadId);
+      }
+      threadCtx.resume(threadId);
       return Services.getMessage("debugging.thread.resumed");
     }
   }

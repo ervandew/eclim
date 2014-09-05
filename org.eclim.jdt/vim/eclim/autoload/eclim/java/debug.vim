@@ -49,13 +49,19 @@ let s:command_breakpoint_toggle =
   \ '-command java_debug_breakpoint_toggle ' .
   \ '-p "<project>" -f "<file>" -l "<line>"'
 
-let s:command_breakpoint_get = '-command java_debug_breakpoint_get'
-let s:command_breakpoint_get_file =
+let s:command_breakpoint_add =
+  \ '-command java_debug_breakpoint_add ' .
+  \ '-p "<project>" -f "<file>" -l "<line>"'
+
+let s:command_breakpoint_get_all = '-command java_debug_breakpoint_get'
+let s:command_breakpoint_get =
   \ '-command java_debug_breakpoint_get -f "<file>"'
 
-let s:command_breakpoint_remove = '-command java_debug_breakpoint_remove'
+let s:command_breakpoint_remove_all = '-command java_debug_breakpoint_remove'
 let s:command_breakpoint_remove_file =
   \ '-command java_debug_breakpoint_remove -f "<file>"'
+let s:command_breakpoint_remove =
+  \ '-command java_debug_breakpoint_remove -f "<file>" -l "<line>"'
 
 let s:command_step = '-command java_debug_step -a "<action>"'
 let s:command_step_thread = '-command java_debug_step -a "<action>" -t "<thread_id>"'
@@ -69,13 +75,23 @@ function! eclim#java#debug#DefineStatusWinCommands() " {{{
   endif
 
   if !exists(":JavaDebugThreadSuspend")
-    command -nargs=? -buffer JavaDebugThreadSuspend 
-      \ :call eclim#java#debug#DebugThreadSuspend(<f-args>)
+    command -nargs=0 -buffer JavaDebugThreadSuspend
+      \ :call eclim#java#debug#DebugThreadSuspend()
+  endif
+
+  if !exists(":JavaDebugThreadSuspendAll")
+    command -nargs=0 -buffer JavaDebugThreadSuspendAll
+      \ :call eclim#java#debug#DebugThreadSuspendAll()
   endif
 
   if !exists(":JavaDebugThreadResume")
-    command -nargs=? -buffer JavaDebugThreadResume 
-      \ :call eclim#java#debug#DebugThreadResume(<f-args>)
+    command -nargs=0 -buffer JavaDebugThreadResume
+      \ :call eclim#java#debug#DebugThreadResume()
+  endif
+
+  if !exists(":JavaDebugThreadResumeAll")
+    command -nargs=0 -buffer JavaDebugThreadResumeAll 
+      \ :call eclim#java#debug#DebugThreadResumeAll()
   endif
 
   if !exists(":JavaDebugStep")
@@ -153,7 +169,8 @@ function! eclim#java#debug#DebugStop() " {{{
   call eclim#util#Echo(result)
 endfunction " }}}
 
-function! eclim#java#debug#DebugThreadSuspend(...) " {{{
+" Suspend thread under cursor.
+function! eclim#java#debug#DebugThreadSuspend() " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -165,15 +182,26 @@ function! eclim#java#debug#DebugThreadSuspend(...) " {{{
     let command = s:command_thread_suspend
     let command = substitute(command, '<thread_id>', thread_id, '')
   else
-    let command = s:command_session_suspend
+    call eclim#util#Echo("No valid thread found under cursor")
+    return
   endif
 
-  let result = eclim#Execute(command)
-
-  call eclim#util#Echo(result)
+  call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
 
-function! eclim#java#debug#DebugThreadResume(...) " {{{
+" Suspends all threads.
+function! eclim#java#debug#DebugThreadSuspendAll() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let file = eclim#lang#SilentUpdate()
+  let command = s:command_session_suspend
+  call eclim#util#Echo(eclim#Execute(command))
+endfunction " }}}
+
+" Resume a single thread.
+function! eclim#java#debug#DebugThreadResume() " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -181,18 +209,17 @@ function! eclim#java#debug#DebugThreadResume(...) " {{{
   let file = eclim#lang#SilentUpdate()
 
   let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
-  if thread_id != ""
-    let command = s:command_thread_resume
-    let command = substitute(command, '<thread_id>', thread_id, '')
-  else
-    let command = s:command_session_resume
-  endif
+  " Even if thread_id is empty, invoke resume. If there is atleast one
+  " suspended thread, then the server could resume that. If not, it will
+  " reurn a message.
+  let command = s:command_thread_resume
+  let command = substitute(command, '<thread_id>', thread_id, '')
 
   let result = eclim#Execute(command)
 
   " Remove the sign from previous location. This is needed here even though it
   " is done in GoToFile function. There may be a time gap until the next
-  " breakpoint is hit or the program terminates. We don't want to highligh
+  " breakpoint is hit or the program terminates. We don't want to highlight
   " the current line until then.
   if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
     call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
@@ -202,47 +229,120 @@ function! eclim#java#debug#DebugThreadResume(...) " {{{
   call eclim#util#Echo(result)
 endfunction " }}}
 
+" Resume all threads.
+function! eclim#java#debug#DebugThreadResumeAll() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let file = eclim#lang#SilentUpdate()
+
+  let command = s:command_session_resume
+  let result = eclim#Execute(command)
+
+  " Remove the sign from previous location. This is needed here even though it
+  " is done in GoToFile function. There may be a time gap until the next
+  " breakpoint is hit or the program terminates. We don't want to highlight
+  " the current line until then.
+  if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
+    call eclim#display#signs#UnplaceFromBuffer(s:debug_step_prev_line,
+      \ bufnr(s:debug_step_prev_file))
+  endif
+
+  call eclim#util#Echo(result)
+endfunction " }}}
+
+" Add breakpoint for current cursor position.
+function! eclim#java#debug#BreakpointAdd() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#lang#SilentUpdate()
+  let line = line('.')
+
+  let command = s:command_breakpoint_add
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let command = substitute(command, '<line>', line, '')
+
+  call eclim#util#Echo(eclim#Execute(command))
+endfunction " }}}
+
+" Display breakpoints present in given file or file loaded in current window.
 function! eclim#java#debug#BreakpointGet(...) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   if a:0 > 0
-    let file = expand(a:1 . ":p")
+    let file = a:1
   else 
-    let file = ""
+    let file = expand('%:p')
   endif
 
-  if file != ""
-    let command = s:command_breakpoint_get_file
-    let command = substitute(command, '<file>', file, '')
-  else
-    let command = s:command_breakpoint_get
-  endif
+  let command = s:command_breakpoint_get
+  let command = substitute(command, '<file>', file, '')
 
   call eclim#java#debug#DisplayPositions(eclim#Execute(command))
 
 endfunction " }}}
 
-function! eclim#java#debug#BreakpointRemove(...) " {{{
+" Display all breakpoints in the workspace.
+function! eclim#java#debug#BreakpointGetAll() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let command = s:command_breakpoint_get_all
+  call eclim#java#debug#DisplayPositions(eclim#Execute(command))
+
+endfunction " }}}
+
+" Remove breakpoint defined under the cursor if present.
+function! eclim#java#debug#BreakpointRemove() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let file = eclim#lang#SilentUpdate()
+  let line = line('.')
+
+  let command = s:command_breakpoint_remove
+  let command = substitute(command, '<file>', file, '')
+  let command = substitute(command, '<line>', line, '')
+
+  call eclim#util#Echo(eclim#Execute(command))
+endfunction " }}}
+
+" Remove all breakpoints defined in given file or file loaded in current
+" window.
+function! eclim#java#debug#BreakpointRemoveFile(...) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
   if a:0 > 0
-    let file = expand(a:1 . ":p")
+    let file = a:1
   else 
-    let file = ""
+    let file = expand('%:p')
   endif
 
-  if file != ""
-    let command = s:command_breakpoint_remove_file
-    let command = substitute(command, '<file>', file, '')
-  else
-    let command = s:command_breakpoint_remove
+  let command = s:command_breakpoint_remove_file
+  let command = substitute(command, '<file>', file, '')
+
+  call eclim#util#Echo(eclim#Execute(command))
+endfunction " }}}
+
+" Remove all breakpoints from workspace.
+function! eclim#java#debug#BreakpointRemoveAll() " {{{
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
   endif
 
-  call eclim#Execute(command)
+  let command = s:command_breakpoint_remove_all
+  call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
 
 function! eclim#java#debug#DisplayPositions(results) " {{{
@@ -384,10 +484,13 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
     \ bufnr(a:file), a:line)
 endfunction " }}}
 
+" Returns the thread ID under cursor. An empty string is returned if there is
+" no valid thread ID. A valid thread ID is searched only in Debug Threads
+" window.
 function! eclim#java#debug#GetThreadIdUnderCursor() " {{{
   " Check if we are in the right window
   if (bufname("%") != s:threads_win_name)
-    return
+    return ""
   endif
 
   let line = line(".")

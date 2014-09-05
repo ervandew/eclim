@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
+import org.eclim.Services;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -27,17 +29,22 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.debug.core.model.ILineBreakpoint;
 
 /**
  * Command to remove breakpoints.
  *
- * If a file is given, then only the breakpoints on that file will be removed.
- * Otherwise, all breakpoints in the project workspace will be removed.
+ * There are 3 options:
+ * - If a file is given, then only the breakpoints on that file will be removed.
+ * - If both file and line number is given, then that specific breakpoint will be
+ * removed.
+ * - Otherwise, all breakpoints in the workspace will be removed.
  */
 @Command(
   name = "java_debug_breakpoint_remove",
   options =
-    "OPTIONAL f file ARG"
+    "OPTIONAL f file ARG," +
+    "OPTIONAL l line_num ARG"
 )
 public class BreakpointRemoveCommand
   extends AbstractCommand
@@ -47,6 +54,7 @@ public class BreakpointRemoveCommand
     throws Exception
   {
     String fileName = commandLine.getValue(Options.FILE_OPTION);
+    Integer lineNum = commandLine.getIntValue(Options.LINE_OPTION);
 
     IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
       .getBreakpointManager();
@@ -61,11 +69,17 @@ public class BreakpointRemoveCommand
           .getRawLocation().toOSString();
 
         if (fileName.equals(curFileName)) {
-          breakpointMgr.removeBreakpoint(breakpoint, true);
+          if (lineNum == null ||
+              lineNum == -1 ||
+              lineNum == ((ILineBreakpoint) breakpoint).getLineNumber())
+          {
+
+            breakpointMgr.removeBreakpoint(breakpoint, true);
+          }
         }
       }
     }
 
-    return null;
+    return Services.getMessage("debugging.breakpoint.removed");
   }
 }

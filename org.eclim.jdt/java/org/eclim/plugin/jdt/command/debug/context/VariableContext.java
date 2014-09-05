@@ -64,9 +64,11 @@ public class VariableContext
   }
 
   public synchronized void removeVariables()
+    throws DebugException
   {
     for (long threadId : varsMap.keySet()) {
       varsMap.put(threadId, null);
+      varView.update(threadId, null);
     }
   }
 }

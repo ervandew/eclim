@@ -111,11 +111,15 @@ public class ThreadContext
     long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
     threadMap.remove(threadId);
     stackFrameMap.remove(threadId);
+
+    threadView.update(threadMap, stackFrameMap);
   }
 
   public synchronized void removeStackFrames()
+    throws DebugException
   {
     stackFrameMap.clear();
+    threadView.update(threadMap, stackFrameMap);
   }
 
   /**
