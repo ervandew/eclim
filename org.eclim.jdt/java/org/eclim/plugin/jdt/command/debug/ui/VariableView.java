@@ -103,10 +103,9 @@ public class VariableView
     }
 
     // Defensive code to protect from too many nesting
-    /*if (level >= 25) {
-      results.add(prefix + " Nesting terminated");
-      return;
-    }*/
+    if (level >= 3) {
+      return false;
+    }
 
     boolean varAdded = false;
     for (IVariable var : vars) {

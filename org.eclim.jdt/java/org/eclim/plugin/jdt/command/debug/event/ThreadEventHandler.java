@@ -24,6 +24,7 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaThread;
 
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugElement;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
@@ -44,6 +45,13 @@ public class ThreadEventHandler extends DebugEventHandler
     throws Exception
   {
     JDIThread thread = (JDIThread) element;
+
+    if (logger.isDebugEnabled()) {
+      logger.debug("Handling thread event : " + thread.getName() + " : " +
+          ((IJavaThread) thread).getThreadObject().getUniqueId() +  " " +
+          kind + " " + detail);
+    }
+
     if (kind == DebugEvent.SUSPEND) {
       if ((detail == DebugEvent.STEP_END) ||
           (detail == DebugEvent.BREAKPOINT))

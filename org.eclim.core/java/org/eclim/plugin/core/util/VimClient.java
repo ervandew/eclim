@@ -37,13 +37,9 @@ public class VimClient
    */
   private final String instanceId;
 
-  // TODO Use this
-  private final String vimBaseCmd;
-
   public VimClient(String instanceId)
   {
     this.instanceId = instanceId;
-    this.vimBaseCmd = "vim --servername " + instanceId;
   }
 
   public String getId()
@@ -63,7 +59,9 @@ public class VimClient
     };
 
 
-    logger.info("Jumping to file: " + Arrays.asList(cmd));
+    if (logger.isDebugEnabled()) {
+      logger.debug("Jumping to file: " + Arrays.asList(cmd));
+    }
 
     CommandExecutor.execute(cmd, TIMEOUT);
   }
@@ -79,7 +77,9 @@ public class VimClient
       ":JavaDebugStatus<CR>",
     };
 
-    logger.info("Refreshing debug status: " + Arrays.asList(cmd));
+    if (logger.isDebugEnabled()) {
+      logger.debug("Refreshing debug status: " + Arrays.asList(cmd));
+    }
 
     CommandExecutor.execute(cmd, TIMEOUT);
   }

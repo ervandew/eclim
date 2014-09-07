@@ -53,11 +53,6 @@ public class DebugEventSetListener
       int kind = event.getKind();
       int detail = event.getDetail();
 
-      if (logger.isDebugEnabled()) {
-        logger.debug("Got event from src: " + src.getClass().getName() +
-            " " + kind + " " + detail);
-      }
-
       DebuggerContext ctx = DebuggerContextManager.getDefault();
       if (ctx == null) {
         if (logger.isDebugEnabled()) {
@@ -74,7 +69,6 @@ public class DebugEventSetListener
         }
       } catch (Exception e) {
         logger.error("Listener failed", e);
-        throw new RuntimeException(e);
       }
     }
   }

@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.debug.event;
 
+import org.eclim.logging.Logger;
+
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 
 import org.eclipse.debug.core.DebugEvent;
@@ -33,6 +35,9 @@ import org.eclipse.jdt.internal.debug.core.model.JDIDebugTarget;
  */
 public class DebugTargetEventHandler extends DebugEventHandler
 {
+  private static final Logger logger =
+    Logger.getLogger(DebugTargetEventHandler.class);
+
   protected void handle(
       DebuggerContext ctx,
       JDIDebugElement element,
@@ -41,6 +46,11 @@ public class DebugTargetEventHandler extends DebugEventHandler
     throws Exception
   {
     JDIDebugTarget debugTarget = (JDIDebugTarget) element;
+
+    if (logger.isDebugEnabled()) {
+      logger.debug("Handling debug target event : " +
+          kind + " " + detail);
+    }
 
     if (kind == DebugEvent.SUSPEND) {
       if (detail == DebugEvent.CLIENT_REQUEST) {
