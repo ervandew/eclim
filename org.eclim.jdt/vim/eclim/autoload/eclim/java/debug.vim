@@ -417,7 +417,7 @@ function! eclim#java#debug#Status() " {{{
 endfunction " }}}
 
 function! eclim#java#debug#DisplayStatus(results) " {{{
-  let status = a:results.status
+  let state = a:results.state
 
   if has_key(a:results,  'threads')
     let threads = a:results.threads
@@ -438,7 +438,7 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
   let cur_col = col('.')
 
   call eclim#util#TempWindow(
-    \ s:threads_win_name, [status] + threads,
+    \ s:threads_win_name, [state] + threads,
     \ {'orientation': 'horizontal', 'singleWinOnly' : 0})
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
@@ -494,7 +494,7 @@ function! eclim#java#debug#GetThreadIdUnderCursor() " {{{
   endif
 
   let line = line(".")
-  " Ignore the first line as it is the status
+  " Ignore the first line as it is the state
   if (line == 1)
     return ""
   endif

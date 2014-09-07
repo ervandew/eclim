@@ -53,8 +53,12 @@ public class ThreadView
 
   private List<String> results = new ArrayList<String>();
 
-  public synchronized List<String> get()
+  public synchronized List<String> get(
+      Map<Long, IThread> threadMap,
+      Map<Long, IStackFrame[]> stackFrameMap)
+    throws DebugException
   {
+    update(threadMap, stackFrameMap);
     return results;
   }
 

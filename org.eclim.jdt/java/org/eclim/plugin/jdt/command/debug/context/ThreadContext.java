@@ -88,8 +88,9 @@ public class ThreadContext
   }
 
   public synchronized List<String> get()
+    throws DebugException
   {
-    return threadView.get();
+    return threadView.get(threadMap, stackFrameMap);
   }
 
   public synchronized void update(IThread thread, IStackFrame[] stackFrames)
@@ -101,8 +102,6 @@ public class ThreadContext
     if (stackFrames != null) {
       stackFrameMap.put(threadId, stackFrames);
     }
-
-    threadView.update(threadMap, stackFrameMap);
   }
 
   public synchronized void remove(IThread thread)
@@ -111,15 +110,12 @@ public class ThreadContext
     long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
     threadMap.remove(threadId);
     stackFrameMap.remove(threadId);
-
-    threadView.update(threadMap, stackFrameMap);
   }
 
   public synchronized void removeStackFrames()
     throws DebugException
   {
     stackFrameMap.clear();
-    threadView.update(threadMap, stackFrameMap);
   }
 
   /**

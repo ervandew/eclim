@@ -19,6 +19,7 @@ package org.eclim.plugin.jdt.command.debug.event;
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
+import org.eclim.plugin.jdt.command.debug.context.DebuggerState;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -52,7 +53,15 @@ public class DebugTargetEventHandler extends DebugEventHandler
           kind + " " + detail);
     }
 
-    if (kind == DebugEvent.SUSPEND) {
+    if (kind == DebugEvent.CREATE) {
+      ctx.setState(DebuggerState.CONNECTED);
+      ctx.getVimClient().refreshDebugStatus();
+    } else if (kind == DebugEvent.TERMINATE) {
+      ctx.setState(DebuggerState.DISCONNECTED);
+      ctx.getVimClient().refreshDebugStatus();
+    } else if (kind == DebugEvent.SUSPEND) {
+      ctx.setState(DebuggerState.SUSPENDED);
+
       if (detail == DebugEvent.CLIENT_REQUEST) {
         IThread[] threads = debugTarget.getThreads();
         if (threads == null) {
@@ -84,6 +93,8 @@ public class DebugTargetEventHandler extends DebugEventHandler
         ctx.getVimClient().refreshDebugStatus();
       }
     } else if (kind == DebugEvent.RESUME) {
+      ctx.setState(DebuggerState.CONNECTED);
+
       if (detail == DebugEvent.CLIENT_REQUEST) {
         ctx.getThreadContext().removeStackFrames();
         ctx.getVariableContext().removeVariables();

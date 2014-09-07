@@ -66,12 +66,6 @@ public class DebuggerContext
   private static final String KEY_HOSTNAME = "hostname";
   private static final String KEY_PORT = "port";
 
-  // Connection status
-  private static final String CONNECTED = "Connected";
-  private static final String DISCONNECTED = "Disconnected";
-  private static final String SUSPENDED = "Suspended";
-  private static final String TERMINATED = "Terminated";
-
   private IProject project;
 
   private String host;
@@ -83,6 +77,8 @@ public class DebuggerContext
    * This should be unique across all active contexts.
    */
   private String id;
+
+  private volatile DebuggerState state = DebuggerState.CONNECTING;
 
   private final ThreadContext threadCtx;
   private final VariableContext varCtx;
@@ -224,21 +220,22 @@ public class DebuggerContext
   {
     Map<String, Object> statusMap = new HashMap<String, Object>();
 
-    String status = CONNECTED;
-    if (debugTarget.isDisconnected()) {
-      status = DISCONNECTED;
-    } else if (debugTarget.isSuspended()) {
-      status = SUSPENDED;
-    } else if (debugTarget.isTerminated()) {
-      status = TERMINATED;
-    }
-
-    statusMap.put("status", ViewUtils.EXPANDED_TREE_SYMBOL + getId() +
-        " (" + status + ")");
+    statusMap.put("state", ViewUtils.EXPANDED_TREE_SYMBOL + getId() +
+        " (" + state.getName() + ")");
     statusMap.put("threads", getThreadContext().get());
     statusMap.put("variables", getVariableContext().get());
 
     return statusMap;
+  }
+
+  public DebuggerState getState()
+  {
+    return this.state;
+  }
+
+  public void setState(DebuggerState state)
+  {
+    this.state = state;
   }
 
   public String getId()

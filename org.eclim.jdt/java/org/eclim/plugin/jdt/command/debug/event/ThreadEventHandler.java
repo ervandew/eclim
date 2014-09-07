@@ -19,6 +19,7 @@ package org.eclim.plugin.jdt.command.debug.event;
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
+import org.eclim.plugin.jdt.command.debug.context.DebuggerState;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -90,7 +91,14 @@ public class ThreadEventHandler extends DebugEventHandler
       }
     } else if (kind == DebugEvent.CREATE) {
       ctx.getThreadContext().update(thread, null);
-      ctx.getVimClient().refreshDebugStatus();
+
+      // Refresh status only after debug target has been created.
+      // This is to avoid refreshing for each and every thread that gets
+      // created before the debug target has finished initialization.
+      // Once its created, we do want to refresh for each thread creation.
+      if (!ctx.getState().equals(DebuggerState.CONNECTING)) {
+        ctx.getVimClient().refreshDebugStatus();
+      }
     } else if (kind == DebugEvent.TERMINATE) {
       ctx.getThreadContext().remove(thread);
       ctx.getVimClient().refreshDebugStatus();
