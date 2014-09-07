@@ -411,26 +411,31 @@ endfunction " }}}
 function! eclim#java#debug#Status() " {{{
   let command = s:command_status
   let results = eclim#Execute(command)
-  if type(results) == g:DICT_TYPE
-    call eclim#java#debug#DisplayStatus(results)
+
+  if has_key(results, 'state')
+    let state = [results.state]
+  else
+    let state = []
   endif
-endfunction " }}}
 
-function! eclim#java#debug#DisplayStatus(results) " {{{
-  let state = a:results.state
-
-  if has_key(a:results,  'threads')
-    let threads = a:results.threads
+  if has_key(results, 'threads')
+    let threads = results.threads
   else
     let threads = []
   endif
 
-  if has_key(a:results,  'variables')
-    let vars = a:results.variables
+  if has_key(results, 'variables')
+    let vars = results.variables
   else 
     let vars = []
   endif
 
+  call eclim#java#debug#CreateStatusWindow(state + threads, vars)
+endfunction " }}}
+
+" Creates the debug status windows if they do not exist already. 
+" The newly created windows are initialized with given content.
+function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   " Store current position and restore in the end so that creation of new
   " window does not end up moving the cursor
   let cur_bufnr = bufnr('%')
@@ -438,8 +443,8 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
   let cur_col = col('.')
 
   call eclim#util#TempWindow(
-    \ s:threads_win_name, [state] + threads,
-    \ {'orientation': 'horizontal', 'singleWinOnly' : 0})
+    \ s:threads_win_name, a:threads,
+    \ {'orientation': 'horizontal'})
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
   setlocal foldtext=eclim#display#fold#SimpleFoldText()
@@ -450,8 +455,8 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
   call eclim#java#debug#DefineStatusWinCommands()
 
   call eclim#util#TempWindow(
-    \ s:variables_win_name, vars,
-    \ {'orientation': 'vertical', 'singleWinOnly' : 0})
+    \ s:variables_win_name, a:vars,
+    \ {'orientation': 'vertical'})
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetNeatFold(v:lnum)
@@ -463,7 +468,7 @@ function! eclim#java#debug#DisplayStatus(results) " {{{
 
   " Restore position
   call eclim#util#GoToBufferWindow(cur_bufnr)
-  call cursor(cur_line, 1)
+  call cursor(cur_line, cur_col)
 endfunction " }}}
 
 function! eclim#java#debug#GoToFile(file, line) " {{{
