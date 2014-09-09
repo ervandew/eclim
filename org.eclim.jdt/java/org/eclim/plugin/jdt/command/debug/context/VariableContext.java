@@ -16,18 +16,13 @@
  */
 package org.eclim.plugin.jdt.command.debug.context;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclim.plugin.jdt.command.debug.ui.VariableView;
 
 import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.debug.core.model.IThread;
-import org.eclipse.debug.core.model.IVariable;
-
-import org.eclipse.jdt.debug.core.IJavaThread;
 
 /**
  * Maintains the variables belonging to a debug session.
@@ -38,37 +33,26 @@ public class VariableContext
 
   private VariableView varView;
 
-  private Map<Long, IVariable[]> varsMap =
-    new HashMap<Long, IVariable[]>();
-
   public VariableContext(ThreadContext threadCtx)
   {
     this.threadCtx = threadCtx;
     this.varView = new VariableView();
   }
 
-  public synchronized List<String> get()
-    throws DebugException
+  public List<String> get()
   {
     IThread thread = threadCtx.getSteppingThread();
     return varView.get(thread);
   }
 
-  public synchronized void update(IThread thread, IVariable[] vars)
+  public List<String> expandValue(long valueId)
     throws DebugException
   {
-    long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
-    varsMap.put(threadId, vars);
-
-    varView.update(threadId, vars);
+    return varView.expandValue(valueId);
   }
 
-  public synchronized void removeVariables()
-    throws DebugException
+  public void removeVariables()
   {
-    for (long threadId : varsMap.keySet()) {
-      varsMap.put(threadId, null);
-      varView.update(threadId, null);
-    }
+    varView.removeVariables();
   }
 }

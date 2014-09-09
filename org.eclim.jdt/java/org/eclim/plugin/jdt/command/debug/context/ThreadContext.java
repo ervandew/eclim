@@ -65,6 +65,7 @@ public class ThreadContext
     }
 
     // Find the first suspended thread and set it as stepping thread
+    steppingThread = null;
     for (Map.Entry<Long, IThread> entry : threadMap.entrySet()) {
       if (entry.getValue().isSuspended()) {
         steppingThread = entry.getValue();
@@ -110,6 +111,12 @@ public class ThreadContext
     long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
     threadMap.remove(threadId);
     stackFrameMap.remove(threadId);
+
+    if (steppingThread != null &&
+        ((IJavaThread) steppingThread).getThreadObject().getUniqueId() == threadId) {
+
+      steppingThread = null;
+    }
   }
 
   public synchronized void removeStackFrames()

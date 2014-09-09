@@ -99,6 +99,7 @@ public class Options
   public static final String VALUE_OPTION = "v";
   public static final String VALUES_OPTION = "v";
   public static final String VARIABLE_OPTION = "v";
+  public static final String VARIABLE_VALUE_ID_OPTION = "v";
   public static final String VERSION_OPTION = "v";
   public static final String VIM_INSTANCE_OPTION = "v";
 

@@ -21,8 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclim.logging.Logger;
+
 import org.eclipse.debug.core.DebugException;
 
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 
@@ -33,7 +36,6 @@ import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaFieldVariable;
 import org.eclipse.jdt.debug.core.IJavaObject;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
-import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
@@ -56,31 +58,62 @@ import org.eclipse.osgi.util.NLS;
  */
 public class VariableView
 {
-  private Map<Long, List<String>> resultsMap =
-    new HashMap<Long, List<String>>();
+  private static final Logger logger =
+    Logger.getLogger(VariableView.class);
 
-  public synchronized List<String> get(IThread thread)
-    throws DebugException
+  private Map<Long, IJavaValue> visibleVarMap =
+    new HashMap<Long, IJavaValue>();
+
+  public List<String> get(IThread thread)
   {
+    // Since the view is being reloaded, we can clear existing entries
+    visibleVarMap.clear();
+
     if (thread == null) {
       return null;
     } else {
-      return resultsMap.get(((IJavaThread) thread).getThreadObject()
-          .getUniqueId());
+      List<String> results = new ArrayList<String>();
+
+      // Protect against variable information unavailable for native
+      // methods
+      try {
+        IStackFrame stackFrame = thread.getTopStackFrame();
+        if (stackFrame != null) {
+          process(thread.getTopStackFrame().getVariables(), results, 0);
+        }
+      } catch (DebugException e) {
+        if (logger.isDebugEnabled()) {
+          logger.debug("Unable to get variables", e);
+        }
+      }
+      return results;
     }
   }
 
-  public synchronized void update(long threadId, IVariable[] vars)
-    throws DebugException
+  public List<String> expandValue(long valueId)
   {
-    List<String> results = resultsMap.get(threadId);
-    if (results == null) {
-      results = new ArrayList<String>();
-      resultsMap.put(threadId, results);
+    IJavaValue value = visibleVarMap.get(valueId);
+
+    if (value == null) {
+      logger.info("No variable value found with ID: " + valueId);
+      return null;
     }
 
-    results.clear();
-    process(vars, results, 0);
+    List<String> results = new ArrayList<String>();
+    // Suppress any exception. No point in letting it propagate
+    try {
+      process(value.getVariables(), results, 0);
+    } catch (DebugException e) {
+      if (logger.isErrorEnabled()) {
+        logger.error("Unable to get variables", e);
+      }
+    }
+    return results;
+  }
+
+  public void removeVariables()
+  {
+    visibleVarMap.clear();
   }
 
   /**
@@ -149,6 +182,11 @@ public class VariableView
 
       // Replace the NULL value with actual variable text
       results.set(curIdx, prefix + getVariableText(jvar));
+
+      // Keep track of this value as it is shown in UI and could be expanded
+      if (value instanceof IJavaObject) {
+        visibleVarMap.put(((IJavaObject) value).getUniqueId(), value);
+      }
     }
 
     return varAdded;
@@ -374,10 +412,6 @@ public class VariableView
       buffer.append(valueString);
       if (isString) {
         buffer.append('"');
-        /*if(value instanceof IJavaObject){
-          buffer.append(" ");
-          buffer.append(String.valueOf(((IJavaObject)value).getUniqueId()));
-        }*/
       }
 
     }

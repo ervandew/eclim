@@ -22,7 +22,6 @@ import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 import org.eclim.plugin.jdt.command.debug.context.DebuggerState;
 
 import org.eclipse.debug.core.DebugEvent;
-import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
@@ -72,7 +71,6 @@ public class ThreadEventHandler extends DebugEventHandler
         // Do not update variables when suspended in a class file.
         // This causes the variable set to explode causing OOM.
         if (fileName != null) {
-          ctx.getVariableContext().update(thread, topStackFrame.getVariables());
           ctx.getVimClient().jumpToFilePosition(fileName, lineNum);
         }
 
@@ -81,12 +79,6 @@ public class ThreadEventHandler extends DebugEventHandler
         ctx.getVimClient().refreshDebugStatus();
       } else if (detail == DebugEvent.CLIENT_REQUEST) {
         ctx.getThreadContext().update(thread, thread.getStackFrames());
-
-        // Protect against variable information unavailable for native methods
-        try {
-          ctx.getVariableContext().update(thread,
-              thread.getTopStackFrame().getVariables());
-        } catch (DebugException e) {}
         ctx.getVimClient().refreshDebugStatus();
       }
     } else if (kind == DebugEvent.CREATE) {
@@ -104,7 +96,7 @@ public class ThreadEventHandler extends DebugEventHandler
       ctx.getVimClient().refreshDebugStatus();
     } else if (kind == DebugEvent.RESUME) {
       ctx.getThreadContext().update(thread, null);
-      ctx.getVariableContext().update(thread, null);
+      ctx.getVariableContext().removeVariables();
       ctx.getVimClient().refreshDebugStatus();
     }
   }

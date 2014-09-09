@@ -22,11 +22,8 @@ import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 import org.eclim.plugin.jdt.command.debug.context.DebuggerState;
 
 import org.eclipse.debug.core.DebugEvent;
-import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.debug.core.model.IThread;
-
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugElement;
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugTarget;
@@ -69,25 +66,7 @@ public class DebugTargetEventHandler extends DebugEventHandler
         }
 
         for (IThread thread : threads) {
-          IJavaStackFrame topStackFrame = (IJavaStackFrame) thread
-            .getTopStackFrame();
-
           ctx.getThreadContext().update(thread, thread.getStackFrames());
-
-          String fileName = getFileNameInFrame(ctx, topStackFrame);
-
-          // Do not update variables when suspended in a class file.
-          // This causes the variable set to explode causing OOM.
-          if (fileName != null) {
-            // Protect against variable information unavailable for native
-            // methods
-            try {
-              ctx.getVariableContext().update(
-                  thread,
-                  topStackFrame
-                  .getVariables());
-            } catch (DebugException e) {}
-          }
         }
 
         ctx.getVimClient().refreshDebugStatus();
