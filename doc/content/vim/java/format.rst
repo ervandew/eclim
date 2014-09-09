@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,9 +72,15 @@ settings.
 Configuration
 -------------
 
-Currently source code formatting is only configurable via the eclipse GUI.  To
-do so, shutdown eclim, start the eclipse GUI and configure your settings via\:
+.. _org.eclim.java.checkstyle.onvalidate:
 
-::
+- **org.eclim.java.format.strip_trialing_whitespace** -
+  When set to true, all trailing whitespace will be removed when formatting java
+  code.
 
-  Preferences : Java / Code Style / Formatter / Active Profile: / Edit
+Aside from the above configuration, source code formatting is only configurable
+via the eclipse GUI. So to make changes to the eclipse java formatting rules,
+shutdown eclim, start the eclipse GUI and configure your settings via\:
+
+:menuselection:`Preferences --> Java --> Code Style --> Formatter --> Active
+Profile: --> Edit`

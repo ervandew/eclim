@@ -116,6 +116,7 @@ public class PluginResources
       "JDT org.eclim.java.import.package_separation_level 1 (-1|\\d+)\n" +
       "JDT org.eclim.java.import.exclude " +
         "[\"^com\\.sun\\..*\",\"^sunw\\?\\..*\"] JSON[]\n" +
+      "JDT org.eclim.java.format.strip_trialing_whitespace true (true|false)\n" +
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
       "JDT org.eclim.java.checkstyle.onvalidate false (true|false)\n" +
