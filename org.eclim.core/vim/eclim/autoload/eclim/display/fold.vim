@@ -19,7 +19,8 @@
 "
 " }}}
 
-function! eclim#display#fold#GetNeatFold(lnum) " {{{
+" Folding to create a tree structure
+function! eclim#display#fold#GetTreeFold(lnum) " {{{
   " The default VIM fold shows the first line of a block separately.
   " But we want to show it with its contents. This is more compact and
   " easier to read.
@@ -43,7 +44,16 @@ function! eclim#display#fold#GetNeatFold(lnum) " {{{
 endfunction " }}}
 
 function! eclim#display#fold#IndentLevel(lnum) " {{{
-  return indent(a:lnum) / &shiftwidth
+  let indent = indent(a:lnum)
+
+  " Adjust the indent to account for the node symbol which takes up 2 spaces.
+  " If this symbol where not there, then it would actually have 2 more spaces.
+  let symbol_match = matchstr(getline("."), '▸\|▾')
+  if (symbol_match != "")
+    let indent = indent + 2
+  endif
+
+  return indent / &shiftwidth
 endfunction " }}}
 
 function! eclim#display#fold#NextNonBlankLine(lnum) " {{{
@@ -61,18 +71,7 @@ function! eclim#display#fold#NextNonBlankLine(lnum) " {{{
   return -2
 endfunction " }}}
 
-function! eclim#display#fold#NeatFoldText() " {{{
-  let line = ' ' . substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g') . ' '
-  let lines_count = v:foldend - v:foldstart + 1
-  let lines_count_text = '| ' . printf("%10s", lines_count . ' lines') . ' |'
-  let foldchar = matchstr(&fillchars, 'fold:\zs.')
-  let foldtextstart = strpart('+' . repeat(foldchar, v:foldlevel*2) . line, 0, (winwidth(0)*2)/3)
-  let foldtextend = lines_count_text . repeat(foldchar, 8)
-  let foldtextlength = strlen(substitute(foldtextstart . foldtextend, '.', 'x', 'g')) + &foldcolumn
-  return foldtextstart . repeat(foldchar, winwidth(0)-foldtextlength) . foldtextend
-endfunction " }}}
-
-function! eclim#display#fold#SimpleFoldText() " {{{
+function! eclim#display#fold#TreeFoldText() " {{{
   let line = substitute(getline(v:foldstart), '▾', '▸', 'g')
   return line
 endfunction " }}}

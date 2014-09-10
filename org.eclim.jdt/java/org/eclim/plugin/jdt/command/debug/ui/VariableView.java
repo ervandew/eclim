@@ -32,7 +32,6 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.core.Signature;
 
 import org.eclipse.jdt.debug.core.IJavaArray;
-import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaFieldVariable;
 import org.eclipse.jdt.debug.core.IJavaObject;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
@@ -43,7 +42,6 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.internal.debug.core.logicalstructures.JDIAllInstancesValue;
 
 import org.eclipse.jdt.internal.debug.core.model.JDIReferenceListValue;
-import org.eclipse.jdt.internal.debug.core.model.JDIType;
 import org.eclipse.jdt.internal.debug.core.model.JDIValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIVariable;
 
@@ -61,13 +59,37 @@ public class VariableView
   private static final Logger logger =
     Logger.getLogger(VariableView.class);
 
-  private Map<Long, IJavaValue> visibleVarMap =
-    new HashMap<Long, IJavaValue>();
+  /**
+   * Depth of the root node.
+   */
+  private static final int ROOT_DEPTH = 0;
+
+  private Map<Long, ExpandableVar> expandableVarMap =
+    new HashMap<Long, ExpandableVar>();
+
+  /**
+   * Variable value that is shown in UI and is expandable; i.e., has inner
+   * variables/fields. These values are instances of IJavaObject.
+   */
+  private class ExpandableVar {
+    private IJavaValue value;
+
+    /**
+     * Depth of this variable in tree. The root node will have depth = 0.
+     */
+    private int depth;
+
+    public ExpandableVar(IJavaValue value, int depth) {
+      this.value = value;
+      this.depth = depth;
+    }
+  }
+
 
   public List<String> get(IThread thread)
   {
     // Since the view is being reloaded, we can clear existing entries
-    visibleVarMap.clear();
+    expandableVarMap.clear();
 
     if (thread == null) {
       return null;
@@ -79,12 +101,10 @@ public class VariableView
       try {
         IStackFrame stackFrame = thread.getTopStackFrame();
         if (stackFrame != null) {
-          process(thread.getTopStackFrame().getVariables(), results, 0);
+          process(thread.getTopStackFrame().getVariables(), results, ROOT_DEPTH);
         }
       } catch (DebugException e) {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Unable to get variables", e);
-        }
+        logger.error("Unable to get variables", e);
       }
       return results;
     }
@@ -92,28 +112,32 @@ public class VariableView
 
   public List<String> expandValue(long valueId)
   {
-    IJavaValue value = visibleVarMap.get(valueId);
+    ExpandableVar expandableVar = expandableVarMap.get(valueId);
 
-    if (value == null) {
-      logger.info("No variable value found with ID: " + valueId);
+    if (expandableVar == null) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("No variable value found with ID: " + valueId);
+      }
       return null;
     }
 
+    IJavaValue value = expandableVar.value;
     List<String> results = new ArrayList<String>();
     // Suppress any exception. No point in letting it propagate
     try {
-      process(value.getVariables(), results, 0);
+      process(value.getVariables(), results, expandableVar.depth + 1);
+
+      // Remove this value as it cannot be expanded anymore
+      expandableVarMap.remove(valueId);
     } catch (DebugException e) {
-      if (logger.isErrorEnabled()) {
-        logger.error("Unable to get variables", e);
-      }
+      logger.error("Unable to get variables", e);
     }
     return results;
   }
 
   public void removeVariables()
   {
-    visibleVarMap.clear();
+    expandableVarMap.clear();
   }
 
   /**
@@ -124,72 +148,33 @@ public class VariableView
    *
    * @param vars variables
    * @param results final results containing the variable text
-   * @param level current nesting level in the tree hierarchy
-   * @return true if atleast one variable was added to result set;
-   * false otherwise. This is used to determine if a tree node has child nodes.
+   * @param depth current nesting depth in the tree hierarchy
    */
-  private boolean process(IVariable[] vars, List<String> results, int level)
+  private void process(IVariable[] vars, List<String> results, int depth)
     throws DebugException
   {
     if (vars == null) {
-      return false;
+      return;
     }
 
-    // Defensive code to protect from too many nesting
-    if (level >= 3) {
-      return false;
-    }
-
-    boolean varAdded = false;
     for (IVariable var : vars) {
       JDIVariable jvar = (JDIVariable) var;
-      if (jvar.isSynthetic()) {
+      if (jvar.isSynthetic() ||
+          ignoreVar(jvar)) {
         continue;
       }
 
       JDIValue value = (JDIValue) var.getValue();
-      if (ignoreVar(jvar)) {
-        continue;
-      }
-
-      varAdded = true;
-
-      // Check if we need to look for any nested variables
-      if (value == null ||
-          !includeNestedVar(value) ||
-          !(value instanceof IJavaObject) ||
-          !value.hasVariables())
-      {
-
-        String prefix = getIndentation(level, true);
-        results.add(prefix + getVariableText(jvar));
-        continue;
-      }
-
-      // Add a placeholder value before processing child variables.
-      // The actual value will be added back to this placeholder location
-      // with the right prefix based on whether child variables were added or
-      // not.
-      int curIdx = results.size();
-      results.add(null);
-
-      String prefix = null;
-      if (process(value.getVariables(), results, level + 1)) {
-        prefix = getIndentation(level, false);
-      } else {
-        prefix = getIndentation(level, true);
-      }
-
-      // Replace the NULL value with actual variable text
-      results.set(curIdx, prefix + getVariableText(jvar));
+      String prefix = getIndentation(depth,
+          value == null ? true : !value.hasVariables());
+      results.add(prefix + getVariableText(jvar));
 
       // Keep track of this value as it is shown in UI and could be expanded
       if (value instanceof IJavaObject) {
-        visibleVarMap.put(((IJavaObject) value).getUniqueId(), value);
+        expandableVarMap.put(((IJavaObject) value).getUniqueId(),
+            new ExpandableVar(value, depth));
       }
     }
-
-    return varAdded;
   }
 
   /**
@@ -200,10 +185,11 @@ public class VariableView
   {
     if (var.isFinal()) {
       JDIValue value = (JDIValue) var.getValue();
-      JDIType type = (JDIType) value.getJavaType();
-      // TODO Add tools.jar to access com.sun classes
-      // Use underlying type to ignore final var that are primitive only
-      return true;
+      if (value instanceof IJavaObject) {
+        return false;
+      } else {
+        return true;
+      }
     }
 
     return false;
@@ -220,9 +206,8 @@ public class VariableView
   private boolean includeNestedVar(JDIValue value)
     throws DebugException
   {
-    if (true) {
-      return true;
-    }
+    return true;
+    /*
     boolean nesting = true;
 
     if ((value instanceof IJavaArray) ||
@@ -252,6 +237,7 @@ public class VariableView
     }
 
     return nesting;
+    */
   }
 
   /**
@@ -259,11 +245,11 @@ public class VariableView
    */
   private String getIndentation(int level, boolean isLeafNode)
   {
-    if (level == 0) {
+    if (level == ROOT_DEPTH) {
       if (isLeafNode) {
         return ViewUtils.NON_LEAF_NODE_INDENT;
       } else {
-        return ViewUtils.EXPANDED_TREE_SYMBOL;
+        return ViewUtils.COLLAPSED_TREE_SYMBOL;
       }
     }
 
@@ -278,7 +264,7 @@ public class VariableView
       sb.append(ViewUtils.LEAF_NODE_INDENT);
     } else {
       sb.append(ViewUtils.NON_LEAF_NODE_INDENT +
-          ViewUtils.EXPANDED_TREE_SYMBOL);
+          ViewUtils.COLLAPSED_TREE_SYMBOL);
     }
 
     return sb.toString();

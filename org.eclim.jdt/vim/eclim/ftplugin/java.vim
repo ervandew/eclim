@@ -228,11 +228,6 @@ if !exists(":JavaDebugStop")
   command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
 endif
 
-if !exists(":JavaDebugThreadSuspend")
-  command -nargs=0 -buffer JavaDebugThreadSuspend
-    \ :call eclim#java#debug#DebugThreadSuspend()
-endif
-
 if !exists(":JavaDebugThreadSuspendAll")
   command -nargs=0 -buffer JavaDebugThreadSuspendAll
     \ :call eclim#java#debug#DebugThreadSuspendAll()
@@ -254,7 +249,7 @@ if !exists(":JavaDebugBreakpointAdd")
 endif
 
 if !exists(":JavaDebugBreakpointGet")
-  command -nargs=? -buffer JavaDebugBreakpointGet
+  command -nargs=0 -buffer JavaDebugBreakpointGet
     \ :call eclim#java#debug#BreakpointGet(<f-args>)
 endif
 
@@ -264,12 +259,12 @@ if !exists(":JavaDebugBreakpointGetAll")
 endif
 
 if !exists(":JavaDebugBreakpointRemove")
-  command -nargs=? -buffer JavaDebugBreakpointRemove
+  command -nargs=0 -buffer JavaDebugBreakpointRemove
     \ :call eclim#java#debug#BreakpointRemove(<f-args>)
 endif
 
 if !exists(":JavaDebugBreakpointRemoveFile")
-  command -nargs=? -buffer JavaDebugBreakpointRemoveFile
+  command -nargs=0 -buffer JavaDebugBreakpointRemoveFile
     \ :call eclim#java#debug#BreakpointRemoveFile(<f-args>)
 endif
 
@@ -277,12 +272,6 @@ if !exists(":JavaDebugBreakpointRemoveAll")
   command -nargs=0 -buffer JavaDebugBreakpointRemoveAll
     \ :call eclim#java#debug#BreakpointRemoveAll()
 endif
-
-" TODO Change toggle to enable/disable breakpoint
-"if !exists(":JavaDebugBreakpointToggle")
-"  command -nargs=0 -buffer JavaDebugBreakpointToggle
-"    \ :call eclim#java#debug#BreakpointToggle()
-"endif
 
 if !exists(":JavaDebugStep")
   command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
