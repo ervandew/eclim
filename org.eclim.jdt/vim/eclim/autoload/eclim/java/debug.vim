@@ -25,7 +25,7 @@
 let s:debug_step_prev_file = ''
 let s:debug_step_prev_line = ''
 
-let s:debug_step_sign_name = 'debug_step'
+let s:debug_line_sign = 'eclim_debug_line'
 let s:breakpoint_sign_name = 'breakpoint'
 
 let s:variable_win_name = 'Debug Variables'
@@ -154,7 +154,8 @@ function! eclim#java#debug#DebugStart(host, port) " {{{
     return
   endif
 
-  call eclim#display#signs#DefineLineHL(s:debug_step_sign_name, 'DebugBreak')
+  call eclim#display#signs#DefineLineHL(s:debug_line_sign,
+    \ g:EclimJavaDebugLineHighlight)
 
   let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_start
@@ -417,9 +418,10 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   let cur_line = line('.')
   let cur_col = col('.')
 
+  let thread_win_opts = {'orientation': 'horizontal'}
   call eclim#util#TempWindow(
     \ s:thread_win_name, a:threads,
-    \ {'orientation': 'horizontal'})
+    \ thread_win_opts)
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetTreeFold(v:lnum)
@@ -432,9 +434,12 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   call eclim#java#debug#DefineStatusWinCommands()
   call eclim#java#debug#DefineThreadWinCommands()
 
+  let var_win_opts = {'orientation': g:EclimJavaDebugStatusWinOrientation,
+    \ 'width': g:EclimJavaDebugStatusWinWidth,
+    \ 'height': g:EclimJavaDebugStatusWinHeight}
   call eclim#util#TempWindow(
     \ s:variable_win_name, a:vars,
-    \ {'orientation': 'vertical'})
+    \ var_win_opts)
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetTreeFold(v:lnum)
@@ -510,7 +515,7 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
 
   " TODO sign id is line number. Can conflict with other signs while
   " unplacing
-  call eclim#display#signs#PlaceInBuffer(s:debug_step_sign_name,
+  call eclim#display#signs#PlaceInBuffer(s:debug_line_sign,
     \ bufnr(a:file), a:line)
 endfunction " }}}
 

@@ -19,7 +19,7 @@
 "
 " }}}
 
-" Global Varables {{{
+" Global Variables {{{
   call eclim#AddVimSetting(
     \ 'Lang/Java', 'g:EclimJavaCompleteLayout',
     \ &completeopt !~ 'preview' && &completeopt =~ 'menu' ? 'standard' : 'compact',
@@ -99,6 +99,27 @@
     \ 'Lang/Java/Web.xml', 'g:EclimWebXmlValidate', 1,
     \ 'Sets whether or not to validate your web.xml files on save.',
     \ '\(0\|1\)')
+
+  " Debugger settings {{{
+  call eclim#AddVimSetting(
+    \ 'Lang/Java', 'g:EclimJavaDebugLineHighlight', 'DebugBreak',
+    \ 'Highlight group to use for showing the current line being debugged.')
+
+  call eclim#AddVimSetting(
+    \ 'Lang/Java', 'g:EclimJavaDebugStatusWinOrientation', 'vertical',
+    \ 'Sets the orientation for the splits inside the debug status windows; ' .
+    \ 'if they should be tiled vertically or horizontally.')
+
+  call eclim#AddVimSetting(
+    \ 'Lang/Java', 'g:EclimJavaDebugStatusWinWidth', 50,
+    \ 'Sets the window width for the splits inside the debug status window. ' .
+    \ 'This is only applicable when the orientation is horizontal.')
+
+  call eclim#AddVimSetting(
+    \ 'Lang/Java', 'g:EclimJavaDebugStatusWinHeight', 10,
+    \ 'Sets the window height for the splits inside the debug status window. ' .
+    \ 'This is only applicable when the orientation is vertical.')
+  " }}}
 " }}}
 
 " vim:ft=vim:fdm=marker
