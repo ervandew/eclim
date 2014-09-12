@@ -44,16 +44,7 @@ function! eclim#display#fold#GetTreeFold(lnum) " {{{
 endfunction " }}}
 
 function! eclim#display#fold#IndentLevel(lnum) " {{{
-  let indent = indent(a:lnum)
-
-  " Adjust the indent to account for the node symbol which takes up 2 spaces.
-  " If this symbol where not there, then it would actually have 2 more spaces.
-  let symbol_match = matchstr(getline("."), '▸\|▾')
-  if (symbol_match != "")
-    let indent = indent + 2
-  endif
-
-  return indent / &shiftwidth
+  return indent(a:lnum) / &shiftwidth
 endfunction " }}}
 
 function! eclim#display#fold#NextNonBlankLine(lnum) " {{{

@@ -43,7 +43,7 @@ public class ThreadView
 
   private static final String SUSPENDED_THREAD_PREFIX =
     ViewUtils.NON_LEAF_NODE_INDENT +
-    ViewUtils.EXPANDED_TREE_SYMBOL;
+    ViewUtils.EXPANDED_NODE_SYMBOL;
 
   private static final String RUNNING_THREAD_PREFIX = ViewUtils.LEAF_NODE_INDENT;
 

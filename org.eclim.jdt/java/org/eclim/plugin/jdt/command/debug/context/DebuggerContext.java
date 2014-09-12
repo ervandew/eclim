@@ -220,7 +220,7 @@ public class DebuggerContext
   {
     Map<String, Object> statusMap = new HashMap<String, Object>();
 
-    statusMap.put("state", ViewUtils.EXPANDED_TREE_SYMBOL + getId() +
+    statusMap.put("state", ViewUtils.EXPANDED_NODE_SYMBOL + getId() +
         " (" + state.getName() + ")");
     statusMap.put("threads", getThreadContext().get());
     statusMap.put("variables", getVariableContext().get());

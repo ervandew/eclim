@@ -464,34 +464,41 @@ function! eclim#java#debug#VariableExpand() " {{{
     return
   endif
 
+  " Return if the current line does not contain any fold
+  if (matchstr(getline(line('.')), "▸\\|▾") == "")
+    return
+  endif
+
   " Make the buffer writable
   setlocal modifiable
   setlocal noreadonly
 
-  let collapsed_symbol_match = matchstr(getline("."), '▸')
-  if (collapsed_symbol_match == "")
-    let expanded_symbol_match = matchstr(getline("."), '▾')
-    if (expanded_symbol_match != "")
-      " Node already expanded. So collapse it.
-      s/▾/▸/
-      " Close the fold
+  let id = eclim#java#debug#GetIdUnderCursor()
+  if (id != "")
+    let command = s:command_variable_expand
+    let command = substitute(command, '<value_id>', id, '')
+
+    let results = eclim#Execute(command)
+    if (type(results) == g:LIST_TYPE && len(results) > 0)
+      call append(line('.'), results)
+
+      " Remove the placeholder line used to get folding to work.
+      " But first unfold.
+      exec "normal! za"
+
+      let cur_line = line('.')
+      let cur_col = col('.')
+      
+      let empty_line = line('.') + len(results) + 1
+      exec 'silent ' . empty_line . ',' . empty_line . 'd'
+
+      " Restore cursor position
+      call cursor(cur_line, cur_col)
+    else
       exec "normal! za"
     endif
   else
-    " Node collapsed. Expand it.
-    s/▸/▾/
-
-    let id = eclim#java#debug#GetIdUnderCursor()
-    if (id != "")
-      let command = s:command_variable_expand
-      let command = substitute(command, '<value_id>', id, '')
-
-      let results = eclim#Execute(command)
-      if (type(results) == g:LIST_TYPE && len(results) > 0)
-        " This will implicitly open the fold also
-        call append(line('.'), results)
-      end
-    end
+    exec "normal! za"
   endif
 
   " Restore settings

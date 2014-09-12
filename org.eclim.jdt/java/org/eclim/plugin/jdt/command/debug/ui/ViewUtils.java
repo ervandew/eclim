@@ -21,23 +21,36 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.eclipse.debug.core.DebugException;
+
+import org.eclipse.jdt.debug.core.IJavaValue;
+
 /**
  * Utility methods to create a UI view.
  */
 public class ViewUtils
 {
-  public static final String EXPANDED_TREE_SYMBOL = "▾ ";
-  public static final String COLLAPSED_TREE_SYMBOL = "▸ ";
+  public static final String EXPANDED_NODE_SYMBOL = "▾ ";
+  public static final String COLLAPSED_NODE_SYMBOL = "▸ ";
+  public static final String LEAF_NODE_SYMBOL = "• ";
 
   // Non leaf node will have the tree symbol appended to it
   public static final String NON_LEAF_NODE_INDENT = "  ";
-  public static final String LEAF_NODE_INDENT = "    ";
+  public static final String LEAF_NODE_INDENT = "  ";
 
   public static final String UNKNOWN = "<Unknown>";
 
   public static final String NO_EXPLICIT_RETURN_VALUE = "No explicit return value";
 
   public static final String STRING_CLASS_NAME = "java.lang.String";
+
+  public static boolean isStringValue(IJavaValue value)
+    throws DebugException
+  {
+
+    String refTypeName = value.getReferenceTypeName();
+    return refTypeName.equals(ViewUtils.STRING_CLASS_NAME);
+  }
 
   public static String getQualifiedName(String name)
   {

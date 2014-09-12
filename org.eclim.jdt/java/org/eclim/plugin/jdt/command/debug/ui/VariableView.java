@@ -104,7 +104,12 @@ public class VariableView
           process(thread.getTopStackFrame().getVariables(), results, ROOT_DEPTH);
         }
       } catch (DebugException e) {
-        logger.error("Unable to get variables", e);
+        // Suppress exception as it is possible to get an error when the current
+        // stack frame points to native method. Variable information is not
+        // available in this case.
+        if (logger.isDebugEnabled()) {
+          logger.debug("Unable to get variables", e);
+        }
       }
       return results;
     }
@@ -165,14 +170,25 @@ public class VariableView
       }
 
       JDIValue value = (JDIValue) var.getValue();
-      String prefix = getIndentation(depth,
-          value == null ? true : !value.hasVariables());
+      boolean isLeafNode = !((value != null) &&
+        (value instanceof IJavaObject) && 
+        value.hasVariables());
+
+      // Treat String as leaf node even though it has child variables
+      isLeafNode = isLeafNode || ViewUtils.isStringValue(value);
+
+      String prefix = getIndentation(depth, isLeafNode);
       results.add(prefix + getVariableText(jvar));
 
       // Keep track of this value as it is shown in UI and could be expanded
-      if (value instanceof IJavaObject) {
+      if (!isLeafNode) {
         expandableVarMap.put(((IJavaObject) value).getUniqueId(),
             new ExpandableVar(value, depth));
+
+        // Hack: Add an empty line so that VIM will think there are child nodes
+        // and fold correctly.
+        String childPrefix = getIndentation(depth + 1, true);
+        results.add(childPrefix);
       }
     }
   }
@@ -247,9 +263,9 @@ public class VariableView
   {
     if (level == ROOT_DEPTH) {
       if (isLeafNode) {
-        return ViewUtils.NON_LEAF_NODE_INDENT;
+        return ViewUtils.LEAF_NODE_SYMBOL;
       } else {
-        return ViewUtils.COLLAPSED_TREE_SYMBOL;
+        return ViewUtils.EXPANDED_NODE_SYMBOL;
       }
     }
 
@@ -261,10 +277,11 @@ public class VariableView
 
     // Special indent for last level since the tree symbol is involved
     if (isLeafNode) {
-      sb.append(ViewUtils.LEAF_NODE_INDENT);
+      sb.append(ViewUtils.LEAF_NODE_INDENT +
+          ViewUtils.LEAF_NODE_SYMBOL);
     } else {
       sb.append(ViewUtils.NON_LEAF_NODE_INDENT +
-          ViewUtils.COLLAPSED_TREE_SYMBOL);
+          ViewUtils.EXPANDED_NODE_SYMBOL);
     }
 
     return sb.toString();
@@ -360,7 +377,7 @@ public class VariableView
   {
     String refTypeName = value.getReferenceTypeName();
     String valueString = value.getValueString();
-    boolean isString = refTypeName.equals(ViewUtils.STRING_CLASS_NAME);
+    boolean isString = ViewUtils.isStringValue(value);
     IJavaType type = value.getJavaType();
     String signature = null;
     if (type != null) {
