@@ -104,8 +104,12 @@ the bottom in a horizontal split window. It has 2 panes\:
   If there are suspended threads, then one of them is automatically selected and
   its variables displayed.
 
-If for some reason, the status window is not updated, you can manually refresh it
-by running **:JavaDebugStatus** command.
+  Nested variables are shown in a tree like structure. To expand a variable, simply
+  place the cursor on that line and press <Enter>. To collapse the variable, press
+  <Enter> again.
+
+If for some reason, the status window is not updated, or you accidentally closed it,
+you can manually refresh it by running **:JavaDebugStatus** command.
 
 .. code-block:: vim
 
@@ -158,5 +162,57 @@ There are 2 ways to resume execution.
 
   :JavaDebugThreadResume
   :JavaDebugThreadResumeAll
+
+Configuration
+-------------
+- **g:EclimJavaDebugLineHighlight** (Default: 'DebugBreak')
+
+  Highlight group to use for showing the current line being debugged.
+
+- **g:EclimJavaDebugStatusWinOrientation** (Default: 'vertical')
+
+  Sets the orientation for the splits inside the debug status windows;
+  if they should be tiled vertically or horizontally.
+  Possible values\:
+
+  - horizontal
+
+  - vertical
+
+- **g:EclimJavaDebugStatusWinWidth** (Default: 50)
+
+  Sets the window width for the splits inside the debug status window.
+  This is only applicable when the orientation is horizontal.
+
+- **g:EclimJavaDebugStatusWinHeight** (Default: 10)
+
+  Sets the window height for the splits inside the debug status window.
+  This is only applicable when the orientation is vertical.
+
+Suggested Mappings
+------------------
+.. code-block:: vim
+
+  noremap <silent> <localleader>q :JavaDebugStop<CR>
+  nnoremap <silent> <localleader>s :JavaDebugThreadSuspend<CR>
+  nnoremap <silent> <localleader>r :JavaDebugThreadResume<CR>
+  nnoremap <silent> <localleader>b :JavaDebugBreakpointAdd<CR>
+  nnoremap <silent> <localleader>br :JavaDebugBreakpointRemove<CR>
+  nnoremap <silent> <localleader>bg :JavaDebugBreakpointGet<CR>
+  nnoremap <silent> ; :JavaDebugStep over<CR>
+  nnoremap <silent> <localleader>e :JavaDebugStep into<CR>
+  nnoremap <silent> <localleader>x :JavaDebugStep return<CR>
+
+Troubleshooting
+---------------
+- Expanding a variable shows an empty line with just a dot.
+  You probably haven't pressed the <Enter> key on the variable.
+  Nested variables are retreived one level at a time from the server to be
+  performant. Since we are using VIM folds, any mapping that simply opens a
+  fold will not cause variables to be retrieved.
+
+- A split window is created when stepping into a function (JavaDebugStep into)
+  from the debug status window. It is not clear why this is happening. To avoid
+  this problem, run step into command outside the debug status window.
 
 .. _eclim-user: http://groups.google.com/group/eclim-user
