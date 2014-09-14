@@ -515,6 +515,18 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
       \ bufnr(s:debug_step_prev_file))
   endif
 
+  " Jump out of status window so that the buffer is opened in the code window
+  " If you are in variable window, first go to thread window
+  if (bufname("%") == s:thread_win_name)
+    call eclim#util#GoToBufferWindow(b:filename)
+  endif
+
+  " If you are in thread window, go back to code window
+  if (bufname("%") == s:variable_win_name)
+    call eclim#util#GoToBufferWindow(b:filename)
+    call eclim#util#GoToBufferWindow(b:filename)
+  endif
+
   let s:debug_step_prev_file = a:file
   let s:debug_step_prev_line = a:line
   call eclim#util#GoToBufferWindowOrOpen(a:file, "edit")
