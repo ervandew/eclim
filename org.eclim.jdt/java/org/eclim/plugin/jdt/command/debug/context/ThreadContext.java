@@ -113,8 +113,8 @@ public class ThreadContext
     stackFrameMap.remove(threadId);
 
     if (steppingThread != null &&
-        ((IJavaThread) steppingThread).getThreadObject().getUniqueId() == threadId) {
-
+        ((IJavaThread)steppingThread).getThreadObject().getUniqueId() == threadId)
+    {
       steppingThread = null;
     }
   }

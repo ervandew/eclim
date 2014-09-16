@@ -71,7 +71,8 @@ public class VariableView
    * Variable value that is shown in UI and is expandable; i.e., has inner
    * variables/fields. These values are instances of IJavaObject.
    */
-  private class ExpandableVar {
+  private class ExpandableVar
+  {
     private IJavaValue value;
 
     /**
@@ -79,7 +80,8 @@ public class VariableView
      */
     private int depth;
 
-    public ExpandableVar(IJavaValue value, int depth) {
+    public ExpandableVar(IJavaValue value, int depth)
+    {
       this.value = value;
       this.depth = depth;
     }
@@ -165,7 +167,8 @@ public class VariableView
     for (IVariable var : vars) {
       JDIVariable jvar = (JDIVariable) var;
       if (jvar.isSynthetic() ||
-          ignoreVar(jvar)) {
+          ignoreVar(jvar))
+      {
         continue;
       }
 
