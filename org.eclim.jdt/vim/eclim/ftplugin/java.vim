@@ -220,7 +220,7 @@ if !exists(":Checkstyle")
 endif
 
 if !exists(":JavaDebugStart")
-  command -nargs=+ -buffer JavaDebugStart 
+  command -nargs=* -buffer JavaDebugStart
     \ :call eclim#java#debug#DebugStart(<f-args>)
 endif
 

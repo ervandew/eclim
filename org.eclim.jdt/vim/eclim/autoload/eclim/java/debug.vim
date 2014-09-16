@@ -133,35 +133,41 @@ function! eclim#java#debug#DefineBreakpointWinCommands() " {{{
   endif
 endfunction " }}}
 
-function! eclim#java#debug#DebugStart(host, port) " {{{
+function! eclim#java#debug#DebugStart(...) " {{{
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
 
-  if (v:servername == '')
-    call eclim#util#EchoError("Error: To debug, start VIM in server mode.
-          \ Usage: vim --servername <name>")
+  if v:servername == ''
+    call eclim#util#EchoError(
+      \ "Error: To debug, VIM must be running in server mode.\n" .
+      \ "Example: vim --servername <name>")
     return
   endif
 
-  if (a:host == '')
-    call eclim#util#EchoError("Error: Please specify a host.")
+  if a:0 != 2
+    call eclim#util#EchoError(
+      \ "Please specify the host and port of the java process to connect to.\n" .
+      \ "Example: JavaDebugStart locahost 1044")
     return
   endif
 
-  if (a:port == '')
-    call eclim#util#EchoError("Error: Please specify a port.")
+  let host = a:1
+  let port = a:2
+
+  if port !~ '^\d\+'
+    call eclim#util#EchoError("Error: Please specify a valid port number.")
     return
   endif
 
-  call eclim#display#signs#DefineLineHL(s:debug_line_sign,
-    \ g:EclimJavaDebugLineHighlight)
+  call eclim#display#signs#DefineLineHL(
+    \ s:debug_line_sign, g:EclimJavaDebugLineHighlight)
 
   let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_start
   let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<host>', a:host, '')
-  let command = substitute(command, '<port>', a:port, '')
+  let command = substitute(command, '<host>', host, '')
+  let command = substitute(command, '<port>', port, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
   let result = eclim#Execute(command)
 
