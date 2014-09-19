@@ -214,6 +214,7 @@ endfunction " }}}
 function! s:LocateFileCompletionInit(action, scope, project, workspace) " {{{
   let file = expand('%')
   let bufnum = bufnr('%')
+  let winnr = winnr()
   let winrestcmd = winrestcmd()
 
   topleft 12split [Locate\ Results]
@@ -238,6 +239,7 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace) " {{{
   setlocal buftype=nofile bufhidden=delete
 
   let b:bufnum = bufnum
+  let b:winnr = winnr
   let b:project = a:project
   let b:workspace = a:workspace
   let b:scope = a:scope
@@ -359,6 +361,7 @@ function! s:LocateFileSelect(action) " {{{
     endif
 
     let bufnum = b:bufnum
+    let winnr = b:winnr
     let winrestcmd = b:winrestcmd
 
     " close locate windows
@@ -369,7 +372,8 @@ function! s:LocateFileSelect(action) " {{{
     exec winrestcmd
 
     " open the selected result
-    call eclim#util#GoToBufferWindow(bufnum)
+    exec winnr . "wincmd w"
+    " call eclim#util#GoToBufferWindow(bufnum)
     call eclim#util#GoToBufferWindowOrOpen(file, a:action)
     call feedkeys("\<esc>", 'n')
     doautocmd WinEnter
