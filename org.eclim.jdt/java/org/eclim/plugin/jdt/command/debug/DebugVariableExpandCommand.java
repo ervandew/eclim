@@ -52,6 +52,6 @@ public class DebugVariableExpandCommand
       return null;
     }
 
-    return ctx.getVariableContext().expandValue(Long.parseLong(valueId));
+    return ctx.getVariableView().expandValue(Long.parseLong(valueId));
   }
 }

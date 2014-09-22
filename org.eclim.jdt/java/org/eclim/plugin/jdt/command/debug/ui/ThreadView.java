@@ -19,14 +19,15 @@ package org.eclim.plugin.jdt.command.debug.ui;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+
+import org.eclim.plugin.jdt.command.debug.context.ThreadContext;
 
 import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.debug.core.model.IStackFrame;
-import org.eclipse.debug.core.model.IThread;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaThread;
 
 /**
  * UI model for displaying threads.
@@ -51,62 +52,64 @@ public class ThreadView
     ViewUtils.LEAF_NODE_INDENT +
     ViewUtils.LEAF_NODE_INDENT;
 
-  private List<String> results = new ArrayList<String>();
+  private ThreadContext threadCtx;
 
-  public synchronized List<String> get(
-      Map<Long, IThread> threadMap,
-      Map<Long, IStackFrame[]> stackFrameMap)
+  public ThreadView(ThreadContext threadCtx)
+  {
+    this.threadCtx = threadCtx;
+  }
+
+  public List<String> get()
     throws DebugException
   {
-    update(threadMap, stackFrameMap);
+    List<String> results = new ArrayList<String>();
+    for (IJavaThread thread : threadCtx.getThreads()) {
+      getThreadText(thread, results);
+    }
     return results;
   }
 
-  public synchronized void update(Map<Long, IThread> threadMap,
-      Map<Long, IStackFrame[]> stackFrameMap)
+  public List<String> get(IJavaThread thread)
     throws DebugException
   {
-    results.clear();
-    process(threadMap, stackFrameMap);
+    List<String> results = new ArrayList<String>();
+    getThreadText(thread, results);
+    return results;
   }
 
-  private void process(Map<Long, IThread> threadMap,
-      Map<Long, IStackFrame[]> stackFrameMap)
+  private void getThreadText(IJavaThread thread, List<String> results)
     throws DebugException
   {
-    for (Map.Entry<Long, IThread> entry : threadMap.entrySet()) {
-      long threadId = entry.getKey();
-      IThread thread = threadMap.get(threadId);
-      String threadName = thread.getName();
+    long threadId = thread.getThreadObject().getUniqueId();
+    String threadName = thread.getName();
 
-      String prefix = null;
-      String status = null;
-      if (thread.isSuspended()) {
-        prefix = SUSPENDED_THREAD_PREFIX;
-        status = SUSPENDED;
-      } else {
-        prefix = RUNNING_THREAD_PREFIX;
-        status = RUNNING;
-      }
+    String prefix = null;
+    String status = null;
+    if (thread.isSuspended()) {
+      prefix = SUSPENDED_THREAD_PREFIX;
+      status = SUSPENDED;
+    } else {
+      prefix = RUNNING_THREAD_PREFIX;
+      status = RUNNING;
+    }
 
-      results.add(prefix + "Thread-" + threadName +
-          ":" + threadId  +
-          " (" + status  + ")");
+    results.add(prefix + "Thread-" + threadName +
+        ":" + threadId  +
+        " (" + status  + ")");
 
-      IStackFrame[] stackFrames = stackFrameMap.get(threadId);
-      if (stackFrames != null) {
-        // Protect against invalid stack frame. When debug session is resumed,
-        // all threads are resumed first. Then notification is sent for each
-        // thread. While processing for one thread, we might end up using old
-        // stack frames for some other thread, that are no longer valid.
-        // This should not happen normally since we have a handler for debug
-        // target itself, but this is being defensive.
-        try {
-          for (IStackFrame stackFrame : stackFrames) {
-            results.add(getStackFrameText(stackFrame));
-          }
-        } catch (DebugException e) {}
-      }
+    IStackFrame[] stackFrames = thread.getStackFrames();
+    if (stackFrames != null) {
+      // Protect against invalid stack frame. When debug session is resumed,
+      // all threads are resumed first. Then notification is sent for each
+      // thread. While processing for one thread, we might end up using old
+      // stack frames for some other thread, that are no longer valid.
+      // This should not happen normally since we have a handler for debug
+      // target itself, but this is being defensive.
+      try {
+        for (IStackFrame stackFrame : stackFrames) {
+          results.add(getStackFrameText(stackFrame));
+        }
+      } catch (DebugException e) {}
     }
   }
 

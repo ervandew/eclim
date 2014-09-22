@@ -25,6 +25,8 @@ import org.eclipse.debug.core.DebugEvent;
 
 import org.eclipse.debug.core.model.IThread;
 
+import org.eclipse.jdt.debug.core.IJavaThread;
+
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugElement;
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugTarget;
 
@@ -66,7 +68,7 @@ public class DebugTargetEventHandler extends DebugEventHandler
         }
 
         for (IThread thread : threads) {
-          ctx.getThreadContext().update(thread, thread.getStackFrames());
+          ctx.getThreadContext().update((IJavaThread) thread);
         }
 
         ctx.getVimClient().refreshDebugStatus();
@@ -75,8 +77,6 @@ public class DebugTargetEventHandler extends DebugEventHandler
       ctx.setState(DebuggerState.CONNECTED);
 
       if (detail == DebugEvent.CLIENT_REQUEST) {
-        ctx.getThreadContext().removeStackFrames();
-        ctx.getVariableContext().removeVariables();
         ctx.getVimClient().refreshDebugStatus();
       }
     }

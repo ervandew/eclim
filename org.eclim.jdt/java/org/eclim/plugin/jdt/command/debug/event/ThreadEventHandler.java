@@ -24,7 +24,6 @@ import org.eclim.plugin.jdt.command.debug.context.DebuggerState;
 import org.eclipse.debug.core.DebugEvent;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.debug.core.IJavaThread;
 
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugElement;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
@@ -45,11 +44,11 @@ public class ThreadEventHandler extends DebugEventHandler
     throws Exception
   {
     JDIThread thread = (JDIThread) element;
+    long threadId = thread.getThreadObject().getUniqueId();
 
     if (logger.isDebugEnabled()) {
       logger.debug("Handling thread event : " + thread.getName() + " : " +
-          ((IJavaThread) thread).getThreadObject().getUniqueId() +  " " +
-          kind + " " + detail);
+          threadId +  " " + kind + " " + detail);
     }
 
     if (kind == DebugEvent.SUSPEND) {
@@ -66,7 +65,7 @@ public class ThreadEventHandler extends DebugEventHandler
           }
         }
 
-        ctx.getThreadContext().update(thread, thread.getStackFrames());
+        ctx.getThreadContext().update(thread);
 
         // Do not update variables when suspended in a class file.
         // This causes the variable set to explode causing OOM.
@@ -76,27 +75,37 @@ public class ThreadEventHandler extends DebugEventHandler
 
         // Call refresh after jumping to file. Otherwise, it causes the sign to
         // not get placed for some reason.
+        //ctx.getVimClient().updateThreadInfo(threadId,
+        //    ctx.getThreadView().get(thread));
         ctx.getVimClient().refreshDebugStatus();
       } else if (detail == DebugEvent.CLIENT_REQUEST) {
-        ctx.getThreadContext().update(thread, thread.getStackFrames());
+        ctx.getThreadContext().update(thread);
+        //ctx.getVimClient().updateThreadInfo(threadId,
+        //    ctx.getThreadView().get(thread));
         ctx.getVimClient().refreshDebugStatus();
       }
     } else if (kind == DebugEvent.CREATE) {
-      ctx.getThreadContext().update(thread, null);
+      ctx.getThreadContext().update(thread);
 
       // Refresh status only after debug target has been created.
       // This is to avoid refreshing for each and every thread that gets
       // created before the debug target has finished initialization.
       // Once its created, we do want to refresh for each thread creation.
       if (!ctx.getState().equals(DebuggerState.CONNECTING)) {
+        //ctx.getVimClient().updateThreadInfo(threadId,
+        //    ctx.getThreadView().get(thread));
         ctx.getVimClient().refreshDebugStatus();
       }
     } else if (kind == DebugEvent.TERMINATE) {
       ctx.getThreadContext().remove(thread);
+      //ctx.getVimClient().updateThreadInfo(threadId,
+      //    ctx.getThreadView().get(thread));
       ctx.getVimClient().refreshDebugStatus();
     } else if (kind == DebugEvent.RESUME) {
-      ctx.getThreadContext().update(thread, null);
-      ctx.getVariableContext().removeVariables();
+      ctx.getThreadContext().update(thread);
+      ctx.getVariableView().clear(thread);
+      //ctx.getVimClient().updateThreadInfo(threadId,
+      //    ctx.getThreadView().get(thread));
       ctx.getVimClient().refreshDebugStatus();
     }
   }

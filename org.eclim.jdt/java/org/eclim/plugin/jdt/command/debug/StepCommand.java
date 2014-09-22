@@ -29,7 +29,7 @@ import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContextManager;
 import org.eclim.plugin.jdt.command.debug.context.ThreadContext;
 
-import org.eclipse.debug.core.model.IThread;
+import org.eclipse.jdt.debug.core.IJavaThread;
 
 /**
  * Command to step through the debug execution flow.
@@ -55,7 +55,7 @@ public class StepCommand
     ThreadContext threadCtx = ctx.getThreadContext();
 
     String threadId = commandLine.getValue(Options.THREAD_ID_OPTION);
-    IThread steppingThread = null;
+    IJavaThread steppingThread = null;
     if (threadId == null) {
       steppingThread = threadCtx.getSteppingThread();
     } else {

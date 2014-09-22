@@ -26,6 +26,8 @@ import org.eclim.plugin.core.util.VimClient;
 
 import org.eclim.plugin.jdt.command.debug.event.DebugEventSetListener;
 
+import org.eclim.plugin.jdt.command.debug.ui.ThreadView;
+import org.eclim.plugin.jdt.command.debug.ui.VariableView;
 import org.eclim.plugin.jdt.command.debug.ui.ViewUtils;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
@@ -81,7 +83,8 @@ public class DebuggerContext
   private volatile DebuggerState state = DebuggerState.CONNECTING;
 
   private final ThreadContext threadCtx;
-  private final VariableContext varCtx;
+  private final ThreadView threadView;
+  private final VariableView varView;
 
   /**
    * Debug target for currently active session.
@@ -109,7 +112,8 @@ public class DebuggerContext
     this.vimClient = new VimClient(vimInstanceId);
 
     this.threadCtx = new ThreadContext();
-    this.varCtx = new VariableContext(threadCtx);
+    this.threadView = new ThreadView(threadCtx);
+    this.varView = new VariableView(threadCtx);
   }
 
   public void start()
@@ -222,8 +226,8 @@ public class DebuggerContext
 
     statusMap.put("state", ViewUtils.EXPANDED_NODE_SYMBOL + getId() +
         " (" + state.getName() + ")");
-    statusMap.put("threads", getThreadContext().get());
-    statusMap.put("variables", getVariableContext().get());
+    statusMap.put("threads", threadView.get());
+    statusMap.put("variables", varView.get());
 
     return statusMap;
   }
@@ -243,14 +247,19 @@ public class DebuggerContext
     return this.id;
   }
 
-  public VariableContext getVariableContext()
-  {
-    return varCtx;
-  }
-
   public ThreadContext getThreadContext()
   {
     return threadCtx;
+  }
+
+  public ThreadView getThreadView()
+  {
+    return threadView;
+  }
+
+  public VariableView getVariableView()
+  {
+    return varView;
   }
 
   public IDebugTarget getDebugTarget()

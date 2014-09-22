@@ -23,10 +23,11 @@ import java.util.Map;
 
 import org.eclim.logging.Logger;
 
+import org.eclim.plugin.jdt.command.debug.context.ThreadContext;
+
 import org.eclipse.debug.core.DebugException;
 
 import org.eclipse.debug.core.model.IStackFrame;
-import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 
 import org.eclipse.jdt.core.Signature;
@@ -35,6 +36,7 @@ import org.eclipse.jdt.debug.core.IJavaArray;
 import org.eclipse.jdt.debug.core.IJavaFieldVariable;
 import org.eclipse.jdt.debug.core.IJavaObject;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
+import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
@@ -64,8 +66,18 @@ public class VariableView
    */
   private static final int ROOT_DEPTH = 0;
 
+  /**
+   * Thread being shown in UI.
+   */
+  private IJavaThread viewingThread;
+
+  /**
+   * Expanded variable map for the thread being shown in UI.
+   */
   private Map<Long, ExpandableVar> expandableVarMap =
     new HashMap<Long, ExpandableVar>();
+
+  private ThreadContext threadCtx;
 
   /**
    * Variable value that is shown in UI and is expandable; i.e., has inner
@@ -87,15 +99,27 @@ public class VariableView
     }
   }
 
-
-  public List<String> get(IThread thread)
+  public VariableView(ThreadContext threadCtx)
   {
+    this.threadCtx = threadCtx;
+  }
+
+  /**
+   * Returns the variable view for the thread currently being stepped through.
+   * If there is no such thread, then a <code>null</code> is returned.
+   */
+  public List<String> get()
+    throws DebugException
+  {
+    IJavaThread thread = threadCtx.getSteppingThread();
+
     // Since the view is being reloaded, we can clear existing entries
-    expandableVarMap.clear();
+    clear(viewingThread);
 
     if (thread == null) {
       return null;
     } else {
+      this.viewingThread = thread;
       List<String> results = new ArrayList<String>();
 
       // Protect against variable information unavailable for native
@@ -142,9 +166,20 @@ public class VariableView
     return results;
   }
 
-  public void removeVariables()
+  public void clear(IJavaThread thread)
+    throws DebugException
   {
-    expandableVarMap.clear();
+    if (viewingThread == null) {
+      return;
+    }
+
+    if (thread.getThreadObject().getUniqueId() ==
+        viewingThread.getThreadObject().getUniqueId())
+    {
+
+      viewingThread = null;
+      expandableVarMap.clear();
+    }
   }
 
   /**
@@ -212,51 +247,6 @@ public class VariableView
     }
 
     return false;
-  }
-
-  /**
-   * Determines whether nested variables should be returned as part of result
-   * set. Most times, we don't want to return fields that are part of Class
-   * that are not part of the source code. For e.g., java.lang.String contains
-   * fields that the application debugger doesn't care about. We only need to
-   * return the value of the string in this case.
-   *
-   */
-  private boolean includeNestedVar(JDIValue value)
-    throws DebugException
-  {
-    return true;
-    /*
-    boolean nesting = true;
-
-    if ((value instanceof IJavaArray) ||
-        (value instanceof IJavaClassObject))
-    {
-
-      nesting = false;
-    } else {
-      JDIType type = (JDIType) value.getJavaType();
-      // TODO Add tools.jar to access com.sun classes
-      //type.getUnderlyingType();
-
-      if (type == null) {
-        nesting = false;
-      } else {
-        String typeName = type.getName();
-
-        // TODO Instead of listing what to ignore, find them out by looking at
-        // the source locator for class names that are not present.
-        if (typeName.equals("java.util.List") ||
-            typeName.equals("java.util.Map") ||
-            typeName.equals("java.lang.String"))
-        {
-          nesting = false;
-        }
-      }
-    }
-
-    return nesting;
-    */
   }
 
   /**
@@ -422,72 +412,7 @@ public class VariableView
 
     }
 
-    // show unsigned value second, if applicable
-    if (isShowUnsignedValues()) {
-      buffer = appendUnsignedText(value, buffer);
-    }
-    // show hex value third, if applicable
-    if (isShowHexValues()) {
-      buffer = appendHexText(value, buffer);
-    }
-    // show byte character value last, if applicable
-    if (isShowCharValues()) {
-      buffer = appendCharText(value, buffer);
-    }
     return buffer.toString().trim();
-  }
-
-  private StringBuilder appendUnsignedText(IJavaValue value, StringBuilder buffer)
-    throws DebugException
-  {
-    String unsignedText = getValueUnsignedText(value);
-    if (unsignedText != null) {
-      buffer.append(" [");
-      buffer.append(unsignedText);
-      buffer.append("]");
-    }
-    return buffer;
-  }
-
-  private String getValueUnsignedText(IJavaValue value) throws DebugException
-  {
-    String sig = getPrimitiveValueTypeSignature(value);
-    if (sig == null) {
-      return null;
-    }
-
-    switch (sig.charAt(0)) {
-      case 'B' : // byte
-        int byteVal;
-        try {
-          byteVal = Integer.parseInt(value.getValueString());
-        } catch (NumberFormatException e) {
-          return null;
-        }
-        if (byteVal < 0) {
-          byteVal = byteVal & 0xFF;
-          return Integer.toString(byteVal);
-        }
-      default :
-        return null;
-    }
-  }
-
-  /**
-   * Returns the type signature for this value if its type is primitive.
-   * For non-primitive types, null is returned.
-   */
-  private String getPrimitiveValueTypeSignature(IJavaValue value)
-    throws DebugException
-  {
-    IJavaType type = value.getJavaType();
-    if (type != null) {
-      String sig = type.getSignature();
-      if (sig != null && sig.length() == 1) {
-        return sig;
-      }
-    }
-    return null;
   }
 
   /**
@@ -541,163 +466,5 @@ public class VariableView
     StringBuilder buffer = new StringBuilder(typeName);
     buffer.insert(firstBracket + 1, Integer.toString(arrayIndex));
     return buffer.toString();
-  }
-
-  private boolean isShowUnsignedValues()
-  {
-    return false;
-  }
-
-  private boolean isShowHexValues()
-  {
-    return false;
-  }
-
-  private boolean isShowCharValues()
-  {
-    return false;
-  }
-
-  private StringBuilder appendHexText(IJavaValue value, StringBuilder buffer)
-    throws DebugException
-  {
-    String hexText = getValueHexText(value);
-    if (hexText != null) {
-      buffer.append(" [");
-      buffer.append(hexText);
-      buffer.append("]");
-    }
-    return buffer;
-  }
-
-  private String getValueHexText(IJavaValue value) throws DebugException
-  {
-    String sig = getPrimitiveValueTypeSignature(value);
-    if (sig == null) {
-      return null;
-    }
-
-    StringBuilder buff = new StringBuilder();
-    long longValue;
-    char sigValue = sig.charAt(0);
-    try {
-      if (sigValue == 'C') {
-        longValue = value.getValueString().charAt(0);
-      } else {
-        longValue = Long.parseLong(value.getValueString());
-      }
-    } catch (NumberFormatException e) {
-      return null;
-    }
-    switch (sigValue) {
-      case 'B' :
-        buff.append("0x");
-        // keep only the relevant bits for byte
-        longValue &= 0xFF;
-        buff.append(Long.toHexString(longValue));
-        break;
-      case 'I' :
-        buff.append("0x");
-        // keep only the relevant bits for integer
-        longValue &= 0xFFFFFFFFl;
-        buff.append(Long.toHexString(longValue));
-        break;
-      case 'S' :
-        buff.append("0x");
-        // keep only the relevant bits for short
-        longValue = longValue & 0xFFFF;
-        buff.append(Long.toHexString(longValue));
-        break;
-      case 'J' :
-        buff.append("0x");
-        buff.append(Long.toHexString(longValue));
-        break;
-      case 'C' :
-        buff.append("\\u");
-        String hexString = Long.toHexString(longValue);
-        int length = hexString.length();
-        while (length < 4) {
-          buff.append('0');
-          length++;
-        }
-        buff.append(hexString);
-        break;
-      default:
-        return null;
-    }
-    return buff.toString();
-  }
-
-  private StringBuilder appendCharText(IJavaValue value, StringBuilder buffer)
-    throws DebugException
-  {
-    String charText = getValueCharText(value);
-    if (charText != null) {
-      buffer.append(" [");
-      buffer.append(charText);
-      buffer.append("]");
-    }
-    return buffer;
-  }
-
-  /**
-   * Returns the character string of a byte or <code>null</code> if
-   * the value can not be interpreted as a valid character.
-   */
-  private String getValueCharText(IJavaValue value) throws DebugException
-  {
-    String sig = getPrimitiveValueTypeSignature(value);
-    if (sig == null) {
-      return null;
-    }
-    String valueString = value.getValueString();
-    long longValue;
-    try {
-      longValue = Long.parseLong(valueString);
-    } catch (NumberFormatException e) {
-      return null;
-    }
-    switch (sig.charAt(0)) {
-      case 'B' : // byte
-        longValue = longValue & 0xFF; // Only lower 8 bits
-        break;
-      case 'I' : // integer
-        longValue = longValue & 0xFFFFFFFF; // Only lower 32 bits
-        if (longValue > 0xFFFF || longValue < 0) {
-          return null;
-        }
-        break;
-      case 'S' : // short
-        longValue = longValue & 0xFFFF; // Only lower 16 bits
-        break;
-      case 'J' :
-        if (longValue > 0xFFFF || longValue < 0) {
-          // Out of character range
-          return null;
-        }
-        break;
-      default :
-        return null;
-    }
-    char charValue = (char)longValue;
-    StringBuilder charText = new StringBuilder();
-    if (Character.getType(charValue) == Character.CONTROL) {
-      Character ctrl = new Character((char) (charValue + 64));
-      charText.append('^');
-      charText.append(ctrl);
-      switch (charValue) { // common use
-        case 0: charText.append(" (NUL)"); break;
-        case 8: charText.append(" (BS)"); break;
-        case 9: charText.append(" (TAB)"); break;
-        case 10: charText.append(" (LF)"); break;
-        case 13: charText.append(" (CR)"); break;
-        case 21: charText.append(" (NL)"); break;
-        case 27: charText.append(" (ESC)"); break;
-        case 127: charText.append(" (DEL)"); break;
-      }
-    } else {
-      charText.append(new Character(charValue));
-    }
-    return charText.toString();
   }
 }

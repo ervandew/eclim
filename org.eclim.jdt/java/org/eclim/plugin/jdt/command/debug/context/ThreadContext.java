@@ -16,17 +16,12 @@
  */
 package org.eclim.plugin.jdt.command.debug.context;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclim.plugin.jdt.command.debug.ui.ThreadView;
-
 import org.eclipse.debug.core.DebugException;
-
-import org.eclipse.debug.core.model.IStackFrame;
-import org.eclipse.debug.core.model.IThread;
 
 import org.eclipse.jdt.debug.core.IJavaThread;
 
@@ -35,27 +30,18 @@ import org.eclipse.jdt.debug.core.IJavaThread;
  */
 public class ThreadContext
 {
-  private ThreadView threadView;
-
   /**
    * Thread that is being currently stepped through. There can be more than one
    * thread suspended in some breakpoint ready to be stepped through. But only
    * one of them can be stepped through at a time. This field holds that
    * thread.
    */
-  private IThread steppingThread = null;
+  private IJavaThread steppingThread = null;
 
-  private Map<Long, IThread> threadMap = new ConcurrentHashMap<Long, IThread>();
+  private Map<Long, IJavaThread> threadMap =
+    new ConcurrentHashMap<Long, IJavaThread>();
 
-  private Map<Long, IStackFrame[]> stackFrameMap =
-    new ConcurrentHashMap<Long, IStackFrame[]>();
-
-  public ThreadContext()
-  {
-    this.threadView = new ThreadView();
-  }
-
-  public synchronized IThread getSteppingThread()
+  public synchronized IJavaThread getSteppingThread()
   {
     if (steppingThread != null) {
       // Check if it is still valid thread and in suspended state
@@ -66,7 +52,7 @@ public class ThreadContext
 
     // Find the first suspended thread and set it as stepping thread
     steppingThread = null;
-    for (Map.Entry<Long, IThread> entry : threadMap.entrySet()) {
+    for (Map.Entry<Long, IJavaThread> entry : threadMap.entrySet()) {
       if (entry.getValue().isSuspended()) {
         steppingThread = entry.getValue();
       }
@@ -78,51 +64,40 @@ public class ThreadContext
   /**
    * Explicitly sets the stepping thread.
    */
-  public synchronized void setSteppingThread(IThread thread)
+  public synchronized void setSteppingThread(IJavaThread thread)
   {
     this.steppingThread = thread;
   }
 
-  public IThread getThread(long threadId)
+  public Collection<IJavaThread> getThreads()
+  {
+    return threadMap.values();
+  }
+
+  public IJavaThread getThread(long threadId)
   {
     return threadMap.get(threadId);
   }
 
-  public synchronized List<String> get()
-    throws DebugException
-  {
-    return threadView.get(threadMap, stackFrameMap);
-  }
-
-  public synchronized void update(IThread thread, IStackFrame[] stackFrames)
+  public synchronized void update(IJavaThread thread)
     throws DebugException
   {
 
-    long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
+    long threadId = thread.getThreadObject().getUniqueId();
     threadMap.put(threadId, thread);
-    if (stackFrames != null) {
-      stackFrameMap.put(threadId, stackFrames);
-    }
   }
 
-  public synchronized void remove(IThread thread)
+  public synchronized void remove(IJavaThread thread)
     throws DebugException
   {
-    long threadId = ((IJavaThread) thread).getThreadObject().getUniqueId();
+    long threadId = thread.getThreadObject().getUniqueId();
     threadMap.remove(threadId);
-    stackFrameMap.remove(threadId);
 
     if (steppingThread != null &&
-        ((IJavaThread)steppingThread).getThreadObject().getUniqueId() == threadId)
+        steppingThread.getThreadObject().getUniqueId() == threadId)
     {
       steppingThread = null;
     }
-  }
-
-  public synchronized void removeStackFrames()
-    throws DebugException
-  {
-    stackFrameMap.clear();
   }
 
   /**
@@ -131,7 +106,7 @@ public class ThreadContext
   public void suspend(long threadId)
     throws DebugException
   {
-    IThread thread = threadMap.get(threadId);
+    IJavaThread thread = threadMap.get(threadId);
     if (thread != null) {
       thread.suspend();
     }
@@ -143,7 +118,7 @@ public class ThreadContext
   public void resume(long threadId)
     throws DebugException
   {
-    IThread thread = threadMap.get(threadId);
+    IJavaThread thread = threadMap.get(threadId);
     if (thread != null) {
       thread.resume();
     }

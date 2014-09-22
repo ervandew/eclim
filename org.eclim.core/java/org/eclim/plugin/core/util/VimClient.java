@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.util;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclim.logging.Logger;
 
@@ -83,4 +84,22 @@ public class VimClient
 
     CommandExecutor.execute(cmd, TIMEOUT);
   }
+
+  /*public void updateThreadInfo(long threadId, List<String> results)
+    throws Exception
+  {
+    String[] cmd = {
+      "vim",
+      "--servername",
+      instanceId,
+      "--remote-send",
+      ":JavaDebugThreadUpdate<CR>",
+    };
+
+    if (logger.isDebugEnabled()) {
+      logger.debug("Updating thread: " + Arrays.asList(cmd));
+    }
+
+    CommandExecutor.execute(cmd, TIMEOUT);
+  }*/
 }
