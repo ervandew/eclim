@@ -117,6 +117,7 @@ public class ClasspathUtils
       return;
     }
 
+    final List<IJavaProject> nextProjects = new ArrayList<IJavaProject>();
     for(IClasspathEntry entry : entries) {
       switch (entry.getEntryKind()) {
         case IClasspathEntry.CPE_LIBRARY :
@@ -133,7 +134,8 @@ public class ClasspathUtils
             javaProject =
               JavaUtils.getJavaProject(entry.getPath().segment(0));
             if (javaProject != null){
-              collect(javaProject, paths, visited, false);
+              // breadth first, not depth first, to preserve dependency ordering
+              nextProjects.add(javaProject);
             }
           }
           break;
@@ -147,6 +149,10 @@ public class ClasspathUtils
           }
           break;
       }
+    }
+    // depth second
+    for(final IJavaProject nextProject : nextProjects) {
+      collect(nextProject, paths, visited, false);
     }
   }
 }
