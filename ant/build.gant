@@ -138,6 +138,7 @@ target(name: 'init'){
         include(name: 'dropins/**/plugins/org.eclipse.*.jar')
         include(name: 'plugins/javax.*.jar')
         include(name: 'plugins/org.eclipse.*.jar')
+        include(name: 'plugins/org.eclipse.debug.*.jar')
         include(name: 'plugins/org.apache.ant_*/lib/ant*.jar')
         include(name: 'plugins/org.w3c.*.jar')
         include(name: 'plugins/com.ibm.*.jar')
