@@ -21,6 +21,8 @@ import org.eclim.logging.Logger;
 import org.eclim.plugin.jdt.command.debug.context.DebuggerContext;
 import org.eclim.plugin.jdt.command.debug.context.DebuggerState;
 
+import org.eclim.plugin.jdt.command.debug.ui.ViewUtils;
+
 import org.eclipse.debug.core.DebugEvent;
 
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -75,14 +77,18 @@ public class ThreadEventHandler extends DebugEventHandler
 
         // Call refresh after jumping to file. Otherwise, it causes the sign to
         // not get placed for some reason.
-        //ctx.getVimClient().updateThreadInfo(threadId,
-        //    ctx.getThreadView().get(thread));
-        ctx.getVimClient().refreshDebugStatus();
+        ctx.getVimClient().updateThreadView(threadId,
+            ViewUtils.MODIFY_NODE,
+            ctx.getThreadView().get(thread));
+
+        ctx.getVimClient().updateVariableView(ctx.getVariableView().get());
       } else if (detail == DebugEvent.CLIENT_REQUEST) {
         ctx.getThreadContext().update(thread);
-        //ctx.getVimClient().updateThreadInfo(threadId,
-        //    ctx.getThreadView().get(thread));
-        ctx.getVimClient().refreshDebugStatus();
+        ctx.getVimClient().updateThreadView(threadId,
+            "m",
+            ctx.getThreadView().get(thread));
+
+        ctx.getVimClient().updateVariableView(ctx.getVariableView().get());
       }
     } else if (kind == DebugEvent.CREATE) {
       ctx.getThreadContext().update(thread);
@@ -92,21 +98,25 @@ public class ThreadEventHandler extends DebugEventHandler
       // created before the debug target has finished initialization.
       // Once its created, we do want to refresh for each thread creation.
       if (!ctx.getState().equals(DebuggerState.CONNECTING)) {
-        //ctx.getVimClient().updateThreadInfo(threadId,
-        //    ctx.getThreadView().get(thread));
-        ctx.getVimClient().refreshDebugStatus();
+        ctx.getVimClient().updateThreadView(threadId,
+            ViewUtils.ADD_NODE,
+            ctx.getThreadView().get(thread));
       }
     } else if (kind == DebugEvent.TERMINATE) {
       ctx.getThreadContext().remove(thread);
-      //ctx.getVimClient().updateThreadInfo(threadId,
-      //    ctx.getThreadView().get(thread));
-      ctx.getVimClient().refreshDebugStatus();
+      ctx.getVimClient().updateThreadView(threadId,
+          ViewUtils.REMOVE_NODE,
+          null);
     } else if (kind == DebugEvent.RESUME) {
       ctx.getThreadContext().update(thread);
-      ctx.getVariableView().clear(thread);
-      //ctx.getVimClient().updateThreadInfo(threadId,
-      //    ctx.getThreadView().get(thread));
-      ctx.getVimClient().refreshDebugStatus();
+      ctx.getVimClient().updateThreadView(threadId,
+          ViewUtils.MODIFY_NODE,
+          ctx.getThreadView().get(thread));
+
+      if (ctx.getVariableView().isViewingThread(thread)) {
+        ctx.getVariableView().clear();
+        ctx.getVimClient().updateVariableView(null);
+      }
     }
   }
 }

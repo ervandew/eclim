@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.util;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclim.logging.Logger;
@@ -48,7 +49,7 @@ public class VimClient
     return instanceId;
   }
 
-  public void jumpToFilePosition(String fileName, int lineNum)
+  private void remoteSend(String arg)
     throws Exception
   {
     String[] cmd = {
@@ -56,50 +57,61 @@ public class VimClient
       "--servername",
       instanceId,
       "--remote-send",
-      ":JavaDebugGoToFile " + fileName + " " + lineNum + "<CR>",
+      arg + "<CR>",
     };
 
-
     if (logger.isDebugEnabled()) {
-      logger.debug("Jumping to file: " + Arrays.asList(cmd));
+      logger.debug("VIM command: " + Arrays.asList(cmd));
     }
 
     CommandExecutor.execute(cmd, TIMEOUT);
+  }
+
+  public void jumpToFilePosition(String fileName, int lineNum)
+    throws Exception
+  {
+    remoteSend(":JavaDebugGoToFile " + fileName + " " + lineNum);
   }
 
   public void refreshDebugStatus()
     throws Exception
   {
-    String[] cmd = {
-      "vim",
-      "--servername",
-      instanceId,
-      "--remote-send",
-      ":JavaDebugStatus<CR>",
-    };
-
-    if (logger.isDebugEnabled()) {
-      logger.debug("Refreshing debug status: " + Arrays.asList(cmd));
-    }
-
-    CommandExecutor.execute(cmd, TIMEOUT);
+      remoteSend(":JavaDebugStatus");
   }
 
-  /*public void updateThreadInfo(long threadId, List<String> results)
+  public void signalSessionTermination()
     throws Exception
   {
-    String[] cmd = {
-      "vim",
-      "--servername",
-      instanceId,
-      "--remote-send",
-      ":JavaDebugThreadUpdate<CR>",
-    };
+    remoteSend(":JavaDebugSessionTerminated");
+  }
 
-    if (logger.isDebugEnabled()) {
-      logger.debug("Updating thread: " + Arrays.asList(cmd));
+  public void updateThreadView(long threadId, String kind, List<String> results)
+    throws Exception
+  {
+    remoteSend(":JavaDebugThreadViewUpdate " + threadId + " " +
+        kind + " " + concatenateList(results));
+  }
+
+  public void updateVariableView(List<String> results)
+    throws Exception
+  {
+    remoteSend(":JavaDebugVariableViewUpdate " +
+        concatenateList(results));
+  }
+
+  private String concatenateList(List<String> entries) {
+    if (entries == null || entries.isEmpty()) {
+      // Return a placeholder string since the remote VIM command expects an arg
+      return "-";
     }
 
-    CommandExecutor.execute(cmd, TIMEOUT);
-  }*/
+    StringBuilder sb = new StringBuilder();
+    Iterator<String> iter = entries.iterator();
+    while (iter.hasNext()) {
+      sb.append(iter.next().replaceAll(" ", "\\\\ "));
+      sb.append("<eol>");
+    }
+
+    return sb.toString();
+  }
 }

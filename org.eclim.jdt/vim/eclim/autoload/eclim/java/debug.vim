@@ -20,6 +20,13 @@
 " }}}
 
 " Script Variables {{{
+" Regex used to search for any object ID
+" Use a non greedy search to match the closing parenthesis using \{-}
+let s:id_search_by_regex = '(id=.\{-})'
+
+" Pattern used to search for specific object ID
+let s:id_search_by_value = '(id=<value>)'
+
 " TODO This needs to be maintained per thread. We can use debug session id +
 " thread id as key
 let s:debug_step_prev_file = ''
@@ -105,6 +112,20 @@ function! eclim#java#debug#DefineStatusWinCommands() " {{{
     command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
   endif
 
+  if !exists(":JavaDebugSessionTerminated")
+    command -nargs=0 JavaDebugSessionTerminated
+      \ :call eclim#java#debug#SessionTerminated()
+  endif
+
+  if !exists(":JavaDebugThreadViewUpdate")
+    command -nargs=+ JavaDebugThreadViewUpdate
+      \ :call eclim#java#debug#ThreadViewUpdate(<f-args>)
+  endif
+
+  if !exists(":JavaDebugVariableViewUpdate")
+    command -nargs=+ JavaDebugVariableViewUpdate
+      \ :call eclim#java#debug#VariableViewUpdate(<f-args>)
+  endif
 endfunction " }}}
 
 function! eclim#java#debug#DefineThreadWinCommands() " {{{
@@ -195,15 +216,21 @@ function! eclim#java#debug#DebugStop() " {{{
 endfunction " }}}
 
 function! eclim#java#debug#DebugThreadSuspend() " {{{
+  " Check if we are in the right window
+  if (bufname("%") != s:thread_win_name)
+    call eclim#util#EchoError("Thread suspend command not applicable in this window.")
+    return
+  endif
+
   " Suspends thread under cursor.
-  let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
-  if thread_id != ""
-    let command = s:command_thread_suspend
-    let command = substitute(command, '<thread_id>', thread_id, '')
-  else
+  let thread_id = eclim#java#debug#GetIdUnderCursor()
+  if thread_id == ""
     call eclim#util#Echo("No valid thread found under cursor")
     return
   endif
+
+  let command = s:command_thread_suspend
+  let command = substitute(command, '<thread_id>', thread_id, '')
 
   call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
@@ -216,10 +243,16 @@ endfunction " }}}
 
 function! eclim#java#debug#DebugThreadResume() " {{{
   " Resume a single thread.
-  let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
   " Even if thread_id is empty, invoke resume. If there is atleast one
   " suspended thread, then the server could resume that. If not, it will
-  " reurn a message.
+  " re-run a message.
+  " Check if we are in the right window
+  if (bufname("%") == s:thread_win_name)
+    let thread_id = eclim#java#debug#GetIdUnderCursor()
+  else
+    let thread_id = ""
+  endif
+
   let command = s:command_thread_resume
   let command = substitute(command, '<thread_id>', thread_id, '')
 
@@ -369,11 +402,17 @@ function! eclim#java#debug#BreakpointToggle() " {{{
 endfunction " }}}
 
 function! eclim#java#debug#Step(action) " {{{
-  let thread_id = eclim#java#debug#GetThreadIdUnderCursor()
+  if (bufname("%") == s:thread_win_name)
+    let thread_id = eclim#java#debug#GetIdUnderCursor()
+  else
+    let thread_id = ""
+  endif
+
   if thread_id != ""
     let command = s:command_step_thread
     let command = substitute(command, '<thread_id>', thread_id, '')
   else
+    " Step through the currently stepping thread, if one exists
     let command = s:command_step
   endif
 
@@ -437,8 +476,8 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
   setlocal nonu
-  call eclim#java#debug#DefineStatusWinCommands()
   call eclim#java#debug#DefineThreadWinCommands()
+  call eclim#java#debug#DefineStatusWinCommands()
 
   let var_win_opts = {'orientation': g:EclimJavaDebugStatusWinOrientation,
     \ 'width': g:EclimJavaDebugStatusWinWidth,
@@ -453,8 +492,8 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
   setlocal nonu
-  call eclim#java#debug#DefineStatusWinCommands()
   call eclim#java#debug#DefineVariableWinCommands()
+  call eclim#java#debug#DefineStatusWinCommands()
 
   " Restore position
   call eclim#util#GoToBufferWindow(cur_bufnr)
@@ -546,35 +585,6 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
     \ bufnr(a:file), a:line)
 endfunction " }}}
 
-function! eclim#java#debug#GetThreadIdUnderCursor() " {{{
-  " Returns the thread ID under cursor. An empty string is returned if there is
-  " no valid thread ID. A valid thread ID is searched only in Debug Threads
-  " window.
-
-  " Check if we are in the right window
-  if (bufname("%") != s:thread_win_name)
-    return ""
-  endif
-
-  let line = line(".")
-  " Ignore the first line as it is the state
-  if (line == 1)
-    return ""
-  endif
-
-  let line_arr = split(getline("."), '(')
-  if (len(line_arr) > 1)
-    let thread_info_arr = split(line_arr[0], ':')
-    if (len(thread_info_arr) == 2)
-      " trim any white space before returning the thread id
-      return substitute(thread_info_arr[1], "^\\s\\+\\|\\s\\+$","","g")
-    endif
-  endif
-
-  " Did not find a valid thread id
-  return ""
-endfunction " }}}
-
 function! eclim#java#debug#GetIdUnderCursor() " {{{
   " Returns the object ID under cursor. Object ID is present in the form:
   " (id=X) where X is the ID.
@@ -582,7 +592,7 @@ function! eclim#java#debug#GetIdUnderCursor() " {{{
   " An empty string is returned if there is no valid ID.
 
   " Look for the substring (id=X) where X is the object ID
-  let id_substr = matchstr(getline("."), '(id=.*)')
+  let id_substr = matchstr(getline("."), s:id_search_by_regex)
   if (id_substr == "")
     return ""
   else
@@ -590,6 +600,111 @@ function! eclim#java#debug#GetIdUnderCursor() " {{{
     " remove the trailing ) character
     return substitute(id, ")","","g")
   endif
+endfunction " }}}
+
+function! eclim#java#debug#ThreadViewUpdate(thread_id, kind, value) " {{{
+  " Updates the thread window with new thread information.
+  " Update kind can be one of the following:
+  " a: Add a new thread
+  " m: Modify an existing thread
+  " r: Remove an existing thread
+  
+  " Overwrite the message containing the long list of arguments to this function
+  call eclim#util#Echo("Refreshing ...")
+
+  " Store current position and restore in the end
+  let cur_bufnr = bufnr('%')
+  let cur_line = line('.')
+  let cur_col = col('.')
+
+  let found = eclim#util#GoToBufferWindow(s:thread_win_name)
+  if found == 0
+    return
+  endif
+
+  setlocal modifiable
+  setlocal noreadonly
+
+  let lines = split(a:value, "<eol>")
+  if a:kind == 'a'
+    " Add to the end
+    call append(line('$'), lines)
+  else
+    " Go to line having the thread id
+    call cursor(1, 1)
+    let pattern = substitute(s:id_search_by_value, '<value>', a:thread_id, '')
+    " Don't wrap search.
+    let match_line = search(pattern, 'W')
+    if match_line != 0
+      " Get the next thread entry. Don't wrap search.
+      let next_match_line = search(s:id_search_by_regex, 'W')
+      if next_match_line == 0
+        let last_line_del = line('$')
+      else
+        let last_line_del = next_match_line - 1
+      endif
+
+      " Delete the desired lines
+      let undolevels = &undolevels
+      set undolevels=-1
+      silent exec match_line . ',' . last_line_del . 'delete _'
+      let &undolevels = undolevels
+
+      " In case of modify, add the new values
+      if a:kind == 'm'
+        call append(match_line - 1, lines)
+      endif
+    endif
+  endif
+
+  setlocal nomodifiable
+  setlocal readonly
+
+  " Restore position
+  call eclim#util#GoToBufferWindow(cur_bufnr)
+  call cursor(cur_line, cur_col)
+  call eclim#util#Echo(" ")
+endfunction " }}}
+
+function! eclim#java#debug#SessionTerminated() " {{{
+  " Cleans up the debug status window.
+
+  " Store current position and restore in the end
+  let cur_bufnr = bufnr('%')
+  let cur_line = line('.')
+  let cur_col = col('.')
+
+  let found = eclim#util#GoToBufferWindow(s:thread_win_name)
+  if found == 0
+    return
+  endif
+
+  setlocal modifiable
+  setlocal noreadonly
+
+  " Go to line having the thread id
+  call cursor(1, 1)
+  s/Connected/Disconnected/
+
+  " Delete any threads that have not been cleared
+  silent 2,$delete _
+
+  setlocal nomodifiable
+  setlocal readonly
+
+  " Restore position
+  call eclim#util#GoToBufferWindow(cur_bufnr)
+  call cursor(cur_line, cur_col)
+
+  call eclim#util#TempWindowClear(s:variable_win_name)
+endfunction " }}}
+
+function! eclim#java#debug#VariableViewUpdate(value) " {{{
+  " Updates the variable window with new set of values.
+
+  call eclim#util#Echo("Refreshing ...")
+  call eclim#util#TempWindowClear(s:variable_win_name, split(a:value, "<eol>"))
+  call eclim#util#Echo(" ")
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

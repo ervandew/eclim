@@ -114,7 +114,7 @@ public class VariableView
     IJavaThread thread = threadCtx.getSteppingThread();
 
     // Since the view is being reloaded, we can clear existing entries
-    clear(viewingThread);
+    clear();
 
     if (thread == null) {
       return null;
@@ -166,20 +166,19 @@ public class VariableView
     return results;
   }
 
-  public void clear(IJavaThread thread)
+  public void clear()
     throws DebugException
   {
-    if (viewingThread == null) {
-      return;
-    }
+    viewingThread = null;
+    expandableVarMap.clear();
+  }
 
-    if (thread.getThreadObject().getUniqueId() ==
-        viewingThread.getThreadObject().getUniqueId())
-    {
-
-      viewingThread = null;
-      expandableVarMap.clear();
-    }
+  public boolean isViewingThread(IJavaThread thread)
+    throws DebugException
+  {
+    return viewingThread != null &&
+      (thread.getThreadObject().getUniqueId() ==
+       viewingThread.getThreadObject().getUniqueId());
   }
 
   /**

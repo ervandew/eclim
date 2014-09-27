@@ -530,8 +530,10 @@ function! eclim#util#GoToBufferWindow(buf)
     let winnr = bufwinnr(bufnr('^' . name . '$'))
   endif
   if winnr != -1
-    exec winnr . "winc w"
-    call eclim#util#DelayedCommand('doautocmd WinEnter')
+    if winnr != winnr()
+      exec winnr . "winc w"
+      call eclim#util#DelayedCommand('doautocmd WinEnter')
+    endif
     return 1
   endif
   return 0
@@ -544,8 +546,10 @@ function! eclim#util#GoToBufferWindowOrOpen(name, cmd)
   let name = eclim#util#EscapeBufferName(a:name)
   let winnr = bufwinnr(bufnr('^' . name . '$'))
   if winnr != -1
-    exec winnr . "winc w"
-    call eclim#util#DelayedCommand('doautocmd WinEnter')
+    if winnr != winnr()
+      exec winnr . "winc w"
+      call eclim#util#DelayedCommand('doautocmd WinEnter')
+    endif
   else
     let cmd = a:cmd
     " if splitting and the buffer is a unamed empty buffer, then switch to an
@@ -1574,8 +1578,10 @@ function! eclim#util#TempWindow(name, lines, ...) " {{{
   endif
 endfunction " }}}
 
-function! eclim#util#TempWindowClear(name) " {{{
+function! eclim#util#TempWindowClear(name, ...) " {{{
   " Clears the contents of the temp window with the given name.
+  " It also accepts an optional argument. If specified, the value will be
+  " treated as new content to be added to the window after clearing it.
   let name = eclim#util#EscapeBufferName(a:name)
   if bufwinnr(name) != -1
     let curwinnr = winnr()
@@ -1583,6 +1589,11 @@ function! eclim#util#TempWindowClear(name) " {{{
     setlocal modifiable
     setlocal noreadonly
     silent 1,$delete _
+
+    if a:0 == 1
+      call append(0, a:1)
+    endif
+
     exec curwinnr . "winc w"
   endif
 endfunction " }}}

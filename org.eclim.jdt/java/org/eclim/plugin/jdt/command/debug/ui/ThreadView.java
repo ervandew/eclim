@@ -46,11 +46,14 @@ public class ThreadView
     ViewUtils.NON_LEAF_NODE_INDENT +
     ViewUtils.EXPANDED_NODE_SYMBOL;
 
-  private static final String RUNNING_THREAD_PREFIX = ViewUtils.LEAF_NODE_INDENT;
+  private static final String RUNNING_THREAD_PREFIX =
+    ViewUtils.LEAF_NODE_INDENT +
+    ViewUtils.LEAF_NODE_SYMBOL;
 
   private static final String STACK_FRAME_PREFIX =
     ViewUtils.LEAF_NODE_INDENT +
-    ViewUtils.LEAF_NODE_INDENT;
+    ViewUtils.LEAF_NODE_INDENT +
+    ViewUtils.LEAF_NODE_SYMBOL;
 
   private ThreadContext threadCtx;
 
@@ -94,7 +97,7 @@ public class ThreadView
     }
 
     results.add(prefix + "Thread-" + threadName +
-        ":" + threadId  +
+        " (id=" + threadId  + ") : " +
         " (" + status  + ")");
 
     IStackFrame[] stackFrames = thread.getStackFrames();

@@ -285,6 +285,21 @@ if !exists(":JavaDebugGoToFile")
   command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
 endif
 
+if !exists(":JavaDebugSessionTerminated")
+  command -nargs=0 JavaDebugSessionTerminated
+    \ :call eclim#java#debug#SessionTerminated()
+endif
+
+if !exists(":JavaDebugThreadViewUpdate")
+  command -nargs=+ JavaDebugThreadViewUpdate
+    \ :call eclim#java#debug#ThreadViewUpdate(<f-args>)
+endif
+
+if !exists(":JavaDebugVariableViewUpdate")
+  command -nargs=+ JavaDebugVariableViewUpdate
+    \ :call eclim#java#debug#VariableViewUpdate(<f-args>)
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker

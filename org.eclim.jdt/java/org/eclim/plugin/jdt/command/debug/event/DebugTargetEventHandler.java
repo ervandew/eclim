@@ -57,7 +57,7 @@ public class DebugTargetEventHandler extends DebugEventHandler
       ctx.getVimClient().refreshDebugStatus();
     } else if (kind == DebugEvent.TERMINATE) {
       ctx.setState(DebuggerState.DISCONNECTED);
-      ctx.getVimClient().refreshDebugStatus();
+      ctx.getVimClient().signalSessionTermination();
     } else if (kind == DebugEvent.SUSPEND) {
       ctx.setState(DebuggerState.SUSPENDED);
 

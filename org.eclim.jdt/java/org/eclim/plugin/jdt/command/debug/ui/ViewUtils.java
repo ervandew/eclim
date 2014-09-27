@@ -38,6 +38,10 @@ public class ViewUtils
   public static final String NON_LEAF_NODE_INDENT = "  ";
   public static final String LEAF_NODE_INDENT = "  ";
 
+  public static final String ADD_NODE = "a";
+  public static final String MODIFY_NODE = "m";
+  public static final String REMOVE_NODE = "r";
+
   public static final String UNKNOWN = "<Unknown>";
 
   public static final String NO_EXPLICIT_RETURN_VALUE = "No explicit return value";
