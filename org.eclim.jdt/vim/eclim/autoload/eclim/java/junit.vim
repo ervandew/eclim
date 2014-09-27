@@ -68,7 +68,8 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
   let curbuf = bufnr('%')
   let result = eclim#Execute(command, {'project': project, 'exec': 1, 'raw': 1})
   let results = split(substitute(result, "^\n*", '', 'g'), "\n")
-  if statusLine[1] == '0' && statusLine[2] == '0'
+  let statusLine = match(result, "Failures: \(.*\), Errors: \(.*\),")
+  if len(statusLine) >= 3 && statusLine[1] == '0' && statusLine[2] == '0'
     let name = eclim#util#EscapeBufferName('[JUnit Output]')
     if bufwinnr(name) != -1
       " close existing output window; we've fixed the issue
@@ -78,7 +79,7 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
       exec curwinnr . "winc w"
     endif
     redraw | echohl IncSearch | echo statusLine[0] | echohl none
-  else
+  elseif result
     call eclim#util#TempWindow('[JUnit Output]', results)
   endif
   let b:project = project
