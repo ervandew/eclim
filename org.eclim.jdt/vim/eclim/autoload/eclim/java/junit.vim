@@ -68,7 +68,11 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
   let curbuf = bufnr('%')
   let result = eclim#Execute(command, {'project': project, 'exec': 1, 'raw': 1})
   let results = split(substitute(result, "^\n*", '', 'g'), "\n")
-  let statusLine = match(result, "Failures: \(.*\), Errors: \(.*\),")
+  let statusLine = matchlist(result, 
+              \ 'Tests run:.*Failures: \([0-9]*\), Errors: \([0-9]*\), [^\n]*sec')
+  let g:result = result
+  let g:results = results
+  let g:statusLine = statusLine
   if len(statusLine) >= 3 && statusLine[1] == '0' && statusLine[2] == '0'
     let name = eclim#util#EscapeBufferName('[JUnit Output]')
     if bufwinnr(name) != -1
@@ -79,7 +83,9 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
       exec curwinnr . "winc w"
     endif
     redraw | echohl IncSearch | echo statusLine[0] | echohl none
-  elseif result
+  elseif result != '0'
+    " if result == '0', then there was some error;
+    "  results won't have anything interesting anyway
     call eclim#util#TempWindow('[JUnit Output]', results)
   endif
   let b:project = project
