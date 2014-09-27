@@ -295,23 +295,36 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
   endif
   if !empty(results)
     if a:type == 'java_search'
+
       call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
       let locs = getloclist(0)
+
       " if only one result and it's for the current file, just jump to it.
       " note: on windows the expand result must be escaped
       if len(results) == 1 && locs[0].bufnr == bufnr('%')
         if results[0].line != 1 && results[0].column != 1
           lfirst
+
+          " clear signs if this was the only one
+          let signs = eclim#display#signs#GetExisting()
+          if len(signs) == 1
+            call eclim#display#signs#UnplaceAll(signs)
+          endif
         endif
 
       " single result in another file
       elseif len(results) == 1 && action != 'lopen'
-        let entry = getloclist(0)[0]
+        let entry = locs[0]
         let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
         call eclim#util#GoToBufferWindowOrOpen(name, action)
-        call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
         call eclim#display#signs#Update()
         call cursor(entry.lnum, entry.col)
+
+        " clear signs if this was the only one
+        let signs = eclim#display#signs#GetExisting()
+        if len(signs) == 1
+          call eclim#display#signs#UnplaceAll(signs)
+        endif
 
       " multiple results and user specified an action other than lopen
       elseif len(results) && len(action_args) && action != 'lopen'
