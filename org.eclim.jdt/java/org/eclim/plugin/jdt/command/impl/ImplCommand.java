@@ -385,7 +385,8 @@ public class ImplCommand
       // a more accurate length estimate can be found by locating the
       //  sibling at its new position and taking the difference.
       //  this prevents the formatting from screwing up the sibling's formatting
-      IJavaElement[] newSiblings = sibling == null ? null : src.findElements(sibling);
+      final IJavaElement[] newSiblings = sibling == null ?
+          null : src.findElements(sibling);
       if (newSiblings != null && newSiblings.length == 1) {
         // not sure what it would mean if there were more than one...
         length = getOffset(newSiblings[0]) - offset;
