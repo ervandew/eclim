@@ -35,7 +35,8 @@ public class ImplementorSearchRequestor
 
   private final IMethod target;
 
-  public ImplementorSearchRequestor(final IMethod target) {
+  public ImplementorSearchRequestor(final IMethod target)
+  {
     this.target = target;
     if (target == null) {
       throw new IllegalArgumentException(
@@ -54,11 +55,12 @@ public class ImplementorSearchRequestor
     }
   }
 
-  private boolean matchDeclaresTarget(final SearchMatch match) 
+  private boolean matchDeclaresTarget(final SearchMatch match)
     throws CoreException
   {
-    if (!(match.getElement() instanceof IType))
+    if (!(match.getElement() instanceof IType)) {
       return false;
+    }
 
     final IType type = (IType) match.getElement();
     IMethod[] found = type.findMethods(target);

@@ -196,7 +196,8 @@ public class SearchCommand
           }
         } else if (context == IJavaSearchConstants.IMPLEMENTORS &&
             (element.getElementType() == IJavaElement.FIELD ||
-             element.getElementType() == IJavaElement.LOCAL_VARIABLE)) {
+             element.getElementType() == IJavaElement.LOCAL_VARIABLE))
+        {
           // it doesn't make sense to search for implementors
           //  of a variable, so switch to declarations
           context = IJavaSearchConstants.DECLARATIONS;
@@ -298,9 +299,9 @@ public class SearchCommand
       IJavaElement implementedTarget)
     throws CoreException
   {
-    SearchRequestor requestor = implementedTarget instanceof IMethod
-        ? new ImplementorSearchRequestor((IMethod) implementedTarget)
-        : new SearchRequestor();
+    SearchRequestor requestor = implementedTarget instanceof IMethod ?
+        new ImplementorSearchRequestor((IMethod) implementedTarget) :
+        new SearchRequestor();
     if(pattern != null){
       SearchEngine engine = new SearchEngine();
       SearchParticipant[] participants =
