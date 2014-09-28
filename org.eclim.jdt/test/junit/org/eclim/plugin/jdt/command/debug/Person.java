@@ -35,4 +35,16 @@ public class Person
   public Sex getSex() {
     return sex;
   }
+
+  @Override
+  public String toString() {
+    StringBuffer sb = new StringBuffer();
+    sb.append("Name:")
+      .append(name)
+      .append("\n")
+      .append("Sex:")
+      .append(sex);
+
+    return sb.toString();
+  }
 }

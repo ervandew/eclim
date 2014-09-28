@@ -76,6 +76,7 @@ let s:command_step_thread = '-command java_debug_step -a "<action>" -t "<thread_
 let s:command_status = '-command java_debug_status'
 
 let s:command_variable_expand = '-command java_debug_variable_expand -v "<value_id>"'
+let s:command_variable_detail = '-command java_debug_variable_detail -v "<value_id>"'
 " }}}
 
 function! eclim#java#debug#DefineStatusWinCommands() " {{{
@@ -138,12 +139,8 @@ endfunction " }}}
 
 function! eclim#java#debug#DefineVariableWinCommands() " {{{
   " Defines commands that are applicable only in the variable window.
-  if !exists(":JavaDebugVariableExpand")
-    command -nargs=0 -buffer JavaDebugVariableExpand
-      \ :call eclim#java#debug#VariableExpand()
-
-    nnoremap <buffer> <silent> <CR> :call eclim#java#debug#VariableExpand()<CR>
-  endif
+  nnoremap <buffer> <silent> <CR> :call eclim#java#debug#VariableExpand()<CR>
+  nnoremap <buffer> <silent> p :call eclim#java#debug#VariableDetail()<CR>
 endfunction " }}}
 
 function! eclim#java#debug#DefineBreakpointWinCommands() " {{{
@@ -555,6 +552,27 @@ function! eclim#java#debug#VariableExpand() " {{{
 
 endfunction " }}}
 
+function! eclim#java#debug#VariableDetail() " {{{
+  " Displays the detail of the variable value under cursor in status line.
+
+  " Check if we are in the right window
+  if (bufname("%") != s:variable_win_name)
+    call eclim#util#EchoError("Variable detail command not applicable in this window.")
+    return
+  endif
+
+  let id = eclim#java#debug#GetIdUnderCursor()
+  if (id == "")
+    return
+  endif
+
+  let command = s:command_variable_detail
+  let command = substitute(command, '<value_id>', id, '')
+
+  let result = eclim#Execute(command)
+  call eclim#util#Echo(result)
+endfunction " }}}
+
 function! eclim#java#debug#GoToFile(file, line) " {{{
   " Remove the sign from previous location
   if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
@@ -687,7 +705,9 @@ function! eclim#java#debug#SessionTerminated() " {{{
   s/Connected/Disconnected/
 
   " Delete any threads that have not been cleared
-  silent 2,$delete _
+  if line('$') > 1
+    silent 2,$delete _
+  endif
 
   setlocal nomodifiable
   setlocal readonly

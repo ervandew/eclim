@@ -99,7 +99,12 @@ public class VimClient
         concatenateList(results));
   }
 
-  private String concatenateList(List<String> entries) {
+  /**
+   * Returns a string by concatenating all the given entries using <eol> as
+   * delimiter.
+   */
+  private String concatenateList(List<String> entries)
+  {
     if (entries == null || entries.isEmpty()) {
       // Return a placeholder string since the remote VIM command expects an arg
       return "-";

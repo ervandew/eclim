@@ -108,6 +108,9 @@ the bottom in a horizontal split window. It has 2 panes\:
   place the cursor on that line and press <Enter>. To collapse the variable, press
   <Enter> again.
 
+  Press the key <p> to display the toString value of the variable under cursor. This is
+  equivalent to the Details pane in Eclipse.
+
 If for some reason, the status window is not updated, or you accidentally closed it,
 you can manually refresh it by running **:JavaDebugStatus** command.
 

@@ -67,6 +67,18 @@ public class VariableView
   private static final int ROOT_DEPTH = 0;
 
   /**
+   * The selector of <code>java.lang.Object#toString()</code>,
+   * used to evaluate 'toString()' for displaying details of a value.
+   */
+  private final String toStringSelector = "toString";
+
+  /**
+   * The signature of <code>java.lang.Object#toString()</code>,
+   * used to evaluate 'toString()' for displaying details of a value.
+   */
+  private final String toStringSig = "()Ljava/lang/String;";
+
+  /**
    * Thread being shown in UI.
    */
   private IJavaThread viewingThread;
@@ -86,6 +98,11 @@ public class VariableView
   private class ExpandableVar
   {
     private IJavaValue value;
+
+    /**
+     * Determines if the variable value is expanded in the UI.
+     */
+    private boolean expanded = false;
 
     /**
      * Depth of this variable in tree. The root node will have depth = 0.
@@ -152,14 +169,19 @@ public class VariableView
       return null;
     }
 
+    // If variable is already expanded, just return.
+    if (expandableVar.expanded) {
+      return null;
+    }
+
     IJavaValue value = expandableVar.value;
     List<String> results = new ArrayList<String>();
     // Suppress any exception. No point in letting it propagate
     try {
       process(value.getVariables(), results, expandableVar.depth + 1);
 
-      // Remove this value as it cannot be expanded anymore
-      expandableVarMap.remove(valueId);
+      // Mark as expanded.
+      expandableVar.expanded = true;
     } catch (DebugException e) {
       logger.error("Unable to get variables", e);
     }
@@ -208,7 +230,7 @@ public class VariableView
 
       JDIValue value = (JDIValue) var.getValue();
       boolean isLeafNode = !((value != null) &&
-        (value instanceof IJavaObject) && 
+        (value instanceof IJavaObject) &&
         value.hasVariables());
 
       // Treat String as leaf node even though it has child variables
@@ -227,6 +249,36 @@ public class VariableView
         String childPrefix = getIndentation(depth + 1, true);
         results.add(childPrefix);
       }
+    }
+  }
+
+  /**
+   * Returns the toString value of the Java object.
+   */
+  public String getDetail(long valueId)
+    throws DebugException
+  {
+    ExpandableVar expandableVar = expandableVarMap.get(valueId);
+
+    if (expandableVar == null) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("No variable value found with ID: " + valueId);
+      }
+      return ViewUtils.UNKNOWN;
+    }
+
+    IJavaValue value = expandableVar.value;
+    if (value instanceof IJavaObject) {
+      IJavaValue toStrValue = ((IJavaObject) value).sendMessage(
+          toStringSelector,
+          toStringSig,
+          null,
+          viewingThread,
+          false);
+
+      return toStrValue == null ? ViewUtils.UNKNOWN : toStrValue.getValueString();
+    } else {
+      return ViewUtils.UNKNOWN;
     }
   }
 
