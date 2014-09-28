@@ -62,6 +62,11 @@
     \ 'Sets the command to use when opening an entry from the java call hierarchy buffer.')
 
   call eclim#AddVimSetting(
+    \ 'Lang/Java', 'g:EclimJavaImplAtCursor', 0,
+    \ 'JavaImpl will insert at or near the cursor position instead of the default.',
+    \ '\(0\|1\)')
+
+  call eclim#AddVimSetting(
     \ 'Lang/Java', 'g:EclimJavaCompilerAutoDetect', 1,
     \ "When enabled, eclim will attempt to determine the appropriate\n" .
     \ "compiler (ant, maven, javac) to set when you are editing java files,\n" .
