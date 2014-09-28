@@ -44,11 +44,13 @@ Remove breakpoint(s)
 ---------------------
 There are 3 ways to remove breakpoints.
 
-- Remove breakpoint under cursor
+- Remove breakpoint under cursor. The cursor should be placed in the desired
+  Java file.
 
-- Remove all breakpoints defined in current file
+- Remove all breakpoints defined in current file. The cursor should be placed in
+  dsired Java file.
 
-- Remove all breakpoints defined in workspace
+- Remove all breakpoints defined in workspace.
 
 .. code-block:: vim
 
@@ -60,16 +62,24 @@ There are 3 ways to remove breakpoints.
 
 Retrieve breakpoints
 --------------------
-There are 2 ways to retrieve breakpoints.
+There are 2 ways to retrieve breakpoints and place them in a split window.
 
-- Get breakpoints defined in current file
+- Get breakpoints defined in current file. The cursor should be placed in the
+  desired Java file.
 
-- Get all breakpoints defined in workspace
+- Get all breakpoints defined in workspace.
 
 .. code-block:: vim
 
   :JavaDebugBreakpointGet
   :JavaDebugBreakpointGetAll
+
+**Mappings**
+
+.. code-block:: vim
+
+  t - Toggle the breakpoint(s) by either enabling or disabling it.
+  d - Delete the breakpoint(s).
 
 .. _\:JavaDebugStep:
 
@@ -104,11 +114,14 @@ the bottom in a horizontal split window. It has 2 panes\:
   If there are suspended threads, then one of them is automatically selected and
   its variables displayed.
 
-  Nested variables are shown in a tree like structure. To expand a variable, simply
-  place the cursor on that line and press <Enter>. To collapse the variable, press
-  <Enter> again.
+**Mappings**
 
-  Press the key <p> to display the toString value of the variable under cursor. This is
+.. code-block:: vim
+
+  <CR> - Expands the variable. Nested variables are shown in a tree like structure.
+  To collapse the variable, press <CR> again.
+
+  p - Displays the toString value of the variable under cursor. This is
   equivalent to the Details pane in Eclipse.
 
 If for some reason, the status window is not updated, or you accidentally closed it,

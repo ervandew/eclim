@@ -33,10 +33,10 @@ let s:debug_step_prev_file = ''
 let s:debug_step_prev_line = ''
 
 let s:debug_line_sign = 'eclim_debug_line'
-let s:breakpoint_sign_name = 'breakpoint'
+let s:breakpoint_sign = 'eclim_breakpoint'
 
-let s:variable_win_name = 'Debug Variables'
-let s:thread_win_name = 'Debug Threads'
+let s:variable_buf_name = 'Debug Variables'
+let s:thread_buf_name = 'Debug Threads'
 
 let s:command_start =
   \ '-command java_debug_start -p "<project>" ' .
@@ -79,7 +79,7 @@ let s:command_variable_expand = '-command java_debug_variable_expand -v "<value_
 let s:command_variable_detail = '-command java_debug_variable_detail -v "<value_id>"'
 " }}}
 
-function! eclim#java#debug#DefineStatusWinCommands() " {{{
+function! s:DefineStatusWinSettings() " {{{
   " Defines commands that are applicable in any of the debug status windows.
   if !exists(":JavaDebugStop")
     command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
@@ -129,26 +129,24 @@ function! eclim#java#debug#DefineStatusWinCommands() " {{{
   endif
 endfunction " }}}
 
-function! eclim#java#debug#DefineThreadWinCommands() " {{{
-  " Defines commands that are applicable only in the thread window.
+function! s:DefineThreadWinSettings() " {{{
   if !exists(":JavaDebugThreadSuspend")
     command -nargs=0 -buffer JavaDebugThreadSuspend
       \ :call eclim#java#debug#DebugThreadSuspend()
   endif
 endfunction " }}}
 
-function! eclim#java#debug#DefineVariableWinCommands() " {{{
-  " Defines commands that are applicable only in the variable window.
-  nnoremap <buffer> <silent> <CR> :call eclim#java#debug#VariableExpand()<CR>
-  nnoremap <buffer> <silent> p :call eclim#java#debug#VariableDetail()<CR>
+function! s:DefineVariableWinSettings() " {{{
+  nnoremap <buffer> <silent> <CR> :call <SID>VariableExpand()<CR>
+  nnoremap <buffer> <silent> p :call <SID>VariableDetail()<CR>
 endfunction " }}}
 
-function! eclim#java#debug#DefineBreakpointWinCommands() " {{{
-  " Defines commands that are applicable only in the breakpoint window.
-  if !exists(":JavaDebugBreakpointToggle")
-    command -nargs=0 -buffer JavaDebugBreakpointToggle
-      \ :call eclim#java#debug#BreakpointToggle()
-  endif
+function! s:DefineBreakpointWinSettings() " {{{
+  call eclim#display#signs#Define(
+    \ s:breakpoint_sign, '•', '')
+
+  nnoremap <buffer> <silent> t :call <SID>BreakpointToggle()<CR>
+  nnoremap <buffer> <silent> d :call eclim#java#debug#BreakpointRemove()<CR>
 endfunction " }}}
 
 function! eclim#java#debug#DebugStart(...) " {{{
@@ -197,8 +195,8 @@ function! eclim#java#debug#DebugStop() " {{{
   let result = eclim#Execute(command)
 
   " Auto close the debug status window
-  call eclim#util#DeleteBuffer(s:variable_win_name)
-  call eclim#util#DeleteBuffer(s:thread_win_name)
+  call eclim#util#DeleteBuffer(s:variable_buf_name)
+  call eclim#util#DeleteBuffer(s:thread_buf_name)
 
   " Remove the sign from previous location
   if (s:debug_step_prev_line != '' && s:debug_step_prev_file != '')
@@ -214,13 +212,13 @@ endfunction " }}}
 
 function! eclim#java#debug#DebugThreadSuspend() " {{{
   " Check if we are in the right window
-  if (bufname("%") != s:thread_win_name)
+  if (bufname("%") != s:thread_buf_name)
     call eclim#util#EchoError("Thread suspend command not applicable in this window.")
     return
   endif
 
   " Suspends thread under cursor.
-  let thread_id = eclim#java#debug#GetIdUnderCursor()
+  let thread_id = s:GetIdUnderCursor()
   if thread_id == ""
     call eclim#util#Echo("No valid thread found under cursor")
     return
@@ -244,8 +242,8 @@ function! eclim#java#debug#DebugThreadResume() " {{{
   " suspended thread, then the server could resume that. If not, it will
   " re-run a message.
   " Check if we are in the right window
-  if (bufname("%") == s:thread_win_name)
-    let thread_id = eclim#java#debug#GetIdUnderCursor()
+  if (bufname("%") == s:thread_buf_name)
+    let thread_id = s:GetIdUnderCursor()
   else
     let thread_id = ""
   endif
@@ -313,14 +311,15 @@ function! eclim#java#debug#BreakpointGet() " {{{
   let command = s:command_breakpoint_get
   let command = substitute(command, '<file>', file, '')
 
-  call eclim#java#debug#DisplayPositions(eclim#Execute(command))
-
+  call s:DisplayBreakpoints(eclim#Execute(command))
+  call s:DefineBreakpointWinSettings()
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointGetAll() " {{{
   " Displays all breakpoints in the workspace.
   let command = s:command_breakpoint_get_all
-  call eclim#java#debug#DisplayPositions(eclim#Execute(command))
+  call s:DisplayBreakpoints(eclim#Execute(command))
+  call s:DefineBreakpointWinSettings()
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointRemove() " {{{
@@ -360,7 +359,7 @@ function! eclim#java#debug#BreakpointRemoveAll() " {{{
   call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
 
-function! eclim#java#debug#DisplayPositions(results) " {{{
+function! s:DisplayBreakpoints(results) " {{{
   if (type(a:results) != g:LIST_TYPE)
     return
   endif
@@ -374,10 +373,16 @@ function! eclim#java#debug#DisplayPositions(results) " {{{
   exec 'lopen ' . g:EclimLocationListHeight
 endfunction " }}}
 
-function! eclim#java#debug#BreakpointToggle() " {{{
+function! s:BreakpointToggle() " {{{
+  "Enables or disables the breakpoint under cursor.
+
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#lang#SilentUpdate()
-  let line = line('.')
+  let loc_list_entry = getline(line('.'))
+
+  " location list entry is of the form: filename|line_num col col_num|
+  let tokens = split(loc_list_entry, "|")
+  let file = tokens[0]
+  let line = split(tokens[1], " ")[0]
 
   let command = s:command_breakpoint_toggle
   let command = substitute(command, '<project>', project, '')
@@ -386,21 +391,19 @@ function! eclim#java#debug#BreakpointToggle() " {{{
 
   let result = eclim#Execute(command)
 
-  call eclim#display#signs#Define(s:breakpoint_sign_name, '*', '')
-
   if (result == "1")
-    call eclim#display#signs#Place(s:breakpoint_sign_name, line)
-    call eclim#util#Echo("Breakpoint added")
+    call eclim#display#signs#Place(s:breakpoint_sign, line('.'))
+  elseif (result == "0")
+    call eclim#display#signs#Unplace(line('.'))
   else
-    call eclim#display#signs#Unplace(line)
-    call eclim#util#Echo("Breakpoint removed")
+    call eclim#util#EchoError("Breakpoint does not exist")
   endif
 
 endfunction " }}}
 
 function! eclim#java#debug#Step(action) " {{{
-  if (bufname("%") == s:thread_win_name)
-    let thread_id = eclim#java#debug#GetIdUnderCursor()
+  if (bufname("%") == s:thread_buf_name)
+    let thread_id = s:GetIdUnderCursor()
   else
     let thread_id = ""
   endif
@@ -447,10 +450,10 @@ function! eclim#java#debug#Status() " {{{
     let vars = []
   endif
 
-  call eclim#java#debug#CreateStatusWindow(state + threads, vars)
+  call s:CreateStatusWindow(state + threads, vars)
 endfunction " }}}
 
-function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
+function! s:CreateStatusWindow(threads, vars) " {{{
   " Creates the debug status windows if they do not already exist.
   " The newly created windows are initialized with given content.
 
@@ -462,7 +465,7 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
 
   let thread_win_opts = {'orientation': 'horizontal'}
   call eclim#util#TempWindow(
-    \ s:thread_win_name, a:threads,
+    \ s:thread_buf_name, a:threads,
     \ thread_win_opts)
 
   setlocal foldmethod=expr
@@ -473,14 +476,14 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
   setlocal nonu
-  call eclim#java#debug#DefineThreadWinCommands()
-  call eclim#java#debug#DefineStatusWinCommands()
+  call s:DefineThreadWinSettings()
+  call s:DefineStatusWinSettings()
 
   let var_win_opts = {'orientation': g:EclimJavaDebugStatusWinOrientation,
     \ 'width': g:EclimJavaDebugStatusWinWidth,
     \ 'height': g:EclimJavaDebugStatusWinHeight}
   call eclim#util#TempWindow(
-    \ s:variable_win_name, a:vars,
+    \ s:variable_buf_name, a:vars,
     \ var_win_opts)
 
   setlocal foldmethod=expr
@@ -489,8 +492,8 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
   setlocal nonu
-  call eclim#java#debug#DefineVariableWinCommands()
-  call eclim#java#debug#DefineStatusWinCommands()
+  call s:DefineVariableWinSettings()
+  call s:DefineStatusWinSettings()
 
   " Restore position
   call eclim#util#GoToBufferWindow(cur_bufnr)
@@ -498,12 +501,12 @@ function! eclim#java#debug#CreateStatusWindow(threads, vars) " {{{
   redraw!
 endfunction " }}}
 
-function! eclim#java#debug#VariableExpand() " {{{
+function! s:VariableExpand() " {{{
   " Expands the variable value under cursor and adds the child variables under
   " it in the tree.
 
   " Check if we are in the right window
-  if (bufname("%") != s:variable_win_name)
+  if (bufname("%") != s:variable_buf_name)
     call eclim#util#EchoError("Variable expand command not applicable in this window.")
     return
   endif
@@ -517,7 +520,7 @@ function! eclim#java#debug#VariableExpand() " {{{
   setlocal modifiable
   setlocal noreadonly
 
-  let id = eclim#java#debug#GetIdUnderCursor()
+  let id = s:GetIdUnderCursor()
   if (id != "")
     let command = s:command_variable_expand
     let command = substitute(command, '<value_id>', id, '')
@@ -552,16 +555,16 @@ function! eclim#java#debug#VariableExpand() " {{{
 
 endfunction " }}}
 
-function! eclim#java#debug#VariableDetail() " {{{
+function! s:VariableDetail() " {{{
   " Displays the detail of the variable value under cursor in status line.
 
   " Check if we are in the right window
-  if (bufname("%") != s:variable_win_name)
+  if (bufname("%") != s:variable_buf_name)
     call eclim#util#EchoError("Variable detail command not applicable in this window.")
     return
   endif
 
-  let id = eclim#java#debug#GetIdUnderCursor()
+  let id = s:GetIdUnderCursor()
   if (id == "")
     return
   endif
@@ -582,12 +585,12 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
 
   " Jump out of status window so that the buffer is opened in the code window
   " If you are in variable window, first go to thread window
-  if (bufname("%") == s:thread_win_name)
+  if (bufname("%") == s:thread_buf_name)
     call eclim#util#GoToBufferWindow(b:filename)
   endif
 
   " If you are in thread window, go back to code window
-  if (bufname("%") == s:variable_win_name)
+  if (bufname("%") == s:variable_buf_name)
     call eclim#util#GoToBufferWindow(b:filename)
     call eclim#util#GoToBufferWindow(b:filename)
   endif
@@ -603,7 +606,7 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
     \ bufnr(a:file), a:line)
 endfunction " }}}
 
-function! eclim#java#debug#GetIdUnderCursor() " {{{
+function! s:GetIdUnderCursor() " {{{
   " Returns the object ID under cursor. Object ID is present in the form:
   " (id=X) where X is the ID.
   "
@@ -635,7 +638,7 @@ function! eclim#java#debug#ThreadViewUpdate(thread_id, kind, value) " {{{
   let cur_line = line('.')
   let cur_col = col('.')
 
-  let found = eclim#util#GoToBufferWindow(s:thread_win_name)
+  let found = eclim#util#GoToBufferWindow(s:thread_buf_name)
   if found == 0
     return
   endif
@@ -692,7 +695,7 @@ function! eclim#java#debug#SessionTerminated() " {{{
   let cur_line = line('.')
   let cur_col = col('.')
 
-  let found = eclim#util#GoToBufferWindow(s:thread_win_name)
+  let found = eclim#util#GoToBufferWindow(s:thread_buf_name)
   if found == 0
     return
   endif
@@ -716,14 +719,14 @@ function! eclim#java#debug#SessionTerminated() " {{{
   call eclim#util#GoToBufferWindow(cur_bufnr)
   call cursor(cur_line, cur_col)
 
-  call eclim#util#TempWindowClear(s:variable_win_name)
+  call eclim#util#TempWindowClear(s:variable_buf_name)
 endfunction " }}}
 
 function! eclim#java#debug#VariableViewUpdate(value) " {{{
   " Updates the variable window with new set of values.
 
   call eclim#util#Echo("Refreshing ...")
-  call eclim#util#TempWindowClear(s:variable_win_name, split(a:value, "<eol>"))
+  call eclim#util#TempWindowClear(s:variable_buf_name, split(a:value, "<eol>"))
   call eclim#util#Echo(" ")
 endfunction " }}}
 

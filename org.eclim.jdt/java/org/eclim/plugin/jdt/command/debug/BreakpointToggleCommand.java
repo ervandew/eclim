@@ -40,7 +40,7 @@ import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
 
 /**
- * Command to add, remove a specific breakpoint.
+ * Command to enable or disable a specific breakpoint.
  */
 @Command(
   name = "java_debug_breakpoint_toggle",
@@ -52,8 +52,9 @@ import org.eclipse.jdt.debug.core.JDIDebugModel;
 public class BreakpointToggleCommand
   extends AbstractCommand
 {
-  private static final String BKPOINT_ADDED = "1";
-  private static final String BKPOINT_REMOVED = "0";
+  private static final String BKPOINT_ENABLED = "1";
+  private static final String BKPOINT_DISABLED = "0";
+  private static final String BKPOINT_NOT_EXISTS = "-1";
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -75,21 +76,19 @@ public class BreakpointToggleCommand
     // TODO How to find out right type from this array?
     IType type = compUnit.getTypes()[0];
     IResource res = compUnit.getResource();
-    Map<String, Object> attrMap = new HashMap<String, Object>();
 
     String typeName = type.getFullyQualifiedName();
     IJavaLineBreakpoint breakpoint = JDIDebugModel.lineBreakpointExists(
         res, typeName, lineNum);
 
     if (breakpoint == null) {
-      JDIDebugModel.createLineBreakpoint(
-          res, typeName, lineNum, -1, -1, 0, true, attrMap);
-      return BKPOINT_ADDED;
+      return BKPOINT_NOT_EXISTS;
+    } else if (breakpoint.isEnabled()) {
+      breakpoint.setEnabled(false);
+      return BKPOINT_DISABLED;
+    } else {
+      breakpoint.setEnabled(true);
+      return BKPOINT_ENABLED;
     }
-
-    IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
-      .getBreakpointManager();
-    breakpointMgr.removeBreakpoint(breakpoint, true);
-    return BKPOINT_REMOVED;
   }
 }
