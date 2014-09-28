@@ -527,8 +527,8 @@ function! eclim#java#debug#VariableExpand() " {{{
       call append(line('.'), results)
 
       " Remove the placeholder line used to get folding to work.
-      " But first unfold.
-      exec "normal! za"
+      " But first unfold if its folded.
+      foldopen
 
       let cur_line = line('.')
       let cur_col = col('.')

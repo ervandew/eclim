@@ -171,6 +171,7 @@ public class VariableView
 
     // If variable is already expanded, just return.
     if (expandableVar.expanded) {
+      logger.info("hehe : alreadu expanded: " + valueId);
       return null;
     }
 
@@ -182,6 +183,7 @@ public class VariableView
 
       // Mark as expanded.
       expandableVar.expanded = true;
+      logger.info("hehe : marking as expanded: " + valueId);
     } catch (DebugException e) {
       logger.error("Unable to get variables", e);
     }
@@ -241,8 +243,14 @@ public class VariableView
 
       // Keep track of this value as it is shown in UI and could be expanded
       if (!isLeafNode) {
-        expandableVarMap.put(((IJavaObject) value).getUniqueId(),
-            new ExpandableVar(value, depth));
+        long valueId = ((IJavaObject) value).getUniqueId();
+        // If this value was already seen, then don't update the map. This is
+        // to prevent infinite recursion and also to not change the node depth
+        // of the previously seen value. This case is normal for enum.
+        if (!expandableVarMap.containsKey(valueId)) {
+          expandableVarMap.put(valueId,
+              new ExpandableVar(value, depth));
+        }
 
         // Hack: Add an empty line so that VIM will think there are child nodes
         // and fold correctly.
