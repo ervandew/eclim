@@ -1,11 +1,11 @@
-" Author:  Eric Van Dewoestine
+" Author:  Daniel Leong
 "
 " Description: {{{
-"   Vim file type detection script for eclim.
+"  Syntax file for Android XML files
 "
 " License:
 "
-" Copyright (C) 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,18 +22,6 @@
 "
 " }}}
 
-function! CheckAndroidXml()
-
-    let s:project = eclim#project#util#GetCurrentProjectName()
-    let s:aliases = eclim#project#util#GetProjectNatureAliases(s:project)
-    if index(s:aliases, "android") >= 0
-        set ft=android-xml
-    endif
-
-endfunction
-
-autocmd BufRead *.aidl set ft=java
-
-autocmd BufRead *.xml call CheckAndroidXml()
+runtime! syntax/xml.vim
 
 " vim:ft=vim:fdm=marker

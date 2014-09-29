@@ -21,11 +21,11 @@
 
 " Script Varables {{{
   let s:complete_command =
-    \ '-command adt_xml_complete -p "<project>" -f "<file>" ' .
+    \ '-command android_xml_complete -p "<project>" -f "<file>" ' .
     \ '-o <offset> -e <encoding> -l <layout>'
 " }}}
 
-function! eclim#xml#complete#CodeComplete(findstart, base) " {{{
+function! eclim#android#xml#complete#CodeComplete(findstart, base) " {{{
   if !eclim#project#util#IsCurrentFileInProject(0)
     return a:findstart ? -1 : []
   endif

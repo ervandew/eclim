@@ -19,12 +19,6 @@
 "
 " }}}
 
-" Options {{{
-
-exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#xml#complete#CodeComplete'
-
-" }}}
-
 " Autocmds {{{
 
 if g:EclimXmlValidate

@@ -1,11 +1,8 @@
-" Author:  Eric Van Dewoestine
+" Author:  Daniel Leong
 "
-" Description: {{{
-"   Vim file type detection script for eclim.
+" License: {{{
 "
-" License:
-"
-" Copyright (C) 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,18 +19,13 @@
 "
 " }}}
 
-function! CheckAndroidXml()
+runtime! ftplugin/xml.vim
+runtime! indent/xml.vim
+    
+" Options {{{
 
-    let s:project = eclim#project#util#GetCurrentProjectName()
-    let s:aliases = eclim#project#util#GetProjectNatureAliases(s:project)
-    if index(s:aliases, "android") >= 0
-        set ft=android-xml
-    endif
+exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#android#xml#complete#CodeComplete'
 
-endfunction
-
-autocmd BufRead *.aidl set ft=java
-
-autocmd BufRead *.xml call CheckAndroidXml()
+" }}}
 
 " vim:ft=vim:fdm=marker
