@@ -80,68 +80,71 @@ let s:command_variable_detail = '-command java_debug_variable_detail -v "<value_
 " }}}
 
 function! s:DefineStatusWinSettings() " {{{
-  " Defines commands that are applicable in any of the debug status windows.
-  if !exists(":JavaDebugStop")
+  " Defines settings that are applicable in any of the debug status windows.
+  if exists(":JavaDebugStop") != 2
     command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
   endif
 
-  if !exists(":JavaDebugThreadSuspendAll")
+  if exists(":JavaDebugThreadSuspendAll") != 2
     command -nargs=0 -buffer JavaDebugThreadSuspendAll
       \ :call eclim#java#debug#DebugThreadSuspendAll()
   endif
 
-  if !exists(":JavaDebugThreadResume")
+  if exists(":JavaDebugThreadResume") != 2
     command -nargs=0 -buffer JavaDebugThreadResume
       \ :call eclim#java#debug#DebugThreadResume()
   endif
 
-  if !exists(":JavaDebugThreadResumeAll")
+  if exists(":JavaDebugThreadResumeAll") != 2
     command -nargs=0 -buffer JavaDebugThreadResumeAll
       \ :call eclim#java#debug#DebugThreadResumeAll()
   endif
 
-  if !exists(":JavaDebugStep")
+  if exists(":JavaDebugStep") != 2
     command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
   endif
 
-  if !exists(":JavaDebugStatus")
+  if exists(":JavaDebugStatus") != 2
     command -nargs=0 -buffer JavaDebugStatus
       \ :call eclim#java#debug#Status()
   endif
 
-  if !exists(":JavaDebugGoToFile")
+  if exists(":JavaDebugGoToFile") != 2
     command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
   endif
 
-  if !exists(":JavaDebugSessionTerminated")
+  if exists(":JavaDebugSessionTerminated") != 2
     command -nargs=0 JavaDebugSessionTerminated
       \ :call eclim#java#debug#SessionTerminated()
   endif
 
-  if !exists(":JavaDebugThreadViewUpdate")
+  if exists(":JavaDebugThreadViewUpdate") != 2
     command -nargs=+ JavaDebugThreadViewUpdate
       \ :call eclim#java#debug#ThreadViewUpdate(<f-args>)
   endif
 
-  if !exists(":JavaDebugVariableViewUpdate")
+  if exists(":JavaDebugVariableViewUpdate") != 2
     command -nargs=+ JavaDebugVariableViewUpdate
       \ :call eclim#java#debug#VariableViewUpdate(<f-args>)
   endif
 endfunction " }}}
 
 function! s:DefineThreadWinSettings() " {{{
-  if !exists(":JavaDebugThreadSuspend")
+  " Defines settings that are applicable only in thread window.
+  if exists(":JavaDebugThreadSuspend") != 2
     command -nargs=0 -buffer JavaDebugThreadSuspend
       \ :call eclim#java#debug#DebugThreadSuspend()
   endif
 endfunction " }}}
 
 function! s:DefineVariableWinSettings() " {{{
+  " Defines settings that are applicable only in variable window.
   nnoremap <buffer> <silent> <CR> :call <SID>VariableExpand()<CR>
   nnoremap <buffer> <silent> p :call <SID>VariableDetail()<CR>
 endfunction " }}}
 
 function! s:DefineBreakpointWinSettings() " {{{
+  " Defines settings that are applicable only in breakpoint window.
   call eclim#display#signs#Define(
     \ s:breakpoint_sign, '•', '')
 
