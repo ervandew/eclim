@@ -39,11 +39,11 @@ function! eclim#android#xml#complete#CodeComplete(findstart, base) " {{{
     let start = col('.') - 1
 
     "exceptions that break the rule
-    if line[start] == ':' && line[start - 1] != ':'
+    if line[start] == ':' || line[start] == '/' || line[start] == '@'
       let start -= 1
     endif
 
-    while start > 0 && line[start - 1] =~ '\w'
+    while start > 0 && line[start - 1] =~ '[0-9A-Za-z_/@]'
       let start -= 1
     endwhile
 
