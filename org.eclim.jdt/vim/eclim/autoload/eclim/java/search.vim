@@ -295,45 +295,8 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
   endif
   if !empty(results)
     if a:type == 'java_search'
-      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-      let locs = getloclist(0)
-      " if only one result and it's for the current file, just jump to it.
-      " note: on windows the expand result must be escaped
-      if len(results) == 1 && locs[0].bufnr == bufnr('%')
-        if results[0].line != 1 && results[0].column != 1
-          lfirst
-        endif
-
-      " single result in another file
-      elseif len(results) == 1 && action != 'lopen'
-        let entry = getloclist(0)[0]
-        let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-        call eclim#util#GoToBufferWindowOrOpen(name, action)
-        call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-        call eclim#display#signs#Update()
-        call cursor(entry.lnum, entry.col)
-
-      " multiple results and user specified an action other than lopen
-      elseif len(results) && len(action_args) && action != 'lopen'
-        let locs = getloclist(0)
-        let files = map(copy(locs),  'printf(' .
-          \ '"%s|%s col %s| %s", ' .
-          \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
-        let response = eclim#util#PromptList(
-          \ 'Please choose the file to ' . action,
-          \ files, g:EclimHighlightInfo)
-        if response == -1
-          return
-        endif
-        let entry = locs[response]
-        let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-        call eclim#util#GoToBufferWindowOrOpen(name, action)
-        call eclim#display#signs#Update()
-        call cursor(entry.lnum, entry.col)
-
-      else
-        exec 'lopen ' . g:EclimLocationListHeight
-      endif
+      call eclim#lang#SearchResults(results, action)
+      return 1
     elseif a:type == 'java_docsearch'
       let window_name = "javadoc_search_results"
       let filename = expand('%:p')

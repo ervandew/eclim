@@ -176,45 +176,7 @@ function! eclim#lang#Search(command, singleResultAction, argline) " {{{
   endif
 
   if !empty(results)
-    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-    let locs = getloclist(0)
-    " if only one result and it's for the current file, just jump to it.
-    " note: on windows the expand result must be escaped
-    if len(results) == 1 && locs[0].bufnr == bufnr('%')
-      if results[0].line != 1 && results[0].column != 1
-        lfirst
-      endif
-
-    " single result in another file.
-    elseif len(results) == 1 && action != "lopen"
-      let entry = getloclist(0)[0]
-      let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-      call eclim#util#GoToBufferWindowOrOpen(name, action)
-      call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-      call eclim#display#signs#Update()
-      call cursor(entry.lnum, entry.col)
-
-    " multiple results and user specified an action other than lopen
-    elseif len(results) && len(action_args) && action != 'lopen'
-      let locs = getloclist(0)
-      let files = map(copy(locs),  'printf(' .
-        \ '"%s|%s col %s| %s", ' .
-        \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
-      let response = eclim#util#PromptList(
-        \ 'Please choose the file to ' . action,
-        \ files, g:EclimHighlightInfo)
-      if response == -1
-        return
-      endif
-      let entry = locs[response]
-      let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-      call eclim#util#GoToBufferWindowOrOpen(name, action)
-      call eclim#display#signs#Update()
-      call cursor(entry.lnum, entry.col)
-
-    else
-      exec 'lopen ' . g:EclimLocationListHeight
-    endif
+    call eclim#lang#SearchResults(results, action)
     return 1
   else
     if argline !~ '-p\>'
@@ -223,6 +185,57 @@ function! eclim#lang#Search(command, singleResultAction, argline) " {{{
       let searchedFor = substitute(argline, '.*-p \(.\{-}\)\( .*\|$\)', '\1', '')
       call eclim#util#EchoInfo("Pattern '" . searchedFor . "' not found.")
     endif
+  endif
+endfunction " }}}
+
+function! eclim#lang#SearchResults(results, action) " {{{
+  " Function which handles processing search results.
+
+  call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
+  let locs = getloclist(0)
+
+  " if there is only one result and the user is jumping to it, then clear
+  " the location list so we don't bother with a fairly unnecessary sign
+  " placement.
+  if len(locs) == 1 && a:action != 'lopen'
+    call eclim#util#ClearLocationList()
+  endif
+
+  " if only one result and it's for the current file, just jump to it.
+  " note: on windows the expand result must be escaped
+  if len(a:results) == 1 && locs[0].bufnr == bufnr('%')
+    if a:results[0].line != 1 && a:results[0].column != 1
+      let entry = locs[0]
+      call cursor(entry.lnum, entry.col)
+    endif
+
+  " single result in another file.
+  elseif len(a:results) == 1 && a:action != "lopen"
+    let entry = locs[0]
+    let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+    call eclim#util#GoToBufferWindowOrOpen(name, a:action)
+    call cursor(entry.lnum, entry.col)
+
+  " multiple results and user specified an action other than lopen
+  elseif len(a:results) && a:action != 'lopen'
+    let files = map(copy(locs),  'printf(' .
+      \ '"%s|%s col %s| %s", ' .
+      \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
+    let response = eclim#util#PromptList(
+      \ 'Please choose the file to ' . a:action,
+      \ files, g:EclimHighlightInfo)
+    if response == -1
+      return
+    endif
+    let entry = locs[response]
+    let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+    call eclim#util#GoToBufferWindowOrOpen(name, a:action)
+    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
+    call eclim#display#signs#Update()
+    call cursor(entry.lnum, entry.col)
+
+  else
+    exec 'lopen ' . g:EclimLocationListHeight
   endif
 endfunction " }}}
 

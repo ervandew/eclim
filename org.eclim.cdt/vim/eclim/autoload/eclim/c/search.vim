@@ -54,6 +54,9 @@ function eclim#c#search#FindInclude(argline) " {{{
     return
   endif
 
+  let [action_args, argline] = eclim#util#ExtractCmdArgs(a:argline, '-a:')
+  let action = len(action_args) == 2 ? action_args[1] : g:EclimCSearchSingleResult
+
   let file = substitute(getline('.'), '.*#include\s*[<"]\(.*\)[>"].*', '\1', '')
 
   let project = eclim#project#util#GetCurrentProjectName()
@@ -72,38 +75,8 @@ function eclim#c#search#FindInclude(argline) " {{{
   let results = split(globpath(join(paths, ','), file), '\n')
 
   if !empty(results)
-    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(results))
-
-    let [action_args, argline] = eclim#util#ExtractCmdArgs(a:argline, '-a:')
-    let action = len(action_args) == 2 ? action_args[1] : g:EclimCSearchSingleResult
-
-    " single result in another file.
-    if len(results) == 1 && action != "lopen"
-      let entry = getloclist(0)[0]
-      call eclim#util#GoToBufferWindowOrOpen(bufname(entry.bufnr), action)
-      call eclim#display#signs#Update()
-
-    " multiple results and user specified an action other than lopen
-    elseif len(results) && len(action_args) && action != 'lopen'
-      let locs = getloclist(0)
-      let files = map(copy(locs),  'printf(' .
-        \ '"%s|%s col %s| %s", ' .
-        \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
-      let response = eclim#util#PromptList(
-        \ 'Please choose the file to ' . action,
-        \ files, g:EclimHighlightInfo)
-      if response == -1
-        return
-      endif
-      let entry = locs[response]
-      let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-      call eclim#util#GoToBufferWindowOrOpen(name, action)
-      call eclim#display#signs#Update()
-      call cursor(entry.lnum, entry.col)
-
-    else
-      exec 'lopen ' . g:EclimLocationListHeight
-    endif
+    call eclim#lang#SearchResults(results, action)
+    return 1
   else
     call eclim#util#EchoInfo("File not found.")
   endif
