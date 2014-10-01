@@ -61,16 +61,30 @@ import org.w3c.dom.Node;
 
 import com.android.SdkConstants;
 
+import com.android.ide.common.resources.ResourceFolder;
+
+import com.android.ide.eclipse.adt.AdtUtils;
+
 import com.android.ide.eclipse.adt.internal.editors.AndroidContentAssist;
 import com.android.ide.eclipse.adt.internal.editors.AndroidXmlEditor;
 
+import com.android.ide.eclipse.adt.internal.editors.animator.AnimationContentAssist;
+
+import com.android.ide.eclipse.adt.internal.editors.color.ColorContentAssist;
+
 import com.android.ide.eclipse.adt.internal.editors.common.CommonXmlEditor;
+
+import com.android.ide.eclipse.adt.internal.editors.drawable.DrawableContentAssist;
 
 import com.android.ide.eclipse.adt.internal.editors.layout.LayoutContentAssist;
 
 import com.android.ide.eclipse.adt.internal.editors.uimodel.UiElementNode;
 
 import com.android.ide.eclipse.adt.internal.editors.values.ValuesContentAssist;
+
+import com.android.ide.eclipse.adt.internal.resources.manager.ResourceManager;
+
+import com.android.resources.ResourceFolderType;
 
 
 /**
@@ -154,6 +168,9 @@ public class AdtAssistUtil {
   private static Pattern sFirstElementWord = Pattern.compile("^[a-zA-Z0-9_:.-]+"); //$NON-NLS-1$
   /** Regexp to detect whitespace */
   private static Pattern sWhitespace = Pattern.compile("\\s+"); //$NON-NLS-1$
+
+  private static final String MENU_CONTENT_ASSIST_FQN =
+    "com.android.ide.eclipse.adt.internal.editors.menu.MenuContentAssist";
 
   private static int REF_COUNT_WARN = 7;
 
@@ -292,7 +309,7 @@ public class AdtAssistUtil {
       final IFile file)
     throws Exception
   {
-    final AndroidContentAssist assistor = pickAssistor(project, file);
+    final AndroidContentAssist assistor = pickAssistor(project, editor, file);
     setEditor(assistor, editor);
 
     // make sure it worked
@@ -313,10 +330,57 @@ public class AdtAssistUtil {
   /**
    * @return the appropriate ContentAssist based on the file
    */
-  static AndroidContentAssist pickAssistor(IProject project, IFile file) {
+  static AndroidContentAssist pickAssistor(IProject project, AndroidXmlEditor editor, IFile file) {
 
-    // TODO
-    return new LayoutContentAssist();
+    // thanks to CommonXmlEditor
+    final ResourceFolder resFolder = ResourceManager.getInstance().getResourceFolder(file);
+    ResourceFolderType type = resFolder == null ? null : resFolder.getType();
+
+    if (type == null) {
+        // We lack any real resource information about that file.
+        // Let's take a guess using the actual path.
+        final IEditorInput editorInput = new FileEditorInput(file);
+        final String folderName = AdtUtils.getParentFolderName(editorInput);
+        type = ResourceFolderType.getFolderType(folderName);
+    }
+
+    switch (type) {
+    case ANIM:
+    case ANIMATOR:
+      // I guess this is for both?
+      return new AnimationContentAssist();
+
+    case COLOR:
+      return new ColorContentAssist();
+
+    case DRAWABLE:
+      return new DrawableContentAssist();
+
+    case LAYOUT:
+      return new LayoutContentAssist();
+
+    case MENU:
+      try {
+        Class<?> klass = Class.forName(MENU_CONTENT_ASSIST_FQN);
+        return (AndroidContentAssist) klass.newInstance();
+      } catch (final Exception e) {
+        // don't have this class? fall back to values, I guess.
+        //  I see it in the source, but Eclipse can't find it,
+        //  so....
+      }
+
+    case VALUES:
+      return new ValuesContentAssist();
+
+    case TRANSITION: // ?
+    case INTERPOLATOR: // ?
+    case XML:
+    case MIPMAP: // ?
+    case RAW: // shouldn't happen
+    default:
+      logger.warn("*** UNKNOWN or UNHANDLED layout type {}", type);
+      return null;
+    }
   }
 
   /** 
