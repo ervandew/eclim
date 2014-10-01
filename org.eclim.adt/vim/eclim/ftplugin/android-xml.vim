@@ -26,6 +26,17 @@ runtime! indent/xml.vim
 
 exec 'setlocal ' . g:EclimCompletionMethod . '=eclim#android#xml#complete#CodeComplete'
 
+" add semnatic completion for YCM
+if exists("g:ycm_semantic_triggers")
+    " start with user's
+    let triggers = g:ycm_semantic_triggers
+else
+    let triggers = {}
+endif
+
+let triggers['android-xml'] = [':', '="', '<', '/', '@']
+let g:ycm_semantic_triggers = triggers
+
 " }}}
 
 " vim:ft=vim:fdm=marker
