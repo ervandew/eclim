@@ -68,6 +68,10 @@ public class BreakpointGetCommand
               ((ILineBreakpoint) breakpoint).getLineNumber(),
               1);
 
+          if (breakpoint.isEnabled()) {
+            position.setMetaInfo("e");
+          }
+
           positions.add(position);
         }
       }

@@ -39,6 +39,14 @@ public class Position
   private int column = 1;
   private String message;
 
+  /**
+   * Information about the Position object itself.
+   * Position objects are typically used to populate VIM location list.
+   * This field can be used to pass any attribute to UI without displaying it
+   * by default.
+   */
+  private String metaInfo;
+
   private Position (
       String filename, String message,
       int offset, int length,
@@ -164,6 +172,16 @@ public class Position
   public String getMessage()
   {
     return this.message;
+  }
+
+  public String getMetaInfo()
+  {
+    return this.metaInfo;
+  }
+
+  public void setMetaInfo(String metaInfo)
+  {
+    this.metaInfo = metaInfo;
   }
 
   @Override

@@ -315,14 +315,12 @@ function! eclim#java#debug#BreakpointGet() " {{{
   let command = substitute(command, '<file>', file, '')
 
   call s:DisplayBreakpoints(eclim#Execute(command))
-  call s:DefineBreakpointWinSettings()
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointGetAll() " {{{
   " Displays all breakpoints in the workspace.
   let command = s:command_breakpoint_get_all
   call s:DisplayBreakpoints(eclim#Execute(command))
-  call s:DefineBreakpointWinSettings()
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointRemove() " {{{
@@ -374,6 +372,23 @@ function! s:DisplayBreakpoints(results) " {{{
 
   call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
   exec 'lopen ' . g:EclimLocationListHeight
+
+  call s:DefineBreakpointWinSettings()
+
+  " Place sign for breakpoints that are enabled
+  let line_num = 0
+  for result in a:results
+    let line_num = line_num + 1
+
+    if !has_key(result, "metaInfo")
+      continue
+    endif
+
+    let enabled = result.metaInfo
+    if enabled == "e"
+      call eclim#display#signs#Place(s:breakpoint_sign, line_num)
+    endif
+  endfor
 endfunction " }}}
 
 function! s:BreakpointToggle() " {{{
