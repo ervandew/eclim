@@ -31,17 +31,22 @@ public class DummyElement
 
   String text;
 
-  public DummyElement(final String nodeName) {
+  public DummyElement(final String nodeName)
+  {
     super(nodeName);
   }
 
   @Override
-  public void setTextContent(String textContent) throws DOMException {
+  public void setTextContent(final String textContent)
+      throws DOMException
+  {
     this.text = textContent;
   }
 
   @Override
-  public String getTextContent() throws DOMException {
+  public String getTextContent()
+    throws DOMException
+  {
     return this.text;
   }
 

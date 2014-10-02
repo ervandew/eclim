@@ -88,13 +88,14 @@ import com.android.resources.ResourceFolderType;
 
 
 /**
- * Various utilities for interacting with ADT's internal 
+ * Various utilities for interacting with ADT's internal
  *  content assist APIs. Anything that might break with
  *  changes to ADT should go here
  *
  * @author Daniel Leong
  */
-public class AdtAssistUtil {
+public class AdtAssistUtil
+{
   private static final Logger logger =
     Logger.getLogger(AdtAssistUtil.class);
 
@@ -102,59 +103,67 @@ public class AdtAssistUtil {
    * Subclassing ValuesContentAssist to make its protected
    *  compute*Values methods accessible to us
    */
-  static class PublicValuesContentAssist extends ValuesContentAssist {
+  static class PublicValuesContentAssist extends ValuesContentAssist
+  {
 
     @Override
-    public boolean computeAttributeValues(List<ICompletionProposal> proposals, int offset,
-            String parentTagName, String attributeName, Node node, String wordPrefix,
-            boolean skipEndTag, int replaceLength) {
-      return super.computeAttributeValues(proposals, offset, parentTagName, attributeName, node,
-                wordPrefix, skipEndTag, replaceLength);
+    public boolean computeAttributeValues(List<ICompletionProposal> proposals,
+        int offset, String parentTagName, String attributeName, Node node,
+        String wordPrefix, boolean skipEndTag, int replaceLength)
+    {
+      return super.computeAttributeValues(proposals, offset, parentTagName,
+          attributeName, node, wordPrefix, skipEndTag, replaceLength);
     }
 
     @Override
     public void computeTextValues(List<ICompletionProposal> proposals, int offset,
             Node parentNode, Node currentNode, UiElementNode uiParent,
-            String prefix) {
+            String prefix)
+    {
         super.computeTextValues(proposals, offset, parentNode, currentNode, uiParent,
                 prefix);
     }
-    
   }
 
-  /** 
-   * Information about the current edit of an attribute as reported by parseAttributeInfo.
+  /**
+   * Information about the current edit of an attribute as
+   *  reported by parseAttributeInfo.
    *
    * Copied from ADT source to somewhat reduce coupling
    */
-  protected static class AttribInfo {
-    public AttribInfo() {
-    }
-    /** True if the cursor is located in an attribute's value, false if in an attribute name */
+  protected static class AttribInfo
+  {
+    /**
+     * True if the cursor is located in an attribute's value,
+     * false if in an attribute name
+     */
     public boolean isInValue = false;
     /** The attribute name. Null when not set. */
     public String name = null;
-    /** The attribute value top the left of the cursor. Null when not set. The value
-     * *may* start with a quote (' or "), in which case we know we don't need to quote
-     * the string for the user */
+    /**
+     * The attribute value top the left of the cursor. Null when not set.
+     * The value *may* start with a quote (' or "), in which case we know
+     * we don't need to quote the string for the user */
     public String valuePrefix = null;
-    /** String typed by the user so far (i.e. right before requesting code completion),
-     *  which will be corrected if we find a possible completion for an attribute value.
-     *  See the long comment in getChoicesForAttribute(). */
+    /**
+     * String typed by the user so far (i.e. right before requesting code
+     *  completion), which will be corrected if we find a possible completion
+     *  for an attribute value. See the long comment in getChoicesForAttribute(). */
     public String correctedPrefix = null;
-    /** Non-zero if an attribute value need a start/end tag (i.e. quotes or brackets) */
+    /**
+     * Non-zero if an attribute value need a start/end tag
+     * (i.e. quotes or brackets)
+     */
     public char needTag = 0;
     /** Number of characters to replace after the prefix */
     public int replaceLength = 0;
     /** Should the cursor advance through the end tag when inserted? */
     public boolean skipEndTag = false;
 
-    @Override
-    public String toString() {
-      return name + "; valpref=" + valuePrefix + "; corr=" + correctedPrefix
-        + "; isInValue=" + isInValue;
-    }
+    public AttribInfo()
+    { }
   }
+
   /** Regexp to detect a full attribute after an element tag.
    * <pre>Syntax:
    *    name = "..." quoted string with all but < and "
@@ -162,12 +171,16 @@ public class AdtAssistUtil {
    *    name = '...' quoted string with all but < and '
    * </pre>
    */
-  private static Pattern sFirstAttribute = Pattern.compile(
+  private static final Pattern sFirstAttribute = Pattern.compile(
       "^ *[a-zA-Z_:]+ *= *(?:\"[^<\"]*\"|'[^<']*')");  //$NON-NLS-1$
+
   /** Regexp to detect an element tag name */
-  private static Pattern sFirstElementWord = Pattern.compile("^[a-zA-Z0-9_:.-]+"); //$NON-NLS-1$
+  private static final Pattern sFirstElementWord =
+    Pattern.compile("^[a-zA-Z0-9_:.-]+"); //$NON-NLS-1$
+
   /** Regexp to detect whitespace */
-  private static Pattern sWhitespace = Pattern.compile("\\s+"); //$NON-NLS-1$
+  private static final Pattern sWhitespace =
+    Pattern.compile("\\s+"); //$NON-NLS-1$
 
   private static final String MENU_CONTENT_ASSIST_FQN =
     "com.android.ide.eclipse.adt.internal.editors.menu.MenuContentAssist";
@@ -193,30 +206,34 @@ public class AdtAssistUtil {
     logger.info("Model for {} has {} refs", file, model.getReferenceCountForRead());
 
     if (model.getReferenceCountForRead() > REF_COUNT_WARN) {
-      logger.warn("You may have forgotten to call AdtAssistUtil#release on your editor!!!");
+      logger.warn("You may have forgotten to call AdtAssistUtil#release(editor)!!!");
     }
 
     // we need this Dummy to ensure it can get `doc`
     //  in all cases
-    final StructuredTextViewer viewer = new DummyStructuredTextViewer(doc, offset, 1);
+    final StructuredTextViewer viewer = new DummyStructuredTextViewer(
+        doc, offset, 1);
     IEditorInput input = new FileEditorInput(file);
     editor.init(new EclimEditorSite(), input);
     editor.initUiRootNode(true);
 
-    // init this field as well, since it uses this to 
+    // init this field as well, since it uses this to
     //  get the StructuredTextViewer to get `doc`
     Field mTextEditor = AndroidXmlEditor.class.getDeclaredField("mTextEditor");
     mTextEditor.setAccessible(true);
-    mTextEditor.set(editor, new StructuredTextEditor() {
+    mTextEditor.set(editor, new StructuredTextEditor()
+    {
 
       @Override
-      public StructuredTextViewer getTextViewer() {
+      public StructuredTextViewer getTextViewer()
+      {
         return viewer;
       }
 
       @Override
       protected void setSourceViewerConfiguration(
-        SourceViewerConfiguration config) {
+        SourceViewerConfiguration config)
+      {
           // nop it to prevent exception
       }
 
@@ -236,12 +253,13 @@ public class AdtAssistUtil {
     IStructuredModel model = StructuredModelManager.getModelManager()
       .getExistingModelForRead(file);
 
-    for (int i=0; i < model.getReferenceCountForRead(); i++) {
+    for (int i = 0; i < model.getReferenceCountForRead(); i++) {
       model.releaseFromRead();
     }
 
     // this number should be 1 less than we printed when aquiring
-    logger.info("Model for {} NOW has {} refs", file, model.getReferenceCountForRead());
+    logger.info("Model for {} NOW has {} refs",
+        file, model.getReferenceCountForRead());
   }
 
   /**
@@ -256,12 +274,13 @@ public class AdtAssistUtil {
   {
 
     // let the right one in
-    final IContentAssistProcessor ca = 
+    final IContentAssistProcessor ca =
       getContentAssist(project, editor, file);
 
     // make sure we could get a processor
-    if (ca == null)
+    if (ca == null) {
       return new ICompletionProposal[0];
+    }
 
     // execute
     ITextViewer viewer = editor.getStructuredSourceViewer();
@@ -275,14 +294,17 @@ public class AdtAssistUtil {
    * A super hacky fallback; if the default completion provided nothing,
    *  this tries to complete possible values for eg layout attribute values
    */
-  public static ICompletionProposal[] attemptValuesCompletion(AndroidXmlEditor editor, final int offset)
+  public static ICompletionProposal[] attemptValuesCompletion(
+      final AndroidXmlEditor editor,
+      final int offset)
     throws Exception
   {
 
     final StructuredTextViewer viewer = (StructuredTextViewer) editor
         .getStructuredSourceViewer();
     final String wordPrefix = extractElementPrefix(viewer, offset);
-    final AttribInfo info = parseAttributeInfo(viewer, offset, offset - wordPrefix.length());
+    final AttribInfo info = parseAttributeInfo(viewer,
+        offset, offset - wordPrefix.length());
 
     final PublicValuesContentAssist assistor = new PublicValuesContentAssist();
     setEditor(assistor, editor);
@@ -330,10 +352,15 @@ public class AdtAssistUtil {
   /**
    * @return the appropriate ContentAssist based on the file
    */
-  static AndroidContentAssist pickAssistor(IProject project, AndroidXmlEditor editor, IFile file) {
+  static AndroidContentAssist pickAssistor(
+      final IProject project,
+      final AndroidXmlEditor editor,
+      final IFile file)
+  {
 
     // thanks to CommonXmlEditor
-    final ResourceFolder resFolder = ResourceManager.getInstance().getResourceFolder(file);
+    final ResourceFolder resFolder = ResourceManager
+      .getInstance().getResourceFolder(file);
     ResourceFolderType type = resFolder == null ? null : resFolder.getType();
 
     if (type == null) {
@@ -383,7 +410,7 @@ public class AdtAssistUtil {
     }
   }
 
-  /** 
+  /**
    * Attach our editor to the ContentAssist so it doesn't try to
    *  query the workbench.
    */
@@ -395,46 +422,19 @@ public class AdtAssistUtil {
     mEditor.set(assistor, editor);
   }
 
-  /* this is some old experiements for reference and is probably no longer needed */
-  // static void test(AndroidXmlEditor editor) {
-  //
-  //   IDocument doc = null; 
-  //   final int offset = 0;
-  //
-  //   Pair<Node, Node> context = DomUtilities.getNodeContext(doc, offset);
-  //   Node current = context.getSecond();
-  //   if (current != null) {
-  //     logger.info("current={}; isElement={}", 
-  //         current, current.getNodeType() == Node.ELEMENT_NODE);
-  //   }
-  //
-  //   StructuredTextViewer viewer = (StructuredTextViewer) editor
-  //     .getStructuredSourceViewer();
-  //
-  //   final String wordPrefix = extractElementPrefix(viewer, offset);
-  //   String parent = current.getNodeName();
-  //   AttribInfo info = parseAttributeInfo(viewer, offset, offset - wordPrefix.length());
-  //   logger.info("prefix=`{}`; info={}", wordPrefix, info);
-  //
-  //   // computeAttributeProposals(proposals, viewer, offset, wordPrefix, currentUiNode,
-  //   // parentNode, currentNode, parent, info, nextChar);
-  //   // (computeAttributeValues(proposals, offset, parent, info.name, currentNode,
-  //   //                 wordPrefix, info.skipEndTag, info.replaceLength)) {
-  //   logger.info("parent={}; attributeName={}", parent, info.name);
-  //   if (info.isInValue) {
-  //     String[] choices = UiResourceAttributeNode.computeResourceStringMatches(
-  //         editor, null /*attributeDescriptor*/, info.correctedPrefix);
-  //     logger.info("res-choices={}", Arrays.asList(choices));
-  //   }
-  //
-  // }
-
-  /** Extracted from AndroidContentAssist, to reduce coupling with any specific version */
-  private static String extractElementPrefix(StructuredTextViewer viewer,
-      int offset) {
+  /**
+   * Extracted from AndroidContentAssist, to reduce coupling
+   * with any specific version
+   */
+  private static String extractElementPrefix(
+      StructuredTextViewer viewer,
+      int offset)
+  {
     int i = offset;
     IDocument document = viewer.getDocument();
-    if (i > document.getLength()) return ""; //$NON-NLS-1$
+    if (i > document.getLength()) {
+      return ""; //$NON-NLS-1$
+    }
     try {
       for (; i > 0; --i) {
         char ch = document.getChar(i - 1);
@@ -447,9 +447,10 @@ public class AdtAssistUtil {
         // - any form of whitespace
         // - any xml separator, e.g. < > ' " and =
         if (Character.isWhitespace(ch) ||
-            ch == '<' || ch == '>' || ch == '\'' || ch == '"' || ch == '=') {
+            ch == '<' || ch == '>' || ch == '\'' || ch == '"' || ch == '=')
+        {
           break;
-            }
+        }
       }
       return document.get(i, offset - i);
     } catch (BadLocationException e) {
@@ -457,8 +458,15 @@ public class AdtAssistUtil {
     }
   }
 
-  /** Extracted from AndroidContentAssist, to reduce coupling with any specific version */
-  private static AttribInfo parseAttributeInfo(ITextViewer viewer, int offset, int prefixStartOffset) {
+  /**
+   * Extracted from AndroidContentAssist, to reduce coupling
+   * with any specific version
+   */
+  private static AttribInfo parseAttributeInfo(
+      ITextViewer viewer,
+      int offset,
+      int prefixStartOffset)
+  {
     AttribInfo info = new AttribInfo();
     int originalOffset = offset;
     IDocument document = viewer.getDocument();
@@ -471,10 +479,14 @@ public class AdtAssistUtil {
           return null;
         }
         n = offset;
-        for (;offset > 0; --offset) {
+        for (; offset > 0; --offset) {
           char ch = document.getChar(offset - 1);
-          if (ch == '>') break;
-          if (ch == '<') break;
+          if (ch == '>') {
+            break;
+          }
+          if (ch == '<') {
+            break;
+          }
         }
         // text will contain the full string of the current element,
         // i.e. whatever is after the "<" to the current cursor
@@ -605,9 +617,12 @@ public class AdtAssistUtil {
    * Extracts the character at the given offset.
    * Returns 0 if the offset is invalid.
    */
-  private static char extractChar(ITextViewer viewer, int offset) {
+  private static char extractChar(ITextViewer viewer, int offset)
+  {
     IDocument document = viewer.getDocument();
-    if (offset > document.getLength()) return 0;
+    if (offset > document.getLength()) {
+      return 0;
+    }
     try {
       return document.getChar(offset);
     } catch (BadLocationException e) {

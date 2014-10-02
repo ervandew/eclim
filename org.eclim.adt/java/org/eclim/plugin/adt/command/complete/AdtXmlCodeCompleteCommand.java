@@ -4,17 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclim.annotation.Command;
-
 import org.eclim.command.CommandLine;
-
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
-
 import org.eclim.plugin.core.util.ProjectUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
 import com.android.ide.eclipse.adt.internal.editors.AndroidXmlEditor;
@@ -28,7 +23,7 @@ import com.android.ide.eclipse.adt.internal.editors.AndroidXmlEditor;
   "REQUIRED e encoding ARG," +
   "REQUIRED l layout ARG"
 )
-public class AdtXmlCodeCompleteCommand 
+public class AdtXmlCodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
 
@@ -59,7 +54,7 @@ public class AdtXmlCodeCompleteCommand
     //  (it's not needed for step 3)
     AdtAssistUtil.release(editor);
 
-    // step 3: no results? twiddle the input 
+    // step 3: no results? twiddle the input
     //  and pass to the ValuesContentAssist
     if (props.length == 0) {
       return AdtAssistUtil.attemptValuesCompletion(editor, offset);
@@ -67,6 +62,5 @@ public class AdtXmlCodeCompleteCommand
 
     return props;
   }
-
 
 }

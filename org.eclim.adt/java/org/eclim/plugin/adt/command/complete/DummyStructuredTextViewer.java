@@ -26,7 +26,7 @@ public class DummyStructuredTextViewer
   public DummyStructuredTextViewer(IStructuredDocument doc, int offset, int length)
   {
     super(new StyledText(EclimPlugin.getShell(), 0), null, null, false, 0);
-  
+
     this.document = doc;
     selectionProvider = new DummySelectionProvider(
         new TextSelection(document, offset, length));
@@ -39,7 +39,8 @@ public class DummyStructuredTextViewer
   }
 
   @Override
-  public ISelectionProvider getSelectionProvider() {
+  public ISelectionProvider getSelectionProvider()
+  {
     return selectionProvider;
   }
 
