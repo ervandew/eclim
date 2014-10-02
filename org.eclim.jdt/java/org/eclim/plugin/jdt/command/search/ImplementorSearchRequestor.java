@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.search;
 
+import org.eclim.plugin.jdt.util.JavaUtils;
+
 import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.jdt.core.IMethod;
@@ -47,24 +49,40 @@ public class ImplementorSearchRequestor
   /**
    * {@inheritDoc}
    */
+  @Override
   public void acceptSearchMatch(SearchMatch match)
     throws CoreException
   {
-    if (matchDeclaresTarget(match)) {
+    final IMethod declared = findTargetDeclaration(match);
+    if (declared != null) {
+      
+      try {
+        // attempt to fix the Match to point to the declaration
+        int declaration = JavaUtils.getElementOffset(declared);
+        match.setOffset(declaration);
+      } catch (final Exception e) {
+        // oh well
+      }
+
       super.acceptSearchMatch(match);
     }
   }
 
-  private boolean matchDeclaresTarget(final SearchMatch match)
+  private IMethod findTargetDeclaration(final SearchMatch match)
     throws CoreException
   {
     if (!(match.getElement() instanceof IType)) {
-      return false;
+      return null;
     }
 
     final IType type = (IType) match.getElement();
     IMethod[] found = type.findMethods(target);
-    return found != null && found.length > 0;
+    if (found != null && found.length > 0) {
+      // just the first, I guess
+      return found[0];
+    }
+
+    return null;
   }
 
 }
