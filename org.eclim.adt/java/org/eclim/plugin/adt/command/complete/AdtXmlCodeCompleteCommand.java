@@ -7,8 +7,6 @@ import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
 
-import org.eclim.logging.Logger;
-
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
@@ -30,15 +28,14 @@ import com.android.ide.eclipse.adt.internal.editors.AndroidXmlEditor;
   "REQUIRED e encoding ARG," +
   "REQUIRED l layout ARG"
 )
-public class AdtXmlCodeCompleteCommand extends AbstractCodeCompleteCommand {
-  private static final Logger logger =
-    Logger.getLogger(AdtXmlCodeCompleteCommand.class);
+public class AdtXmlCodeCompleteCommand 
+  extends AbstractCodeCompleteCommand
+{
 
   @Override
   protected Object getResponse(List<CodeCompleteResult> results)
   {
-    logger.info("Code completion! {}", results.size());
-    // TODO clean this up
+    // Anything else wanted here?
     HashMap<String, Object> response = new HashMap<String, Object>();
     response.put("completions", results);
     return response;
@@ -52,7 +49,6 @@ public class AdtXmlCodeCompleteCommand extends AbstractCodeCompleteCommand {
     final IProject project = ProjectUtils.getProject(projectName);
     final IFile ifile = ProjectUtils.getFile(project, file);
 
-    logger.info("complete @{}", offset);
     AndroidXmlEditor editor = AdtAssistUtil.newXmlEditor(ifile, offset);
 
     // step 1: only slightly hacky completion based on default mechanism

@@ -74,61 +74,43 @@ function! eclim#android#xml#complete#CodeComplete(findstart, base) " {{{
       return -1
     endif
 
-    " if the word has a '.' in it (like package completion) then we need to
-    " strip some off according to what is currently in the buffer.
-    let prefix = substitute(getline('.'),
-      \ '.\{-}\([[:alnum:].]\+\%' . col('.') . 'c\).*', '\1', '')
+    " attribute namespaces, if already typed, should be stripped
+    let attribPrefix = substitute(getline('.'),
+      \ '.\{-}\([[:alnum:]:]\+\%' . col('.') . 'c\).*', '\1', '')
 
-    " as of eclipse 3.2 it will include the parens on a completion result even
-    " if the file already has them.
-    let open_paren = getline('.') =~ '\%' . col('.') . 'c\s*('
-    let close_paren = getline('.') =~ '\%' . col('.') . 'c\s*(\s*)'
-
-    " when completing imports, the completions include ending ';'
-    let semicolon = getline('.') =~ '\%' . col('.') . 'c\s*;'
+    " also, already-typed part of resources
+    let resPrefix = substitute(getline('.'),
+      \ '.\{-}\([[:alnum:]@+/]\+\%' . col('.') . 'c\).*', '\1', '')
 
     for result in response.completions
       let word = result.completion
 
-      " strip off prefix if necessary.
-      if word =~ '\.'
-        let word = substitute(word, prefix, '', '')
+      " strip off prefixes if necessary.
+      if word =~ '\:'
+        let word = substitute(word, attribPrefix, '', '')
       endif
 
-      " strip off close paren if necessary.
-      if word =~ ')$' && close_paren
+      if word =~ '@'
+        let word = substitute(word, resPrefix, '', '')
+      endif
+
+      " strip off trailing slash; if they type it
+      "  with YCM, it will start autocomplete
+      if word =~ '/$' 
         let word = strpart(word, 0, strlen(word) - 1)
       endif
-
-      " strip off open paren if necessary.
-      if word =~ '($' && open_paren
-        let word = strpart(word, 0, strlen(word) - 1)
-      endif
-
-      " strip off semicolon if necessary.
-      if word =~ ';$' && semicolon
-        let word = strpart(word, 0, strlen(word) - 1)
-      endif
-
-      " " if user wants case sensitivity, then filter out completions that don't
-      " " match
-      " if g:EclimJavaCompleteCaseSensitive && a:base != ''
-      "   if word !~ '^' . a:base . '\C'
-      "     continue
-      "   endif
-      " endif
 
       let menu = result.menu
       let info = eclim#html#util#HtmlToText(result.info)
 
       let dict = {
           \ 'word': word,
+          \ 'abbr': result.completion,
           \ 'menu': menu,
           \ 'info': info,
           \ 'kind': result.type,
           \ 'dup': 1,
         \ }
-          " \ 'icase': !g:EclimJavaCompleteCaseSensitive,
 
       call add(completions, dict)
     endfor
