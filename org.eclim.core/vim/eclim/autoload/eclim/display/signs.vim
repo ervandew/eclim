@@ -33,11 +33,33 @@
       \ 'off': 0,
     \ }
 
+  let s:sign_ids = {}
+
 " }}}
 
 function! eclim#display#signs#Define(name, text, highlight) " {{{
   " Defines a new sign name or updates an existing one.
+  if !has_key(s:sign_ids, a:name)
+    let sid = 0
+    let index = 0
+    let name = 'eclim' . a:name
+    while index < len(name)
+      let sid += char2nr(name[index])
+      let index += 1
+    endwhile
+    let sid = sid * 1000
+    for [key, value] in items(s:sign_ids)
+      if value == sid
+        throw printf('Sign id for "%s" clashes with "%s".', a:name, key)
+      endif
+    endfor
+    let s:sign_ids[a:name] = sid
+  endif
   exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
+endfunction " }}}
+
+function! eclim#display#signs#Id(name, line) " {{{
+  return s:sign_ids[a:name] + a:line
 endfunction " }}}
 
 function! eclim#display#signs#Place(name, line) " {{{
@@ -45,7 +67,7 @@ function! eclim#display#signs#Place(name, line) " {{{
   if a:line > 0
     let lastline = line('$')
     let line = a:line <= lastline ? a:line : lastline
-    let id = a:name == 'placeholder' ? 999999 : line
+    let id = eclim#display#signs#Id(a:name, line)
     exec "sign place " . id . " line=" . line . " name=" . a:name .
       \ " buffer=" . bufnr('%')
   endif
@@ -81,7 +103,7 @@ function! eclim#display#signs#UnplaceAll(list) " {{{
 
   for sign in a:list
     if type(sign) == g:DICT_TYPE
-      call eclim#display#signs#Unplace(sign['id'])
+      call eclim#display#signs#Unplace(sign.id)
     else
       call eclim#display#signs#Unplace(sign)
     endif
@@ -97,9 +119,9 @@ function! eclim#display#signs#Toggle(name, line) " {{{
   " Toggle a sign on the current line.
   if a:line > 0
     let existing = eclim#display#signs#GetExisting(a:name)
-    let exists = len(filter(existing, "v:val['line'] == a:line"))
-    if exists
-      call eclim#display#signs#Unplace(a:line)
+    let exists = filter(existing, "v:val['line'] == a:line")
+    if len(exists)
+      call eclim#display#signs#Unplace(exists[0].id)
     else
       call eclim#display#signs#Place(a:name, a:line)
     endif
@@ -176,7 +198,8 @@ function! eclim#display#signs#GetExisting(...) " {{{
   "   line: The line number.
   "   name: The sign name (erorr, warning, etc.)
   "
-  " Optionally a sign name may be supplied to only retrieve signs of that name.
+  " Optionally one or more sign names may be supplied to only retrieve signs
+  " for those names.
 
   if !has('signs') || g:EclimSignLevel == 'off'
     return []
@@ -196,7 +219,8 @@ function! eclim#display#signs#GetExisting(...) " {{{
   endfor
 
   if len(a:000) > 0
-    call filter(existing, "v:val['name'] == a:000[0]")
+    let pattern = '^\(' . join(a:000, '\|') . '\)$'
+    call filter(existing, "v:val['name'] =~ pattern")
   endif
 
   return existing
