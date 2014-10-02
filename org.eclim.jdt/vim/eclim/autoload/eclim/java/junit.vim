@@ -79,7 +79,7 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
       quit
       exec curwinnr . "winc w"
     endif
-    call eclim#util#Echo(statusLine[0])
+    call eclim#util#EchoSuccess(statusLine[0])
   elseif result != '0'
     " if result == '0', then there was some error;
     "  results won't have anything interesting anyway

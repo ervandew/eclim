@@ -57,6 +57,9 @@ call eclim#AddVimSetting(
 call eclim#AddVimSetting(
   \ 'Core', 'g:EclimHighlightError', 'Error',
   \ 'Sets the vim highlight group to be used for error messages/signs.')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimHighlightSuccess', 'MoreMsg',
+  \ 'Sets the vim highlight group to be used for success messages/signs.')
 
 call eclim#AddVimSetting(
   \ 'Core', 'g:EclimMenus', 1,

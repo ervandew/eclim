@@ -157,8 +157,17 @@ endfunction " }}}
 
 function! eclim#util#Echo(message) " {{{
   " Echos a message using the info highlight regardless of what log level is set.
+  call s:EchoHighlight(a:message, g:EclimHighlightInfo)
+endfunction " }}}
+
+function! eclim#util#EchoSuccess(message) " {{{
+  " Echos a message using the 'success' highlight regardless log level
+    call s:EchoHighlight(a:message, g:EclimHighlightSuccess)
+endfunction " }}}
+
+function! s:EchoHighlight(message, highlight) " {{{
   if a:message != "0"
-    exec "echohl " . g:EclimHighlightInfo
+    exec "echohl " . a:highlight
     redraw
     for line in split(a:message, '\n')
       echom line
