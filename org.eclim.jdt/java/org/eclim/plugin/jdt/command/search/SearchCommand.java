@@ -299,6 +299,17 @@ public class SearchCommand
       IJavaElement implementedTarget)
     throws CoreException
   {
+    final SearchRequestor requestor = searchInternal(
+        pattern, scope, implementedTarget);
+    return collectResults(scope, requestor);
+  }
+
+  private SearchRequestor searchInternal(
+      SearchPattern pattern,
+      IJavaSearchScope scope,
+      IJavaElement implementedTarget)
+    throws CoreException
+  {
     SearchRequestor requestor = implementedTarget instanceof IMethod ?
         new ImplementorSearchRequestor((IMethod) implementedTarget) :
         new SearchRequestor();
@@ -308,7 +319,33 @@ public class SearchCommand
         new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
       engine.search(pattern, participants, scope, requestor, null);
     }
-    return requestor.getMatches();
+
+    return requestor;
+  }
+
+  private List<SearchMatch> collectResults(
+      final IJavaSearchScope scope,
+      final SearchRequestor requestor)
+    throws CoreException
+  {
+    List<SearchMatch> results = requestor.getMatches();
+    if (!(requestor instanceof ImplementorSearchRequestor))
+      return results; // we're done here
+
+    ImplementorSearchRequestor isr = (ImplementorSearchRequestor) requestor;
+    IJavaElement target = isr.getTarget();
+    SearchPattern nextPattern = isr.getNextSearch();
+    while (nextPattern != null) {
+
+      // it MUST also be an ISR
+      isr = (ImplementorSearchRequestor) searchInternal(
+          nextPattern, scope, target);
+      results.addAll(isr.getMatches());
+
+      nextPattern = isr.getNextSearch();
+    }
+
+    return results;
   }
 
   /**

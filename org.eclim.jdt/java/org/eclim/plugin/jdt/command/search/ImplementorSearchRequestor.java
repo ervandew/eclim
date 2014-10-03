@@ -16,14 +16,21 @@
  */
 package org.eclim.plugin.jdt.command.search;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.core.runtime.CoreException;
 
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.SearchMatch;
+import org.eclipse.jdt.core.search.SearchPattern;
 
 /**
  * Extension to eclim SearchRequestor that ensures
@@ -36,6 +43,8 @@ public class ImplementorSearchRequestor
 {
 
   private final IMethod target;
+  private final List<IJavaElement> candidateParents =
+    new ArrayList<IJavaElement>();
 
   public ImplementorSearchRequestor(final IMethod target)
   {
@@ -65,7 +74,44 @@ public class ImplementorSearchRequestor
       }
 
       super.acceptSearchMatch(match);
+    } else {
+      candidateParents.add((IJavaElement) match.getElement());
     }
+  }
+
+  /**
+   * @return A SearchPattern if there are still more
+   *  candidates, else null
+   */
+  public SearchPattern getNextSearch()
+  {
+    if (candidateParents.isEmpty()) {
+      return null;
+    }
+
+    Iterator<IJavaElement> iter = candidateParents.iterator();
+    SearchPattern result = createSearchFor(iter.next());
+    iter.remove();
+
+    while (iter.hasNext()) {
+      result = SearchPattern.createOrPattern(result,
+          createSearchFor(iter.next()));
+
+      iter.remove();
+    }
+
+    return result;
+  }
+
+  public IMethod getTarget()
+  {
+    return target;
+  }
+
+  private SearchPattern createSearchFor(final IJavaElement parent)
+  {
+    return SearchPattern.createPattern(parent, 
+        IJavaSearchConstants.SUPERTYPE_TYPE_REFERENCE);
   }
 
   private IMethod findTargetDeclaration(final SearchMatch match)
