@@ -100,6 +100,7 @@ public class Main
             results[0] = command.execute(commandLine);
           }catch(Exception e){
             results[0] = e;
+            logger.error("Command failed", e);
           }finally{
             command.cleanup(commandLine);
           }
