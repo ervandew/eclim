@@ -171,7 +171,6 @@ public class VariableView
 
     // If variable is already expanded, just return.
     if (expandableVar.expanded) {
-      logger.info("hehe : alreadu expanded: " + valueId);
       return null;
     }
 
@@ -183,7 +182,6 @@ public class VariableView
 
       // Mark as expanded.
       expandableVar.expanded = true;
-      logger.info("hehe : marking as expanded: " + valueId);
     } catch (DebugException e) {
       logger.error("Unable to get variables", e);
     }

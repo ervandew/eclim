@@ -97,6 +97,11 @@ public class VimClient
   {
     remoteSend(":JavaDebugVariableViewUpdate " +
         concatenateList(results));
+
+    // Hack to force VIM to execute the previous remote send command.
+    // In some cases, VIM seems to buffer the command and not execute
+    // until the next remote command is sent.
+    remoteSend(":echo ' '");
   }
 
   /**
@@ -106,8 +111,8 @@ public class VimClient
   private String concatenateList(List<String> entries)
   {
     if (entries == null || entries.isEmpty()) {
-      // Return a placeholder string since the remote VIM command expects an arg
-      return "-";
+      // Return an empty string since the remote VIM command expects an arg
+      return "\\ ";
     }
 
     StringBuilder sb = new StringBuilder();

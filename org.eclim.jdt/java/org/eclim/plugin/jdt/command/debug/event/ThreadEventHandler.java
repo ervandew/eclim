@@ -85,7 +85,7 @@ public class ThreadEventHandler extends DebugEventHandler
       } else if (detail == DebugEvent.CLIENT_REQUEST) {
         ctx.getThreadContext().update(thread);
         ctx.getVimClient().updateThreadView(threadId,
-            "m",
+            ViewUtils.MODIFY_NODE,
             ctx.getThreadView().get(thread));
 
         ctx.getVimClient().updateVariableView(ctx.getVariableView().get());
@@ -115,6 +115,10 @@ public class ThreadEventHandler extends DebugEventHandler
 
       if (ctx.getVariableView().isViewingThread(thread)) {
         ctx.getVariableView().clear();
+        // TODO If we send this remote command, then in some cases
+        // it causes the next remote command to update variable window
+        // to not get sent correctly. As a result, the variable window
+        // becomes empty after a step over operation.
         ctx.getVimClient().updateVariableView(null);
       }
     }

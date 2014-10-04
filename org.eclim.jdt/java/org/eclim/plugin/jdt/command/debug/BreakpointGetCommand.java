@@ -27,6 +27,8 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.util.file.Position;
 
+import org.eclipse.core.resources.IResource;
+
 import org.eclipse.debug.core.DebugPlugin;
 
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -58,13 +60,14 @@ public class BreakpointGetCommand
 
     if (breakpoints != null) {
       for (IBreakpoint breakpoint : breakpoints) {
-        String curFileName = breakpoint.getMarker().getResource()
-          .getRawLocation().toOSString();
+        IResource resource = breakpoint.getMarker().getResource();
+        String curFileName = resource.getRawLocation().toOSString();
+        String projectName = resource.getProject().getName();
 
         if (fileName == null || fileName.equals(curFileName)) {
           Position position = Position.fromLineColumn(
               curFileName,
-              "",
+              projectName,
               ((ILineBreakpoint) breakpoint).getLineNumber(),
               1);
 

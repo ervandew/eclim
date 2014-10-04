@@ -394,13 +394,13 @@ endfunction " }}}
 function! s:BreakpointToggle() " {{{
   "Enables or disables the breakpoint under cursor.
 
-  let project = eclim#project#util#GetCurrentProjectName()
   let loc_list_entry = getline(line('.'))
 
-  " location list entry is of the form: filename|line_num col col_num|
+  " location list entry is of the form: filename|line_num col col_num|project
   let tokens = split(loc_list_entry, "|")
   let file = tokens[0]
-  let line = split(tokens[1], " ")[0]
+  let project = s:Trim(tokens[2])
+  let line = s:Trim(split(tokens[1], " ")[0])
 
   let command = s:command_breakpoint_toggle
   let command = substitute(command, '<project>', project, '')
@@ -746,6 +746,12 @@ function! eclim#java#debug#VariableViewUpdate(value) " {{{
   call eclim#util#Echo("Refreshing ...")
   call eclim#util#TempWindowClear(s:variable_buf_name, split(a:value, "<eol>"))
   call eclim#util#Echo(" ")
+endfunction " }}}
+      
+function! s:Trim(value) " {{{
+  " Removes any leading and trailing white spaces.
+
+  return substitute(a:value, "^\\s\\+\\|\\s\\+$","","g")
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

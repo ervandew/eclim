@@ -16,9 +16,6 @@
  */
 package org.eclim.plugin.jdt.command.debug;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -32,6 +29,8 @@ import org.eclipse.core.resources.IResource;
 
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
+
+import org.eclipse.debug.core.model.IBreakpoint;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
@@ -63,6 +62,27 @@ public class BreakpointToggleCommand
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String fileName = commandLine.getValue(Options.FILE_OPTION);
     int lineNum = commandLine.getIntValue(Options.LINE_OPTION);
+
+    // TODO For some projects, querying for compilation unit does not
+    // work. So for now, iterating through all breakpoints to find match.
+    // If it does not work, then lookup using project and file.
+    IBreakpointManager breakpointMgr = DebugPlugin.getDefault()
+      .getBreakpointManager();
+    IBreakpoint[] breakpoints = breakpointMgr.getBreakpoints();
+    for (IBreakpoint breakpoint : breakpoints) {
+      String curFileName = breakpoint.getMarker().getResource()
+        .getRawLocation().toOSString();
+
+      if (fileName.equals(curFileName)) {
+        if (breakpoint.isEnabled()) {
+          breakpoint.setEnabled(false);
+          return BKPOINT_DISABLED;
+        } else {
+          breakpoint.setEnabled(true);
+          return BKPOINT_ENABLED;
+        }
+      }
+    }
 
     return toggleBreakpoint(projectName, fileName, lineNum);
   }
