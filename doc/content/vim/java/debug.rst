@@ -42,10 +42,7 @@ line and run **:JavaDebugBreakpointAdd** command.
 
 Remove breakpoint(s)
 ---------------------
-There are 3 ways to remove breakpoints.
-
-- Remove breakpoint under cursor. The cursor should be placed in the desired
-  Java file.
+There are 2 ways to remove breakpoints.
 
 - Remove all breakpoints defined in current file. The cursor should be placed in
   dsired Java file.
@@ -54,7 +51,6 @@ There are 3 ways to remove breakpoints.
 
 .. code-block:: vim
 
-  :JavaDebugBreakpointRemove
   :JavaDebugBreakpointRemoveFile
   :JavaDebugBreakpointRemoveAll
 

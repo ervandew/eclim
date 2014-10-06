@@ -37,6 +37,7 @@ let s:breakpoint_sign = 'eclim_breakpoint'
 
 let s:variable_buf_name = 'Debug Variables'
 let s:thread_buf_name = 'Debug Threads'
+let s:breakpoint_buf_name = 'Breakpoints'
 
 let s:command_start =
   \ '-command java_debug_start -p "<project>" ' .
@@ -131,16 +132,32 @@ endfunction " }}}
 
 function! s:DefineThreadWinSettings() " {{{
   " Defines settings that are applicable only in thread window.
-  if exists(":JavaDebugThreadSuspend") != 2
-    command -nargs=0 -buffer JavaDebugThreadSuspend
-      \ :call eclim#java#debug#DebugThreadSuspend()
-  endif
+  nnoremap <silent> <buffer> s :call eclim#java#debug#DebugThreadSuspend()<CR>
+  nnoremap <silent> <buffer> S :call eclim#java#debug#DebugThreadSuspendAll()<CR>
+  nnoremap <silent> <buffer> r :call eclim#java#debug#DebugThreadResume()<CR>
+  nnoremap <silent> <buffer> R :call eclim#java#debug#DebugThreadResumeAll()<CR>
+
+  nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
+    \ [
+      \ 's - suspend the thread under the cursor',
+      \ 'S - suspend all threads',
+      \ 'r - resume the thread under the cursor',
+      \ 'R - resume all threads',
+    \ ],
+    \ 'vertical', 40)<CR>
 endfunction " }}}
 
 function! s:DefineVariableWinSettings() " {{{
   " Defines settings that are applicable only in variable window.
-  nnoremap <buffer> <silent> <CR> :call <SID>VariableExpand()<CR>
-  nnoremap <buffer> <silent> p :call <SID>VariableDetail()<CR>
+  nnoremap <silent> <buffer> <CR> :call <SID>VariableExpand()<CR>
+  nnoremap <silent> <buffer> p :call <SID>VariableDetail()<CR>
+
+  nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
+    \ [
+      \ '<CR> - expand the variable under the cursor',
+      \ 'p - preview toString value',
+    \ ],
+    \ 'vertical', 40)<CR>
 endfunction " }}}
 
 function! s:DefineBreakpointWinSettings() " {{{
@@ -148,8 +165,15 @@ function! s:DefineBreakpointWinSettings() " {{{
   call eclim#display#signs#Define(
     \ s:breakpoint_sign, '•', '')
 
-  nnoremap <buffer> <silent> t :call <SID>BreakpointToggle()<CR>
-  nnoremap <buffer> <silent> d :call eclim#java#debug#BreakpointRemove()<CR>
+  nnoremap <silent> <buffer> t :call <SID>BreakpointToggle()<CR>
+  nnoremap <silent> <buffer> d :call <SID>BreakpointRemove()<CR>
+
+  nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
+    \ [
+      \ 't - toggle breakpoint under cursor',
+      \ 'd - delete breakpoint under cursor',
+      \ ],
+    \ 'vertical', 40)<CR>
 endfunction " }}}
 
 function! eclim#java#debug#DebugStart(...) " {{{
@@ -323,20 +347,21 @@ function! eclim#java#debug#BreakpointGetAll() " {{{
   call s:DisplayBreakpoints(eclim#Execute(command))
 endfunction " }}}
 
-function! eclim#java#debug#BreakpointRemove() " {{{
-  " Removes breakpoint defined under the cursor if present.
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
-  endif
+function! s:BreakpointRemove() " {{{
+  " Removes breakpoint defined under the cursor.
+  let loc_list_entry = getline(line('.'))
 
-  let file = eclim#lang#SilentUpdate()
-  let line = line('.')
+  " location list entry is of the form: filename|line_num col col_num|project
+  let tokens = split(loc_list_entry, "|")
+  let file = tokens[0]
+  let line = s:Trim(split(tokens[1], " ")[0])
 
   let command = s:command_breakpoint_remove
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<line>', line, '')
 
   call eclim#util#Echo(eclim#Execute(command))
+  call eclim#java#debug#BreakpointGetAll()
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointRemoveFile() " {{{
@@ -482,9 +507,7 @@ function! s:CreateStatusWindow(threads, vars) " {{{
   let cur_col = col('.')
 
   let thread_win_opts = {'orientation': 'horizontal'}
-  call eclim#util#TempWindow(
-    \ s:thread_buf_name, a:threads,
-    \ thread_win_opts)
+  call eclim#util#TempWindow(s:thread_buf_name, a:threads, thread_win_opts)
 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetTreeFold(v:lnum)
@@ -493,23 +516,22 @@ function! s:CreateStatusWindow(threads, vars) " {{{
   setlocal foldlevel=5
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
-  setlocal nonu
+  setlocal nonumber
   call s:DefineThreadWinSettings()
   call s:DefineStatusWinSettings()
 
-  let var_win_opts = {'orientation': g:EclimJavaDebugStatusWinOrientation,
+  let var_win_opts = {
+    \ 'orientation': g:EclimJavaDebugStatusWinOrientation,
     \ 'width': g:EclimJavaDebugStatusWinWidth,
-    \ 'height': g:EclimJavaDebugStatusWinHeight}
-  call eclim#util#TempWindow(
-    \ s:variable_buf_name, a:vars,
-    \ var_win_opts)
-
+    \ 'height': g:EclimJavaDebugStatusWinHeight
+  \ }
+  call eclim#util#TempWindow(s:variable_buf_name, a:vars, var_win_opts) 
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetTreeFold(v:lnum)
   setlocal foldtext=eclim#display#fold#TreeFoldText()
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
-  setlocal nonu
+  setlocal nonumber
   call s:DefineVariableWinSettings()
   call s:DefineStatusWinSettings()
 

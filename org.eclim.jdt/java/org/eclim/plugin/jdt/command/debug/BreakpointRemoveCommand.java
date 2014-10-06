@@ -68,7 +68,10 @@ public class BreakpointRemoveCommand
         String curFileName = breakpoint.getMarker().getResource()
           .getRawLocation().toOSString();
 
-        if (fileName.equals(curFileName)) {
+        String projectRelPath = breakpoint.getMarker().getResource()
+          .getProjectRelativePath().toString();
+
+        if (fileName.equals(curFileName) || fileName.equals(projectRelPath)) {
           if (lineNum == null ||
               lineNum == -1 ||
               lineNum == ((ILineBreakpoint) breakpoint).getLineNumber())

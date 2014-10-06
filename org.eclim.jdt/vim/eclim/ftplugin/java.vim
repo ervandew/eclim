@@ -258,11 +258,6 @@ if exists(":JavaDebugBreakpointGetAll") != 2
     \ :call eclim#java#debug#BreakpointGetAll()
 endif
 
-if exists(":JavaDebugBreakpointRemove") != 2
-  command -nargs=0 -buffer JavaDebugBreakpointRemove
-    \ :call eclim#java#debug#BreakpointRemove(<f-args>)
-endif
-
 if exists(":JavaDebugBreakpointRemoveFile") != 2
   command -nargs=0 -buffer JavaDebugBreakpointRemoveFile
     \ :call eclim#java#debug#BreakpointRemoveFile(<f-args>)
