@@ -196,6 +196,11 @@ if !exists(":JavaMove")
     \ JavaMove :call eclim#java#refactor#Move('<args>')
 endif
 
+if !exists(":JavaNew")
+  command -nargs=+ -buffer -complete=customlist,eclim#java#new#CommandComplete
+    \ JavaNew :call eclim#java#new#Create(<f-args>)
+endif
+
 if !exists(":JavaLoggingInit")
   command -buffer JavaLoggingInit :call eclim#java#logging#LoggingInit()
 endif
