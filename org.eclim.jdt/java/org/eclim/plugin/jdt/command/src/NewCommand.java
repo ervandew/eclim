@@ -53,33 +53,29 @@ public class NewCommand
   extends AbstractCommand
 {
 
-  static final String TEMPLATE = 
+  static final String TEMPLATE =
     "package %1$s;\n\n" +
     "public %2$s %3$s {\n" +
     "}";
 
-  // // TODO is this a const anywhere?
-  // static final String TEMPLATE_ID = "newtype";
-  // static final String CONTEXT_ID = "newtype_context";
-
   @Override
   public Object execute(CommandLine commandLine)
-    throws Exception 
+    throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String type = commandLine.getValue(Options.TYPE_OPTION);
     String name = commandLine.getValue(Options.NAME_OPTION);
 
     int classStart = name.lastIndexOf('.');
-    final String packageName = classStart >= 0
-      ? name.substring(0, classStart) : name;
-    final String typeName = classStart >= 0
-      ? name.substring(classStart + 1) : name;
+    final String packageName = classStart >= 0 ?
+      name.substring(0, classStart) : name;
+    final String typeName = classStart >= 0 ?
+      name.substring(classStart + 1) : name;
     final String fileName = typeName + ".java";
 
     IPackageFragment frag = JavaUtils.getPackageFragment(project, packageName);
     if (frag == null) {
-      // TODO wut? new package, maybe?
+      // TODO support generating a new package?
       throw new IllegalStateException("Could not get package");
     }
 
@@ -94,7 +90,7 @@ public class NewCommand
       .refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
 
     // create!
-    final String content = String.format(TEMPLATE, 
+    final String content = String.format(TEMPLATE,
         packageName, getType(type), typeName);
     try {
       // NB: If we delete the file outside of Eclipse'
@@ -118,43 +114,20 @@ public class NewCommand
     return singleMap("path", file.getAbsolutePath());
   }
 
-  private HashMap<String, Object> singleMap(String key, Object value) {
-
+  private HashMap<String, Object> singleMap(String key, Object value)
+  {
     HashMap<String, Object> result = new HashMap<String, Object>();
     result.put(key, value);
     return result;
   }
 
-  private String getType(String type) {
-    if ("abstract".equals(type))
+  private String getType(String type)
+  {
+    if ("abstract".equals(type)) {
       return "abstract class";
+    }
 
     return type;
   }
-
-  // Screw the template. It's not really adding anything for us....
-  // Keeping this here so it's at least in the git history if anyone wants it
-  // private Template findTemplateById(String projectName, String id)
-  //   throws Exception
-  // {
-  //
-  //   try {
-  //     ProjectTemplateStore templates = new ProjectTemplateStore(
-  //         JavaUtils.getJavaProject(projectName).getProject());
-  //     templates.load();
-  //     Template projectTemplate = templates.findTemplateById(id);
-  //     if (projectTemplate != null)
-  //       return projectTemplate;
-  //   } catch (Throwable e) {
-  //   }
-  //
-  //   TemplateStore store = JavaPlugin.getDefault().getCodeTemplateStore();
-  //   for (Template t : store.getTemplates()) {
-  //     if (id.equals(t.getName()))
-  //       return t;
-  //   }
-  //
-  //   return store.findTemplateById(id);
-  // }
 
 }
