@@ -16,21 +16,37 @@
 History of Changes
 ==================
 
-.. _2.3.5:
+.. _2.4.0:
 
-2.3.5 (XXX. XX, 2014)
+2.4.0 (Aug. 24, 2014)
 ---------------------
 
 Eclim:
+  - Eclim now supports, and requires, Eclipse Luna
   - **:EclimSettings** renamed to **:WorkspaceSettings** to better reflect what
     is being edited.
   - Added :ref:`:VimSettings <:VimSettings>` command to make viewing/editing of
     eclim's vim client settings easier.
+  - All eclim ``make`` based commands (:Ant, :Mvn, etc.) will now use dispatch_
+    if available. If you would like to disable this behavior, add the following
+    to your vimrc:
 
-Groovy:
-  - :doc:`Groovy support </vim/groovy/index>` added.
+    .. code-block:: vim
 
-| :gitlog:`Git Log (2.3.5) <2.3.4...2.3.5>`
+      let g:EclimMakeDispatchEnabled = 0
+
+  - Lot of bugs have also been fixed.
+
+Scala:
+  - Scala support is disabled in this release. I tried waiting for a final
+    release of ScalaIDE 4.0.0 for Luna, but I don't want to hold up the rest of
+    eclim any longer. If you want to use eclim's scala support, you'll need to
+    install the ScalaIDE 4.0.0 milestone and build eclim from the master git
+    branch.
+
+| :gitlog:`Git Log (2.4.0) <2.3.4...2.4.0>`
+
+.. _dispatch: https://github.com/tpope/vim-dispatch
 
 .. _1.7.19:
 

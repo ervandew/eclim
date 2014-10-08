@@ -917,7 +917,7 @@ function! eclim#project#util#GetProjectRelativeFilePath(...) " {{{
 
   let file = substitute(fnamemodify(file, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'
-  if has('win32') || has('win64')
+  if has('win32') || has('win64') || has('macunix')
     let pattern .= '\c'
   endif
   let result = substitute(file, get(project, 'path', '') . pattern, '', '')
@@ -1005,7 +1005,7 @@ function! eclim#project#util#GetProject(path) " {{{
 
   let path = substitute(fnamemodify(path, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'
-  if has('win32') || has('win64')
+  if has('win32') || has('win64') || has('macunix')
     let pattern .= '\c'
   endif
 

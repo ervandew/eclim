@@ -65,9 +65,15 @@
     </module>
     <module name="ParameterName"/>
     <module name="ParenPad"/>
+    <module name="Regexp">
+      <property name="format" value="[ \t]+$"/>
+      <property name="illegalPattern" value="true"/>
+      <property name="message" value="Trailing whitespace"/>
+    </module>
     <module name="RightCurly">
       <property name="option" value="same"/>
     </module>
+    <module name="org.eclim.checkstyle.ThrowsClause"/>
     <module name="org.eclim.checkstyle.WhitespaceAfter">
       <property name="tokens" value="COMMA, SEMI"/>
     </module>

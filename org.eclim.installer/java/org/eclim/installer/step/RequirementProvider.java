@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,10 +106,22 @@ public class RequirementProvider
       int minor = Integer.parseInt(parts[1]);
       int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 
-      if(major != 4 || minor < 3 || patch < 0){
+      int requiredMajor = Integer.parseInt(
+          Installer.getString("eclipse.version.major"));
+      int requiredMinor = Integer.parseInt(
+          Installer.getString("eclipse.version.minor"));
+      int requiredPatch = Integer.parseInt(
+          Installer.getString("eclipse.version.patch"));
+
+      if (major != requiredMajor ||
+          minor != requiredMinor ||
+          patch < requiredPatch)
+      {
         return new Status(FAIL,
             Installer.getString(
-              "eclipse.version.invalid", version, "4.3.x (Kepler)"));
+              "eclipse.version.invalid",
+              version,
+              Installer.getString("eclipse.version")));
       }
 
       return OK_STATUS;

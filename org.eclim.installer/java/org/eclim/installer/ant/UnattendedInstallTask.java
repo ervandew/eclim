@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.installer.ant;
 
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.MagicNames;
@@ -46,6 +47,11 @@ public class UnattendedInstallTask
 
     if (Installer.getProject() == null){
       Installer.setProject(getProject());
+      // hack to deal w/ unattended install bypassing the formic installer task
+      if (Installer.getResourceBundle() == null){
+        Installer.setResourceBundle(ResourceBundle.getBundle("resources.install"));
+      }
+
       String targets = getProject().getProperty(MagicNames.PROJECT_INVOKED_TARGETS);
       uninstall = "uninstall".equals(targets);
     }else{

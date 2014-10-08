@@ -9,4 +9,5 @@
   <suppress files="org/eclim/eclipse/jface" checks="\w*"/>
   <suppress files="org/vimplugin" checks="\w*"/>
   <suppress files="BufferedReader.java" checks="\w*"/>
+  <suppress files=".swp" checks="\w*"/>
 </suppressions>

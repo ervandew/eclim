@@ -23,10 +23,9 @@ Requirements
 Before beginning the installation, first confirm that you have met the
 following requirements.
 
-- `Java Development Kit`_ 1.6 or greater
+- `Java Development Kit`_ 1.7 or greater
 - `Vim`_ 7.1 or greater
-- `Eclipse 4.3.x (Kepler)`_ (eclim 2.2.x), `Eclipse 3.7.x (Indigo)`_ (eclim
-  1.7.x), or `Eclipse 3.8`_ (eclim 1.7.13 or greater)
+- `Eclipse eclipse_version`_
 - Mac and Linux users must also have make and gcc installed.
 
   **Minimum Vim Settings**: In order for eclim to function properly, there is a
@@ -70,8 +69,7 @@ Download
 You can find the official eclim installer on eclim's sourceforge `downloads
 page`_:
 
-- :eclimdist:`jar` (for Eclipse 4.3.x, Kepler)
-- :eclimdist_indigo:`jar` (for Eclipse 3.8 or Eclipse 3.7.x, Indigo)
+- :eclimdist:`jar`
 
 .. _downloads page: https://sourceforge.net/projects/eclim/files/eclim/
 
@@ -447,9 +445,7 @@ just need to supply your vim files and eclipse paths as system properties:
 
 .. _java development kit: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _eclipse.org: http://eclipse.org/downloads/
-.. _eclipse 4.3.x (kepler): http://eclipse.org/downloads/index.php
-.. _eclipse 3.7.x (indigo): http://eclipse.org/downloads/packages/release/indigo/sr2
-.. _eclipse 3.8: http://download.eclipse.org/eclipse/downloads/drops/R-3.8-201206081200/
+.. _eclipse eclipse_version: http://eclipse.org/downloads/index.php
 .. _vim: http://www.vim.org/download.php
 .. _eclim-user: http://groups.google.com/group/eclim-user
 .. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml

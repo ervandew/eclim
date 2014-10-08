@@ -38,6 +38,7 @@ let g:HtmlDjangoBodyElements = [
     \ ['autoescape', 'endautoescape'],
     \ ['block', 'endblock'],
     \ ['blocktrans', 'plural', 'endblocktrans'],
+    \ ['cache', 'endcache'],
     \ ['comment', 'endcomment'],
     \ ['filter', 'endfilter'],
     \ ['for', 'empty', 'endfor'],
@@ -61,7 +62,7 @@ if exists("b:match_words")
       endif
       let pattern .= '{%\s*\<' . tag . '\>.\{-}%}'
     endfor
-    let pattern .= ':{%\s*\<' . element[-1:][0] . '\>\s*%}'
+    let pattern .= ':{%\s*\<' . element[-1:][0] . '\>.\{-}%}'
     let b:match_words .= ',' . pattern
   endfor
 endif

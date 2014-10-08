@@ -47,7 +47,7 @@ function s:InitInterpreters() " {{{
       silent! let path =
         \ substitute(eclim#util#System('which ruby 2> /dev/null'), '\n$', '', '')
     else
-      let paths = escape(substitute(expand('$PATH'), ';', ',', 'g'), ' ')
+      let paths = escape(substitute($PATH, ';', ',', 'g'), ' ')
       let path = substitute(findfile('ruby.exe', paths, ';'), '\', '/', 'g')
     endif
     let answer = 0

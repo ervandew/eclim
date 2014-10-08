@@ -2,6 +2,7 @@
 
 <!ELEMENT feature (dependency+)>
 <!ATTLIST feature id ID #REQUIRED>
+<!ATTLIST feature status (unreleased) #IMPLIED>
 
 <!ELEMENT dependency (site?)>
 <!ATTLIST dependency id ID #REQUIRED>

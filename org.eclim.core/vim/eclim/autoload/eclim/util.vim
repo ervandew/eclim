@@ -157,8 +157,17 @@ endfunction " }}}
 
 function! eclim#util#Echo(message) " {{{
   " Echos a message using the info highlight regardless of what log level is set.
+  call s:EchoHighlight(a:message, g:EclimHighlightInfo)
+endfunction " }}}
+
+function! eclim#util#EchoSuccess(message) " {{{
+  " Echos a message using the 'success' highlight regardless log level
+    call s:EchoHighlight(a:message, g:EclimHighlightSuccess)
+endfunction " }}}
+
+function! s:EchoHighlight(message, highlight) " {{{
   if a:message != "0"
-    exec "echohl " . g:EclimHighlightInfo
+    exec "echohl " . a:highlight
     redraw
     for line in split(a:message, '\n')
       echom line
@@ -652,6 +661,18 @@ endfunction " }}}
 
 function! eclim#util#Make(bang, args) " {{{
   " Executes make using the supplied arguments.
+
+  " if vim-dispatch is installed, just delegate to that.
+  if exists(':Dispatch') == 2
+    " vim-dispatch has a :Make command which doesn't really have anything to do
+    " with the build tool 'make', but is instead an upper cased async version of
+    " vim's 'make' command. Several of tpope's plugins depend on that :Make
+    " command (instead of the underlying function, or the less ambiguous
+    " :Dispatch command), so anyone else that defines such a command is shit out
+    " of luck.
+    exec 'Dispatch' . a:bang . ' _ ' . a:args
+    return
+  endif
 
   let makefile = findfile('makefile', '.;')
   let makefile2 = findfile('Makefile', '.;')

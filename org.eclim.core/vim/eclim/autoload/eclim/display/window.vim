@@ -68,7 +68,6 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
     endif
   endif
 
-
   let relative_window = 0
   let relative_window_loc = 'below'
   if taglist_window != -1 || len(g:VerticalToolBuffers) > 0
@@ -88,6 +87,9 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
         elseif getbufvar(toolbuf, 'weight') > a:weight
           let relative_window = bufwinnr(toolbuf)
           let relative_window_loc = 'below'
+        elseif getbufvar(toolbuf, 'weight') < a:weight
+          let relative_window = bufwinnr(toolbuf)
+          let relative_window_loc = 'above'
         endif
       endif
     endfor
@@ -133,8 +135,7 @@ function! eclim#display#window#VerticalToolWindowOpen(name, weight, ...) " {{{
    \ (!exists('g:Tlist_Use_Horiz_Window') || !g:Tlist_Use_Horiz_Window)
     augroup eclim_vertical_tool_windows_move_taglist
       autocmd!
-      exec 'autocmd BufWinEnter ' . eclim#util#EscapeBufferName(g:TagList_title) .
-        \ ' call s:MoveRelativeTo()'
+      autocmd BufWinEnter * if bufname('%') == g:TagList_title | call s:MoveRelativeTo() | endif
     augroup END
   endif
   if exists(':TagbarOpen')

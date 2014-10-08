@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,8 +165,8 @@ public class CallHierarchyCommand
     throws Exception
   {
     IMember member = root.getMember();
-    String memberName = JavaElementLabels.getTextLabel(member, 
-        AppearanceAwareLabelProvider.DEFAULT_TEXTFLAGS | 
+    String memberName = JavaElementLabels.getTextLabel(member,
+        AppearanceAwareLabelProvider.DEFAULT_TEXTFLAGS |
         JavaElementLabels.ALL_POST_QUALIFIED |
         JavaElementLabels.P_COMPRESSED);
     CallLocation location = root.getMethodCall().getFirstCallLocation();
@@ -184,8 +184,8 @@ public class CallHierarchyCommand
         String file = resource.getLocation().toOSString().replace('\\', '/');
         int offset = location.getStart();
 
-        result.put("position", Position.fromOffset(file, null, offset, 
-            location.getEnd() - offset));
+        result.put("position", Position.fromOffset(
+              file, null, offset, location.getEnd() - offset));
       }
     }
 

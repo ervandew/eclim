@@ -18,8 +18,8 @@ target(name: 'org.eclim.build.eclipse'){
     }
     if (!ngUptodate) {
       exec(executable: 'org.eclim/nailgun/configure',
-        dir: 'org.eclim/nailgun', resolveexecutable: 'true')
-      exec(executable: 'make', dir: 'org.eclim/nailgun')
+        dir: 'org.eclim/nailgun', resolveexecutable: 'true', failonerror: 'true')
+      exec(executable: 'make', dir: 'org.eclim/nailgun', failonerror: 'true')
     }
     copy(file: 'org.eclim/nailgun/ng',
         todir: '${build.plugins}/org.eclim_${eclim.version}/bin')

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@ package org.eclim.installer.step;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import java.io.File;
 
 import java.util.ArrayList;
 
@@ -42,7 +40,7 @@ public class FeatureProvider
   public static final String[] FEATURES = {
     "jdt", "adt", "wst", "cdt",
     "dltk", "dltkruby", "pdt",
-    "pydev", "sdt210", "groovy"
+    "pydev", "sdt211", "groovy"
   };
 
   private static final String[][] FEATURES_DEPENDS = {
@@ -88,11 +86,23 @@ public class FeatureProvider
         }
       }
 
-      features.add(new Feature(
+      Feature feature = new Feature(
           FEATURES[ii],
           enabled[ii],
           FEATURES_DEPENDS[ii],
-          FEATURES_EXCLUSIVE[ii]));
+          FEATURES_EXCLUSIVE[ii]);
+
+      String status = info.getStatus(FEATURES[ii]);
+      if (status != null){
+        feature.setAvailable(false);
+        feature.setEnabled(false);
+        feature.setInfo(
+            Installer.getString(
+              "feature.status." + status,
+              Installer.getString("eclipse.version")));
+      }
+
+      features.add(feature);
     }
 
     return features.toArray(new Feature[features.size()]);

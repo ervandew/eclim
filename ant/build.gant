@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import groovy.json.JsonSlurper
+import groovy.util.XmlSlurper
+
 import org.apache.tools.ant.BuildException
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -29,6 +31,16 @@ ant.property(environment: 'env')
 ant.property(file: 'ant/build.properties')
 ant.defaultexcludes(add: '**/*.swp')
 ant.defaultexcludes(add: '**/*.bak')
+
+if (System.getProperty('user.name') == 'root'){
+  ant.fail('''
+    Abort:
+
+    #####
+    Building eclim as root is highly discouraged.
+    #####
+  ''')
+}
 
 gitAvailable = getGitAvailable()
 
@@ -146,11 +158,6 @@ target(name: 'init'){
       }
     }
   }
-}
-
-target(name: 'clean'){
-  delete(dir: 'build')
-  delete(file: 'org.eclim/nailgun/ng')
 }
 
 target(name: 'build'){
@@ -373,11 +380,19 @@ target(name: 'test'){
 }
 
 target(name: 'dist'){
-  // validate that all plugins will be built.
+  // load dependencies.xml so we know if any plugins are disabled
+  dependencies = new XmlSlurper(true, false, true).parse(
+    new File('org.eclim.installer/build/resources/dependencies.xml'))
+
+  // validate that all released plugins will be built.
   new File('.').eachDirMatch(~/org\.eclim(\.\w*|$)/){ dir ->
     name = dir.getName()
     if (name != 'org.eclim.installer' && !pluginNames.contains(name)){
-      fail('All plugin dependencies must be met before building an eclim distribution.')
+      id = name.split('\\.')[-1]
+      dep = dependencies.feature.findAll{ f -> f.@id == id }[0]
+      if (dep.@status != 'unreleased'){
+        fail('All plugin dependencies must be met before building an eclim distribution.')
+      }
     }
   }
 
@@ -489,6 +504,7 @@ target(name: 'javadoc'){
 target(name: 'docs'){
   depends('init')
 
+  property(file: 'org.eclim.installer/build/resources/install.properties')
   property(name: 'sphinx.args', value: '')
   mkdir(dir: 'build/doc/site')
 
@@ -514,6 +530,7 @@ target(name: 'docs'){
   replace(dir: 'build/doc/site', includes: '**/*.html'){
     replacefilter(token: 'eclim_release_indigo', value: '${eclim.release.indigo}')
     replacefilter(token: 'eclim_release', value: '${eclim.release}')
+    replacefilter(token: 'eclipse_version', value: '${eclipse.version}')
   }
 
   // support for google sitemap
@@ -677,8 +694,50 @@ target(name: 'plugin.create'){
   }
 }
 
+target(name: 'eclipse.init'){
+  launcher = null
+  new File("${eclipseHome}/plugins")
+    .eachFileMatch(~/org.eclipse.equinox.launcher_.*\.jar/){ file ->
+      launcher = file.getAbsolutePath()
+    }
+
+  if (launcher == null){
+    fail("Unable to find the eclipse launch in ${eclipseHome}/plugins")
+  }
+  echo('Running eclipse initilization...')
+  java(jar: launcher, fork: true, failonerror: true){
+    jvmarg(value: '-Xmx256m')
+    arg(value: '-debug')
+    arg(value: '-clean')
+    arg(value: '-refresh')
+    arg(value: '-initialize')
+  }
+  echo('Finished eclipse initialization.')
+}
+
+target(name: 'eclipse.gc'){
+  launcher = null
+  new File("${eclipseHome}/plugins")
+    .eachFileMatch(~/org.eclipse.equinox.launcher_.*\.jar/){ file ->
+      launcher = file.getAbsolutePath()
+    }
+
+  if (launcher == null){
+    fail("Unable to find the eclipse launch in ${eclipseHome}/plugins")
+  }
+  echo('Running eclipse garbage collection...')
+  java(jar: launcher, fork: true, failonerror: true){
+    jvmarg(value: '-Xmx256m')
+    arg(value: '-debug')
+    arg(value: '-clean')
+    arg(value: '-refresh')
+    arg(value: '-application')
+    arg(value: 'org.eclipse.equinox.p2.garbagecollector.application')
+  }
+  echo('Finished eclipse garbage collection.')
+}
+
 target(name: 'eclipse.docs'){
-  eclipseHome = binding.getVariable('eclipse')
   new File("${eclipseHome}/plugins").eachFileMatch(~/.*\.doc\..*\.jar/){ file ->
     docDir = file.getName().replaceFirst('_.*', '')
     unjar(src: file.getPath(), dest: '${eclipse.local}/docs/' + docDir)
@@ -686,7 +745,6 @@ target(name: 'eclipse.docs'){
 }
 
 target(name: 'eclipse.src'){
-  eclipseHome = binding.getVariable('eclipse')
   property(name: 'src.dir', value: "${eclipseHome}/plugins")
   srcDir = binding.getVariable('src.dir')
 
@@ -702,7 +760,6 @@ target(name: 'patch'){
   depends(init)
 
   patchPlugins(){ plugin ->
-    eclipseHome = binding.getVariable('eclipse')
     resolved = patchPluginResolve(plugin)
 
     if (resolved != null){
@@ -1296,7 +1353,6 @@ def patchPluginResolve(plugin){
     return pluginDir
   }
 
-  eclipseHome = binding.getVariable('eclipse')
   ant.echo(message:
     "WARN: No plugin jar file or dir found for '${plugin}' in '${eclipseHome}'.")
   return null

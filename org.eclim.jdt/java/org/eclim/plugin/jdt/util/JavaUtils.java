@@ -586,24 +586,32 @@ public class JavaUtils
       String formatted = document.get();
 
       // jdt formatter can introduce trailing whitespace (javadoc comments), so
-      // we'll remove all trailing whitespace from the formatted section.
+      // we'll remove all trailing whitespace from the formatted section (unless
+      // the user has configured eclim not to do so).
       length += formatted.length() - oldLength;
       if (offset < (offset + length)){
-        String pre = formatted.substring(0, offset);
-        StringBuffer section = new StringBuffer(
-            formatted.substring(offset, offset + length));
-        StringBuffer post = new StringBuffer(
-            formatted.substring(offset + length));
-        // account for section not ending at a line delimiter
-        while (!section.toString().endsWith(delimiter) && post.length() > 0){
-          section.append(post.charAt(0));
-          post.deleteCharAt(0);
+        String stripTrailingWhitespace = Preferences.getInstance().getValue(
+          src.getJavaProject().getProject(),
+          "org.eclim.java.format.strip_trialing_whitespace");
+        if ("true".equals(stripTrailingWhitespace)){
+          String pre = formatted.substring(0, offset);
+          StringBuffer section = new StringBuffer(
+              formatted.substring(offset, offset + length));
+          StringBuffer post = new StringBuffer(
+              formatted.substring(offset + length));
+          // account for section not ending at a line delimiter
+          while (!section.toString().endsWith(delimiter) && post.length() > 0){
+            section.append(post.charAt(0));
+            post.deleteCharAt(0);
+          }
+
+          Matcher matcher = TRAILING_WHITESPACE.matcher(section);
+          String stripped = matcher.replaceAll(StringUtils.EMPTY);
+
+          src.getBuffer().setContents(pre + stripped + post);
+        }else{
+          src.getBuffer().setContents(formatted);
         }
-
-        Matcher matcher = TRAILING_WHITESPACE.matcher(section);
-        String stripped = matcher.replaceAll(StringUtils.EMPTY);
-
-        src.getBuffer().setContents(pre + stripped + post);
       }else{
         src.getBuffer().setContents(formatted);
       }

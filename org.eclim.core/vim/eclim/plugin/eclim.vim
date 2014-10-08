@@ -57,6 +57,9 @@ call eclim#AddVimSetting(
 call eclim#AddVimSetting(
   \ 'Core', 'g:EclimHighlightError', 'Error',
   \ 'Sets the vim highlight group to be used for error messages/signs.')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimHighlightSuccess', 'MoreMsg',
+  \ 'Sets the vim highlight group to be used for success messages/signs.')
 
 call eclim#AddVimSetting(
   \ 'Core', 'g:EclimMenus', 1,
@@ -258,11 +261,12 @@ endif
 let g:EclimQuote = "['\"]"
 
 if !exists("g:EclimTempDir")
-  let g:EclimTempDir = expand('$TMP')
-  if g:EclimTempDir == '$TMP'
-    let g:EclimTempDir = expand('$TEMP')
-  endif
-  if g:EclimTempDir == '$TEMP' && has('unix')
+  " NOTE: `expand("$FOO")` might spawn a new shell.
+  if len($TMP)
+    let g:EclimTempDir = $TMP
+  elseif len($TEMP)
+    let g:EclimTempDir = $TEMP
+  elseif has('unix')
     let g:EclimTempDir = '/tmp'
   endif
 
