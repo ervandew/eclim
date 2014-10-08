@@ -72,23 +72,23 @@ public class ThreadEventHandler extends DebugEventHandler
         // Do not update variables when suspended in a class file.
         // This causes the variable set to explode causing OOM.
         if (fileName != null) {
-          ctx.getVimClient().jumpToFilePosition(fileName, lineNum);
+          ctx.jumpToFilePosition(fileName, lineNum);
         }
 
         // Call refresh after jumping to file. Otherwise, it causes the sign to
         // not get placed for some reason.
-        ctx.getVimClient().updateThreadView(threadId,
+        ctx.updateThreadView(threadId,
             ViewUtils.MODIFY_NODE,
             ctx.getThreadView().get(thread));
 
-        ctx.getVimClient().updateVariableView(ctx.getVariableView().get());
+        ctx.updateVariableView(ctx.getVariableView().get());
       } else if (detail == DebugEvent.CLIENT_REQUEST) {
         ctx.getThreadContext().update(thread);
-        ctx.getVimClient().updateThreadView(threadId,
+        ctx.updateThreadView(threadId,
             ViewUtils.MODIFY_NODE,
             ctx.getThreadView().get(thread));
 
-        ctx.getVimClient().updateVariableView(ctx.getVariableView().get());
+        ctx.updateVariableView(ctx.getVariableView().get());
       }
     } else if (kind == DebugEvent.CREATE) {
       ctx.getThreadContext().update(thread);
@@ -98,18 +98,16 @@ public class ThreadEventHandler extends DebugEventHandler
       // created before the debug target has finished initialization.
       // Once its created, we do want to refresh for each thread creation.
       if (!ctx.getState().equals(DebuggerState.CONNECTING)) {
-        ctx.getVimClient().updateThreadView(threadId,
+        ctx.updateThreadView(threadId,
             ViewUtils.ADD_NODE,
             ctx.getThreadView().get(thread));
       }
     } else if (kind == DebugEvent.TERMINATE) {
       ctx.getThreadContext().remove(thread);
-      ctx.getVimClient().updateThreadView(threadId,
-          ViewUtils.REMOVE_NODE,
-          null);
+      ctx.updateThreadView(threadId, ViewUtils.REMOVE_NODE, null);
     } else if (kind == DebugEvent.RESUME) {
       ctx.getThreadContext().update(thread);
-      ctx.getVimClient().updateThreadView(threadId,
+      ctx.updateThreadView(threadId,
           ViewUtils.MODIFY_NODE,
           ctx.getThreadView().get(thread));
 
@@ -119,7 +117,7 @@ public class ThreadEventHandler extends DebugEventHandler
         // it causes the next remote command to update variable window
         // to not get sent correctly. As a result, the variable window
         // becomes empty after a step over operation.
-        ctx.getVimClient().updateVariableView(null);
+        ctx.updateVariableView(null);
       }
     }
   }

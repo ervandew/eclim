@@ -54,10 +54,10 @@ public class DebugTargetEventHandler extends DebugEventHandler
 
     if (kind == DebugEvent.CREATE) {
       ctx.setState(DebuggerState.CONNECTED);
-      ctx.getVimClient().refreshDebugStatus();
+      ctx.refreshDebugStatus();
     } else if (kind == DebugEvent.TERMINATE) {
       ctx.setState(DebuggerState.DISCONNECTED);
-      ctx.getVimClient().signalSessionTermination();
+      ctx.signalSessionTermination();
     } else if (kind == DebugEvent.SUSPEND) {
       ctx.setState(DebuggerState.SUSPENDED);
 
@@ -71,13 +71,13 @@ public class DebugTargetEventHandler extends DebugEventHandler
           ctx.getThreadContext().update((IJavaThread) thread);
         }
 
-        ctx.getVimClient().refreshDebugStatus();
+        ctx.refreshDebugStatus();
       }
     } else if (kind == DebugEvent.RESUME) {
       ctx.setState(DebuggerState.CONNECTED);
 
       if (detail == DebugEvent.CLIENT_REQUEST) {
-        ctx.getVimClient().refreshDebugStatus();
+        ctx.refreshDebugStatus();
       }
     }
   }

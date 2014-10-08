@@ -82,51 +82,17 @@ let s:command_variable_detail = '-command java_debug_variable_detail -v "<value_
 
 function! s:DefineStatusWinSettings() " {{{
   " Defines settings that are applicable in any of the debug status windows.
-  if exists(":JavaDebugStop") != 2
+  if !exists(":JavaDebug")
     command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
-  endif
+    command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#Status()
+    command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
 
-  if exists(":JavaDebugThreadSuspendAll") != 2
     command -nargs=0 -buffer JavaDebugThreadSuspendAll
       \ :call eclim#java#debug#DebugThreadSuspendAll()
-  endif
-
-  if exists(":JavaDebugThreadResume") != 2
     command -nargs=0 -buffer JavaDebugThreadResume
       \ :call eclim#java#debug#DebugThreadResume()
-  endif
-
-  if exists(":JavaDebugThreadResumeAll") != 2
     command -nargs=0 -buffer JavaDebugThreadResumeAll
       \ :call eclim#java#debug#DebugThreadResumeAll()
-  endif
-
-  if exists(":JavaDebugStep") != 2
-    command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
-  endif
-
-  if exists(":JavaDebugStatus") != 2
-    command -nargs=0 -buffer JavaDebugStatus
-      \ :call eclim#java#debug#Status()
-  endif
-
-  if exists(":JavaDebugGoToFile") != 2
-    command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
-  endif
-
-  if exists(":JavaDebugSessionTerminated") != 2
-    command -nargs=0 JavaDebugSessionTerminated
-      \ :call eclim#java#debug#SessionTerminated()
-  endif
-
-  if exists(":JavaDebugThreadViewUpdate") != 2
-    command -nargs=+ JavaDebugThreadViewUpdate
-      \ :call eclim#java#debug#ThreadViewUpdate(<f-args>)
-  endif
-
-  if exists(":JavaDebugVariableViewUpdate") != 2
-    command -nargs=+ JavaDebugVariableViewUpdate
-      \ :call eclim#java#debug#VariableViewUpdate(<f-args>)
   endif
 endfunction " }}}
 

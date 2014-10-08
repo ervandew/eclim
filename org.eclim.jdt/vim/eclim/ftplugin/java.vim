@@ -219,80 +219,30 @@ if !exists(":Checkstyle")
   command -nargs=0 -buffer Checkstyle :call eclim#java#src#Checkstyle()
 endif
 
-if exists(":JavaDebugStart") != 2
+if !exists(":JavaDebug")
   command -nargs=* -buffer JavaDebugStart
     \ :call eclim#java#debug#DebugStart(<f-args>)
-endif
-
-if exists(":JavaDebugStop") != 2
   command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
-endif
+  command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#Status()
+  command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
 
-if exists(":JavaDebugThreadSuspendAll") != 2
   command -nargs=0 -buffer JavaDebugThreadSuspendAll
     \ :call eclim#java#debug#DebugThreadSuspendAll()
-endif
-
-if exists(":JavaDebugThreadResume") != 2
   command -nargs=0 -buffer JavaDebugThreadResume
     \ :call eclim#java#debug#DebugThreadResume()
-endif
-
-if exists(":JavaDebugThreadResumeAll") != 2
   command -nargs=0 -buffer JavaDebugThreadResumeAll
     \ :call eclim#java#debug#DebugThreadResumeAll()
-endif
 
-if exists(":JavaDebugBreakpointAdd") != 2
   command -nargs=0 -buffer JavaDebugBreakpointAdd
     \ :call eclim#java#debug#BreakpointAdd()
-endif
-
-if exists(":JavaDebugBreakpointGet") != 2
   command -nargs=0 -buffer JavaDebugBreakpointGet
     \ :call eclim#java#debug#BreakpointGet(<f-args>)
-endif
-
-if exists(":JavaDebugBreakpointGetAll") != 2
   command -nargs=0 -buffer JavaDebugBreakpointGetAll
     \ :call eclim#java#debug#BreakpointGetAll()
-endif
-
-if exists(":JavaDebugBreakpointRemoveFile") != 2
   command -nargs=0 -buffer JavaDebugBreakpointRemoveFile
     \ :call eclim#java#debug#BreakpointRemoveFile(<f-args>)
-endif
-
-if exists(":JavaDebugBreakpointRemoveAll") != 2
   command -nargs=0 -buffer JavaDebugBreakpointRemoveAll
     \ :call eclim#java#debug#BreakpointRemoveAll()
-endif
-
-if exists(":JavaDebugStep") != 2
-  command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
-endif
-
-if exists(":JavaDebugStatus") != 2
-  command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#Status()
-endif
-
-if exists(":JavaDebugGoToFile") != 2
-  command -nargs=+ JavaDebugGoToFile :call eclim#java#debug#GoToFile(<f-args>)
-endif
-
-if exists(":JavaDebugSessionTerminated") != 2
-  command -nargs=0 JavaDebugSessionTerminated
-    \ :call eclim#java#debug#SessionTerminated()
-endif
-
-if exists(":JavaDebugThreadViewUpdate") != 2
-  command -nargs=+ JavaDebugThreadViewUpdate
-    \ :call eclim#java#debug#ThreadViewUpdate(<f-args>)
-endif
-
-if exists(":JavaDebugVariableViewUpdate") != 2
-  command -nargs=+ JavaDebugVariableViewUpdate
-    \ :call eclim#java#debug#VariableViewUpdate(<f-args>)
 endif
 
 " }}}

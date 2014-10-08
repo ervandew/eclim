@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014 Eric Van Dewoestine
+ * Copyright (C) 2014 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
 package org.eclim.plugin.core.util;
 
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclim.logging.Logger;
 
@@ -49,7 +47,7 @@ public class VimClient
     return instanceId;
   }
 
-  private void remoteSend(String arg)
+  public void remoteSend(String arg)
     throws Exception
   {
     String[] cmd = {
@@ -67,61 +65,18 @@ public class VimClient
     CommandExecutor.execute(cmd, TIMEOUT);
   }
 
-  public void jumpToFilePosition(String fileName, int lineNum)
+  public void remoteFunctionCall(String function, String... args)
     throws Exception
   {
-    remoteSend(":JavaDebugGoToFile " + fileName + " " + lineNum);
-  }
-
-  public void refreshDebugStatus()
-    throws Exception
-  {
-      remoteSend(":JavaDebugStatus");
-  }
-
-  public void signalSessionTermination()
-    throws Exception
-  {
-    remoteSend(":JavaDebugSessionTerminated");
-  }
-
-  public void updateThreadView(long threadId, String kind, List<String> results)
-    throws Exception
-  {
-    remoteSend(":JavaDebugThreadViewUpdate " + threadId + " " +
-        kind + " " + concatenateList(results));
-  }
-
-  public void updateVariableView(List<String> results)
-    throws Exception
-  {
-    remoteSend(":JavaDebugVariableViewUpdate " +
-        concatenateList(results));
-
-    // Hack to force VIM to execute the previous remote send command.
-    // In some cases, VIM seems to buffer the command and not execute
-    // until the next remote command is sent.
-    remoteSend(":echo ' '");
-  }
-
-  /**
-   * Returns a string by concatenating all the given entries using <eol> as
-   * delimiter.
-   */
-  private String concatenateList(List<String> entries)
-  {
-    if (entries == null || entries.isEmpty()) {
-      // Return an empty string since the remote VIM command expects an arg
-      return "\\ ";
+    StringBuilder call = new StringBuilder()
+      .append(":call ").append(function).append('(');
+    for (int i = 0; i < args.length; i++){
+      call.append('"').append(args[i]).append('"');
+      if (i < args.length - 1){
+        call.append(',');
+      }
     }
-
-    StringBuilder sb = new StringBuilder();
-    Iterator<String> iter = entries.iterator();
-    while (iter.hasNext()) {
-      sb.append(iter.next().replaceAll(" ", "\\\\ "));
-      sb.append("<eol>");
-    }
-
-    return sb.toString();
+    call.append(')');
+    remoteSend(call.toString());
   }
 }

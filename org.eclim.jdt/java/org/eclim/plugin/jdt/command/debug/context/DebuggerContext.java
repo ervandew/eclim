@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.command.debug.context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclim.logging.Logger;
@@ -267,8 +268,64 @@ public class DebuggerContext
     return debugTarget;
   }
 
-  public VimClient getVimClient()
+  public void jumpToFilePosition(String fileName, int lineNum)
+    throws Exception
   {
-    return vimClient;
+    vimClient.remoteFunctionCall(
+        "eclim#java#debug#GoToFile",
+        fileName, String.valueOf(lineNum));
+  }
+
+  public void refreshDebugStatus()
+    throws Exception
+  {
+    vimClient.remoteSend(":JavaDebugStatus");
+  }
+
+  public void signalSessionTermination()
+    throws Exception
+  {
+    vimClient.remoteFunctionCall("eclim#java#debug#SessionTerminated");
+  }
+
+  public void updateThreadView(long threadId, String kind, List<String> results)
+    throws Exception
+  {
+    vimClient.remoteFunctionCall(
+        "eclim#java#debug#ThreadViewUpdate",
+        String.valueOf(threadId), kind, concatenateList(results));
+  }
+
+  public void updateVariableView(List<String> results)
+    throws Exception
+  {
+    vimClient.remoteFunctionCall(
+        "eclim#java#debug#VariableViewUpdate",
+        concatenateList(results));
+
+    // Hack to force VIM to execute the previous remote send command.
+    // In some cases, VIM seems to buffer the command and not execute
+    // until the next remote command is sent.
+    vimClient.remoteSend(":echo ' '");
+  }
+
+  /**
+   * Returns a string by concatenating all the given entries using <eol> as
+   * delimiter.
+   */
+  private String concatenateList(List<String> entries)
+  {
+    if (entries == null || entries.isEmpty()) {
+      // Return an empty string since the remote VIM command expects an arg
+      return "\\ ";
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (String entry : entries){
+      sb.append(entry.replaceAll(" ", "\\\\ "));
+      sb.append("<eol>");
+    }
+
+    return sb.toString();
   }
 }
