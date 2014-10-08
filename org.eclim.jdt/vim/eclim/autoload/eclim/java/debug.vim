@@ -32,8 +32,8 @@ let s:id_search_by_value = '(id=<value>)'
 let s:debug_step_prev_file = ''
 let s:debug_step_prev_line = ''
 
-let s:debug_line_sign = 'eclim_debug_line'
 let s:breakpoint_sign = 'eclim_breakpoint'
+let s:breakpoint_sign_current = 'eclim_breakpoint_cur'
 
 let s:variable_buf_name = 'Debug Variables'
 let s:thread_buf_name = 'Debug Threads'
@@ -168,9 +168,6 @@ function! eclim#java#debug#DebugStart(...) " {{{
     call eclim#util#EchoError("Error: Please specify a valid port number.")
     return
   endif
-
-  call eclim#display#signs#DefineLineHL(
-    \ s:debug_line_sign, g:EclimJavaDebugLineHighlight)
 
   let project = eclim#project#util#GetCurrentProjectName()
   let command = s:command_start
@@ -606,10 +603,15 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
   call eclim#util#GoToBufferWindowOrOpen(a:file, "edit")
   call cursor(a:line, '^')
 
-  " TODO sign id is line number. Can conflict with other signs while
-  " unplacing
-  call eclim#display#signs#PlaceInBuffer(s:debug_line_sign,
-    \ bufnr(a:file), a:line)
+  " gross, but seems to be the easiest way to remove the sign from all buffers
+  silent! call eclim#display#signs#Undefine(s:breakpoint_sign_current)
+
+  call eclim#display#signs#Define(
+    \ s:breakpoint_sign_current, '•',
+    \ g:EclimHighlightSuccess,
+    \ g:EclimJavaDebugLineHighlight)
+  call eclim#display#signs#PlaceInBuffer(
+    \ s:breakpoint_sign_current, bufnr(a:file), a:line)
 endfunction " }}}
 
 function! s:GetIdUnderCursor() " {{{

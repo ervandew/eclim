@@ -37,17 +37,16 @@
 
 " }}}
 
-function! eclim#display#signs#Define(name, text, highlight) " {{{
+function! eclim#display#signs#Define(name, text, highlight, ...) " {{{
   " Defines a new sign name or updates an existing one.
+  " Optional arg:
+  "   linehl: The highlight to use for the line with this sign applied.
   call s:Define(a:name)
-  exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
-endfunction " }}}
-
-function! eclim#display#signs#DefineLineHL(name, highlight) " {{{
-  " Defines a new sign name which uses line highlighting instead of sign column
-  " text.
-  call s:Define(a:name)
-  exec "sign define " . a:name . " linehl=" . a:highlight
+  let command = "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
+  if a:0
+    let command .= " linehl=" . a:1
+  endif
+  exec command
 endfunction " }}}
 
 function! s:Define(name) " {{{
