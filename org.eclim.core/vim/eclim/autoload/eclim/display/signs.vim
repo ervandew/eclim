@@ -39,6 +39,19 @@
 
 function! eclim#display#signs#Define(name, text, highlight) " {{{
   " Defines a new sign name or updates an existing one.
+  call s:Define(a:name)
+  exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
+endfunction " }}}
+
+function! eclim#display#signs#DefineLineHL(name, highlight) " {{{
+  " Defines a new sign name which uses line highlighting instead of sign column
+  " text.
+  call s:Define(a:name)
+  exec "sign define " . a:name . " linehl=" . a:highlight
+endfunction " }}}
+
+function! s:Define(name) " {{{
+  " Defines a new sign name and assignes it a base id.
   if !has_key(s:sign_ids, a:name)
     let sid = 0
     let index = 0
@@ -55,12 +68,6 @@ function! eclim#display#signs#Define(name, text, highlight) " {{{
     endfor
     let s:sign_ids[a:name] = sid
   endif
-  exec "sign define " . a:name . " text=" . a:text . " texthl=" . a:highlight
-endfunction " }}}
-
-function! eclim#display#signs#DefineLineHL(name, highlight) " {{{
-  " Defines a new sign name or updates an existing one.
-  exec "sign define " . a:name . " linehl=" . a:highlight
 endfunction " }}}
 
 function! eclim#display#signs#Id(name, line) " {{{
