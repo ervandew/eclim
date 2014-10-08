@@ -218,16 +218,7 @@ function! eclim#lang#SearchResults(results, action) " {{{
 
   " multiple results and user specified an action other than lopen
   elseif len(a:results) && a:action != 'lopen'
-    let files = map(copy(locs),  'printf(' .
-      \ '"%s|%s col %s| %s", ' .
-      \ 'bufname(v:val.bufnr), v:val.lnum, v:val.col, v:val.text)')
-    let response = eclim#util#PromptList(
-      \ 'Please choose the file to ' . a:action,
-      \ files, g:EclimHighlightInfo)
-    if response == -1
-      return
-    endif
-    let entry = locs[response]
+    let entry = locs[0]
     let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
     call eclim#util#GoToBufferWindowOrOpen(name, a:action)
     call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
