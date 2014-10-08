@@ -711,7 +711,7 @@ function! eclim#java#debug#SessionTerminated() " {{{
 
   " Go to line having the thread id
   call cursor(1, 1)
-  s/Connected/Disconnected/
+  s/Connect\(ed\|ing\)/Disconnected/
 
   " Delete any threads that have not been cleared
   if line('$') > 1
