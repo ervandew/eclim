@@ -168,6 +168,8 @@ TODO {{{
   }}}
 
   Vimplugin {{{
+    - add an "Open in Eclipse" command from vim to open the current file in eclipse.
+      - command must check that the eclipse gui is running first.
     - setting to force eclipse to not make gvim the default editor for each
       file opened via gvim. Someone else also wants the opposite, where they
       have vim as the default, but occasionaly open via the Java Editor
