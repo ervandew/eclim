@@ -130,13 +130,13 @@ function! s:DefineBreakpointWinSettings() " {{{
   " Defines settings that are applicable only in breakpoint window.
   call eclim#display#signs#Define(s:breakpoint_sign, '•', '')
 
-  nnoremap <silent> <buffer> t :call <SID>BreakpointToggle()<CR>
-  nnoremap <silent> <buffer> d :call <SID>BreakpointRemove()<CR>
+  nnoremap <silent> <buffer> T :call <SID>BreakpointToggle()<CR>
+  nnoremap <silent> <buffer> D :call <SID>BreakpointRemove()<CR>
 
   nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
     \ [
-      \ 't - toggle breakpoint under cursor',
-      \ 'd - delete breakpoint under cursor',
+      \ 'T - toggle breakpoint under cursor',
+      \ 'D - delete breakpoint under cursor',
       \ ],
     \ 'vertical', 40)<CR>
 endfunction " }}}
@@ -358,7 +358,6 @@ function! s:DisplayBreakpoints(results) " {{{
   endif
 
   call eclim#util#FileList('Debug Breakpoints', a:results)
-
   call s:DefineBreakpointWinSettings()
 
   " Place sign for breakpoints that are enabled
@@ -380,10 +379,10 @@ endfunction " }}}
 function! s:BreakpointToggle() " {{{
   "Enables or disables the breakpoint under cursor.
 
-  let loc_list_entry = getline(line('.'))
+  let entry = getline('.')
 
   " location list entry is of the form: filename|line_num col col_num|project
-  let tokens = split(loc_list_entry, "|")
+  let tokens = split(entry, "|")
   let file = tokens[0]
   let project = s:Trim(tokens[2])
   let line = s:Trim(split(tokens[1], " ")[0])
@@ -398,7 +397,8 @@ function! s:BreakpointToggle() " {{{
   if (result == "1")
     call eclim#display#signs#Place(s:breakpoint_sign, line('.'))
   elseif (result == "0")
-    call eclim#display#signs#Unplace(line('.'))
+    call eclim#display#signs#Unplace(
+      \ eclim#display#signs#Id(s:breakpoint_sign, line('.')))
   else
     call eclim#util#EchoError("Breakpoint does not exist")
   endif

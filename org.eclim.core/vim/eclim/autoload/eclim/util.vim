@@ -1650,7 +1650,7 @@ function! eclim#util#FileList(name, entries) " {{{
 
   call eclim#util#TempWindow(a:name, content)
   set filetype=eclim_filelist
-  let b:eclim_file_list = a:entries
+  let b:eclim_filelist = a:entries
 
   nnoremap <silent> <buffer> <cr> :call eclim#util#FileListOpenFile('edit')<cr>
   nnoremap <silent> <buffer> s    :call eclim#util#FileListOpenFile('split')<cr>
@@ -1666,7 +1666,7 @@ function! eclim#util#FileList(name, entries) " {{{
 endfunction " }}}
 
 function! eclim#util#FileListOpenFile(action) " {{{
-  let entry = b:eclim_file_list[line('.') - 1]
+  let entry = b:eclim_filelist[line('.') - 1]
   let filename = entry.filename
   let line = get(entry, 'line', 0)
   let col = get(entry, 'column', 0)
