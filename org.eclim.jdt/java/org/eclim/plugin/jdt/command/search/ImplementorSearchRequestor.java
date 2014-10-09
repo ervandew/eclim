@@ -20,13 +20,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclim.plugin.jdt.util.ASTUtils;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.core.runtime.CoreException;
 
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.SearchMatch;
@@ -69,6 +76,25 @@ public class ImplementorSearchRequestor
         // attempt to fix the Match to point to the declaration
         int declaration = JavaUtils.getElementOffset(declared);
         match.setOffset(declaration);
+
+        // look for a method declaration for a more precise match
+        final ICompilationUnit raw = declared.getCompilationUnit();
+        if (raw != null) {
+          final CompilationUnit cu = ASTUtils.getCompilationUnit(raw);
+          ASTNode node = ASTUtils.findNode(cu, declaration);
+          while (node != null && !(node instanceof MethodDeclaration)) {
+            node = node.getParent();
+          }
+
+          if (node instanceof MethodDeclaration) {
+            final MethodDeclaration decl = (MethodDeclaration) node;
+            final SimpleName name = decl.getName();
+            final int startPos = name.getStartPosition();
+            if (startPos >= 0) {
+              match.setOffset(startPos);
+            }
+          }
+        }
       } catch (final Exception e) {
         // oh well
       }
