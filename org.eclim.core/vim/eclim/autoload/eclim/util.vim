@@ -548,11 +548,16 @@ function! eclim#util#GoToBufferWindow(buf)
   return 0
 endfunction " }}}
 
-" GoToBufferWindowOrOpen(name, cmd) {{{
-" Gives focus to the window containing the buffer for the supplied file, or if
-" none, opens the file using the supplied command.
-function! eclim#util#GoToBufferWindowOrOpen(name, cmd)
+function! eclim#util#GoToBufferWindowOrOpen(name, cmd, ...) " {{{
+  " Gives focus to the window containing the buffer for the supplied file, or if
+  " none, opens the file using the supplied command.
+  " Optional args:
+  "   line: the line number to jump to in the file
+  "   column: the column number to jump to in the file
+
   let name = eclim#util#EscapeBufferName(a:name)
+  let line = a:0 ? a:1 : 0
+  let col = a:0 ? a:2 : 0
   let winnr = bufwinnr(bufnr('^' . name . '$'))
   if winnr != -1
     if winnr != winnr()
@@ -569,6 +574,7 @@ function! eclim#util#GoToBufferWindowOrOpen(name, cmd)
     endif
     silent exec cmd . ' ' . escape(eclim#util#Simplify(a:name), ' ')
   endif
+  call cursor(line, col)
 endfunction " }}}
 
 " GoToTabAwareBufferWindowOrOpen(name, cmd) {{{
@@ -1113,11 +1119,10 @@ function! eclim#util#PromptConfirm(prompt, ...)
   return response =~ '\c\s*\(y\(es\)\?\)\s*'
 endfunction " }}}
 
-" Complete(start, completions) {{{
-" Returns 1 if completion has been setup/triggered, 0 if not (because it is
-" active already) and any input trigger would need to be inserted by the
-" caller.
 function! eclim#util#Complete(start, completions) " {{{
+  " Returns 1 if completion has been setup/triggered, 0 if not (because it is
+  " active already) and any input trigger would need to be inserted by the
+  " caller.
   if !exists('##CompleteDone')
     call complete(a:start, a:completions)
     return 1
@@ -1353,9 +1358,8 @@ function! eclim#util#ShowCurrentError()
   endif
 endfunction " }}}
 
-" Simplify(file) {{{
-" Simply the supplied file to the shortest valid name.
-function! eclim#util#Simplify(file)
+function! eclim#util#Simplify(file) " {{{
+  " Simply the supplied file to the shortest valid name.
   let file = a:file
 
   " Don't run simplify on url files, it will screw them up.
@@ -1617,6 +1621,57 @@ function! eclim#util#TempWindowClear(name, ...) " {{{
 
     exec curwinnr . "winc w"
   endif
+endfunction " }}}
+
+function! eclim#util#FileList(name, entries) " {{{
+  " Very similar to vim's location list or quickfix list, but using a named temp
+  " window and with some slightly different features.
+  " Args:
+  "   name: The name to give/display for this file list.
+  "   entries: A list of dicts containing:
+  "     filename
+  "     line (optional)
+  "     column (optional)
+  "     message (optional)
+  let content = []
+  for entry in a:entries
+    let line = eclim#util#Simplify(entry.filename)
+    if has_key(entry, 'line')
+      let line .= '|' . entry.line
+      if has_key(entry, 'column')
+        let line .= ' col ' . entry.column
+      endif
+    endif
+    if has_key(entry, 'message')
+      let line .= '|' . entry.message
+    endif
+    call add(content, line)
+  endfor
+
+  call eclim#util#TempWindow(a:name, content)
+  set filetype=eclim_filelist
+  let b:eclim_file_list = a:entries
+
+  nnoremap <silent> <buffer> <cr> :call eclim#util#FileListOpenFile('edit')<cr>
+  nnoremap <silent> <buffer> s    :call eclim#util#FileListOpenFile('split')<cr>
+  nnoremap <silent> <buffer> t    :call eclim#util#FileListOpenFile('tabnew')<cr>
+
+  nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
+    \ [
+      \ '<cr> - open the file under the cursor using :edit',
+      \ 's    - open the file under the cursor using :split',
+      \ 't    - open the file under the cursor using :tabnew',
+      \ ],
+    \ 'vertical', 40)<CR>
+endfunction " }}}
+
+function! eclim#util#FileListOpenFile(action) " {{{
+  let entry = b:eclim_file_list[line('.') - 1]
+  let filename = entry.filename
+  let line = get(entry, 'line', 0)
+  let col = get(entry, 'column', 0)
+  exec b:winnr . 'winc w'
+  call eclim#util#GoToBufferWindowOrOpen(filename, a:action, line, col)
 endfunction " }}}
 
 function! eclim#util#DeleteBuffer(name) " {{{

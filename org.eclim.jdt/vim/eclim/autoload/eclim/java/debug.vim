@@ -128,8 +128,7 @@ endfunction " }}}
 
 function! s:DefineBreakpointWinSettings() " {{{
   " Defines settings that are applicable only in breakpoint window.
-  call eclim#display#signs#Define(
-    \ s:breakpoint_sign, '•', '')
+  call eclim#display#signs#Define(s:breakpoint_sign, '•', '')
 
   nnoremap <silent> <buffer> t :call <SID>BreakpointToggle()<CR>
   nnoremap <silent> <buffer> d :call <SID>BreakpointRemove()<CR>
@@ -358,8 +357,7 @@ function! s:DisplayBreakpoints(results) " {{{
     return
   endif
 
-  call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
-  exec 'lopen ' . g:EclimLocationListHeight
+  call eclim#util#FileList('Debug Breakpoints', a:results)
 
   call s:DefineBreakpointWinSettings()
 
