@@ -61,9 +61,9 @@ let s:command_breakpoint_add =
   \ '-command java_debug_breakpoint_add ' .
   \ '-p "<project>" -f "<file>" -l "<line>"'
 
-let s:command_breakpoint_get_all = '-command java_debug_breakpoint_get'
-let s:command_breakpoint_get =
-  \ '-command java_debug_breakpoint_get -f "<file>"'
+let s:command_breakpoints_list_all = '-command java_debug_breakpoint_list'
+let s:command_breakpoints_list =
+  \ '-command java_debug_breakpoint_list -f "<file>"'
 
 let s:command_breakpoint_remove_all = '-command java_debug_breakpoint_remove'
 let s:command_breakpoint_remove_file =
@@ -102,6 +102,7 @@ function! s:DefineThreadWinSettings() " {{{
   nnoremap <silent> <buffer> S :call eclim#java#debug#DebugThreadSuspendAll()<CR>
   nnoremap <silent> <buffer> r :call eclim#java#debug#DebugThreadResume()<CR>
   nnoremap <silent> <buffer> R :call eclim#java#debug#DebugThreadResumeAll()<CR>
+  nnoremap <silent> <buffer> B :call eclim#java#debug#BreakpointsList('!')<CR>
 
   nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
     \ [
@@ -109,6 +110,7 @@ function! s:DefineThreadWinSettings() " {{{
       \ 'S - suspend all threads',
       \ 'r - resume the thread under the cursor',
       \ 'R - resume all threads',
+      \ 'B - view all breakpoints',
     \ ],
     \ 'vertical', 40)<CR>
 endfunction " }}}
@@ -117,11 +119,13 @@ function! s:DefineVariableWinSettings() " {{{
   " Defines settings that are applicable only in variable window.
   nnoremap <silent> <buffer> <CR> :call <SID>VariableExpand()<CR>
   nnoremap <silent> <buffer> p :call <SID>VariableDetail()<CR>
+  nnoremap <silent> <buffer> B :call eclim#java#debug#BreakpointsList('!')<CR>
 
   nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
     \ [
       \ '<CR> - expand the variable under the cursor',
       \ 'p - preview toString value',
+      \ 'B - view all breakpoints',
     \ ],
     \ 'vertical', 40)<CR>
 endfunction " }}}
@@ -289,24 +293,53 @@ function! eclim#java#debug#BreakpointAdd() " {{{
   call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
 
-function! eclim#java#debug#BreakpointGet() " {{{
-  " Displays breakpoints present in file loaded in current window.
-  if !eclim#project#util#IsCurrentFileInProject()
+function! eclim#java#debug#BreakpointsList(bang) " {{{
+  " List breakpoints in the current file or the entire workspace.
+  if !eclim#project#util#IsCurrentFileInProject() && a:bang == ''
     return
   endif
 
-  let file = expand('%:p')
+  if a:bang == '!'
+    let command = s:command_breakpoints_list_all
+  else
+    let file = expand('%:p')
+    let command = s:command_breakpoints_list
+    let command = substitute(command, '<file>', file, '')
+  endif
 
-  let command = s:command_breakpoint_get
-  let command = substitute(command, '<file>', file, '')
+  let results = eclim#Execute(command)
+  if (type(results) != g:LIST_TYPE)
+    return
+  endif
 
-  call s:DisplayBreakpoints(eclim#Execute(command))
-endfunction " }}}
+  if empty(results)
+    echo "No breakpoints"
+    return
+  endif
 
-function! eclim#java#debug#BreakpointGetAll() " {{{
-  " Displays all breakpoints in the workspace.
-  let command = s:command_breakpoint_get_all
-  call s:DisplayBreakpoints(eclim#Execute(command))
+  " when run from one of the status windows, force the list to open above them
+  " if possible
+  if &buftype == 'nofile'
+    winc k
+  endif
+
+  call eclim#util#FileList('Debug Breakpoints', results, {'location': ''})
+  call s:DefineBreakpointWinSettings()
+
+  " Place sign for breakpoints that are enabled
+  let line_num = 0
+  for result in results
+    let line_num = line_num + 1
+
+    if !has_key(result, "metaInfo")
+      continue
+    endif
+
+    let enabled = result.metaInfo
+    if enabled == "e"
+      call eclim#display#signs#Place(s:breakpoint_sign, line_num)
+    endif
+  endfor
 endfunction " }}}
 
 function! s:BreakpointRemove() " {{{
@@ -345,35 +378,6 @@ function! eclim#java#debug#BreakpointRemoveAll() " {{{
   " Removes all breakpoints from workspace.
   let command = s:command_breakpoint_remove_all
   call eclim#util#Echo(eclim#Execute(command))
-endfunction " }}}
-
-function! s:DisplayBreakpoints(results) " {{{
-  if (type(a:results) != g:LIST_TYPE)
-    return
-  endif
-
-  if empty(a:results)
-    echo "No breakpoints"
-    return
-  endif
-
-  call eclim#util#FileList('Debug Breakpoints', a:results)
-  call s:DefineBreakpointWinSettings()
-
-  " Place sign for breakpoints that are enabled
-  let line_num = 0
-  for result in a:results
-    let line_num = line_num + 1
-
-    if !has_key(result, "metaInfo")
-      continue
-    endif
-
-    let enabled = result.metaInfo
-    if enabled == "e"
-      call eclim#display#signs#Place(s:breakpoint_sign, line_num)
-    endif
-  endfor
 endfunction " }}}
 
 function! s:BreakpointToggle() " {{{

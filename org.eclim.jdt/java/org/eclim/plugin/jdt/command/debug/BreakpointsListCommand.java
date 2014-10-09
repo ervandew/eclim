@@ -35,17 +35,17 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.ILineBreakpoint;
 
 /**
- * Command to retrieve breakpoints.
+ * Command to list breakpoints.
  *
  * If a file is given, then only the breakpoints on that file will be returned.
  * Otherwise, all breakpoints in the project workspace will be returned.
  */
 @Command(
-  name = "java_debug_breakpoint_get",
+  name = "java_debug_breakpoint_list",
   options =
     "OPTIONAL f file ARG"
 )
-public class BreakpointGetCommand
+public class BreakpointsListCommand
   extends AbstractCommand
 {
   @Override

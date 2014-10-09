@@ -1517,6 +1517,16 @@ endfunction " }}}
 function! eclim#util#TempWindow(name, lines, ...) " {{{
   " Opens a temp window w/ the given name and contents which is readonly unless
   " specified otherwise.
+  " Optional Args:
+  "   options: dict of supported options
+  "     readonly (default: 1): if non-zero, the contents are readonly
+  "     orientation (default horizontal): horizontal or vertical
+  "     height (default: 10): height if horizontal
+  "     width (default: 50): width if vertical
+  "     location (default: belowright/botright): the location to open the window at.
+  "     preserveCursor: preserve the cursor position if this temp window exists
+  "                     and will be cleared before loading the new content.
+
   let options = a:0 > 0 ? a:1 : {}
   let filename = expand('%:p')
   let winnr = winnr()
@@ -1540,12 +1550,14 @@ function! eclim#util#TempWindow(name, lines, ...) " {{{
   if bufwinnr(bufname) == -1
     let orient = get(options, 'orientation', 'horizontal')
     if orient == 'vertical'
+      let location = get(options, 'location', 'belowright')
       let width = get(options, 'width', 50)
-      let split_cmd = "belowright vertical " . width . " sview "
+      let split_cmd = location . " vertical " . width . " sview "
       silent! noautocmd exec "keepalt " . split_cmd . name
     else
+      let location = get(options, 'location', 'botright')
       let height = get(options, 'height', 10)
-      let split_cmd = "botright " . height . " sview "
+      let split_cmd = location . " " . height . " sview "
       silent! noautocmd exec "keepalt " . split_cmd . name
     endif
 
@@ -1623,7 +1635,7 @@ function! eclim#util#TempWindowClear(name, ...) " {{{
   endif
 endfunction " }}}
 
-function! eclim#util#FileList(name, entries) " {{{
+function! eclim#util#FileList(name, entries, ...) " {{{
   " Very similar to vim's location list or quickfix list, but using a named temp
   " window and with some slightly different features.
   " Args:
@@ -1633,6 +1645,9 @@ function! eclim#util#FileList(name, entries) " {{{
   "     line (optional)
   "     column (optional)
   "     message (optional)
+  " Optional Args:
+  "   options: options dict to pass into the TempWindow call
+
   let content = []
   for entry in a:entries
     let line = eclim#util#Simplify(entry.filename)
@@ -1648,7 +1663,8 @@ function! eclim#util#FileList(name, entries) " {{{
     call add(content, line)
   endfor
 
-  call eclim#util#TempWindow(a:name, content)
+  let options = a:0 > 0 ? a:1 : {}
+  call eclim#util#TempWindow(a:name, content, options)
   set filetype=eclim_filelist
   let b:eclim_filelist = a:entries
 
