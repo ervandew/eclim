@@ -65,8 +65,8 @@ let s:command_breakpoints_list_all = '-command java_debug_breakpoint_list'
 let s:command_breakpoints_list =
   \ '-command java_debug_breakpoint_list -f "<file>"'
 
-let s:command_breakpoint_remove_all = '-command java_debug_breakpoint_remove'
-let s:command_breakpoint_remove_file =
+let s:command_breakpoints_remove_all = '-command java_debug_breakpoint_remove'
+let s:command_breakpoints_remove_from_file =
   \ '-command java_debug_breakpoint_remove -f "<file>"'
 let s:command_breakpoint_remove =
   \ '-command java_debug_breakpoint_remove -f "<file>" -l "<line>"'
@@ -135,7 +135,7 @@ function! s:DefineBreakpointWinSettings() " {{{
   call eclim#display#signs#Define(s:breakpoint_sign, '•', '')
 
   nnoremap <silent> <buffer> T :call <SID>BreakpointToggle()<CR>
-  nnoremap <silent> <buffer> D :call <SID>BreakpointRemove()<CR>
+  nnoremap <silent> <buffer> D :call <SID>BreakpointRemoveUnderCursor()<CR>
 
   nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
     \ [
@@ -342,7 +342,7 @@ function! eclim#java#debug#BreakpointsList(bang) " {{{
   endfor
 endfunction " }}}
 
-function! s:BreakpointRemove() " {{{
+function! s:BreakpointRemoveUnderCursor() " {{{
   " Removes breakpoint defined under the cursor.
   let loc_list_entry = getline(line('.'))
 
@@ -356,27 +356,31 @@ function! s:BreakpointRemove() " {{{
   let command = substitute(command, '<line>', line, '')
 
   call eclim#util#Echo(eclim#Execute(command))
-  call eclim#java#debug#BreakpointGetAll()
+
+  setlocal modifiable
+  setlocal noreadonly
+
+  let cur_line = line(".")
+  silent exec cur_line . ',' . cur_line . 'delete _'
+
+  setlocal nomodifiable
+  setlocal readonly
 endfunction " }}}
 
-function! eclim#java#debug#BreakpointRemoveFile() " {{{
-  " Removes all breakpoints defined in file loaded in current
-  " window.
-  if !eclim#project#util#IsCurrentFileInProject()
+function! eclim#java#debug#BreakpointRemove(bang) " {{{
+  " Removes breakpoints defined in file or the entire workspace.
+  if !eclim#project#util#IsCurrentFileInProject() && a:bang == ''
     return
   endif
 
-  let file = expand('%:p')
+  if a:bang == '!'
+    let command = s:command_breakpoints_remove_all
+  else
+    let file = expand('%:p')
+    let command = s:command_breakpoints_remove_from_file
+    let command = substitute(command, '<file>', file, '')
+  endif
 
-  let command = s:command_breakpoint_remove_file
-  let command = substitute(command, '<file>', file, '')
-
-  call eclim#util#Echo(eclim#Execute(command))
-endfunction " }}}
-
-function! eclim#java#debug#BreakpointRemoveAll() " {{{
-  " Removes all breakpoints from workspace.
-  let command = s:command_breakpoint_remove_all
   call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
 

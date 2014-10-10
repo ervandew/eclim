@@ -237,10 +237,8 @@ if !exists(":JavaDebug")
     \ :call eclim#java#debug#BreakpointAdd()
   command -nargs=0 -buffer -bang JavaDebugBreakpointsList
     \ :call eclim#java#debug#BreakpointsList('<bang>')
-  command -nargs=0 -buffer JavaDebugBreakpointRemoveFile
-    \ :call eclim#java#debug#BreakpointRemoveFile(<f-args>)
-  command -nargs=0 -buffer JavaDebugBreakpointRemoveAll
-    \ :call eclim#java#debug#BreakpointRemoveAll()
+  command -nargs=0 -buffer JavaDebugBreakpointRemove
+    \ :call eclim#java#debug#BreakpointRemove('<bang>')
 endif
 
 " }}}
