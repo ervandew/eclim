@@ -636,6 +636,9 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
 
   let s:debug_step_prev_file = a:file
   let s:debug_step_prev_line = a:line
+  if &buftype == 'nofile'
+    winc k
+  endif
   call eclim#util#GoToBufferWindowOrOpen(a:file, "edit")
   call cursor(a:line, '^')
 
