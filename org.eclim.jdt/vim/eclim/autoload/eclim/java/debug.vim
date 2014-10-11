@@ -37,7 +37,7 @@ let s:breakpoint_sign_current = 'eclim_breakpoint_cur'
 
 let s:variable_buf_name = 'Debug Variables'
 let s:thread_buf_name = 'Debug Threads'
-let s:breakpoint_buf_name = 'Breakpoints'
+let s:breakpoint_buf_name = 'Debug Breakpoints'
 
 let s:command_start =
   \ '-command java_debug_start -p "<project>" ' .
@@ -56,15 +56,10 @@ let s:command_thread_resume = '-command java_debug_thread_resume ' .
 let s:command_breakpoint_add =
   \ '-command java_debug_breakpoint_add ' .
   \ '-p "<project>" -f "<file>" -l "<line>"'
-
-let s:command_breakpoints_list_all = '-command java_debug_breakpoint_list'
-let s:command_breakpoints_list =
-  \ '-command java_debug_breakpoint_list -f "<file>"'
-
-let s:command_breakpoint_toggle =
-  \ '-command java_debug_breakpoint_toggle -p "<project>"'
 let s:command_breakpoint_remove =
   \ '-command java_debug_breakpoint_remove -p "<project>"'
+let s:command_breakpoints_list =
+  \ '-command java_debug_breakpoint_list -p "<project>"'
 
 let s:command_step = '-command java_debug_step -a "<action>"'
 let s:command_step_thread = '-command java_debug_step -a "<action>" -t "<thread_id>"'
@@ -288,6 +283,14 @@ function! eclim#java#debug#BreakpointAdd() " {{{
   let command = substitute(command, '<line>', line, '')
 
   call eclim#util#Echo(eclim#Execute(command))
+
+  let name = eclim#util#EscapeBufferName(s:breakpoint_buf_name)
+  if bufwinnr(name) != -1
+    let curwinnr = winnr()
+    exec bufwinnr(name) . "winc w"
+    call s:BreakpointsListRefresh()
+    exec curwinnr . "winc w"
+  endif
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointsList(bang) " {{{
@@ -296,12 +299,12 @@ function! eclim#java#debug#BreakpointsList(bang) " {{{
     return
   endif
 
-  if a:bang == '!'
-    let command = s:command_breakpoints_list_all
-  else
-    let file = expand('%:p')
-    let command = s:command_breakpoints_list
-    let command = substitute(command, '<file>', file, '')
+  let project = eclim#project#util#GetCurrentProjectName()
+  let command = s:command_breakpoints_list
+  let command = substitute(command, '<project>', project, '')
+  if a:bang != '!'
+    let file = eclim#project#util#GetProjectRelativeFilePath()
+    let command .= ' -f "' . file . '"'
   endif
 
   let results = eclim#Execute(command)
@@ -324,9 +327,14 @@ function! eclim#java#debug#BreakpointsList(bang) " {{{
 endfunction " }}}
 
 function! s:BreakpointsList(command, results) " {{{
-  call eclim#util#FileList('Debug Breakpoints', a:results, {
+  let group_by = ['project', 'name']
+  if a:command =~ '\s-f\s'
+    let group_by = ['name']
+  endif
+
+  call eclim#util#FileList(s:breakpoint_buf_name, a:results, {
       \ 'location': '',
-      \ 'group_by': ['project', 'name'],
+      \ 'group_by': group_by,
     \ })
   call s:DefineBreakpointWinSettings()
   let b:eclim_breakpoints = a:command
@@ -383,7 +391,7 @@ function! eclim#java#debug#BreakpointRemove(bang) " {{{
     let command = s:command_breakpoint_remove
     let command = substitute(command, '<project>', file, '')
   else
-    let file = expand('%:p')
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:command_breakpoint_remove . ' -f "<file>"'
     let command = substitute(command, '<project>', file, '')
     let command = substitute(command, '<file>', file, '')
@@ -399,17 +407,19 @@ function! s:BreakpointAction(command) " {{{
   let command = ''
   " single breakpoint
   if has_key(entry, 'filename')
+    let file = eclim#project#util#GetProjectRelativeFilePath(entry.filename)
     let command = '-command ' . a:command . ' -p "<project>" -f "<file>" -l <line>'
     let command = substitute(command, '<project>', entry.project, '')
-    let command = substitute(command, '<file>', entry.filename, '')
+    let command = substitute(command, '<file>', file, '')
     let command = substitute(command, '<line>', entry.line, '')
 
   " all breakpoints for a file
   elseif has_key(b:eclim_filelist[line('.')], 'filename')
     let info = b:eclim_filelist[line('.')]
+    let file = eclim#project#util#GetProjectRelativeFilePath(info.filename)
     let command = '-command ' . a:command . ' -p "<project>" -f "<file>"'
     let command = substitute(command, '<project>', info.project, '')
-    let command = substitute(command, '<file>', info.filename, '')
+    let command = substitute(command, '<file>', file, '')
 
   " all breakpoints for a project
   elseif has_key(b:eclim_filelist[line('.') + 1], 'filename')

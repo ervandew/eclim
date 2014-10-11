@@ -1758,7 +1758,7 @@ function! s:FileListFormatGrouped(entries, grouped, level) " {{{
     if type(a:grouped[key]) == g:DICT_TYPE
       call s:FileListFormatGrouped(a:entries, a:grouped[key], a:level + 1)
     else
-      for entry in a:grouped[key]
+      for entry in sort(a:grouped[key])
         let entry.padding = padding
         let shift = 0
         while shift < &shiftwidth

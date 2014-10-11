@@ -17,6 +17,7 @@
 package org.eclim.plugin.jdt.command.debug;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.eclim.annotation.Command;
 
@@ -25,8 +26,11 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.util.ProjectUtils;
+
 import org.eclim.plugin.jdt.util.JavaUtils;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
 import org.eclipse.debug.core.DebugPlugin;
@@ -45,6 +49,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 @Command(
   name = "java_debug_breakpoint_list",
   options =
+    "REQUIRED p project ARG," +
     "OPTIONAL f file ARG"
 )
 public class BreakpointsListCommand
@@ -54,7 +59,20 @@ public class BreakpointsListCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String fileName = commandLine.getValue(Options.FILE_OPTION);
+    // currently relies on comparing absolute paths
+    if (fileName != null){
+      fileName = ProjectUtils.getFilePath(projectName, fileName);
+    }
+
+    HashSet<String> projectNames = new HashSet<String>();
+    projectNames.add(projectName);
+    IProject project = ProjectUtils.getProject(projectName);
+    for (IProject ref : project.getReferencedProjects()){
+      projectNames.add(ref.getName());
+    }
+
     ArrayList<Breakpoint> results = new ArrayList<Breakpoint>();
 
     IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager()
@@ -63,15 +81,19 @@ public class BreakpointsListCommand
     if (breakpoints != null) {
       for (IBreakpoint breakpoint : breakpoints) {
         IResource resource = breakpoint.getMarker().getResource();
-        String projectName = resource.getProject().getName();
+        String curProject = resource.getProject().getName();
+        if (!projectNames.contains(curProject)){
+          continue;
+        }
+
         String fullFileName = resource.getRawLocation().toOSString();
         ICompilationUnit cu = JavaUtils.getCompilationUnit(
-            projectName, resource.getProjectRelativePath().toOSString());
+            curProject, resource.getProjectRelativePath().toOSString());
         String name = JavaUtils.getFullyQualifiedName(cu);
 
         if (fileName == null || fileName.equals(fullFileName)) {
           results.add(new Breakpoint(
-                projectName,
+                curProject,
                 fullFileName,
                 name,
                 ((ILineBreakpoint) breakpoint).getLineNumber(),

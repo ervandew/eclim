@@ -27,6 +27,8 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.util.ProjectUtils;
+
 import org.eclipse.core.resources.IResource;
 
 import org.eclipse.debug.core.DebugPlugin;
@@ -66,6 +68,10 @@ public class BreakpointToggleCommand
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String fileName = commandLine.getValue(Options.FILE_OPTION);
+    // currently relies on comparing absolute paths
+    if (fileName != null){
+      fileName = ProjectUtils.getFilePath(projectName, fileName);
+    }
     Integer lineNum = commandLine.getIntValue(Options.LINE_OPTION);
 
     ArrayList<IBreakpoint> enabled = new ArrayList<IBreakpoint>();
