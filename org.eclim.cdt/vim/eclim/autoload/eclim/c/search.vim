@@ -24,7 +24,7 @@
   let s:includepaths = '-command c_includepaths -p "<project>"'
   let s:sourcepaths = '-command c_sourcepaths -p "<project>"'
   let s:options_map = {
-      \ '-a': ['split', 'vsplit', 'edit', 'tabnew', 'lopen'],
+      \ '-a': ['split', 'vsplit', 'edit', 'tabnew'],
       \ '-s': ['all', 'project'],
       \ '-i': [],
       \ '-p': [],

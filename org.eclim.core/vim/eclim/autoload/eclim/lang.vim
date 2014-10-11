@@ -191,42 +191,16 @@ endfunction " }}}
 function! eclim#lang#SearchResults(results, action) " {{{
   " Function which handles processing search results.
 
-  call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
-  let locs = getloclist(0)
-
-  " if there is only one result and the user is jumping to it, then clear
-  " the location list so we don't bother with a fairly unnecessary sign
-  " placement.
-  if len(locs) == 1 && a:action != 'lopen'
-    call eclim#util#ClearLocationList()
-  endif
-
-  " if only one result and it's for the current file, just jump to it.
-  " note: on windows the expand result must be escaped
-  if len(a:results) == 1 && locs[0].bufnr == bufnr('%')
-    if a:results[0].line != 1 && a:results[0].column != 1
-      let entry = locs[0]
-      call cursor(entry.lnum, entry.col)
-    endif
-
-  " single result in another file.
-  elseif len(a:results) == 1 && a:action != "lopen"
-    let entry = locs[0]
-    let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
+  " single result
+  if len(a:results) == 1
+    let name = substitute(a:results[0].filename, '\', '/', 'g')
     call eclim#util#GoToBufferWindowOrOpen(name, a:action)
-    call cursor(entry.lnum, entry.col)
+    call cursor(a:results[0].line, a:results[0].column)
 
-  " multiple results and user specified an action other than lopen
-  elseif len(a:results) && a:action != 'lopen'
-    let entry = locs[0]
-    let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-    call eclim#util#GoToBufferWindowOrOpen(name, a:action)
-    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries(a:results))
-    call eclim#display#signs#Update()
-    call cursor(entry.lnum, entry.col)
-
+  " more than one result
   else
-    exec 'lopen ' . g:EclimLocationListHeight
+    call eclim#util#SetQuickfixList(eclim#util#ParseLocationEntries(a:results))
+    exec 'copen ' . g:EclimQuickfixHeight
   endif
 endfunction " }}}
 

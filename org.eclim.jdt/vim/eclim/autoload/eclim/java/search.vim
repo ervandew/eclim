@@ -302,7 +302,7 @@ function! eclim#java#search#SearchAndDisplay(type, args) " {{{
       let filename = expand('%:p')
       call eclim#util#TempWindowClear(window_name)
 
-      if len(results) == 1 && g:EclimJavaDocSearchSingleResult == 'open'
+      if len(results) == 1
         let entry = results[0]
         call s:ViewDoc(entry)
       else

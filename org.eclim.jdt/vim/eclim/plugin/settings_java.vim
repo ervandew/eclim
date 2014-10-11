@@ -50,11 +50,6 @@
     \ 'Sets the command to use when opening a single result from a java search.')
 
   call eclim#AddVimSetting(
-    \ 'Lang/Java', 'g:EclimJavaDocSearchSingleResult', 'open',
-    \ 'Sets the command to use when opening a single result from a java doc search.',
-    \ '\(open\|lopen\)')
-
-  call eclim#AddVimSetting(
     \ 'Lang/Java', 'g:EclimJavaHierarchyDefaultAction', g:EclimDefaultFileOpenAction,
     \ 'Sets the command to use when opening an entry from the java hierarchy buffer.')
   call eclim#AddVimSetting(

@@ -119,17 +119,9 @@ function! eclim#java#junit#JUnitFindTest() " {{{
     return
   endif
 
-  call eclim#util#SetLocationList(eclim#util#ParseLocationEntries([result]))
-  let entry = getloclist(0)[0]
-  let name = substitute(bufname(entry.bufnr), '\', '/', 'g')
-  if g:EclimJavaSearchSingleResult != 'lopen'
-    call eclim#util#GoToBufferWindowOrOpen(name, g:EclimJavaSearchSingleResult)
-    call eclim#util#SetLocationList(eclim#util#ParseLocationEntries([result]))
-    call eclim#display#signs#Update()
-    call cursor(entry.lnum, entry.col)
-  else
-    exec 'lopen ' . g:EclimLocationListHeight
-  endif
+  let name = substitute(result.filename, '\', '/', 'g')
+  call eclim#util#GoToBufferWindowOrOpen(name, g:EclimJavaSearchSingleResult)
+  call cursor(result.line, result.column)
 endfunction " }}}
 
 function! eclim#java#junit#JUnitResult(test) " {{{

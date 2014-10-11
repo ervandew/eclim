@@ -92,22 +92,6 @@ files will be used.
 Configuration
 -------------
 
-:doc:`Vim Settings </vim/settings>`
-
-.. _g\:EclimJavaDocSearchSingleResult:
-
-- **g:EclimJavaDocSearchSingleResult** (Default: 'open') -
-  Determines what action to take when only a singe result is found.
-
-  Possible values include\:
-
-  - 'open' - open the result in a browser.
-  - 'lopen' - open the temp window to display the result.
-
-- **g:EclimLocationListHeight** (Default: 10) -
-  Sets the height in lines of the location list window when eclim opens it to
-  display search results.
-
 :doc:`Eclim Settings </vim/settings>`
 
 - **org.eclim.user.name** - Used as the name portion of the author tag.

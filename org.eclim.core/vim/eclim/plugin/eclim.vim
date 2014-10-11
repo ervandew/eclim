@@ -238,6 +238,10 @@ if !exists('g:EclimLocateUserScopes')
   let g:EclimLocateUserScopes = []
 endif
 
+if !exists("g:EclimQuickfixHeight")
+  let g:EclimQuickfixHeight = 10
+endif
+
 if !exists("g:EclimLocationListHeight")
   let g:EclimLocationListHeight = 10
 endif

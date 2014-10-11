@@ -1300,9 +1300,11 @@ function! eclim#util#ClearLocationList(...)
   unlet! b:eclim_loclist
 endfunction " }}}
 
-" SetQuickfixList(list, [action]) {{{
-" Sets the contents of the quickfix list.
-function! eclim#util#SetQuickfixList(list, ...)
+function! eclim#util#SetQuickfixList(list, ...) " {{{
+  " Sets the contents of the quickfix list.
+  " Optional args:
+  "   action: The action to pass into vim's setqflist function
+
   let qflist = a:list
   if exists('b:EclimQuickfixFilter')
     let newlist = []

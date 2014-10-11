@@ -127,16 +127,16 @@ function! TestSearch() " {{{
   edit! src/org/eclim/test/doc/TestDocSearchVUnit.java
   call vunit#PeekRedir()
 
-  call cursor(5, 11)
-  let g:EclimJavaDocSearchSingleResult = 'lopen'
-  JavaDocSearch -x declarations
+  JavaDocSearch -x declarations -p List
   call vunit#PeekRedir()
 
   call vunit#AssertEquals('javadoc_search_results', bufname('%'),
     \ 'Search results window not opened.')
-  call vunit#AssertEquals(1, line('$'), 'Wrong number of results.')
-  call vunit#AssertEquals('http://docs.oracle.com/javase/1.5.0/docs/api/java/awt/List.html',
-    \ line('1'), 'Wrong result.')
+  call vunit#AssertEquals(2, line('$'), 'Wrong number of results.')
+  call vunit#AssertEquals('http://docs.oracle.com/javase/7/docs/api/java/awt/List.html',
+    \ line('1'), 'Wrong result 1.')
+  call vunit#AssertEquals('http://docs.oracle.com/javase/7/docs/api/java/util/List.html',
+    \ line('2'), 'Wrong result 2.')
 endfunction " }}}
 
 function! TestJavadoc() " {{{

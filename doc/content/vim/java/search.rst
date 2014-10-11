@@ -216,15 +216,14 @@ Configuration
   - 'split' - open the result in a new window via "split".
   - 'edit' - open the result in the current window.
   - 'tabnew' - open the result in a new tab.
-  - 'lopen' - open the location list to display the result.
 
   This setting overrides the global default for all supported language types
   which can be set using the **g:EclimDefaultFileOpenAction** setting which
   accepts the same possible values.
 
-- **g:EclimLocationListHeight** (Default: 10) -
-  Sets the height in lines of the location list window when eclim opens it to
-  display search results.
+- **g:EclimQuickfixHeight** (Default: 10) -
+  Sets the height in lines of the quickfix window when eclim opens it to display
+  search results.
 
 .. _g\:EclimJavaSearchMapping:
 
