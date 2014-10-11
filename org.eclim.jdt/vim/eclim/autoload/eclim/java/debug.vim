@@ -756,11 +756,5 @@ function! eclim#java#debug#VariableViewUpdate(value) " {{{
   call eclim#util#TempWindowClear(s:variable_buf_name, split(a:value, "<eol>"))
   call eclim#util#Echo(" ")
 endfunction " }}}
-      
-function! s:Trim(value) " {{{
-  " Removes any leading and trailing white spaces.
-
-  return substitute(a:value, "^\\s\\+\\|\\s\\+$","","g")
-endfunction " }}}
 
 " vim:ft=vim:fdm=marker
