@@ -613,7 +613,8 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
   silent! call eclim#display#signs#Undefine(s:breakpoint_sign_current)
 
   call eclim#display#signs#Define(
-    \ s:breakpoint_sign_current, '•',
+    \ s:breakpoint_sign_current,
+    \ g:EclimJavaDebugLineSignText,
     \ g:EclimHighlightSuccess,
     \ g:EclimJavaDebugLineHighlight)
   call eclim#display#signs#PlaceInBuffer(

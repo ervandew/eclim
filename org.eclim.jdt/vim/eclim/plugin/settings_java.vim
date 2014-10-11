@@ -106,6 +106,10 @@
     \ 'Highlight group to use for showing the current line being debugged.')
 
   call eclim#AddVimSetting(
+    \ 'Lang/Java', 'g:EclimJavaDebugLineSignText', '•',
+    \ 'Text to use on sign column for showing the current line being debugged.')
+
+  call eclim#AddVimSetting(
     \ 'Lang/Java', 'g:EclimJavaDebugStatusWinOrientation', 'vertical',
     \ 'Sets the orientation for the splits inside the debug status windows; ' .
     \ 'if they should be tiled vertically or horizontally.')

@@ -181,6 +181,10 @@ Configuration
 
   Highlight group to use for showing the current line being debugged.
 
+- **g:EclimJavaDebugLineSignText** (Default: '•')
+
+  Text to use on sign column for showing the current line being debugged.
+
 - **g:EclimJavaDebugStatusWinOrientation** (Default: 'vertical')
 
   Sets the orientation for the splits inside the debug status windows;
