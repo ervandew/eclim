@@ -53,10 +53,6 @@ let s:command_session_resume = '-command java_debug_thread_resume'
 let s:command_thread_resume = '-command java_debug_thread_resume ' .
   \ '-t "<thread_id>"'
 
-let s:command_breakpoint_toggle =
-  \ '-command java_debug_breakpoint_toggle ' .
-  \ '-p "<project>" -f "<file>" -l "<line>"'
-
 let s:command_breakpoint_add =
   \ '-command java_debug_breakpoint_add ' .
   \ '-p "<project>" -f "<file>" -l "<line>"'
@@ -65,11 +61,10 @@ let s:command_breakpoints_list_all = '-command java_debug_breakpoint_list'
 let s:command_breakpoints_list =
   \ '-command java_debug_breakpoint_list -f "<file>"'
 
-let s:command_breakpoints_remove_all = '-command java_debug_breakpoint_remove'
-let s:command_breakpoints_remove_from_file =
-  \ '-command java_debug_breakpoint_remove -f "<file>"'
+let s:command_breakpoint_toggle =
+  \ '-command java_debug_breakpoint_toggle -p "<project>"'
 let s:command_breakpoint_remove =
-  \ '-command java_debug_breakpoint_remove -f "<file>" -l "<line>"'
+  \ '-command java_debug_breakpoint_remove -p "<project>"'
 
 let s:command_step = '-command java_debug_step -a "<action>"'
 let s:command_step_thread = '-command java_debug_step -a "<action>" -t "<thread_id>"'
@@ -134,13 +129,15 @@ function! s:DefineBreakpointWinSettings() " {{{
   " Defines settings that are applicable only in breakpoint window.
   call eclim#display#signs#Define(s:breakpoint_sign, '•', '')
 
-  nnoremap <silent> <buffer> T :call <SID>BreakpointToggle()<CR>
-  nnoremap <silent> <buffer> D :call <SID>BreakpointRemoveUnderCursor()<CR>
+  nnoremap <silent> <buffer> T
+    \ :call <SID>BreakpointAction("java_debug_breakpoint_toggle")<CR>
+  nnoremap <silent> <buffer> D
+    \ :call <SID>BreakpointAction("java_debug_breakpoint_remove")<CR>
 
   nnoremap <silent> <buffer> ? :call eclim#help#BufferHelp(
     \ [
-      \ 'T - toggle breakpoint under cursor',
-      \ 'D - delete breakpoint under cursor',
+      \ 'T - toggle breakpoint (or group of breakpoints) under cursor',
+      \ 'D - delete breakpoint (or group of breakpoints) under cursor',
       \ ],
     \ 'vertical', 40)<CR>
 endfunction " }}}
@@ -313,7 +310,7 @@ function! eclim#java#debug#BreakpointsList(bang) " {{{
   endif
 
   if empty(results)
-    echo "No breakpoints"
+    call eclim#util#Echo('No breakpoints found.')
     return
   endif
 
@@ -323,11 +320,16 @@ function! eclim#java#debug#BreakpointsList(bang) " {{{
     winc k
   endif
 
-  call eclim#util#FileList('Debug Breakpoints', results, {
+  call s:BreakpointsList(command, results)
+endfunction " }}}
+
+function! s:BreakpointsList(command, results) " {{{
+  call eclim#util#FileList('Debug Breakpoints', a:results, {
       \ 'location': '',
       \ 'group_by': ['project', 'name'],
     \ })
   call s:DefineBreakpointWinSettings()
+  let b:eclim_breakpoints = a:command
 
   " Place sign for breakpoints that are enabled
   let line_num = 0
@@ -339,65 +341,87 @@ function! eclim#java#debug#BreakpointsList(bang) " {{{
   endfor
 endfunction " }}}
 
+function! s:BreakpointsListRefresh() " {{{
+  " FIXME: restore all closed fold states
+  let results = eclim#Execute(b:eclim_breakpoints)
+  if (type(results) != g:LIST_TYPE)
+    return
+  endif
+
+  if empty(results)
+    call eclim#util#Echo('No breakpoints found.')
+    close
+    return
+  endif
+
+  let line = line('.')
+  let col = col('.')
+
+  " remove all existing signs first
+  for existing in eclim#display#signs#GetExisting(s:breakpoint_sign)
+    call eclim#display#signs#Unplace(existing.id)
+  endfor
+
+  call s:BreakpointsList(b:eclim_breakpoints, results)
+
+  if line > line('$')
+    let line = line('$')
+  endif
+  " very weird case where calling cursor(...) now doesn't properly update the
+  " cusors location in the display, but delaying the call works.
+  call eclim#util#DelayedCommand(printf("call cursor(%s, %s)", line, col))
+endfunction " }}}
+
 function! eclim#java#debug#BreakpointRemove(bang) " {{{
-  " Removes breakpoints defined in file or the entire workspace.
+  " Removes breakpoints defined in file or the entire project.
   if !eclim#project#util#IsCurrentFileInProject() && a:bang == ''
     return
   endif
 
+  let project = eclim#project#util#GetCurrentProjectName()
   if a:bang == '!'
-    let command = s:command_breakpoints_remove_all
+    let command = s:command_breakpoint_remove
+    let command = substitute(command, '<project>', file, '')
   else
     let file = expand('%:p')
-    let command = s:command_breakpoints_remove_from_file
+    let command = s:command_breakpoint_remove . ' -f "<file>"'
+    let command = substitute(command, '<project>', file, '')
     let command = substitute(command, '<file>', file, '')
   endif
 
   call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
 
-function! s:BreakpointRemoveUnderCursor() " {{{
+function! s:BreakpointAction(command) " {{{
   " Removes breakpoint defined under the cursor.
 
   let entry = b:eclim_filelist[line('.') - 1]
+  let command = ''
+  " single breakpoint
   if has_key(entry, 'filename')
-    let command = s:command_breakpoint_remove
-    let command = substitute(command, '<file>', entry.filename, '')
-    let command = substitute(command, '<line>', entry.line, '')
-
-    call eclim#util#Echo(eclim#Execute(command))
-
-    setlocal modifiable
-    setlocal noreadonly
-
-    let cur_line = line(".")
-    silent exec cur_line . ',' . cur_line . 'delete _'
-
-    setlocal nomodifiable
-    setlocal readonly
-  endif
-endfunction " }}}
-
-function! s:BreakpointToggle() " {{{
-  "Enables or disables the breakpoint under cursor.
-
-  let entry = b:eclim_filelist[line('.') - 1]
-  if has_key(entry, 'filename')
-    let command = s:command_breakpoint_toggle
+    let command = '-command ' . a:command . ' -p "<project>" -f "<file>" -l <line>'
     let command = substitute(command, '<project>', entry.project, '')
     let command = substitute(command, '<file>', entry.filename, '')
     let command = substitute(command, '<line>', entry.line, '')
 
-    let result = eclim#Execute(command)
+  " all breakpoints for a file
+  elseif has_key(b:eclim_filelist[line('.')], 'filename')
+    let info = b:eclim_filelist[line('.')]
+    let command = '-command ' . a:command . ' -p "<project>" -f "<file>"'
+    let command = substitute(command, '<project>', info.project, '')
+    let command = substitute(command, '<file>', info.filename, '')
 
-    if (result == "1")
-      call eclim#display#signs#Place(s:breakpoint_sign, line('.'))
-    elseif (result == "0")
-      call eclim#display#signs#Unplace(
-        \ eclim#display#signs#Id(s:breakpoint_sign, line('.')))
-    else
-      call eclim#util#EchoError("Breakpoint does not exist")
-    endif
+  " all breakpoints for a project
+  elseif has_key(b:eclim_filelist[line('.') + 1], 'filename')
+    let info = b:eclim_filelist[line('.') + 1]
+    let command = '-command ' . a:command . ' -p "<project>"'
+    let command = substitute(command, '<project>', info.project, '')
+  endif
+
+  if command != ''
+    let result = eclim#Execute(command)
+    call s:BreakpointsListRefresh()
+    call eclim#util#Echo(result)
   endif
 endfunction " }}}
 

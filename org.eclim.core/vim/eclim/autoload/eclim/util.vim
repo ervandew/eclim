@@ -1713,6 +1713,7 @@ function! eclim#util#FileList(name, entries, ...) " {{{
   setlocal foldmethod=expr
   setlocal foldexpr=eclim#display#fold#GetTreeFold(v:lnum)
   setlocal foldtext=eclim#display#fold#TreeFoldText()
+  setlocal foldlevel=99
   let b:eclim_filelist = entries
 
   nnoremap <silent> <buffer> <cr> :call eclim#util#FileListOpenFile('edit')<cr>

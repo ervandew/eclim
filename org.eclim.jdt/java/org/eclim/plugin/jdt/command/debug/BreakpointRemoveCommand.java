@@ -25,6 +25,8 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclipse.core.resources.IResource;
+
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 
@@ -34,17 +36,20 @@ import org.eclipse.debug.core.model.ILineBreakpoint;
 /**
  * Command to remove breakpoints.
  *
- * There are 3 options:
- * - If a file is given, then only the breakpoints on that file will be removed.
- * - If both file and line number is given, then that specific breakpoint will be
- * removed.
- * - Otherwise, all breakpoints in the workspace will be removed.
+ * There are three possible ways this command can be executed:
+ * - If only a project is supplied, then only the breakpoints in that project
+ *   will be removed.
+ * - If a file path is supplied, then only the breakpoints for that file will be
+ *   removed.
+ * - If both a file name and a line number is supplied, then that specific
+ *   breakpoint will be removed.
  */
 @Command(
   name = "java_debug_breakpoint_remove",
   options =
+    "REQUIRED p project ARG," +
     "OPTIONAL f file ARG," +
-    "OPTIONAL l line_num ARG"
+    "OPTIONAL l line ARG"
 )
 public class BreakpointRemoveCommand
   extends AbstractCommand
@@ -53,6 +58,7 @@ public class BreakpointRemoveCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String fileName = commandLine.getValue(Options.FILE_OPTION);
     Integer lineNum = commandLine.getIntValue(Options.LINE_OPTION);
 
@@ -60,26 +66,27 @@ public class BreakpointRemoveCommand
       .getBreakpointManager();
 
     IBreakpoint[] breakpoints = breakpointMgr.getBreakpoints();
+    for (IBreakpoint breakpoint : breakpoints) {
+      IResource resource = breakpoint.getMarker().getResource();
+      String curProject = resource.getProject().getName();
+      String curFileName = resource.getRawLocation().toOSString();
+      if (!curProject.equals(projectName)){
+        continue;
+      }
 
-    if (fileName == null) {
-      breakpointMgr.removeBreakpoints(breakpoints, true);
-    } else {
-      for (IBreakpoint breakpoint : breakpoints) {
-        String curFileName = breakpoint.getMarker().getResource()
-          .getRawLocation().toOSString();
-
-        String projectRelPath = breakpoint.getMarker().getResource()
-          .getProjectRelativePath().toString();
-
+      String projectRelPath = breakpoint.getMarker().getResource()
+        .getProjectRelativePath().toString();
+      if (fileName != null){
         if (fileName.equals(curFileName) || fileName.equals(projectRelPath)) {
           if (lineNum == null ||
               lineNum == -1 ||
-              lineNum == ((ILineBreakpoint) breakpoint).getLineNumber())
+              lineNum == ((ILineBreakpoint)breakpoint).getLineNumber())
           {
-
             breakpointMgr.removeBreakpoint(breakpoint, true);
           }
         }
+      }else{
+        breakpointMgr.removeBreakpoint(breakpoint, true);
       }
     }
 
