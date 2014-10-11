@@ -393,11 +393,19 @@ function! eclim#java#debug#BreakpointRemove(bang) " {{{
   else
     let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:command_breakpoint_remove . ' -f "<file>"'
-    let command = substitute(command, '<project>', file, '')
+    let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
   endif
 
   call eclim#util#Echo(eclim#Execute(command))
+
+  let name = eclim#util#EscapeBufferName(s:breakpoint_buf_name)
+  if bufwinnr(name) != -1
+    let curwinnr = winnr()
+    exec bufwinnr(name) . "winc w"
+    call s:BreakpointsListRefresh()
+    exec curwinnr . "winc w"
+  endif
 endfunction " }}}
 
 function! s:BreakpointAction(command) " {{{
