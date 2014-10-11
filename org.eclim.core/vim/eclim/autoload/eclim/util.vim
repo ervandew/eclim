@@ -1646,27 +1646,74 @@ function! eclim#util#FileList(name, entries, ...) " {{{
   "     column (optional)
   "     message (optional)
   " Optional Args:
-  "   options: options dict to pass into the TempWindow call
+  "   options: options dict that will be passed to the TempWindow call and can
+  "            also contain options for how the FileList is formatted.
+  "     group_by: list of attributes from the entry dicts to group by
+
+  let options = a:0 > 0 ? a:1 : {}
+  let entries = a:entries
+
+  if has_key(options, 'group_by')
+    let grouped = {}
+    for entry in entries
+      let group = grouped
+      let level = 1
+      for by in options.group_by
+        let by_value = entry[by]
+        if level < len(options.group_by)
+          if !has_key(group, by_value)
+            let group[by_value] = {}
+          endif
+          let group = group[by_value]
+        else
+          if !has_key(group, by_value)
+            let group[by_value] = []
+          endif
+          let entries = group[by_value]
+        endif
+        let level += 1
+      endfor
+      call add(entries, entry)
+    endfor
+
+    let entries = []
+    call s:FileListFormatGrouped(entries, grouped, 0)
+  endif
 
   let content = []
-  for entry in a:entries
-    let line = eclim#util#Simplify(entry.filename)
+  for entry in entries
+    let line = ''
+    if has_key(entry, 'padding')
+      let line .= entry.padding
+    endif
+
+    if has_key(entry, 'name')
+      let line .= entry.name
+    else
+      let line .= eclim#util#Simplify(entry.filename)
+    endif
+
     if has_key(entry, 'line')
       let line .= '|' . entry.line
       if has_key(entry, 'column')
         let line .= ' col ' . entry.column
       endif
     endif
+
     if has_key(entry, 'message')
       let line .= '|' . entry.message
     endif
     call add(content, line)
   endfor
 
-  let options = a:0 > 0 ? a:1 : {}
+  let shiftwidth = &shiftwidth
   call eclim#util#TempWindow(a:name, content, options)
   set filetype=eclim_filelist
-  let b:eclim_filelist = a:entries
+  let &l:shiftwidth = shiftwidth
+  setlocal foldmethod=expr
+  setlocal foldexpr=eclim#display#fold#GetTreeFold(v:lnum)
+  setlocal foldtext=eclim#display#fold#TreeFoldText()
+  let b:eclim_filelist = entries
 
   nnoremap <silent> <buffer> <cr> :call eclim#util#FileListOpenFile('edit')<cr>
   nnoremap <silent> <buffer> s    :call eclim#util#FileListOpenFile('split')<cr>
@@ -1683,11 +1730,44 @@ endfunction " }}}
 
 function! eclim#util#FileListOpenFile(action) " {{{
   let entry = b:eclim_filelist[line('.') - 1]
-  let filename = entry.filename
-  let line = get(entry, 'line', 0)
-  let col = get(entry, 'column', 0)
-  exec b:winnr . 'winc w'
-  call eclim#util#GoToBufferWindowOrOpen(filename, a:action, line, col)
+  if has_key(entry, 'filename')
+    let filename = entry.filename
+    let line = get(entry, 'line', 0)
+    let col = get(entry, 'column', 0)
+    exec b:winnr . 'winc w'
+    call eclim#util#GoToBufferWindowOrOpen(filename, a:action, line, col)
+  endif
+endfunction " }}}
+
+function! s:FileListFormatGrouped(entries, grouped, level) " {{{
+  let keys = sort(keys(a:grouped))
+  for key in keys
+    let padding = ''
+    let index = 0
+    while index < a:level
+      let shift = 0
+      while shift < &shiftwidth
+        let padding .= ' '
+        let shift += 1
+      endwhile
+      let index += 1
+    endwhile
+
+    call add(a:entries, {'name': padding . key})
+    if type(a:grouped[key]) == g:DICT_TYPE
+      call s:FileListFormatGrouped(a:entries, a:grouped[key], a:level + 1)
+    else
+      for entry in a:grouped[key]
+        let entry.padding = padding
+        let shift = 0
+        while shift < &shiftwidth
+          let entry.padding .= ' '
+          let shift += 1
+        endwhile
+        call add(a:entries, entry)
+      endfor
+    endif
+  endfor
 endfunction " }}}
 
 function! eclim#util#DeleteBuffer(name) " {{{

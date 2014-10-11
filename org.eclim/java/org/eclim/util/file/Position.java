@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,14 +38,6 @@ public class Position
   private int line = 1;
   private int column = 1;
   private String message;
-
-  /**
-   * Information about the Position object itself.
-   * Position objects are typically used to populate VIM location list.
-   * This field can be used to pass any attribute to UI without displaying it
-   * by default.
-   */
-  private String metaInfo;
 
   private Position (
       String filename, String message,
@@ -172,16 +164,6 @@ public class Position
   public String getMessage()
   {
     return this.message;
-  }
-
-  public String getMetaInfo()
-  {
-    return this.metaInfo;
-  }
-
-  public void setMetaInfo(String metaInfo)
-  {
-    this.metaInfo = metaInfo;
   }
 
   @Override

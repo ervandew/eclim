@@ -19,8 +19,8 @@
 "
 " }}}
 
-" Folding to create a tree structure
 function! eclim#display#fold#GetTreeFold(lnum) " {{{
+  " Folding to create a tree structure
   " The default VIM fold shows the first line of a block separately.
   " But we want to show it with its contents. This is more compact and
   " easier to read.

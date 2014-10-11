@@ -25,7 +25,7 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.util.file.Position;
+import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.core.resources.IResource;
 
@@ -33,6 +33,8 @@ import org.eclipse.debug.core.DebugPlugin;
 
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.ILineBreakpoint;
+
+import org.eclipse.jdt.core.ICompilationUnit;
 
 /**
  * Command to list breakpoints.
@@ -53,7 +55,7 @@ public class BreakpointsListCommand
     throws Exception
   {
     String fileName = commandLine.getValue(Options.FILE_OPTION);
-    ArrayList<Position> positions = new ArrayList<Position>();
+    ArrayList<Breakpoint> results = new ArrayList<Breakpoint>();
 
     IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager()
       .getBreakpoints();
@@ -61,25 +63,23 @@ public class BreakpointsListCommand
     if (breakpoints != null) {
       for (IBreakpoint breakpoint : breakpoints) {
         IResource resource = breakpoint.getMarker().getResource();
-        String curFileName = resource.getRawLocation().toOSString();
         String projectName = resource.getProject().getName();
+        String fullFileName = resource.getRawLocation().toOSString();
+        ICompilationUnit cu = JavaUtils.getCompilationUnit(
+            projectName, resource.getProjectRelativePath().toOSString());
+        String name = JavaUtils.getFullyQualifiedName(cu);
 
-        if (fileName == null || fileName.equals(curFileName)) {
-          Position position = Position.fromLineColumn(
-              curFileName,
-              projectName,
-              ((ILineBreakpoint) breakpoint).getLineNumber(),
-              1);
-
-          if (breakpoint.isEnabled()) {
-            position.setMetaInfo("e");
-          }
-
-          positions.add(position);
+        if (fileName == null || fileName.equals(fullFileName)) {
+          results.add(new Breakpoint(
+                projectName,
+                fullFileName,
+                name,
+                ((ILineBreakpoint) breakpoint).getLineNumber(),
+                breakpoint.isEnabled()));
         }
       }
     }
 
-    return positions;
+    return results;
   }
 }

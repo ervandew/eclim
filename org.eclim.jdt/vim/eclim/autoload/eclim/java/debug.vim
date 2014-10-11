@@ -323,48 +323,20 @@ function! eclim#java#debug#BreakpointsList(bang) " {{{
     winc k
   endif
 
-  call eclim#util#FileList('Debug Breakpoints', results, {'location': ''})
+  call eclim#util#FileList('Debug Breakpoints', results, {
+      \ 'location': '',
+      \ 'group_by': ['project', 'name'],
+    \ })
   call s:DefineBreakpointWinSettings()
 
   " Place sign for breakpoints that are enabled
   let line_num = 0
-  for result in results
-    let line_num = line_num + 1
-
-    if !has_key(result, "metaInfo")
-      continue
-    endif
-
-    let enabled = result.metaInfo
-    if enabled == "e"
+  for entry in b:eclim_filelist
+    let line_num += 1
+    if get(entry, 'enabled')
       call eclim#display#signs#Place(s:breakpoint_sign, line_num)
     endif
   endfor
-endfunction " }}}
-
-function! s:BreakpointRemoveUnderCursor() " {{{
-  " Removes breakpoint defined under the cursor.
-  let loc_list_entry = getline(line('.'))
-
-  " location list entry is of the form: filename|line_num col col_num|project
-  let tokens = split(loc_list_entry, "|")
-  let file = tokens[0]
-  let line = s:Trim(split(tokens[1], " ")[0])
-
-  let command = s:command_breakpoint_remove
-  let command = substitute(command, '<file>', file, '')
-  let command = substitute(command, '<line>', line, '')
-
-  call eclim#util#Echo(eclim#Execute(command))
-
-  setlocal modifiable
-  setlocal noreadonly
-
-  let cur_line = line(".")
-  silent exec cur_line . ',' . cur_line . 'delete _'
-
-  setlocal nomodifiable
-  setlocal readonly
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointRemove(bang) " {{{
@@ -384,33 +356,49 @@ function! eclim#java#debug#BreakpointRemove(bang) " {{{
   call eclim#util#Echo(eclim#Execute(command))
 endfunction " }}}
 
+function! s:BreakpointRemoveUnderCursor() " {{{
+  " Removes breakpoint defined under the cursor.
+
+  let entry = b:eclim_filelist[line('.') - 1]
+  if has_key(entry, 'filename')
+    let command = s:command_breakpoint_remove
+    let command = substitute(command, '<file>', entry.filename, '')
+    let command = substitute(command, '<line>', entry.line, '')
+
+    call eclim#util#Echo(eclim#Execute(command))
+
+    setlocal modifiable
+    setlocal noreadonly
+
+    let cur_line = line(".")
+    silent exec cur_line . ',' . cur_line . 'delete _'
+
+    setlocal nomodifiable
+    setlocal readonly
+  endif
+endfunction " }}}
+
 function! s:BreakpointToggle() " {{{
   "Enables or disables the breakpoint under cursor.
 
-  let entry = getline('.')
+  let entry = b:eclim_filelist[line('.') - 1]
+  if has_key(entry, 'filename')
+    let command = s:command_breakpoint_toggle
+    let command = substitute(command, '<project>', entry.project, '')
+    let command = substitute(command, '<file>', entry.filename, '')
+    let command = substitute(command, '<line>', entry.line, '')
 
-  " location list entry is of the form: filename|line_num col col_num|project
-  let tokens = split(entry, "|")
-  let file = tokens[0]
-  let project = s:Trim(tokens[2])
-  let line = s:Trim(split(tokens[1], " ")[0])
+    let result = eclim#Execute(command)
 
-  let command = s:command_breakpoint_toggle
-  let command = substitute(command, '<project>', project, '')
-  let command = substitute(command, '<file>', file, '')
-  let command = substitute(command, '<line>', line, '')
-
-  let result = eclim#Execute(command)
-
-  if (result == "1")
-    call eclim#display#signs#Place(s:breakpoint_sign, line('.'))
-  elseif (result == "0")
-    call eclim#display#signs#Unplace(
-      \ eclim#display#signs#Id(s:breakpoint_sign, line('.')))
-  else
-    call eclim#util#EchoError("Breakpoint does not exist")
+    if (result == "1")
+      call eclim#display#signs#Place(s:breakpoint_sign, line('.'))
+    elseif (result == "0")
+      call eclim#display#signs#Unplace(
+        \ eclim#display#signs#Id(s:breakpoint_sign, line('.')))
+    else
+      call eclim#util#EchoError("Breakpoint does not exist")
+    endif
   endif
-
 endfunction " }}}
 
 function! eclim#java#debug#Step(action) " {{{
