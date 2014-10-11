@@ -27,6 +27,7 @@ Features
    complete
    search
    java
+   debug
    javadoc
    format
    refactor

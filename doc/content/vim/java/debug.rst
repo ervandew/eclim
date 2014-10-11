@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -14,83 +14,109 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Java Debugging
-================
+==============
 
 .. _\:JavaDebugStart:
 
-Start debug session
--------------------
-A debug session can be started by using **:JavaDebugStart** command.
-This command requires a hostname/IP and the port number on which the debug server is running.
+Starting a  debug session
+-------------------------
+
+Before starting a debug session from vim you first need to do a couple things:
+
+1. Start your java program with the debugging hooks enabled:
+
+::
+
+  $ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044 \
+      -classpath ./bin org.eclim.test.debug.Main
+
+2. Start vim with the --servername argument (eclimd currently sends debugger
+   updates to vim using vim's remote invocation support):
+
+::
+
+  $ vim --servername debug ...
+
+.. note::
+
+  The server name you choose doesn't matter as long as you don't have another vim
+  instance running with that same name.
+
+Once you've got your java program running and vim started with a servername, you
+can then start your debug session using the **:JavaDebugStart** command.
+This command requires the hostname/IP and the port number on which the debug
+server is running.
 
 .. code-block:: vim
 
-  :JavaDebugStart localhost 5000
+  :JavaDebugStart localhost 1044
 
 .. _\:JavaDebugBreakpointAdd:
 
 Add a breakpoint
 -----------------
+
 To add a breakpoint, simply open the file, position the cursor on the desired
-line and run **:JavaDebugBreakpointAdd** command.
+line and run the **:JavaDebugBreakpointAdd** command.
 
 .. code-block:: vim
 
   :JavaDebugBreakpointAdd
 
-.. _\:JavaDebugBreakpointRemove:
+.. _\:JavaDebugBreakpointsList:
 
-Remove breakpoint(s)
----------------------
-There are 2 ways to remove breakpoints.
+Listing your breakpoints
+------------------------
 
-- Remove all breakpoints defined in current file. The cursor should be placed in
-  dsired Java file.
-
-- Remove all breakpoints defined in workspace.
-
-.. code-block:: vim
-
-  :JavaDebugBreakpointRemoveFile
-  :JavaDebugBreakpointRemoveAll
-
-.. _\:JavaDebugBreakpoint:
-
-Retrieve breakpoints
---------------------
-There are 2 ways to retrieve breakpoints and place them in a split window.
-
-- Get breakpoints defined in current file. The cursor should be placed in the
-  desired Java file.
-
-- Get all breakpoints defined in workspace.
+To view a list of all your breakpoints you can use the
+**:JavaDebugBreakpointsList** command, which by default will list all
+breakpoints for the current file, or with the ``!`` suffix, it will list all
+breakpoints for the current project and all project dependencies.
 
 .. code-block:: vim
 
-  :JavaDebugBreakpointGet
-  :JavaDebugBreakpointGetAll
+  :JavaDebugBreakpointsList
+  :JavaDebugBreakpointsList!
+
+This will open a new window which displays your breakpoints grouped by file or
+by project and file.
 
 **Mappings**
 
+- **<cr>** - Jump to the file and line of the breakpoint under the cursor
+- **T** - Toggles the breakpoint under the cursor, or all breakpoints under the
+  file or project when used on the class name or project name.
+- **D** - Deletes the breakpoint under the cursor, or all breakpoints under the
+  file or project when used on the class name or project name.
+
+.. _\:JavaDebugBreakpointRemove:
+
+Remove breakpoints
+------------------
+
+In addition to using the delete mapping provided in the
+:ref:`:JavaDebugBreakpointsList <:JavaDebugBreakpointsList>` window, you can
+also remove all breakpoints in the current file using the
+**:JavaDebugBreakpointRemove** command, or with the ``!`` suffix, you can remove
+all breakpoints in the current project.
+
 .. code-block:: vim
 
-  t - Toggle the breakpoint(s) by either enabling or disabling it.
-  d - Delete the breakpoint(s).
+  :JavaDebugBreakpointRemove
+  :JavaDebugBreakpointRemove!
 
 .. _\:JavaDebugStep:
 
-Step
-----
-There are 3 ways to step through code using **:JavaDebugStep** command and an
-action argument.
+Step Through the Code
+---------------------
+There are 3 ways to step through code using the **:JavaDebugStep** command and
+an action argument.
 
-- over: Step over current line
+- **over**: Step over current line
+- **into**: Step into a function
+- **return**: Return from current function
 
-- into: Step into a function
-
-- return: Return from current function
-
-.. code-block:: vim
+::
 
   :JavaDebugStep over
   :JavaDebugStep into
@@ -105,20 +131,28 @@ the bottom in a horizontal split window. It has 2 panes\:
 
 - Debug Threads: The left pane shows active threads along with its stack frames.
 
-- Debug Variables: The rigt pane shows the variables available for the thread
+  **Mappings**
+
+  - **s** - Suspend the thread under the cursor.
+  - **S** - Suspend all threads.
+  - **r** - Resume the thread under the cursor.
+  - **R** - Resume all threads.
+  - **B** - Open the breakpoints window showing all breakpoints for this project
+    and dependencies.
+
+- Debug Variables: The right pane shows the variables available for the thread
   selected on the left pane. Variables can be seen only for suspended threads.
   If there are suspended threads, then one of them is automatically selected and
   its variables displayed.
 
-**Mappings**
+  **Mappings**
 
-.. code-block:: vim
-
-  <CR> - Expands the variable. Nested variables are shown in a tree like structure.
-  To collapse the variable, press <CR> again.
-
-  p - Displays the toString value of the variable under cursor. This is
-  equivalent to the Details pane in Eclipse.
+  - **<cr>** - Expands the variable. Nested variables are shown in a tree like
+    structure. To collapse the variable, press <CR> again.
+  - **p** - Displays the toString value of the variable under cursor. This is
+    equivalent to the Details pane in Eclipse.
+  - **B** - Open the breakpoints window showing all breakpoints for this project
+    and dependencies.
 
 If for some reason, the status window is not updated, or you accidentally closed it,
 you can manually refresh it by running **:JavaDebugStatus** command.
@@ -129,98 +163,67 @@ you can manually refresh it by running **:JavaDebugStatus** command.
 
 .. _\:JavaDebugStop:
 
+Suspend / Resume
+-----------------
+
+In addition to using the mappings provided in the :ref:`:JavaDebugStatus
+<:JavaDebugStatus>` threads window, you can also suspend and resume threads
+using the following commands:
+
+- To suspend the entire debugging session (all threads), run
+  **:JavaDebugThreadSuspendAll** from any window.
+- To resume the entire debugging session (all threads), run
+  **:JavaDebugThreadResumeAll** from any window.
+
 Stop
 -----
-To stop a debug session, you can use **:JavaDebugStop** command.
+
+To stop a debug session, you can use the **:JavaDebugStop** command.
 
 .. code-block:: vim
 
   :JavaDebugStop
 
-.. _\:JavaDebugSuspend:
-
-Suspend
---------
-There are 2 ways to suspend execution.
-
-- To suspend execution of a single thread, jump to the Debug Threads split
-  window, place cursor on desired thread, and run **:JavaDebugThreadSuspend**
-  command.
-
-- To suspend the entire debugging session (all threads), run
-  **:JavaDebugThreadSuspendAll** from any window.
-
-.. code-block:: vim
-
-  :JavaDebugThreadSuspend
-  :JavaDebugThreadSuspendAll
-
-.. _\:JavaDebugResume:
-
-Resume
-------
-There are 2 ways to resume execution.
-
-- To resume execution of a single thread, jump to the Debug Threads split
-  window, place cursor on desired thread, and run **:JavaDebugThreadResume**
-  command. For convenience, this command is allowed from any window. If it detects
-  that the cursor is not in the Debug Threads window, it will try to suspend the
-  last thread that the user was stepping through.
-
-- To resume the entire debugging session (all threads), run
-  **:JavaDebugThreadResumeAll** from any window.
-
-.. code-block:: vim
-
-  :JavaDebugThreadResume
-  :JavaDebugThreadResumeAll
+.. _\:JavaDebugThreadSuspendAll:
+.. _\:JavaDebugThreadResume:
+.. _\:JavaDebugThreadResumeAll:
 
 Configuration
 -------------
-- **g:EclimJavaDebugLineHighlight** (Default: 'DebugBreak')
+.. _g\:EclimJavaDebugLineHighlight:
 
+- **g:EclimJavaDebugLineHighlight** (Default: 'DebugBreak')
   Highlight group to use for showing the current line being debugged.
 
-- **g:EclimJavaDebugLineSignText** (Default: '•')
+.. _g\:EclimJavaDebugLineSignText:
 
+- **g:EclimJavaDebugLineSignText** (Default: '•')
   Text to use on sign column for showing the current line being debugged.
 
-- **g:EclimJavaDebugStatusWinOrientation** (Default: 'vertical')
+.. _g\:EclimJavaDebugStatusWinOrientation:
 
+- **g:EclimJavaDebugStatusWinOrientation** (Default: 'vertical')
   Sets the orientation for the splits inside the debug status windows;
   if they should be tiled vertically or horizontally.
   Possible values\:
-
   - horizontal
-
   - vertical
 
-- **g:EclimJavaDebugStatusWinWidth** (Default: 50)
+.. _g\:EclimJavaDebugStatusWinWidth:
 
+- **g:EclimJavaDebugStatusWinWidth** (Default: 50)
   Sets the window width for the splits inside the debug status window.
   This is only applicable when the orientation is horizontal.
 
-- **g:EclimJavaDebugStatusWinHeight** (Default: 10)
+.. _g\:EclimJavaDebugStatusWinHeight:
 
+- **g:EclimJavaDebugStatusWinHeight** (Default: 10)
   Sets the window height for the splits inside the debug status window.
   This is only applicable when the orientation is vertical.
 
-Suggested Mappings
-------------------
-.. code-block:: vim
-
-  noremap <silent> <localleader>q :JavaDebugStop<CR>
-  nnoremap <silent> <localleader>s :JavaDebugThreadSuspend<CR>
-  nnoremap <silent> <localleader>r :JavaDebugThreadResume<CR>
-  nnoremap <silent> <localleader>b :JavaDebugBreakpointAdd<CR>
-  nnoremap <silent> <localleader>br :JavaDebugBreakpointRemove<CR>
-  nnoremap <silent> <localleader>bg :JavaDebugBreakpointGet<CR>
-  nnoremap <silent> ; :JavaDebugStep over<CR>
-  nnoremap <silent> <localleader>e :JavaDebugStep into<CR>
-  nnoremap <silent> <localleader>x :JavaDebugStep return<CR>
-
 Troubleshooting
 ---------------
+
 - Expanding a variable shows an empty line with just a dot.
   You probably haven't pressed the <Enter> key on the variable.
   Nested variables are retreived one level at a time from the server to be
