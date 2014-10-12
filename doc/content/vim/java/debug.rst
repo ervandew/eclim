@@ -57,11 +57,13 @@ Add a breakpoint
 -----------------
 
 To add a breakpoint, simply open the file, position the cursor on the desired
-line and run the **:JavaDebugBreakpointAdd** command.
+line and run the **:JavaDebugBreakpointToggle** command. Note that if a breakpoint
+was already defined on this line, then its status will be toggled; i.e., if it was
+enabled, then it wil be disabled and vice-versa.
 
 .. code-block:: vim
 
-  :JavaDebugBreakpointAdd
+  :JavaDebugBreakpointToggle
 
 .. _\:JavaDebugBreakpointsList:
 
