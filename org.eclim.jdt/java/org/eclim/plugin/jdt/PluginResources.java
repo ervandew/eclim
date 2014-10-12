@@ -284,7 +284,10 @@ public class PluginResources
 
       HashMap<Object, String> values = new HashMap<Object, String>();
       for(Object key : System.getProperties().keySet()){
-        values.put(key, System.getProperty((String)key).replace('\\', '/'));
+        String value = System.getProperty((String)key);
+        if (value != null){
+          values.put(key, value.replace('\\', '/'));
+        }
       }
       propertiesString =
         StringUtils.replacePlaceholders(propertiesString, values);
