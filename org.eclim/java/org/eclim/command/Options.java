@@ -83,6 +83,7 @@ public class Options
   public static final String PROJECT_OPTION = "p";
   public static final String PROPERTIES_OPTION = "r";
   public static final String REVISION_OPTION = "r";
+  public static final String ROOT_OPTION = "r";
   public static final String SCHEMA_OPTION = "s";
   public static final String SCOPE_OPTION = "s";
   public static final String SEARCH_OPTION = "s";

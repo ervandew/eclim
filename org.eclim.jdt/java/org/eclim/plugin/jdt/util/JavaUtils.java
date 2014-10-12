@@ -65,7 +65,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageDeclaration;
-import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
@@ -487,43 +486,6 @@ public class JavaUtils
     }
 
     return typeName;
-  }
-
-  /**
-   * Get the first IPackageFragment in the project for the given package name.
-   *
-   * @param projectName The java project name.
-   * @param packageName The dot separated package name.
-   * @return The IPackageFragement or null if it doesn't exist.
-   */
-  public static IPackageFragment getPackageFragment(
-      String projectName,
-      String packageName)
-    throws Exception
-  {
-    IJavaProject project = JavaUtils.getJavaProject(projectName);
-    return getPackageFragment(project, packageName);
-  }
-
-  /**
-   * Get the first IPackageFragment in the project for the given package name.
-   *
-   * @param projectName The java project.
-   * @param packageName The dot separated package name.
-   * @return The IPackageFragement or null if it doesn't exist.
-   */
-  public static IPackageFragment getPackageFragment(
-      IJavaProject project,
-      String packageName)
-    throws Exception
-  {
-    for (IPackageFragment f : project.getPackageFragments()) {
-      if (f.getElementName().equals(packageName)){
-        return f;
-      }
-    }
-
-    return null;
   }
 
   /**

@@ -52,8 +52,5 @@ as the file you are currently editing:
   This command supports command completion of the available types (class,
   interface, etc) as well as completion of existing package names.
 
-In the case where you are creating a new type in a package that does not yet
-exist, eclim will do its best to create that new package in the correct source
-file directory. If you have multiple source directories with packages that
-partially match the new package, eclim will currently choose the one which
-occurs first in your ``.classpath`` file.
+In the case where the source directory to create the type in is ambiguous, you
+will be prompted to choose the source directory from a list.

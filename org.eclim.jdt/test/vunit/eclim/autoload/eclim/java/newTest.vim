@@ -33,6 +33,7 @@ function! TestJavaNewExistingPackage() " {{{
 
   call vunit#AssertEquals(winnr('$'), 1, 'too many initial windows.')
 
+  let g:EclimTestPromptQueue = [0]
   JavaNew class org.eclim.test.TestNew
 
   call vunit#AssertEquals(winnr('$'), 2, 'new window not opened.')
@@ -52,6 +53,7 @@ function! TestJavaNewChildPackage() " {{{
     \ isdirectory('src/org/eclim/test/testnew'),
     \ 'package dir already exists.')
 
+  let g:EclimTestPromptQueue = [0]
   JavaNew class org.eclim.test.testnew.TestNew
 
   call vunit#AssertEquals(winnr('$'), 2, 'new window not opened.')
@@ -74,6 +76,7 @@ function! TestJavaNewParentPackage() " {{{
     \ isdirectory('src/testnew/test'),
     \ 'package dir already exists.')
 
+  let g:EclimTestPromptQueue = [0]
   JavaNew class testnew.test.TestNew
 
   call vunit#AssertEquals(winnr('$'), 2, 'new window not opened.')

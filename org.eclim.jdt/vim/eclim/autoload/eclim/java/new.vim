@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -48,16 +48,24 @@ function! eclim#java#new#Create(type, name) " {{{
   let command = substitute(command, "<name>", newName, '')
 
   let result = eclim#Execute(command)
-  if g:DICT_TYPE != type(result)
+  if type(result) == g:LIST_TYPE
+    let answer = eclim#util#PromptList(
+      \ "Please choose the src directory to create this new package in",
+      \ result)
+    if answer == -1
+      return
+    endif
+
+    let path = eclim#Execute(command . ' -r "' . result[answer] . '"')
+    if type(path) != g:STRING_TYPE
+      return
+    endif
+  elseif type(result) == g:STRING_TYPE
+    let path = result
+  else
     return
   endif
 
-  if has_key(result, "error")
-    call eclim#util#EchoError(result.error)
-    return
-  endif
-
-  let path = result.path
   call eclim#util#GoToBufferWindowOrOpen(path, g:EclimJavaNewOpenAction)
 endfunction " }}}
 
