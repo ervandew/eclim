@@ -1218,62 +1218,14 @@ function! eclim#util#SetLocationList(list, ...) " {{{
   " Sets the contents of the location list for the current window.
   " Optional args:
   "   action: The action passed to the setloclist() function call.
-  let loclist = a:list
-
-  " filter the list if the current buffer defines a list of filters.
-  if exists('b:EclimLocationListFilter')
-    let newlist = []
-    for item in loclist
-      let addit = 1
-
-      for filter in b:EclimLocationListFilter
-        if item.text =~ filter
-          let addit = 0
-          break
-        endif
-      endfor
-
-      if addit
-        call add(newlist, item)
-      endif
-    endfor
-    let loclist = newlist
-  endif
-
-  if a:0 == 0
-    call setloclist(0, loclist)
-  else
-    call setloclist(0, loclist, a:1)
-  endif
-
-  silent let projectName = eclim#project#util#GetCurrentProjectName()
-  if projectName != ''
-    " setbufvar seems to have the side affect of changing to the buffer's dir
-    " when autochdir is set.
-    let save_autochdir = &autochdir
-    set noautochdir
-
-    for item in getloclist(0)
-      call setbufvar(item.bufnr, 'eclim_project', projectName)
-    endfor
-
-    let &autochdir = save_autochdir
-  endif
-
-  if g:EclimShowCurrentError && len(loclist) > 0
-    call eclim#util#DelayedCommand('call eclim#util#ShowCurrentError()')
-  endif
-
-  let b:eclim_loclist = 1
-  call eclim#display#signs#Update()
+  call s:SetList('loclist', a:list, a:0 ? a:1 : ' ')
 endfunction " }}}
 
-" ClearLocationList([namespace, namespace, ...]) {{{
-" Clears the current location list.  Optionally 'namespace' arguments can be
-" supplied which will only clear items with text prefixed with '[namespace]'.
-" Also the special namespace 'global' may be supplied which will only remove
-" items with no namepace prefix.
-function! eclim#util#ClearLocationList(...)
+function! eclim#util#ClearLocationList(...) " {{{
+  " Clears the current location list.  Optionally 'namespace' arguments can be
+  " supplied which will only clear items with text prefixed with '[namespace]'.
+  " Also the special namespace 'global' may be supplied which will only remove
+  " items with no namepace prefix.
   if a:0 > 0
     let loclist = getloclist(0)
     if len(loclist) > 0
@@ -1304,14 +1256,20 @@ function! eclim#util#SetQuickfixList(list, ...) " {{{
   " Sets the contents of the quickfix list.
   " Optional args:
   "   action: The action to pass into vim's setqflist function
+  call s:SetList('qflist', a:list, a:0 ? a:1 : ' ')
+endfunction " }}}
 
-  let qflist = a:list
-  if exists('b:EclimQuickfixFilter')
+function! s:SetList(type, list, action) " {{{
+  " Sets the contents of the <type> list.
+  let list = a:list
+  let list_filter = a:type == 'qflist' ?
+    \ 'EclimQuickfixFilter' : 'EclimLocationListFilter'
+  if exists('b:' . list_filter)
     let newlist = []
-    for item in qflist
+    for item in list
       let addit = 1
 
-      for filter in b:EclimQuickfixFilter
+      for filter in b:{list_filter}
         if item.text =~ filter
           let addit = 0
           break
@@ -1322,22 +1280,25 @@ function! eclim#util#SetQuickfixList(list, ...) " {{{
         call add(newlist, item)
       endif
     endfor
-    let qflist = newlist
+    let list = newlist
   endif
-  if a:0 == 0
-    call setqflist(qflist)
+
+  if a:type == 'qflist'
+    call setqflist(list, a:action)
   else
-    call setqflist(qflist, a:1)
+    call setloclist(0, list, a:action)
   endif
-  if g:EclimShowCurrentError && len(qflist) > 0
+
+  if g:EclimShowCurrentError && len(list) > 0
     call eclim#util#DelayedCommand('call eclim#util#ShowCurrentError()')
   endif
+
+  let b:eclim_loclist = 1
   call eclim#display#signs#Update()
 endfunction " }}}
 
-" ShowCurrentError() {{{
-" Shows the error on the cursor line if one.
-function! eclim#util#ShowCurrentError()
+function! eclim#util#ShowCurrentError() " {{{
+  " Shows the error on the cursor line if one.
   if mode() != 'n' || expand('%') == ''
     return
   endif

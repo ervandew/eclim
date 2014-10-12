@@ -191,15 +191,33 @@ endfunction " }}}
 function! eclim#lang#SearchResults(results, action) " {{{
   " Function which handles processing search results.
 
+  silent let projectName = eclim#project#util#GetCurrentProjectName()
+
   " single result
   if len(a:results) == 1
     let name = substitute(a:results[0].filename, '\', '/', 'g')
     call eclim#util#GoToBufferWindowOrOpen(name, a:action)
     call cursor(a:results[0].line, a:results[0].column)
+    silent let curProjectName = eclim#project#util#GetCurrentProjectName()
+    if curProjectName == '' && projectName != ''
+      let b:eclim_project = projectName
+    endif
 
   " more than one result
   else
     call eclim#util#SetQuickfixList(eclim#util#ParseLocationEntries(a:results))
+    if projectName != ''
+      " setbufvar seems to have the side affect of changing to the buffer's dir
+      " when autochdir is set.
+      let save_autochdir = &autochdir
+      set noautochdir
+
+      for item in getqflist()
+        call setbufvar(item.bufnr, 'eclim_project', projectName)
+      endfor
+
+      let &autochdir = save_autochdir
+    endif
     exec 'copen ' . g:EclimQuickfixHeight
   endif
 endfunction " }}}
