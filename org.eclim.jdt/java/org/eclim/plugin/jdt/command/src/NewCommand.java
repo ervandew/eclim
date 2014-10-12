@@ -67,6 +67,12 @@ public class NewCommand
     String type = commandLine.getValue(Options.TYPE_OPTION);
     String name = commandLine.getValue(Options.NAME_OPTION);
 
+    // handle someone typing a file path instead of a fully qualified class name
+    if (name.endsWith(".java")){
+      name = name.substring(0, name.length() - 5);
+    }
+    name = name.replace('/', '.');
+
     int classStart = name.lastIndexOf('.');
     final String packageName = classStart >= 0 ?
       name.substring(0, classStart) : name;
