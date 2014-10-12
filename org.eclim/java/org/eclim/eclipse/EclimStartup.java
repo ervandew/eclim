@@ -16,8 +16,6 @@
  */
 package org.eclim.eclipse;
 
-import java.io.PrintStream;
-
 import org.eclim.logging.Logger;
 
 import org.eclipse.ui.IStartup;
@@ -39,8 +37,6 @@ public class EclimStartup
   public void earlyStartup()
   {
     logger.debug("EclimApplication enabled: {}", EclimApplication.isEnabled());
-    final PrintStream out = System.out;
-    final PrintStream err = System.err;
     if (EclimApplication.isEnabled()){
       final IWorkbench workbench = PlatformUI.getWorkbench();
       logger.debug("Creating thread to start EclimDaemon...");
@@ -50,8 +46,8 @@ public class EclimStartup
             // counter act apache felix ThreadPrintStream behavior which gives
             // each thread a different PrintStream, but those streams don't seem
             // to be writing to the console for some reason.
-            System.setOut(out);
-            System.setErr(err);
+            System.setOut(EclimApplication.stdout);
+            System.setErr(EclimApplication.stderr);
             new Thread(){
               public void run(){
                 logger.debug("Starting EclimDaemon...");

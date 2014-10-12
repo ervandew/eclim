@@ -16,6 +16,8 @@
  */
 package org.eclim.eclipse;
 
+import java.io.PrintStream;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -55,6 +57,9 @@ public class EclimApplication
 
   private static EclimApplication instance;
   private static boolean stopping;
+
+  public static PrintStream stdout = System.out;
+  public static PrintStream stderr = System.err;
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
