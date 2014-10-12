@@ -53,9 +53,8 @@ let s:command_session_resume = '-command java_debug_thread_resume'
 let s:command_thread_resume = '-command java_debug_thread_resume ' .
   \ '-t "<thread_id>"'
 
-let s:command_breakpoint_add =
-  \ '-command java_debug_breakpoint_add ' .
-  \ '-p "<project>" -f "<file>" -l "<line>"'
+let s:command_breakpoint_toggle =
+  \ '-command java_debug_breakpoint_toggle -p "<project>"'
 let s:command_breakpoint_remove =
   \ '-command java_debug_breakpoint_remove -p "<project>"'
 let s:command_breakpoints_list =
@@ -267,8 +266,9 @@ function! eclim#java#debug#DebugThreadResumeAll() " {{{
   call eclim#util#Echo(result)
 endfunction " }}}
 
-function! eclim#java#debug#BreakpointAdd() " {{{
-  " Adds breakpoint for current cursor position.
+function! eclim#java#debug#BreakpointToggle(bang) " {{{
+  " Adds, enables, disables, or deletes a breakpoint for current cursor
+  " position.
   if !eclim#project#util#IsCurrentFileInProject()
     return
   endif
@@ -277,10 +277,14 @@ function! eclim#java#debug#BreakpointAdd() " {{{
   let file = eclim#lang#SilentUpdate()
   let line = line('.')
 
-  let command = s:command_breakpoint_add
+  let command = s:command_breakpoint_toggle . ' -f "<file>" -l <line>'
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
   let command = substitute(command, '<line>', line, '')
+
+  if a:bang == '!'
+    let command .= ' -d'
+  endif
 
   call eclim#util#Echo(eclim#Execute(command))
 
@@ -375,9 +379,7 @@ function! s:BreakpointsListRefresh() " {{{
   if line > line('$')
     let line = line('$')
   endif
-  " very weird case where calling cursor(...) now doesn't properly update the
-  " cusors location in the display, but delaying the call works.
-  call eclim#util#DelayedCommand(printf("call cursor(%s, %s)", line, col))
+  call cursor(line, col)
 endfunction " }}}
 
 function! eclim#java#debug#BreakpointRemove(bang) " {{{

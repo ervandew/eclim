@@ -17,6 +17,7 @@
 package org.eclim.plugin.jdt.command.debug;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eclim.Services;
 
@@ -29,6 +30,8 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
+import org.eclim.plugin.jdt.util.JavaUtils;
+
 import org.eclipse.core.resources.IResource;
 
 import org.eclipse.debug.core.DebugPlugin;
@@ -36,6 +39,11 @@ import org.eclipse.debug.core.IBreakpointManager;
 
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.ILineBreakpoint;
+
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IType;
+
+import org.eclipse.jdt.debug.core.JDIDebugModel;
 
 /**
  * Command to enable or disable a specific breakpoint.
@@ -47,6 +55,9 @@ import org.eclipse.debug.core.model.ILineBreakpoint;
  *   enabled/disabled.
  * - If both a file name and a line number is supplied, then that specific
  *   breakpoint will be toggled.
+ *   - If no breakpoint exists it will be created.
+ *   - If the 'delete' option is supplied the breakpoint will be delete in the
+ *     case where it would have been otherwise disabled.
  *
  * When toggling more than one breakpoint, the behavior is:
  * - if all breakpoints are disabled, enable them all
@@ -57,7 +68,8 @@ import org.eclipse.debug.core.model.ILineBreakpoint;
   options =
     "REQUIRED p project ARG," +
     "OPTIONAL f file ARG," +
-    "OPTIONAL l line ARG"
+    "OPTIONAL l line ARG," +
+    "OPTIONAL d delete NOARG"
 )
 public class BreakpointToggleCommand
   extends AbstractCommand
@@ -112,6 +124,16 @@ public class BreakpointToggleCommand
       }
     }
 
+    // edge case when acting on a line in a file, create the breakpoint if none
+    // exists
+    if (fileName != null && lineNum != null &&
+        enabled.size() == 0 && disabled.size() == 0)
+    {
+      fileName = commandLine.getValue(Options.FILE_OPTION);
+      create(projectName, fileName, lineNum);
+      return Services.getMessage("debugging.breakpoint.added");
+    }
+
     String action = "enabled";
     if (enabled.size() == 0){
       for (IBreakpoint breakpoint : disabled){
@@ -119,11 +141,35 @@ public class BreakpointToggleCommand
       }
     }else{
       action = "disabled";
-      for (IBreakpoint breakpoint : enabled){
-        breakpoint.setEnabled(false);
+      // another edge case when acting on a line in a file, delete the
+      // breakpoint if the 'delete' option was supplied
+      if (fileName != null && lineNum != null &&
+          enabled.size() == 1 && commandLine.hasOption("d"))
+      {
+        action = "removed";
+        breakpointMgr.removeBreakpoint(enabled.get(0), true);
+      }else{
+        for (IBreakpoint breakpoint : enabled){
+          breakpoint.setEnabled(false);
+        }
       }
     }
 
     return Services.getMessage("debugging.breakpoint.toggled", action);
+  }
+
+  private void create(String projectName, String fileName, int line)
+    throws Exception
+  {
+    ICompilationUnit compUnit = JavaUtils.getCompilationUnit(
+        projectName, fileName);
+    // TODO How to find out right type from this array?
+    IType type = compUnit.getTypes()[0];
+    IResource res = compUnit.getResource();
+    HashMap<String, Object> attrMap = new HashMap<String, Object>();
+
+    String typeName = type.getFullyQualifiedName();
+    JDIDebugModel.createLineBreakpoint(
+        res, typeName, line, -1, -1, 0, true, attrMap);
   }
 }

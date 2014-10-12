@@ -233,11 +233,11 @@ if !exists(":JavaDebug")
   command -nargs=0 -buffer JavaDebugThreadResumeAll
     \ :call eclim#java#debug#DebugThreadResumeAll()
 
-  command -nargs=0 -buffer JavaDebugBreakpointAdd
-    \ :call eclim#java#debug#BreakpointAdd()
+  command -nargs=0 -buffer -bang JavaDebugBreakpointToggle
+    \ :call eclim#java#debug#BreakpointToggle('<bang>')
   command -nargs=0 -buffer -bang JavaDebugBreakpointsList
     \ :call eclim#java#debug#BreakpointsList('<bang>')
-  command -nargs=0 -buffer JavaDebugBreakpointRemove
+  command -nargs=0 -buffer -bang JavaDebugBreakpointRemove
     \ :call eclim#java#debug#BreakpointRemove('<bang>')
 endif
 
