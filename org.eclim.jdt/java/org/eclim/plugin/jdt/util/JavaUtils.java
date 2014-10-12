@@ -490,8 +490,11 @@ public class JavaUtils
   }
 
   /**
-   * Get the first IPackageFragment in the project
-   *  for the given package name
+   * Get the first IPackageFragment in the project for the given package name.
+   *
+   * @param projectName The java project name.
+   * @param packageName The dot separated package name.
+   * @return The IPackageFragement or null if it doesn't exist.
    */
   public static IPackageFragment getPackageFragment(
       String projectName,
@@ -503,18 +506,19 @@ public class JavaUtils
   }
 
   /**
-   * Get the first IPackageFragment in the project
-   *  for the given package name
+   * Get the first IPackageFragment in the project for the given package name.
+   *
+   * @param projectName The java project.
+   * @param packageName The dot separated package name.
+   * @return The IPackageFragement or null if it doesn't exist.
    */
   public static IPackageFragment getPackageFragment(
       IJavaProject project,
       String packageName)
     throws Exception
   {
-    String packagePath = packageName.replaceAll("\\.", "/");
     for (IPackageFragment f : project.getPackageFragments()) {
-      String pathString = f.getPath().toPortableString();
-      if (pathString.endsWith(packagePath)) {
+      if (f.getElementName().equals(packageName)){
         return f;
       }
     }
