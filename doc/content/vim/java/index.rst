@@ -33,6 +33,7 @@ Features
    refactor
    inspection
    import
+   types
    methods
    unittests
    logging
