@@ -37,6 +37,8 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaModelException;
 
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+
 /**
  * Command to generate a new Java Type file
  *
@@ -52,7 +54,6 @@ import org.eclipse.jdt.core.JavaModelException;
 public class NewCommand
   extends AbstractCommand
 {
-
   static final String TEMPLATE =
     "package %1$s;\n\n" +
     "public %2$s %3$s {\n" +
@@ -107,6 +108,10 @@ public class NewCommand
         return singleMap("error", "Could not create " + file);
       }
 
+      JavaUtils.format(
+          unit, CodeFormatter.K_COMPILATION_UNIT,
+          0, unit.getBuffer().getLength());
+
     } catch (JavaModelException e) {
       return singleMap("error", e.getMessage());
     }
@@ -129,5 +134,4 @@ public class NewCommand
 
     return type;
   }
-
 }
