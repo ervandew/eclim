@@ -69,7 +69,7 @@ of the pattern to search for.
 - -x <context> (Default: declarations): The context of the search, where
   possible context values include
 
-  - all - All occurances.
+  - all - All occurrences.
   - declarations - Declarations matching the pattern or element.
   - implementors - Implementors of the pattern or element.
   - references - References of the pattern or element.
