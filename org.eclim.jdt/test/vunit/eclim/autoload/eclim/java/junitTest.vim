@@ -35,7 +35,7 @@ function! TestJUnit() " {{{
   ProjectBuild
 
   call cursor(1, 1)
-  JUnit
+  JUnit!
   call vunit#AssertEquals(winnr('$'), 2, 'Run full test: windows')
   winc j
 
@@ -65,7 +65,7 @@ function! TestJUnit() " {{{
   bdelete
 
   call cursor(12, 5)
-  silent JUnit
+  silent JUnit!
   call vunit#AssertEquals(winnr('$'), 2, 'Run test: windows')
   winc j
   call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run test: name')
@@ -81,7 +81,7 @@ function! TestJUnit() " {{{
 
   edit! src/org/eclim/test/junit/run/Foo.java
   call cursor(12, 5)
-  silent JUnit
+  silent JUnit!
   call vunit#AssertEquals(winnr('$'), 2, 'Run class test: windows')
   winc j
   call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run class test: name')
@@ -96,7 +96,7 @@ function! TestJUnit() " {{{
   bdelete
 
   call cursor(12, 5)
-  silent JUnit **/run/*Test
+  silent JUnit! **/run/*Test
   call vunit#AssertEquals(winnr('$'), 2, 'Run pattern: windows')
   winc j
   call vunit#AssertEquals(bufname('%'), '[JUnit Output]', 'Run pattern: name')

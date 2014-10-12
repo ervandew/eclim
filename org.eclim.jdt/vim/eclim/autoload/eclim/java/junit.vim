@@ -46,7 +46,7 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
   endif
 
   Validate
-  if len(getloclist(0)) > 0
+  if len(filter(getloclist(0), 'v:val.type == "e"')) > 0
     call eclim#util#EchoError('Test case contains validation errors.')
     return
   endif
@@ -72,12 +72,14 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
     \ 'Tests run:.*Failures: \([0-9]*\), Errors: \([0-9]*\), [^\n]*sec')
   if len(statusLine) >= 3 && statusLine[1] == '0' && statusLine[2] == '0'
     let name = eclim#util#EscapeBufferName('[JUnit Output]')
-    if bufwinnr(name) != -1
+    if bufwinnr(name) != -1 && a:bang != '!'
       " close existing output window; we've fixed the issue
       let curwinnr = winnr()
       exec bufwinnr(name) . "winc w"
       quit
       exec curwinnr . "winc w"
+    elseif a:bang == '!'
+      call eclim#util#TempWindow('[JUnit Output]', results)
     endif
     call eclim#util#EchoSuccess(statusLine[0])
   elseif result != '0'
@@ -88,7 +90,8 @@ function! eclim#java#junit#JUnit(test, bang) " {{{
   let b:project = project
 
   if exists(":JUnit") != 2
-    command -buffer -nargs=? -complete=customlist,eclim#java#junit#CommandCompleteTest
+    command -bang -buffer -nargs=?
+      \ -complete=customlist,eclim#java#junit#CommandCompleteTest
       \ JUnit :call eclim#java#junit#JUnit('<args>', '<bang>')
   endif
 
