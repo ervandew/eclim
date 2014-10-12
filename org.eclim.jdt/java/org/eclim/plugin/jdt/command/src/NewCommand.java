@@ -34,7 +34,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaModelException;
 
 import org.eclipse.jdt.core.formatter.CodeFormatter;
@@ -63,7 +65,7 @@ public class NewCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    String project = commandLine.getValue(Options.PROJECT_OPTION);
+    String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String type = commandLine.getValue(Options.TYPE_OPTION);
     String name = commandLine.getValue(Options.NAME_OPTION);
 
@@ -80,10 +82,33 @@ public class NewCommand
       name.substring(classStart + 1) : name;
     final String fileName = typeName + ".java";
 
-    IPackageFragment frag = JavaUtils.getPackageFragment(project, packageName);
-    if (frag == null) {
-      // TODO support generating a new package?
-      throw new IllegalStateException("Could not get package");
+    IJavaProject javaProject = JavaUtils.getJavaProject(projectName);
+    IPackageFragment frag = JavaUtils.getPackageFragment(
+        javaProject, packageName);
+    if (frag == null && packageName.indexOf('.') > 0) {
+      String parent = packageName;
+      while(frag == null && parent.indexOf('.') > 0){
+        parent = parent.substring(0, parent.lastIndexOf('.'));
+        frag = JavaUtils.getPackageFragment(javaProject, parent);
+      }
+
+      // we've found a parent package, so create the child in the first package
+      // root we find containing the parent.
+      if (frag != null){
+        for (IPackageFragmentRoot root : javaProject.getPackageFragmentRoots()){
+          if(root.getPackageFragment(parent).exists()){
+            frag = root.createPackageFragment(packageName, false, null);
+            break;
+          }
+        }
+      }
+    }
+
+    // we couldn't find a parent package, so create the child in the first
+    // package root of the project.
+    if (frag == null){
+      IPackageFragmentRoot root = javaProject.getPackageFragmentRoots()[0];
+      frag = root.createPackageFragment(packageName, false, null);
     }
 
     // locate the to-be created file
