@@ -26,27 +26,9 @@
 
 " }}}
 
-function! eclim#java#new#CommandComplete(argLead, cmdLine, cursorPos) " {{{
-  let args = eclim#util#ParseCmdLine(a:cmdLine)
-  if len(args) <= 2
-    " Suggest java types
-    let arg = substitute(a:argLead, '@', '\\@', '')
-    return filter(copy(s:java_types), 'v:val =~ "^' . arg . '"')
-  endif
-
-  if len(a:argLead) <= 3 || a:argLead =~ '\.'
-    " Propose packages
-    return eclim#java#util#CommandCompletePackage(
-                \ a:argLead, a:cmdLine, a:cursorPos)
-  endif
-
-  return []
-
-endfunction " }}}
-
 function! eclim#java#new#Create(type, name) " {{{
   " Create a new Java Type
-  "
+
   if !eclim#project#util#IsCurrentFileInProject(0)
     return
   endif
@@ -57,7 +39,7 @@ function! eclim#java#new#Create(type, name) " {{{
   " prepend current package if necessary
   let newName = a:name
   if newName !~ '\.' && len(myPackage) > 0
-      let newName = myPackage . '.' . newName
+    let newName = myPackage . '.' . newName
   endif
 
   let command = s:command_new
@@ -67,17 +49,34 @@ function! eclim#java#new#Create(type, name) " {{{
 
   let result = eclim#Execute(command)
   if g:DICT_TYPE != type(result)
-      return
+    return
   endif
 
   if has_key(result, "error")
-      call eclim#util#EchoError(result.error)
-      return
+    call eclim#util#EchoError(result.error)
+    return
   endif
 
   let path = result.path
   call eclim#util#GoToBufferWindowOrOpen(path, g:EclimJavaNewOpenAction)
+endfunction " }}}
 
+function! eclim#java#new#CommandComplete(argLead, cmdLine, cursorPos) " {{{
+  let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
+  let args = eclim#util#ParseCmdLine(cmdLine)
+  if len(args) < 2 || (len(args) == 2 && cmdLine !~ '\s$')
+    " Suggest java types
+    let arg = substitute(a:argLead, '@', '\\@', '')
+    return filter(copy(s:java_types), 'v:val =~ "^' . arg . '"')
+  endif
+
+  if len(a:argLead) <= 3 || a:argLead =~ '\.'
+    " Propose packages
+    return eclim#java#util#CommandCompletePackage(
+      \ a:argLead, a:cmdLine, a:cursorPos)
+  endif
+
+  return []
 endfunction " }}}
 
 
