@@ -51,19 +51,27 @@ server is running.
 
   :JavaDebugStart localhost 1044
 
-.. _\:JavaDebugBreakpointAdd:
+.. _\:JavaDebugBreakpointToggle:
 
-Add a breakpoint
------------------
+Add/Remove a breakpoint
+-----------------------
 
 To add a breakpoint, simply open the file, position the cursor on the desired
-line and run the **:JavaDebugBreakpointToggle** command. Note that if a breakpoint
-was already defined on this line, then its status will be toggled; i.e., if it was
-enabled, then it wil be disabled and vice-versa.
+line and run the **:JavaDebugBreakpointToggle** command. If now breakpoint
+exists, one will be created. If a breakpoint does exist, then
+**:JavaDebugBreakpointToggle** will toggle whether that breakpoint is enabled or
+not. If you'd like to delete the breakpoint on the current line instead of
+disabling it, then run the toggle command with the ``!`` option.
 
 .. code-block:: vim
 
+  " create a breakpoint or toggle whether the current breakpoint is
+  " enabled/disabled
   :JavaDebugBreakpointToggle
+
+  " same as the above, but instead disabling an enabled breakpoint,
+  " delete it instead.
+  :JavaDebugBreakpointToggle!
 
 .. _\:JavaDebugBreakpointsList:
 
