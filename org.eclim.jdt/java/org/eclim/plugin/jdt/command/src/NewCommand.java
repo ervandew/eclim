@@ -128,7 +128,7 @@ public class NewCommand
         roots.clear();
         for (IPackageFragmentRoot root : javaProject.getPackageFragmentRoots()){
           if (root.getKind() == IPackageFragmentRoot.K_SOURCE &&
-              root.getElementName().equals(srcRoot)){
+              getPath(root).equals(srcRoot)){
             roots.add(root);
             break;
           }
@@ -143,7 +143,7 @@ public class NewCommand
       if (roots.size() > 1){
         ArrayList<String> srcRoots = new ArrayList<String>();
         for (IPackageFragmentRoot root : roots){
-          srcRoots.add(root.getElementName());
+          srcRoots.add(getPath(root));
         }
         return srcRoots;
       }
@@ -195,5 +195,11 @@ public class NewCommand
     }
 
     return type;
+  }
+
+  private String getPath(IPackageFragmentRoot root)
+    throws Exception
+  {
+    return root.getRawClasspathEntry().getPath().toString();
   }
 }
