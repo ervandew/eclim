@@ -78,8 +78,11 @@ class CodeCompleteCommand
       // for short desc, shorten all fully qualified Types to just the type.
       val shortDescription = description.replaceAll(
           "[a-zA-Z]\\w*[\\w.]*\\.(\\w+[^.])", "$1")
-      completion = if (proposal.paramTypes.head.size > 0)
-        completion + "(" else completion
+      // if the proposal accepts arguments, then add an opening paren to the
+      // completion string.
+      if (proposal.paramTypes.size > 0 && proposal.paramTypes.head.size > 0){
+        completion += "("
+      }
       results += new CodeCompleteResult(
         completion, shortDescription, description)
     }
