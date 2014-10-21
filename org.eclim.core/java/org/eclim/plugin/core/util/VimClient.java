@@ -59,10 +59,11 @@ public class VimClient
     };
 
     if (logger.isDebugEnabled()) {
-      logger.debug("VIM command: " + Arrays.asList(cmd));
+      logger.info("VIM command: " + Arrays.asList(cmd));
     }
 
-    CommandExecutor.execute(cmd, TIMEOUT);
+    CommandExecutor ex = CommandExecutor.execute(cmd, TIMEOUT);
+    logger.info("out={}:{}:{}", ex.getReturnCode(), ex.getResult(), ex.getErrorMessage());
   }
 
   public void remoteFunctionCall(String function, String... args)

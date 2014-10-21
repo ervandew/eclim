@@ -33,15 +33,25 @@ import org.eclim.logging.Logger;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.util.ProjectUtils;
+import org.eclim.plugin.core.util.VimClient;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
+import org.eclipse.core.runtime.jobs.Job;
+
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.IStreamListener;
+
+import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.debug.core.model.IStreamMonitor;
 
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.IDebugUIConstants;
@@ -56,6 +66,7 @@ import org.eclipse.debug.ui.ILaunchGroup;
   name = "project_run",
   options =
     "OPTIONAL p project ARG," +
+    "OPTIONAL v vim_instance_name ARG," + // not required for List
     "OPTIONAL l list NOARG," +
     "OPTIONAL d debug NOARG," +
     "OPTIONAL n name ARG"
@@ -74,6 +85,7 @@ public class ProjectRunCommand
     final boolean list = commandLine.hasOption(Options.LIST_OPTION);
     final String configName = commandLine.getValue(Options.NAME_OPTION);
     final String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    final String vimInstanceId = commandLine.getValue(Options.VIM_INSTANCE_OPTION);
     final String group;
     if (commandLine.hasOption(Options.DEBUG_OPTION)) {
       group = IDebugUIConstants.ID_DEBUG_LAUNCH_GROUP;
@@ -133,76 +145,47 @@ public class ProjectRunCommand
     final ILaunchConfiguration chosen;
     if (configName != null) {
       chosen = findConfiguration(projectConfigs, configName);
-    } else {
+    } else if (!projectConfigs.isEmpty()) {
       // just get the first
       chosen = projectConfigs.get(0);
+    } else {
+      return Services.getMessage("project.execute.noconfig", projectName);
     }
 
     if (chosen == null) {
       return Services.getMessage("project.execute.invalid", projectName);
     }
 
-    // Without this, buildAndLaunch throws NPE;
-    //  perhaps we could dump the output like the :JUnit command?
-    final IProgressMonitor monitor = new IProgressMonitor() {
+    // prepare the progress monitor
+    final String completionMessage = chosen.getName().equals(projectName) ?
+      Services.getMessage("project.executed.exact", projectName) :
+      Services.getMessage("project.executed", chosen.getName(), projectName);
 
-        @Override
-        public void beginTask(String name, int totalWork)
-        {
-            logger.info("Begin: " + name + " / " + totalWork);
-        }
-
-        @Override
-        public void done()
-        {
-            logger.info("Done!");
-        }
-
-        @Override
-        public void internalWorked(double work)
-        {
-            logger.info("Internal..." + work);
-        }
-
-        @Override
-        public boolean isCanceled()
-        {
-            return false;
-        }
-
-        @Override
-        public void setCanceled(boolean value)
-        {
-            logger.info("Cancel!" + value);
-        }
-
-        @Override
-        public void setTaskName(String name)
-        {
-            logger.info("Now called: " + name);
-        }
-
-        @Override
-        public void subTask(String name)
-        {
-            logger.info("subtask: " + name);
-        }
-
-        @Override
-        public void worked(int work)
-        {
-            logger.info("worked... " + work);
-        }
-    };
-
-    logger.info("Launching: " + chosen + " in mode: " + mode);
-    ILaunch launch = DebugUITools.buildAndLaunch(chosen, "run", monitor);
-    logger.info("Launched: " + launch);
-
-    if (chosen.getName().equals(projectName)) {
-      return Services.getMessage("project.executed.exact", projectName);
+    final IProgressMonitor monitor;
+    final OutputHandler handler;
+    final boolean hasVim = vimInstanceId != null && !"".equals(vimInstanceId);
+    if (hasVim) {
+      monitor = new VimUpdatingProgressMonitor(completionMessage, vimInstanceId);
+      handler = new VimOutputHandler(vimInstanceId);
     } else {
-      return Services.getMessage("project.executed", chosen.getName(), projectName);
+      monitor = new NullUpdatingProgressMonitor(completionMessage);
+      handler = new NullOutputHandler();
+    }
+
+    final LaunchJob launchJob = new LaunchJob(chosen, monitor, handler);
+    if (!(monitor instanceof NullUpdatingProgressMonitor)) {
+      // launch after a short delay; this is required
+      //  so vim isn't blocked waiting on the result
+      launchJob.schedule();
+      return null;
+    } else {
+      // just run interactively; there's no progress to post
+      try {
+        launchJob.run(null);
+        return completionMessage;
+      } catch (Exception e) {
+        return Services.getMessage("project.executed.asyncfail", projectName);
+      }
     }
   }
 
@@ -245,5 +228,267 @@ public class ProjectRunCommand
     }
 
     return resources[0].getProject();
+  }
+
+  abstract static class UpdatingProgressMonitor implements IProgressMonitor
+  {
+
+    final String completionMessage;
+    double totalProgress = 0.0;
+    String baseTask;
+    String currentTask;
+
+    public UpdatingProgressMonitor(final String completionMessage) {
+      this.completionMessage = completionMessage;
+    }
+
+    @Override
+    public void beginTask(String name, int totalWork)
+    {
+        logger.info("Begin: " + name + " / " + totalWork);
+        baseTask = name;
+        currentTask = baseTask;
+    }
+
+    @Override
+    public void done()
+    {
+      totalProgress = 1;
+
+      try {
+        sendMessage(completionMessage);
+      } catch (Exception e) {
+        logger.error("Couldn't send message", e);
+      }
+    }
+
+    @Override
+    public void internalWorked(double work)
+    {
+        logger.info("Internal..." + work);
+        totalProgress += work;
+        sendProgress();
+    }
+
+    @Override
+    public boolean isCanceled()
+    {
+        return false;
+    }
+
+    @Override
+    public void setCanceled(boolean value)
+    {
+      // nop
+    }
+
+    @Override
+    public void setTaskName(String name)
+    {
+      // nop
+    }
+
+    @Override
+    public void subTask(String name)
+    {
+      if (name == null || "".equals(name))
+        return; // don't bother
+
+      logger.info("subtask: " + name);
+      if (baseTask != null && !"".equals(baseTask)) {
+        currentTask = baseTask + " - " + name;
+      } else {
+        currentTask = name;
+      }
+
+      sendProgress();
+    }
+
+    @Override
+    public void worked(int work)
+    {
+      // nop
+    }
+
+    void sendProgress()
+    {
+      try {
+        sendProgress(Math.min(1, totalProgress), currentTask);
+      } catch (final Exception e) {
+        // no worries
+        logger.error("Couldn't send progress", e);
+      }
+    }
+
+    public abstract void sendMessage(String message)
+      throws Exception;
+
+    public abstract void sendProgress(double percent, String label)
+      throws Exception;
+  }
+
+  static class NullUpdatingProgressMonitor extends UpdatingProgressMonitor
+  {
+
+    NullUpdatingProgressMonitor(final String completionMessage)
+    {
+      super(completionMessage);
+    }
+
+    @Override
+    public void sendMessage(String message)
+    {
+      logger.info("Message: {}", message);
+    }
+
+    @Override
+    public void sendProgress(double percent, String label)
+    {
+      logger.info("Progress({}): {}", percent, label);
+    }
+
+  }
+
+  static class VimUpdatingProgressMonitor extends UpdatingProgressMonitor
+  {
+
+    final VimClient client;
+
+    public VimUpdatingProgressMonitor(final String completionMessage, final String vimInstanceId)
+    {
+      super(completionMessage);
+      client = new VimClient(vimInstanceId);
+    }
+
+    @Override
+    public void sendMessage(String message)
+      throws Exception
+    {
+      client.remoteFunctionCall("eclim#util#Echo", message);
+    }
+
+    @Override
+    public void sendProgress(final double percent, final String label)
+      throws Exception
+    {
+      client.remoteFunctionCall("eclim#project#run#onLaunchProgress",
+          String.valueOf(percent), label);
+    }
+
+  }
+
+  interface OutputHandler
+  {
+    public void prepare()
+      throws Exception;
+    public void sendErr(String line);
+    public void sendOut(String line);
+  }
+
+  static class NullOutputHandler implements OutputHandler
+  {
+    @Override public void prepare()
+      throws Exception
+    {
+      throw new Exception("Output not handled");
+    }
+    @Override public void sendErr(String line) {}
+    @Override public void sendOut(String line) {}
+  }
+
+  static class VimOutputHandler implements OutputHandler
+  {
+    final VimClient client;
+
+    public VimOutputHandler(String vimInstanceId)
+    {
+      this.client = new VimClient(vimInstanceId);
+    }
+
+    public void prepare()
+      throws Exception
+    {
+      // TODO prepare buffer and fetch bufno
+      throw new Exception("Vim async output not yet supported");
+    }
+
+    public void sendErr(String line)
+    {
+      // TODO
+    }
+    public void sendOut(String line)
+    {
+      // TODO
+    }
+  }
+
+  static class LaunchJob extends Job {
+    final ILaunchConfiguration config;
+    final IProgressMonitor monitor;
+    final OutputHandler output;
+
+    public LaunchJob(ILaunchConfiguration config, IProgressMonitor monitor,
+        OutputHandler output) {
+      super("Eclim Launch");
+
+      this.config = config;
+      this.monitor = monitor;
+      this.output = output;
+    }
+
+    @Override
+    public IStatus run(IProgressMonitor ignore) {
+      logger.info("Launching: " + config);
+      try {
+        ILaunch launch = DebugUITools.buildAndLaunch(config, "run", monitor);
+        logger.info("Launched: " + launch);
+        if (launch != null) {
+          handleLaunch(launch);
+        }
+      } catch (Exception e) {
+        logger.error("Couldn't launch", e);
+      }
+      return Status.OK_STATUS;
+    }
+
+    void handleLaunch(final ILaunch launch) {
+      IProcess[] procs = launch.getProcesses();
+      if (procs == null || procs.length == 0) {
+        // we're done here
+        return;
+      }
+
+      // procs remaining; prepare the output
+      try {
+        output.prepare();
+      } catch (final Exception e) {
+        logger.error("OutputHandler does not support async output", e);
+        try {
+          launch.terminate();
+        } catch (final DebugException e2) {
+          // no worries
+        }
+        return;
+      }
+
+      procs[0].getStreamsProxy().getErrorStreamMonitor().addListener(
+        new IStreamListener() {
+
+          @Override
+          public void streamAppended(String text, IStreamMonitor monitor) {
+            output.sendErr(text);
+          }
+        });
+
+      procs[0].getStreamsProxy().getOutputStreamMonitor().addListener(
+        new IStreamListener() {
+
+          @Override
+          public void streamAppended(String text, IStreamMonitor monitor) {
+            output.sendOut(text);
+          }
+        });
+
+    }
   }
 }
