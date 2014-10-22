@@ -29,11 +29,79 @@ let s:command_project_run_config = '-command project_run -p "<project>" ' .
 let s:command_project_run_list = '-command project_run -p "<project>" -l'
 " }}}
 
+" Python functions {{{
+  " Requiring python is gross, but it's the only way to append to
+  "  a buffer that isn't visible, and that is surely required
+function! s:append(bufno, line) " {{{
+  if !has('python')
+    return
+  endif
+
+  file "append"
+
+  let bufnr = a:bufno
+  let lines = split(a:line, '\r', 1)
+  py vim.current.buffer.vars['apo1'] = "YES "
+py << PYEOF
+import vim
+bufnr = vim.eval('bufnr')
+vim.current.buffer.vars['bufnr'] = "YES " + int(bufnr)
+buf = vim.buffers[int(bufnr)]
+if buf:
+  vim.current.buffer.vars['howdy'] = buf.name
+  lines = vim.eval('lines')
+  vim.current.buffer.vars['howdy1'] = "YES"
+
+  buf.options['readonly'] = False
+  buf.options['modifiable'] = True
+  vim.current.buffer.vars['howdy2'] = "YES"
+  buf.append(lines)
+  vim.current.buffer.vars['howdy3'] = "YES"
+  buf.options['readonly'] = True
+  buf.options['modifiable'] = False
+
+  # find windows for this buffer
+  for tab in vim.tabpages:
+    for win in tab.windows:
+      if win.buffer == buf:
+        # scroll to bottom
+        win.cursor = [len(buf), 1]
+else:
+  vim.current.buffer.vars['fail'] = "yup"
+  vim.current.buffer.vars['hllo'] = bufnr
+  print bufnr
+PYEOF
+endfunction " }}}
+
+function! s:onTerminated(bufno) " {{{
+  if !has('python')
+    return
+  endif
+
+  call s:append(a:bufno, "<terminated>")
+
+  " rename the buffer
+  let bufnr = a:bufno
+py << PYEOF
+import vim
+bufnr = vim.eval('bufnr')
+buf = vim.buffers[bufnr]
+if buf is not None:
+  buf.name = "[TERMINATED %s]" % buf.vars['launch_id']
+PYEOF
+endfunction " }}}
+" }}}
+
 function! eclim#project#run#ProjectRun(...) " {{{
   " Option args:
   "   config: The name of the configuration to run for the current project
   
   if !eclim#EclimAvailable()
+    return
+  endif
+
+  if !has('python')
+    eclim#util#EchoError("Python support is required for :ProjectRun")
     return
   endif
 
@@ -112,13 +180,7 @@ function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
   let current = winnr()
   call eclim#util#TempWindow('[' . a:launchId . ' Output]', [])
   let no = bufnr('%')
-  let b:pending = []
   let b:launch_id = a:launchId
-
-  augroup eclim_project_output
-    autocmd! BufEnter <buffer> 
-    call s:onBufferReturn()
-  augroup END
 
   exe current . "winc w"
   redraw!
@@ -126,64 +188,19 @@ function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
 endfunction " }}}
 
 function! eclim#project#run#onOutput(bufNo, type, line) " {{{
-  let current = winnr()
-
   " TODO fancier?
   let fullLine = a:type . "> " . a:line 
 
-  let bufNr = str2nr(a:bufNo)
-  let winnr = bufwinnr(bufNr)
-  if -1 == winnr
-    " save for later
-    let pending = getbufvar(bufNr, "pending")
+  call eclim#util#Echo("On output " . has('python'))
+
+  if has('python')
     if "terminated" == a:type
-      call add(pending, "<terminated>")
+      call s:onTerminated(a:bufNo)
     else
-      call add(pending, fullLine)
-    endif
-  else 
-    exe winnr . "winc w"
-    if "terminated" == a:type
-      call s:onTerminated()
-    else
-      call s:append(fullLine)
+      call s:append(a:bufNo, fullLine)
     endif
   endif
 
-  " pop back
-  exe current . "winc w"
-
-endfunction " }}}
-
-function! s:onBufferReturn() " {{{
-  for line in b:pending
-    if line == "<terminated>"
-      call s:onTerminated()
-    else
-      call s:append(line)
-    endif
-  endfor
-
-  let b:pending = []
-endfunction " }}}
-
-function! s:append(line) " {{{
-  setlocal modifiable
-  setlocal noreadonly
-
-  let lines = split(a:line, '\r', 1)
-  call append(line('$'), lines)
-  norm G
-
-  setlocal nomodifiable
-  setlocal readonly
-endfunction " }}}
-
-function! s:onTerminated() " {{{
-  call s:append("<terminated>")
-
-  " rename the buffer
-  exe "silent file [TERMINATED " . b:launch_id . "]"
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
