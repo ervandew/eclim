@@ -108,11 +108,12 @@ function! eclim#project#run#onLaunchProgress(percent, label) " {{{
   call eclim#util#Echo(output)
 endfunction " }}}
 
-function! eclim#project#run#onPrepareOutput(configName) " {{{
+function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
   let current = winnr()
-  call eclim#util#TempWindow('[' . a:configName . ' Output]', [])
+  call eclim#util#TempWindow('[' . a:launchId . ' Output]', [])
   let no = bufnr('%')
   let b:pending = []
+  let b:launch_id = a:launchId
 
   augroup eclim_project_output
     autocmd! BufEnter <buffer> 
@@ -135,10 +136,18 @@ function! eclim#project#run#onOutput(bufNo, type, line) " {{{
   if -1 == winnr
     " save for later
     let pending = getbufvar(bufNr, "pending")
-    call add(pending, fullLine)
+    if "terminated" == a:type
+      call add(pending, "<terminated>")
+    else
+      call add(pending, fullLine)
+    endif
   else 
     exe winnr . "winc w"
-    call s:append(fullLine)
+    if "terminated" == a:type
+      call s:onTerminated()
+    else
+      call s:append(fullLine)
+    endif
   endif
 
   " pop back
@@ -148,7 +157,11 @@ endfunction " }}}
 
 function! s:onBufferReturn() " {{{
   for line in b:pending
-    call s:append(line)
+    if line == "<terminated>"
+      call s:onTerminated()
+    else
+      call s:append(line)
+    endif
   endfor
 
   let b:pending = []
@@ -166,7 +179,11 @@ function! s:append(line) " {{{
   setlocal readonly
 endfunction " }}}
 
+function! s:onTerminated() " {{{
+  call s:append("<terminated>")
 
-
+  " rename the buffer
+  exe "silent file [TERMINATED " . b:launch_id . "]"
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker

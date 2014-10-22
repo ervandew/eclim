@@ -32,6 +32,8 @@ import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.command.project.EclimLaunchManager.OutputHandler;
+
 import org.eclim.plugin.core.util.ProjectUtils;
 import org.eclim.plugin.core.util.VimClient;
 
@@ -44,14 +46,9 @@ import org.eclipse.core.runtime.Status;
 
 import org.eclipse.core.runtime.jobs.Job;
 
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.IStreamListener;
-
-import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.debug.core.model.IStreamMonitor;
 
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.IDebugUIConstants;
@@ -377,23 +374,17 @@ public class ProjectRunCommand
 
   }
 
-  interface OutputHandler
-  {
-    public void prepare()
-      throws Exception;
-    public void sendErr(String line);
-    public void sendOut(String line);
-  }
-
   static class NullOutputHandler implements OutputHandler
   {
-    @Override public void prepare()
+    @Override public void prepare(String launchId)
       throws Exception
     {
       throw new Exception("Output not handled");
     }
+
     @Override public void sendErr(String line) {}
     @Override public void sendOut(String line) {}
+    @Override public void sendTerminated() {}
   }
 
   static class VimOutputHandler implements OutputHandler
@@ -409,20 +400,29 @@ public class ProjectRunCommand
       this.configName = configName;
     }
 
-    public void prepare()
+    public void prepare(String launchId)
       throws Exception
     {
-      bufNo = client.remoteFunctionExpr("eclim#project#run#onPrepareOutput", configName).trim();
+      bufNo = client.remoteFunctionExpr("eclim#project#run#onPrepareOutput", 
+          configName, launchId).trim();
     }
 
+    @Override
     public void sendErr(String line)
     {
       sendLine("err", line);
     }
 
+    @Override
     public void sendOut(String line)
     {
       sendLine("out", line);
+    }
+
+    @Override
+    public void sendTerminated()
+    {
+      sendLine("terminated", "");
     }
 
     void sendLine(String type, String line) {
@@ -460,52 +460,12 @@ public class ProjectRunCommand
         ILaunch launch = DebugUITools.buildAndLaunch(config, "run", monitor);
         logger.info("Launched: " + launch);
         if (launch != null) {
-          handleLaunch(launch);
+          EclimLaunchManager.manage(launch, output);
         }
       } catch (Exception e) {
         logger.error("Couldn't launch", e);
       }
       return Status.OK_STATUS;
-    }
-
-    void handleLaunch(final ILaunch launch) {
-      IProcess[] procs = launch.getProcesses();
-      if (procs == null || procs.length == 0) {
-        // we're done here
-        return;
-      }
-
-      // procs remaining; prepare the output
-      try {
-        output.prepare();
-      } catch (final Exception e) {
-        logger.error("OutputHandler does not support async output", e);
-        try {
-          launch.terminate();
-        } catch (final DebugException e2) {
-          // no worries
-        }
-        return;
-      }
-
-      procs[0].getStreamsProxy().getErrorStreamMonitor().addListener(
-        new IStreamListener() {
-
-          @Override
-          public void streamAppended(String text, IStreamMonitor monitor) {
-            output.sendErr(text);
-          }
-        });
-
-      procs[0].getStreamsProxy().getOutputStreamMonitor().addListener(
-        new IStreamListener() {
-
-          @Override
-          public void streamAppended(String text, IStreamMonitor monitor) {
-            output.sendOut(text);
-          }
-        });
-
     }
   }
 }
