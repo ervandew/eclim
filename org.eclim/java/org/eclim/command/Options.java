@@ -104,6 +104,7 @@ public class Options
   public static final String VARIABLE_VALUE_ID_OPTION = "v";
   public static final String VERSION_OPTION = "v";
   public static final String VIM_INSTANCE_OPTION = "v";
+  public static final String VIM_EXECUTABLE_OPTION = "x";
 
   private static final String ANY = "ANY";
   private static final String ARG = "ARG";

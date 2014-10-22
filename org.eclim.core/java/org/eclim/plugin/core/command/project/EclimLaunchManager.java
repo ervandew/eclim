@@ -29,7 +29,8 @@ import org.eclipse.debug.core.model.IStreamMonitor;
 /**
  * Manages Launches started by ProjectRunCommand
  */
-public class EclimLaunchManager implements Runnable {
+public class EclimLaunchManager implements Runnable
+{
   private static final Logger logger =
     Logger.getLogger(EclimLaunchManager.class);
 
@@ -42,12 +43,14 @@ public class EclimLaunchManager implements Runnable {
     public void sendTerminated();
   }
 
-  static class LaunchSet {
+  static class LaunchSet
+  {
     final String id;
     final ILaunch launch;
     final OutputHandler output;
 
-    LaunchSet(String id, ILaunch launch, OutputHandler output) {
+    LaunchSet(String id, ILaunch launch, OutputHandler output)
+    {
       this.id = id;
       this.launch = launch;
       this.output = output;
@@ -58,7 +61,8 @@ public class EclimLaunchManager implements Runnable {
   static Thread thread;
 
   @Override
-  public void run() {
+  public void run()
+  {
     for (;;) {
       try {
         Thread.sleep(500);
@@ -72,12 +76,14 @@ public class EclimLaunchManager implements Runnable {
     }
   }
 
-  static synchronized void cleanLaunches() {
+  static synchronized void cleanLaunches()
+  {
     Iterator<LaunchSet> iter = sLaunches.values().iterator();
     while (iter.hasNext()) {
       final LaunchSet set = iter.next();
-      if (set == null)
+      if (set == null) {
         continue;
+      }
 
       if (set.launch.isTerminated()) {
         iter.remove();
@@ -86,7 +92,8 @@ public class EclimLaunchManager implements Runnable {
     }
   }
 
-  public static synchronized void manage(final ILaunch launch, final OutputHandler output)
+  public static synchronized void manage(final ILaunch launch,
+      final OutputHandler output)
   {
     final IProcess[] procs = launch.getProcesses();
     if (procs == null || procs.length == 0) {
@@ -110,16 +117,20 @@ public class EclimLaunchManager implements Runnable {
       return;
     }
 
-    IStreamListener errListener = new IStreamListener() {
+    IStreamListener errListener = new IStreamListener()
+    {
       @Override
-      public void streamAppended(String text, IStreamMonitor monitor) {
+      public void streamAppended(String text, IStreamMonitor monitor)
+      {
         output.sendErr(text);
       }
     };
 
-    IStreamListener outListener = new IStreamListener() {
+    IStreamListener outListener = new IStreamListener()
+    {
       @Override
-      public void streamAppended(String text, IStreamMonitor monitor) {
+      public void streamAppended(String text, IStreamMonitor monitor)
+      {
         output.sendOut(text);
       }
     };
@@ -157,7 +168,8 @@ public class EclimLaunchManager implements Runnable {
     return id;
   }
 
-  static synchronized void remove(String id) {
+  static synchronized void remove(String id)
+  {
     sLaunches.remove(id);
   }
 }

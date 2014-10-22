@@ -23,9 +23,9 @@
 
 " Script Variables {{{
 let s:command_project_run = '-command project_run -p "<project>" ' .
-  \ '-v "<vim_servername>"'
+  \ '-x "<vim_executable>" -v "<vim_servername>"'
 let s:command_project_run_config = '-command project_run -p "<project>" ' .
-  \ '-n "<config>" -v "<vim_servername>"'
+  \ '-n "<config>" -x "<vim_executable>" -v "<vim_servername>"'
 let s:command_project_run_list = '-command project_run -p "<project>" -l'
 " }}}
 
@@ -115,8 +115,8 @@ function! eclim#project#run#ProjectRun(...) " {{{
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<config>', config, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
-  let result = eclim#Execute(command, {'project': project})
-  " call eclim#util#Echo(result)
+  let command = substitute(command, '<vim_executable>', exepath(v:progpath), '')
+  call eclim#Execute(command, {'project': project})
 endfunction " }}}
 
 function! eclim#project#run#ProjectRunList() " {{{

@@ -64,6 +64,7 @@ import org.eclipse.debug.ui.ILaunchGroup;
   options =
     "OPTIONAL p project ARG," +
     "OPTIONAL v vim_instance_name ARG," + // not required for List
+    "OPTIONAL x vim_executable ARG," + // not required for List
     "OPTIONAL l list NOARG," +
     "OPTIONAL d debug NOARG," +
     "OPTIONAL n name ARG"
@@ -83,6 +84,7 @@ public class ProjectRunCommand
     final String configName = commandLine.getValue(Options.NAME_OPTION);
     final String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     final String vimInstanceId = commandLine.getValue(Options.VIM_INSTANCE_OPTION);
+    final String vimExecutable = commandLine.getValue(Options.VIM_EXECUTABLE_OPTION);
     final String group;
     if (commandLine.hasOption(Options.DEBUG_OPTION)) {
       group = IDebugUIConstants.ID_DEBUG_LAUNCH_GROUP;
@@ -162,8 +164,9 @@ public class ProjectRunCommand
     final OutputHandler handler;
     final boolean hasVim = vimInstanceId != null && !"".equals(vimInstanceId);
     if (hasVim) {
-      monitor = new VimUpdatingProgressMonitor(completionMessage, vimInstanceId);
-      handler = new VimOutputHandler(vimInstanceId, chosen.getName());
+      final VimClient client = new VimClient(vimExecutable, vimInstanceId);
+      monitor = new VimUpdatingProgressMonitor(client, completionMessage);
+      handler = new VimOutputHandler(client, chosen.getName());
     } else {
       monitor = new NullUpdatingProgressMonitor(completionMessage);
       handler = new NullOutputHandler();
@@ -178,7 +181,11 @@ public class ProjectRunCommand
     } else {
       // just run interactively; there's no progress to post
       try {
-        launchJob.run(null);
+        IStatus status = launchJob.run(null);
+        if (status.getSeverity() != IStatus.OK) {
+          return Services.getMessage("project.executed.asyncfail", projectName);
+        }
+
         return completionMessage;
       } catch (Exception e) {
         return Services.getMessage("project.executed.asyncfail", projectName);
@@ -235,7 +242,8 @@ public class ProjectRunCommand
     String baseTask;
     String currentTask;
 
-    public UpdatingProgressMonitor(final String completionMessage) {
+    public UpdatingProgressMonitor(final String completionMessage)
+    {
       this.completionMessage = completionMessage;
     }
 
@@ -288,8 +296,9 @@ public class ProjectRunCommand
     @Override
     public void subTask(String name)
     {
-      if (name == null || "".equals(name))
+      if (name == null || "".equals(name)) {
         return; // don't bother
+      }
 
       logger.info("subtask: " + name);
       if (baseTask != null && !"".equals(baseTask)) {
@@ -351,10 +360,11 @@ public class ProjectRunCommand
 
     final VimClient client;
 
-    public VimUpdatingProgressMonitor(final String completionMessage, final String vimInstanceId)
+    public VimUpdatingProgressMonitor(final VimClient client,
+        final String completionMessage)
     {
       super(completionMessage);
-      client = new VimClient(vimInstanceId);
+      this.client = client;
     }
 
     @Override
@@ -394,16 +404,16 @@ public class ProjectRunCommand
 
     String bufNo;
 
-    public VimOutputHandler(String vimInstanceId, String configName)
+    public VimOutputHandler(VimClient client, String configName)
     {
-      this.client = new VimClient(vimInstanceId);
+      this.client = client;
       this.configName = configName;
     }
 
     public void prepare(String launchId)
       throws Exception
     {
-      bufNo = client.remoteFunctionExpr("eclim#project#run#onPrepareOutput", 
+      bufNo = client.remoteFunctionExpr("eclim#project#run#onPrepareOutput",
           configName, launchId).trim();
     }
 
@@ -425,7 +435,8 @@ public class ProjectRunCommand
       sendLine("terminated", "");
     }
 
-    void sendLine(String type, String line) {
+    void sendLine(String type, String line)
+    {
       try {
         final String clean = line.trim()
           .replaceAll("\n", "\\\\r")
@@ -439,13 +450,15 @@ public class ProjectRunCommand
     }
   }
 
-  static class LaunchJob extends Job {
+  static class LaunchJob extends Job
+  {
     final ILaunchConfiguration config;
     final IProgressMonitor monitor;
     final OutputHandler output;
 
     public LaunchJob(ILaunchConfiguration config, IProgressMonitor monitor,
-        OutputHandler output) {
+        final OutputHandler output)
+    {
       super("Eclim Launch");
 
       this.config = config;
@@ -454,7 +467,8 @@ public class ProjectRunCommand
     }
 
     @Override
-    public IStatus run(IProgressMonitor ignore) {
+    public IStatus run(IProgressMonitor ignore)
+    {
       logger.info("Launching: " + config);
       try {
         ILaunch launch = DebugUITools.buildAndLaunch(config, "run", monitor);
@@ -464,6 +478,7 @@ public class ProjectRunCommand
         }
       } catch (Exception e) {
         logger.error("Couldn't launch", e);
+        return new Status(Status.ERROR, "", "Unable to launch", e);
       }
       return Status.OK_STATUS;
     }

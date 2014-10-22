@@ -36,13 +36,24 @@ public class VimClient
   private static final long TIMEOUT_INPUT = 200;
 
   /**
+   * Executable to use to send commands
+   */
+  private final String executable;
+
+  /**
    * VIM server instance to connect to send commands.
    */
   private final String instanceId;
 
   public VimClient(String instanceId)
   {
+    this("vim", instanceId);
+  }
+
+  public VimClient(String executable, String instanceId)
+  {
     this.instanceId = instanceId;
+    this.executable = executable;
   }
 
   public String getId()
@@ -56,11 +67,11 @@ public class VimClient
     // redraw at end to prevent "ENTER to continue"
     //  for long commands
     String[] cmd = {
-      "vim",
+      executable,
       "--servername",
       instanceId,
       "--remote-send",
-      arg + "<CR> | redraw!", 
+      arg + "<CR> | redraw!",
     };
 
     if (logger.isDebugEnabled()) {
@@ -74,7 +85,7 @@ public class VimClient
     throws Exception
   {
     String[] cmd = {
-      "vim",
+      executable,
       "--servername",
       instanceId,
       "--remote-expr",
