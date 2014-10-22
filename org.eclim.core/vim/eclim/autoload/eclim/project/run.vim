@@ -108,4 +108,65 @@ function! eclim#project#run#onLaunchProgress(percent, label) " {{{
   call eclim#util#Echo(output)
 endfunction " }}}
 
+function! eclim#project#run#onPrepareOutput(configName) " {{{
+  let current = winnr()
+  call eclim#util#TempWindow('[' . a:configName . ' Output]', [])
+  let no = bufnr('%')
+  let b:pending = []
+
+  augroup eclim_project_output
+    autocmd! BufEnter <buffer> 
+    call s:onBufferReturn()
+  augroup END
+
+  exe current . "winc w"
+  redraw!
+  return no
+endfunction " }}}
+
+function! eclim#project#run#onOutput(bufNo, type, line) " {{{
+  let current = winnr()
+
+  " TODO fancier?
+  let fullLine = a:type . "> " . a:line 
+
+  let bufNr = str2nr(a:bufNo)
+  let winnr = bufwinnr(bufNr)
+  if -1 == winnr
+    " save for later
+    let pending = getbufvar(bufNr, "pending")
+    call add(pending, fullLine)
+  else 
+    exe winnr . "winc w"
+    call s:append(fullLine)
+  endif
+
+  " pop back
+  exe current . "winc w"
+
+endfunction " }}}
+
+function! s:onBufferReturn() " {{{
+  for line in b:pending
+    call s:append(line)
+  endfor
+
+  let b:pending = []
+endfunction " }}}
+
+function! s:append(line) " {{{
+  setlocal modifiable
+  setlocal noreadonly
+
+  let lines = split(a:line, '\r', 1)
+  call append(line('$'), lines)
+  norm G
+
+  setlocal nomodifiable
+  setlocal readonly
+endfunction " }}}
+
+
+
+
 " vim:ft=vim:fdm=marker

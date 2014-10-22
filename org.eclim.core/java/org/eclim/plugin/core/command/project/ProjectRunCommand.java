@@ -166,7 +166,7 @@ public class ProjectRunCommand
     final boolean hasVim = vimInstanceId != null && !"".equals(vimInstanceId);
     if (hasVim) {
       monitor = new VimUpdatingProgressMonitor(completionMessage, vimInstanceId);
-      handler = new VimOutputHandler(vimInstanceId);
+      handler = new VimOutputHandler(vimInstanceId, chosen.getName());
     } else {
       monitor = new NullUpdatingProgressMonitor(completionMessage);
       handler = new NullOutputHandler();
@@ -364,14 +364,14 @@ public class ProjectRunCommand
     public void sendMessage(String message)
       throws Exception
     {
-      client.remoteFunctionCall("eclim#util#Echo", message);
+      client.remoteFunctionExpr("eclim#util#Echo", message);
     }
 
     @Override
     public void sendProgress(final double percent, final String label)
       throws Exception
     {
-      client.remoteFunctionCall("eclim#project#run#onLaunchProgress",
+      client.remoteFunctionExpr("eclim#project#run#onLaunchProgress",
           String.valueOf(percent), label);
     }
 
@@ -399,26 +399,43 @@ public class ProjectRunCommand
   static class VimOutputHandler implements OutputHandler
   {
     final VimClient client;
+    final String configName;
 
-    public VimOutputHandler(String vimInstanceId)
+    String bufNo;
+
+    public VimOutputHandler(String vimInstanceId, String configName)
     {
       this.client = new VimClient(vimInstanceId);
+      this.configName = configName;
     }
 
     public void prepare()
       throws Exception
     {
-      // TODO prepare buffer and fetch bufno
-      throw new Exception("Vim async output not yet supported");
+      bufNo = client.remoteFunctionExpr("eclim#project#run#onPrepareOutput", configName).trim();
     }
 
     public void sendErr(String line)
     {
-      // TODO
+      sendLine("err", line);
     }
+
     public void sendOut(String line)
     {
-      // TODO
+      sendLine("out", line);
+    }
+
+    void sendLine(String type, String line) {
+      try {
+        final String clean = line.trim()
+          .replaceAll("\n", "\\\\r")
+          .replaceAll("\t", "    ");
+
+        // functionExpr is safer, in case they're in input mode
+        client.remoteFunctionExpr("eclim#project#run#onOutput", bufNo, type, clean);
+      } catch (Exception e) {
+        // no worries
+      }
     }
   }
 
