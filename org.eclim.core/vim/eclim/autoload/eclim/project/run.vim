@@ -37,40 +37,32 @@ function! s:append(bufno, line) " {{{
     return
   endif
 
-  file "append"
-
+  " prepare vars so python can pick them up
   let bufnr = a:bufno
   let lines = split(a:line, '\r', 1)
-  py vim.current.buffer.vars['apo1'] = "YES "
+
 py << PYEOF
 import vim
-bufnr = vim.eval('bufnr')
-vim.current.buffer.vars['bufnr'] = "YES " + int(bufnr)
-buf = vim.buffers[int(bufnr)]
+bufnr = int(vim.eval('bufnr')) # NB int() is crucial
+buf = vim.buffers[bufnr]
 if buf:
-  vim.current.buffer.vars['howdy'] = buf.name
   lines = vim.eval('lines')
-  vim.current.buffer.vars['howdy1'] = "YES"
 
   buf.options['readonly'] = False
   buf.options['modifiable'] = True
-  vim.current.buffer.vars['howdy2'] = "YES"
   buf.append(lines)
-  vim.current.buffer.vars['howdy3'] = "YES"
   buf.options['readonly'] = True
   buf.options['modifiable'] = False
 
   # find windows for this buffer
   for tab in vim.tabpages:
     for win in tab.windows:
-      if win.buffer == buf:
+      if win.buffer.number == buf.number:
         # scroll to bottom
         win.cursor = [len(buf), 1]
-else:
-  vim.current.buffer.vars['fail'] = "yup"
-  vim.current.buffer.vars['hllo'] = bufnr
-  print bufnr
 PYEOF
+
+  redraw!
 endfunction " }}}
 
 function! s:onTerminated(bufno) " {{{
@@ -84,11 +76,13 @@ function! s:onTerminated(bufno) " {{{
   let bufnr = a:bufno
 py << PYEOF
 import vim
-bufnr = vim.eval('bufnr')
+bufnr = int(vim.eval('bufnr'))
 buf = vim.buffers[bufnr]
 if buf is not None:
   buf.name = "[TERMINATED %s]" % buf.vars['launch_id']
 PYEOF
+
+  redraw!
 endfunction " }}}
 " }}}
 
