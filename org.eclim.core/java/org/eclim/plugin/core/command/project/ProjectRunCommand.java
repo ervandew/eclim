@@ -67,6 +67,7 @@ import org.eclipse.debug.ui.ILaunchGroup;
     "OPTIONAL x vim_executable ARG," + // not required for List
     "OPTIONAL l list NOARG," +
     "OPTIONAL d debug NOARG," +
+    "OPTIONAL c force NOARG," +
     "OPTIONAL n name ARG"
 )
 public class ProjectRunCommand
@@ -81,6 +82,7 @@ public class ProjectRunCommand
     throws Exception
   {
     final boolean list = commandLine.hasOption(Options.LIST_OPTION);
+    final boolean force = commandLine.hasOption(Options.FORCE_OPTION);
     final String configName = commandLine.getValue(Options.NAME_OPTION);
     final String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     final String vimInstanceId = commandLine.getValue(Options.VIM_INSTANCE_OPTION);
@@ -153,6 +155,11 @@ public class ProjectRunCommand
 
     if (chosen == null) {
       return Services.getMessage("project.execute.invalid", projectName);
+    }
+
+    // do we need to force?
+    if (EclimLaunchManager.isRunning(chosen.getName()) && !force) {
+      EclimLaunchManager.terminate(chosen.getName());
     }
 
     // prepare the progress monitor

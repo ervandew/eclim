@@ -222,7 +222,8 @@ endif
 if !exists(":ProjectRun")
   " TODO I *guess* we could support cross-project and autocomplete
   command -nargs=0 ProjectRunList :call eclim#project#run#ProjectRunList()
-  command -nargs=? ProjectRun :call eclim#project#run#ProjectRun('<args>')
+  command -nargs=? -bang ProjectRun 
+      \ :call eclim#project#run#ProjectRun('<args>', '<bang>')
 endif
 " }}}
 

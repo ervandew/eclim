@@ -61,6 +61,7 @@ public class Options
   public static final String FAMILY_OPTION = "f";
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
+  public static final String FORCE_OPTION = "c"; // 'c' to avoid confusion in cleanup
   public static final String HELP = "help";
   public static final String HALT_OPTION = "h";
   public static final String HOST_OPTION = "h";

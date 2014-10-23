@@ -92,6 +92,11 @@ public class EclimLaunchManager implements Runnable
     }
   }
 
+  public static synchronized boolean isRunning(final String launchId)
+  {
+    return sLaunches.containsKey(launchId);
+  }
+
   public static synchronized boolean terminate(final String launchId)
     throws DebugException
   {

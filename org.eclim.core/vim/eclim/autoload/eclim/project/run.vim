@@ -29,6 +29,7 @@ let s:command_project_run_config = '-command project_run -p "<project>" ' .
 let s:command_project_run_list = '-command project_run -p "<project>" -l'
 let s:command_project_run_terminate = '-command project_run_terminate ' .
   \ '-l "<launch_id>"'
+let s:flag_project_run_force = ' -c'
 " }}}
 
 " Python functions {{{
@@ -114,6 +115,11 @@ function! eclim#project#run#ProjectRun(...) " {{{
   if config != ''
     let command = s:command_project_run_config
   endif
+  
+  let force = a:0 > 1 ? a:2 != "" : 0
+  if force
+    let command = command . s:flag_project_run_force
+  endif
 
   " TODO include warning about --servername?
   call eclim#util#Echo("Running project '" . project . "'...")
@@ -192,7 +198,18 @@ function! eclim#project#run#onLaunchProgress(percent, label) " {{{
 endfunction " }}}
 
 function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
+
   let current = winnr()
+
+  " is there a terminated launch window?
+  " NB missing open bracket is intentional, and
+  "  it returns the wrong buffer if not omitted
+  let terminated = 'TERMINATED ' . a:launchId . ']'
+  let terminatedBuf = bufnr(terminated)
+  if terminatedBuf != -1
+    exe 'bdelete ' . terminatedBuf
+  endif
+
   call eclim#util#TempWindow('[' . a:launchId . ' Output]', [])
   let no = bufnr('%')
   let b:launch_id = a:launchId
