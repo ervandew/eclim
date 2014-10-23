@@ -34,13 +34,14 @@ let s:command_project_run_terminate = '-command project_run_terminate ' .
 " Python functions {{{
   " Requiring python is gross, but it's the only way to append to
   "  a buffer that isn't visible, and that is surely required
-function! s:append(bufno, line) " {{{
+function! s:append(bufno, type, line) " {{{
   if !has('python')
     return
   endif
 
   " prepare vars so python can pick them up
   let bufnr = a:bufno
+  let ltype = a:type
   let lines = split(a:line, '\r', 1)
 
 py << PYEOF
@@ -49,10 +50,12 @@ bufnr = int(vim.eval('bufnr')) # NB int() is crucial
 buf = vim.buffers[bufnr]
 if buf:
   lines = vim.eval('lines')
+  ltype = vim.eval('ltype')
+  prefixed = map(lambda l: "%s>%s" % (ltype, l), lines)
 
   buf.options['readonly'] = False
   buf.options['modifiable'] = True
-  buf.append(lines)
+  buf.append(prefixed)
   buf.options['readonly'] = True
   buf.options['modifiable'] = False
 
@@ -72,7 +75,7 @@ function! s:onTerminated(bufno) " {{{
     return
   endif
 
-  call s:append(a:bufno, "<terminated>")
+  call s:append(a:bufno, "out", "<terminated>")
 
   " rename the buffer
   let bufnr = a:bufno
@@ -202,10 +205,19 @@ function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
     setlocal bufhidden=hide
   endif
 
+  " supply a Terminate command
   exe 'command -nargs=0 -buffer Terminate ' .
         \ ':call eclim#project#run#TerminateLaunch("' .
         \ b:launch_id . '")'
 
+  " beautiful highlighting for error lines vs out> lines
+  syntax region Error matchgroup=Quote start=/err>/ end=/\n/ concealends oneline
+  syntax region Normal matchgroup=Quote start=/out>/ end=/\n/ concealends oneline
+
+  set conceallevel=3
+  set concealcursor=nc
+
+  " pop back and show
   exe current . "winc w"
   redraw!
   return no
@@ -213,15 +225,13 @@ endfunction " }}}
 
 function! eclim#project#run#onOutput(bufNo, type, line) " {{{
   " TODO fancier?
-  let fullLine = a:type . "> " . a:line 
-
   call eclim#util#Echo("On output " . has('python'))
 
   if has('python')
     if "terminated" == a:type
       call s:onTerminated(a:bufNo)
     else
-      call s:append(a:bufNo, fullLine)
+      call s:append(a:bufNo, a:type, a:line)
     endif
   endif
 
