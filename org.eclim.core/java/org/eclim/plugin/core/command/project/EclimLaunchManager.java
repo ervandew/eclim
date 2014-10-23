@@ -92,6 +92,24 @@ public class EclimLaunchManager implements Runnable
     }
   }
 
+  public static synchronized boolean terminate(final String launchId)
+    throws DebugException
+  {
+    LaunchSet set = sLaunches.remove(launchId);
+    if (set == null) {
+      return false;
+    }
+
+    if (set.launch.isTerminated()) {
+      // already terminated... consider success?
+      return true;
+    }
+
+    set.launch.terminate();
+    set.output.sendTerminated();
+    return true;
+  }
+
   public static synchronized void manage(final ILaunch launch,
       final OutputHandler output)
   {

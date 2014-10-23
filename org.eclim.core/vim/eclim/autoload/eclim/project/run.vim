@@ -27,6 +27,8 @@ let s:command_project_run = '-command project_run -p "<project>" ' .
 let s:command_project_run_config = '-command project_run -p "<project>" ' .
   \ '-n "<config>" -x "<vim_executable>" -v "<vim_servername>"'
 let s:command_project_run_list = '-command project_run -p "<project>" -l'
+let s:command_project_run_terminate = '-command project_run_terminate ' .
+  \ '-l "<launch_id>"'
 " }}}
 
 " Python functions {{{
@@ -158,6 +160,22 @@ function! eclim#project#run#ProjectRunList() " {{{
   call eclim#util#Echo(join(output, "\n"))
 endfunction " }}}
 
+function! eclim#project#run#TerminateLaunch(launchId) " {{{
+  if !eclim#EclimAvailable()
+    return
+  endif
+
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+  let project = eclim#project#util#GetCurrentProjectName()
+
+  let command = s:command_project_run_terminate
+  let command = substitute(command, '<launch_id>', a:launchId, '')
+  let result = eclim#Execute(command, {'project': project})
+  call eclim#util#Echo(result)
+endfunction " }}}
+
 function! eclim#project#run#onLaunchProgress(percent, label) " {{{
 
   let totalBars = 10
@@ -175,6 +193,18 @@ function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
   call eclim#util#TempWindow('[' . a:launchId . ' Output]', [])
   let no = bufnr('%')
   let b:launch_id = a:launchId
+
+  if g:EclimTerminateLaunchOnBufferClosed
+    exe 'autocmd BufWipeout <buffer> call eclim#project#run#TerminateLaunch("' .
+          \ b:launch_id . '")'
+  else
+    " need to keep the buffer around, then
+    setlocal bufhidden=hide
+  endif
+
+  exe 'command -nargs=0 -buffer Terminate ' .
+        \ ':call eclim#project#run#TerminateLaunch("' .
+        \ b:launch_id . '")'
 
   exe current . "winc w"
   redraw!

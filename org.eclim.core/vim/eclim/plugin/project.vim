@@ -73,6 +73,12 @@ call eclim#AddVimSetting(
 call eclim#AddVimSetting(
   \ 'Core/Projects', 'g:EclimProjectProblemsQuickFixOpen', 'botright copen',
   \ 'Sets the vim command used to open the :ProjectProblems quickfix window.')
+
+call eclim#AddVimSetting(
+  \ 'Core/Projects', 'g:EclimTerminateLaunchOnBufferClosed', 1,
+  \ 'Automatically terminate a running launch started by :ProjectRun' .
+    \ ' when the buffer is closed by eg :q.',
+  \ '\(0\|1\)')
 " }}}
 
 " Auto Commands {{{
