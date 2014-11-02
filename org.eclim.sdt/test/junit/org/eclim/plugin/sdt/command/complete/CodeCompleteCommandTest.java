@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,16 +61,16 @@ public class CodeCompleteCommandTest
 
     result = results.get(1);
     assertEquals(result.get("completion"), "scalaMethod2(");
-    assertEquals(result.get("menu"), "scalaMethod2(String): Unit");
-    assertEquals(result.get("info"), "scalaMethod2(String): Unit");
+    assertEquals(result.get("menu"), "scalaMethod2(name: String): Unit");
+    assertEquals(result.get("info"), "scalaMethod2(name: String): Unit");
     assertEquals(result.get("type"), "");
 
     result = results.get(2);
     assertEquals(result.get("completion"), "scalaMethod3(");
     assertEquals(result.get("menu"),
-        "scalaMethod3(String, Comparator[String]): Unit");
+        "scalaMethod3(name: String, value: Comparator[String]): Unit");
     assertEquals(result.get("info"),
-        "scalaMethod3(String, java.util.Comparator[String]): Unit");
+        "scalaMethod3(name: String, value: Comparator[String]): Unit");
     assertEquals(result.get("type"), "");
   }
 
@@ -98,16 +98,16 @@ public class CodeCompleteCommandTest
 
     result = results.get(1);
     assertEquals(result.get("completion"), "javaMethod2(");
-    assertEquals(result.get("menu"), "javaMethod2(String): String");
+    assertEquals(result.get("menu"), "javaMethod2(name: String): String");
     assertEquals(result.get("info"),
-        "javaMethod2(String): String");
+        "javaMethod2(name: String): String");
     assertEquals(result.get("type"), "");
 
     result = results.get(2);
     assertEquals(result.get("completion"), "javaMethod3(");
-    assertEquals(result.get("menu"), "javaMethod3(String, Comparator[_]): String");
+    assertEquals(result.get("menu"), "javaMethod3(name: String, value: Comparator[_]): String");
     assertEquals(result.get("info"),
-        "javaMethod3(String, java.util.Comparator[_]): String");
+        "javaMethod3(name: String, value: Comparator[_]): String");
     assertEquals(result.get("type"), "");
   }
 }

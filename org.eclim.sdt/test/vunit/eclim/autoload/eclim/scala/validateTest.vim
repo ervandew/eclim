@@ -21,16 +21,15 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_scala'
 endfunction " }}}
 
-" TestValidate() {{{
-function! TestValidate()
+function! TestValidate() " {{{
   edit! src/eclim/test/src/TestSrc.scala
   call vunit#PeekRedir()
 
+  write
   Validate
   call vunit#PeekRedir()
 
@@ -39,7 +38,7 @@ function! TestValidate()
 
   call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
   call vunit#AssertEquals(9, results[0].lnum, 'Wrong line num.')
-  call vunit#AssertEquals(10, results[0].col, 'Wrong col num.')
+  call vunit#AssertEquals(5, results[0].col, 'Wrong col num.')
   call vunit#AssertEquals(
     \ "value foo is not a member of eclim.test.TestScala",
     \ results[0].text, 'Wrong result.')

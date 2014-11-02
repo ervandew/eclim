@@ -46,7 +46,7 @@ object ScalaUtils
    */
   def refreshSourceFile(src: ScalaSourceFile): ScalaSourceFile = {
     if (src != null){
-      src.scalaProject.presentationCompiler.apply(_.askReload(src, src.getContents))
+      src.initialReconcile
     }
     src
   }

@@ -46,11 +46,13 @@ import org.eclipse.jdt.core.search.TypeNameMatch
 import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
 import org.eclipse.jdt.internal.corext.util.TypeNameMatchCollector
 
+import org.scalaide.core.compiler.IScalaPresentationCompiler.Implicits._
+
 import org.scalaide.core.internal.jdt.model.ScalaSourceFile
 
-import org.scalaide.util.internal.ScalaWordFinder
+import org.scalaide.util.ScalaWordFinder
 
-import org.scalaide.util.internal.eclipse.EditorUtils
+import org.scalaide.util.internal.eclipse.TextEditUtils
 
 /**
  * Command to add an import to a scala source file.
@@ -112,24 +114,25 @@ class ImportCommand
     }else{
       var exception = None : Option[Throwable]
       val oldLength = src.getBuffer.getLength
+
       val changes = src.withSourceFile { (sourceFile, compiler) =>
-         val r = new compiler.Response[compiler.Tree]
-         compiler.askLoadedTyped(sourceFile, r)
-         (r.get match {
-           case Right(error) =>
-             exception = Some(error)
-             None
-           case _ =>
-             compiler.askOption {() =>
-               val refactoring = new AddImportStatement { val global = compiler }
-               refactoring.addImport(src.file, imprt)
-             }
-         }) getOrElse Nil
-      }.getOrElse(List())
+        val r = compiler.askLoadedTyped(sourceFile, false)
+        (r.get match {
+          case Right(error) =>
+            exception = Some(error)
+            None
+          case _ =>
+            compiler.asyncExec {
+              val refactoring = new AddImportStatement { val global = compiler }
+              refactoring.addImport(src.file, imprt)
+            } getOption()
+        }) getOrElse Nil
+      } getOrElse (Nil)
+
       val project = src.getJavaProject.getProject
       val document = ProjectUtils.getDocument(project, file)
       val ifile = ProjectUtils.getFile(project, file)
-      val edit = EditorUtils.createTextFileChange(ifile, changes).getEdit
+      val edit = TextEditUtils.createTextFileChange(ifile, changes).getEdit
       JavaModelUtil.applyEdit(src, edit, true, null)
 
       exception match {

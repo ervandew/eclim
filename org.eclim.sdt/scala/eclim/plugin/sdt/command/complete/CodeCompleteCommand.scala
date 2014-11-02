@@ -40,7 +40,7 @@ import org.eclim.plugin.core.util.ProjectUtils
 import org.scalaide.core.completion.CompletionProposal
 import org.scalaide.core.completion.ScalaCompletions
 
-import org.scalaide.util.internal.ScalaWordFinder
+import org.scalaide.util.ScalaWordFinder
 
 /**
  * Command which provides completion proposals.
@@ -65,9 +65,7 @@ class CodeCompleteCommand
 
     val chars = ProjectUtils.getDocument(project, file).get.toCharArray
     val region = ScalaWordFinder.findCompletionPoint(chars, offset)
-    val proposals = src.withSourceFile {
-      COMPLETIONS.findCompletions(region)(offset, src)
-    }.getOrElse(List())
+    val proposals = COMPLETIONS.findCompletions(region, offset, src)
 
     val results: ListBuffer[CodeCompleteResult] = ListBuffer()
     for (proposal <- proposals.sortBy(p => (-p.relevance, p.completion))){

@@ -42,11 +42,9 @@ import org.eclipse.jdt.core.IPackageFragmentRoot
 
 import org.eclipse.jdt.core.search.SearchMatch
 
-import org.eclipse.jface.text.hyperlink.IHyperlink
+import org.eclipse.jface.text.IRegion
 
-import org.scalaide.core.hyperlink.Hyperlink
-
-import org.scalaide.core.hyperlink.detector.ScalaDeclarationHyperlinkComputer
+import org.scalaide.core.internal.hyperlink.ScalaDeclarationHyperlinkComputer
 
 import org.scalaide.core.internal.jdt.model.ScalaClassFile
 import org.scalaide.core.internal.jdt.model.ScalaCompilationUnit
@@ -54,7 +52,7 @@ import org.scalaide.core.internal.jdt.model.ScalaCompilationUnit
 import org.scalaide.core.internal.jdt.search.ScalaSelectionEngine
 import org.scalaide.core.internal.jdt.search.ScalaSelectionRequestor
 
-import org.scalaide.util.internal.ScalaWordFinder
+import org.scalaide.util.ScalaWordFinder
 
 /**
  * Command to handle scala search requests.
@@ -92,21 +90,20 @@ class SearchCommand
       case Some(hyperlinks) => hyperlinks.map(link => {
         val openableOrUnitField = link.getClass.getDeclaredField("openableOrUnit")
         val textField = link.getClass.getDeclaredField("text")
-        val posField = link.getClass.getDeclaredField("pos")
-        val lenField = link.getClass.getDeclaredField("len")
+        val regionField = link.getClass.getDeclaredField("region")
 
         openableOrUnitField.setAccessible(true)
         textField.setAccessible(true)
-        posField.setAccessible(true)
-        lenField.setAccessible(true)
+        regionField.setAccessible(true)
 
         val unit = openableOrUnitField.get(link)
-        val pos = posField.get(link).asInstanceOf[Int]
-        val len = lenField.get(link).asInstanceOf[Int]
         var text = textField.get(link).asInstanceOf[String]
         if (text.indexOf("Open Declaration (") != -1){
           text = text.substring(18, text.length - 1)
         }
+        val region = regionField.get(link).asInstanceOf[IRegion]
+        val pos = region.getOffset
+        val len = region.getLength
 
         unit match {
           case cu: ICompilationUnit => {
@@ -128,7 +125,7 @@ class SearchCommand
   }
 
   def javaLinks(src: ScalaCompilationUnit, offset: Int, length: Int): List[Position] = {
-    val environment = src.newSearchableEnvironment()
+    val environment = src.scalaProject.newSearchableEnvironment()
     val requestor = new ScalaSelectionRequestor(environment.nameLookup, src)
     val engine = new ScalaSelectionEngine(
       environment, requestor, src.getJavaProject.getOptions(true))

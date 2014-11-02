@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.NullProgressMonitor
 
 import org.eclipse.jdt.core.JavaCore
 
-import org.scalaide.core.ScalaPlugin
+import org.scalaide.core.IScalaPlugin
 
 import org.scalaide.core.internal.jdt.model.ScalaSourceFile
 
@@ -69,7 +69,7 @@ class ScalaProjectManager
     super.refresh(project, commandLine)
 
     // is there an easier way to force re-parsing of all files?
-    val sproject = ScalaPlugin.plugin.getScalaProject(project)
+    val sproject = IScalaPlugin().getScalaProject(project)
     for (src <- sproject.allSourceFiles){
       val cu = JavaCore.createCompilationUnitFrom(src)
       if (cu.isInstanceOf[ScalaSourceFile]){

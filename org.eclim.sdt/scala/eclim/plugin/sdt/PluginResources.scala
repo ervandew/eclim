@@ -25,7 +25,7 @@ import org.eclim.plugin.AbstractPluginResources
 import org.eclim.plugin.core.project.ProjectManagement
 import org.eclim.plugin.core.project.ProjectNatureFactory
 
-import org.scalaide.core.ScalaPlugin
+import org.scalaide.core.SdtConstants
 
 /**
  * Implementation of AbstractPluginResources.
@@ -42,7 +42,7 @@ class PluginResources
   {
     super.initialize(name)
 
-    //System.setProperty(ScalaPlugin.HEADLESS_TEST) // private property
+    //System.setProperty(SdtConstants.HeadlessProperty) // private property
     System.setProperty("sdtcore.headless", "true")
 
     ProjectNatureFactory.addNature("scala", NATURE)
@@ -60,5 +60,5 @@ object PluginResources {
    */
   final val NAME = "org.eclim.sdt"
 
-  final val NATURE = ScalaPlugin.plugin.natureId
+  final val NATURE = SdtConstants.NatureId
 }
