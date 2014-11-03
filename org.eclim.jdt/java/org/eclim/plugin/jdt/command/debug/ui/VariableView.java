@@ -423,7 +423,8 @@ public class VariableView
    * @return the value string
    * @throws DebugException if something happens trying to compute the value string
    */
-  private String getValueText(IJavaValue value) throws DebugException
+  private String getValueText(IJavaValue value)
+    throws DebugException
   {
     String refTypeName = value.getReferenceTypeName();
     String valueString = value.getValueString();

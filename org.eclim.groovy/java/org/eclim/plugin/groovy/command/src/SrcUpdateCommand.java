@@ -52,9 +52,9 @@ import org.eclipse.jdt.core.compiler.IProblem;
 @Command(
   name = "groovy_src_update",
   options =
-    "REQUIRED p project ARG," + 
-    "REQUIRED f file ARG," + 
-    "OPTIONAL v validate NOARG," + 
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG," +
+    "OPTIONAL v validate NOARG," +
     "OPTIONAL b build NOARG"
 )
 public final class SrcUpdateCommand

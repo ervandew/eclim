@@ -128,7 +128,8 @@ public class NewCommand
         roots.clear();
         for (IPackageFragmentRoot root : javaProject.getPackageFragmentRoots()){
           if (root.getKind() == IPackageFragmentRoot.K_SOURCE &&
-              getPath(root).equals(srcRoot)){
+              getPath(root).equals(srcRoot))
+          {
             roots.add(root);
             break;
           }
