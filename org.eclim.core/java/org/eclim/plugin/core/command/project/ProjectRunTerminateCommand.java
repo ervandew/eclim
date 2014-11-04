@@ -30,13 +30,14 @@ import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclipse.debug.core.DebugException;
 
 /**
- * Command to terminate a running launch
+ * Command to terminate a running launch. If no launch id
+ *  is provided, all current launches are terminated.
  *
  * @author Daniel Leong
  */
 @Command(
   name = "project_run_terminate",
-  options = "REQUIRED l launchid ARG"
+  options = "OPTIONAL l launchid ARG"
 )
 public class ProjectRunTerminateCommand
   extends AbstractCommand
@@ -50,11 +51,17 @@ public class ProjectRunTerminateCommand
   {
     final String launchId = commandLine.getValue(Options.LAUNCH_ID_OPTION);
     try {
-      if (EclimLaunchManager.terminate(launchId)) {
-        logger.info("Terminated {}", launchId);
-        return Services.getMessage("project.execute.terminated", launchId);
+      if (launchId != null) {
+        if (EclimLaunchManager.terminate(launchId)) {
+          logger.info("Terminated {}", launchId);
+          return Services.getMessage("project.execute.terminated", launchId);
+        } else {
+          return Services.getMessage("project.execute.terminate.nosuch", launchId);
+        }
       } else {
-        return Services.getMessage("project.execute.terminate.nosuch", launchId);
+        logger.info("Terminating all running procs");
+        EclimLaunchManager.terminateAll();
+        return Services.getMessage("project.execute.terminated.all");
       }
     } catch (final DebugException e) {
       logger.error("Unable to terminate launch!", e);

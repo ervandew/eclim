@@ -29,6 +29,7 @@ let s:command_project_run_config = '-command project_run -p "<project>" ' .
 let s:command_project_run_list = '-command project_run -p "<project>" -l'
 let s:command_project_run_terminate = '-command project_run_terminate ' .
   \ '-l "<launch_id>"'
+let s:command_project_run_terminate_all = '-command project_run_terminate'
 let s:flag_project_run_force = ' -c'
 " }}}
 
@@ -186,6 +187,21 @@ function! eclim#project#run#TerminateLaunch(launchId) " {{{
   call eclim#util#Echo(result)
 endfunction " }}}
 
+function! eclim#project#run#TerminateAllLaunches() " {{{
+  if !eclim#EclimAvailable()
+    return
+  endif
+
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+  let project = eclim#project#util#GetCurrentProjectName()
+
+  let command = s:command_project_run_terminate_all
+  let result = eclim#Execute(command, {'project': project})
+  call eclim#util#Echo(result)
+endfunction " }}}
+
 function! eclim#project#run#onLaunchProgress(percent, label) " {{{
 
   let totalBars = 10
@@ -214,6 +230,11 @@ function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
   call eclim#util#TempWindow('[' . a:launchId . ' Output]', [])
   let no = bufnr('%')
   let b:launch_id = a:launchId
+
+  augroup eclim_async_launch_cleanup
+    autocmd!
+    autocmd VimLeavePre * call eclim#project#run#TerminateAllLaunches()
+  augroup END
 
   if g:EclimTerminateLaunchOnBufferClosed
     exe 'autocmd BufWipeout <buffer> call eclim#project#run#TerminateLaunch("' .

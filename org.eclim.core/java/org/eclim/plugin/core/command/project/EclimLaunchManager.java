@@ -103,14 +103,33 @@ public class EclimLaunchManager implements Runnable
       return false;
     }
 
+    terminate(set);
+    return true;
+  }
+
+  static void terminate(final LaunchSet set)
+    throws DebugException
+  {
     if (set.launch.isTerminated()) {
       // already terminated... consider success?
-      return true;
+      return;
     }
 
     set.launch.terminate();
     set.output.sendTerminated();
-    return true;
+  }
+
+  public static synchronized void terminateAll() {
+    Iterator<LaunchSet> iter = sLaunches.values().iterator();
+    while (iter.hasNext()) {
+      LaunchSet set = iter.next();
+      try {
+        terminate(set);
+      } catch (DebugException e) {
+        // just keep moving
+      }
+      iter.remove();
+    }
   }
 
   /**
