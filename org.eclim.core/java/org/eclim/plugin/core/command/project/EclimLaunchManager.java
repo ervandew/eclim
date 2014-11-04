@@ -19,10 +19,10 @@ package org.eclim.plugin.core.command.project;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.eclim.logging.Logger;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.IStreamListener;
+
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 
@@ -31,8 +31,6 @@ import org.eclipse.debug.core.model.IStreamMonitor;
  */
 public class EclimLaunchManager implements Runnable
 {
-  private static final Logger logger =
-    Logger.getLogger(EclimLaunchManager.class);
 
   public interface OutputHandler
   {
@@ -117,6 +115,7 @@ public class EclimLaunchManager implements Runnable
 
   public static synchronized void manage(final ILaunch launch,
       final OutputHandler output)
+    throws IllegalArgumentException
   {
     final IProcess[] procs = launch.getProcesses();
     if (procs == null || procs.length == 0) {
@@ -131,13 +130,16 @@ public class EclimLaunchManager implements Runnable
       output.prepare(id);
     } catch (final Exception e) {
       remove(id);
-      logger.error("OutputHandler does not support async output", e);
       try {
         launch.terminate();
       } catch (final DebugException e2) {
-        // no worries
+        // we're quitting anyway
       }
-      return;
+
+      // re-raise
+      throw new IllegalArgumentException(
+              "OutputHandler does not support async output",
+              e);
     }
 
     IStreamListener errListener = new IStreamListener()

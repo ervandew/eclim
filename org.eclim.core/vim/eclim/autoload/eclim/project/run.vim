@@ -127,7 +127,8 @@ function! eclim#project#run#ProjectRun(...) " {{{
   let command = substitute(command, '<config>', config, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
   let command = substitute(command, '<vim_executable>', exepath(v:progpath), '')
-  call eclim#Execute(command, {'project': project})
+  let result = eclim#Execute(command, {'project': project})
+  call eclim#util#EchoError(result)
 endfunction " }}}
 
 function! eclim#project#run#ProjectRunList() " {{{

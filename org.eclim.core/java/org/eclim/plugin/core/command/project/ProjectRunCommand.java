@@ -194,7 +194,7 @@ public class ProjectRunCommand
         }
 
         return completionMessage;
-      } catch (Exception e) {
+      } catch (Throwable e) {
         return Services.getMessage("project.executed.asyncfail", projectName);
       }
     }
@@ -484,8 +484,7 @@ public class ProjectRunCommand
           EclimLaunchManager.manage(launch, output);
         }
       } catch (Exception e) {
-        logger.error("Couldn't launch", e);
-        return new Status(Status.ERROR, "", "Unable to launch", e);
+        return new Status(Status.ERROR, "eclim", "Unable to launch", e);
       }
       return Status.OK_STATUS;
     }
