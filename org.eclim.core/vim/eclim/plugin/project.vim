@@ -123,6 +123,8 @@ if !exists(":ProjectCreate")
     \ -complete=customlist,eclim#project#util#CommandCompleteProjectCreate
     \ ProjectCreate :call eclim#project#util#ProjectCreate('<args>')
   command -nargs=1 -complete=dir
+    \ ProjectImportDiscover :call eclim#project#util#ProjectImportDiscover('<args>')
+  command -nargs=1 -complete=dir
     \ ProjectImport :call eclim#project#util#ProjectImport('<args>')
   command -nargs=1
     \ -complete=customlist,eclim#project#util#CommandCompleteProject

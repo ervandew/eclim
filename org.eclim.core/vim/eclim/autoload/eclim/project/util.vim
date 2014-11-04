@@ -173,6 +173,22 @@ function! s:ProjectNatureHooks(natureIds, hookName, args) " {{{
   return 1
 endfunction " }}}
 
+function! eclim#project#util#ProjectImportDiscover(arg) " {{{
+  " Recursively searches the given directory for any project files
+  " and imports them.
+  let projects = split(globpath(a:arg, '**/.project'), '\n')
+  if (len(projects) == 0)
+    call eclim#util#Echo("No projects found")
+    return
+  endif
+
+  for project in projects
+    call eclim#project#util#ProjectImport(fnamemodify(project, ':h'))
+  endfor
+
+  call eclim#util#Echo("Imported " . len(projects) . " projects.")
+endfunction " }}}
+
 function! eclim#project#util#ProjectImport(arg) " {{{
   let folder = fnamemodify(expand(a:arg), ':p')
   let folder = substitute(folder, '\', '/', 'g')
