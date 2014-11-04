@@ -89,6 +89,7 @@ import com.google.gson.Gson;
 public class ImplCommand
   extends AbstractCommand
 {
+
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -351,9 +352,14 @@ public class ImplCommand
 
     int pos = -1;
     int len = src.getBuffer().getLength();
-    IJavaElement sibling = getSibling(type);
+    final IJavaElement sibling;
+    if (commandLine.hasOption(Options.OFFSET_OPTION)) {
+      sibling = getSibling(type, getOffset(commandLine));
+    } else {
+      sibling = getSibling(type);
+    }
     if (sibling != null){
-      pos = ((ISourceReference)sibling).getSourceRange().getOffset();
+      pos = getOffset(sibling);
     }
 
     IWorkspaceRunnable op = getImplOperation(
@@ -375,6 +381,16 @@ public class ImplCommand
       int offset = pos != -1 ? pos : (len - 1 - lineDelim.length());
       int newLen = src.getBuffer().getLength();
       int length = newLen - len - 1;
+
+      // a more accurate length estimate can be found by locating the
+      //  sibling at its new position and taking the difference.
+      //  this prevents the formatting from screwing up the sibling's formatting
+      final IJavaElement[] newSiblings = sibling == null ?
+          null : src.findElements(sibling);
+      if (newSiblings != null && newSiblings.length == 1) {
+        // not sure what it would mean if there were more than one...
+        length = getOffset(newSiblings[0]) - offset;
+      }
 
       // the change in length may include newly added imports, so handle that as
       // best we can
@@ -424,6 +440,12 @@ public class ImplCommand
     return getMethodBindingCallSignature(binding).replaceAll("<.*?>", "");
   }
 
+  private int getOffset(IJavaElement element)
+    throws Exception
+  {
+    return ((ISourceReference) element).getSourceRange().getOffset();
+  }
+
   private IJavaElement getSibling(IType type)
     throws Exception
   {
@@ -448,5 +470,28 @@ public class ImplCommand
     }
 
     return sibling;
+  }
+
+  private IJavaElement getSibling(IType type, int offset)
+    throws Exception
+  {
+    // insert before the offset
+    IMethod[] methods = type.getMethods();
+    for (IMethod method : methods) {
+      if (getOffset(method) >= offset) {
+        return method;
+      }
+    }
+
+    // insert before inner classes.
+    IType[] types = type.getTypes();
+    // find the first non-enum type.
+    for (IType subtype : types) {
+        if (getOffset(subtype) >= offset) {
+            return subtype;
+        }
+    }
+
+    return null;
   }
 }
