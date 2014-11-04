@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,6 +80,17 @@ Vim's command line completion to complete the project name.
   .. code-block:: vim
 
     :ProjectImport ~/workspace/some_project
+
+- **:ProjectImportDiscover** <folder>
+
+  If you have several existing eclipse projects within a parent directory that
+  you'd like to import, you can do so using this command, which scans the
+  supplied folder for all ``.project`` files and imports the corresponding
+  project into your current workspace:
+
+  .. code-block:: vim
+
+    :ProjectImport ~/some/parent/dir
 
 .. _\:ProjectList:
 
