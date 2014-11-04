@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -167,6 +167,19 @@ This functionality supports outer, inner, and anonymous classes classes.
 To view the list of methods to override for an inner or anonymous class, simply
 execute **:JavaImpl** with the cursor somewhere in the body of the inner or
 anonymous class.
+
+Configuration
+~~~~~~~~~~~~~
+
+:doc:`Vim Settings </vim/settings>`
+
+.. _g\:EclimJavaImplInsertAtCursor:
+
+- **g:EclimJavaImplInsertAtCursor** (Default: 0) -
+  By default eclim will insert methods you've chosen after all the existing
+  methods, but before any inner classes. If you enable this setting, then the
+  methods will instead be inserted near where your cursor was when you first
+  invoked **:JavaImpl**.
 
 .. _\:JavaDelegate:
 

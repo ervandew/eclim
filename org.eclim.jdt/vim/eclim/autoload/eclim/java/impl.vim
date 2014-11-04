@@ -33,9 +33,6 @@
   let s:command_impl_insert =
     \ '-command java_impl -p "<project>" -f "<file>" -t "<type>" ' .
     \ '-s "<superType>" <methods>'
-  let s:command_impl_insert_offset =
-    \ '-command java_impl -p "<project>" -f "<file>" -t "<type>" ' .
-    \ '-o <offset> -s "<superType>" <methods>'
   let s:command_delegate =
     \ '-command java_delegate -p "<project>" -f "<file>" -o <offset> -e <encoding>'
   let s:command_delegate_insert =
@@ -334,9 +331,8 @@ endfunction " }}}
 
 function! s:AddImpl(visual) " {{{
   let command = s:command_impl_insert
-  if exists('g:EclimJavaImplAtCursor') && g:EclimJavaImplAtCursor
-    let command = s:command_impl_insert_offset
-    let command = substitute(command, "<offset>", b:eclim_offset, '')
+  if g:EclimJavaImplInsertAtCursor
+    let command .= ' -o ' . b:eclim_offset
   endif
   call eclim#java#impl#Add
     \ (command, function("eclim#java#impl#ImplWindow"), a:visual)

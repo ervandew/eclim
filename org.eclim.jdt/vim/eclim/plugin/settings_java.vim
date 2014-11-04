@@ -57,8 +57,11 @@
     \ 'Sets the command to use when opening an entry from the java call hierarchy buffer.')
 
   call eclim#AddVimSetting(
-    \ 'Lang/Java', 'g:EclimJavaImplAtCursor', 0,
-    \ 'JavaImpl will insert at or near the cursor position instead of the default.',
+    \ 'Lang/Java', 'g:EclimJavaImplInsertAtCursor', 0,
+    \ 'When enabled, :JavaImpl will insert the chosen method(s) at or\n' .
+    \ 'near the cursor position from which you initially called :JavaImpl\n' .
+    \ 'from, instead of the default behavior of adding them after any\n' .
+    \ 'existing methods but before any inner classes.',
     \ '\(0\|1\)')
 
   call eclim#AddVimSetting(
