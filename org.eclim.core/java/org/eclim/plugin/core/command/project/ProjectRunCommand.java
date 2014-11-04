@@ -73,9 +73,10 @@ import org.eclipse.debug.ui.ILaunchGroup;
 public class ProjectRunCommand
   extends AbstractCommand
 {
-    private static final Logger logger =
-        Logger.getLogger(ProjectRunCommand.class);
+  private static final Logger logger =
+      Logger.getLogger(ProjectRunCommand.class);
 
+  static final String ERROR_ASYNC = "Unable to do async output";
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -190,12 +191,22 @@ public class ProjectRunCommand
       try {
         IStatus status = launchJob.run(null);
         if (status.getSeverity() != IStatus.OK) {
-          return Services.getMessage("project.executed.asyncfail", projectName);
+          if (ERROR_ASYNC.equals(status.getMessage())) {
+            return Services.getMessage("project.executed.asyncfail",
+                    projectName,
+                    status.getException().getCause().getMessage());
+          } else {
+            return Services.getMessage("project.execute.fail",
+                    projectName,
+                    status.getException().getMessage());
+          }
         }
 
         return completionMessage;
       } catch (Throwable e) {
-        return Services.getMessage("project.executed.asyncfail", projectName);
+        logger.error("Unexpected error while launching", e);
+        return Services.getMessage("project.execute.fail",
+            projectName, e.getMessage());
       }
     }
   }
@@ -396,7 +407,9 @@ public class ProjectRunCommand
     @Override public void prepare(String launchId)
       throws Exception
     {
-      throw new Exception("Output not handled");
+      // NB client-specific errors can be returned here in the future,
+      //  possibly via constructor
+      throw new Exception("Vim requires --servername support");
     }
 
     @Override public void sendErr(String line) {}
@@ -483,8 +496,12 @@ public class ProjectRunCommand
         if (launch != null) {
           EclimLaunchManager.manage(launch, output);
         }
+      } catch (IllegalArgumentException e) {
+        logger.info("Launch terminated; async not supported");
+        return new Status(Status.ERROR, "eclim", ERROR_ASYNC, e);
       } catch (Exception e) {
-        return new Status(Status.ERROR, "eclim", "Unable to launch", e);
+        // anything else is unexpected
+        return new Status(Status.ERROR, "eclim", "Error while launching", e);
       }
       return Status.OK_STATUS;
     }

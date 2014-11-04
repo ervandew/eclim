@@ -45,7 +45,9 @@ public class ProjectRunTerminateCommand
     Logger.getLogger(ProjectRunTerminateCommand.class);
 
   @Override
-  public Object execute(CommandLine commandLine) throws Exception {
+  public Object execute(CommandLine commandLine)
+      throws Exception
+  {
     final String launchId = commandLine.getValue(Options.LAUNCH_ID_OPTION);
     try {
       if (EclimLaunchManager.terminate(launchId)) {

@@ -113,6 +113,12 @@ public class EclimLaunchManager implements Runnable
     return true;
   }
 
+  /**
+   * @throws IllegalArgumentException if the OutputHandler
+   *  provided doesn't support async output and we're trying
+   *  to perform it. The original exception can be retreived
+   *  from #getCause()
+   */
   public static synchronized void manage(final ILaunch launch,
       final OutputHandler output)
     throws IllegalArgumentException
