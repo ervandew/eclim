@@ -54,6 +54,7 @@ if buf:
   lines = vim.eval('lines')
   ltype = vim.eval('ltype')
   prefixed = map(lambda l: "%s>%s" % (ltype, l), lines)
+  oldEnd = len(buf)
 
   buf.options['readonly'] = False
   buf.options['modifiable'] = True
@@ -65,8 +66,10 @@ if buf:
   for tab in vim.tabpages:
     for win in tab.windows:
       if win.buffer.number == buf.number:
-        # scroll to bottom
-        win.cursor = [len(buf), 1]
+        # scroll to bottom if still there
+        row, col = win.cursor
+        if row == oldEnd:
+            win.cursor = [len(buf), col]
 PYEOF
 
   redraw!
