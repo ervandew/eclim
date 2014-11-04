@@ -433,8 +433,13 @@ public class ProjectRunCommand
     public void prepare(String launchId)
       throws Exception
     {
-      bufNo = client.remoteFunctionExpr("eclim#project#run#onPrepareOutput",
-          configName, launchId).trim();
+      final String rawResult = client.remoteFunctionExpr(
+          "eclim#project#run#onPrepareOutput", configName, launchId);
+      if (rawResult == null) {
+        throw new Exception("Timeout preparing output buffer");
+      }
+
+      bufNo = rawResult.trim();
     }
 
     @Override

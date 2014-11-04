@@ -33,7 +33,7 @@ public class VimClient
   private static final long TIMEOUT = 60;
 
   /** we need a bit of extra time to read the output */
-  private static final long TIMEOUT_INPUT = 240;
+  private static final long TIMEOUT_INPUT = 480;
 
   /**
    * Executable to use to send commands
