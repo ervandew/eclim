@@ -76,8 +76,6 @@ public class ProjectRunCommand
   private static final Logger logger =
       Logger.getLogger(ProjectRunCommand.class);
 
-  static final String ERROR_ASYNC = "Unable to do async output";
-
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -191,17 +189,14 @@ public class ProjectRunCommand
       try {
         IStatus status = launchJob.run(null);
         if (status.getSeverity() != IStatus.OK) {
-          if (ERROR_ASYNC.equals(status.getMessage())) {
-            return Services.getMessage("project.executed.asyncfail",
-                    projectName,
-                    status.getException().getCause().getMessage());
-          } else {
-            return Services.getMessage("project.execute.fail",
-                    projectName,
-                    status.getException().getMessage());
+          Throwable exception = status.getException();
+          while (exception.getCause() != null){
+            exception = exception.getCause();
           }
+          return Services.getMessage("project.execute.fail",
+              projectName,
+              exception.getMessage());
         }
-
         return completionMessage;
       } catch (Throwable e) {
         logger.error("Unexpected error while launching", e);
@@ -409,7 +404,9 @@ public class ProjectRunCommand
     {
       // NB client-specific errors can be returned here in the future,
       //  possibly via constructor
-      throw new Exception("Vim requires --servername support");
+      throw new Exception(
+          "Vim must be running in server mode:\n" +
+          "Example: vim --servername <name>");
     }
 
     @Override public void sendErr(String line) {}
@@ -503,7 +500,7 @@ public class ProjectRunCommand
         }
       } catch (IllegalArgumentException e) {
         logger.info("Launch terminated; async not supported");
-        return new Status(Status.ERROR, "eclim", ERROR_ASYNC, e);
+        return new Status(Status.ERROR, "eclim", "Unable to capture async output", e);
       } catch (Exception e) {
         // anything else is unexpected
         return new Status(Status.ERROR, "eclim", "Error while launching", e);
