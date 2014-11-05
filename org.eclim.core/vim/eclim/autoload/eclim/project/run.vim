@@ -69,10 +69,11 @@ if buf:
         # scroll to bottom if still there
         row, col = win.cursor
         if row == oldEnd:
-            win.cursor = [len(buf), col]
+          win.cursor = [len(buf), col]
+        break
 PYEOF
 
-  redraw!
+  redraw
 endfunction " }}}
 
 function! s:onTerminated(bufno) " {{{
@@ -266,9 +267,6 @@ function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
 endfunction " }}}
 
 function! eclim#project#run#onOutput(bufNo, type, line) " {{{
-  " TODO fancier?
-  call eclim#util#Echo("On output " . has('python'))
-
   if has('python')
     if "terminated" == a:type
       call s:onTerminated(a:bufNo)
@@ -276,7 +274,6 @@ function! eclim#project#run#onOutput(bufNo, type, line) " {{{
       call s:append(a:bufNo, a:type, a:line)
     endif
   endif
-
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
