@@ -105,8 +105,18 @@ function! eclim#project#run#ProjectRun(...) " {{{
     return
   endif
 
+  if has('win32') || has('win64')
+    call eclim#util#EchoError(':ProjectRun is not currently supported on Windows')
+    return
+  endif
+
   if !has('python')
-    eclim#util#EchoError("Python support is required for :ProjectRun")
+    call eclim#util#EchoError(':ProjectRun requires python support')
+    return
+  endif
+
+  if v:version < 704 || (v:version == 704 && !has('patch234'))
+    call eclim#util#EchoError(':ProjectRun requires vim 7.4.234 or newer')
     return
   endif
 
@@ -128,10 +138,11 @@ function! eclim#project#run#ProjectRun(...) " {{{
 
   " TODO include warning about --servername?
   call eclim#util#Echo("Running project '" . project . "'...")
+  let vim_exe = substitute(exepath(v:progpath), '\', '/', 'g')
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<config>', config, '')
   let command = substitute(command, '<vim_servername>', v:servername, '')
-  let command = substitute(command, '<vim_executable>', exepath(v:progpath), '')
+  let command = substitute(command, '<vim_executable>', vim_exe, '')
   let result = eclim#Execute(command, {'project': project})
   call eclim#util#EchoError(result)
 endfunction " }}}
