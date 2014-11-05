@@ -499,10 +499,10 @@ public class ProjectRunCommand
           EclimLaunchManager.manage(launch, output);
         }
       } catch (IllegalArgumentException e) {
-        logger.info("Launch terminated; async not supported");
+        logger.error("Launch terminated; async not supported", e);
         return new Status(Status.ERROR, "eclim", "Unable to capture async output", e);
       } catch (Exception e) {
-        // anything else is unexpected
+        logger.error("Launch terminated; Unexpected Error", e);
         return new Status(Status.ERROR, "eclim", "Error while launching", e);
       }
       return Status.OK_STATUS;
