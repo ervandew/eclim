@@ -653,6 +653,71 @@ function! eclim#project#util#ProjectNatureModify(command, args) " {{{
   endif
 endfunction " }}}
 
+function! eclim#project#util#ProjectRun(...) " {{{
+  " Option args:
+  "   config: The name of the configuration to run for the current project
+  
+  if !eclim#EclimAvailable()
+    return
+  endif
+
+  let config = a:0 > 0 ? a:1 : ''
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+  let project = eclim#project#util#GetCurrentProjectName()
+
+  let command = s:command_project_run
+  if config != ''
+    let command = s:command_project_run_config
+  endif
+
+  call eclim#util#Echo("Running project '" . project . "'...")
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<config>', config, '')
+  let result = eclim#Execute(command, {'project': project})
+  call eclim#util#Echo(result)
+endfunction " }}}
+
+function! eclim#project#util#ProjectRunList() " {{{
+
+  if !eclim#EclimAvailable()
+    return
+  endif
+
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+  let project = eclim#project#util#GetCurrentProjectName()
+
+  let command = s:command_project_run_list
+
+  call eclim#util#Echo("Fetching launch configs for project '" . project . "'...")
+  let command = substitute(command, '<project>', project, '')
+  let result = eclim#Execute(command, {'project': project})
+  if type(result) != g:LIST_TYPE
+    call eclim#util#Echo(result)
+    return
+  endif
+
+  if len(result) == 0
+    call eclim#util#Echo("No launch configs for project '" . project . ".")
+    return
+  endif
+
+  let pad = 0
+  for config in result
+    let pad = len(config.name) > pad ? len(config.name) : pad
+  endfor
+
+  let output = []
+  for config in result
+    call add(output,
+      \ eclim#util#Pad(config.name, pad) . ' - ' . config.type)
+  endfor
+  call eclim#util#Echo(join(output, "\n"))
+endfunction " }}}
+
 function! eclim#project#util#ProjectSettings(project) " {{{
   " Opens a window that can be used to edit a project's settings.
 
@@ -726,60 +791,6 @@ function! eclim#project#util#ProjectUpdate() " {{{
   else
     call eclim#util#ClearLocationList()
     call eclim#util#Echo(result)
-  endif
-endfunction " }}}
-
-function! eclim#project#util#ProjectGrep(command, args) " {{{
-  " Executes the supplied vim grep command with the specified pattern against
-  " one or more file patterns.
-
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
-  endif
-
-  let project = eclim#project#util#GetProject(expand('%:p'))
-  let tail = substitute(a:args, '\(.\).\{-}\1\s\(.*\)', '\2', '')
-  let pattern = substitute(a:args, '\(.*\)\s\+\M' . tail . '\m$', '\1', '')
-  let cmd = a:command
-  let acd = &autochdir
-  set noautochdir
-  try
-    if pattern != a:args && tail != a:args && tail != ''
-      let files = eclim#util#ParseArgs(tail)
-      let paths = ''
-      for file in files
-        if paths != ''
-          let paths .= ' '
-        endif
-        let paths .= escape(project.path, ' ') . '/' . file
-      endfor
-      let links = get(project, 'links', {})
-      if len(links)
-        for link in values(links)
-          for file in files
-            let paths .= ' ' . escape(link, ' ') . '/' . file
-          endfor
-        endfor
-      endif
-      silent exec a:command . ' ' . pattern . ' ' . paths
-    else
-      " let vim generate the proper error
-      silent exec a:command . ' ' . a:args
-    endif
-  catch /E480/
-    " no results found
-  catch /.*/
-    call eclim#util#EchoError(v:exception)
-    return
-  finally
-    let &autochdir = acd
-    " force quickfix / location list signs to update.
-    call eclim#display#signs#Update()
-  endtry
-
-  let numresults = len(a:command =~ '^l' ? getloclist(0) : getqflist())
-  if numresults == 0
-    call eclim#util#EchoInfo('No results found.')
   endif
 endfunction " }}}
 

@@ -61,6 +61,7 @@ public class Options
   public static final String FAMILY_OPTION = "f";
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
+  public static final String FORCE_OPTION = "c"; // 'c' to avoid confusion in cleanup
   public static final String HELP = "help";
   public static final String HALT_OPTION = "h";
   public static final String HOST_OPTION = "h";
@@ -68,10 +69,12 @@ public class Options
   public static final String INDEXED_OPTION = "i";
   public static final String JARS_OPTION = "j";
   public static final String LANG_OPTION = "l";
+  public static final String LAUNCH_ID_OPTION = "l";
   public static final String LAYOUT_OPTION = "l";
   public static final String LENGTH_OPTION = "l";
   public static final String LINE_OPTION = "l";
   public static final String LINE_WIDTH_OPTION = "w";
+  public static final String LIST_OPTION = "l";
   public static final String METHOD_OPTION = "m";
   public static final String NAME_OPTION = "n";
   public static final String NATURE_OPTION = "n";
@@ -103,6 +106,7 @@ public class Options
   public static final String VARIABLE_VALUE_ID_OPTION = "v";
   public static final String VERSION_OPTION = "v";
   public static final String VIM_INSTANCE_OPTION = "v";
+  public static final String VIM_EXECUTABLE_OPTION = "x";
 
   private static final String ANY = "ANY";
   private static final String ARG = "ARG";
