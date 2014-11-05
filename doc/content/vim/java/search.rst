@@ -204,6 +204,15 @@ suggestions.
 Configuration
 -------------
 
+:doc:`Eclim Settings </vim/settings>`
+
+- **org.eclim.java.search.sort** -
+  Json formatted list of directory paths used to sort the search results.
+
+  For e.g., if your projects follow maven hierarchy and if you want the test
+  references to be listed after the main code references, then use this setting:
+  org.eclim.java.search.sort=["src/main", "src/test"]
+
 :doc:`Vim Settings </vim/settings>`
 
 .. _g\:EclimJavaSearchSingleResult:
