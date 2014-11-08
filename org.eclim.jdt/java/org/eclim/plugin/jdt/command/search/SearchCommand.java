@@ -532,7 +532,7 @@ public class SearchCommand
         theClass.equals(org.eclipse.jdt.internal.core.SourceField.class) ||
         theClass.equals(org.eclipse.jdt.internal.core.SourceMethod.class))
     {
-      return IJavaSearchConstants.ALL_OCCURRENCES;
+      return IJavaSearchConstants.REFERENCES;
     }
 
     return IJavaSearchConstants.DECLARATIONS;
