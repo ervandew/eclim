@@ -75,26 +75,6 @@ PYEOF
 
   redraw
 endfunction " }}}
-
-function! s:onTerminated(bufno) " {{{
-  if !has('python')
-    return
-  endif
-
-  call s:append(a:bufno, "out", "<terminated>")
-
-  " rename the buffer
-  let bufnr = a:bufno
-py << PYEOF
-import vim
-bufnr = int(vim.eval('bufnr'))
-buf = vim.buffers[bufnr]
-if buf is not None:
-  buf.name = "[TERMINATED %s]" % buf.vars['launch_id']
-PYEOF
-
-  redraw!
-endfunction " }}}
 " }}}
 
 function! eclim#project#run#ProjectRun(...) " {{{
@@ -230,59 +210,53 @@ function! eclim#project#run#onLaunchProgress(percent, label) " {{{
 endfunction " }}}
 
 function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
+  let name = '[' . a:launchId . ' Output]'
+  let bufnum = bufnr(eclim#util#EscapeBufferName(name))
+  if bufnum == -1
+    let current = winnr()
+    call eclim#util#TempWindow(name, [])
+    let bufnum = bufnr('%')
+    let b:launch_id = a:launchId
 
-  let current = winnr()
+    augroup eclim_async_launch_cleanup
+      autocmd!
+      autocmd VimLeavePre * call eclim#project#run#TerminateAllLaunches()
+    augroup END
 
-  " is there a terminated launch window?
-  " NB missing open bracket is intentional, and
-  "  it returns the wrong buffer if not omitted
-  let terminated = 'TERMINATED ' . a:launchId . ']'
-  let terminatedBuf = bufnr(terminated)
-  if terminatedBuf != -1
-    exe 'bdelete ' . terminatedBuf
-  endif
+    if g:EclimTerminateLaunchOnBufferClosed
+      exe 'autocmd BufWipeout <buffer> call eclim#project#run#TerminateLaunch("' .
+            \ b:launch_id . '")'
+    else
+      " need to keep the buffer around, then
+      setlocal bufhidden=hide
+    endif
 
-  call eclim#util#TempWindow('[' . a:launchId . ' Output]', [])
-  let no = bufnr('%')
-  let b:launch_id = a:launchId
+    " supply a Terminate command
+    exec 'command! -nargs=0 -buffer Terminate ' .
+      \ ':call eclim#project#run#TerminateLaunch("' . b:launch_id . '")'
 
-  augroup eclim_async_launch_cleanup
-    autocmd!
-    autocmd VimLeavePre * call eclim#project#run#TerminateAllLaunches()
-  augroup END
+    " beautiful highlighting for error lines vs out> lines
+    syntax region Error matchgroup=Quote start=/err>/ end=/\n/ concealends oneline
+    syntax region Normal matchgroup=Quote start=/out>/ end=/\n/ concealends oneline
 
-  if g:EclimTerminateLaunchOnBufferClosed
-    exe 'autocmd BufWipeout <buffer> call eclim#project#run#TerminateLaunch("' .
-          \ b:launch_id . '")'
+    set conceallevel=3
+    set concealcursor=nc
+
+    exec current . "winc w"
   else
-    " need to keep the buffer around, then
-    setlocal bufhidden=hide
+    call eclim#util#TempWindowClear(name)
   endif
 
-  " supply a Terminate command
-  exe 'command -nargs=0 -buffer Terminate ' .
-        \ ':call eclim#project#run#TerminateLaunch("' .
-        \ b:launch_id . '")'
-
-  " beautiful highlighting for error lines vs out> lines
-  syntax region Error matchgroup=Quote start=/err>/ end=/\n/ concealends oneline
-  syntax region Normal matchgroup=Quote start=/out>/ end=/\n/ concealends oneline
-
-  set conceallevel=3
-  set concealcursor=nc
-
-  " pop back and show
-  exe current . "winc w"
   redraw!
-  return no
+  return bufnum
 endfunction " }}}
 
-function! eclim#project#run#onOutput(bufNo, type, line) " {{{
+function! eclim#project#run#onOutput(bufnum, type, line) " {{{
   if has('python')
     if "terminated" == a:type
-      call s:onTerminated(a:bufNo)
+      call s:append(a:bufnum, "out", "<terminated>")
     else
-      call s:append(a:bufNo, a:type, a:line)
+      call s:append(a:bufnum, a:type, a:line)
     endif
   endif
 endfunction " }}}
