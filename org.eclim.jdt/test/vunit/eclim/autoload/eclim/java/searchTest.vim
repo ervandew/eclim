@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,15 +22,19 @@
 "
 " }}}
 
-" SetUp() {{{
-function! SetUp()
+function! SetUp() " {{{
   exec 'cd ' . g:TestEclimWorkspace . 'eclim_unit_test_java'
+endfunction " }}}
+
+function! TearDown() " {{{
+  silent! unlet g:EclimTestPromptQueue
 endfunction " }}}
 
 function! TestSearch() " {{{
   edit! src/org/eclim/test/search/TestSearchVUnit.java
 
   call cursor(8, 11)
+  let g:EclimTestPromptQueue = [1]
   JavaSearch
   call vunit#PeekRedir()
   let name = fnamemodify(bufname('%'), ':t')
@@ -41,6 +45,7 @@ function! TestSearch() " {{{
 
   call vunit#AssertTrue(search('extends Collection'), 'Could not find "extends Collection"')
   normal w
+  let g:EclimTestPromptQueue = [1]
   JavaSearch
   call vunit#PeekRedir()
   let name = fnamemodify(bufname('%'), ':t')
@@ -53,6 +58,7 @@ function! TestSearch() " {{{
   bdelete!
 
   call cursor(12, 5)
+  let g:EclimTestPromptQueue = [1]
   JavaSearch
   call vunit#PeekRedir()
   echom 'line: ' . line('.') . ' ' . getline('.')

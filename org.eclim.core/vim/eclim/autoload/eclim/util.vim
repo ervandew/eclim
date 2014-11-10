@@ -572,7 +572,7 @@ function! eclim#util#GoToBufferWindowOrOpen(name, cmd, ...) " {{{
      \ !&modified && line('$') == 1 && getline(1) == ''
       let cmd = 'edit'
     endif
-    silent exec cmd . ' ' . escape(eclim#util#Simplify(a:name), ' ')
+    exec cmd . ' ' . escape(eclim#util#Simplify(a:name), ' ')
   endif
   call cursor(line, col)
 endfunction " }}}

@@ -391,7 +391,7 @@ augroup eclim_archive_read
   autocmd BufReadCmd
     \ jar:/*,jar:\*,jar:file:/*,jar:file:\*,
     \tar:/*,tar:\*,tar:file:/*,tar:file:\*,
-    \tbz2:/*,tgz:\*,tbz2:file:/*,tbz2:file:\*,
+    \tbz2:/*,tbz2:\*,tbz2:file:/*,tbz2:file:\*,
     \tgz:/*,tgz:\*,tgz:file:/*,tgz:file:\*,
     \zip:/*,zip:\*,zip:file:/*,zip:file:\*
     \ call eclim#common#util#ReadFile()
