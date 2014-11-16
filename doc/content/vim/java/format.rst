@@ -72,7 +72,7 @@ settings.
 Configuration
 -------------
 
-.. _org.eclim.java.checkstyle.onvalidate:
+.. _org.eclim.java.format.strip_trialing_whitespace:
 
 - **org.eclim.java.format.strip_trialing_whitespace** -
   When set to true, all trailing whitespace will be removed when formatting java
