@@ -641,8 +641,7 @@ function! eclim#java#debug#GoToFile(file, line) " {{{
   if &buftype == 'nofile'
     winc k
   endif
-  call eclim#util#GoToBufferWindowOrOpen(a:file, "edit")
-  call cursor(a:line, '^')
+  call eclim#util#GoToBufferWindowOrOpen(a:file, 'edit', a:line, '^')
 
   " gross, but seems to be the easiest way to remove the sign from all buffers
   silent! call eclim#display#signs#Undefine(s:breakpoint_sign_current)

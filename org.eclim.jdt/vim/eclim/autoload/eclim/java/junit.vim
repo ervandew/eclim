@@ -123,8 +123,8 @@ function! eclim#java#junit#JUnitFindTest() " {{{
   endif
 
   let name = substitute(result.filename, '\', '/', 'g')
-  call eclim#util#GoToBufferWindowOrOpen(name, g:EclimJavaSearchSingleResult)
-  call cursor(result.line, result.column)
+  call eclim#util#GoToBufferWindowOrOpen(
+    \ name, g:EclimJavaSearchSingleResult, result.line, result.column)
 endfunction " }}}
 
 function! eclim#java#junit#JUnitResult(test) " {{{

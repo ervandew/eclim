@@ -564,6 +564,11 @@ function! eclim#util#GoToBufferWindowOrOpen(name, cmd, ...) " {{{
       exec winnr . "winc w"
       call eclim#util#DelayedCommand('doautocmd WinEnter')
     endif
+
+    " set the cursor line mark if we plan on moving the cursor
+    if line
+      mark '
+    endif
   else
     let cmd = a:cmd
     " if splitting and the buffer is a unamed empty buffer, then switch to an

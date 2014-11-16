@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2014  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -126,8 +126,8 @@ function! s:Open(action) " {{{
     exec b:winnr . 'winc w'
 
     let action = a:action
-    call eclim#util#GoToBufferWindowOrOpen(info.file, action)
-    call cursor(info.line, info.col)
+    call eclim#util#GoToBufferWindowOrOpen(
+      \ info.file, action, info.line, info.col)
 
    " force any previous messge from else below to be cleared
     echo ''

@@ -63,8 +63,9 @@ function! eclim#common#util#SwapWords() " {{{
   let save_search = @/
 
   normal! "_yiw
-  s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/
-  exec "normal! \<C-O>"
+  let pos = getpos('.')
+  keepjumps s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/
+  call setpos('.', pos)
 
   " restore the last search pattern
   let @/ = save_search

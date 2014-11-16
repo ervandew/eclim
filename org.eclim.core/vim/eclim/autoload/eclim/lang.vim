@@ -196,8 +196,8 @@ function! eclim#lang#SearchResults(results, action) " {{{
   " single result
   if len(a:results) == 1
     let name = substitute(a:results[0].filename, '\', '/', 'g')
-    call eclim#util#GoToBufferWindowOrOpen(name, a:action)
-    call cursor(a:results[0].line, a:results[0].column)
+    call eclim#util#GoToBufferWindowOrOpen(
+      \ name, a:action, a:results[0].line, a:results[0].column)
     silent let curProjectName = eclim#project#util#GetCurrentProjectName()
     if curProjectName == '' && projectName != ''
       let b:eclim_project = projectName
