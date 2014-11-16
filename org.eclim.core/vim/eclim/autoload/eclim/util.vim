@@ -1263,7 +1263,7 @@ function! s:SetList(type, list, action) " {{{
   " Sets the contents of the <type> list.
   let list = a:list
   let list_filter = a:type == 'qflist' ?
-    \ 'EclimQuickfixFilter' : 'EclimLocationListFilter'
+    \ 'EclimQuickFixFilter' : 'EclimLocationListFilter'
   if exists('b:' . list_filter)
     let newlist = []
     for item in list

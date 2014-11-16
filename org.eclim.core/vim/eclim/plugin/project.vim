@@ -70,9 +70,6 @@ call eclim#AddVimSetting(
   \ 'Core/Projects', 'g:EclimProjectProblemsUpdateOnBuild', 1,
   \ 'Should the open :ProjectProblems window be updated when running :ProjectBuild.',
   \ '\(0\|1\)')
-call eclim#AddVimSetting(
-  \ 'Core/Projects', 'g:EclimProjectProblemsQuickFixOpen', 'botright copen',
-  \ 'Sets the vim command used to open the :ProjectProblems quickfix window.')
 " }}}
 
 " Auto Commands {{{

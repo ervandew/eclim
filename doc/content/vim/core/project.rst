@@ -264,11 +264,11 @@ Vim's command line completion to complete the project name.
 
   :doc:`Vim Settings </vim/settings>`
 
-  .. _g\:EclimProjectProblemsQuickFixOpen:
+  .. _g\:EclimQuickFixOpen:
 
-  - **g:EclimProjectProblemsQuickFixOpen** (Default: 'botright copen')
+  - **g:EclimQuickFixOpen** (Default: 'botright copen')
 
-    Specified the command used to open the quickfix window when executing the
+    Specifies the command used to open the quickfix window when executing the
     :ref`:ProjectProblems` command.
 
   .. _g\:EclimProjectProblemsUpdateOnSave:

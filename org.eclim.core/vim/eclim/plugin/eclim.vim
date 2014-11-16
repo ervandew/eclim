@@ -136,6 +136,14 @@ call eclim#AddVimSetting(
   \ '\(0\|1\)')
 
 call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimQuickFixOpen', 'botright copen',
+  \ 'Determines the command to use when eclim opens the quickfix window.')
+call eclim#AddVimSetting(
+  \ 'Core', 'g:EclimQuickFixHeight', 10,
+  \ 'Determines the height of the quickfix window when eclim opens it.',
+  \ '\d\+')
+
+call eclim#AddVimSetting(
   \ 'Core/Signs', 'g:EclimSignLevel', has('signs') ? 'info' : 'off',
   \ 'Sets the level of signs (markers) that will be placed by eclim.',
   \ '\(info\|warning\|error\|off\)')
@@ -236,10 +244,6 @@ call eclim#AddVimSetting(
 
 if !exists('g:EclimLocateUserScopes')
   let g:EclimLocateUserScopes = []
-endif
-
-if !exists("g:EclimQuickfixHeight")
-  let g:EclimQuickfixHeight = 10
 endif
 
 if !exists("g:EclimLocationListHeight")
@@ -418,7 +422,7 @@ if g:EclimMakeQfFilter
   augroup eclim_qf_filter
     autocmd!
     autocmd QuickFixCmdPost make
-      \ if exists('b:EclimQuickfixFilter') |
+      \ if exists('b:EclimQuickFixFilter') |
       \   call eclim#util#SetQuickfixList(getqflist(), 'r') |
       \ endif
   augroup END

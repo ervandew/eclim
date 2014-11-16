@@ -234,13 +234,13 @@ Configuration
   which can be set using the **g:EclimDefaultFileOpenAction** setting which
   accepts the same possible values.
 
-- **g:EclimQuickfixHeight** (Default: 10) -
-  Sets the height in lines of the quickfix window when eclim opens it to display
-  search results.
+.. include:: /vim/search.rst
+   :start-after: begin-search-quickfix
+   :end-before: end-search-quickfix
 
 .. _g\:EclimJavaSearchMapping:
 
 - **g:EclimJavaSearchMapping** (Default: 1) -
   When set to 1, <enter> will be mapped to the java search functionality for the
   various java related xml files (spring, hibernate, web.xml, and
-  struts-config.xml).  By default this is enabled.
+  struts-config.xml).

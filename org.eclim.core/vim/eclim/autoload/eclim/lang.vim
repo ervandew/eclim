@@ -218,7 +218,7 @@ function! eclim#lang#SearchResults(results, action) " {{{
 
       let &autochdir = save_autochdir
     endif
-    exec 'copen ' . g:EclimQuickfixHeight
+    exec g:EclimQuickFixOpen . ' ' . g:EclimQuickFixHeight
   endif
 endfunction " }}}
 

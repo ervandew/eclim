@@ -133,6 +133,6 @@ Configuration
   which can be set using the **g:EclimDefaultFileOpenAction** setting which
   accepts the same possible values.
 
-- **g:EclimQuickfixHeight** (Default: 10) -
-  Sets the height in lines of the quickfix window when eclim opens it to display
-  search results.
+.. include:: /vim/search.rst
+   :start-after: begin-search-quickfix
+   :end-before: end-search-quickfix

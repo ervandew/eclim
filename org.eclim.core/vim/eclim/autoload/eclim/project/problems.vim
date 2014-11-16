@@ -54,7 +54,7 @@ function! eclim#project#problems#Problems(project, open, bang) " {{{
   let s:eclim_problems_bang = a:bang
 
   if a:open
-    exec g:EclimProjectProblemsQuickFixOpen
+    exec g:EclimQuickFixOpen . ' ' . g:EclimQuickFixHeight
   endif
 endfunction " }}}
 
