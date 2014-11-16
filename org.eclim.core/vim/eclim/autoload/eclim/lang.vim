@@ -218,7 +218,8 @@ function! eclim#lang#SearchResults(results, action) " {{{
 
       let &autochdir = save_autochdir
     endif
-    exec 'copen ' . g:EclimQuickfixHeight
+    " Using botright to handle multiple splits windows. See :h window
+    exec 'botright copen ' . g:EclimQuickfixHeight
   endif
 endfunction " }}}
 
