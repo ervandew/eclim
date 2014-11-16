@@ -34,10 +34,15 @@ function! eclim#java#new#Create(type, name) " {{{
   endif
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let myPackage = eclim#java#util#GetPackage()
+
+  " strip off .java suffix if supplied.
+  let newName = a:name
+  if newName =~? '\.java$'
+    let newName = substitute(newName, '\.java$', '', '')
+  endif
 
   " prepend current package if necessary
-  let newName = a:name
+  let myPackage = eclim#java#util#GetPackage()
   if newName !~ '\.' && len(myPackage) > 0
     let newName = myPackage . '.' . newName
   endif
