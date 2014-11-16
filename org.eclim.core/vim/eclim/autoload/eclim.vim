@@ -133,7 +133,7 @@ function! eclim#Execute(command, ...) " {{{
   let error = ''
   if result =~ '^[^\n]*Exception:\?[^\n]*\n\s\+\<at\> ' ||
    \ result =~ '^[^\n]*ResourceException(.\{-})\[[0-9]\+\]:[^\n]*\n\s\+\<at\> '
-    if g:EclimLogLevel != 'trace'
+    if g:EclimLogLevel != 'trace' && !&verbose
       let error = substitute(result, '\(.\{-}\)\n.*', '\1', '')
     else
       let error = result

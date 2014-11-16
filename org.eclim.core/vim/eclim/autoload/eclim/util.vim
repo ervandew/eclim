@@ -127,7 +127,7 @@ function! s:EchoLevel(message, level, highlight) " {{{
     return
   endif
 
-  if s:log_levels[g:EclimLogLevel] < s:log_levels[a:level]
+  if s:log_levels[g:EclimLogLevel] < s:log_levels[a:level] && !&verbose
     return
   endif
 
