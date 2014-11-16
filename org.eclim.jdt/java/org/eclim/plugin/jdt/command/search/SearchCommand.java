@@ -19,8 +19,12 @@ package org.eclim.plugin.jdt.command.search;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +43,8 @@ import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
+
+import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
@@ -117,6 +123,11 @@ public class SearchCommand
   private static final Pattern ANDROID_JDK_URL =
     Pattern.compile(".*android\\.jar!java.*");
 
+  /**
+   * Key used for results that don't belong to any user specified sort key.
+   */
+  private static final String DEFAULT_SORT_KEY = "";
+
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -126,7 +137,12 @@ public class SearchCommand
     IProject project = projectName != null ?
       ProjectUtils.getProject(projectName) : null;
 
-    ArrayList<Position> results = new ArrayList<Position>();
+    String[] sortKeys = getSortKeys();
+
+    // Store the results keyed by the sort key
+    Map<String, List<Position>> positionMap =
+      new HashMap<String, List<Position>>();
+
     for(SearchMatch match : matches){
       IJavaElement element = (IJavaElement)match.getElement();
       if (element != null){
@@ -135,13 +151,67 @@ public class SearchCommand
             elementType != IJavaElement.PACKAGE_FRAGMENT_ROOT)
         {
           Position result = createPosition(project, match);
-          if(result != null){
-            results.add(result);
+          if (result != null) {
+            String sortKey = getSortKey(result, sortKeys);
+            List<Position> positions = positionMap.get(sortKey);
+            if (positions == null) {
+              positions = new ArrayList<Position>();
+              positionMap.put(sortKey, positions);
+            }
+
+            positions.add(result);
           }
         }
       }
     }
-    return results;
+
+    // Assemble the final results in the sorted order
+    List<Position> results = null;
+    for (String sortKey : sortKeys) {
+      List<Position> positions = positionMap.get(sortKey);
+      if (positions == null) {
+        continue;
+      }
+
+      if (results == null) {
+        results = positions;
+      } else {
+        results.addAll(positions);
+      }  
+    }
+
+    return results == null ? Collections.emptyList() : results;
+  }
+
+  /**
+   * Returns the sort keys for this project. It will include the default
+   * key <code>DEFAULT_SORT_KEY</code>.
+   */
+  private String[] getSortKeys()
+    throws Exception {
+
+    String[] sortSettings = Preferences.getInstance()
+      .getArrayValue("org.eclim.java.search.sort");
+
+    String[] sortKeys = Arrays.copyOf(sortSettings, sortSettings.length + 1);
+    sortKeys[sortKeys.length - 1] = DEFAULT_SORT_KEY;
+    return sortKeys;
+  }
+
+  /**
+   * Returns the sort key associated with the given <code>Position</code>.
+   */
+  private String getSortKey(Position position, String[] sortKeys) {
+    for (String sortKey : sortKeys) {
+      if (position.getFilename().contains(sortKey)) {
+        return sortKey;
+      }
+    }
+
+    // This case will not happen since the last entry in sortKeys is an empty
+    // string - DEFAULT_SORT_KEY.
+    assert false;
+    return DEFAULT_SORT_KEY;
   }
 
   /**
