@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,6 @@
  */
 package org.eclim.plugin.core.command.project;
 
-import java.net.URI;
-
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -25,8 +23,7 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclim.plugin.core.util.ProjectUtils;
 
 /**
  * Command to get the project relative path of a linked resource.
@@ -40,24 +37,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class ProjectLinkResource
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
     String file = commandLine.getValue(Options.FILE_OPTION);
-
-    // can't use URLEncoder on the full file since the color in 'C:' gets
-    // encoded as well.
-    //URI uri = new URI("file://" + URLEncoder.encode(file, "UTF-8"));
-    URI uri = new URI("file://" + file.replaceAll(" ", "%20"));
-    IFile[] files = ResourcesPlugin
-      .getWorkspace().getRoot().findFilesForLocationURI(uri);
-
-    if (files.length > 0){
-      return files[0].getProjectRelativePath().toString();
-    }
-    return null;
+    return ProjectUtils.getProjectRelativePath(file);
   }
 }

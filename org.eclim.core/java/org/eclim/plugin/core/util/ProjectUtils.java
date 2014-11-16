@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 package org.eclim.plugin.core.util;
 
 import java.io.File;
+
+import java.net.URI;
 
 import org.eclim.Services;
 
@@ -72,6 +74,28 @@ public class ProjectUtils
   {
     IPath path = getIPath(project);
     return path != null ? path.toOSString().replace('\\', '/') : null;
+  }
+
+  /**
+   * Gets the project relative path of the supplied absolute file path.
+   *
+   * @param path The absolute path to a file in a project.
+   * @return The path or null if not found.
+   */
+  public static String getProjectRelativePath(String path)
+    throws Exception
+  {
+    // can't use URLEncoder on the full file since the colon in 'C:' gets
+    // encoded as well.
+    //URI uri = new URI("file://" + URLEncoder.encode(file, "UTF-8"));
+    URI uri = new URI("file://" + path.replaceAll(" ", "%20"));
+    IFile[] files = ResourcesPlugin
+      .getWorkspace().getRoot().findFilesForLocationURI(uri);
+
+    if (files.length > 0){
+      return files[0].getProjectRelativePath().toString();
+    }
+    return null;
   }
 
   /**

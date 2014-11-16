@@ -104,20 +104,103 @@ public class SearchCommandTest
         "-p", "org.eclim.test.search.TestSearch%2A"
       });
 
-    assertEquals("Wrong number of results.", 2, results.size());
+    assertEquals("Wrong number of results.", 3, results.size());
 
     Map<String,Object> result = results.get(0);
     assertTrue(((String)result.get("filename"))
-        .endsWith("/org/eclim/test/search/TestSearch.java"));
+        .endsWith("src/org/eclim/test/search/TestSearch.java"));
     assertEquals(result.get("message"), "org.eclim.test.search.TestSearch");
     assertEquals(result.get("line"), 6);
     assertEquals(result.get("column"), 14);
 
     result = results.get(1);
     assertTrue(((String)result.get("filename"))
-        .endsWith("/org/eclim/test/search/TestSearchVUnit.java"));
+        .endsWith("src/org/eclim/test/search/TestSearchVUnit.java"));
     assertEquals(result.get("message"), "org.eclim.test.search.TestSearchVUnit");
     assertEquals(result.get("line"), 6);
+    assertEquals(result.get("column"), 14);
+
+    result = results.get(2);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("test/org/eclim/test/search/TestSearchTest.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearchTest");
+    assertEquals(result.get("line"), 3);
+    assertEquals(result.get("column"), 14);
+
+    // test changing the sort
+    Eclim.execute(new String[]{
+      "project_setting",
+      "-p", Jdt.TEST_PROJECT,
+      "-s", "org.eclim.java.search.sort",
+      "-v", "[\"test\", \"src\"]",
+    });
+
+    results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_search", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-p", "org.eclim.test.search.TestSearch%2A"
+      });
+
+    assertEquals("Wrong number of results.", 3, results.size());
+
+    result = results.get(0);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("test/org/eclim/test/search/TestSearchTest.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearchTest");
+    assertEquals(result.get("line"), 3);
+    assertEquals(result.get("column"), 14);
+
+    result = results.get(1);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("src/org/eclim/test/search/TestSearch.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearch");
+    assertEquals(result.get("line"), 6);
+    assertEquals(result.get("column"), 14);
+
+    result = results.get(2);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("src/org/eclim/test/search/TestSearchVUnit.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearchVUnit");
+    assertEquals(result.get("line"), 6);
+    assertEquals(result.get("column"), 14);
+
+    // change the sort again
+    Eclim.execute(new String[]{
+      "project_setting",
+      "-p", Jdt.TEST_PROJECT,
+      "-s", "org.eclim.java.search.sort",
+      "-v", "[\"src\", \"test\"]",
+    });
+
+    results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_search", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-p", "org.eclim.test.search.TestSearch%2A"
+      });
+
+    assertEquals("Wrong number of results.", 3, results.size());
+
+    result = results.get(0);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("src/org/eclim/test/search/TestSearch.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearch");
+    assertEquals(result.get("line"), 6);
+    assertEquals(result.get("column"), 14);
+
+    result = results.get(1);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("src/org/eclim/test/search/TestSearchVUnit.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearchVUnit");
+    assertEquals(result.get("line"), 6);
+    assertEquals(result.get("column"), 14);
+
+    result = results.get(2);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("test/org/eclim/test/search/TestSearchTest.java"));
+    assertEquals(result.get("message"), "org.eclim.test.search.TestSearchTest");
+    assertEquals(result.get("line"), 3);
     assertEquals(result.get("column"), 14);
   }
 

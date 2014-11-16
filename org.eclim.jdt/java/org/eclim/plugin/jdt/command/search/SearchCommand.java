@@ -44,11 +44,11 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
-import org.eclim.plugin.core.preference.Preferences;
-
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.FileUtils;
 import org.eclim.util.file.Position;
@@ -126,7 +126,7 @@ public class SearchCommand
   /**
    * Key used for results that don't belong to any user specified sort key.
    */
-  private static final String DEFAULT_SORT_KEY = "";
+  private static final String DEFAULT_SORT_KEY = StringUtils.EMPTY;
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -137,7 +137,7 @@ public class SearchCommand
     IProject project = projectName != null ?
       ProjectUtils.getProject(projectName) : null;
 
-    String[] sortKeys = getSortKeys();
+    String[] sortKeys = getSortKeys(project);
 
     // Store the results keyed by the sort key
     Map<String, List<Position>> positionMap =
@@ -186,12 +186,23 @@ public class SearchCommand
   /**
    * Returns the sort keys for this project. It will include the default
    * key <code>DEFAULT_SORT_KEY</code>.
+   *
+   * @param project The current project.
    */
-  private String[] getSortKeys()
+  private String[] getSortKeys(IProject project)
     throws Exception {
 
-    String[] sortSettings = Preferences.getInstance()
-      .getArrayValue("org.eclim.java.search.sort");
+    String[] sortSettings = getPreferences()
+      .getArrayValue(project, "org.eclim.java.search.sort");
+
+    for(int i = 0; i < sortSettings.length; i++){
+      String sortKey = sortSettings[i];
+      sortKey = sortKey.replace('\\', '/');
+      if (!sortKey.endsWith("/")){
+        sortKey += '/';
+      }
+      sortSettings[i] = sortKey;
+    }
 
     String[] sortKeys = Arrays.copyOf(sortSettings, sortSettings.length + 1);
     sortKeys[sortKeys.length - 1] = DEFAULT_SORT_KEY;
@@ -201,16 +212,18 @@ public class SearchCommand
   /**
    * Returns the sort key associated with the given <code>Position</code>.
    */
-  private String getSortKey(Position position, String[] sortKeys) {
-    for (String sortKey : sortKeys) {
-      if (position.getFilename().contains(sortKey)) {
-        return sortKey;
+  private String getSortKey(Position position, String[] sortKeys)
+    throws Exception
+  {
+    String path = ProjectUtils.getProjectRelativePath(position.getFilename());
+    if (path != null){
+      for (String sortKey : sortKeys) {
+        if (path.startsWith(sortKey)) {
+          return sortKey;
+        }
       }
     }
 
-    // This case will not happen since the last entry in sortKeys is an empty
-    // string - DEFAULT_SORT_KEY.
-    assert false;
     return DEFAULT_SORT_KEY;
   }
 
