@@ -19,6 +19,21 @@
 "
 " }}}
 
+" Options {{{
+
+" add xml semantic completion triggers for YCM
+if exists("g:ycm_semantic_triggers")
+    " start with user's
+    let triggers = g:ycm_semantic_triggers
+else
+    let triggers = {}
+endif
+
+let triggers['android-xml'] = [':', '="', '<', '/', '@']
+let g:ycm_semantic_triggers = triggers
+
+" }}}
+
 " Command Declarations {{{
 if !exists(":AndroidReload")
   command AndroidReload :call eclim#android#Reload()
