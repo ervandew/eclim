@@ -24,12 +24,25 @@
 
 function! CheckAndroidXml()
 
-    let s:project = eclim#project#util#GetCurrentProjectName()
-    let s:aliases = eclim#project#util#GetProjectNatureAliases(s:project)
-    if index(s:aliases, "android") >= 0
-        set ft=android-xml
-    endif
+  let s:project = eclim#project#util#GetCurrentProjectName()
+  let s:aliases = eclim#project#util#GetProjectNatureAliases(s:project)
+  if index(s:aliases, "android") == -1
+    " only in android projects
+    return
+  endif
 
+  if expand('%') != 'AndroidManifest.xml'
+    " if not the manifest, we must be somewhere
+    " in /res, but NOT in /res/raw
+    let fullPath = expand('%:p')
+    if fullPath !~ '/res/' || fullPath =~ '/res/raw/'
+      " Nope
+      return
+    endif
+  endif
+
+  " yes!
+  set ft=android-xml
 endfunction
 
 autocmd BufRead *.aidl set ft=java
