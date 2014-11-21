@@ -419,8 +419,20 @@ public class ProjectRunCommand
 
   static class VimOutputHandler implements OutputHandler
   {
+
+    static final class PendingOutput
+    {
+      final String type, line;
+      PendingOutput(String type, String line)
+      {
+        this.type = type;
+        this.line = line;
+      }
+    }
+
     final VimClient client;
     final String configName;
+    final ArrayList<PendingOutput> pendingOutput = new ArrayList<PendingOutput>();
 
     String bufNo;
 
@@ -430,6 +442,7 @@ public class ProjectRunCommand
       this.configName = configName;
     }
 
+    @Override
     public void prepare(String launchId)
       throws Exception
     {
@@ -440,6 +453,11 @@ public class ProjectRunCommand
       }
 
       bufNo = rawResult.trim();
+
+      for (PendingOutput output : pendingOutput) {
+        sendLine(output.type, output.line);
+      }
+      pendingOutput.clear();
     }
 
     @Override
@@ -462,6 +480,11 @@ public class ProjectRunCommand
 
     void sendLine(String type, String line)
     {
+      if (bufNo == null) {
+        // not prepared yet; queue for later
+        pendingOutput.add(new PendingOutput(type, line));
+        return;
+      }
       try {
         final String clean = line.trim()
           .replaceAll("\n", "\\\\r")
@@ -496,11 +519,12 @@ public class ProjectRunCommand
     {
       logger.info("Launching: " + config);
       try {
+
         ILaunch launch = DebugUITools.buildAndLaunch(config, "run", monitor);
-        logger.info("Launched: " + launch);
         if (launch != null) {
           EclimLaunchManager.manage(launch, output);
         }
+        logger.info("Launched: " + launch);
       } catch (IllegalArgumentException e) {
         logger.info("Launch terminated; async not supported");
         return new Status(Status.ERROR, "eclim", ERROR_ASYNC, e);
