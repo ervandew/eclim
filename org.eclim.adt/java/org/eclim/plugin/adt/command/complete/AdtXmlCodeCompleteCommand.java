@@ -20,8 +20,7 @@ import com.android.ide.eclipse.adt.internal.editors.AndroidXmlEditor;
   "REQUIRED p project ARG," +
   "REQUIRED f file ARG," +
   "REQUIRED o offset ARG," +
-  "REQUIRED e encoding ARG," +
-  "REQUIRED l layout ARG"
+  "REQUIRED e encoding ARG"
 )
 public class AdtXmlCodeCompleteCommand
   extends AbstractCodeCompleteCommand

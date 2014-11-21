@@ -61,7 +61,6 @@ function! eclim#android#xml#complete#CodeComplete(findstart, base) " {{{
     let command = substitute(command, '<file>', file, '')
     let command = substitute(command, '<offset>', offset, '')
     let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
-    let command = substitute(command, '<layout>', g:EclimJavaCompleteLayout, '')
 
     let completions = []
     let response = eclim#Execute(command)
