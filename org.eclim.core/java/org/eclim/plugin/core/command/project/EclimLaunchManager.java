@@ -34,6 +34,13 @@ public class EclimLaunchManager implements Runnable
 
   public interface OutputHandler
   {
+    /**
+     * NB: If your OutputHandler's prepare might take
+     *  a non-trivial amount of time, you MUST
+     *  queue up any outputs that come along before
+     *  you started. Future work could abstract that
+     *  out as necessary
+     */
     public void prepare(final String launchId)
       throws Exception;
     public void sendErr(String line);
@@ -119,7 +126,8 @@ public class EclimLaunchManager implements Runnable
     set.output.sendTerminated();
   }
 
-  public static synchronized void terminateAll() {
+  public static synchronized void terminateAll()
+  {
     Iterator<LaunchSet> iter = sLaunches.values().iterator();
     while (iter.hasNext()) {
       LaunchSet set = iter.next();
@@ -148,25 +156,7 @@ public class EclimLaunchManager implements Runnable
       return;
     }
 
-    final String id = allocateId(launch);
-
-    // procs remaining; prepare the output
-    try {
-      output.prepare(id);
-    } catch (final Exception e) {
-      remove(id);
-      try {
-        launch.terminate();
-      } catch (final DebugException e2) {
-        // we're quitting anyway
-      }
-
-      // re-raise
-      throw new IllegalArgumentException(
-              "OutputHandler does not support async output",
-              e);
-    }
-
+    // attach NOW so we don't miss anything
     IStreamListener errListener = new IStreamListener()
     {
       @Override
@@ -188,6 +178,25 @@ public class EclimLaunchManager implements Runnable
     for (final IProcess proc : procs) {
       proc.getStreamsProxy().getErrorStreamMonitor().addListener(errListener);
       proc.getStreamsProxy().getOutputStreamMonitor().addListener(outListener);
+    }
+
+    final String id = allocateId(launch);
+
+    // procs remaining; prepare the output
+    try {
+      output.prepare(id);
+    } catch (final Exception e) {
+      remove(id);
+      try {
+        launch.terminate();
+      } catch (final DebugException e2) {
+        // we're quitting anyway
+      }
+
+      // re-raise
+      throw new IllegalArgumentException(
+              "OutputHandler does not support async output",
+              e);
     }
 
     sLaunches.put(id, new LaunchSet(id, launch, output));
