@@ -49,6 +49,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
+
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
+
+import org.eclipse.debug.internal.ui.views.console.ProcessConsoleManager;
 
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.IDebugUIConstants;
@@ -489,6 +494,8 @@ public class ProjectRunCommand
         final String clean = line.trim()
           .replaceAll("\n", "\\\\r")
           .replaceAll("\t", "    ");
+        logger.info("Sending cleaned: ``{}''", clean);
+        logger.info("original: ``{}''", line);
 
         // functionExpr is safer, in case they're in input mode
         client.remoteFunctionExpr("eclim#project#run#onOutput", bufNo, type, clean);
@@ -517,22 +524,53 @@ public class ProjectRunCommand
     @Override
     public IStatus run(IProgressMonitor ignore)
     {
-      logger.info("Launching: " + config);
+      logger.info("Launching: {}", config);
       try {
+        // By default, ProcessConsoleManager will attach a ProcessConsole
+        //  that will steal any buffered output. Rude. Let's muzzle it
+        //  for a second while we launch so it won't steal our output
+        ProcessConsoleManager consoleMgr = DebugUIPlugin.getDefault().getProcessConsoleManager();
+        ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
+        launchMgr.removeLaunchListener(consoleMgr);
 
-        ILaunch launch = DebugUITools.buildAndLaunch(config, "run", monitor);
+        final ILaunch launch = DebugUITools.buildAndLaunch(config, "run", monitor);
         if (launch != null) {
           EclimLaunchManager.manage(launch, output);
+
+          // it's like it never happened!
+          launchMgr.addLaunchListener(consoleMgr);
         }
+
         logger.info("Launched: " + launch);
       } catch (IllegalArgumentException e) {
         logger.info("Launch terminated; async not supported");
-        return new Status(Status.ERROR, "eclim", ERROR_ASYNC, e);
+        return errorStatus(Status.ERROR, ERROR_ASYNC, e);
       } catch (Exception e) {
         // anything else is unexpected
-        return new Status(Status.ERROR, "eclim", "Error while launching", e);
+        logger.error("Unexpected exception during launch", e);
+        return errorStatus(Status.ERROR, "Unexpected error while launching", e);
       }
       return Status.OK_STATUS;
+    }
+
+    private IStatus errorStatus(int kind, String message,
+        Exception e) {
+      final IStatus result = new Status(kind, "eclim", message, e);
+      if (!(monitor instanceof NullUpdatingProgressMonitor)
+            && (monitor instanceof UpdatingProgressMonitor)) {
+        // if we're in async mode, we should try to report the problem
+        try {
+          StringBuilder builder = new StringBuilder(message);
+          if (e != null && e.getMessage() != null && !"".equals(e.getMessage())) {
+            builder.append(": ")
+                   .append(e.getMessage());
+          }
+          ((UpdatingProgressMonitor) monitor).sendMessage(builder.toString());
+        } catch (Exception ignore) {
+          // we did our best, but there's nothing more we can do
+        }
+      }
+      return result;
     }
   }
 }
