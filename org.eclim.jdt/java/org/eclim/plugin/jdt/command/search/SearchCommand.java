@@ -62,6 +62,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.ICodeAssist;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
@@ -93,6 +94,7 @@ import org.eclipse.jdt.core.search.SearchPattern;
 public class SearchCommand
   extends AbstractCommand
 {
+
   public static final String CONTEXT_ALL = "all";
   public static final String CONTEXT_DECLARATIONS = "declarations";
   public static final String CONTEXT_IMPLEMENTORS = "implementors";
@@ -252,6 +254,7 @@ public class SearchCommand
       JavaUtils.getJavaProject(project) : null;
 
     // element search
+    IJavaElement implementedTarget = null;
     if(file != null && offset != null && length != null){
       int charOffset = getOffset(commandLine);
       IJavaElement element = getElement(
@@ -266,8 +269,23 @@ public class SearchCommand
         }else if (context == IJavaSearchConstants.IMPLEMENTORS &&
             element.getElementType() == IJavaElement.METHOD)
         {
+          if (element instanceof IMethod) {
+            // it *should* be instanceof since that's the type,
+            //  but let's be overly cautious
+            implementedTarget = element;
+            element = element.getAncestor(IJavaElement.TYPE);
+          } else {
+            context = IJavaSearchConstants.DECLARATIONS;
+          }
+        } else if (context == IJavaSearchConstants.IMPLEMENTORS &&
+            (element.getElementType() == IJavaElement.FIELD ||
+             element.getElementType() == IJavaElement.LOCAL_VARIABLE))
+        {
+          // it doesn't make sense to search for implementors
+          //  of a variable, so switch to declarations
           context = IJavaSearchConstants.DECLARATIONS;
         }
+
         pattern = SearchPattern.createPattern(element, context);
       }
 
@@ -319,7 +337,9 @@ public class SearchCommand
           .replace(")", "\\)")
           .replace("*", ".*")
           .replace("?", "."));
-        List<SearchMatch> matches = search(pattern, getScope(scope, javaProject));
+        List<SearchMatch> matches = search(pattern,
+                getScope(scope, javaProject),
+                null);
         Iterator<SearchMatch> iterator = matches.iterator();
         while (iterator.hasNext()){
           SearchMatch match = iterator.next();
@@ -340,7 +360,9 @@ public class SearchCommand
           Services.getMessage("java_search.indeterminate"));
     }
 
-    List<SearchMatch> matches = search(pattern, getScope(scope, javaProject));
+    List<SearchMatch> matches = search(pattern,
+            getScope(scope, javaProject),
+            implementedTarget);
     return matches;
   }
 
@@ -349,21 +371,64 @@ public class SearchCommand
    *
    * @param pattern The search pattern.
    * @param scope The scope of the search (file, project, all, etc).
+   * @param implementedTarget If provided, an IJavaElement representing
+   *    a method that must be declared in the resulting types
    *
    * @return List of matches.
    */
   protected List<SearchMatch> search(
-      SearchPattern pattern, IJavaSearchScope scope)
+      SearchPattern pattern,
+      IJavaSearchScope scope,
+      IJavaElement implementedTarget)
     throws CoreException
   {
-    SearchRequestor requestor = new SearchRequestor();
+    final SearchRequestor requestor = searchInternal(
+        pattern, scope, implementedTarget);
+    return collectResults(scope, requestor);
+  }
+
+  private SearchRequestor searchInternal(
+      SearchPattern pattern,
+      IJavaSearchScope scope,
+      IJavaElement implementedTarget)
+    throws CoreException
+  {
+    SearchRequestor requestor = implementedTarget instanceof IMethod ?
+        new ImplementorSearchRequestor((IMethod) implementedTarget) :
+        new SearchRequestor();
     if(pattern != null){
       SearchEngine engine = new SearchEngine();
       SearchParticipant[] participants =
         new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
       engine.search(pattern, participants, scope, requestor, null);
     }
-    return requestor.getMatches();
+
+    return requestor;
+  }
+
+  private List<SearchMatch> collectResults(
+      final IJavaSearchScope scope,
+      final SearchRequestor requestor)
+    throws CoreException
+  {
+    List<SearchMatch> results = requestor.getMatches();
+    if (!(requestor instanceof ImplementorSearchRequestor))
+      return results; // we're done here
+
+    ImplementorSearchRequestor isr = (ImplementorSearchRequestor) requestor;
+    IJavaElement target = isr.getTarget();
+    SearchPattern nextPattern = isr.getNextSearch();
+    while (nextPattern != null) {
+
+      // it MUST also be an ISR
+      isr = (ImplementorSearchRequestor) searchInternal(
+          nextPattern, scope, target);
+      results.addAll(isr.getMatches());
+
+      nextPattern = isr.getNextSearch();
+    }
+
+    return results;
   }
 
   /**
