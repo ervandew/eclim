@@ -22,7 +22,7 @@
 " Script Varables {{{
   let s:complete_command =
     \ '-command android_xml_complete -p "<project>" -f "<file>" ' .
-    \ '-o <offset> -e <encoding> -l <layout>'
+    \ '-o <offset> -e <encoding>'
 " }}}
 
 function! eclim#android#xml#complete#CodeComplete(findstart, base) " {{{

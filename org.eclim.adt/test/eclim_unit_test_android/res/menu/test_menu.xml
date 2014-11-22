@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 
+      For whatever reason, attribute names don't seem to get
+      completed in menu files, but the attribute *values* do. 
+      So, you should see `@+id/mytext_id` and `@string/hello`,
+      for example
+    -->
+    <item 
+        android:id="@+id/title"
+        android:title="@string/hello"
+        />
+</menu>

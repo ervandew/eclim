@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+
+    tools:context=".EclimAdtTestActivity" >
+
+    <!-- 
+      typing `android:` in the above space should provide
+        lots of attributes like "android:orientation"
+      typing `android:orientation="` should provide
+        "vertical" and "horizontal" 
+      -->
+
+    <!-- 
+      typing `<` here should provide standard Views.
+      in my own project, I also get my custom view fqns
+      from this `<`, but it's not working here. I'm not sure
+      why, but it does work with the <view class="" /> notation
+      as shown below
+      -->
+
+    <!-- 
+      typing `@string/` as below should provide "@string/hello"
+      -->
+    <TextView android:id="@+id/mytext_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hello" />
+
+    <!-- 
+      typing `class="` as below should provide the CustomView fqn
+      -->
+    <view
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="org.eclim.adt.test.CustomView"
+    />
+
+</LinearLayout>

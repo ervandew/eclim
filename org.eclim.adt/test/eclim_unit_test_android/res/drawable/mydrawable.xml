@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    
+    <!-- typing '<' should provide "solid," "stroke," etc. -->
+    <solid android:color="#fff" />
+    
+    <!-- 
+      triggering completion in the blank space should provide
+        "android:dashGap", "android:color", etc.
+      typing `android:` should also provide the same
+      typing `android:color="` should provide "@string/", "@color/", etc.
+      typing `android:color="@color/` should provide "@color/mydrawable_border"
+      -->
+    <stroke
+
+        android:width="2dp"
+        android:color="@color/mydrawable_border"/>
+    
+</shape>

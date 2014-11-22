@@ -4,12 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclim.annotation.Command;
+
 import org.eclim.command.CommandLine;
+
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
+
 import org.eclim.plugin.core.util.ProjectUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
 import com.android.ide.eclipse.adt.internal.editors.AndroidXmlEditor;
@@ -43,7 +48,8 @@ public class AdtXmlCodeCompleteCommand
     final IProject project = ProjectUtils.getProject(projectName);
     final IFile ifile = ProjectUtils.getFile(project, file);
 
-    AndroidXmlEditor editor = AdtAssistUtil.newXmlEditor(ifile, offset);
+    // step 0: prepare the editor
+    final AndroidXmlEditor editor = AdtAssistUtil.newXmlEditor(ifile, offset);
 
     // step 1: only slightly hacky completion based on default mechanism
     ICompletionProposal[] props = AdtAssistUtil

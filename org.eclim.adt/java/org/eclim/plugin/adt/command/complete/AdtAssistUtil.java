@@ -78,6 +78,8 @@ import com.android.ide.eclipse.adt.internal.editors.drawable.DrawableContentAssi
 
 import com.android.ide.eclipse.adt.internal.editors.layout.LayoutContentAssist;
 
+import com.android.ide.eclipse.adt.internal.editors.manifest.ManifestContentAssist;
+
 import com.android.ide.eclipse.adt.internal.editors.uimodel.UiElementNode;
 
 import com.android.ide.eclipse.adt.internal.editors.values.ValuesContentAssist;
@@ -203,7 +205,7 @@ public class AdtAssistUtil
     final IModelManager man = StructuredModelManager.getModelManager();
     IStructuredModel model = man.getModelForRead(file);
     IStructuredDocument doc = model.getStructuredDocument();
-    logger.info("Model for {} has {} refs", file, model.getReferenceCountForRead());
+    logger.debug("Model for {} has {} refs", file, model.getReferenceCountForRead());
 
     if (model.getReferenceCountForRead() > REF_COUNT_WARN) {
       logger.warn("You may have forgotten to call AdtAssistUtil#release(editor)!!!");
@@ -358,17 +360,27 @@ public class AdtAssistUtil
       final IFile file)
   {
 
+    if ("AndroidManifest.xml".equals(file.getName())) {
+      // special case (type is always null below)
+      return new ManifestContentAssist();
+    }
+
     // thanks to CommonXmlEditor
     final ResourceFolder resFolder = ResourceManager
       .getInstance().getResourceFolder(file);
     ResourceFolderType type = resFolder == null ? null : resFolder.getType();
 
     if (type == null) {
-        // We lack any real resource information about that file.
-        // Let's take a guess using the actual path.
-        final IEditorInput editorInput = new FileEditorInput(file);
-        final String folderName = AdtUtils.getParentFolderName(editorInput);
-        type = ResourceFolderType.getFolderType(folderName);
+      // We lack any real resource information about that file.
+      // Let's take a guess using the actual path.
+      final IEditorInput editorInput = new FileEditorInput(file);
+      final String folderName = AdtUtils.getParentFolderName(editorInput);
+      type = ResourceFolderType.getFolderType(folderName);
+    }
+
+    if (type == null) {
+      // STILL null? I guess just fall back to values
+      type = ResourceFolderType.VALUES;
     }
 
     switch (type) {
