@@ -149,7 +149,7 @@ call eclim#AddVimSetting(
   \ '\(info\|warning\|error\|off\)')
 
 call eclim#AddVimSetting(
-  \ 'Core/Signs', 'g:EclimShowQuickfixSigns', 1,
+  \ 'Core/Signs', 'g:EclimShowQuickfixSigns', 0,
   \ 'Determines if a sign is placed on lines found in the quickfix list.',
   \ '\(0\|1\)')
 call eclim#AddVimSetting(
