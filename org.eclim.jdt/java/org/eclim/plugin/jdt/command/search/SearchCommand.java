@@ -251,6 +251,8 @@ public class SearchCommand
     IJavaProject javaProject = project != null ?
       JavaUtils.getJavaProject(project) : null;
 
+    SearchRequestor requestor = new SearchRequestor();
+
     // element search
     if(file != null && offset != null && length != null){
       int charOffset = getOffset(commandLine);
@@ -267,6 +269,7 @@ public class SearchCommand
             element.getElementType() == IJavaElement.METHOD)
         {
           context = IJavaSearchConstants.DECLARATIONS;
+          requestor = new ImplementorsSearchRequestor();
         }
         pattern = SearchPattern.createPattern(element, context);
       }
@@ -302,6 +305,7 @@ public class SearchCommand
           context == IJavaSearchConstants.IMPLEMENTORS)
       {
         context = IJavaSearchConstants.DECLARATIONS;
+        requestor = new ImplementorsSearchRequestor();
       }
 
       // hack for inner classes
@@ -340,7 +344,8 @@ public class SearchCommand
           Services.getMessage("java_search.indeterminate"));
     }
 
-    List<SearchMatch> matches = search(pattern, getScope(scope, javaProject));
+    List<SearchMatch> matches = search(
+        pattern, getScope(scope, javaProject), requestor);
     return matches;
   }
 
@@ -356,7 +361,22 @@ public class SearchCommand
       SearchPattern pattern, IJavaSearchScope scope)
     throws CoreException
   {
-    SearchRequestor requestor = new SearchRequestor();
+    return search(pattern, scope, new SearchRequestor());
+  }
+
+  /**
+   * Executes the search.
+   *
+   * @param pattern The search pattern.
+   * @param scope The scope of the search (file, project, all, etc).
+   * @param requestor The search requestor used to accept matches.
+   *
+   * @return List of matches.
+   */
+  protected List<SearchMatch> search(
+      SearchPattern pattern, IJavaSearchScope scope, SearchRequestor requestor)
+    throws CoreException
+  {
     if(pattern != null){
       SearchEngine engine = new SearchEngine();
       SearchParticipant[] participants =

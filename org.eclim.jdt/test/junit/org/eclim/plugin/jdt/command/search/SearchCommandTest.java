@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ public class SearchCommandTest
 {
   private static final String TEST_FILE =
     "src/org/eclim/test/search/TestSearch.java";
+  private static final String TEST_FILE_IMPLEMENTORS =
+    "src/org/eclim/test/search/implementors/TestSearchImplementors.java";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -224,5 +226,38 @@ public class SearchCommandTest
     assertEquals(result.get("message"), "org.eclim.test.search.TestSearch#list");
     assertEquals(result.get("line"), 8);
     assertEquals(result.get("column"), 16);
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void searchImplementors()
+  {
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    List<Map<String,Object>> results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "java_search", "-n", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE_IMPLEMENTORS,
+        "-x", "implementors",
+        "-o", "173", "-e", "utf-8", "-l", "4"
+      });
+    assertEquals(results.size(), 2);
+
+    Map<String,Object> result = results.get(0);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/org/eclim/test/search/implementors/TestImplementor1.java"));
+    assertEquals(result.get("message"),
+        "org.eclim.test.search.implementors.TestImplementor1#test()");
+    assertEquals(result.get("line"), 7);
+    assertEquals(result.get("column"), 15);
+
+    result = results.get(1);
+    assertTrue(((String)result.get("filename"))
+        .endsWith("/org/eclim/test/search/implementors/TestImplementor2.java"));
+    assertEquals(result.get("message"),
+        "org.eclim.test.search.implementors.TestImplementor2#test()");
+    assertEquals(result.get("line"), 7);
+    assertEquals(result.get("column"), 15);
   }
 }

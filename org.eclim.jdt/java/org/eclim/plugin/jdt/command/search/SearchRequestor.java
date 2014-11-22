@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,9 +42,7 @@ public class SearchRequestor
 
   private ArrayList<SearchMatch> matches = new ArrayList<SearchMatch>();
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void acceptSearchMatch(SearchMatch match)
     throws CoreException
   {
@@ -73,18 +71,14 @@ public class SearchRequestor
     private static final IJavaElementComparator ELEMENT_COMPATATOR =
       new IJavaElementComparator();
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int compare(SearchMatch o1, SearchMatch o2)
     {
       return ELEMENT_COMPATATOR.compare(
           (IJavaElement)o1.getElement(), (IJavaElement)o2.getElement());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean equals(Object obj)
     {
       if(obj instanceof SearchMatchComparator){
