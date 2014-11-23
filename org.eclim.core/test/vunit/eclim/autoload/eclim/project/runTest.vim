@@ -80,7 +80,7 @@ function! TestProjectRun() " {{{
   call vunit#PeekRedir()
   echo "Output: " . string(output)
   call vunit#AssertEquals(output[0], 'out>Test Project')
-  call vunit#AssertEquals(output[1], 'err>sample error message')
+  call vunit#AssertEquals(output[1], 'err>sample error message.')
   call vunit#AssertEquals(output[2], 'out><terminated>')
 endfunction " }}}
 
