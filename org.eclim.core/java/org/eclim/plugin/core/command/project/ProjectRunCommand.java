@@ -100,7 +100,7 @@ public class ProjectRunCommand
     // find the actual mode for that group
     final String mode = getGroupMode(group);
     if (mode == null) {
-        throw new IllegalStateException("Invalid group mode. Should never happen");
+      throw new IllegalStateException("Invalid group mode. Should never happen");
     }
 
     // get the requested project
@@ -210,7 +210,7 @@ public class ProjectRunCommand
     }
   }
 
-  ILaunchConfiguration findConfiguration(
+  private ILaunchConfiguration findConfiguration(
       final Iterable<ILaunchConfiguration> configs,
       final String name)
   {
@@ -223,7 +223,7 @@ public class ProjectRunCommand
     return null;
   }
 
-  String getGroupMode(final String groupId)
+  private String getGroupMode(final String groupId)
   {
     final ILaunchGroup[] groups = DebugUITools.getLaunchGroups();
     for (final ILaunchGroup group : groups) {
@@ -235,7 +235,7 @@ public class ProjectRunCommand
     return null;
   }
 
-  IProject getProject(ILaunchConfiguration config)
+  private IProject getProject(ILaunchConfiguration config)
     throws Exception
   {
 
@@ -251,7 +251,8 @@ public class ProjectRunCommand
     return resources[0].getProject();
   }
 
-  abstract static class UpdatingProgressMonitor implements IProgressMonitor
+  private abstract static class UpdatingProgressMonitor
+    implements IProgressMonitor
   {
 
     final String completionMessage;
@@ -267,9 +268,9 @@ public class ProjectRunCommand
     @Override
     public void beginTask(String name, int totalWork)
     {
-        logger.info("Begin: " + name + " / " + totalWork);
-        baseTask = name;
-        currentTask = baseTask;
+      logger.info("Begin: " + name + " / " + totalWork);
+      baseTask = name;
+      currentTask = baseTask;
     }
 
     @Override
@@ -287,15 +288,15 @@ public class ProjectRunCommand
     @Override
     public void internalWorked(double work)
     {
-        logger.info("Internal..." + work);
-        totalProgress += work;
-        sendProgress();
+      logger.info("Internal..." + work);
+      totalProgress += work;
+      sendProgress();
     }
 
     @Override
     public boolean isCanceled()
     {
-        return false;
+      return false;
     }
 
     @Override
@@ -350,10 +351,9 @@ public class ProjectRunCommand
       throws Exception;
   }
 
-  static class NullUpdatingProgressMonitor extends UpdatingProgressMonitor
+  private static class NullUpdatingProgressMonitor extends UpdatingProgressMonitor
   {
-
-    NullUpdatingProgressMonitor(final String completionMessage)
+    public NullUpdatingProgressMonitor(final String completionMessage)
     {
       super(completionMessage);
     }
@@ -372,12 +372,12 @@ public class ProjectRunCommand
 
   }
 
-  static class VimUpdatingProgressMonitor extends UpdatingProgressMonitor
+  private static class VimUpdatingProgressMonitor extends UpdatingProgressMonitor
   {
+    private final VimClient client;
 
-    final VimClient client;
-
-    public VimUpdatingProgressMonitor(final VimClient client,
+    public VimUpdatingProgressMonitor(
+        final VimClient client,
         final String completionMessage)
     {
       super(completionMessage);
@@ -401,9 +401,10 @@ public class ProjectRunCommand
 
   }
 
-  static class NullOutputHandler implements OutputHandler
+  private static class NullOutputHandler implements OutputHandler
   {
-    @Override public void prepare(String launchId)
+    @Override
+    public void prepare(String launchId)
       throws Exception
     {
       // NB client-specific errors can be returned here in the future,
@@ -413,29 +414,24 @@ public class ProjectRunCommand
           "Example: vim --servername <name>");
     }
 
-    @Override public void sendErr(String line) {}
-    @Override public void sendOut(String line) {}
-    @Override public void sendTerminated() {}
+    @Override
+    public void sendErr(String line) {}
+
+    @Override
+    public void sendOut(String line) {}
+
+    @Override
+    public void sendTerminated() {}
   }
 
-  static class VimOutputHandler implements OutputHandler
+  private static class VimOutputHandler implements OutputHandler
   {
+    private final VimClient client;
+    private final String configName;
+    private final ArrayList<PendingOutput> pendingOutput =
+      new ArrayList<PendingOutput>();
 
-    static final class PendingOutput
-    {
-      final String type, line;
-      PendingOutput(String type, String line)
-      {
-        this.type = type;
-        this.line = line;
-      }
-    }
-
-    final VimClient client;
-    final String configName;
-    final ArrayList<PendingOutput> pendingOutput = new ArrayList<PendingOutput>();
-
-    String bufNo;
+    private String bufNo;
 
     public VimOutputHandler(VimClient client, String configName)
     {
@@ -479,7 +475,7 @@ public class ProjectRunCommand
       sendLine("terminated", "");
     }
 
-    void sendLine(String type, String line)
+    private void sendLine(String type, String line)
     {
       if (bufNo == null) {
         // not prepared yet; queue for later
@@ -496,19 +492,35 @@ public class ProjectRunCommand
         // functionExpr is safer, in case they're in input mode
         client.remoteFunctionExpr("eclim#project#run#onOutput", bufNo, type, clean);
       } catch (Exception e) {
+        logger.error("error", e);
         // no worries
+      }
+    }
+
+    private static final class PendingOutput
+    {
+      private final String type;
+      private final String line;
+
+      public PendingOutput(String type, String line)
+      {
+        this.type = type;
+        this.line = line;
       }
     }
   }
 
-  static class LaunchJob extends Job
+  private static class LaunchJob
+      extends Job
   {
     final ILaunchConfiguration config;
     final IProgressMonitor monitor;
     final OutputHandler output;
 
-    public LaunchJob(ILaunchConfiguration config, IProgressMonitor monitor,
-        final OutputHandler output)
+    public LaunchJob(
+        ILaunchConfiguration config,
+        IProgressMonitor monitor,
+        OutputHandler output)
     {
       super("Eclim Launch");
 
@@ -525,7 +537,8 @@ public class ProjectRunCommand
         // By default, ProcessConsoleManager will attach a ProcessConsole
         //  that will steal any buffered output. Rude. Let's muzzle it
         //  for a second while we launch so it won't steal our output
-        ProcessConsoleManager consoleMgr = DebugUIPlugin.getDefault().getProcessConsoleManager();
+        ProcessConsoleManager consoleMgr =
+          DebugUIPlugin.getDefault().getProcessConsoleManager();
         ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
         launchMgr.removeLaunchListener(consoleMgr);
 
@@ -540,32 +553,13 @@ public class ProjectRunCommand
         logger.info("Launched: " + launch);
       } catch (IllegalArgumentException e) {
         logger.error("Launch terminated; async not supported", e);
-        return new Status(Status.ERROR, "eclim", "Unable to capture async output", e);
+        return new Status(
+            Status.ERROR, "eclim", "Unable to capture async output", e);
       } catch (Exception e) {
         logger.error("Launch terminated; Unexpected Error", e);
         return new Status(Status.ERROR, "eclim", "Error while launching", e);
       }
       return Status.OK_STATUS;
-    }
-
-    private IStatus errorStatus(int kind, String message,
-        Exception e) {
-      final IStatus result = new Status(kind, "eclim", message, e);
-      if (!(monitor instanceof NullUpdatingProgressMonitor)
-            && (monitor instanceof UpdatingProgressMonitor)) {
-        // if we're in async mode, we should try to report the problem
-        try {
-          StringBuilder builder = new StringBuilder(message);
-          if (e != null && e.getMessage() != null && !"".equals(e.getMessage())) {
-            builder.append(": ")
-                   .append(e.getMessage());
-          }
-          ((UpdatingProgressMonitor) monitor).sendMessage(builder.toString());
-        } catch (Exception ignore) {
-          // we did our best, but there's nothing more we can do
-        }
-      }
-      return result;
     }
   }
 }

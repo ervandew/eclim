@@ -31,44 +31,14 @@ import org.eclipse.debug.core.model.IStreamMonitor;
  */
 public class EclimLaunchManager implements Runnable
 {
-
-  public interface OutputHandler
-  {
-    /**
-     * NB: If your OutputHandler's prepare might take
-     *  a non-trivial amount of time, you MUST
-     *  queue up any outputs that come along before
-     *  you started. Future work could abstract that
-     *  out as necessary
-     */
-    public void prepare(final String launchId)
-      throws Exception;
-    public void sendErr(String line);
-    public void sendOut(String line);
-    public void sendTerminated();
-  }
-
-  static class LaunchSet
-  {
-    final String id;
-    final ILaunch launch;
-    final OutputHandler output;
-
-    LaunchSet(String id, ILaunch launch, OutputHandler output)
-    {
-      this.id = id;
-      this.launch = launch;
-      this.output = output;
-    }
-  }
-
-  static HashMap<String, LaunchSet> sLaunches = new HashMap<String, LaunchSet>();
-  static Thread thread;
+  private static HashMap<String, LaunchSet> sLaunches =
+    new HashMap<String, LaunchSet>();
+  private static Thread thread;
 
   @Override
   public void run()
   {
-    for (;;) {
+    while (true) {
       try {
         Thread.sleep(500);
       } catch (InterruptedException e) {
@@ -81,7 +51,7 @@ public class EclimLaunchManager implements Runnable
     }
   }
 
-  static synchronized void cleanLaunches()
+  private static synchronized void cleanLaunches()
   {
     Iterator<LaunchSet> iter = sLaunches.values().iterator();
     while (iter.hasNext()) {
@@ -114,7 +84,7 @@ public class EclimLaunchManager implements Runnable
     return true;
   }
 
-  static void terminate(final LaunchSet set)
+  private static void terminate(final LaunchSet set)
     throws DebugException
   {
     if (set.launch.isTerminated()) {
@@ -146,7 +116,8 @@ public class EclimLaunchManager implements Runnable
    *  to perform it. The original exception can be retreived
    *  from #getCause()
    */
-  public static synchronized void manage(final ILaunch launch,
+  public static synchronized void manage(
+      final ILaunch launch,
       final OutputHandler output)
     throws IllegalArgumentException
   {
@@ -182,8 +153,12 @@ public class EclimLaunchManager implements Runnable
       // dump buffered content, if any
       final String pendingOut = stdout.getContents();
       final String pendingErr = stderr.getContents();
-      if (pendingOut.length() > 0) output.sendOut(pendingOut);
-      if (pendingErr.length() > 0) output.sendErr(pendingErr);
+      if (pendingOut.length() > 0){
+        output.sendOut(pendingOut);
+      }
+      if (pendingErr.length() > 0){
+        output.sendErr(pendingErr);
+      }
 
       // attach listeners
       stdout.addListener(outListener);
@@ -205,11 +180,10 @@ public class EclimLaunchManager implements Runnable
 
       // re-raise
       throw new IllegalArgumentException(
-              "OutputHandler does not support async output",
-              e);
+          "OutputHandler does not support async output", e);
     }
 
-    sLaunches.put(id, new LaunchSet(id, launch, output));
+    sLaunches.put(id, new LaunchSet(launch, output));
 
     if (thread == null) {
       thread = new Thread(new EclimLaunchManager());
@@ -218,7 +192,7 @@ public class EclimLaunchManager implements Runnable
     }
   }
 
-  static synchronized String allocateId(ILaunch launch)
+  private static synchronized String allocateId(ILaunch launch)
   {
     final String name = launch.getLaunchConfiguration().getName();
     if (!sLaunches.containsKey(name)) {
@@ -237,8 +211,36 @@ public class EclimLaunchManager implements Runnable
     return id;
   }
 
-  static synchronized void remove(String id)
+  private static synchronized void remove(String id)
   {
     sLaunches.remove(id);
+  }
+
+  public interface OutputHandler
+  {
+    /**
+     * NB: If your OutputHandler's prepare might take
+     *  a non-trivial amount of time, you MUST
+     *  queue up any outputs that come along before
+     *  you started. Future work could abstract that
+     *  out as necessary
+     */
+    public void prepare(final String launchId)
+      throws Exception;
+    public void sendErr(String line);
+    public void sendOut(String line);
+    public void sendTerminated();
+  }
+
+  private static class LaunchSet
+  {
+    final ILaunch launch;
+    final OutputHandler output;
+
+    LaunchSet(ILaunch launch, OutputHandler output)
+    {
+      this.launch = launch;
+      this.output = output;
+    }
   }
 }
