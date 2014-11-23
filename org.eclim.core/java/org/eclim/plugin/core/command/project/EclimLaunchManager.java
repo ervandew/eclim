@@ -176,8 +176,18 @@ public class EclimLaunchManager implements Runnable
     };
 
     for (final IProcess proc : procs) {
-      proc.getStreamsProxy().getErrorStreamMonitor().addListener(errListener);
-      proc.getStreamsProxy().getOutputStreamMonitor().addListener(outListener);
+      IStreamMonitor stdout = proc.getStreamsProxy().getOutputStreamMonitor();
+      IStreamMonitor stderr = proc.getStreamsProxy().getErrorStreamMonitor();
+
+      // dump buffered content, if any
+      final String pendingOut = stdout.getContents();
+      final String pendingErr = stderr.getContents();
+      if (pendingOut.length() > 0) output.sendOut(pendingOut);
+      if (pendingErr.length() > 0) output.sendErr(pendingErr);
+
+      // attach listeners
+      stdout.addListener(outListener);
+      stderr.addListener(errListener);
     }
 
     final String id = allocateId(launch);
