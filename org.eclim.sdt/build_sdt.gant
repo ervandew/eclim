@@ -1,7 +1,7 @@
 feature_sdt = 'org.scala-ide.sdt.feature'
 
 target(name: 'org.eclim.sdt.classpath'){
-  fileset(dir: '${eclipse}'){
+  pluginClasspath{
     include(name: 'dropins/**/plugins/org.scala-ide.*.jar')
     include(name: 'dropins/**/plugins/org.scala-lang.*.jar')
     include(name: 'dropins/**/plugins/org.scala-refactoring.*.jar')

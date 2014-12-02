@@ -1058,6 +1058,18 @@ def plugin(name){
   }
 }
 
+pluginClasspath = { nested ->
+  paths = [getVariable('eclipse')]
+  if (getVariable('eclipse') != getVariable('eclipse.local')){
+    paths << getVariable('eclipse.local')
+  }
+  for (path in paths){
+    ant.fileset(dir: path){
+      nested()
+    }
+  }
+}
+
 runTests = { pluginName, nested ->
   nested()
   junit(pluginName)

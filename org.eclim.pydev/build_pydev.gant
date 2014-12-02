@@ -8,7 +8,7 @@ target(name: 'org.eclim.pydev.test'){
 }
 
 target(name: 'org.eclim.pydev.classpath'){
-  fileset(dir: '${eclipse}'){
+  pluginClasspath{
     include(name: 'dropins/**/plugins/com.aptana.shared_core*/*.jar')
     include(name: 'dropins/**/plugins/com.python.pydev*/*.jar')
     include(name: 'dropins/**/plugins/org.python.pydev*/*.jar')

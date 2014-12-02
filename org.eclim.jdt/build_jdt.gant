@@ -1,7 +1,7 @@
 feature_jdt = 'org.eclipse.jdt'
 
 target(name: 'org.eclim.jdt.classpath'){
-  fileset(dir: '${eclipse}'){
+  pluginClasspath{
     include(name: 'dropins/**/plugins/org.eclipse.jdt.debug_*/*.jar')
     include(name: 'plugins/org.eclipse.jdt.debug_*/*.jar')
   }
