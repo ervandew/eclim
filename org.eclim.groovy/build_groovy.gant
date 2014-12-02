@@ -1,7 +1,7 @@
 feature_groovy = 'org.codehaus.groovy.jdt.patch'
 
 target(name: 'org.eclim.groovy.classpath'){
-  fileset(dir: '${eclipse}'){
+  pluginClasspath{
     include(name: 'dropins/**/plugins/*groovy*.jar')
     include(name: 'plugins/*groovy*.jar')
   }
