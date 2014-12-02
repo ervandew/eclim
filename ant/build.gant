@@ -32,7 +32,9 @@ ant.property(file: 'ant/build.properties')
 ant.defaultexcludes(add: '**/*.swp')
 ant.defaultexcludes(add: '**/*.bak')
 
-if (System.getProperty('user.name') == 'root'){
+if (System.getProperty('user.name') == 'root' &&
+    getVariable('env.FAKEROOTKEY') == null)
+{
   ant.fail('''
     Abort:
 
