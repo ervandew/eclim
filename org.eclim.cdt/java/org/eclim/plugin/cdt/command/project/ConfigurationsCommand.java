@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,10 +58,7 @@ import org.eclipse.core.runtime.IPath;
 public class ConfigurationsCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -107,6 +104,10 @@ public class ConfigurationsCommand
 
       IConfiguration config =
         ManagedBuildManager.getConfigurationForDescription(cconfig);
+      if (config == null){
+        continue;
+      }
+
       ITool[] tools = config.getTools();
       if(tools.length > 0){
         ArrayList<HashMap<String,Object>> tls =
