@@ -43,8 +43,8 @@
     </dependency>
   </feature>
 
-  <feature id="groovy" status="unreleased">
-    <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.0">
+  <feature id="groovy">
+    <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.1">
       <site url="http://dist.springsource.org/release/GRECLIPSE/e4.4/"/>
     </dependency>
   </feature>
