@@ -143,6 +143,11 @@
   </target>
 
   <target name="gant">
+    <antversion property="ant.version.valid" atleast="1.7.1"/>
+    <fail unless="ant.version.valid">
+      To build eclim, you must use ant 1.7.1 or greater.
+    </fail>
+
     <path id="gant-classpath">
       <fileset dir="ant/lib" includes="*.jar"/>
       <fileset dir="org.eclim" includes="lib/*.jar"/>
