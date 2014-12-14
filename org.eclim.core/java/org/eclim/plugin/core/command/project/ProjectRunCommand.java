@@ -534,12 +534,14 @@ public class ProjectRunCommand
     {
       logger.info("Launching: {}", config);
       try {
+        DebugUIPlugin debugUI = DebugUIPlugin.getDefault();
         // By default, ProcessConsoleManager will attach a ProcessConsole
         //  that will steal any buffered output. Rude. Let's muzzle it
         //  for a second while we launch so it won't steal our output
-        ProcessConsoleManager consoleMgr =
-          DebugUIPlugin.getDefault().getProcessConsoleManager();
+        ProcessConsoleManager consoleMgr = debugUI.getProcessConsoleManager();
+
         ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
+        launchMgr.removeLaunchListener(debugUI);
         launchMgr.removeLaunchListener(consoleMgr);
 
         final ILaunch launch = DebugUITools.buildAndLaunch(config, "run", monitor);
