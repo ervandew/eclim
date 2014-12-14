@@ -176,7 +176,7 @@ public class ProjectRunCommand
     if (hasVim) {
       final VimClient client = new VimClient(vimExecutable, vimInstanceId);
       monitor = new VimUpdatingProgressMonitor(client, completionMessage);
-      handler = new VimOutputHandler(client, chosen.getName());
+      handler = new VimOutputHandler(client, project.getName(), chosen.getName());
     } else {
       monitor = new NullUpdatingProgressMonitor(completionMessage);
       handler = new NullOutputHandler();
@@ -427,18 +427,22 @@ public class ProjectRunCommand
     public void sendTerminated() {}
   }
 
-  private static class VimOutputHandler implements OutputHandler
+  private static class VimOutputHandler
+    implements OutputHandler
   {
     private final VimClient client;
+    private final String projectName;
     private final String configName;
     private final ArrayList<PendingOutput> pendingOutput =
       new ArrayList<PendingOutput>();
 
     private String bufNo;
 
-    public VimOutputHandler(VimClient client, String configName)
+    public VimOutputHandler(
+        VimClient client, String projectName, String configName)
     {
       this.client = client;
+      this.projectName = projectName;
       this.configName = configName;
     }
 
@@ -447,7 +451,7 @@ public class ProjectRunCommand
       throws Exception
     {
       final String rawResult = client.remoteFunctionExpr(
-          "eclim#project#run#onPrepareOutput", configName, launchId);
+          "eclim#project#run#onPrepareOutput", projectName, configName, launchId);
       if (rawResult == null) {
         throw new Exception("Timeout preparing output buffer");
       }

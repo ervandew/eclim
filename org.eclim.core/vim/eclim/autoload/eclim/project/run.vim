@@ -187,11 +187,7 @@ function! eclim#project#run#TerminateAllLaunches() " {{{
     return
   endif
 
-  if !eclim#project#util#IsCurrentFileInProject()
-    return
-  endif
   let project = eclim#project#util#GetCurrentProjectName()
-
   let command = s:command_project_run_terminate_all
   let result = eclim#Execute(command, {'project': project})
   call eclim#util#Echo(result)
@@ -209,7 +205,7 @@ function! eclim#project#run#onLaunchProgress(percent, label) " {{{
   call eclim#util#Echo(output)
 endfunction " }}}
 
-function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
+function! eclim#project#run#onPrepareOutput(projectName, configName, launchId) " {{{
   let name = '[' . a:launchId . ' Output]'
   let bufnum = bufnr(eclim#util#EscapeBufferName(name))
   if bufnum == -1
@@ -217,6 +213,7 @@ function! eclim#project#run#onPrepareOutput(configName, launchId) " {{{
     call eclim#util#TempWindow(name, [])
     let bufnum = bufnr('%')
     let b:launch_id = a:launchId
+    let b:eclim_project = a:projectName
 
     augroup eclim_async_launch_cleanup
       autocmd!
