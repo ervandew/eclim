@@ -53,13 +53,13 @@ public class ProjectRunTerminateCommand
     try {
       if (launchId != null) {
         if (EclimLaunchManager.terminate(launchId)) {
-          logger.info("Terminated {}", launchId);
+          logger.debug("Terminated {}", launchId);
           return Services.getMessage("project.execute.terminated", launchId);
         } else {
           return Services.getMessage("project.execute.terminate.nosuch", launchId);
         }
       } else {
-        logger.info("Terminating all running procs");
+        logger.debug("Terminating all running procs");
         EclimLaunchManager.terminateAll();
         return Services.getMessage("project.execute.terminated.all");
       }

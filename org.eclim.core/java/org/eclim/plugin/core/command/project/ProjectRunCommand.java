@@ -268,7 +268,7 @@ public class ProjectRunCommand
     @Override
     public void beginTask(String name, int totalWork)
     {
-      logger.info("Begin: " + name + " / " + totalWork);
+      logger.debug("Begin: " + name + " / " + totalWork);
       baseTask = name;
       currentTask = baseTask;
     }
@@ -288,7 +288,7 @@ public class ProjectRunCommand
     @Override
     public void internalWorked(double work)
     {
-      logger.info("Internal..." + work);
+      logger.debug("Internal..." + work);
       totalProgress += work;
       sendProgress();
     }
@@ -318,7 +318,7 @@ public class ProjectRunCommand
         return; // don't bother
       }
 
-      logger.info("subtask: " + name);
+      logger.debug("subtask: " + name);
       if (baseTask != null && !"".equals(baseTask)) {
         currentTask = baseTask + " - " + name;
       } else {
@@ -351,7 +351,8 @@ public class ProjectRunCommand
       throws Exception;
   }
 
-  private static class NullUpdatingProgressMonitor extends UpdatingProgressMonitor
+  private static class NullUpdatingProgressMonitor
+    extends UpdatingProgressMonitor
   {
     public NullUpdatingProgressMonitor(final String completionMessage)
     {
@@ -361,18 +362,19 @@ public class ProjectRunCommand
     @Override
     public void sendMessage(String message)
     {
-      logger.info("Message: {}", message);
+      logger.debug("Message: {}", message);
     }
 
     @Override
     public void sendProgress(double percent, String label)
     {
-      logger.info("Progress({}): {}", percent, label);
+      logger.debug("Progress({}): {}", percent, label);
     }
 
   }
 
-  private static class VimUpdatingProgressMonitor extends UpdatingProgressMonitor
+  private static class VimUpdatingProgressMonitor
+    extends UpdatingProgressMonitor
   {
     private final VimClient client;
 
@@ -401,7 +403,8 @@ public class ProjectRunCommand
 
   }
 
-  private static class NullOutputHandler implements OutputHandler
+  private static class NullOutputHandler
+    implements OutputHandler
   {
     @Override
     public void prepare(String launchId)
@@ -486,8 +489,8 @@ public class ProjectRunCommand
         final String clean = line.trim()
           .replaceAll("\n", "\\\\r")
           .replaceAll("\t", "    ");
-        logger.info("Sending cleaned: ``{}''", clean);
-        logger.info("original: ``{}''", line);
+        logger.debug("Sending cleaned: ``{}''", clean);
+        logger.debug("original: ``{}''", line);
 
         // functionExpr is safer, in case they're in input mode
         client.remoteFunctionExpr("eclim#project#run#onOutput", bufNo, type, clean);
@@ -511,7 +514,7 @@ public class ProjectRunCommand
   }
 
   private static class LaunchJob
-      extends Job
+    extends Job
   {
     final ILaunchConfiguration config;
     final IProgressMonitor monitor;
@@ -532,7 +535,7 @@ public class ProjectRunCommand
     @Override
     public IStatus run(IProgressMonitor ignore)
     {
-      logger.info("Launching: {}", config);
+      logger.debug("Launching: {}", config);
       try {
         DebugUIPlugin debugUI = DebugUIPlugin.getDefault();
         // By default, ProcessConsoleManager will attach a ProcessConsole
@@ -552,7 +555,7 @@ public class ProjectRunCommand
           launchMgr.addLaunchListener(consoleMgr);
         }
 
-        logger.info("Launched: " + launch);
+        logger.debug("Launched: " + launch);
       } catch (IllegalArgumentException e) {
         logger.error("Launch terminated; async not supported", e);
         return new Status(
