@@ -33,4 +33,6 @@ Require-Bundle: org.eclim,
   org.eclipse.team.core,
   org.eclipse.text,
   org.eclipse.ui,
-  org.eclipse.ui.ide
+  org.eclipse.ui.ide,
+  org.eclipse.debug.core,
+  org.eclipse.debug.ui

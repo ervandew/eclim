@@ -32,6 +32,14 @@ public class VimClient
 
   private static final long TIMEOUT = 60;
 
+  /** we need a bit of extra time to read the output */
+  private static final long TIMEOUT_INPUT = 480;
+
+  /**
+   * Executable to use to send commands
+   */
+  private final String executable;
+
   /**
    * VIM server instance to connect to send commands.
    */
@@ -39,7 +47,13 @@ public class VimClient
 
   public VimClient(String instanceId)
   {
+    this("vim", instanceId);
+  }
+
+  public VimClient(String executable, String instanceId)
+  {
     this.instanceId = instanceId;
+    this.executable = executable;
   }
 
   public String getId()
@@ -50,19 +64,40 @@ public class VimClient
   public void remoteSend(String arg)
     throws Exception
   {
+    // redraw at end to prevent "ENTER to continue"
+    //  for long commands
     String[] cmd = {
-      "vim",
+      executable,
       "--servername",
       instanceId,
       "--remote-send",
-      arg + "<CR>",
+      arg + "<CR> | redraw!",
     };
 
     if (logger.isDebugEnabled()) {
-      logger.debug("VIM command: " + Arrays.asList(cmd));
+      logger.info("VIM command: " + Arrays.asList(cmd));
     }
 
     CommandExecutor.execute(cmd, TIMEOUT);
+  }
+
+  public String remoteExpr(String arg)
+    throws Exception
+  {
+    String[] cmd = {
+      executable,
+      "--servername",
+      instanceId,
+      "--remote-expr",
+      arg,
+    };
+
+    if (logger.isDebugEnabled()) {
+      logger.info("VIM expr: " + Arrays.asList(cmd));
+    }
+
+    CommandExecutor exec = CommandExecutor.execute(cmd, TIMEOUT_INPUT);
+    return exec.getResult();
   }
 
   public void remoteFunctionCall(String function, String... args)
@@ -78,5 +113,22 @@ public class VimClient
     }
     call.append(')');
     remoteSend(call.toString());
+  }
+
+  /** Like remoteFunctionCall but returns the result as a String */
+  public String remoteFunctionExpr(String function, String...args)
+    throws Exception
+  {
+    StringBuilder call = new StringBuilder()
+      .append(function).append('(');
+    for (int i = 0; i < args.length; i++){
+      call.append('"').append(args[i]).append('"');
+      if (i < args.length - 1){
+        call.append(',');
+      }
+    }
+    call.append(')')
+        .append(" | redraw!"); // special for func calls
+    return remoteExpr(call.toString());
   }
 }

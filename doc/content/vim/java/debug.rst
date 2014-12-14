@@ -30,7 +30,7 @@ Before starting a debug session from vim you first need to do a couple things:
   $ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044 \
       -classpath ./bin org.eclim.test.debug.Main
 
-2. Start vim with the --servername argument (eclimd currently sends debugger
+2. Start vim with the ``--servername`` argument (eclimd currently sends debugger
    updates to vim using vim's remote invocation support):
 
 ::
