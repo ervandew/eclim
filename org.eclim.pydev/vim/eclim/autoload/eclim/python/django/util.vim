@@ -163,7 +163,7 @@ function! eclim#python#django#util#PythonExec(code, ...) " {{{
       call eclim#util#EchoDebug('----------')
       call eclim#util#EchoDebug(getcwd())
       call eclim#util#EchoDebug(code)
-      let result = eclim#util#System(interpreter . " -c \"" . code . "\"")
+      let result = eclim#util#System(interpreter . " -W ignore -c \"" . code . "\"")
       if v:shell_error
         call eclim#util#EchoDebug(result)
         " try going up a dir and using that as a top level namespace
@@ -176,7 +176,7 @@ function! eclim#python#django#util#PythonExec(code, ...) " {{{
         call eclim#util#EchoDebug('----------')
         call eclim#util#EchoDebug(getcwd())
         call eclim#util#EchoDebug(code)
-        let result = eclim#util#System(interpreter . " -c \"" . code . "\"")
+        let result = eclim#util#System(interpreter . " -W ignore -c \"" . code . "\"")
         if v:shell_error
           call eclim#util#EchoDebug(result)
           return ''
