@@ -71,11 +71,11 @@ public class VimClient
       "--servername",
       instanceId,
       "--remote-send",
-      arg + "<CR> | redraw!",
+      arg + "<cr> | :redraw!<cr>",
     };
 
     if (logger.isDebugEnabled()) {
-      logger.info("VIM command: " + Arrays.asList(cmd));
+      logger.debug("VIM command: " + Arrays.asList(cmd));
     }
 
     CommandExecutor.execute(cmd, TIMEOUT);
@@ -93,7 +93,7 @@ public class VimClient
     };
 
     if (logger.isDebugEnabled()) {
-      logger.info("VIM expr: " + Arrays.asList(cmd));
+      logger.debug("VIM expr: " + Arrays.asList(cmd));
     }
 
     CommandExecutor exec = CommandExecutor.execute(cmd, TIMEOUT_INPUT);
@@ -128,7 +128,7 @@ public class VimClient
       }
     }
     call.append(')')
-        .append(" | redraw!"); // special for func calls
+        .append(" | :redraw!<cr>"); // special for func calls
     return remoteExpr(call.toString());
   }
 }
