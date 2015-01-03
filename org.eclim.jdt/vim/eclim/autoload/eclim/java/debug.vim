@@ -494,10 +494,10 @@ function! eclim#java#debug#Status() " {{{
     let vars = []
   endif
 
-  call s:CreateStatusWindow(state + threads, vars)
+  call s:CreateStatusWindow(results.project, state + threads, vars)
 endfunction " }}}
 
-function! s:CreateStatusWindow(threads, vars) " {{{
+function! s:CreateStatusWindow(project, threads, vars) " {{{
   " Creates the debug status windows if they do not already exist.
   " The newly created windows are initialized with given content.
 
@@ -518,6 +518,7 @@ function! s:CreateStatusWindow(threads, vars) " {{{
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
   setlocal nonumber
+  let b:eclim_project = a:project
   call s:DefineThreadWinSettings()
   call s:DefineStatusWinSettings()
 
@@ -533,6 +534,7 @@ function! s:CreateStatusWindow(threads, vars) " {{{
   " Avoid the ugly - symbol on folded lines
   setlocal fillchars="fold:\ "
   setlocal nonumber
+  let b:eclim_project = a:project
   call s:DefineVariableWinSettings()
   call s:DefineStatusWinSettings()
 
@@ -678,7 +680,7 @@ function! eclim#java#debug#ThreadViewUpdate(thread_id, kind, value) " {{{
   " a: Add a new thread
   " m: Modify an existing thread
   " r: Remove an existing thread
-  
+
   " Overwrite the message containing the long list of arguments to this function
   call eclim#util#Echo("Refreshing ...")
 
@@ -773,7 +775,6 @@ endfunction " }}}
 
 function! eclim#java#debug#VariableViewUpdate(value) " {{{
   " Updates the variable window with new set of values.
-
   call eclim#util#Echo("Refreshing ...")
   call eclim#util#TempWindowClear(s:variable_buf_name, split(a:value, "<eol>"))
   call eclim#util#Echo(" ")

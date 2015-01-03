@@ -225,6 +225,7 @@ public class DebuggerContext
   {
     Map<String, Object> statusMap = new HashMap<String, Object>();
 
+    statusMap.put("project", project.getName());
     statusMap.put("state", ViewUtils.EXPANDED_NODE_SYMBOL + getId() +
         " (" + state.getName() + ")");
     statusMap.put("threads", threadView.get());
