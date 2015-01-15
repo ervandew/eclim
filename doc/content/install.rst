@@ -79,8 +79,8 @@ Third Party Packages
 As an alternative to the official installer, there are also some packages
 maintained by third parties:
 
-- **Arch:** `aur (eclim) <http://aur.archlinux.org/packages.php?ID=7291>`_,
-  `aur (eclim-git) <http://aur.archlinux.org/packages.php?ID=33120>`_
+- **Arch:** `aur (eclim) <https://aur.archlinux.org/packages/eclim/>`_,
+  `aur (eclim-git) <https://aur.archlinux.org/packages/eclim-git/>`_
 
 Installing / Upgrading
 ======================
