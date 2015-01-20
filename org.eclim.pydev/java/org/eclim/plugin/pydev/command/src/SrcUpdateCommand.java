@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2014  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -99,13 +100,10 @@ public class SrcUpdateCommand
     IProject project = ProjectUtils.getProject(projectName);
     PythonNature nature = PythonNature.getPythonNature(project);
 
-    // only refresh the file.
-    if(!commandLine.hasOption(Options.VALIDATE_OPTION) || nature == null){
-      // getting the file will refresh it.
-      ProjectUtils.getFile(project, file);
+    IFile ifile = ProjectUtils.getFile(project, file);
 
     // validate the src file.
-    }else{
+    if(commandLine.hasOption(Options.VALIDATE_OPTION) && nature != null){
       String filePath = ProjectUtils.getFilePath(project, file);
       String moduleName = nature.resolveModule(filePath);
 
@@ -117,10 +115,8 @@ public class SrcUpdateCommand
           false /* checkForPath */);
 
       // see com.python.pydev.analysis.builder.AnalysisBuilderRunnable.doAnalysis
-      IAnalysisPreferences analysisPreferences =
-        AnalysisPreferences.getAnalysisPreferences();
-      analysisPreferences.clearCaches();
-      IIndentPrefs indentPrefs = DefaultIndentPrefs.get();
+      IAnalysisPreferences analysisPreferences = new AnalysisPreferences(ifile);
+      IIndentPrefs indentPrefs = DefaultIndentPrefs.get(ifile);
       indentPrefs.regenerateIndentString(); // TAB_INDENT pref may have changd.
       OccurrencesAnalyzer analyzer = new OccurrencesAnalyzer();
       IMessage[] messages = analyzer.analyzeDocument(
