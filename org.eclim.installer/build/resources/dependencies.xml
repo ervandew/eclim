@@ -38,7 +38,7 @@
   </feature>
 
   <feature id="adt">
-    <dependency id="com.android.ide.eclipse.adt.feature" version="23.0.3">
+    <dependency id="com.android.ide.eclipse.adt.feature" version="23.0.4">
       <site url="https://dl-ssl.google.com/android/eclipse/"/>
     </dependency>
   </feature>
@@ -50,13 +50,13 @@
   </feature>
 
   <feature id="pydev">
-    <dependency id="org.python.pydev.feature" version="3.6.0">
+    <dependency id="org.python.pydev.feature" version="3.9.1">
       <site url="http://pydev.org/updates"/>
     </dependency>
   </feature>
 
   <feature id="sdt211" status="unreleased">
-    <dependency id="org.scala-ide.sdt.feature" version="4.0.0" match="m2-2_11">
+    <dependency id="org.scala-ide.sdt.feature" version="4.0.0">
       <site url="http://download.scala-ide.org/sdk/lithium/e44/scala211/dev/site"/>
     </dependency>
   </feature>
