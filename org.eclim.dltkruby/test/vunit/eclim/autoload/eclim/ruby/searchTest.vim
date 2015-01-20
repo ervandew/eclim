@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -154,7 +154,7 @@ function! TestSearchPattern()
   lclose
   call vunit#PeekRedir()
 
-  let results = getloclist(0)
+  let results = getqflist()
   echo string(results)
   call vunit#AssertEquals(3, len(results), 'Wrong number of results.')
 endfunction " }}}

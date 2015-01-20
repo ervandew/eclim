@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -72,7 +72,9 @@ function eclim#c#search#FindInclude(argline) " {{{
   if index(paths, dir) == -1
     call add(paths, dir)
   endif
-  let results = split(globpath(join(paths, ','), file), '\n')
+  let results = map(
+    \ split(globpath(join(paths, ','), file), '\n'),
+    \ '{"filename": v:val, "line": 0, "column": 0}')
 
   if !empty(results)
     call eclim#lang#SearchResults(results, action)

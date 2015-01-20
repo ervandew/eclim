@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ public class CodeCompleteCommandTest
         "-o", "42", "-e", "utf-8"
       });
 
-    assertTrue("Wrong number of results", results.size() > 25);
+    assertTrue("Wrong number of results", results.size() > 2);
 
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "testA");

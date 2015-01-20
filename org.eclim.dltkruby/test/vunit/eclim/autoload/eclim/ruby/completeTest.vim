@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ function! TestCompleteUser() " {{{
   let results = eclim#ruby#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call vunit#AssertTrue(len(results) >= 2, 'Wrong number of results.')
+  call vunit#AssertEquals(len(results), 2, 'Wrong number of results.')
   call vunit#AssertEquals('testA', results[0].word, 'Wrong result.')
   call vunit#AssertEquals('testB', results[1].word, 'Wrong result.')
 
@@ -109,7 +109,7 @@ function! TestCompleteUser() " {{{
   let results = eclim#ruby#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  call vunit#AssertTrue(len(results) > 25, 'Wrong number of results.')
+  call vunit#AssertTrue(len(results) > 2, 'Wrong number of results.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
