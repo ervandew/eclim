@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,8 +26,9 @@ element.  A pattern search can be executed using the command
 
 **:RubySearch** -p <pattern> [-t <type> -s <scope> -i -a <action>]
 
-All of the results will be placed into the current window's location list (:help
-location-list) so that you can easily navigate the results.
+When there is more than 1 result, those results will be placed into vim's
+quickfix list (:help quickfix) so that you can easily navigate them using vim's
+quickfix commands.
 
 Vim command completion is supported through out the command with the exception
 of the pattern to search for.
@@ -85,10 +86,10 @@ search with the exception that you do not specify the -p option since the
 element under the cursor will be searched for instead.
 
 If only one result is found and that result is in the current source file, the
-cursor will be moved to the element found.  Otherwise, on single result
+cursor will be moved to the element found. Otherwise, on single result
 matches, the value of :ref:`g:EclimRubySearchSingleResult` will be consulted
-for the action to take.  If there are multiple results, the location list will
-be opened with the list of results.
+for the action to take. If there are multiple results, the quickfix list will be
+opened with the list of results.
 
 .. _\:RubySearchContext:
 

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,8 +26,9 @@ pattern search can be executed using the command
 
 **:JavaSearch** -p <pattern> [-t <type> -x <context> -s <scope> -i -a <action>]
 
-All of the results will be placed into the current window's location list (:help
-location-list) so that you can easily navigate the results.
+When there is more than 1 result, those results will be placed into vim's
+quickfix list (:help quickfix) so that you can easily navigate them using vim's
+quickfix commands.
 
 Vim command completion is supported through out the command with the excption
 of the pattern to search for.

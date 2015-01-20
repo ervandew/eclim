@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ references using:
 If only one result is found and that result is in the current source file, the
 cursor will be moved to the element found. Otherwise, on single result matches,
 the value of :ref:`g:EclimPythonSearchSingleResult` will be consulted for the
-action to take. If there are multiple results, the location list will be opened
+action to take. If there are multiple results, the quickfix list will be opened
 with the list of results. You can also force the action to use for the current
 search by suppling the ``-a <action>`` arg:
 
