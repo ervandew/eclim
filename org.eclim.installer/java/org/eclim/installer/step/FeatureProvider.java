@@ -40,7 +40,7 @@ public class FeatureProvider
   public static final String[] FEATURES = {
     "jdt", "adt", "wst", "cdt",
     "dltk", "dltkruby", "pdt",
-    "pydev", "sdt211", "groovy"
+    "pydev", "sdt", "groovy"
   };
 
   private static final String[][] FEATURES_DEPENDS = {
