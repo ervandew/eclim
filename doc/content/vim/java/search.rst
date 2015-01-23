@@ -207,6 +207,8 @@ Configuration
 
 :doc:`Eclim Settings </vim/settings>`
 
+.. _org.eclim.java.search.sort:
+
 - **org.eclim.java.search.sort** -
   Json formatted list of project releative paths used to sort the search results.
 

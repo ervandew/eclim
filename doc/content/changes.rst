@@ -16,6 +16,59 @@
 History of Changes
 ==================
 
+.. _2.4.1:
+
+2.4.1 (Jan. 22, 2015)
+---------------------
+
+Install:
+  - Fixed unattended installation.
+
+Eclim:
+  - Updated the search behavior across all eclim's supported languages to now
+    use vim's quickfix list instead of the location list, and to only do so if
+    there is more than one result.
+  - Updated eclim's sign support for quickfix results to now be disabled by
+    default.
+  - Updated eclim's signs to use more unique ids to support multiple different
+    sign types on a single line and to avoid clashing with other plugins that
+    may be setting signs on the same lines as eclim.
+
+Project:
+  - Added a :ref:`:ProjectRun <:ProjectRun>` command to invoke your project's
+    eclipse run configuration.
+    |br| Thanks to Daniel Leong
+  - Added :ref:`:ProjectImportDiscover <:ProjectImportDiscover>` to bulk import
+    projects from a common parent directory.
+    |br| Thanks to Kannan Rajah
+
+Java:
+  - Added support for :doc:`java debugging </vim/java/debug>`.
+    |br| Thanks to Kannan Rajah
+  - Added a :ref:`:JavaNew <:JavaNew>` command to create new classes,
+    interfaces, etc in your project.
+    |br| Thanks to Daniel Leong
+  - Added ability to configure :JavaImpl to :ref:`insert methods at the current
+    cursor position <g:EclimJavaImplInsertAtCursor>`.
+    |br| Thanks to Daniel Leong
+  - Updated :JavaSearch to support :ref:`sorting <org.eclim.java.search.sort>`
+    the results by relative path.
+    |br| Thanks to Kannan Rajah
+
+Groovy:
+  - Added support for groovy :doc:`validation </vim/groovy/validate>` and
+    :doc:`code completion </vim/groovy/complete>`.
+    |br| Thanks to Yves Zoundi
+
+Python:
+  - Fixed eclim's python support to work against the pydev 3.9.1
+
+Scala:
+  - Scala support has been re-enabled now that ScalaIDE 4.0.0 for Luna has been
+    released.
+
+| :gitlog:`Git Log (2.4.1) <2.4.0...2.4.1>`
+
 .. _2.4.0:
 
 2.4.0 (Aug. 24, 2014)
@@ -213,7 +266,8 @@ Java:
   - Fix for rare case where an invalid classpath entry could result in the
     .classpath file reverted to the eclipse default.
   - :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` added to show the caller or
-    callee hierarchy of a method. Thanks to Alexandre Fonseca.
+    callee hierarchy of a method.
+    |br| Thanks to Alexandre Fonseca
 
 Php:
   .. warning::
@@ -294,3 +348,7 @@ Scala:
 | :gitlog:`Git Log (1.7.14) <1.7.13...1.7.14>`
 
 :doc:`/archive/changes`
+
+.. |br| raw:: html
+
+  <br/>

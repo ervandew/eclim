@@ -123,6 +123,15 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Jan 22, 2015
+-------------
+
+The latest version of eclim is now available with scala support re-enabled, new
+groovy support, java debugging support, many bug fixes, and more.
+
+- :ref:`Eclim 2.4.1 <2.4.1>`
+
+
 Aug 24, 2014
 -------------
 
