@@ -221,6 +221,7 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace) " {{{
   set filetype=locate_results
   setlocal nonumber nowrap
   setlocal noswapfile nobuflisted
+  setlocal nospell norelativenumber
   setlocal buftype=nofile bufhidden=delete
 
   let results_bufnum = bufnr('%')
@@ -236,6 +237,7 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace) " {{{
   setlocal nonumber
   setlocal nolist
   setlocal noswapfile nobuflisted
+  setlocal nospell norelativenumber
   setlocal buftype=nofile bufhidden=delete
 
   let b:bufnum = bufnum
@@ -409,6 +411,7 @@ function! s:LocateFileChangeScope() " {{{
   setlocal nonumber
   setlocal nolist
   setlocal noswapfile nobuflisted
+  setlocal nospell norelativenumber
   setlocal buftype=nofile bufhidden=delete
 
   nnoremap <buffer> <silent> <cr> :call <SID>ChooseScope()<cr>
