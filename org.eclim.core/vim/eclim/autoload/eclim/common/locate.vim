@@ -272,19 +272,19 @@ function! s:LocateFileCompletionInit(action, scope, project, workspace) " {{{
   " enable completion after user starts typing
   call s:LocateFileCompletionAutocmdDeferred()
 
-  imap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection("n")<cr>
-  imap <buffer> <silent> <c-j> <c-r>=<SID>LocateFileSelection("n")<cr>
-  imap <buffer> <silent> <down> <c-r>=<SID>LocateFileSelection("n")<cr>
-  imap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection("p")<cr>
-  imap <buffer> <silent> <up> <c-r>=<SID>LocateFileSelection("p")<cr>
-  imap <buffer> <silent> <c-k> <c-r>=<SID>LocateFileSelection("p")<cr>
-  exec 'imap <buffer> <silent> <cr> ' .
+  inoremap <buffer> <silent> <tab> <c-r>=<SID>LocateFileSelection("n")<cr>
+  inoremap <buffer> <silent> <c-j> <c-r>=<SID>LocateFileSelection("n")<cr>
+  inoremap <buffer> <silent> <down> <c-r>=<SID>LocateFileSelection("n")<cr>
+  inoremap <buffer> <silent> <s-tab> <c-r>=<SID>LocateFileSelection("p")<cr>
+  inoremap <buffer> <silent> <up> <c-r>=<SID>LocateFileSelection("p")<cr>
+  inoremap <buffer> <silent> <c-k> <c-r>=<SID>LocateFileSelection("p")<cr>
+  exec 'inoremap <buffer> <silent> <cr> ' .
     \ '<c-r>=<SID>LocateFileSelect("' . a:action . '")<cr>'
-  imap <buffer> <silent> <c-e> <c-r>=<SID>LocateFileSelect('edit')<cr>
-  imap <buffer> <silent> <c-s> <c-r>=<SID>LocateFileSelect('split')<cr>
-  imap <buffer> <silent> <c-t> <c-r>=<SID>LocateFileSelect("tablast \| tabnew")<cr>
-  imap <buffer> <silent> <c-l> <c-r>=<SID>LocateFileChangeScope()<cr>
-  imap <buffer> <silent> <c-h> <c-r>=<SID>LocateFileHelp()<cr>
+  inoremap <buffer> <silent> <c-e> <c-r>=<SID>LocateFileSelect('edit')<cr>
+  inoremap <buffer> <silent> <c-s> <c-r>=<SID>LocateFileSelect('split')<cr>
+  inoremap <buffer> <silent> <c-t> <c-r>=<SID>LocateFileSelect("tablast \| tabnew")<cr>
+  inoremap <buffer> <silent> <c-l> <c-r>=<SID>LocateFileChangeScope()<cr>
+  inoremap <buffer> <silent> <c-h> <c-r>=<SID>LocateFileHelp()<cr>
 
   startinsert!
 endfunction " }}}
