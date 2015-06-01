@@ -8,7 +8,6 @@ from docutils.parsers.rst import Directive, directives, Parser
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.writers.html import HTMLTranslator, HTMLWriter
 from sphinx.util.osutil import os_path
-from sphinx.util.pycompat import b
 
 class RssTranslator(HTMLTranslator):
     def __init__(self, *args, **kwargs):
@@ -105,11 +104,20 @@ class RssInsertDirective(Directive):
         source = self.state_machine.input_lines.source(
             self.lineno - self.state_machine.input_offset - 1)
 
-        rss_doc = utils.new_document(b('<rss>'), self.state.document.settings)
+        rss_doc = utils.new_document('<rss>', self.state.document.settings)
         Parser().parse('\n'.join(self.content), rss_doc)
 
-        rst_suffix = env.config.source_suffix
-        path = os.path.relpath(source, env.srcdir).replace(rst_suffix, '.html')
+        path = os.path.relpath(source, env.srcdir)
+
+        suffixes = env.config.source_suffix
+        # retain backwards compatibility with sphinx < 1.3
+        if isinstance(suffixes, basestring):
+            suffixes = [suffixes]
+
+        for suffix in suffixes:
+            if path.endswith(suffix):
+                path = '%s.html' % path[:-len(suffix)]
+                break
 
         builder = env.app.builder
         docwriter = HTMLWriter(self)
@@ -142,7 +150,7 @@ class RssInsertDirective(Directive):
                 node = nodes.paragraph()
                 node.extend(child.children[title_index + 1:])
 
-                sec_doc = utils.new_document(b('<rss-section>'), docsettings)
+                sec_doc = utils.new_document('<rss-section>', docsettings)
                 sec_doc.append(node)
                 visitor = RssTranslator(builder, sec_doc)
                 sec_doc.walkabout(visitor)
@@ -165,3 +173,9 @@ def setup(app):
     app.add_directive('rss', RssDirective)
     app.add_directive('rssinsert', RssInsertDirective)
     app.add_config_value('rss_baseurl', None, 'html')
+
+# python 2 and 3 compatibility
+try:
+    basestring
+except:
+    basestring = str
