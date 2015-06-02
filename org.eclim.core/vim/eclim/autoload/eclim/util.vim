@@ -1075,7 +1075,7 @@ function! eclim#util#PromptList(prompt, list, ...)
       echo prompt . "\n"
       let response = input(a:prompt . ": ")
     endtry
-    while response !~ '\(^$\|^[0-9]\+$\)' ||
+    while response !~ '^\d*$' ||
         \ response < g:EclimPromptListStartIndex ||
         \ response > maxindex
       let response = input("You must choose a value between " .
