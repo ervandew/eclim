@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2013  Eric Van Dewoestine
+Copyright (C) 2005 - 2015  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -51,19 +51,22 @@ class VimdocWriter(text.TextWriter):
     self.document.walkabout(visitor)
     self.output = visitor.body
 
-    # add page tag and vim modline
-    try:
-      page = os.path.relpath(
-        self.document.settings._source,
-        self.builder.env.srcdir
-      ).replace(self.builder.config.source_suffix, '')
-    except TypeError:
-      # python 3
-      page = os.path.relpath(
-        self.document.settings._source.decode('utf8'),
-        self.builder.env.srcdir
-      ).replace(self.builder.config.source_suffix, '')
+    page = os.path.relpath(
+      self.document.settings._source,
+      self.builder.env.srcdir
+    )
 
+    suffixes = self.builder.config.source_suffix
+    # retain backwards compatibility with sphinx < 1.3
+    if isinstance(suffixes, basestring):
+      suffixes = [suffixes]
+
+    for suffix in suffixes:
+      if page.endswith(suffix):
+        page = '%s.html' % page[:-len(suffix)]
+        break
+
+    # add page tag and vim modline
     self.output = '*%s*\n\n%s\n\nvim:ft=eclimhelp' % (
       page.replace(os.path.sep, '-'),
       self.output.strip(),
@@ -274,3 +277,9 @@ def setup(sphinx):
 
   else:
     sphinx.connect('missing-reference', missing_reference_html)
+
+# python 2 and 3 compatibility
+try:
+    basestring
+except:
+    basestring = str
