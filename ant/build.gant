@@ -63,7 +63,7 @@ if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
 
   eclipseDestDir = new File(binding.getVariable('eclipse.dest'))
   if (!eclipseDestDir.exists()){
-    ant.fail(message: "Eclipse home directory does not exist: $eclipseDestDir")
+    ant.fail(message: "Eclipse destination directory does not exist: $eclipseDestDir")
   }
   if (!eclipseDestDir.canWrite()){
     ant.echo('''
@@ -298,23 +298,23 @@ target(name: 'deploy.eclipse'){
         includes: '**/*', perm: 'ugo+x')
     // java symlink support sucks, especially if the link is broken
     exec(executable: 'rm', errorproperty: 'ignore'){
-      arg(line: '"${eclipse.local}/eclim" "${eclipse.local}/eclimd"')
+      arg(line: '"${eclipse.dest}/eclim" "${eclipse.dest}/eclimd"')
     }
     // if ln supports it (gnu), make the links relative, otherwise fallback to
     // absolute
     try{
-      exec(executable: 'ln', dir: '${eclipse.local}',
+      exec(executable: 'ln', dir: '${eclipse.dest}',
           failonerror: true, errorproperty: 'ignore'){
         arg(line: '-rs ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim .')
       }
-      exec(executable: 'ln', dir: '${eclipse.local}', failonerror: true){
+      exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
         arg(line: '-rs ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd .')
       }
     }catch(e){
-      exec(executable: 'ln', dir: '${eclipse.local}', failonerror: true){
+      exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
         arg(line: '-s ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim .')
       }
-      exec(executable: 'ln', dir: '${eclipse.local}', failonerror: true){
+      exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
         arg(line: '-s ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd .')
       }
     }
