@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -791,6 +791,60 @@ function! eclim#project#util#ProjectUpdate() " {{{
   else
     call eclim#util#ClearLocationList()
     call eclim#util#Echo(result)
+  endif
+endfunction " }}}
+
+function! eclim#project#util#ProjectGrep(command, args) " {{{
+  " Executes the supplied vim grep command with the specified pattern against
+  " one or more file patterns.
+
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
+
+  let project = eclim#project#util#GetProject(expand('%:p'))
+  let tail = substitute(a:args, '\(.\).\{-}\1\s\(.*\)', '\2', '')
+  let pattern = substitute(a:args, '\(.*\)\s\+\M' . tail . '\m$', '\1', '')
+  let cmd = a:command
+  let acd = &autochdir
+  set noautochdir
+  try
+    if pattern != a:args && tail != a:args && tail != ''
+      let files = eclim#util#ParseArgs(tail)
+      let paths = ''
+      for file in files
+        if paths != ''
+          let paths .= ' '
+        endif
+        let paths .= escape(project.path, ' ') . '/' . file
+      endfor
+      let links = get(project, 'links', {})
+      if len(links)
+        for link in values(links)
+          for file in files
+            let paths .= ' ' . escape(link, ' ') . '/' . file
+          endfor
+        endfor
+      endif
+      silent exec a:command . ' ' . pattern . ' ' . paths
+    else
+      " let vim generate the proper error
+      silent exec a:command . ' ' . a:args
+    endif
+  catch /E480/
+    " no results found
+  catch /.*/
+    call eclim#util#EchoError(v:exception)
+    return
+  finally
+    let &autochdir = acd
+    " force quickfix / location list signs to update.
+    call eclim#display#signs#Update()
+  endtry
+
+  let numresults = len(a:command =~ '^l' ? getloclist(0) : getqflist())
+  if numresults == 0
+    call eclim#util#EchoInfo('No results found.')
   endif
 endfunction " }}}
 
