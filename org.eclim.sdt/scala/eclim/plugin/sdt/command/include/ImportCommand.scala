@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2014 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2015 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ class ImportCommand
       val project = src.getJavaProject.getProject
       val document = ProjectUtils.getDocument(project, file)
       val ifile = ProjectUtils.getFile(project, file)
-      val edit = TextEditUtils.createTextFileChange(ifile, changes).getEdit
+      val edit = TextEditUtils.createTextFileChange(ifile, changes, true).getEdit
       JavaModelUtil.applyEdit(src, edit, true, null)
 
       exception match {
