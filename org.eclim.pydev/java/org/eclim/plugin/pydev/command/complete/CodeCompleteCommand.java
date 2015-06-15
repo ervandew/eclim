@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2013 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -184,6 +184,13 @@ public class CodeCompleteCommand
     public Object getAdapter(Class adapter)
     {
       return null;
+    }
+
+    @Override
+    public int getGrammarVersion()
+      throws MisconfigurationException
+    {
+      return getPythonNature().getGrammarVersion();
     }
   }
 }
