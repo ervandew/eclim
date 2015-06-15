@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import org.eclipse.core.resources.IProject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 
 import org.eclipse.ui.internal.wizards.datatransfer.WizardProjectsImportPage;
 
@@ -99,9 +100,9 @@ public class ProjectImportCommand
         WizardProjectsImportPage.ProjectRecord.class,
         IProgressMonitor.class);
     method.setAccessible(true);
-    Boolean result = (Boolean)method.invoke(page, record, new NullProgressMonitor());
+    Status result = (Status)method.invoke(page, record, new NullProgressMonitor());
 
-    if (!result.booleanValue()){
+    if (!result.isOK()){
       return Services.getMessage("project.import.failed", projectName);
     }
 
