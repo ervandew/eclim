@@ -132,7 +132,7 @@ class ImportCommand
       val project = src.getJavaProject.getProject
       val document = ProjectUtils.getDocument(project, file)
       val ifile = ProjectUtils.getFile(project, file)
-      val edit = TextEditUtils.createTextFileChange(ifile, changes).getEdit
+      val edit = TextEditUtils.createTextFileChange(ifile, changes, leaveDirty = false).getEdit
       JavaModelUtil.applyEdit(src, edit, true, null)
 
       exception match {
