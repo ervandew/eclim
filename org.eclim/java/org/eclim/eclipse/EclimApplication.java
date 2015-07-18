@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,10 @@ public class EclimApplication
   public Object start(IApplicationContext context)
     throws Exception
   {
+    if (System.getProperty("eclipse.launcher") == null){
+      System.setProperty("eclipse.launcher", "eclimd");
+    }
+
     if (System.getProperty("org.eclim.debug") != null){
       logger.info("Enabing debug logging for org.eclim...");
       LogManager.getLogger("org.eclim").setLevel(Level.DEBUG);
