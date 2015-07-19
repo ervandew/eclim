@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,7 +115,7 @@ public class CodeCompleteCommandTest
 
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "regular");
-    assertEquals(result.get("menu"), "$regular: mixed");
+    assertEquals(result.get("menu"), "$regular : mixed");
     assertEquals(result.get("info"), "$regular regular read/write property<br/>Type:  mixed");
   }
 

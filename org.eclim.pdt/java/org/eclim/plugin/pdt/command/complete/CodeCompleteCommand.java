@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,8 @@ public class CodeCompleteCommand
   protected String getCompletion(IScriptCompletionProposal proposal)
   {
     String completion = proposal.getDisplayString().trim();
-    completion = DISPALY_TO_COMPLETION.matcher(completion).replaceFirst("$1");
+    completion = DISPALY_TO_COMPLETION
+      .matcher(completion).replaceFirst("$1").trim();
 
     Matcher matcher = METHOD_WITH_ARGS.matcher(completion);
     if (matcher.find()){
