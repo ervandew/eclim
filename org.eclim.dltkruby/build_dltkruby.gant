@@ -11,10 +11,16 @@ target(name: 'org.eclim.dltkruby.test'){
   }else{
     property(name: 'ruby.path', value: '/usr/bin/ruby')
   }
+  sleep(seconds: 1)
+  echo('removing ruby interpreter')
   eclim('-command dltk_remove_interpreter -l ruby -p "${ruby.path}"')
+  sleep(seconds: 1)
+  echo('adding ruby interpreter')
   eclim('-command dltk_add_interpreter -l ruby -t ruby -p "${ruby.path}"')
 
   runTests('org.eclim.dltkruby'){
+    sleep(seconds: 1)
+    echo('creating ruby project')
     createProject('org.eclim.dltkruby', 'eclim_unit_test_ruby')
     sleep(seconds: 5)
   }
