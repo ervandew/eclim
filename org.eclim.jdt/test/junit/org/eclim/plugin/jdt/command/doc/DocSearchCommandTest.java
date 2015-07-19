@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class DocSearchCommandTest
 
     normalize(results);
     assertEquals(results.get(0),
-        "http://docs.oracle.com/javase/${version}/docs/api/java/awt/List.html");
+        "https://docs.oracle.com/javase/${version}/docs/api/java/awt/List.html");
   }
 
   @Test
@@ -71,10 +71,10 @@ public class DocSearchCommandTest
 
     normalize(results);
     assertEquals(results.get(0),
-        "http://docs.oracle.com/javase/${version}/docs/api/" +
+        "https://docs.oracle.com/javase/${version}/docs/api/" +
         "java/util/ArrayList.html");
     assertEquals(results.get(1),
-        "http://docs.oracle.com/javase/${version}/docs/api/" +
+        "https://docs.oracle.com/javase/${version}/docs/api/" +
         "java/util/Arrays.ArrayList.html");
   }
 
@@ -94,7 +94,7 @@ public class DocSearchCommandTest
 
     normalize(results);
     assertEquals(results.get(0),
-        "http://docs.oracle.com/javase/${version}/docs/api/" +
+        "https://docs.oracle.com/javase/${version}/docs/api/" +
         "java/lang/System.html#currentTimeMillis()");
   }
 
