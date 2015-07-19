@@ -1,6 +1,6 @@
 @echo off
 
-rem Copyright (C) 2005 - 2012  Eric Van Dewoestine
+rem Copyright (C) 2005 - 2015  Eric Van Dewoestine
 rem
 rem This program is free software: you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by
@@ -20,4 +20,4 @@ set ECLIPSE_HOME=%~dp0
 set CLASSPATH=
 
 rem ECLIMD_OPTS=-java.ext.dirs
-start "eclimd" "%ECLIPSE_HOME%\eclipse" -debug -nosplash -clean -refresh -application org.eclim.application -vmargs %ECLIMD_OPTS% %*
+start "eclimd" "%ECLIPSE_HOME%\eclipse" --launcher.suppressErrors -debug -nosplash -clean -refresh -application org.eclim.application -vmargs %ECLIMD_OPTS% %*
