@@ -63,12 +63,7 @@ function! TestCompleteBuiltin() " {{{
   let results = eclim#ruby#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
   echo 'results = ' . string(results)
-  " DLTK returns times() and, for some reason:
-  " timestamp_file(name, target_prefix) - MakeMakefile
-  " This occurs both in eclim and in the eclipse gui. Probably another dltk
-  " bug.
-  "call vunit#AssertEquals(len(results), 1, 'Wrong number of results.')
-  call vunit#AssertTrue(len(results) >= 1, 'Wrong number of results.')
+  call vunit#AssertEquals(len(results), 1, 'Wrong number of results.')
   call vunit#AssertEquals('times', results[0].word, 'Wrong result.')
 
   " list method

@@ -167,12 +167,7 @@ public class CodeCompleteCommandTest
         "-o", "70", "-e", "utf-8"
       });
 
-    // DLTK returns times() and, for some reason:
-    // timestamp_file(name, target_prefix) - MakeMakefile
-    // This occurs both in eclim and in the eclipse gui. Probably another dltk
-    // bug.
-    //assertEquals("Wrong number of results", 1, results.size());
-    assertTrue("Wrong number of results", results.size() >= 1);
+    assertEquals("Wrong number of results", 1, results.size());
 
     result = results.get(0);
     assertEquals(result.get("completion"), "times");
