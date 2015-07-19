@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,9 +120,11 @@ public class CommentCommand
       Javadoc javadoc = (node instanceof PackageDeclaration) ?
         ((PackageDeclaration)node).getJavadoc() :
         ((BodyDeclaration)node).getJavadoc();
-      JavaUtils.format(
-          src, CodeFormatter.K_COMPILATION_UNIT,
-          javadoc.getStartPosition(), javadoc.getLength());
+      int kind = CodeFormatter.K_COMPILATION_UNIT |
+        CodeFormatter.F_INCLUDE_COMMENTS;
+      int start = javadoc.getStartPosition();
+      int length = javadoc.getLength();
+      JavaUtils.format(src, kind, start, javadoc.getLength());
     }
 
     return null;

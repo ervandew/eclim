@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,9 +35,10 @@ function! TestComment() " {{{
 
   call vunit#AssertEquals('  /**', getline(11), 'Wrong doc line 11.')
   call vunit#AssertEquals('   * {@inheritDoc}', getline(12), 'Wrong doc line 12.')
-  call vunit#AssertEquals('   * @see Object#equals(Object)', getline(13),
-    \ 'Wrong doc line 13.')
-  call vunit#AssertEquals('   */', getline(14), 'Wrong doc line 14.')
+  call vunit#AssertEquals('   *', getline(13), 'Wrong doc line 13.')
+  call vunit#AssertEquals('   * @see Object#equals(Object)', getline(14),
+    \ 'Wrong doc line 14.')
+  call vunit#AssertEquals('   */', getline(15), 'Wrong doc line 15.')
 
   call cursor(5, 3)
   JavaDocComment
