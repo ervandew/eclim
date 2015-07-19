@@ -1,8 +1,8 @@
 package org.eclim.test.refactoring.rename.n1.n2;
 
-import org.eclim.test.refactoring.rename.n1.TestN1;
-
 import static org.eclim.test.refactoring.rename.n1.TestN1.FOO;
+
+import org.eclim.test.refactoring.rename.n1.TestN1;
 
 public class TestN2
 {

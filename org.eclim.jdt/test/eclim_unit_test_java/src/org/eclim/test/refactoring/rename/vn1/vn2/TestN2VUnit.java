@@ -1,8 +1,8 @@
 package org.eclim.test.refactoring.rename.vn1.vn2;
 
-import org.eclim.test.refactoring.rename.vn1.TestN1VUnit;
-
 import static org.eclim.test.refactoring.rename.vn1.TestN1VUnit.FOO;
+
+import org.eclim.test.refactoring.rename.vn1.TestN1VUnit;
 
 public class TestN2VUnit
 {

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2012  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ function! TestRenameField() " {{{
 
   call vunit#AssertEquals(expand('%'), 'TestN2VUnit.current.java', 'wrong diff current 2')
   call vunit#AssertTrue(&diff, 'current diff not enabled 2')
-  call vunit#AssertEquals(getline(5),
+  call vunit#AssertEquals(getline(3),
     \ 'import static org.eclim.test.refactoring.rename.vn1.TestN1VUnit.FOO;',
     \ 'current import FOO field incorrect.')
   call vunit#AssertEquals(getline(11),
@@ -94,7 +94,7 @@ function! TestRenameField() " {{{
   winc l
   call vunit#AssertEquals(expand('%'), 'TestN2VUnit.new.java', 'wrong diff new 2')
   call vunit#AssertTrue(&diff, 'new diff not enabled 2')
-  call vunit#AssertEquals(getline(5),
+  call vunit#AssertEquals(getline(3),
     \ 'import static org.eclim.test.refactoring.rename.vn1.TestN1VUnit.BAR;',
     \ 'new import FOO field incorrect.')
   call vunit#AssertEquals(getline(11),
@@ -113,7 +113,7 @@ function! TestRenameField() " {{{
     \ '  public static final String BAR = "value";', 'field rename incorrect')
   let lines = readfile(
     \ 'src/org/eclim/test/refactoring/rename/vn1/vn2/TestN2VUnit.java')
-  call vunit#AssertEquals(lines[4],
+  call vunit#AssertEquals(lines[2],
     \ 'import static org.eclim.test.refactoring.rename.vn1.TestN1VUnit.BAR;',
     \ 'static field import rename incorrect')
   call vunit#AssertEquals(lines[10],
@@ -210,11 +210,11 @@ function! TestRenameType() " {{{
   call vunit#AssertEquals(expand('%'), 'TestN2VUnit.current.java', 'wrong diff current 1')
   call vunit#AssertTrue(&diff, 'current diff not enabled 1')
   call vunit#AssertEquals(getline(3),
-    \ 'import org.eclim.test.refactoring.rename.vn1.TestN1VUnit;',
-    \ 'current type import incorrect 1')
-  call vunit#AssertEquals(getline(5),
     \ 'import static org.eclim.test.refactoring.rename.vn1.TestN1VUnit.BAR;',
     \ 'current type static import incorrect 1')
+  call vunit#AssertEquals(getline(5),
+    \ 'import org.eclim.test.refactoring.rename.vn1.TestN1VUnit;',
+    \ 'current type import incorrect 1')
   call vunit#AssertEquals(getline(12),
     \ '    TestN1VUnit test = new TestN1VUnit();',
     \ 'current type reference incorrect 1')
@@ -222,11 +222,11 @@ function! TestRenameType() " {{{
   call vunit#AssertEquals(expand('%'), 'TestN2VUnit.new.java', 'wrong diff new 1')
   call vunit#AssertTrue(&diff, 'new diff not enabled')
   call vunit#AssertEquals(getline(3),
-    \ 'import org.eclim.test.refactoring.rename.vn1.TestR1VUnit;',
-    \ 'new type import incorrect')
-  call vunit#AssertEquals(getline(5),
     \ 'import static org.eclim.test.refactoring.rename.vn1.TestR1VUnit.BAR;',
     \ 'new type static import incorrect')
+  call vunit#AssertEquals(getline(5),
+    \ 'import org.eclim.test.refactoring.rename.vn1.TestR1VUnit;',
+    \ 'new type import incorrect')
   call vunit#AssertEquals(getline(12),
     \ '    TestR1VUnit test = new TestR1VUnit();',
     \ 'new type reference incorrect')
@@ -247,11 +247,11 @@ function! TestRenameType() " {{{
   let lines = readfile(
     \ 'src/org/eclim/test/refactoring/rename/vn1/vn2/TestN2VUnit.java')
   call vunit#AssertEquals(lines[2],
-    \ 'import org.eclim.test.refactoring.rename.vn1.TestR1VUnit;',
-    \ 'type import rename incorrect')
-  call vunit#AssertEquals(lines[4],
     \ 'import static org.eclim.test.refactoring.rename.vn1.TestR1VUnit.BAR;',
     \ 'type static import rename incorrect')
+  call vunit#AssertEquals(lines[4],
+    \ 'import org.eclim.test.refactoring.rename.vn1.TestR1VUnit;',
+    \ 'type import rename incorrect')
   call vunit#AssertEquals(lines[11],
     \ '    TestR1VUnit test = new TestR1VUnit();',
     \ 'type reference rename incorrect')
@@ -287,20 +287,20 @@ function! TestRenamePackage() " {{{
   call vunit#AssertEquals(expand('%'), 'TestN2VUnit.current.java', 'wrong diff current 1')
   call vunit#AssertTrue(&diff, 'current diff not enabled 1')
   call vunit#AssertEquals(getline(3),
-    \ 'import org.eclim.test.refactoring.rename.vn1.TestR1VUnit;',
-    \ 'current vn1 import incorrect 1')
-  call vunit#AssertEquals(getline(5),
     \ 'import static org.eclim.test.refactoring.rename.vn1.TestR1VUnit.BAR;',
     \ 'current vn1 static import incorrect 1')
+  call vunit#AssertEquals(getline(5),
+    \ 'import org.eclim.test.refactoring.rename.vn1.TestR1VUnit;',
+    \ 'current vn1 import incorrect 1')
   winc l
   call vunit#AssertEquals(expand('%'), 'TestN2VUnit.new.java', 'wrong diff new 1')
   call vunit#AssertTrue(&diff, 'new diff not enabled 1')
   call vunit#AssertEquals(getline(3),
-    \ 'import org.eclim.test.refactoring.rename.vr1.TestR1VUnit;',
-    \ 'new vn1 import incorrect 1')
-  call vunit#AssertEquals(getline(5),
     \ 'import static org.eclim.test.refactoring.rename.vr1.TestR1VUnit.BAR;',
     \ 'new vn1 static import incorrect 1')
+  call vunit#AssertEquals(getline(5),
+    \ 'import org.eclim.test.refactoring.rename.vr1.TestR1VUnit;',
+    \ 'new vn1 import incorrect 1')
 
   let numwins = winnr('$')
   winc j
@@ -315,11 +315,11 @@ function! TestRenamePackage() " {{{
     \ 'package org.eclim.test.refactoring.rename.vr1.vn2;',
     \ 'package declaration rename incorrect')
   call vunit#AssertEquals(getline(3),
-    \ 'import org.eclim.test.refactoring.rename.vr1.TestR1VUnit;',
-    \ 'vn1 import rename incorrect')
-  call vunit#AssertEquals(getline(5),
     \ 'import static org.eclim.test.refactoring.rename.vr1.TestR1VUnit.BAR;',
     \ 'vn1 static import rename incorrect')
+  call vunit#AssertEquals(getline(5),
+    \ 'import org.eclim.test.refactoring.rename.vr1.TestR1VUnit;',
+    \ 'vn1 import rename incorrect')
   let lines = readfile('../TestR1VUnit.java')
   call vunit#AssertEquals(lines[0],
     \ 'package org.eclim.test.refactoring.rename.vr1;',
