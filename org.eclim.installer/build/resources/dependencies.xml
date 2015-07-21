@@ -2,61 +2,61 @@
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
 <dependencies>
   <feature id="cdt">
-    <dependency id="org.eclipse.cdt" version="8.4.0">
-      <site url="http://download.eclipse.org/releases/luna/"/>
+    <dependency id="org.eclipse.cdt" version="8.7.0">
+      <site url="http://download.eclipse.org/releases/mars/"/>
     </dependency>
   </feature>
 
   <feature id="dltk">
-    <dependency id="org.eclipse.dltk.core" version="5.0.0">
-      <site url="http://download.eclipse.org/releases/luna/"/>
+    <dependency id="org.eclipse.dltk.core" version="5.2.0">
+      <site url="http://download.eclipse.org/releases/mars/"/>
     </dependency>
   </feature>
 
   <feature id="dltkruby">
-    <dependency id="org.eclipse.dltk.ruby" version="5.0.0">
-      <site url="http://download.eclipse.org/releases/luna/"/>
+    <dependency id="org.eclipse.dltk.ruby" version="5.2.0">
+      <site url="http://download.eclipse.org/releases/mars/"/>
     </dependency>
   </feature>
 
   <feature id="jdt">
-    <dependency id="org.eclipse.jdt" version="3.10.0">
-      <site url="http://download.eclipse.org/releases/luna/"/>
+    <dependency id="org.eclipse.jdt" version="3.11.0">
+      <site url="http://download.eclipse.org/releases/mars/"/>
     </dependency>
   </feature>
 
   <feature id="pdt">
-    <dependency id="org.eclipse.php" version="3.3.0">
-      <site url="http://download.eclipse.org/releases/luna/"/>
+    <dependency id="org.eclipse.php" version="3.5.0">
+      <site url="http://download.eclipse.org/releases/mars/"/>
     </dependency>
   </feature>
 
   <feature id="wst">
-    <dependency id="org.eclipse.wst.web_ui.feature" version="3.6.0">
-      <site url="http://download.eclipse.org/releases/luna/"/>
+    <dependency id="org.eclipse.wst.web_ui.feature" version="3.7.0">
+      <site url="http://download.eclipse.org/releases/mars/"/>
     </dependency>
   </feature>
 
   <feature id="adt">
-    <dependency id="com.android.ide.eclipse.adt.feature" version="23.0.4">
+    <dependency id="com.android.ide.eclipse.adt.feature" version="23.0.6">
       <site url="https://dl-ssl.google.com/android/eclipse/"/>
     </dependency>
   </feature>
 
   <feature id="groovy">
-    <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.1">
-      <site url="http://dist.springsource.org/release/GRECLIPSE/e4.4/"/>
+    <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.2">
+      <site url="http://dist.springsource.org/snapshot/GRECLIPSE/e4.5/"/>
     </dependency>
   </feature>
 
   <feature id="pydev">
-    <dependency id="org.python.pydev.feature" version="3.9.1">
+    <dependency id="org.python.pydev.feature" version="4.2.0">
       <site url="http://pydev.org/updates"/>
     </dependency>
   </feature>
 
   <feature id="sdt">
-    <dependency id="org.scala-ide.sdt.feature" version="4.0.0">
+    <dependency id="org.scala-ide.sdt.feature" version="4.1.0">
       <site url="http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site"/>
     </dependency>
   </feature>
