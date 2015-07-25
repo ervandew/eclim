@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,11 +49,10 @@ public class HeadlessPresentationEngine
   @Override
   protected Object createWidget(MUIElement element, Object parent)
   {
-    // hide the top level window.
-    if (parent == null && element instanceof MWindow){
-      element.setVisible(false);
-    }
-    return super.createWidget(element, parent);
+    Object widget = super.createWidget(element, parent);
+    // hide all elements
+    element.setVisible(false);
+    return widget;
   }
 
   @Override
