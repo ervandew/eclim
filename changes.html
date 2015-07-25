@@ -1,0 +1,777 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>History of Changes &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="index.html" />
+    <link rel="next" title="Contribute" href="contribute.html" />
+    <link rel="prev" title="Cheatsheet" href="cheatsheet.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="vim/index.html">Documentation</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/java/index.html">Java</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="cheatsheet.html"
+         title="previous chapter">&laquo; Cheatsheet</a></li>
+  <li class="hidden-phone"><a href="contribute.html"
+         title="next chapter">Contribute &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="history-of-changes">
+<h1>History of Changes<a class="headerlink" href="#history-of-changes" title="Permalink to this headline">¶</a></h1>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li><a class="reference internal" href="#jul-25-2015">2.5.0 (Jul. 25, 2015)</a></li>
+<li><a class="reference internal" href="#jan-22-2015">2.4.1 (Jan. 22, 2015)</a></li>
+<li><a class="reference internal" href="#aug-24-2014">2.4.0 (Aug. 24, 2014)</a></li>
+<li><a class="reference internal" href="#may-07-2014">1.7.19 (May 07, 2014)</a></li>
+<li><a class="reference internal" href="#apr-12-2014">2.3.4 (Apr. 12, 2014)</a></li>
+<li><a class="reference internal" href="#apr-06-2014">2.3.3 (Apr. 06, 2014)</a></li>
+<li><a class="reference internal" href="#sep-12-2013">2.3.2 / 1.7.18 (Sep. 12, 2013)</a></li>
+<li><a class="reference internal" href="#jul-27-2013">2.3.1 (Jul. 27, 2013)</a></li>
+<li><a class="reference internal" href="#jul-21-2013">2.3.0 / 1.7.17 (Jul. 21, 2013)</a></li>
+<li><a class="reference internal" href="#jul-14-2013">2.2.7 / 1.7.16 (Jul. 14, 2013)</a></li>
+<li><a class="reference internal" href="#may-18-2013">2.2.6 / 1.7.14 (May 18, 2013)</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="jul-25-2015">
+<span id="id1"></span><h2>2.5.0 (Jul. 25, 2015)<a class="headerlink" href="#jul-25-2015" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Eclim:</dt>
+<dd><ul class="first last simple">
+<li>Eclim now supports, and requires, Eclipse 4.5 (Mars)</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.4.1...2.5.0">Git Log (2.5.0)</a></div>
+</div>
+</div>
+<div class="section" id="jan-22-2015">
+<span id="id2"></span><h2>2.4.1 (Jan. 22, 2015)<a class="headerlink" href="#jan-22-2015" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Install:</dt>
+<dd><ul class="first last simple">
+<li>Fixed unattended installation.</li>
+</ul>
+</dd>
+<dt>Eclim:</dt>
+<dd><ul class="first last simple">
+<li>Updated the search behavior across all eclim's supported languages to now
+use vim's quickfix list instead of the location list, and to only do so if
+there is more than one result.</li>
+<li>Updated eclim's sign support for quickfix results to now be disabled by
+default.</li>
+<li>Updated eclim's signs to use more unique ids to support multiple different
+sign types on a single line and to avoid clashing with other plugins that
+may be setting signs on the same lines as eclim.</li>
+</ul>
+</dd>
+<dt>Project:</dt>
+<dd><ul class="first last simple">
+<li>Added a <a class="reference internal" href="vim/core/project.html#projectrun"><span>:ProjectRun</span></a> command to invoke your project's
+eclipse run configuration.
+<br/> Thanks to Daniel Leong</li>
+<li>Added <a class="reference internal" href="vim/core/project.html#projectimportdiscover"><span>:ProjectImportDiscover</span></a> to bulk import
+projects from a common parent directory.
+<br/> Thanks to Kannan Rajah</li>
+</ul>
+</dd>
+<dt>Java:</dt>
+<dd><ul class="first last simple">
+<li>Added support for <a class="reference internal" href="vim/java/debug.html"><em>java debugging</em></a>.
+<br/> Thanks to Kannan Rajah</li>
+<li>Added a <a class="reference internal" href="vim/java/types.html#javanew"><span>:JavaNew</span></a> command to create new classes,
+interfaces, etc in your project.
+<br/> Thanks to Daniel Leong</li>
+<li>Added ability to configure :JavaImpl to <a class="reference internal" href="vim/java/methods.html#g-eclimjavaimplinsertatcursor"><span>insert methods at the current
+cursor position</span></a>.
+<br/> Thanks to Daniel Leong</li>
+<li>Updated :JavaSearch to support <a class="reference internal" href="vim/java/search.html#org-eclim-java-search-sort"><span>sorting</span></a>
+the results by relative path.
+<br/> Thanks to Kannan Rajah</li>
+</ul>
+</dd>
+<dt>Groovy:</dt>
+<dd><ul class="first last simple">
+<li>Added support for groovy <a class="reference internal" href="vim/groovy/validate.html"><em>validation</em></a> and
+<a class="reference internal" href="vim/groovy/complete.html"><em>code completion</em></a>.
+<br/> Thanks to Yves Zoundi</li>
+</ul>
+</dd>
+<dt>Python:</dt>
+<dd><ul class="first last simple">
+<li>Fixed eclim's python support to work against the pydev 3.9.1</li>
+</ul>
+</dd>
+<dt>Scala:</dt>
+<dd><ul class="first last simple">
+<li>Scala support has been re-enabled now that ScalaIDE 4.0.0 for Luna has been
+released.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.4.0...2.4.1">Git Log (2.4.1)</a></div>
+</div>
+</div>
+<div class="section" id="aug-24-2014">
+<span id="id3"></span><h2>2.4.0 (Aug. 24, 2014)<a class="headerlink" href="#aug-24-2014" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Eclim:</dt>
+<dd><ul class="first last">
+<li><p class="first">Eclim now supports, and requires, Eclipse Luna</p>
+</li>
+<li><p class="first"><strong>:EclimSettings</strong> renamed to <strong>:WorkspaceSettings</strong> to better reflect what
+is being edited.</p>
+</li>
+<li><p class="first">Added <a class="reference internal" href="vim/core/eclim.html#vimsettings"><span>:VimSettings</span></a> command to make viewing/editing of
+eclim's vim client settings easier.</p>
+</li>
+<li><p class="first">All eclim <code>make</code> based commands (:Ant, :Mvn, etc.) will now use <a class="reference external" href="https://github.com/tpope/vim-dispatch">dispatch</a>
+if available. If you would like to disable this behavior, add the following
+to your vimrc:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimMakeDispatchEnabled <span class="p">=</span> <span class="m">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Lot of bugs have also been fixed.</p>
+</li>
+</ul>
+</dd>
+<dt>Scala:</dt>
+<dd><ul class="first last simple">
+<li>Scala support is disabled in this release. I tried waiting for a final
+release of ScalaIDE 4.0.0 for Luna, but I don't want to hold up the rest of
+eclim any longer. If you want to use eclim's scala support, you'll need to
+install the ScalaIDE 4.0.0 milestone and build eclim from the master git
+branch.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.3.4...2.4.0">Git Log (2.4.0)</a></div>
+</div>
+</div>
+<div class="section" id="may-07-2014">
+<span id="id4"></span><h2>1.7.19 (May 07, 2014)<a class="headerlink" href="#may-07-2014" title="Permalink to this headline">¶</a></h2>
+<p>Indigo release which includes most of the changes from 2.3.3 and 2.3.4,
+excluding the new pydev support. This will most likely be the final eclim
+release for indigo.</p>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/1.7.18...1.7.19">Git Log (1.7.19)</a></div>
+</div>
+</div>
+<div class="section" id="apr-12-2014">
+<span id="id5"></span><h2>2.3.4 (Apr. 12, 2014)<a class="headerlink" href="#apr-12-2014" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Project:</dt>
+<dd><ul class="first last simple">
+<li>Fixed the <code>projects</code> command result on Windows.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.3.3...2.3.4">Git Log (2.3.4)</a></div>
+</div>
+</div>
+<div class="section" id="apr-06-2014">
+<span id="id6"></span><h2>2.3.3 (Apr. 06, 2014)<a class="headerlink" href="#apr-06-2014" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Installer:</dt>
+<dd><ul class="first last simple">
+<li>Fixed running of the installer with Java 8.</li>
+</ul>
+</dd>
+<dt>Eclimd:</dt>
+<dd><ul class="first last simple">
+<li>Starting eclimd in the background is now done using the <code>-b</code> flag instead
+of passing a <code>start</code> argument.</li>
+<li>Eclimd debug logging can now be enabled at startup using the <code>--debug</code>
+flag.</li>
+</ul>
+</dd>
+<dt>Ant:</dt>
+<dd><ul class="first last simple">
+<li>Fixed ant target completion for newer ant versions (those that require java
+5).</li>
+</ul>
+</dd>
+<dt>C/C++:</dt>
+<dd><ul class="first last simple">
+<li>Fixed adding of includes etc. in the C++ sections of <strong>:CProjectConfig</strong>.</li>
+<li>Fixed searching to include macro results.</li>
+<li>TODO/FIXME markers are now ignored by validation.</li>
+</ul>
+</dd>
+<dt>Html:</dt>
+<dd><ul class="first last simple">
+<li>Fixed indentation after unclosed <code>&lt;br&gt;</code> and <code>&lt;input&gt;</code> tags.</li>
+</ul>
+</dd>
+<dt>Java:</dt>
+<dd><ul class="first last simple">
+<li>Fixed possible infinite loop when adding imports using <strong>:JavaImport</strong>.</li>
+<li>Fixed an edge case which caused an additional empty line to be added between
+imports that should be grouped together when using <strong>:JavaImport</strong>.</li>
+<li>Fixed <strong>:Java</strong> command if the main class has no package declaration.</li>
+<li>Fixed issue with large portions of code being re-formatted when applying a
+correction suggestion.</li>
+<li>TODO/FIXME markers are now ignored by validation.</li>
+<li>Some of the eclipse java code completion settings are now available via
+<strong>:ProjectSettings</strong>.</li>
+</ul>
+</dd>
+<dt>Javascript:</dt>
+<dd><ul class="first last simple">
+<li>Let tern supersede eclim's limited javascript completion.</li>
+</ul>
+</dd>
+<dt>Maven/Ivy:</dt>
+<dd><ul class="first last simple">
+<li>Removed dependency searching since the search provider no longer exists.</li>
+</ul>
+</dd>
+<dt>Python:</dt>
+<dd><ul class="first last">
+<li><p class="first">Eclim's python support been re-written to use pydev instead of rope.</p>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p>Any exiting eclim python projects you have should be re-created with the
+new <code>python</code> nature:</p>
+<div class="last highlight-python"><div class="highlight"><pre>:ProjectCreate /path/to/project -n python
+</pre></div>
+</div>
+</div>
+</li>
+</ul>
+</dd>
+<dt>Scala:</dt>
+<dd><ul class="first last simple">
+<li>Disabled use of temp files which could cause some validation errors.</li>
+<li>Added support for <a class="reference internal" href="vim/scala/import.html#scalaimport"><span>automated imports</span></a>.</li>
+</ul>
+</dd>
+<dt>Xml:</dt>
+<dd><ul class="first last simple">
+<li>Fixed validation of xml files with no dtd/schema to not raise errors on
+missing dtd for non-english users.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.3.2...2.3.3">Git Log (2.3.3)</a></div>
+</div>
+</div>
+<div class="section" id="sep-12-2013">
+<span id="id8"></span><span id="id7"></span><h2>2.3.2 / 1.7.18 (Sep. 12, 2013)<a class="headerlink" href="#sep-12-2013" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Installer:</dt>
+<dd><ul class="first last simple">
+<li>Fixed extraction of scala vim files when installing scala support.</li>
+</ul>
+</dd>
+<dt>Php:</dt>
+<dd><ul class="first last simple">
+<li>Fixed completion of php namespaces.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.3.1...2.3.2">Git Log (2.3.2)</a></div>
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/1.7.17...1.7.18">Git Log (1.7.18)</a></div>
+</div>
+</div>
+<div class="section" id="jul-27-2013">
+<span id="id9"></span><h2>2.3.1 (Jul. 27, 2013)<a class="headerlink" href="#jul-27-2013" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Installer:</dt>
+<dd><ul class="first last simple">
+<li>Fixed dependencies to point at the Kepler update site.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.3.0...2.3.1">Git Log (2.3.1)</a></div>
+</div>
+</div>
+<div class="section" id="jul-21-2013">
+<span id="id11"></span><span id="id10"></span><h2>2.3.0 / 1.7.17 (Jul. 21, 2013)<a class="headerlink" href="#jul-21-2013" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Java:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="vim/java/classpath.html#newjarentry-java"><span>:NewJarEntry</span></a> now accepts up to 3 arguments
+allowing you to create the jar entry with the path to the jar, path to the
+source, and the path to the javadocs.</li>
+<li>On javadoc search, all results, including results found in jar files, will
+be fully translated to usable urls to be opened by vim instead of sending
+jar results back to eclipse to let it open them. With this change your
+chosen brower on the vim side will always be used.</li>
+<li>Fix for import grouping by package on Kepler.</li>
+</ul>
+</dd>
+<dt>Php:</dt>
+<dd><div class="first last alert">
+<p class="alert-heading first admonition-title">Warning</p>
+<p><strong>Reminder:</strong> The format of the h2 database used for php searching and code
+completion has changed in <strong>Kepler</strong> which may result in searching / code
+completion not returning any results, both in eclim and in the standard
+eclipse php editor.  To fix this you'll need to stop eclipse, remove the old
+index, and then restart:</p>
+<div class="last highlight-python"><div class="highlight"><pre>$ rm -r &lt;your workspace&gt;/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
+</pre></div>
+</div>
+</div>
+</dd>
+<dt>Scala:</dt>
+<dd><ul class="first last simple">
+<li>Updated to require 3.0.1 of the Scala IDE which now supports Kepler (for
+eclim 2.3.0 only). Since this version of the Scala IDE seems to only support
+Scala 2.10.x now, the option to install 2.9.x version has been removed,
+however the indigo release of eclim (1.7.17) still supports the Scala 2.9.x
+version of Scala IDE 3.0.0.</li>
+</ul>
+</dd>
+<dt>Xml:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="vim/xml/index.html#xmlformat"><span>:XmlFormat</span></a> now uses the DOM3 APIs to improve the
+formatted result, honoring your <code>textwidth</code> and indent settings.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.2.7...2.3.0">Git Log (2.3.0)</a></div>
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/1.7.16...1.7.17">Git Log (1.7.17)</a></div>
+</div>
+</div>
+<div class="section" id="jul-14-2013">
+<span id="id13"></span><span id="id12"></span><h2>2.2.7 / 1.7.16 (Jul. 14, 2013)<a class="headerlink" href="#jul-14-2013" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Java:</dt>
+<dd><ul class="first last simple">
+<li>Fix for some completions on Kepler.</li>
+<li>Fix for rare case where an invalid classpath entry could result in the
+.classpath file reverted to the eclipse default.</li>
+<li><a class="reference internal" href="vim/java/inspection.html#javacallhierarchy"><span>:JavaCallHierarchy</span></a> added to show the caller or
+callee hierarchy of a method.
+<br/> Thanks to Alexandre Fonseca</li>
+</ul>
+</dd>
+<dt>Php:</dt>
+<dd><div class="first last alert">
+<p class="alert-heading first admonition-title">Warning</p>
+<p>The format of the h2 database used for php searching and code completion has
+changed in <strong>Kepler</strong> which may result in searching / code completion not
+returning any results, both in eclim and in the standard eclipse php editor.
+To fix this you'll need to stop eclipse, remove the old index, and then
+restart:</p>
+<div class="last highlight-python"><div class="highlight"><pre>$ rm -r &lt;your workspace&gt;/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
+</pre></div>
+</div>
+</div>
+</dd>
+<dt>Ruby:</dt>
+<dd><ul class="first last simple">
+<li>Fixed the inserted completion text for some ruby libraries.</li>
+</ul>
+</dd>
+<dt>Scala:</dt>
+<dd><ul class="first last simple">
+<li>The graphical installer now includes a compiled eclim sdt bundle for both
+scala 2.9.x and 2.10.x for which one will be chosen for you if you already
+have the scala-ide installed, otherwise you can pick one and the appropriate
+version of the scala-ide will be installed for you.</li>
+</ul>
+</dd>
+<dt>Vimplugin:</dt>
+<dd><ul class="first last simple">
+<li>The option to force focusing of gvim with a simulated click is now disabled
+by default, but when enabled, it should be less likely to have unintended
+side affects.</li>
+</ul>
+</dd>
+<dt>Cygwin:</dt>
+<dd><ul class="first last simple">
+<li>Performance optimization for user's with many projects.</li>
+</ul>
+</dd>
+<dt>Installer:</dt>
+<dd><ul class="first last simple">
+<li>The installer will now properly shutdown eclimd instances registered using
+the old non-json format.</li>
+</ul>
+</dd>
+<dt>Docs:</dt>
+<dd><ul class="first last simple">
+<li>Expanded the <a class="reference internal" href="development/index.html"><em>developer docs</em></a> to include docs on
+<a class="reference internal" href="development/commands.html"><em>creating new commands</em></a> along with some of the
+basics for <a class="reference internal" href="development/plugins.html"><em>adding new eclim plugins</em></a>.</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.2.6...2.2.7">Git Log (2.2.7)</a></div>
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/1.7.14...1.7.16">Git Log (1.7.16)</a></div>
+</div>
+</div>
+<div class="section" id="may-18-2013">
+<span id="id15"></span><span id="id14"></span><h2>2.2.6 / 1.7.14 (May 18, 2013)<a class="headerlink" href="#may-18-2013" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Bug Fixes:</dt>
+<dd><ul class="first last simple">
+<li>Fixed eclimd to prevent incorrect addition of -d32 on 64bit systems, which
+prevents eclimd from starting.</li>
+<li>Fix potential conflicts between syntastic validation vs eclim validation
+(syntastic validation will be diabled if eclim validation is available for
+the current file type).</li>
+<li>Many more fixes.</li>
+</ul>
+</dd>
+<dt>Android:</dt>
+<dd><ul class="first last simple">
+<li>Updated for ADT 22.0.0</li>
+</ul>
+</dd>
+<dt>C/C++:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="vim/c/inspection.html#ccallhierarchy"><span>:CCallHierarchy</span></a> now support showing callee tree.</li>
+</ul>
+</dd>
+<dt>Java:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="vim/java/methods.html#javaimpl"><span>:JavaImpl</span></a> now supports anonymous inner classes and will
+also properly handle suggesting methods from a nested superclass.</li>
+</ul>
+</dd>
+<dt>Php:</dt>
+<dd><ul class="first last simple">
+<li>Eclim will no longer run php files through html validation by default (see
+the <a class="reference internal" href="vim/php/validate.html"><em>Php Validation</em></a> doc for settings to enable
+html validation).</li>
+</ul>
+</dd>
+<dt>Scala:</dt>
+<dd><ul class="first last simple">
+<li>Scala support updated for Scala IDE 3.0.0.</li>
+<li>Scala now supported on both versions of eclim (Juno and Indigo).</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.2.5...2.2.6">Git Log (2.2.6)</a></div>
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/1.7.13...1.7.14">Git Log (1.7.14)</a></div>
+</div>
+<p><a class="reference internal" href="archive/changes.html"><em>Eclim Changes Archive</em></a></p>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="_sources/changes.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

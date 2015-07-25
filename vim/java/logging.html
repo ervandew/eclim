@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Logging (log4j, etc) &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="../../index.html" />
+    <link rel="up" title="Java" href="index.html" />
+    <link rel="next" title="Ant" href="ant.html" />
+    <link rel="prev" title="Unit Tests" href="unittests.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="../../index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="../index.html">Documentation</a><ul class="current dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current dropdown-submenu active"><a class="reference internal" href="index.html">Java</a><ul class="current dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../../development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="unittests.html"
+         title="previous chapter">&laquo; Unit Tests</a></li>
+  <li class="hidden-phone"><a href="ant.html"
+         title="next chapter">Ant &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="logging-log4j-etc">
+<h1>Logging (log4j, etc)<a class="headerlink" href="#logging-log4j-etc" title="Permalink to this headline">¶</a></h1>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#auto-import-initialize">Auto import / initialize<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#log4j">Log4j<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#validation">Validation</a></li>
+<li><a class="reference internal" href="#id2">Configuration</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="auto-import-initialize">
+<h2>Auto import / initialize<a class="headerlink" href="#auto-import-initialize" title="Permalink to this headline">¶</a></h2>
+<p>While editing a java source file, if you start to create a logging statement
+(<code>log.</code> or <code>logger.</code>), the logging plugin will attempt to perform the
+appropriate initialization (imports, static variable) for the configured logging
+implementation.</p>
+<p>Eclim provides a handful of templates for the most widely used implementations
+(commons-logging, slf4j, log4j, and jdk).  However, if you happen to use an
+alternate logging framework, or perhaps a home grown framework, eclim also
+provides the means to supply a custom template.  To utilize it, simply set the
+<strong>org.eclim.java.logging.impl</strong> setting to &quot;custom&quot; and add your template to
+<code>~/.eclim/resources/jdt/templates/logger.gst</code>.  Two variables will be
+supplied to your template: <code>var</code>, which is the logger instance variable, and
+<code>class</code>, which is the class name of the current class you are implementing.</p>
+<p>Here is an example which eclim uses for its logger implementation:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.eclim.logging.Logger</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">$</span><span class="o">{</span><span class="n">var</span><span class="o">}</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">$</span><span class="o">{</span><span class="n">class</span><span class="o">}.</span><span class="na">class</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>After performing the necessary variable substitution, eclim will take any
+imports and insert them amongst your existing import statements.  The remaining
+code will be inserted after your class definition.</p>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<ul class="simple" id="g-eclimloggingdisabled">
+<li><strong>g:EclimLoggingDisabled</strong> (Default: 0) -
+If set to a value greater than 0, then this plugin will be disabled.</li>
+</ul>
+<p><a class="reference internal" href="../settings.html"><em>Eclim Settings</em></a></p>
+<ul id="org-eclim-java-logging-impl">
+<li><p class="first"><strong>org.eclim.java.logging.impl</strong> (Default: &quot;commons-logging&quot;) -
+Determines which logging implementation to use.</p>
+<p>Possible values include &quot;commons-logging&quot;, &quot;slf4j&quot;, &quot;log4j&quot;, &quot;jdk&quot;, and
+&quot;custom&quot;.</p>
+</li>
+</ul>
+<ul class="simple" id="org-eclim-java-logging-template">
+<li><strong>org.eclim.java.logging.template</strong> (Default: 'logger.gst') -
+Determines the name of the template to use for the custom logger.  The name
+must be a file name relative to ~/.eclim/resources/jdt/templates/.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="log4j">
+<span id="id1"></span><h2>Log4j<a class="headerlink" href="#log4j" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="validation">
+<h3>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h3>
+<p>When editing a log4j xml file eclim will default to validating the file when it
+is written. Any errors will be added to the current window's location list
+(:help location-list) and their corresponding line number noted via Vim's sign
+functionality.</p>
+<p>Eclim also combines the above validation with <a class="reference internal" href="../xml/index.html#xml-validation"><span>xml validation</span></a> to validate that the file is well formed.</p>
+<p>If you do not want your log4j files validated automatically when saved, you can
+set the <a class="reference internal" href="#g-eclimlog4jvalidate"><span class="xref std std-ref">g:EclimLog4jValidate</span></a> variable described in the configuration
+section below.</p>
+<p id="validate-log4j">Whether or not auto validation has been enabled, eclim also exposes the command
+<strong>:Validate</strong> to manually execute the validation of the file.</p>
+</div>
+<div class="section" id="id2">
+<h3>Configuration<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<ul class="simple" id="g-eclimlog4jvalidate">
+<li><strong>g:EclimLog4jValidate</strong> (Default: 1) -
+If set to 0, disables validation when saving the file.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="../../_sources/vim/java/logging.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

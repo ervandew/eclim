@@ -1,0 +1,203 @@
+/*
+* bootstrap-sphinx.css
+* ~~~~~~~~~~~~~~~~~~~~
+*
+* Sphinx stylesheet -- Twitter Bootstrap theme.
+*/
+
+body {
+  padding-top: 0;
+}
+body.with-fixed-nav {
+  padding-top: 60px;
+}
+
+@media (max-width: 768px) {
+  /* Remove any padding from the body */
+  body.with-fixed-nav {
+    padding-top: 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 980px) {
+  /* Remove any padding from the body */
+  body.with-fixed-nav {
+    padding-top: 0;
+  }
+}
+@media(max-width: 979px){
+  /* don't adding padding since it changes the height of navbar which can
+   * affect absolute elements (ex. github fork ribbon) */
+  .navbar-fixed-top .navbar-inner{
+    padding: 0;
+  }
+}
+
+footer {
+  margin-top: 50px;
+}
+
+#navbar .navbar-inner {
+  border: none;
+  border-radius: 0;
+  height: 40px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.navbar .brand {
+  color: #FFF;
+  float: left;
+  margin-left: 0;
+  margin-right: 10px;
+  text-shadow: #777 2px 2px 3px;
+}
+
+/* align any plain text li elements in the navbar w/ nav links */
+.nav > li > .navbar-text {
+  display: block;
+  line-height: 19px;
+  padding: 10px;
+}
+
+/* default navbar dropdowns to work on hover if js doesn't load */
+#navbar.no-js .dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+/* fix submenus greater than the second depth */
+.dropdown-submenu:hover .dropdown-menu {
+   display: none;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+   display: block;
+}
+
+.content > .section > h1 {
+  font-size: 50px;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.content > .section > p {
+  margin-top: 25px;
+}
+.content > .section > p.lead {
+  margin-top: 10px;
+}
+.content > .section > .section {
+  padding-top: 25px;
+}
+.content > .section > .section > h2 {
+  border-bottom: 1px solid #eee;
+  margin: 10px 0;
+  padding-bottom: 5px;
+}
+
+/* improve permalink position */
+a.headerlink {
+  margin-left: 5px;
+  position: relative;
+  top: -0.14em;
+}
+a.headerlink:hover {
+  text-decoration: none;
+}
+
+.section > h1 + .toctree-wrapper,
+.section > h1 + .subnav + .toctree-wrapper {
+  margin-top: 15px;
+}
+
+.content .section img {
+  margin-bottom: 15px;
+}
+
+.alert .alert-heading {
+  border-bottom: 1px solid #f6e5c4;
+  margin-bottom: 15px;
+  padding-bottom: 3px;
+}
+.alert-info .alert-heading {
+  border-bottom: 1px solid #addce6;
+}
+.alert-error .alert-heading {
+  border-bottom: 1px solid #eac5ca;
+}
+
+/* disable bootstrap's word wrapping in pre blocks */
+pre {
+  word-wrap: normal;
+  white-space: pre;
+}
+.subnav {
+  margin-top: 18px;
+}
+.subnav .nav-pills {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.subnav .nav-pills > li {
+  display: table-cell;
+  float: none;
+}
+.subnav .navbar-inner {
+  padding: 0;
+}
+.subnav .navbar-inner ul.nav {
+  white-space: nowrap;
+}
+.subnav .navbar-inner ul.nav li {
+  display: inline-block;
+  float: none;
+}
+.subnav .dropdown-toggle {
+  display: none;
+  margin-left: 8px;
+  line-height: 40px;
+}
+.subnav .hoverscroll {
+  margin: 0 auto;
+}
+.subnav-fixed .nav {
+  margin: 0;
+}
+@media (min-width: 980px) {
+  .subnav-fixed {
+    margin-top: 0;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
+    border-color: #d5d5d5;
+    border-width: 0 0 1px; /* drop the border on the fixed edges */
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+       -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false); /* IE6-9 */
+  }
+  .subnav-fixed .nav {
+    width: 938px;
+    margin: 0 auto;
+    padding: 0 1px;
+  }
+  .subnav .nav > li:first-child > a,
+  .subnav .nav > li:first-child > a:hover {
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+  }
+}
+@media (max-width: 768px) {
+  .subnav {
+    display: none;
+  }
+}
+@media (min-width: 1210px) {
+  .subnav-fixed .nav {
+    width: 1168px;
+  }
+
+}

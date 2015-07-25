@@ -1,0 +1,536 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Developers Guide &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="../_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="../index.html" />
+    <link rel="up" title="Development Docs" href="index.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Development Docs" href="index.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="../index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../vim/index.html">Documentation</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/java/index.html">Java</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../vim/scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="index.html">Development Docs</a><ul class="current dropdown-menu">
+<li class="toctree-l2 current active"><a class="current reference internal" href="">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="index.html"
+         title="previous chapter">&laquo; Development Docs</a></li>
+  <li class="hidden-phone"><a href="architecture.html"
+         title="next chapter">Architecture &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="developers-guide">
+<h1>Developers Guide<a class="headerlink" href="#developers-guide" title="Permalink to this headline">¶</a></h1>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#checking-out-the-code-and-building-it">Checking out the code and building it.<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#check-out-the-code">1. Check out the code:</a></li>
+<li><a class="reference internal" href="#build-eclim">2. Build eclim:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#coding-style">Coding Style</a></li>
+<li><a class="reference internal" href="#developing-submitting-patches">Developing / Submitting Patches</a></li>
+<li><a class="reference internal" href="#building-the-eclim-installer">Building the eclim installer</a></li>
+<li><a class="reference internal" href="#what-s-next">What's Next</a></li>
+</ul>
+</div>
+</div>
+<p>This guide is intended for those who wish to contribute to eclim by
+fixing bugs or adding new functionality.</p>
+<div class="section" id="checking-out-the-code-and-building-it">
+<h2>Checking out the code and building it.<a class="headerlink" href="#checking-out-the-code-and-building-it" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="check-out-the-code">
+<h3>1. Check out the code:<a class="headerlink" href="#check-out-the-code" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone git://github.com/ervandew/eclim.git
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-eclim">
+<h3>2. Build eclim:<a class="headerlink" href="#build-eclim" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>$ cd eclim
+$ ant -Declipse.home=/your/eclipse/home/dir
+</pre></div>
+</div>
+<p>This will build and deploy eclim to your eclipse and vim directories.</p>
+<div class="alert">
+<p class="alert-heading first admonition-title">Warning</p>
+<p>Building eclim as root is highly discouraged. If your eclipse install is only
+writable as root, you can supply the <code>eclipse.local</code> property to tell eclim
+where your eclipse user local directory is located and eclimd will be
+installed there (make sure to replace <code>&lt;version&gt;</code> portion of the path below
+accordingly):</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ant \
+    -Declipse.home=/opt/eclipse \
+    -Declipse.local=$HOME/.eclipse/org.eclipse.platform_&lt;version&gt;
+</pre></div>
+</div>
+<p>If you do not yet have a <code>.eclipse</code> directory in your home directory, you
+can run either of the following commands to create it:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ant -Declipse.home=/opt/eclipse eclipse.init
+</pre></div>
+</div>
+<p>or</p>
+<div class="last highlight-python"><div class="highlight"><pre>$ /path/to/eclipse/eclipse -initialize
+</pre></div>
+</div>
+</div>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p>If your eclipse home path contains a space, be sure to quote it:</p>
+<div class="last highlight-python"><div class="highlight"><pre>&gt; ant &quot;-Declipse.home=C:/Program Files/eclipse&quot;
+</pre></div>
+</div>
+</div>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p>If your vimfiles directory is not located at the default location for your
+OS, then you can specify the location using the &quot;vim.files&quot; property:</p>
+<div class="last highlight-python"><div class="highlight"><pre>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
+</pre></div>
+</div>
+</div>
+<p>When the build starts, it will first examine your eclipse installation to
+find what eclipse plugins are available. It will then use that list to determine
+which eclim features/plugins should be built and will output a list like the one
+below showing what will be built vs what will be skipped:</p>
+<div class="highlight-python"><div class="highlight"><pre>[echo] ${eclipse}: /opt/eclipse
+[echo] # Skipping org.eclim.adt, missing com.android.ide.eclipse.adt
+[echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
+[echo] # Skipping org.eclim.dltkruby, missing org.eclipse.dltk.ruby
+[echo] # Skipping org.eclim.pdt, missing org.eclipse.php
+[echo] Plugins:
+[echo]   org.eclim.cdt
+[echo]   org.eclim.jdt
+[echo]   org.eclim.pydev
+[echo]   org.eclim.sdt
+[echo]   org.eclim.wst
+</pre></div>
+</div>
+<p>In this case we can see that four eclim plugins will be skipped along with the
+eclipse feature that would be required to build those plugins.</p>
+<p>If you don't want to supply the eclipse home directory, or any other
+properties, on the command line every time you build eclim, you can create a
+<code>user.properties</code> file at the eclim source root and put all your properties
+in there:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ vim user.properties
+eclipse.home=/opt/eclipse
+eclipse.local=${user.home}/.eclipse/org.eclipse.platform_&lt;version&gt;
+vim.files=${user.home}/.vim/bundle/eclim
+</pre></div>
+</div>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p>The eclim vim help files, used by the <a class="reference internal" href="../vim/core/eclim.html#eclimhelp"><span>:EclimHelp</span></a> command,
+are not built by default. To build these you first need to install <a class="reference external" href="http://sphinx-doc.org">sphinx</a>,
+then run the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ant vimdocs
+</pre></div>
+</div>
+<p>This target also supports the <code>vim.files</code> property if you want the docs
+deployed to a directory other than the default location.</p>
+<div class="last alert">
+<p class="alert-heading first admonition-title">Warning</p>
+<p>Debian/Ubuntu users: The debian version of sphinx has unfortunately been
+patched to behave differently than the upstream version, resulting in one or
+more eclim supplied sphinx extensions not loading. Another issue you may run
+into is the docutils package, which sphinx depends on, is outdated on
+debian/ubuntu, resulting in another set of errors.</p>
+<p class="last">So to get around these issues you'll need to install sphinx using <a class="reference external" href="http://pip.readthedocs.org/en/latest/index.html">pip</a> or
+similar.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="coding-style">
+<span id="id1"></span><h2>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this headline">¶</a></h2>
+<p>When contributing code please try to adhere to the coding style of similar code
+so that eclim's source can retain consistency throughout. For java code, eclim
+includes a checkstyle configuration which can be run against the whole project:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ant checkstyle
+</pre></div>
+</div>
+<p>or against the current java file from within vim:</p>
+<div class="highlight-python"><div class="highlight"><pre>:Checkstyle
+</pre></div>
+</div>
+</div>
+<div class="section" id="developing-submitting-patches">
+<span id="development-patches"></span><h2>Developing / Submitting Patches<a class="headerlink" href="#developing-submitting-patches" title="Permalink to this headline">¶</a></h2>
+<p>The preferred means of developing and submitting patches is to use a github
+fork. Github provides a nice <a class="reference external" href="http://help.github.com/forking/">guide to forking</a> which should get you started.</p>
+<p>Although using a github fork is preferred, you can of course still submit
+patches via email using git's format-patch command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git format-patch -M origin/master
+</pre></div>
+</div>
+<p>Running the above command will generate a series of patch files which can be
+submitted to the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim development group</a>.</p>
+</div>
+<div class="section" id="building-the-eclim-installer">
+<h2>Building the eclim installer<a class="headerlink" href="#building-the-eclim-installer" title="Permalink to this headline">¶</a></h2>
+<p>It should be rare that someone should need to build the eclim installer, but
+should the need arise here are the instructions for doing so.</p>
+<p>To build the installer you first need a couple external tools installed:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="http://sphinx-doc.org">sphinx</a>: Sphinx is used to build the eclim documentation which is included in
+the installer.</p>
+<p>Eclim also uses a custom sphinx theme which is included in eclim as a git
+submodule. So before you can build the installer you will need to initialize
+the submodule:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git submodule init
+$ git submodule update
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.graphviz.org/">graphviz</a>:  The docs include a few uml diagrams which are generated using
+<a class="reference external" href="http://plantuml.sourceforge.net/">plantuml</a> (included in the eclim source tree) which in turn requires
+<a class="reference external" href="http://www.graphviz.org/">graphviz</a>.</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://github.com/ervandew/formic">formic</a>: The eclim installer has been developed using the formic framework,
+and requires it to build the installer distributables.  Formic doesn't
+currently have an official release, so you'll need to check out the source
+code:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone git://github.com/ervandew/formic.git
+</pre></div>
+</div>
+<p>After checking out the code, you'll need to build the formic distribution:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd formic
+$ ant dist
+</pre></div>
+</div>
+<p>Then extract the formic tar to the location of your choice</p>
+<div class="highlight-python"><div class="highlight"><pre>$ tar -zxvf build/dist/formic-0.2.0.tar.gz -C /location/of/your/choice
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Once you have installed the above dependencies, you can then build the eclim
+installer with the following command.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ant -Dformic.home=/your/formic/install/dir dist
+</pre></div>
+</div>
+<p>In lieu of supplying the formic home on the command line, you can instead put
+it in a <code>user.properties</code> file at the eclim source root:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ vim user.properties
+formic.home=/your/formic/install/dir
+</pre></div>
+</div>
+</div>
+<div class="section" id="what-s-next">
+<h2>What's Next<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
+<p>Now that you're familiar with the basics of building and patching eclim, the
+next step is to familiarize yourself with the eclim architecture and to review
+the detailed docs on how new features are added.</p>
+<p>All of that and more can be found in the
+<a class="reference internal" href="index.html"><em>eclim development docs</em></a>.</p>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="../_sources/development/gettingstarted.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

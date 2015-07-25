@@ -1,0 +1,571 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Eclim &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="#" />
+    <link rel="next" title="Download / Install" href="install.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="#">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="vim/index.html">Documentation</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/java/index.html">Java</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="install.html"
+         title="next chapter">Download / Install &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="welcome-to-eclim">
+<h1>Welcome to Eclim<a class="headerlink" href="#welcome-to-eclim" title="Permalink to this headline">¶</a></h1>
+<p class="lead">The power of Eclipse in your favorite editor.</p>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li><a class="reference internal" href="#what-is-it">What is it?</a></li>
+<li><a class="reference internal" href="#how-do-i-get-install-it">How do I get/install it?</a></li>
+<li><a class="reference internal" href="#how-do-i-use-it">How do I use it?</a></li>
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#where-can-i-get-help">Where can I get help?<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#mailing-lists">Mailing Lists</a></li>
+<li><a class="reference internal" href="#irc-eclim-on-freenode-net">IRC (#eclim on freenode.net)</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#how-do-i-report-a-bug">How do I report a bug?<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#reporting-bugs">Reporting Bugs</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#what-s-new">What's New?<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#jul-25-2015">Jul 25, 2015</a></li>
+<li><a class="reference internal" href="#jan-22-2015">Jan 22, 2015</a></li>
+<li><a class="reference internal" href="#aug-24-2014">Aug 24, 2014</a></li>
+<li><a class="reference internal" href="#may-07-2014">May 07, 2014</a></li>
+<li><a class="reference internal" href="#apr-12-2014">Apr. 12, 2014</a></li>
+<li><a class="reference internal" href="#apr-06-2014">Apr. 06, 2014</a></li>
+<li><a class="reference internal" href="#sep-12-2013">Sep. 12, 2013</a></li>
+<li><a class="reference internal" href="#jul-27-2013">Jul. 27, 2013</a></li>
+<li><a class="reference internal" href="#jul-21-2013">Jul. 21, 2013</a></li>
+<li><a class="reference internal" href="#jul-14-2013">Jul. 14, 2013</a></li>
+<li><a class="reference internal" href="#may-18-2013">May 18, 2013</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="what-is-it">
+<h2>What is it?<a class="headerlink" href="#what-is-it" title="Permalink to this headline">¶</a></h2>
+<p>Eclim provides the ability to access <a class="reference external" href="http://eclipse.org">Eclipse</a> code editing features (code
+completion, searching, code validation, and <a class="reference internal" href="features.html"><em>many more</em></a>) via
+the command line or a local network connection, allowing those features to be
+integrated with your favorite editor. Eclim provides an integration with <a class="reference external" href="http://www.vim.org">Vim</a>,
+but <a class="reference internal" href="relatedprojects.html"><em>third party clients</em></a> have been created to add eclim
+support to other editors as well (emacs, sublime text 2, textmate).</p>
+<p>There are three primary usage scenarios in which eclim is designed to be used:</p>
+<img alt="_images/use_cases.png" src="_images/use_cases.png" />
+<ol class="arabic">
+<li><p class="first">The <a class="reference internal" href="eclimd.html#eclimd-headless"><span>first scenario</span></a> is for those for which vim is
+their primary editing interface.  In this scenario you run a headless
+instance of eclipse which all vim instances can then communicate with to
+provide the various eclipse features.</p>
+</li>
+<li><p class="first">The <a class="reference internal" href="eclimd.html#eclimd-headed"><span>second scenario</span></a> is for those who prefer using vim
+as their main interface, but frequently end up jumping back to eclipse for
+any features not provided by eclim.  In this case you can run the eclim
+server inside of the eclipse gui and then interact with it via external vim
+instances just like the first scenario.</p>
+</li>
+<li><p class="first">The <a class="reference internal" href="eclimd.html#gvim-embedded"><span>last scenario</span></a> is for those who wish to use the
+eclipse interface full time, but want to use gvim as an embedded eclipse
+editor. Just like the previous use case, the eclim server is run inside of
+the eclipse gui and the embedded gvim will interact with it just like
+external vim instances would. This feature is only support on Windows and
+Unix systems (where gvim is compiled with the gtk gui).</p>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p class="last">Please be aware that the embedded vim does not behave like a standard
+eclipse editor. It's a separate program (vim) embedded into eclipse, so
+eclipse features are provided by eclim's vim plugins and not the usual
+eclipse key bindings, context menus, etc. For those that just want vim like
+key bindings in their eclipse editors, <a class="reference external" href="http://vrapper.sourceforge.net/home/">vrapper</a> is an excellent alternative
+which provides exactly that.</p>
+</div>
+</li>
+</ol>
+<p>Eclim is released under the <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">GPLv3</a>.</p>
+</div>
+<div class="section" id="how-do-i-get-install-it">
+<h2>How do I get/install it?<a class="headerlink" href="#how-do-i-get-install-it" title="Permalink to this headline">¶</a></h2>
+<p>You can follow the <a class="reference internal" href="install.html"><em>eclim install guide</em></a> which will walk you
+through downloading and installing eclim.</p>
+</div>
+<div class="section" id="how-do-i-use-it">
+<h2>How do I use it?<a class="headerlink" href="#how-do-i-use-it" title="Permalink to this headline">¶</a></h2>
+<p>After you've installed eclim, you can refer to the <a class="reference internal" href="gettingstarted.html"><em>getting started</em></a> page which will walk you through creating your first
+project.</p>
+</div>
+<div class="section" id="where-can-i-get-help">
+<h2>Where can I get help?<a class="headerlink" href="#where-can-i-get-help" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mailing-lists">
+<h3>Mailing Lists<a class="headerlink" href="#mailing-lists" title="Permalink to this headline">¶</a></h3>
+<p>If at any time you have any questions or feedback, feel free to post to one of
+the eclim mailing lists:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://groups.google.com/group/eclim-user">eclim-user</a>: For all questions regarding installation, usage,
+troubleshooting, etc.</li>
+<li><a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim-dev</a>: For all eclim development related discussions.</li>
+</ul>
+</div>
+<div class="section" id="irc-eclim-on-freenode-net">
+<h3>IRC (#eclim on freenode.net)<a class="headerlink" href="#irc-eclim-on-freenode-net" title="Permalink to this headline">¶</a></h3>
+<p>If you would like to get help or ask questions on IRC, then feel free to join
+#eclim on freenode.net. Please note that I (Eric Van Dewoestine, ervandew on
+irc) try to stay in the channel as much as possible, but I might not be
+available to answer questions immediately. It's also worth noting that I live
+in California, so if you are in Europe, Asia, or some other timezone whose
+normal waking hours don't overlap well with mine, then you may be better off
+getting help using one of the mailing lists above.</p>
+</div>
+</div>
+<div class="section" id="how-do-i-report-a-bug">
+<h2>How do I report a bug?<a class="headerlink" href="#how-do-i-report-a-bug" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="reporting-bugs">
+<h3>Reporting Bugs<a class="headerlink" href="#reporting-bugs" title="Permalink to this headline">¶</a></h3>
+<p>If you've found a bug please report the issue to either the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim-dev</a>
+mailing list or create a new issue on eclim's github <a class="reference external" href="http://github.com/ervandew/eclim/issues">issue tracker</a>.</p>
+<p>When reporting a bug, please include the following information:</p>
+<ul class="simple">
+<li><strong>What OS are you on?</strong><ul>
+<li>Linux users: please include the distro and version.</li>
+</ul>
+</li>
+<li><strong>What version of eclim, vim, and eclipse are you using?</strong><ul>
+<li>Linux users: please indicate whether you installed eclipse via your
+distro's package manager or not, and if not, please indicate what
+distribution of eclipse you are using (&quot;Eclipse Classic&quot;, &quot;Eclipse IDE for
+C/C++ Developers&quot;, some other eclipse bundle).</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="what-s-new">
+<h2>What's New?<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
+<a class="reference external image-reference" href="index.rss"><img alt="Rss Feed for What's New" src="_images/rss.png" /></a>
+<div class="section" id="jul-25-2015">
+<h3>Jul 25, 2015<a class="headerlink" href="#jul-25-2015" title="Permalink to this headline">¶</a></h3>
+<p>A new version of eclim is now available with support for Eclipse 4.5 (Mars).</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id1"><span>Eclim 2.5.0</span></a></li>
+</ul>
+</div>
+<div class="section" id="jan-22-2015">
+<h3>Jan 22, 2015<a class="headerlink" href="#jan-22-2015" title="Permalink to this headline">¶</a></h3>
+<p>The latest version of eclim is now available with scala support re-enabled, new
+groovy support, java debugging support, many bug fixes, and more.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id2"><span>Eclim 2.4.1</span></a></li>
+</ul>
+</div>
+<div class="section" id="aug-24-2014">
+<h3>Aug 24, 2014<a class="headerlink" href="#aug-24-2014" title="Permalink to this headline">¶</a></h3>
+<p>Eclim has <strong>finally</strong> been released with Eclipse Luna support. Please note
+however that scala support is disabled in this release. I tried waiting for a
+final release of ScalaIDE 4.0.0 for Luna, but I don't want to hold up the rest
+of eclim any longer. If you want to use eclim's scala support, you'll need to
+install the ScalaIDE 4.0.0 milestone and build eclim from the master git branch.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id3"><span>Eclim 2.4.0</span></a></li>
+</ul>
+</div>
+<div class="section" id="may-07-2014">
+<h3>May 07, 2014<a class="headerlink" href="#may-07-2014" title="Permalink to this headline">¶</a></h3>
+<p>Release of eclim for indigo users.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id4"><span>Eclim 1.7.19</span></a></li>
+</ul>
+</div>
+<div class="section" id="apr-12-2014">
+<h3>Apr. 12, 2014<a class="headerlink" href="#apr-12-2014" title="Permalink to this headline">¶</a></h3>
+<p>Eclim has been updated to fix an issue on Windows that could prevent many
+features from working.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id5"><span>Eclim 2.3.4</span></a></li>
+</ul>
+</div>
+<div class="section" id="apr-06-2014">
+<h3>Apr. 06, 2014<a class="headerlink" href="#apr-06-2014" title="Permalink to this headline">¶</a></h3>
+<p>This release includes many bug fixes and refinements as well as a rewrite of
+eclim's python support to utilize pydev instead of rope.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id6"><span>Eclim 2.3.3</span></a></li>
+</ul>
+<div class="alert">
+<p class="alert-heading first admonition-title">Warning</p>
+<p>Any exiting eclim python projects you have should be re-created with the new
+<code>python</code> nature:</p>
+<div class="last highlight-python"><div class="highlight"><pre>:ProjectCreate /path/to/project -n python
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="sep-12-2013">
+<h3>Sep. 12, 2013<a class="headerlink" href="#sep-12-2013" title="Permalink to this headline">¶</a></h3>
+<p>This release fixes the extraction of the necessary vim files when installing
+scala support.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id7"><span>Eclim 2.3.2</span></a> for Eclipse 4.3 (Kepler).</li>
+<li><a class="reference internal" href="changes.html#id8"><span>Eclim 1.7.18</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+</ul>
+</div>
+<div class="section" id="jul-27-2013">
+<h3>Jul. 27, 2013<a class="headerlink" href="#jul-27-2013" title="Permalink to this headline">¶</a></h3>
+<p>The previous eclim installer for Kepler was still pointing at the Juno update
+site. This release remedies that.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id9"><span>Eclim 2.3.1</span></a> for Eclipse 4.3 (Kepler).</li>
+</ul>
+</div>
+<div class="section" id="jul-21-2013">
+<h3>Jul. 21, 2013<a class="headerlink" href="#jul-21-2013" title="Permalink to this headline">¶</a></h3>
+<p>The focus of this release is to bring eclim fully up to date with Eclipse Kepler
+support. The installer for eclim 2.3.0 now requires that you install against
+Kepler.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id10"><span>Eclim 2.3.0</span></a> for Eclipse 4.3 (Kepler).</li>
+<li><a class="reference internal" href="changes.html#id11"><span>Eclim 1.7.17</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+</ul>
+</div>
+<div class="section" id="jul-14-2013">
+<h3>Jul. 14, 2013<a class="headerlink" href="#jul-14-2013" title="Permalink to this headline">¶</a></h3>
+<p>This is primarily a bug fix release with a few new features. Unless some
+critical error is found, this will be the last release targeting Juno. The next
+release will likely target Kepler though this release should work fine on Kepler
+as well, with the exception of scala support which has not been tested. Indigo
+support will continue but will likely end with the release of Luna, possibly
+sooner.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id12"><span>Eclim 2.2.7</span></a> for Eclipse 4.2 (Juno).</li>
+<li><a class="reference internal" href="changes.html#id13"><span>Eclim 1.7.16</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+</ul>
+</div>
+<div class="section" id="may-18-2013">
+<h3>May 18, 2013<a class="headerlink" href="#may-18-2013" title="Permalink to this headline">¶</a></h3>
+<p>Eclim has been updated to support the Android Development Toolkit version
+22.0.0, scala is now supported for both Juno and Indigo, and there are a few
+other improvements and many bug fixes.</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id14"><span>Eclim 2.2.6</span></a> for Eclipse 4.2 (Juno).</li>
+<li><a class="reference internal" href="changes.html#id15"><span>Eclim 1.7.14</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+</ul>
+<p><a class="reference internal" href="archive/news.html"><em>Eclim News Archive</em></a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="_sources/index.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

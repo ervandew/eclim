@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FAQ / Troubleshooting &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="index.html" />
+    <link rel="next" title="Features" href="features.html" />
+    <link rel="prev" title="Plugins" href="development/plugins.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="vim/index.html">Documentation</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/java/index.html">Java</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="development/plugins.html"
+         title="previous chapter">&laquo; Plugins</a></li>
+  <li class="hidden-phone"><a href="features.html"
+         title="next chapter">Features &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="faq-troubleshooting">
+<h1>FAQ / Troubleshooting<a class="headerlink" href="#faq-troubleshooting" title="Permalink to this headline">¶</a></h1>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#faq">FAQ<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#how-do-i-tell-eclim-which-eclipse-workspace-to-use">How do I tell eclim which eclipse workspace to use?</a></li>
+<li><a class="reference internal" href="#how-can-i-configure-eclim-to-use-a-proxy">How can I configure eclim to use a proxy?</a></li>
+<li><a class="reference internal" href="#how-do-i-specify-jvm-memory-arguments-for-eclim-fix-outofmemory-errors">How do I specify jvm memory arguments for eclim (fix OutOfMemory errors).</a></li>
+<li><a class="reference internal" href="#how-do-i-troubleshoot-features-not-functioning-or-errors-encountered">How do I troubleshoot features not functioning, or errors encountered?</a></li>
+<li><a class="reference internal" href="#how-can-i-run-eclimd-on-a-truly-headless-server">How can I run eclimd on a truly headless server?</a></li>
+<li><a class="reference internal" href="#how-can-i-set-the-default-encoding-used-by-eclipse-eclimd">How can I set the default encoding used by eclipse/eclimd?</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#troubleshooting">Troubleshooting<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#eclim-does-not-recognize-any-of-my-existing-projects">Eclim does not recognize any of my existing projects.</a></li>
+<li><a class="reference internal" href="#i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work">I'm editing a [java, python, php, etc] file and code completion doesn't work.</a></li>
+<li><a class="reference internal" href="#i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist">I'm editing a [java, python, php, etc] file and none of the file type commands exist.</a></li>
+<li><a class="reference internal" href="#code-validation-signs-are-showing-up-on-the-wrong-lines">Code validation signs are showing up on the wrong lines.</a></li>
+<li><a class="reference internal" href="#i-received-a-java-exception-while-executing-command-message">I received a java exception &quot;while executing command&quot; message.</a></li>
+<li><a class="reference internal" href="#incompatible-plugins">Incompatible Plugins</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-tell-eclim-which-eclipse-workspace-to-use">
+<span id="eclim-workspace"></span><h3>How do I tell eclim which eclipse workspace to use?<a class="headerlink" href="#how-do-i-tell-eclim-which-eclipse-workspace-to-use" title="Permalink to this headline">¶</a></h3>
+<p>To configure the workspace you can start eclimd like so:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+</pre></div>
+</div>
+<p>Note the system property <code>osgi.instance.area.default</code>, which is used to
+specify the location of your workspace.  Also note the variable
+<code>&#64;user.home</code> which will be replaced with your home directory at runtime.</p>
+<p>If you are running a unix variant (linux, mac osx, bsd, etc.) then you
+can specify the above system property in the .eclimrc file in your home
+directory.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ echo &quot;osgi.instance.area.default=@user.home/another_workspace&quot; &gt;&gt; ~/.eclimrc
+</pre></div>
+</div>
+<p id="eclimd-options-windows">For Windows users there are a couple alternatives to the unsupported
+.eclimrc:</p>
+<ol class="arabic">
+<li><p class="first">Your first option is to add a new environment variable:</p>
+<ul>
+<li><div class="first line-block">
+<div class="line">Windows 2000: <span class="menuselection">Control Panel ‣ System ‣ Advanced ‣ Environment Variables</span></div>
+<div class="line">Windows XP: <span class="menuselection">Control Panel ‣ Performance And Maintenance ‣ System ‣ Advanced ‣ Environment Variables</span></div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line">Under &quot;User variables...&quot; click &quot;New...&quot;</div>
+<div class="line">Variable Name: ECLIMD_OPTS</div>
+<div class="line">Variable Value: -Dosgi.instance.area.default=&#64;user.home/another_workspace</div>
+</div>
+</li>
+<li><p class="first">Then you can start eclimd as normal (via the eclimd.bat file).</p>
+</li>
+</ul>
+</li>
+<li><p class="first">The second option is to create a shortcut to the eclimd.bat file:</p>
+<ul>
+<li><p class="first">In Windows Explorer, open your eclipse folder.</p>
+</li>
+<li><p class="first">Hold down the right mouse button and drag the eclimd.bat file to where
+you want the shortcut to exist (like your desktop) and release the
+right mouse button.</p>
+</li>
+<li><p class="first">Choose &quot;Create Shortcut(s) Here&quot;</p>
+</li>
+<li><p class="first">Right click the shortcut and choose &quot;Properties&quot;</p>
+</li>
+<li><div class="first line-block">
+<div class="line">On the &quot;Shortcut&quot; tab edit the &quot;Target:&quot; field and append:</div>
+<div class="line">-Dosgi.instance.area.default=&#64;user.home/another_workspace</div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="how-can-i-configure-eclim-to-use-a-proxy">
+<span id="eclim-proxy"></span><h3>How can I configure eclim to use a proxy?<a class="headerlink" href="#how-can-i-configure-eclim-to-use-a-proxy" title="Permalink to this headline">¶</a></h3>
+<p>The occasional eclim feature requires network access to function properly.
+For example, xml validation may require validating the file against a dtd or
+xsd located remotely.  If you are behind a proxy then you may need to provide
+eclim with the necessary proxy settings.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ eclimd -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
+</pre></div>
+</div>
+<p>If you are running a unix variant (linux, mac osx, bsd, etc.) then you
+can specify the above system property in the .eclimrc file in your home
+directory.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ echo -e &quot;http.proxyHost=my.proxy\nhttp.proxyPort=8080&quot; &gt;&gt; ~/.eclimrc
+</pre></div>
+</div>
+<p>If your proxy requires authentication, you'll need to supply the
+<code>-Dhttp.proxyUser</code> and <code>-Dhttp.proxyPassword</code> properties as well.</p>
+<p>On Windows systems you can use the same steps
+<a class="reference internal" href="#eclimd-options-windows"><span>described</span></a> above, for setting the workspace
+location, to also set the proxy settings.</p>
+</div>
+<div class="section" id="how-do-i-specify-jvm-memory-arguments-for-eclim-fix-outofmemory-errors">
+<span id="eclim-memory"></span><h3>How do I specify jvm memory arguments for eclim (fix OutOfMemory errors).<a class="headerlink" href="#how-do-i-specify-jvm-memory-arguments-for-eclim-fix-outofmemory-errors" title="Permalink to this headline">¶</a></h3>
+<p>If you are using the headless version of eclimd, then you have a couple
+options:</p>
+<ol class="arabic">
+<li><p class="first">pass the necessary jvm args to eclimd. For example, to increase the heap
+size:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ eclimd -Xmx256M
+</pre></div>
+</div>
+</li>
+<li><p class="first">if you are using a unix variant, then you can add the necessary vm args to
+a .eclimrc file in your home directory.</p>
+<div class="highlight-python"><div class="highlight"><pre># increase heap size
+-Xmx256M
+
+# increase perm gen size
+-XX:PermSize=64m
+-XX:MaxPermSize=128m
+</pre></div>
+</div>
+<p>On Windows systems you can use the same steps
+<a class="reference internal" href="#eclimd-options-windows"><span>described</span></a> above, for setting the workspace
+location, to also specify the jvm memory args.</p>
+</li>
+</ol>
+<p>If you are using the headed version of eclimd, then setting the jvm memory
+arguments for eclim is the same procedure as setting them for eclipse.  Details
+can be found on the <a class="reference external" href="http://wiki.eclipse.org/Eclipse.ini">eclipse wiki</a>.</p>
+</div>
+<div class="section" id="how-do-i-troubleshoot-features-not-functioning-or-errors-encountered">
+<span id="eclim-troubleshoot"></span><h3>How do I troubleshoot features not functioning, or errors encountered?<a class="headerlink" href="#how-do-i-troubleshoot-features-not-functioning-or-errors-encountered" title="Permalink to this headline">¶</a></h3>
+<p>For troubleshooting eclim, please see the dedicated
+<a class="reference internal" href="#troubleshooting"><span>troubleshooting</span></a> section below.</p>
+</div>
+<div class="section" id="how-can-i-run-eclimd-on-a-truly-headless-server">
+<span id="eclim-full-headless"></span><h3>How can I run eclimd on a truly headless server?<a class="headerlink" href="#how-can-i-run-eclimd-on-a-truly-headless-server" title="Permalink to this headline">¶</a></h3>
+<p>Please see the <a class="reference internal" href="install.html#install-headless"><span>headless guide</span></a>.</p>
+</div>
+<div class="section" id="how-can-i-set-the-default-encoding-used-by-eclipse-eclimd">
+<span id="eclim-encoding"></span><h3>How can I set the default encoding used by eclipse/eclimd?<a class="headerlink" href="#how-can-i-set-the-default-encoding-used-by-eclipse-eclimd" title="Permalink to this headline">¶</a></h3>
+<p>To set the default encoding you can set the <code>file.encoding</code> system property
+according to your setup:</p>
+<ol class="arabic">
+<li><p class="first">Headless eclimd users on any unix variant (Linux, OSX, etc) can simply add
+the property your .eclimrc file in your home directory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># set the default file encoding</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">encoding</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Headless eclimd users on Windows can add the system property (eg.
+<code>-Dfile.encoding=utf-8</code>) using the same steps
+<a class="reference internal" href="#eclimd-options-windows"><span>described</span></a> above, for setting the workspace
+location.</p>
+</li>
+<li><p class="first">Headed eclimd users can add the system property (eg.
+<code>-Dfile.encoding=utf-8</code>) to your eclipse.ini file found in your eclipse
+install's root directory. Be sure to add the property on a new line after
+the <code>-vmargs</code> line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+<span class="o">-</span><span class="n">vmargs</span>
+<span class="o">...</span>
+<span class="o">-</span><span class="n">Dfile</span><span class="o">.</span><span class="n">encoding</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
+</pre></div>
+</div>
+<p>You can read more about the eclipse.ini file on the <a class="reference external" href="http://wiki.eclipse.org/Eclipse.ini">eclipse wiki</a>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<span id="id1"></span><h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>The purpose of this guide is to serve as a means to help troubleshoot common
+issues encountered when getting start with eclim, or providing information if
+you've discovered a possible bug.</p>
+<p>The first thing to note is that as of eclim 1.6.1, errors raised by eclimd when
+executing an autocmd from vim, like validating a file on write, are no longer
+echoed as errors to the user. Instead these errors are logged and only
+displayed if your eclim log level is set to a relevant level.  You can set the
+log level at any time by running:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">let</span> <span class="k">g</span>:EclimLogLevel <span class="p">=</span> <span class="s1">&#39;trace&#39;</span>
+</pre></div>
+</div>
+<p>in vim, which in this case sets the logging to verbose (the default log level
+is <code>info</code>). After setting the log level, any external commands that are run or
+autocmd errors encountered will be printed (you may need to run :messages to see
+them all).</p>
+<p>Below are a series of sections broken up by the behavior (or lack of)
+experienced and the steps for diagnosing the cause of that behavior.</p>
+<p>If you can't find the answer to your question here, be sure to take a look at
+the <a class="reference internal" href=""><em>faq</em></a> to see if your question is answered there.</p>
+<div class="section" id="eclim-does-not-recognize-any-of-my-existing-projects">
+<span id="ts-workspace"></span><h3>Eclim does not recognize any of my existing projects.<a class="headerlink" href="#eclim-does-not-recognize-any-of-my-existing-projects" title="Permalink to this headline">¶</a></h3>
+<p>A fairly common occurrence for users new to eclim, is that after starting
+eclimd and then attempting to execute some project dependent functionality,
+the functionality appears to do nothing or eclim complains that the project
+could not be determined.  If you have existing projects created in eclipse and
+eclim is not finding them, then the likely cause is that your projects are
+located in a non-default workspace location.</p>
+<p>For the answer to how to specify the location of your workspace when starting
+eclimd, please see the <a class="reference internal" href="#eclim-workspace"><span>faq</span></a> devoted to this.</p>
+</div>
+<div class="section" id="i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work">
+<span id="ts-completion"></span><h3>I'm editing a [java, python, php, etc] file and code completion doesn't work.<a class="headerlink" href="#i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">If you receive the message &quot;E764: Option 'completefunc' is not set&quot;, please
+see the <a class="reference internal" href="#ts-ftplugin"><span>file type section below</span></a>.</p>
+</li>
+<li><p class="first">Next step is to make sure that the current file is in an eclipse project by
+running the following command in the vim windows containing the file you are
+working on.</p>
+<div class="highlight-python"><div class="highlight"><pre>:ProjectInfo
+</pre></div>
+</div>
+<p>If that returns an error that it is unable to determine the project, then see
+the <a class="reference internal" href="#ts-workspace"><span>workspace section above</span></a> or the guide on
+<a class="reference internal" href="gettingstarted.html#gettingstarted-create"><span>creating a new project</span></a>.</p>
+</li>
+<li><p class="first">If the correct project info is found, then try running the completion again,
+if it still doesn't return any results run the command:</p>
+<div class="highlight-python"><div class="highlight"><pre>:messages
+</pre></div>
+</div>
+<p>This will print out any messages that you might have missed.  If you see an
+error regarding a java exception while running a command then see the section
+on <a class="reference internal" href="#ts-exception"><span>troubleshooting exceptions</span></a>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist">
+<span id="ts-ftplugin"></span><h3>I'm editing a [java, python, php, etc] file and none of the file type commands exist.<a class="headerlink" href="#i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist" title="Permalink to this headline">¶</a></h3>
+<p>This usually indicates that you don't have file type plugins enabled in vim.
+To check you can run:</p>
+<div class="highlight-python"><div class="highlight"><pre>:EclimValidate
+</pre></div>
+</div>
+<p>If it complains about filetype plugin support not being found, then follow its
+directions on adding the following to your vimrc:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">filetype</span> plugin indent <span class="k">on</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="code-validation-signs-are-showing-up-on-the-wrong-lines">
+<span id="ts-signs-misplaced"></span><h3>Code validation signs are showing up on the wrong lines.<a class="headerlink" href="#code-validation-signs-are-showing-up-on-the-wrong-lines" title="Permalink to this headline">¶</a></h3>
+<p>This is most likely a result of eclipse being setup to use a different file
+encoding than vim, most likely cp1251 (windows-1251) vs utf-8.  You should be
+able to resolve this issue by <a class="reference internal" href="#eclim-encoding"><span>setting eclipse's default encoding</span></a> accordingly.</p>
+<p>If you're unsure what encoding to use, try using utf-8.</p>
+</div>
+<div class="section" id="i-received-a-java-exception-while-executing-command-message">
+<span id="ts-exception"></span><h3>I received a java exception &quot;while executing command&quot; message.<a class="headerlink" href="#i-received-a-java-exception-while-executing-command-message" title="Permalink to this headline">¶</a></h3>
+<p>If you receive a java exception while performing some action in vim, it should
+also include a message indicating the issue.  However, if you receive something
+like a NullPointerException or some other exception which doesn't include a
+helpful message, then you may have encountered a bug.</p>
+<p>Once you've encountered this type of issue, the first step it to get more
+details which you can do by enabling eclim debugging in vim:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">let</span> <span class="k">g</span>:EclimLogLevel <span class="p">=</span> <span class="s1">&#39;trace&#39;</span>
+</pre></div>
+</div>
+<p>Then you can perform the same action that triggered the error again. This time
+you should receive the full stack trace of the error.</p>
+<p>If the error occurs while manually running a command (<code>:JavaSearch</code>, etc),
+then you can instead prepend <code>verbose</code> to the command to view the full stack
+trace:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">verbose</span> JavaSearch ...
+</pre></div>
+</div>
+<p>Once you've obtained the stack trace, the next step it to send it to the
+<a class="reference external" href="http://groups.google.com/group/eclim-user">eclim-user</a> mailing list along with a description of what you were doing when
+the error occurred, as well as the OS you are on, and whether you were using
+eclimd headless or headed (inside of the eclipse gui).</p>
+</div>
+<div class="section" id="incompatible-plugins">
+<span id="ts-incompatible-plugins"></span><h3>Incompatible Plugins<a class="headerlink" href="#incompatible-plugins" title="Permalink to this headline">¶</a></h3>
+<p>There are some third party eclipse plugins which currently may interfere with
+eclim.  Below is a list of these known plugin incompatibilities.</p>
+<ul class="simple">
+<li><strong>Spring IDE</strong>: At least one user has reported that eclim's java validation
+no longer works after installing the Spring IDE.</li>
+<li><strong>viPlugin</strong>: Attempting to open a file using the embedded gvim support
+fails if viPlugin is installed.  This issue has been reported on the
+viPlugin site.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="_sources/faq.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Cheatsheet &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="index.html" />
+    <link rel="next" title="History of Changes" href="changes.html" />
+    <link rel="prev" title="Features" href="features.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="vim/index.html">Documentation</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/java/index.html">Java</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="features.html"
+         title="previous chapter">&laquo; Features</a></li>
+  <li class="hidden-phone"><a href="changes.html"
+         title="next chapter">History of Changes &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="cheatsheet">
+<h1>Cheatsheet<a class="headerlink" href="#cheatsheet" title="Permalink to this headline">¶</a></h1>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li><a class="reference internal" href="#global-commands">Global Commands</a></li>
+<li><a class="reference internal" href="#project-commands">Project Commands</a></li>
+<li><a class="reference internal" href="#android-commands">Android Commands</a></li>
+<li><a class="reference internal" href="#ant-commands">Ant Commands</a></li>
+<li><a class="reference internal" href="#c-c-commands">C/C++ Commands</a></li>
+<li><a class="reference internal" href="#css-commands">Css Commands</a></li>
+<li><a class="reference internal" href="#dtd-commands">Dtd Commands</a></li>
+<li><a class="reference internal" href="#html-commands">Html Commands</a></li>
+<li><a class="reference internal" href="#groovy-commands">Groovy Commands</a></li>
+<li><a class="reference internal" href="#ivy-commands">Ivy Commands</a></li>
+<li><a class="reference internal" href="#java-commands">Java Commands</a></li>
+<li><a class="reference internal" href="#java-classpath-commands">Java .classpath Commands</a></li>
+<li><a class="reference internal" href="#javascript-commands">Javascript Commands</a></li>
+<li><a class="reference internal" href="#log4j-commands">Log4j Commands</a></li>
+<li><a class="reference internal" href="#maven-commands">Maven Commands</a></li>
+<li><a class="reference internal" href="#php-commands">Php Commands</a></li>
+<li><a class="reference internal" href="#python-commands">Python Commands</a></li>
+<li><a class="reference internal" href="#ruby-commands">Ruby Commands</a></li>
+<li><a class="reference internal" href="#scala-commands">Scala Commands</a></li>
+<li><a class="reference internal" href="#webxml-commands">WebXml Commands</a></li>
+<li><a class="reference internal" href="#xml-commands">Xml Commands</a></li>
+<li><a class="reference internal" href="#xsd-commands">Xsd Commands</a></li>
+<li><a class="reference internal" href="#misc-commands">Misc. Commands</a></li>
+</ul>
+</div>
+</div>
+<p>Here you will find a comprehensive list of eclim commands that you can use as a
+reference.</p>
+<div class="section" id="global-commands">
+<h2>Global Commands<a class="headerlink" href="#global-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/core/eclim.html#pingeclim"><span>:PingEclim</span></a> - Pings eclimd server.</li>
+<li><a class="reference internal" href="vim/core/eclim.html#shutdowneclim"><span>:ShutdownEclim</span></a> - Shuts down eclimd server.</li>
+<li><a class="reference internal" href="vim/core/eclim.html#vimsettings"><span>:VimSettings</span></a> -
+View / edit eclim's vim client settings.</li>
+<li><a class="reference internal" href="vim/core/eclim.html#workspacesettings"><span>:WorkspaceSettings</span></a> -
+View / edit global workspace settings.</li>
+<li><a class="reference internal" href="vim/core/eclim.html#eclimdisable"><span>:EclimDisable</span></a> -
+Temporarily disables communication with eclimd.</li>
+<li><a class="reference internal" href="vim/core/eclim.html#eclimenable"><span>:EclimEnable</span></a> - Re-enables communication with eclimd.</li>
+<li><a class="reference internal" href="vim/core/eclim.html#eclimhelp"><span>:EclimHelp</span></a> [helptopic] - View eclim documentation in vim.</li>
+<li><a class="reference internal" href="vim/core/eclim.html#eclimhelpgrep"><span>:EclimHelpGrep</span></a> /regex/ -
+Search the eclim documentation in vim.</li>
+</ul>
+</div>
+<div class="section" id="project-commands">
+<h2>Project Commands<a class="headerlink" href="#project-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/core/project.html#projectcreate"><span>:ProjectCreate</span></a>
+&lt;folder&gt; [-p &lt;project_name&gt;] -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -
+Create a new project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectimport"><span>:ProjectImport</span></a> &lt;folder&gt; -
+Import a project from an existing eclipse project folder.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectlist"><span>:ProjectList</span></a> - List current projects.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectsettings"><span>:ProjectSettings</span></a> [&lt;project&gt;] -
+View / edit project settings.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectdelete"><span>:ProjectDelete</span></a> &lt;project&gt; - Delete a project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectrename"><span>:ProjectRename</span></a> [&lt;project&gt;] &lt;name&gt; - Rename a project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectmove"><span>:ProjectMove</span></a> [&lt;project&gt;] &lt;dir&gt; - Move a project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectrefresh"><span>:ProjectRefresh</span></a> [&lt;project&gt; &lt;project&gt; ...] -
+Refresh supplied list of projects against the current files on disk.  If
+no project names supplied, refresh the current project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectrefreshall"><span>:ProjectRefreshAll</span></a> - Refresh all projects.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectbuild"><span>:ProjectBuild</span></a> [&lt;project&gt;] -
+Build the current or supplied project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectinfo"><span>:ProjectInfo</span></a> [&lt;project&gt;] -
+Echos info for the current or supplied project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectopen"><span>:ProjectOpen</span></a> [&lt;project&gt;] - Opens a project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectclose"><span>:ProjectClose</span></a> [&lt;project&gt;] - Closes a project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectnatures"><span>:ProjectNatures</span></a> [&lt;project&gt;] -
+View the configured natures for one or all projects.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectnatureadd"><span>:ProjectNatureAdd</span></a> &lt;project&gt; [&lt;nature&gt; ...] -
+Add one or more natures to a project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectnatureremove"><span>:ProjectNatureRemove</span></a> &lt;project&gt; [&lt;nature&gt; ...] -
+Remove one or more natures from a project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectproblems"><span>:ProjectProblems</span></a> [&lt;project&gt;] -
+Populates vim's quickfix with all eclipse build errors and warnings for the
+current, or specified project, and all related projects.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectcd"><span>:ProjectCD</span></a> -
+Changes the global current working directory to the root directory of the
+current file's project (executes a :cd).</li>
+<li><a class="reference internal" href="vim/core/project.html#projectlcd"><span>:ProjectLCD</span></a> -
+Changes the current working directory of the current window to the root
+directory of the current file's project (executes a :lcd).</li>
+<li><a class="reference internal" href="vim/core/project.html#projecttree"><span>:ProjectTree</span></a> [&lt;project&gt; &lt;project&gt; ...] -
+Opens navigable a tree for one or more projects.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectstree"><span>:ProjectsTree</span></a> - Opens a tree containing all projects.</li>
+<li><a class="reference internal" href="vim/core/project.html#projecttab"><span>:ProjectTab</span></a> &lt;project&gt; - Opens a new tab containing the project tree
+and the tab local working directory set to the supplied project's root.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectgrep"><span>:ProjectGrep</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+Issues a vimgrep starting at the root of the current project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectgrepadd"><span>:ProjectGrepAdd</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+Issues a vimgrepadd starting at the root of the current project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectlgrep"><span>:ProjectLGrep</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+Issues a lvimgrep starting at the root of the current project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectlgrepadd"><span>:ProjectLGrepAdd</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+Issues a lvimgrepadd starting at the root of the current project.</li>
+<li><a class="reference internal" href="vim/core/project.html#projecttodo"><span>:ProjectTodo</span></a> -
+Searches project files for todo / fixme patterns and adds them to the
+location list.</li>
+<li><a class="reference internal" href="vim/core/project.html#todo"><span>:Todo</span></a> -
+Searches the current file for todo / fixme patterns and adds them to the
+location list.</li>
+</ul>
+</div>
+<div class="section" id="android-commands">
+<h2>Android Commands<a class="headerlink" href="#android-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/android.html#androidreload"><span>:AndroidReload</span></a> - Reloads the Android SDK environment in the
+running eclimd/eclipse instance. Useful if you've made changes to the SDK
+outside of eclipse (installed a new target platform, etc).</li>
+</ul>
+</div>
+<div class="section" id="ant-commands">
+<h2>Ant Commands<a class="headerlink" href="#ant-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/ant.html#id1"><span>:Ant</span></a> [&lt;target&gt; ...] - Execute ant from the current project.</li>
+<li><a class="reference internal" href="vim/java/ant.html#antdoc"><span>:AntDoc</span></a> [&lt;element&gt;] -
+Find and open the documentation for the element under the cursor or the
+element supplied as an argument.</li>
+<li><a class="reference internal" href="vim/java/ant.html#validate-ant"><span>:Validate</span></a> - Validate the current ant build file.</li>
+</ul>
+</div>
+<div class="section" id="c-c-commands">
+<h2>C/C++ Commands<a class="headerlink" href="#c-c-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/c/validate.html#validate-c"><span>:Validate</span></a> - Validate the current file.</li>
+<li><a class="reference internal" href="vim/c/search.html#csearch"><span>:CSearch</span></a> [-p &lt;pattern&gt; -t &lt;type&gt; -s &lt;scope&gt; -x &lt;context&gt;] -
+Search for classes, functions, methods, macros, etc.</li>
+<li><a class="reference internal" href="vim/c/search.html#csearchcontext"><span>:CSearchContext</span></a> -
+Find the element under the cursor based on its context.</li>
+<li><a class="reference internal" href="vim/c/project.html#cprojectconfigs"><span>:CProjectConfigs</span></a> [project] -
+Open a temp buffer to view/modify the current projects cdt configurations.</li>
+<li><a class="reference internal" href="vim/c/inspection.html#ccallhierarchy"><span>:CCallHierarchy</span></a> -
+Display the call hierarchy for the function or method under the cursor.</li>
+</ul>
+</div>
+<div class="section" id="css-commands">
+<h2>Css Commands<a class="headerlink" href="#css-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/html/index.html#validate-css"><span>:Validate</span></a> - Validate the current file.</li>
+</ul>
+</div>
+<div class="section" id="dtd-commands">
+<h2>Dtd Commands<a class="headerlink" href="#dtd-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/xml/index.html#validate-dtd"><span>:Validate</span></a> - Validate the current file.</li>
+</ul>
+</div>
+<div class="section" id="html-commands">
+<h2>Html Commands<a class="headerlink" href="#html-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/html/index.html#validate-html"><span>:Validate</span></a> - Validate the current file.</li>
+<li><a class="reference internal" href="vim/html/index.html#browseropen"><span>:BrowserOpen</span></a> -
+Opens the current file in your configured browser.</li>
+</ul>
+</div>
+<div class="section" id="groovy-commands">
+<h2>Groovy Commands<a class="headerlink" href="#groovy-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/groovy/validate.html#validate-groovy"><span>:Validate</span></a> - Validate the current file.</li>
+</ul>
+</div>
+<div class="section" id="ivy-commands">
+<h2>Ivy Commands<a class="headerlink" href="#ivy-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/classpath.html#ivyrepo"><span>:IvyRepo</span></a> &lt;path&gt; -
+Sets the necessary IVY_REPO classpath variable for supporting automatic
+updates to .classpath files upon ivy.xml updates.</li>
+</ul>
+</div>
+<div class="section" id="java-commands">
+<h2>Java Commands<a class="headerlink" href="#java-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/methods.html#javaget"><span>:JavaGet</span></a> - Create a java bean getter method.</li>
+<li><a class="reference internal" href="vim/java/methods.html#javaset"><span>:JavaSet</span></a> - Create a java bean setter method.</li>
+<li><a class="reference internal" href="vim/java/methods.html#javagetset"><span>:JavaGetSet</span></a> -
+Create both a java bean getter and setter method.</li>
+<li><a class="reference internal" href="vim/java/methods.html#javaconstructor"><span>:JavaConstructor</span></a> -
+Creates class constructor, either empty or based on selected class fields.</li>
+<li><a class="reference internal" href="vim/java/inspection.html#javacallhierarchy"><span>:JavaCallHierarchy</span></a> -
+Display the call hierarchy for the method under the cursor.</li>
+<li><a class="reference internal" href="vim/java/inspection.html#javahierarchy"><span>:JavaHierarchy</span></a> - View the type hierarchy tree.</li>
+<li><a class="reference internal" href="vim/java/methods.html#javaimpl"><span>:JavaImpl</span></a> -
+View implementable / overridable methods from super classes and implemented
+interfaces.</li>
+<li><a class="reference internal" href="vim/java/methods.html#javadelegate"><span>:JavaDelegate</span></a> -
+View list of methods that delegate to the field under the cursor.</li>
+<li><a class="reference internal" href="vim/java/unittests.html#junit"><span>:JUnit</span></a> [testcase] -
+Allows you to execute junit test cases.</li>
+<li><a class="reference internal" href="vim/java/unittests.html#junitfindtest"><span>:JUnitFindTest</span></a> -
+Attempts to find the corresponding test for the current source file.</li>
+<li><a class="reference internal" href="vim/java/unittests.html#junitimpl"><span>:JUnitImpl</span></a> -
+Similar to <strong>:JavaImpl</strong>, but creates test methods.</li>
+<li><a class="reference internal" href="vim/java/unittests.html#junitresult"><span>:JUnitResult</span></a> [testcase] -
+Allows you to view the results of a test case.</li>
+<li><a class="reference internal" href="vim/java/import.html#javaimport"><span>:JavaImport</span></a> - Import the class under the cursor.</li>
+<li><a class="reference internal" href="vim/java/import.html#javaimportorganize"><span>:JavaImportOrganize</span></a> -
+Import undefined types, remove unused imports, sort and format imports.</li>
+<li><a class="reference internal" href="vim/java/search.html#javasearch"><span>:JavaSearch</span></a>
+[-p &lt;pattern&gt;] [-t &lt;type&gt;] [-x &lt;context&gt;] [-s &lt;scope&gt;] -
+Search for classes, methods, fields, etc.  (With pattern supplied, searches
+for the element under the cursor).</li>
+<li><a class="reference internal" href="vim/java/search.html#javasearchcontext"><span>:JavaSearchContext</span></a> -
+Perform a context sensitive search for the element under the cursor.</li>
+<li><a class="reference internal" href="vim/java/validate.html#javacorrect"><span>:JavaCorrect</span></a> -
+Suggest possible corrections for a source error.</li>
+<li><a class="reference internal" href="vim/java/javadoc.html#javadocsearch"><span>:JavaDocSearch</span></a> -
+Search for javadocs.  Same usage as <strong>:JavaSearch</strong>.</li>
+<li><a class="reference internal" href="vim/java/javadoc.html#javadoccomment"><span>:JavaDocComment</span></a> -
+Adds or updates the comments for the element under the cursor.</li>
+<li><a class="reference internal" href="vim/java/javadoc.html#javadocpreview"><span>:JavaDocPreview</span></a> -
+Display the javadoc of the element under the cursor in vim's preview window.</li>
+<li><a class="reference internal" href="vim/java/refactor.html#javarename"><span>:JavaRename</span></a> [new_name] -
+Rename the element under the cursor.</li>
+<li><a class="reference internal" href="vim/java/refactor.html#javamove"><span>:JavaMove</span></a> [new_package] -
+Move the current class/interface to another package.</li>
+<li><a class="reference internal" href="vim/java/java.html#java"><span>:Java</span></a> -
+Executes the java using your project's main class.</li>
+<li><a class="reference internal" href="vim/java/java.html#javaclasspath"><span>:JavaClasspath</span></a> [-d &lt;delim&gt;] -
+Echos the project's classpath delimited by the system path separator or the
+supplied delimiter.</li>
+<li><a class="reference internal" href="vim/java/javadoc.html#javadoc"><span>:Javadoc</span></a> [file, file, ...] -
+Executes the javadoc utility against all or just the supplied source files.</li>
+<li><a class="reference internal" href="vim/java/java.html#javalistinstalls"><span>:JavaListInstalls</span></a> - List known JDK/JRE installs.</li>
+<li><a class="reference internal" href="vim/java/format.html#javaformat"><span>:JavaFormat</span></a> - Formats java source code.</li>
+<li><a class="reference internal" href="vim/java/validate.html#checkstyle"><span>:Checkstyle</span></a> - Invokes checkstyle on the current file.</li>
+<li><a class="reference internal" href="vim/java/java.html#jps"><span>:Jps</span></a> -
+Opens window with information about the currently running java processes.</li>
+<li><a class="reference internal" href="vim/java/validate.html#validate-java"><span>:Validate</span></a> - Manually runs source code validation.</li>
+</ul>
+</div>
+<div class="section" id="java-classpath-commands">
+<h2>Java .classpath Commands<a class="headerlink" href="#java-classpath-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/classpath.html#newsrcentry-java"><span>:NewSrcEntry</span></a> &lt;dir&gt; -
+Add a new source dir entry.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#newprojectentry-java"><span>:NewProjectEntry</span></a> &lt;project&gt; -
+Add a new project entry.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#newjarentry-java"><span>:NewJarEntry</span></a> &lt;file&gt; [&lt;src_path&gt; &lt;javadoc_path&gt;] -
+Add a jar entry.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#newvarentry-java"><span>:NewVarEntry</span></a> &lt;VAR/file&gt; [&lt;src_path&gt; &lt;javadoc_path&gt;] -
+Add a new var entry.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#variablelist"><span>:VariableList</span></a>
+List available classpath variables and their corresponding values.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#variablecreate"><span>:VariableCreate</span></a> &lt;name&gt; &lt;path&gt; -
+Creates or updates the variable with the supplied name.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#variabledelete"><span>:VariableDelete</span></a> &lt;name&gt; -
+Deletes the variable with the supplied name.</li>
+</ul>
+</div>
+<div class="section" id="javascript-commands">
+<h2>Javascript Commands<a class="headerlink" href="#javascript-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/javascript/index.html#validate-javascript"><span>:Validate</span></a> - Validate the current javascript file.</li>
+</ul>
+</div>
+<div class="section" id="log4j-commands">
+<h2>Log4j Commands<a class="headerlink" href="#log4j-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/logging.html#validate-log4j"><span>:Validate</span></a> -
+Validate the current log4j xml configuration file.</li>
+</ul>
+</div>
+<div class="section" id="maven-commands">
+<h2>Maven Commands<a class="headerlink" href="#maven-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/maven.html#id1"><span>:Maven</span></a> [&lt;goal&gt; ...] -
+Execute maven 1.x from the current project.</li>
+<li><a class="reference internal" href="vim/java/maven.html#mvn"><span>:Mvn</span></a> [&lt;goal&gt; ...] - Execute maven 2.x from the current project.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#mavenrepo"><span>:MavenRepo</span></a> -
+Sets the necessary MAVEN_REPO classpath variable for maven's (1.x) eclipse
+support.</li>
+<li><a class="reference internal" href="vim/java/classpath.html#mvnrepo"><span>:MvnRepo</span></a> -
+Sets the necessary M2_REPO classpath variable for maven's (2.x) eclipse
+support.</li>
+</ul>
+</div>
+<div class="section" id="php-commands">
+<h2>Php Commands<a class="headerlink" href="#php-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/php/search.html#phpsearch"><span>:PhpSearch</span></a>
+[-p &lt;pattern&gt; -t &lt;type&gt; -s &lt;scope&gt; -x &lt;context&gt;] -
+Search for classes, methods, and constants.</li>
+<li><a class="reference internal" href="vim/php/search.html#phpsearchcontext"><span>:PhpSearchContext</span></a> -
+Find the element under the cursor based on its context.</li>
+<li><a class="reference internal" href="vim/php/validate.html#validate-php"><span>:Validate</span></a> - Manually runs source code validation.</li>
+</ul>
+</div>
+<div class="section" id="python-commands">
+<h2>Python Commands<a class="headerlink" href="#python-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/python/search.html#pythonsearch"><span>:PythonSearch</span></a> -
+Find the element under the cursor or, if requested, all references to that
+element.</li>
+<li><a class="reference internal" href="vim/python/search.html#pythonsearchcontext"><span>:PythonSearchContext</span></a> -
+Find the element under the cursor or its references based on the current
+context in the file.</li>
+<li><a class="reference internal" href="vim/python/validate.html#validate-python"><span>:Validate</span></a> - Validates the current file.</li>
+<li><a class="reference internal" href="vim/python/django.html#djangomanage"><span>:DjangoManage</span></a> -
+Invokes django's manage.py from any file in the same directory as your
+manage.py or in any of the child directories.</li>
+<li><a class="reference internal" href="vim/python/django.html#djangofind"><span>:DjangoFind</span></a> -
+Available when editing a django html template file.  Finds tag/filter
+definition, other template files, and static files.</li>
+<li><a class="reference internal" href="vim/python/django.html#djangotemplateopen"><span>:DjangoTemplateOpen</span></a> -
+Available when editing a python file.  Finds the template referenced under
+the cursor.</li>
+<li><a class="reference internal" href="vim/python/django.html#djangoviewopen"><span>:DjangoViewOpen</span></a> -
+Available when editing a python file.  When within a django url patterns
+definition, finds the view referenced under the cursor.</li>
+<li><a class="reference internal" href="vim/python/django.html#djangocontextopen"><span>:DjangoContextOpen</span></a> -
+Available when editing a python file.  Executes <strong>:DjangoViewOpen</strong>,
+<strong>:DjangoTemplateOpen</strong>, or <strong>:PythonSearchContext</strong> depending on the
+context of the text under the cursor.</li>
+</ul>
+</div>
+<div class="section" id="ruby-commands">
+<h2>Ruby Commands<a class="headerlink" href="#ruby-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/ruby/search.html#rubysearch"><span>:RubySearch</span></a>
+[-p &lt;pattern&gt; -t &lt;type&gt; -s &lt;scope&gt; -x &lt;context&gt;] -
+Search for modules, classes, methods, etc.</li>
+<li><a class="reference internal" href="vim/ruby/search.html#rubysearchcontext"><span>:RubySearchContext</span></a> -
+Find the element under the cursor based on its context.</li>
+<li><a class="reference internal" href="vim/ruby/validate.html#validate-ruby"><span>:Validate</span></a> - Manually runs source code validation.</li>
+<li><a class="reference internal" href="vim/ruby/buildpath.html#rubyinterpreteradd"><span>:RubyInterpreterAdd</span></a> [-n &lt;name&gt;] &lt;path&gt; -
+Add a ruby interpreter.</li>
+<li><a class="reference internal" href="vim/ruby/buildpath.html#rubyinterpreterremove"><span>:RubyInterpreterRemove</span></a> &lt;path&gt; -
+Remove a ruby interpreter.</li>
+<li><a class="reference internal" href="vim/ruby/buildpath.html#rubyinterpreterlist"><span>:RubyInterpreterList</span></a>  -
+List the available ruby interpreters.</li>
+</ul>
+</div>
+<div class="section" id="scala-commands">
+<h2>Scala Commands<a class="headerlink" href="#scala-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/scala/search.html#scalasearch"><span>:ScalaSearch</span></a> -
+Search for the definition of the element under the cursor.</li>
+<li><a class="reference internal" href="vim/scala/import.html#scalaimport"><span>:ScalaImport</span></a> - Import the type under the cursor.</li>
+<li><a class="reference internal" href="vim/scala/validate.html#validate-scala"><span>:Validate</span></a> - Manually runs source code validation.</li>
+</ul>
+</div>
+<div class="section" id="webxml-commands">
+<h2>WebXml Commands<a class="headerlink" href="#webxml-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/java/webxml.html#validate-webxml"><span>:Validate</span></a> - Validate the current web.xml file.</li>
+</ul>
+</div>
+<div class="section" id="xml-commands">
+<h2>Xml Commands<a class="headerlink" href="#xml-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/xml/index.html#dtddefinition"><span>:DtdDefinition</span></a> [&lt;element&gt;] -
+Open the current xml file's dtd and jump to the element definition if
+supplied.</li>
+<li><a class="reference internal" href="vim/xml/index.html#xsddefinition"><span>:XsdDefinition</span></a> [&lt;element&gt;] -
+Open the current xml file's xsd and jump to the element definition if
+supplied.</li>
+<li><a class="reference internal" href="vim/xml/index.html#validate-xml"><span>:Validate</span></a> [&lt;file&gt;] -
+Validates the supplied xml file or the current file if none supplied.</li>
+<li><a class="reference internal" href="vim/xml/index.html#xmlformat"><span>:XmlFormat</span></a> - Reformats the current xml file.</li>
+</ul>
+</div>
+<div class="section" id="xsd-commands">
+<h2>Xsd Commands<a class="headerlink" href="#xsd-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/xml/index.html#validate-xsd"><span>:Validate</span></a> - Validate the current file.</li>
+</ul>
+</div>
+<div class="section" id="misc-commands">
+<h2>Misc. Commands<a class="headerlink" href="#misc-commands" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="vim/core/locate.html#locatefile"><span>:LocateFile</span></a> [file] -
+Locates a relative file and opens it.</li>
+<li><a class="reference internal" href="vim/core/util.html#tcd"><span>:Tcd</span></a> dir -
+Like :lcd but sets the tab's local working directory.</li>
+<li><a class="reference internal" href="vim/core/util.html#difflastsaved"><span>:DiffLastSaved</span></a> -
+Performs a diffsplit with the last saved version of the currently modifed
+file.</li>
+<li><a class="reference internal" href="vim/core/util.html#swapwords"><span>:SwapWords</span></a> -
+Swaps two words (with cursor placed on the first word). Supports swapping
+around non-word characters like commas, periods, etc.</li>
+<li><a class="reference internal" href="vim/core/util.html#sign"><span>:Sign</span></a> -
+Toggles adding or removing a vim sign on the current line.</li>
+<li><a class="reference internal" href="vim/core/util.html#signs"><span>:Signs</span></a> -
+Opens a new window containing a list of signs for the current buffer.</li>
+<li><a class="reference internal" href="vim/core/util.html#signclearuser"><span>:SignClearUser</span></a> -
+Removes all vim signs added via :Sign.</li>
+<li><a class="reference internal" href="vim/core/util.html#signclearall"><span>:SignClearAll</span></a> - Removes all vim signs.</li>
+<li><a class="reference internal" href="vim/core/util.html#quickfixclear"><span>:QuickFixClear</span></a> -
+Removes all entries from the quick fix window.</li>
+<li><a class="reference internal" href="vim/core/util.html#locationlistclear"><span>:LocationListClear</span></a> -
+Removes all entries from the location list window.</li>
+<li><a class="reference internal" href="vim/core/util.html#buffers"><span>:Buffers</span></a> -
+Opens a temporary window with a list of all the currently listed
+buffers, allowing you to open or remove them.</li>
+<li><a class="reference internal" href="vim/core/util.html#bufferstoggle"><span>:BuffersToggle</span></a> -
+Opens the buffers window if not open, otherwise closes it.</li>
+<li><a class="reference internal" href="vim/core/util.html#only"><span>:Only</span></a> -
+Closes all but the current window and any windows excluded by
+<strong>g:EclimOnlyExclude</strong>.</li>
+<li><a class="reference internal" href="vim/core/history.html#history"><span>:History</span></a> -
+View the local history entries for the current file.</li>
+<li><a class="reference internal" href="vim/core/history.html#historyclear"><span>:HistoryClear</span></a> -
+Clear the local history entries for the current file.</li>
+<li><a class="reference internal" href="vim/core/history.html#historydiffnext"><span>:HistoryDiffNext</span></a> /
+<a class="reference internal" href="vim/core/history.html#historydiffprev"><span>:HistoryDiffPrev</span></a> -
+Diff the current file against the next/previous entry in the history stack.</li>
+<li><a class="reference internal" href="vim/refactoring.html#refactorundo"><span>:RefactorUndo</span></a> /
+<a class="reference internal" href="vim/refactoring.html#refactorredo"><span>:RefactorRedo</span></a> -
+Undo / Redo the last refactoring.</li>
+<li><a class="reference internal" href="vim/refactoring.html#refactorundopeek"><span>:RefactorUndoPeek</span></a> /
+<a class="reference internal" href="vim/refactoring.html#refactorredopeek"><span>:RefactorRedoPeek</span></a> -
+Display a short description of the refactoring to be undone / redone.</li>
+<li><a class="reference internal" href="vim/core/util.html#openurl"><span>:OpenUrl</span></a> [url] - Opens a url in your configured web browser.</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="_sources/cheatsheet.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

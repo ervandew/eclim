@@ -1,0 +1,444 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Locate File &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="../../index.html" />
+    <link rel="up" title="Core Functionality" href="index.html" />
+    <link rel="next" title="Utility Commands" href="util.html" />
+    <link rel="prev" title="Eclipse Local History" href="history.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="../../index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="../index.html">Documentation</a><ul class="current dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 current dropdown-submenu active"><a class="reference internal" href="index.html">Core Functionality</a><ul class="current dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../java/index.html">Java</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../../development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="history.html"
+         title="previous chapter">&laquo; Eclipse Local History</a></li>
+  <li class="hidden-phone"><a href="util.html"
+         title="next chapter">Utility Commands &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="locate-file">
+<span id="locatefile"></span><h1>Locate File<a class="headerlink" href="#locate-file" title="Permalink to this headline">¶</a></h1>
+<p>Eclim provides the <strong>:LocateFile</strong> command to allow you to quickly find and
+open files or buffers.</p>
+<ul>
+<li><p class="first"><strong>:LocateFile</strong> [file_pattern] -
+Attempts to locate the supplied file pattern or if no argument is supplied,
+opens a temporary window where the text you type is turned into a pattern and
+search results are presented as you type.</p>
+<img alt="../../_images/locate.gif" src="../../_images/locate.gif" />
+<dl class="docutils">
+<dt>While in this completion mode the following key bindings are available:</dt>
+<dd><ul class="first last simple">
+<li>&lt;esc&gt; - close the search window without selecting a file</li>
+<li>&lt;tab&gt; or &lt;down&gt; - cycle forward through the results</li>
+<li>&lt;shift&gt;&lt;tab&gt; or &lt;up&gt; - cycle backwards through the results</li>
+<li>&lt;enter&gt; - open the selected file using the
+<a class="reference internal" href="#g-eclimlocatefiledefaultaction"><span>default action</span></a></li>
+<li>&lt;ctrl&gt;e - open the selected file via :edit</li>
+<li>&lt;ctrl&gt;s - open the selected file via :split</li>
+<li>&lt;ctrl&gt;t - open the selected file via :tabnew</li>
+<li>&lt;ctrl&gt;l - switch the locate scope</li>
+<li>&lt;ctrl&gt;h - toggle the help buffer</li>
+</ul>
+</dd>
+</dl>
+<p>By default, the search string accepted by the completion mode is intended to
+be just portions of the file name you are looking for, which is then
+automatically expanded in an effort to help you find the file with the fewest
+keystrokes possible.</p>
+<p>The argument version of <strong>:LocateFile</strong> on the other hand, accepts a hybrid
+glob/regex pattern.  The glob portion allows you to use * and ** to match
+portions of a path or traverse multiple directories.  You can mix * and **
+with standard perl compatible regex operators to construct your search
+pattern.</p>
+<p>If you prefer the more explicit patterns supported by the argument version of
+<strong>:LocateFile</strong> over the default &quot;fuzzy&quot; pattern supported by the completion
+version of <strong>:LocateFile</strong>, then you can turn off the fuzzy matching support
+using the <strong>g:EclimLocateFileFuzzy</strong> variable described below.</p>
+<p>By default, all searching by both variants of this command is limited to the
+current project and any projects listed as dependencies, but you can widen
+the search scope to include all open projects by setting
+<strong>g:EclimLocateFileScope</strong> to 'workspace', which is the default scope when
+<strong>:LocateFile</strong> is executed outside of a project.</p>
+<p>In addition to the 'project' and 'workspace' scopes, <strong>:LocateFile</strong> also
+supports the following scopes:</p>
+<ul class="simple">
+<li>buffers: search listed buffers</li>
+<li>quickfix: search the quickfix results</li>
+</ul>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p class="last">For performance reasons, locating files in the 'project' and 'workspace'
+scopes depends on eclipse being aware of all your project files.  For the
+most part this is handled automatically as you create and edit files within
+vim.  However, actions you take outside of vim or eclipse (moving/removing
+files, updates from a version control system, etc.) will not be visible
+until you force a project refresh via <a class="reference internal" href="project.html#projectrefresh"><span class="xref std std-ref">:ProjectRefresh</span></a>.</p>
+</div>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p>If you would like to use :LocateFile even when eclimd is not running or for
+projects not known to eclim, one option would be to install <a class="reference external" href="https://github.com/ggreer/the_silver_searcher">the silver
+searcher</a>, then install my <a class="reference external" href="https://github.com/ervandew/ag">ag plugin</a>, and configure eclim to use the
+plugin as the fallback default:</p>
+<div class="last highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimLocateFileNonProjectScope <span class="p">=</span> <span class="s1">&#39;ag&#39;</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Configuration</strong></p>
+<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<ul class="simple" id="g-eclimlocatefiledefaultaction">
+<li><strong>g:EclimLocateFileDefaultAction</strong> (Default: 'split') -
+Determines the command used to open the file when hitting &lt;enter&gt; on an entry
+in the locate file results.</li>
+</ul>
+<ul class="simple" id="g-eclimlocatefilescope">
+<li><strong>g:EclimLocateFileScope</strong> (Default: 'project') -
+Determines the scope for which to search for files.<ul>
+<li>'project': search only the current project and its dependencies.</li>
+<li>'workspace': search the entire workspace (all open projects).</li>
+<li>'buffers': search listed buffers</li>
+<li>'quickfix': search the quickfix results</li>
+<li>'vcsmodified': search files reported by your vcs as modified or
+untracked.</li>
+</ul>
+</li>
+</ul>
+<ul class="simple" id="g-eclimlocatefilefuzzy">
+<li><strong>g:EclimLocateFileFuzzy</strong> (Default: 1) -
+Determines whether or not 'fuzzy' searching will be used on the no argument
+version of :LocateFile.</li>
+</ul>
+<ul class="simple" id="g-eclimlocatefilecaseinsensitive">
+<li><strong>g:EclimLocateFileCaseInsensitive</strong> (Default: 'lower') -
+Determines when case insensitive searching is performed.<ul>
+<li>'lower': when the search string is all lower case the search will be case
+insensitive, but if one or more capital letters are present, then the
+search will be case sensitive.</li>
+<li>'always': searching will always be case insensitive.</li>
+<li>'never': searching will never be case insensitive.</li>
+</ul>
+</li>
+</ul>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p><strong>Search Filters</strong>: eclim does not yet expose the ability to add filters
+should you want to ignore certain directories, but you can configure this
+ability from within Eclipse:</p>
+<p class="last"><span class="menuselection">&lt;right click on your project&gt; ‣ Properties ‣ Resource
+‣ Resource Filters</span></p>
+</div>
+</li>
+</ul>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="../../_sources/vim/core/locate.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

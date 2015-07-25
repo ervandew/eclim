@@ -1,0 +1,18 @@
+/* get the rss image/link next to the what's new text */
+a[href='index.rss'] {
+  position: absolute;
+  top: 40px;
+}
+#what-s-new,
+#_what-s-new {
+  position: relative;
+}
+#what-s-new > h2:first-child,
+#_what-s-new > h2:first-child {
+  padding-left: 35px;
+}
+
+/* improve readability of bootstrap alerts */
+.alert {
+  color: #555;
+}

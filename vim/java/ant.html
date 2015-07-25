@@ -1,0 +1,512 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ant &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="../../index.html" />
+    <link rel="up" title="Java" href="index.html" />
+    <link rel="next" title="Maven" href="maven.html" />
+    <link rel="prev" title="Logging (log4j, etc)" href="logging.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="../../index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="../index.html">Documentation</a><ul class="current dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current dropdown-submenu active"><a class="reference internal" href="index.html">Java</a><ul class="current dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../python/index.html">Python</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../../development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="logging.html"
+         title="previous chapter">&laquo; Logging (log4j, etc)</a></li>
+  <li class="hidden-phone"><a href="maven.html"
+         title="next chapter">Maven &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="ant">
+<h1>Ant<a class="headerlink" href="#ant" title="Permalink to this headline">¶</a></h1>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li><a class="reference internal" href="#running">Running</a></li>
+<li><a class="reference internal" href="#code-completion">Code Completion</a></li>
+<li><a class="reference internal" href="#validation">Validation</a></li>
+<li><a class="reference internal" href="#documentation-lookup">Documentation Lookup</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#suggested-mappings">Suggested Mappings</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="running">
+<h2>Running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h2>
+<p>For those that use Vim as an editor and ant as a build tool, is is common to set
+your Vim 'makeprg' option to execute ant so that you may navigate compilation
+errors via Vim's quickfix functionality.</p>
+<p>Eclim utilizes this same paradigm to provide users with ant execution
+functionality from any file without any of the setup required by Vim.</p>
+<p id="id1">Eclim provides the following command:</p>
+<p><strong>:Ant</strong> [&lt;target&gt; ...]</p>
+<p>which performs the following steps:</p>
+<ul class="simple">
+<li>Saves any previous 'makeprg' and 'errorformat' option settings so that you can
+define your own settings for the :make command.</li>
+<li>Sets 'makeprg' to execute ant with the -find option so that it will search for
+your build.xml file in the current directory or in a parent directory.</li>
+<li>Sets 'errorformat' to recognize the following errors:<ul>
+<li>javac errors.</li>
+<li>javadoc errors.</li>
+<li>jasper jsp compilattion errors.</li>
+<li>junit errors / failures.</li>
+<li>cactus errors / failures.</li>
+</ul>
+</li>
+<li>Executes :make.</li>
+<li>Restores your previous 'makeprg' and 'errorformat' option settings.</li>
+</ul>
+<p>Additionally, if <a class="reference internal" href="../core/eclim.html#g-eclimmakelcd"><span class="xref std std-ref">g:EclimMakeLCD</span></a> is enabled (which it is by default),
+then the execution of ant will be performed from the current buffer's project
+root directory, ensuring that ant's build file discovery method is performed
+from the buffer's working directory and not your own.</p>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p class="last"><strong>:Ant</strong> also supports use of '!' (:Ant!) just like :make does, which tells
+Vim not to jump to the first error if one exists.</p>
+</div>
+<p>The <strong>:Ant</strong> command also has the added benefit of command completion.</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>Ant <span class="k">com</span><span class="p">&lt;</span>Tab<span class="p">&gt;</span>
+<span class="p">:</span>Ant <span class="k">compile</span>
+</pre></div>
+</div>
+<div class="alert">
+<p class="alert-heading first admonition-title">Warning</p>
+<p class="last">If your ant file has a lot of imports, then the command completion may be slow
+as Eclipse parses all the imports when creating the ant model.  You will
+notice the same slow behavior when using Eclipse directly to perform ant code
+completion.</p>
+</div>
+</div>
+<div class="section" id="code-completion">
+<h2>Code Completion<a class="headerlink" href="#code-completion" title="Permalink to this headline">¶</a></h2>
+<p>Ant code completion uses the standard
+<a class="reference internal" href="../code_completion.html"><em>Vim code completion mechanism</em></a> like so:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;ja&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
+&lt;jar de&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
+&lt;jar destfile=&quot;${bas&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
+&lt;jar destfile=&quot;${basdir
+...
+</pre></div>
+</div>
+<p>Screenshot of completion in action:</p>
+<img alt="../../_images/completion1.png" src="../../_images/completion1.png" />
+<div class="alert">
+<p class="alert-heading first admonition-title">Warning</p>
+<p class="last">If your ant file has a lot of imports, then the code completion may be slow as
+Eclipse parses all the imports when creating the ant model.  You will notice
+the same slow behavior when using Eclipse directly.</p>
+</div>
+</div>
+<div class="section" id="validation">
+<h2>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h2>
+<p>When editing an ant xml file eclim will default to validating the file when it
+is written.  Any errors will be added to the current window's location list
+(:help location-list) and their corresponding line number noted via Vim's sign
+functionality.</p>
+<p>Currently the Eclipse ant file validation isn't as robust as one might hope.  It
+doesn't validate that element attributes are correct, that child elements are
+valid, etc., but it does perform the following:</p>
+<ul class="simple">
+<li>If a default target is specified, validate that it exists and that the target
+dependencies exist.</li>
+<li>Check for missing dependencies.</li>
+<li>Check for circular dependencies.</li>
+</ul>
+<p>Eclim also combines the above validation with <a class="reference internal" href="../xml/index.html#xml-validation"><span>xml validation</span></a> to validate that the ant file is well formed.</p>
+<p>If you do not want your ant files validated automatically when saved, you can
+set the <a class="reference internal" href="#g-eclimantvalidate"><span class="xref std std-ref">g:EclimAntValidate</span></a> variable described in the configuration
+section below.</p>
+<p id="validate-ant">Whether or not auto validation has been enabled, eclim also exposes the command
+<strong>:Validate</strong> to manually execute the validation of the ant file.</p>
+</div>
+<div class="section" id="documentation-lookup">
+<span id="antdoc"></span><h2>Documentation Lookup<a class="headerlink" href="#documentation-lookup" title="Permalink to this headline">¶</a></h2>
+<p>When editing an ant build file eclim defines a command named <strong>:AntDoc</strong> which
+will attempt to lookup and open in your
+<a class="reference internal" href="../core/eclim.html#g-eclimbrowser"><span>configured browser</span></a> the documentation for the element
+under the cursor or, if supplied, the element passed to it.</p>
+<p>This command will only lookup element names, not attribute names or values.</p>
+<p>By default this plugin is configured to find all the standard ant tasks, types,
+etc, as well as those defined by the <a class="reference external" href="http://ant-contrib.sourceforge.net">antcontrib</a> project.</p>
+<p id="antuserdoc">If you have other tasks that you wish to add to this plugin, you can do so by
+defining the global variable <strong>g:EclimAntUserDocs</strong>. The value of this variable
+is expected to be a map of element names to the url where the documentation for
+that element can be found.  The url also supports a substitution variable,
+&lt;element&gt; which will be substituted with the lower case version of the element
+name.</p>
+<p>The following is an example which adds the tasks from the apache cactus project.</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> s:cactus <span class="p">=</span>
+  \ <span class="s1">&#39;http://jakarta.apache.org/cactus/integration/ant/task_&lt;element&gt;.html&#39;</span>
+<span class="k">let</span> <span class="k">g</span>:EclimAntUserDocs <span class="p">=</span> {
+    \  <span class="s1">&#39;cactifywar&#39;</span>     : s:cactus<span class="p">,</span>
+    \  <span class="s1">&#39;cactifyear&#39;</span>     : s:cactus<span class="p">,</span>
+    \  <span class="s1">&#39;cactus&#39;</span>         : s:cactus<span class="p">,</span>
+    \  <span class="s1">&#39;runservertests&#39;</span> : s:cactus<span class="p">,</span>
+    \  <span class="s1">&#39;webxmlmerge&#39;</span>    : s:cactus<span class="p">,</span>
+  \ }
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<ul id="g-eclimantcompileradditionalerrorformat">
+<li><p class="first"><strong>g:EclimAntCompilerAdditionalErrorFormat</strong> (Default: '') -
+Since there are many more ant tasks beyond javac, javadoc, etc., eclim
+provides this variable as a means to add error format information for
+any additional ant tasks that you may be using.</p>
+<p>Example: Adding support for xslt</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimAntCompilerAdditionalErrorFormat <span class="p">=</span>
+  \ <span class="s1">&#39;\%A%.%#[xslt]\ Loading\ stylesheet\ %f,&#39;</span> .
+  \ <span class="s1">&#39;\%Z%.%#[xslt]\ %.%#:%l:%c:\ %m,&#39;</span>
+</pre></div>
+</div>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p class="last">The xslt task is a bit flaky when it comes to reporting the file name on
+errors, so the above format will catch successful runs as well.  If anyone
+has a better solution, please submit it.</p>
+</div>
+</li>
+</ul>
+<ul class="simple" id="g-eclimanterrorsenabled">
+<li><strong>g:EclimAntErrorsEnabled</strong> (Default: 0) -
+When non-zero, build file error messages will be added to vim's quickfix if
+encountered during <strong>:Ant</strong> invocations.  Disabled by default because it's
+difficult to distinguish between actual issues with the build file (invalid
+property, task, etc.) and build failure messages which occur under normal
+usage (junit task failed due to test failure, javac failures due to compile
+error, etc.) leading to false positives.</li>
+</ul>
+<ul class="simple" id="g-eclimantvalidate">
+<li><strong>g:EclimAntValidate</strong> (Default: 1) -
+If set to 0, disables ant xml validation when saving the file.</li>
+</ul>
+</div>
+<div class="section" id="suggested-mappings">
+<h2>Suggested Mappings<a class="headerlink" href="#suggested-mappings" title="Permalink to this headline">¶</a></h2>
+<p>Here are some mappings for the ant funtionality provided by eclim.  To make use
+of these mappings, simply create a ftplugin file for ant and place your mappings
+there (:help ftplugin-name).</p>
+<ul>
+<li><p class="first">Lookup and open the documentation for the ant element under the cursor with
+&lt;enter&gt;.</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="nb">noremap</span> <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span> <span class="p">&lt;</span>buffer<span class="p">&gt;</span> <span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span> :AntDoc<span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="../../_sources/vim/java/ant.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

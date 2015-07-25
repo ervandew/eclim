@@ -1,0 +1,567 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Django &mdash; eclim (eclipse + vim)</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'v2.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.ba-hashchange.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.hoverscroll.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap.scrollspy.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="eclim (eclipse + vim)" href="../../index.html" />
+    <link rel="up" title="Python" href="index.html" />
+    <link rel="next" title="Ruby" href="../ruby/index.html" />
+    <link rel="prev" title="Python Search" href="search.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
+
+  </head>
+  <body role="document">
+  
+  <div id="navbar" class="navbar navbar-inverse no-js">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="../../index.html">eclim</a>
+        <span class="navbar-text pull-left"></span>
+        <ul class="nav">
+          <li class="divider-vertical"></li>
+          <li><b class="navbar-text">v2.5.0</b></li>
+          
+            <li class="dropdown">
+  <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
+  <ul class="current dropdown-menu">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="../index.html">Documentation</a><ul class="current dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../core/index.html">Core Functionality</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/project.html">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/locate.html">Locate File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/util.html">Utility Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../c/index.html">C/C++</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../c/project.html">C/C++ Project Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/complete.html">C/C++ Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/validate.html">C/C++ Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/search.html">C/C++ Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../groovy/index.html">Groovy</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../groovy/complete.html">Groovy Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../groovy/validate.html">Groovy Validation</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../java/index.html">Java</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/debug.html">Java Debugging</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/android.html">Android</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../php/index.html">Php</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../php/buildpath.html">Php Build Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/complete.html">Php Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/validate.html">Php Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../php/search.html">Php Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current dropdown-submenu active"><a class="reference internal" href="index.html">Python</a><ul class="current dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="complete.html">Python Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Python Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="">Django</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../ruby/index.html">Ruby</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/complete.html">Ruby Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/validate.html">Ruby Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/search.html">Ruby Search</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../scala/index.html">Scala</a><ul class="dropdown-menu">
+<li class="toctree-l3"><a class="reference internal" href="../scala/complete.html">Scala Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/validate.html">Scala Validation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/search.html">Scala Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../../development/index.html">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/architecture.html">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+</li>
+            
+          
+          
+            
+  <li class="hidden-phone"><a href="search.html"
+         title="previous chapter">&laquo; Python Search</a></li>
+  <li class="hidden-phone"><a href="../ruby/index.html"
+         title="next chapter">Ruby &raquo;</a></li>
+          
+          
+          
+        </ul>
+        
+  <form class="navbar-search pull-right hidden-phone" action="http://www.google.com/cse" id="cse-search-box" style="margin-bottom:-3px;">
+    <div>
+      <input type="hidden" name="cx" value="017410349476015560612:d4krsrdx6ym" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input type="text" name="q" size="18" />
+    </div>
+  </form>
+  <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/ervandew/eclim" class="hidden-phone"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <div class="body container">
+  <div >
+    <div class="content ">
+      
+      
+  <div class="section" id="django">
+<h1>Django<a class="headerlink" href="#django" title="Permalink to this headline">¶</a></h1>
+<div class="page-toc subnav navbar">
+<div class="navbar-inner">
+<ul class="nav">
+<li><a class="reference internal" href="#django-manage-py">Django manage.py</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#django-python-support">Django python support</a></li>
+<li><a class="reference internal" href="#django-html-template-support">Django html template support</a></li>
+<li><a class="reference internal" href="#id1">Configuration</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="django-manage-py">
+<span id="djangomanage"></span><h2>Django manage.py<a class="headerlink" href="#django-manage-py" title="Permalink to this headline">¶</a></h2>
+<p>For each project you create with the django framework, django provides you with
+a manage.py which can be used to perform various tasks.  To make the invocation
+of the manage.py script even easier, eclim provides the command
+<strong>:DjangoManage</strong> which can be invoked from any file in the same directory as
+your manage.py or in any of the child directories.</p>
+<p><strong>:DjangoManage</strong> supports all the same commands as manage.py and supports
+command line completion of command names and app names where supported.</p>
+<p>Several of the manage.py commands simply perform an action without generating
+much if any output.  However there is also a set of commands which generate sql
+statements.  For all of these commands, instead of just running the command in a
+shell, <strong>:DjangoManage</strong> will run the command and populate a new buffer with the
+resulting output and set the proper file type.</p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<ul class="simple" id="g-eclimdjangoadmin">
+<li><strong>g:EclimDjangoAdmin</strong> (Default: 'django-admin.py') -
+This setting specifies the location of your <code>django-admin.py</code> file. By
+default it will attempt to locate it in your system path, but you can
+optionally set an absolute path for eclim to use. Eclim currently only needs
+access to this script when running <code>:DjangoManage startproject &lt;project_name&gt;
+[destination]</code>. All other <strong>:DjangoManage</strong> commands will use your project's
+<code>manage.py</code>.</li>
+</ul>
+</div>
+<div class="section" id="django-python-support">
+<h2>Django python support<a class="headerlink" href="#django-python-support" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils" id="djangotemplateopen">
+<dt>Locating templates</dt>
+<dd><p class="first">The command <strong>:DjangoTemplateOpen</strong> supports finding and opening a template
+referenced under the cursor.</p>
+<p>Ex.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="c"># w/ cursor on &#39;mytemplates/mytemplate.html&#39;</span>
+<span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;mytemplates/mytemplate.html&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="djangoviewopen">
+<dt>Locating views</dt>
+<dd><p class="first">The command <strong>:DjangoViewOpen</strong> supports finding and opening a view referenced
+under the cursor.</p>
+<p>Ex.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="c"># w/ cursor on &#39;myproject.myapp.views&#39; or &#39;my_view&#39; on the second line.</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;myproject.myapp.views&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="s">&#39;my_view&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="djangocontextopen">
+<dt>Contextually locate file</dt>
+<dd>The command <strong>:DjangoContextOpen</strong> supports executing <strong>:DjangoViewOpen</strong>,
+<strong>:DjangoTemplateOpen</strong>, or <strong>:PythonSearchContext</strong> depending on the context
+of the text under the cursor.</dd>
+<dt>Specifying the open command to use</dt>
+<dd><p class="first">All of the above <strong>:Django*Open</strong> commands support an optional <code>-a</code> argument
+to specify the vim command used to open the result:</p>
+<ul class="last simple">
+<li>-a: The vim command to use to open the result (edit, split, tabnew, etc).</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="django-html-template-support">
+<span id="htmldjango"></span><h2>Django html template support<a class="headerlink" href="#django-html-template-support" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Syntax</dt>
+<dd>Vim ships with a syntax file for django html template files, but eclim builds on
+that base to support highlighting of user defined tags and filters (see the
+configuration section below.</dd>
+<dt>Indent</dt>
+<dd>Using the same settings as the enhanced syntax file, eclim also ships with an
+indent script which provides indentation support all of the default django tags
+and any user defined tags that have been configured.</dd>
+<dt>Match It</dt>
+<dd>Again, using the same set of variables, eclim sets the necessary variables to
+allow proper matchit.vim support for django default and user defined tags.</dd>
+<dt>End Tag Completion</dt>
+<dd>Using the <a class="reference internal" href="#g-htmldjangouserbodyelements"><span class="xref std std-ref">g:HtmlDjangoUserBodyElements</span></a> setting along with the
+pre-configured default list of body elements, eclim includes support for auto
+completion of ending template tags when you type an <code>{%e</code> or <code>{% e</code>.</dd>
+</dl>
+<dl class="docutils" id="djangofind">
+<dt>Contextual Find</dt>
+<dd><p class="first">While editing django html templates, the command <strong>:DjangoFind</strong> which will
+attempt to locate the relevant resource depending on what is under the cursor.</p>
+<ul>
+<li><p class="first">If on a user defined tag, attempt to find the tag definition within the python
+tag definition file.</p>
+<p>Ex.</p>
+<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;mytag&#39; #}
+{% mytag somearg %}
+</pre></div>
+</div>
+</li>
+<li><p class="first">If on a user defined filter, attempt to find the filter definition within the
+python filter definition file.</p>
+<p>Ex.</p>
+<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;myfilter&#39; #}
+{{ somevalue|myfilter }}
+</pre></div>
+</div>
+</li>
+<li><p class="first">If on the tag/filter definition portion of of a 'load' tag, attempt to
+find the definition file.</p>
+<p>Ex.</p>
+<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;mytags&#39; #}
+{% load mytags %}
+</pre></div>
+</div>
+</li>
+<li><p class="first">If on a reference to a template for ethier an 'extends' or 'include' tag,
+attempt to find that template file.</p>
+<p>Ex.</p>
+<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;include/mytemplate.html&#39; #}
+{% include &quot;include/mytemplate.html&quot; %}
+</pre></div>
+</div>
+</li>
+<li><p class="first">If on static file reference, as defined in a 'src' or 'href' attribute
+of an element, attempt to find that static file.</p>
+<p>Ex.</p>
+<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;/css/my.css&#39; #}
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/css/my.css&quot; type=&quot;text/css&quot; /&gt;
+</pre></div>
+</div>
+<p>Note: this functionality requires that
+<strong>g:EclimDjangoStaticPaths</strong> is set to a list of absolute
+or django project relative (relative to directory containing manage.py
+and settings.py) directories, though it will fallback to using eclim's locate
+file functionality.</p>
+<p>Ex.</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPaths <span class="p">=</span> [<span class="s2">&quot;../static/&quot;</span>]
+</pre></div>
+</div>
+</li>
+</ul>
+<p class="last">Like the <strong>:Django*Open</strong> commands, <strong>:DjangoFind</strong> supports an optional <code>-a
+&lt;action&gt;</code> argument to specify the vim command used to open the resulting
+file.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id1">
+<h2>Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<ul id="g-htmldjangouserbodyelements">
+<li><p class="first"><strong>g:HtmlDjangoUserBodyElements</strong> -
+List of lists, where each list contains the name of the start and end
+tag, as well as any intermediary tags of any custom tags which have a
+body.</p>
+<p>Ex.</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:HtmlDjangoUserBodyElements <span class="p">=</span> [
+    \ [<span class="s1">&#39;repeat&#39;</span><span class="p">,</span> <span class="s1">&#39;endrepeat&#39;</span>]<span class="p">,</span>
+    \ [<span class="s1">&#39;try&#39;</span><span class="p">,</span> <span class="s1">&#39;except&#39;</span><span class="p">,</span> <span class="s1">&#39;finally&#39;</span><span class="p">,</span> <span class="s1">&#39;endtry&#39;</span>]<span class="p">,</span>
+  \ ]
+</pre></div>
+</div>
+<p>This setting is used for indentation of the custom tag's body, as well
+as arguments for proper matchit support, end tag completion, and
+syntax highlighting.</p>
+</li>
+</ul>
+<ul class="simple" id="g-htmldjangousertags">
+<li><strong>g:HtmlDjangoUserTags</strong> -
+This setting is a list of any non-body tags which don't require indentation or
+matchit support.  The items configured here will be used for syntax
+highlighting.</li>
+</ul>
+<ul class="simple" id="g-htmldjangouserfilters">
+<li><strong>g:HtmlDjangoUserFilters</strong> -
+This settings contains a list of any user defined django filters.  It is
+currently used for syntax highlighting.</li>
+</ul>
+<ul class="simple" id="g-htmldjangocompleteendtag">
+<li><strong>g:HtmlDjangoCompleteEndTag</strong> (Default: 1) -
+When set to 0, disables the auto completion of end tags.</li>
+</ul>
+<ul id="g-eclimdjangostaticpaths">
+<li><p class="first"><strong>g:EclimDjangoStaticPaths</strong> -
+Used as a list of directories to search when looking for static files (js,
+css, etc). Expected to be a list of absolute or django project relative
+(relative to directory containing manage.py and settings.py) directories.</p>
+<p>Ex.</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPaths <span class="p">=</span> [<span class="s2">&quot;../static/&quot;</span>]
+</pre></div>
+</div>
+</li>
+</ul>
+<ul id="g-eclimdjangostaticpattern">
+<li><p class="first"><strong>g:EclimDjangoStaticPattern</strong> -
+If you have a custom tag to load static files, then eclim by default may not
+be able to determine that it should be attempting to search for the static
+file referenced by that custom tag. In this case you can set
+g:EclimDjangoStaticPattern to a vim regular expression which matches your
+custom tag. For example, if you have a custom tag called <code>static</code> to load
+static files like so:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% static &#39;lib/somefile.js&#39; %}
+</pre></div>
+</div>
+<p>Then you could set g:EclimDjangoStaticPattern to:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPattern <span class="p">=</span> <span class="s2">&quot;{%\\s*static([&#39;\&quot;]&lt;element&gt;[&#39;\&quot;]&quot;</span>
+</pre></div>
+</div>
+<p>Note that this pattern allows either <code>'</code> or <code>&quot;</code> to quote the static file
+path and since we are doing this we need to use double quotes around the
+pattern which in turn means that we need to double escape back slashes (note
+the double backslashes when matching 0 or more spaces: <code>\\s*</code>). Also note
+that the <code>&lt;element&gt;</code> portion of the pattern will be replaced with the path
+of the static file that eclim extracted while the cursor was over that portion
+of the tag.</p>
+</li>
+</ul>
+<ul class="simple" id="g-eclimdjangofindaction">
+<li><strong>g:EclimDjangoFindAction</strong> (Default: &quot;split&quot;) -
+For <strong>:DjangoFind</strong> and <strong>:DjangoTemplateOpen</strong>, used as the action to perform
+on the file found.</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      
+  <a href="../../_sources/vim/python/django.txt"
+         rel="nofollow">Source</a> /
+      <a href="#">Back to top</a>
+    </p>
+    <p>
+        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
+      Last updated on Jul 25, 2015<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
+      <br/>
+    </p>
+  </div>
+</footer>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-575508-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  </body>
+</html>

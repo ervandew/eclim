@@ -1,0 +1,66 @@
+/**
+ * HoverScroll Style Sheet
+ *
+ * @author RasCarlito <carl.ogren@gmail.com>
+ * @version 0.2.4
+ * @revision 21
+ */
+
+/* Main container */
+div.hoverscroll {
+  position:relative;
+}
+
+/* List container */
+div.hoverscroll div.listcontainer {
+  overflow:hidden;
+}
+div.hoverscroll div.fixed-listcontainer {
+    overflow: hidden;
+    float: left;
+}
+
+div.hoverscroll.horizontal ul.list li.item {
+  float:left;
+}
+div.hoverscroll.horizontal.rtl ul.list li.item {
+  float: right;
+}
+
+
+/* Arrows */
+div.hoverscroll div.arrow {
+  position:absolute;
+  float:none;
+  background-color:#ccc;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0.6;
+  filter:alpha(opacity=60);
+}
+div.hoverscroll div.fixed-arrow {
+  display: block;
+  float: left;
+  background-color: #ccc;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+div.hoverscroll div.arrow.left,
+div.hoverscroll div.arrow.right,
+div.hoverscroll div.fixed-arrow.left,
+div.hoverscroll div.fixed-arrow.right {
+  top:0px;
+  width:30px;
+  height:100%;
+}
+div.hoverscroll div.arrow.left,
+div.hoverscroll div.fixed-arrow.left {
+  left:0px;
+  background-image:url('img/arrow-left.png');
+}
+div.hoverscroll div.arrow.right,
+div.hoverscroll div.fixed-arrow.right {
+  right:0px;
+  background-image:url('img/arrow-right.png');
+}
