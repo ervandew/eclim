@@ -123,6 +123,13 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Jul 25, 2015
+-------------
+
+A new version of eclim is now available with support for Eclipse 4.5 (Mars).
+
+- :ref:`Eclim 2.5.0 <2.5.0>`
+
 Jan 22, 2015
 -------------
 

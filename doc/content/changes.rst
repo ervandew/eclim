@@ -16,6 +16,16 @@
 History of Changes
 ==================
 
+.. _2.5.0:
+
+2.5.0 (Jul. 25, 2015)
+---------------------
+
+Eclim:
+  - Eclim now supports, and requires, Eclipse 4.5 (Mars)
+
+| :gitlog:`Git Log (2.5.0) <2.4.1...2.5.0>`
+
 .. _2.4.1:
 
 2.4.1 (Jan. 22, 2015)
