@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -577,6 +577,14 @@ target(name: 'docs'){
     match: '(href|src)="(?!/|https?:)',
     replace: '\\1="/',
     flags: 'g')
+
+  // sync to github pages repo/branch if it exists
+  if (new File("${basedir}/gh-pages").exists()){
+    sync(todir: 'gh-pages', overwrite: true){
+      fileset(dir: 'build/doc/site')
+      preserveintarget{ include(name: '.git/**/*') }
+    }
+  }
 }
 
 target(name: 'vimdocs'){

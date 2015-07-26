@@ -5,6 +5,7 @@
 /.cache
 /.ropeproject
 /build
+/gh-pages
 /org.eclim/nailgun/config.log
 /org.eclim/nailgun/config.status
 /org.eclim/nailgun/Makefile
