@@ -1,4 +1,4 @@
-.. Copyright (C) 2014  Eric Van Dewoestine
+.. Copyright (C) 2014 - 2015  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ Before starting a debug session from vim you first need to do a couple things:
 ::
 
   $ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044 \
-      -classpath ./bin org.eclim.test.debug.Main
+      -classpath ./bin org.test.debug.Main
 
 2. Start vim with the ``--servername`` argument (eclimd currently sends debugger
    updates to vim using vim's remote invocation support):
