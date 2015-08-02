@@ -39,6 +39,24 @@ if [ "$1" = "-?" -o "$1" = "-h" -o "$1" = "--help" ] ; then
   exit 0
 fi
 
+if [ -z "$JAVA" ] ; then
+  JAVA=$(which java 2> /dev/null)
+  if [ -n "$JAVA_HOME" ] ; then
+    if [ -x "$JAVA_HOME/bin/java" ] ; then
+      JAVA="$JAVA_HOME/bin/java"
+    elif [ -x "$JAVA_HOME/jre/bin/java" ] ; then
+      JAVA="$JAVA_HOME/jre/bin/java"
+    fi
+  fi
+fi
+
+if [ -z "$JAVA" ] ; then
+  echo "Unable to locate your java install."
+  echo "Please set your JAVA_HOME environment variable or"
+  echo "set JAVA to the location of your java executable."
+  exit 1
+fi
+
 ##
 # Determines eclim's home directory and sets the ECLIM_HOME var to that path.
 #
@@ -133,7 +151,7 @@ build_vmargs(){
       ARCH=-d32
     fi
 
-    if ! `java $ARCH -version 2> /dev/null` ; then
+    if ! `$JAVA $ARCH -version 2> /dev/null` ; then
       echo "Your jvm does not support the architecture required " \
         "for the version of eclipse you have installed: $ARCH"
       exit 1;
@@ -251,24 +269,6 @@ ARGS=(
   -refresh
   -application $APPLICATION
 )
-
-if [ -z "$JAVA" ] ; then
-  JAVA=$(which java 2> /dev/null)
-  if [ -n "$JAVA_HOME" ] ; then
-    if [ -x "$JAVA_HOME/bin/java" ] ; then
-      JAVA="$JAVA_HOME/bin/java"
-    elif [ -x "$JAVA_HOME/jre/bin/java" ] ; then
-      JAVA="$JAVA_HOME/jre/bin/java"
-    fi
-  fi
-fi
-
-if [ -z "$JAVA" ] ; then
-  echo "Unable to locate your java install."
-  echo "Please set your JAVA_HOME environment variable or"
-  echo "set JAVA to the location of your java executable."
-  exit 1
-fi
 
 if [ $BACKGROUND -eq 1 ]; then
   CLASSPATH="" $JAVA "${ARGS[@]}" > /dev/null &
