@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2012  Eric Van Dewoestine
+# Copyright (C) 2005 - 2015  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ function site () {
 
 function dist () {
   echo "rsync dist"
-  VERSION=`git describe`
+  VERSION=$(git describe --abbrev=0)
   echo "eclim version: $VERSION"
   rsync --progress --whole-file \
     --stats -v --rsh="ssh -l ervandew" \
