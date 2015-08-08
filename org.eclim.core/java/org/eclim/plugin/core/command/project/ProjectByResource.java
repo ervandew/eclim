@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,10 @@ import org.eclim.command.Options;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.eclim.plugin.core.util.ProjectUtils;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 /**
@@ -41,24 +44,34 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class ProjectByResource
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    String file = commandLine.getValue(Options.FILE_OPTION);
+    String path = commandLine.getValue(Options.FILE_OPTION);
 
     // can't use URLEncoder on the full file since the colon in 'C:' gets
     // encoded as well.
-    //URI uri = new URI("file://" + URLEncoder.encode(file, "UTF-8"));
-    URI uri = new URI("file://" + file.replaceAll(" ", "%20"));
+    //URI uri = new URI("file://" + URLEncoder.encode(path, "UTF-8"));
+    URI uri = new URI("file://" + path.replaceAll(" ", "%20"));
     IFile[] files = ResourcesPlugin
       .getWorkspace().getRoot().findFilesForLocationURI(uri);
 
+    IProject project = null;
     if (files.length > 0){
-      return files[0].getProject().getName();
+      // loop over all the files and return the project for the longest path
+      // (handles the case where projects are nested, returning the most nested
+      // parent project of the file)
+      for (IFile file : files){
+        IProject fproject = file.getProject();
+        if (project == null ||
+            ProjectUtils.getPath(fproject).length() >
+            ProjectUtils.getPath(project).length())
+        {
+          project = fproject;
+        }
+      }
     }
-    return null;
+    return project != null ? project.getName() : null;
   }
 }
