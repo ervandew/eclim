@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ Java Commands
   Create both a java bean getter and setter method.
 - :ref:`:JavaConstructor <:JavaConstructor>` -
   Creates class constructor, either empty or based on selected class fields.
-- :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` -
+- :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` [-s <scope>] -
   Display the call hierarchy for the method under the cursor.
 - :ref:`:JavaHierarchy <:JavaHierarchy>` - View the type hierarchy tree.
 - :ref:`:JavaImpl <:JavaImpl>` -

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,6 +90,14 @@ invoking the command with a ``!``:
 .. code-block:: vim
 
   :JavaCallHierarchy!
+
+By default the call hierarchy (caller and callee) will search across your entire
+workspace. If you want to limit the search to just the current project you can
+use the scope (``-s``) option:
+
+.. code-block:: vim
+
+  :JavaCallHierarchy -s project
 
 Configuration
 ^^^^^^^^^^^^^

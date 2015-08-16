@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
     \ '-o <offset> -l <length> -e <encoding>'
 " }}}
 
-function! eclim#lang#hierarchy#CallHierarchy(lang, default_action, bang) " {{{
+function! eclim#lang#hierarchy#CallHierarchy(lang, default_action, bang, ...) " {{{
   if !eclim#project#util#IsCurrentFileInProject(1)
     return
   endif
@@ -44,6 +44,12 @@ function! eclim#lang#hierarchy#CallHierarchy(lang, default_action, bang) " {{{
   let command = substitute(command, '<offset>', offset, '')
   let command = substitute(command, '<length>', length, '')
   let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+  if a:0
+    " doesn't support args that need quoting or escaping, just simply flags,
+    " etc.
+    let command .= ' ' . join(a:000, ' ')
+  endif
+
   " return callees
   if a:bang != ''
     let command .= ' -c'

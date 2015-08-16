@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -353,6 +353,12 @@ endfunction " }}}
 
 function! eclim#java#search#CommandCompleteSearchContext(argLead, cmdLine, cursorPos) " {{{
   let options_map = {'-a': s:options_map['-a']}
+  return eclim#util#CommandCompleteOptions(
+    \ a:argLead, a:cmdLine, a:cursorPos, options_map)
+endfunction " }}}
+
+function! eclim#java#search#CommandCompleteSearchScope(argLead, cmdLine, cursorPos) " {{{
+  let options_map = {'-s': ['all', 'project']}
   return eclim#util#CommandCompleteOptions(
     \ a:argLead, a:cmdLine, a:cursorPos, options_map)
 endfunction " }}}
