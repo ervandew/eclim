@@ -65,6 +65,7 @@ import org.eclipse.jdt.ui.JavaElementLabels;
     "REQUIRED o offset ARG," +
     "REQUIRED l length ARG," +
     "REQUIRED e encoding ARG," +
+    "OPTIONAL s scope ARG," +
     "OPTIONAL c callees NOARG"
 )
 public class CallHierarchyCommand
@@ -82,6 +83,7 @@ public class CallHierarchyCommand
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
     boolean callees = commandLine.hasOption(CALLEES_OPTION);
+    String scope = commandLine.getValue(Options.SCOPE_OPTION);
     int length = commandLine.getIntValue(Options.LENGTH_OPTION);
     int offset = getOffset(commandLine);
 
@@ -98,11 +100,7 @@ public class CallHierarchyCommand
       MethodWrapper[] roots;
 
       CallHierarchy callHierarchy = CallHierarchy.getDefault();
-      // Keep search scope for hierarchy in current project
-      callHierarchy.setSearchScope(
-        SearchEngine.createJavaSearchScope(new IJavaElement[] {
-          src.getJavaProject(),
-        }));
+      callHierarchy.setSearchScope(getScope(scope, src.getJavaProject()));
 
       Comparator<MethodWrapper> comparator = null;
 
