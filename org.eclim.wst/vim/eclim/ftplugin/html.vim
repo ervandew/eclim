@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -18,6 +18,12 @@
 " along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "
 " }}}
+
+" some other filetypes (like markdown) source all html ftplugins, so don't
+" setup eclim features for those.
+if expand('%:e') !~? 'x\?html\?'
+  finish
+endif
 
 " Options {{{
 
