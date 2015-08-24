@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -682,6 +682,16 @@ function! eclim#util#Make(bang, args) " {{{
     " :Dispatch command), so anyone else that defines such a command is shit out
     " of luck.
     exec 'Dispatch' . a:bang . ' _ ' . a:args
+    return
+  endif
+
+  " don't break fugitive when dispatch is not installed
+  if exists('b:current_compiler') && b:current_compiler == 'git' &&
+   \ exists('*fugitive#cwindow')
+    " straight copy out of fugitive s:Dispatch(...)
+    silent noautocmd make!
+    redraw!
+    call fugitive#cwindow()
     return
   endif
 
