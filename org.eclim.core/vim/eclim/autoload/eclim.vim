@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -437,7 +437,7 @@ function! eclim#VimSettings() " {{{
   setlocal modifiable
   setlocal foldmethod=marker
   setlocal foldmarker={{{,}}}
-  nnoremap <cr> :call <SID>VimSettingHelp()<cr>
+  nnoremap <buffer> <cr> :call <SID>VimSettingHelp()<cr>
 
   augroup eclim_settings
     autocmd! BufWriteCmd <buffer>
