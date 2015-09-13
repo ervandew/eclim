@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ public class SearchCommandTest
 
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
-    assertEquals(result.get("message"), "");
+    assertEquals(result.get("message"), "int test_search_function(void) {");
     assertEquals(result.get("line"), 16);
     assertEquals(result.get("column"), 5);
   }
@@ -204,12 +204,12 @@ public class SearchCommandTest
     if (Os.isFamily(Os.FAMILY_WINDOWS)){
       assertTrue(((String)result.get("filename"))
           .endsWith("/include/stdlib.h"));
-      assertEquals(result.get("message"), "");
       assertEquals(result.get("line"), 34);
       assertEquals(result.get("column"), 9);
     }else{
       assertEquals(result.get("filename"), "/usr/include/stdlib.h");
-      assertEquals(result.get("message"), "");
+      assertEquals(result.get("message"),
+          "#define	EXIT_FAILURE	1	/* Failing exit status.  */");
       assertEquals(result.get("column"), 9);
       int line = ((Integer)result.get("line")).intValue();
       assertTrue(line > 130 && line < 140);
@@ -233,7 +233,7 @@ public class SearchCommandTest
 
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("filename"), file);
-    assertEquals(result.get("message"), "");
+    assertEquals(result.get("message"), "struct test_search_struct {");
     assertEquals(result.get("line"), 5);
     assertEquals(result.get("column"), 8);
   }

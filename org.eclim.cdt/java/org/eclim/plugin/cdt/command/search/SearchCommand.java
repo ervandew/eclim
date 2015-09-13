@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.annotation.Command;
@@ -37,6 +40,7 @@ import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclim.util.CollectionUtils;
+import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.Position;
 
@@ -126,6 +130,8 @@ public class SearchCommand
   public static final String TYPE_NAMESPACE = "namespace";
   public static final String TYPE_TYPEDEF = "typedef";
   public static final String TYPE_MACRO = "macro";
+
+  private static final Pattern PATTERN_MATCH = Pattern.compile("^\\d+:\\s*");
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -234,8 +240,11 @@ public class SearchCommand
         }
         for (Match m : result.getMatches(e)){
           CSearchMatch match = (CSearchMatch)m;
+          String message = match.getElement().toString();
+          Matcher matcher = PATTERN_MATCH.matcher(message);
+          message = matcher.replaceFirst(StringUtils.EMPTY);
           results.add(
-              Position.fromOffset(filename, null, match.getOffset(), 0));
+              Position.fromOffset(filename, message, match.getOffset(), 0));
         }
       }
     }
