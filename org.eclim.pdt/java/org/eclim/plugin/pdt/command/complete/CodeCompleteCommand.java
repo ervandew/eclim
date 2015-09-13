@@ -23,10 +23,15 @@ import org.eclim.annotation.Command;
 
 import org.eclim.plugin.dltk.command.complete.AbstractCodeCompleteCommand;
 
+import org.eclim.util.StringUtils;
+
 import org.eclipse.dltk.core.ISourceModule;
 
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
+
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 
 import org.eclipse.php.internal.ui.editor.contentassist.PHPCompletionProposalCollector;
 
@@ -46,8 +51,8 @@ import org.eclipse.php.internal.ui.editor.contentassist.PHPCompletionProposalCol
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
-  private static final Pattern DISPALY_TO_COMPLETION =
-    Pattern.compile("^(.*)(\\s+-\\s+.*|:\\s+\\S+)");
+  private static final Pattern PREFIX =
+    Pattern.compile("^(.*?[^\\w$])[\\w$]*$");
   private static final Pattern METHOD_WITH_ARGS =
     Pattern.compile("^(\\w+\\s*\\().+\\)\\s*$");
   private static final Pattern REMOVE_HEAD =
@@ -65,30 +70,48 @@ public class CodeCompleteCommand
   }
 
   @Override
-  protected String getCompletion(IScriptCompletionProposal proposal)
+  protected String getCompletion(
+      IDocument document, int offset, IScriptCompletionProposal proposal)
   {
-    String completion = proposal.getDisplayString().trim();
-    completion = DISPALY_TO_COMPLETION
-      .matcher(completion).replaceFirst("$1").trim();
+    // php proposal display string isn't reliable enough to use as the
+    // completion, so we have to resort to applying each completion and looking
+    // at the change to determine the completion value to return.
+    String content = document.get();
+    try{
+      int ln = document.getLineOfOffset(offset);
+      IRegion region = document.getLineInformation(ln);
+      String line = document.get(region.getOffset(), region.getLength());
+      String prefix = line.substring(0, offset - region.getOffset());
+      String suffix = line.replace(prefix, StringUtils.EMPTY);
 
-    Matcher matcher = METHOD_WITH_ARGS.matcher(completion);
-    if (matcher.find()){
-      completion = matcher.group(1);
-    }else if(completion.startsWith("$")){
-      completion = completion.substring(1);
+      // here we are basically mimicing what we do on the vim side to determine
+      // the start of where the completion will actually be inserted.
+      Matcher matcher = PREFIX.matcher(prefix);
+      if (matcher.find()){
+        prefix = matcher.group(1);
+      }
+
+      proposal.apply(document);
+      region = document.getLineInformation(ln);
+      line = document.get(region.getOffset(), region.getLength());
+
+      // remove everything from the line that isn't part of the completion, and
+      // we are left with the proposal string.
+      String completion = line;
+      completion = completion.replace(prefix, StringUtils.EMPTY);
+      completion = completion.replace(suffix, StringUtils.EMPTY);
+
+      matcher = METHOD_WITH_ARGS.matcher(completion);
+      if (matcher.find()){
+        completion = matcher.group(1);
+      }
+
+      return completion;
+    }catch(Exception e){
+      throw new RuntimeException(e);
+    }finally{
+      document.set(content);
     }
-
-    // handle inconsistency w/ completion of php namespaced results where the
-    // namespace will complete fully, but a function, etc in that namespace will
-    // complete only that member:
-    //   App\Lib being a full completion for 'App\' but,
-    //   MyFunction() begin the completion for 'App\Lib\MyF'
-    int index = completion.lastIndexOf('\\');
-    if (index != -1){
-      completion = completion.substring(index + 1);
-    }
-
-    return completion;
   }
 
   @Override

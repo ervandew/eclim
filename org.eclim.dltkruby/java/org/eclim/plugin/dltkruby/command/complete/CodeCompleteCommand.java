@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ import org.eclipse.dltk.ruby.internal.ui.text.completion.RubyCompletionProposalC
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
 
+import org.eclipse.jface.text.IDocument;
+
 /**
  * Command to perform ruby code completion.
  *
@@ -62,7 +64,8 @@ public class CodeCompleteCommand
   }
 
   @Override
-  protected String getCompletion(IScriptCompletionProposal proposal)
+  protected String getCompletion(
+      IDocument document, int offset, IScriptCompletionProposal proposal)
   {
     String completion = proposal.getDisplayString().trim();
     completion = DISPALY_TO_COMPLETION.matcher(completion).replaceFirst("$1");

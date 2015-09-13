@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@ import java.io.File;
 import java.net.URI;
 
 import org.eclim.Services;
-
-import org.eclim.plugin.core.preference.Preferences;
 
 import org.eclim.plugin.core.project.ProjectManagement;
 import org.eclim.plugin.core.project.ProjectManager;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
 
+import org.eclipse.jface.text.IDocument;
+
 //import org.eclipse.dltk.ui.DLTKUIPlugin;
 //import org.eclipse.dltk.ui.PreferenceConstants;
 
@@ -52,16 +54,14 @@ import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
 public abstract class AbstractCodeCompleteCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
     IFile ifile = ProjectUtils.getFile(project, file);
+    IDocument document = ProjectUtils.getDocument(project, file);
     int offset = getOffset(commandLine);
 
     /*int timeout = DLTKUIPlugin.getDefault().getPreferenceStore()
@@ -73,12 +73,16 @@ public abstract class AbstractCodeCompleteCommand
 
     IScriptCompletionProposal[] proposals =
       collector.getScriptCompletionProposals();
-    Arrays.sort(proposals, new ScriptCompletionProposalComparator());
+    ScriptCompletionProposalComparator comparator =
+      new ScriptCompletionProposalComparator(document, offset);
+    Arrays.sort(proposals, comparator);
 
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for (IScriptCompletionProposal proposal : proposals){
       CodeCompleteResult ccresult = new CodeCompleteResult(
-          getCompletion(proposal), getMenu(proposal), getInfo(proposal));
+          getCompletion(document, offset, proposal),
+          getMenu(proposal),
+          getInfo(proposal));
 
       if(!results.contains(ccresult)){
         results.add(ccresult);
@@ -116,7 +120,8 @@ public abstract class AbstractCodeCompleteCommand
    * @param proposal The IScriptCompletionProposal.
    * @return The completion.
    */
-  protected String getCompletion(IScriptCompletionProposal proposal)
+  protected String getCompletion(
+      IDocument doccument, int offset, IScriptCompletionProposal proposal)
   {
     return proposal.getDisplayString().trim();
   }
@@ -151,12 +156,21 @@ public abstract class AbstractCodeCompleteCommand
     implements Comparator<IScriptCompletionProposal>
   {
     private Collator COLLATOR = Collator.getInstance(Locale.US);
+    private IDocument document;
+    private int offset;
+
+    public ScriptCompletionProposalComparator(IDocument document, int offset){
+      this.document = document;
+      this.offset = offset;
+    }
 
     public int compare(IScriptCompletionProposal p1, IScriptCompletionProposal p2)
     {
       int diff = p1.getRelevance() - p2.getRelevance();
       if (diff == 0){
-        return COLLATOR.compare(getCompletion(p1), getCompletion(p2));
+        return COLLATOR.compare(
+            getCompletion(document, offset, p1),
+            getCompletion(document, offset, p2));
       }
       return 0 - diff;
     }

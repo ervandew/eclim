@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,8 +34,10 @@ function! eclim#php#complete#CodeComplete(findstart, base)
     return eclim#html#complete#CodeComplete(a:findstart, a:base)
   endif
 
-  return eclim#lang#CodeComplete(
-    \ s:complete_command, a:findstart, a:base, {'temp': 0})
+  return eclim#lang#CodeComplete(s:complete_command, a:findstart, a:base, {
+    \   'temp': 0,
+    \   'regex': '\(\w\|\$\)',
+    \ })
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -8,6 +8,7 @@
   </head>
   <body>
     <?php
+    use Eclim\;
     require_once('lib.php');
     include '../models.php';
 

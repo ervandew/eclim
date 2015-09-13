@@ -51,7 +51,7 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "242", "-e", "utf-8"
+        "-o", "258", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 3, results.size());
@@ -82,7 +82,7 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "257", "-e", "utf-8"
+        "-o", "273", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 2, results.size());
@@ -108,7 +108,7 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "323", "-e", "utf-8"
+        "-o", "339", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 1, results.size());
@@ -129,12 +129,35 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "333", "-e", "utf-8"
+        "-o", "133", "-e", "utf-8"
+      });
+
+    assertEquals("Wrong number of results", 3, results.size());
+
+    Map<String,Object> result = results.get(0);
+    assertEquals(result.get("completion"), "Common");
+    assertEquals(result.get("menu"), "Common - Eclim");
+    assertEquals(result.get("info"), "Eclim\\Common");
+
+    result = results.get(1);
+    assertEquals(result.get("completion"), "Test");
+    assertEquals(result.get("menu"), "Eclim\\Test - Components.php");
+    assertEquals(result.get("info"), "Eclim\\Test");
+
+    result = results.get(2);
+    assertEquals(result.get("completion"), "Test\\Nested");
+    assertEquals(result.get("menu"), "Eclim\\Test\\Nested - Components.php");
+    assertEquals(result.get("info"), "Eclim\\Test\\Nested");
+
+    results = (List<Map<String,Object>>)
+      Eclim.execute(new String[]{
+        "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
+        "-o", "349", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 1, results.size());
 
-    Map<String,Object> result = results.get(0);
+    result = results.get(0);
     assertEquals(result.get("completion"), "Lib");
     assertEquals(result.get("menu"), "App\\Lib - lib.php");
     assertEquals(result.get("info"), "App\\Lib");
@@ -142,7 +165,7 @@ public class CodeCompleteCommandTest
     results = (List<Map<String,Object>>)
       Eclim.execute(new String[]{
         "php_complete", "-p", Pdt.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "347", "-e", "utf-8"
+        "-o", "363", "-e", "utf-8"
       });
 
     assertEquals("Wrong number of results", 3, results.size());

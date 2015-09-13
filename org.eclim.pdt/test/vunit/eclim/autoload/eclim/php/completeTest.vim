@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,7 +30,19 @@ function! TestCompletePhp() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(17, 13)
+  call cursor(11, 15)
+  let start = eclim#php#complete#CodeComplete(1, '')
+  call vunit#AssertEquals(14, start, 'Wrong starting column.')
+
+  let results = eclim#php#complete#CodeComplete(0, '')
+  call vunit#PeekRedir()
+  echo 'results = ' . string(results)
+  call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
+  call vunit#AssertEquals('Common', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('Test', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('Test\Nested', results[2].word, 'Wrong result.')
+
+  call cursor(18, 13)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(12, start, 'Wrong starting column.')
 
@@ -42,7 +54,7 @@ function! TestCompletePhp() " {{{
   call vunit#AssertEquals('methodA1(', results[1].word, 'Wrong result.')
   call vunit#AssertEquals('methodA2()', results[2].word, 'Wrong result.')
 
-  call cursor(22, 14)
+  call cursor(23, 14)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(12, start, 'Wrong starting column.')
   let results = eclim#php#complete#CodeComplete(0, '')
@@ -56,7 +68,7 @@ function! TestCompletePhpShortTags() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(29, 32)
+  call cursor(30, 32)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(31, start, 'Wrong starting column.')
 
@@ -68,7 +80,7 @@ function! TestCompletePhpShortTags() " {{{
   call vunit#AssertEquals('methodA1(', results[1].word, 'Wrong result.')
   call vunit#AssertEquals('methodA2()', results[2].word, 'Wrong result.')
 
-  call cursor(30, 17)
+  call cursor(31, 17)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(15, start, 'Wrong starting column.')
   let results = eclim#php#complete#CodeComplete(0, '')
@@ -100,7 +112,7 @@ function! TestCompleteCss() " {{{
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
     \ 'Results does not contain font-weight')
 
-  call cursor(29, 20)
+  call cursor(30, 20)
   let start = eclim#html#complete#CodeComplete(1, '')
   call vunit#AssertEquals(15, start, 'Wrong starting column.')
 
@@ -128,7 +140,7 @@ function! TestCompleteHtml() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(26, 7)
+  call cursor(27, 7)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(5, start, 'Wrong starting column.')
 
