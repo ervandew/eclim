@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import javax.xml.XMLConstants
+
 import groovy.json.JsonSlurper
 import groovy.util.XmlSlurper
 
@@ -402,7 +404,9 @@ target(name: 'test'){
 
 target(name: 'dist'){
   // load dependencies.xml so we know if any plugins are disabled
-  dependencies = new XmlSlurper(true, false, true).parse(
+  slurper = new XmlSlurper(true, false, true)
+  slurper.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, 'all')
+  dependencies = slurper.parse(
     new File('org.eclim.installer/build/resources/dependencies.xml'))
 
   // validate that all released plugins will be built.
