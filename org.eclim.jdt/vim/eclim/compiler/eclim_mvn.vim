@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@ CompilerSet makeprg=mvn\ $*
 
 " Lines 1 - 3: javac
 " Lines 4 - 7: javadoc
+" Lines 8 - 12: test failures
+"   second set handles the case where the test emits output.
 exec 'CompilerSet errorformat=' .
   \ '\%A%f:[%l\\,%c]\ %m,' .
   \ '\%Csymbol%.%#:\ %m,' .
@@ -44,7 +46,10 @@ exec 'CompilerSet errorformat=' .
   \ '\%A%f:%l:\ %m,' .
   \ '\%-Z\ %p^,' .
   \ '\%ARunning\ %f,' .
-  \ '\%+ZTests\ run%.%#FAILURE!,' .
+  \ '\%+ZTests\ run%.%#FAILURE!%.%#,' .
+  \ '\%ARunning\ %f,' .
+  \ '\%C%.%#,' .
+  \ '\%+ZTests\ run%.%#FAILURE!%.%#,' .
   \ g:EclimMvnCompilerAdditionalErrorFormat .
   \ '\%-G%.%#'
 
