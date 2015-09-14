@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,17 +85,13 @@ public class CodeCompleteCommandTest
         "-f", TEST_FILE, "-o", "33", "-e", "utf-8",
       });
 
-    assertEquals(results.size(), 6);
+    assertEquals(results.size(), 3);
 
     Map<String,String> result = results.get(0);
-    assertEquals(result.get("completion"), "Test1");
-    assertTrue(result.get("info").startsWith("class Test1(object):"));
-
-    result = results.get(1);
     assertEquals(result.get("completion"), "test1()");
     assertTrue(result.get("info").startsWith("def test1():"));
 
-    result = results.get(3);
+    result = results.get(1);
     assertEquals(result.get("completion"), "test2(");
     assertTrue(result.get("info").startsWith("def test2(foo, bar='baz'):"));
   }

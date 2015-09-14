@@ -18,6 +18,11 @@ package org.eclim.plugin.pydev.command.complete;
 
 import java.io.File;
 
+import java.util.ArrayList;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -28,6 +33,9 @@ import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
+
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
@@ -68,14 +76,17 @@ import com.python.pydev.analysis.CtxInsensitiveImportComplProposal;
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
+  private static final Pattern PREFIX =
+    Pattern.compile("^*?\\W(\\w*)$");
+
   @Override
   protected ICompletionProposal[] getCompletionProposals(
       CommandLine commandLine, String projectName, String fileName, int offset)
     throws Exception
   {
     ISourceViewer viewer = getTextViewer(commandLine, projectName, fileName);
-    File file = new File(ProjectUtils.getFilePath(projectName, fileName));
     IProject project = ProjectUtils.getProject(projectName);
+    File file = new File(ProjectUtils.getFilePath(project, fileName));
     IPySyntaxHighlightingAndCodeCompletionEditor editor =
       new PyEditor(project, file, viewer);
     PyContentAssistant assistant = new PyContentAssistant();
@@ -83,6 +94,27 @@ public class CodeCompleteCommand
       new PythonCompletionProcessor(editor, assistant);
     ICompletionProposal[] results =
       processor.computeCompletionProposals(viewer, offset);
+
+    // pydev completions are case insensitive, so filter out the insensitive
+    // matches
+    if(results != null && results.length > 0){
+      IDocument document = ProjectUtils.getDocument(project, fileName);
+      IRegion region = document.getLineInformationOfOffset(offset);
+      String prefix = document.get(region.getOffset(), offset - region.getOffset());
+
+      Matcher matcher = PREFIX.matcher(prefix);
+      if (matcher.find()){
+        prefix = matcher.group(1);
+      }
+      ArrayList<ICompletionProposal> filtered =
+        new ArrayList<ICompletionProposal>();
+      for (ICompletionProposal proposal : results){
+        if (proposal.getDisplayString().startsWith(prefix)){
+          filtered.add(proposal);
+        }
+      }
+      results = filtered.toArray(new ICompletionProposal[filtered.size()]);
+    }
     return results;
   }
 
@@ -180,7 +212,7 @@ public class CodeCompleteCommand
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public Object getAdapter(Class adapter)
     {
       return null;

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2015  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -64,13 +64,10 @@ function! s:TestComplete(line) " {{{
 
   let results = eclim#python#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
-  call vunit#AssertEquals(len(results), 6, 'Wrong number of results.')
-  call vunit#AssertEquals('Test1', results[0].word, 'Wrong result at 0.')
-  call vunit#AssertEquals('test1()', results[1].word, 'Wrong result at 1.')
-  call vunit#AssertEquals('Test2', results[2].word, 'Wrong result at 2.')
-  call vunit#AssertEquals('test2(', results[3].word, 'Wrong result at 3.')
-  call vunit#AssertEquals('Test3', results[4].word, 'Wrong result at 4.')
-  call vunit#AssertEquals('test3(', results[5].word, 'Wrong result at 5.')
+  call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
+  call vunit#AssertEquals('test1()', results[0].word, 'Wrong result at 0.')
+  call vunit#AssertEquals('test2(', results[1].word, 'Wrong result at 2.')
+  call vunit#AssertEquals('test3(', results[2].word, 'Wrong result at 3.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
