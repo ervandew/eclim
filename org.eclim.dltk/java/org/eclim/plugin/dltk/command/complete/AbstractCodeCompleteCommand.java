@@ -19,7 +19,7 @@ package org.eclim.plugin.dltk.command.complete;
 import java.text.Collator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 
@@ -73,9 +73,6 @@ public abstract class AbstractCodeCompleteCommand
 
     IScriptCompletionProposal[] proposals =
       collector.getScriptCompletionProposals();
-    ScriptCompletionProposalComparator comparator =
-      new ScriptCompletionProposalComparator(document, offset);
-    Arrays.sort(proposals, comparator);
 
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for (IScriptCompletionProposal proposal : proposals){
@@ -83,12 +80,14 @@ public abstract class AbstractCodeCompleteCommand
           getCompletion(document, offset, proposal),
           getMenu(proposal),
           getInfo(proposal));
+      ccresult.setRelevance(proposal.getRelevance());
 
       if(!results.contains(ccresult)){
         results.add(ccresult);
       }
     }
 
+    Collections.sort(results, new CodeCompleteResultComparator());
     return results;
   }
 
@@ -152,25 +151,16 @@ public abstract class AbstractCodeCompleteCommand
     return info;
   }
 
-  private class ScriptCompletionProposalComparator
-    implements Comparator<IScriptCompletionProposal>
+  private class CodeCompleteResultComparator
+    implements Comparator<CodeCompleteResult>
   {
     private Collator COLLATOR = Collator.getInstance(Locale.US);
-    private IDocument document;
-    private int offset;
 
-    public ScriptCompletionProposalComparator(IDocument document, int offset){
-      this.document = document;
-      this.offset = offset;
-    }
-
-    public int compare(IScriptCompletionProposal p1, IScriptCompletionProposal p2)
+    public int compare(CodeCompleteResult r1, CodeCompleteResult r2)
     {
-      int diff = p1.getRelevance() - p2.getRelevance();
+      int diff = r1.getRelevance() - r2.getRelevance();
       if (diff == 0){
-        return COLLATOR.compare(
-            getCompletion(document, offset, p1),
-            getCompletion(document, offset, p2));
+        return COLLATOR.compare(r1.getCompletion(), r2.getCompletion());
       }
       return 0 - diff;
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2015  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ public class CodeCompleteResult
   private String menu;
   private String info;
   private String type;
+  private int relevance;
 
   /**
    * Constructs a new instance.
@@ -130,6 +131,26 @@ public class CodeCompleteResult
   public String getType()
   {
     return this.type;
+  }
+
+  /**
+   * Get the relevance of this completion as an int.
+   *
+   * @return the relevance
+   */
+  public int getRelevance()
+  {
+    return relevance;
+  }
+
+  /**
+   * Set the relevance of this completion.
+   *
+   * @param relevance the relevance of this completion.
+   */
+  public void setRelevance(int relevance)
+  {
+    this.relevance = relevance;
   }
 
   /**
