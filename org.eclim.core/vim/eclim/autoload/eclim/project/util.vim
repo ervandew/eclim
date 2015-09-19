@@ -856,7 +856,7 @@ function! eclim#project#util#ProjectTab(project) " {{{
   let names = eclim#project#util#GetProjectNames()
   if index(names, project) == -1
     let is_project = 0
-    let dir = expand(project, ':p')
+    let dir = fnamemodify(project, ':p')
     if !isdirectory(dir)
       if eclim#EclimAvailable(0)
         call eclim#util#EchoError("No project '" . project . "' found.")
