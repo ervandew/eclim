@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@ Development Docs
    architecture
    commands
    plugins
-..   unittests
    installer
+..   unittests
 
 :doc:`/development/gettingstarted`
 
@@ -38,6 +38,9 @@ Development Docs
 
 :doc:`/development/plugins`
   Details the process of adding a new plugin to eclim.
+
+:doc:`/development/installer`
+  Short guide on how to build the eclim installer.
 
 **... More To Come**
 
