@@ -556,7 +556,9 @@ function! eclim#SaveVimSettings() " {{{
 endfunction " }}}
 
 function! eclim#UserHome() " {{{
-  if has('win32unix')
+  if exists('g:EclimUserHome')
+    let home = g:EclimUserHome
+  elseif has('win32unix')
     let home = eclim#cygwin#WindowsHome()
   elseif has('win32') || has('win64')
     let home = expand('$USERPROFILE')
