@@ -108,14 +108,17 @@ public class CodeCompleteCommand
   {
     String completion = null;
     String menu = proposal.getDisplayString();
+    Integer offset = null;
 
     int kind = -1;
     if(proposal instanceof JavaCompletionProposal){
       JavaCompletionProposal lazy = (JavaCompletionProposal)proposal;
       completion = lazy.getReplacementString();
+      offset = lazy.getReplacementOffset();
     }else if(proposal instanceof LazyJavaCompletionProposal){
       LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)proposal;
       completion = lazy.getReplacementString();
+      offset = lazy.getReplacementOffset();
       Method getProposal = LazyJavaCompletionProposal.class
         .getDeclaredMethod("getProposal");
       getProposal.setAccessible(true);
@@ -182,6 +185,6 @@ public class CodeCompleteCommand
     // of whether the user ever views it.
     /*return new CodeCompleteResult(
         kind, completion, menu, proposal.getAdditionalProposalInfo());*/
-    return new CodeCompleteResult(completion, menu, menu, type);
+    return new CodeCompleteResult(completion, menu, menu, type, offset);
   }
 }
