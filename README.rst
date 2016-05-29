@@ -57,5 +57,5 @@ Eclim is released under the GPLv3_.
 .. _eclipse: http://eclipse.org
 .. _vim: http://www.vim.org
 .. _gplv3: http://www.gnu.org/licenses/gpl-3.0-standalone.html
-.. _Emacs client: http://github.com/senny/emacs-eclim
+.. _Emacs client: https://github.com/emacs-eclim/emacs-eclim
 .. _TextMate client: http://github.com/JulianEberius/Eclim.tmbundle
