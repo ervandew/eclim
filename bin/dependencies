@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-# Copyright (C) 2005 - 2013  Eric Van Dewoestine
+# Copyright (C) 2005 - 2016  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -65,24 +65,33 @@ def getEclimHome():
   return os.path.dirname(sys.path[0])
 
 def getEclipseHome(eclimHome):
-  properties_path = eclimHome + '/user.properties'
-  if not os.path.isfile(properties_path):
-    if 'ECLIM_ECLIPSE_HOME' in os.environ:
-      return os.environ['ECLIM_ECLIPSE_HOME']
-    raise Exception('ECLIM_ECLIPSE_HOME environment variable not set.')
+  propertiesPath = eclimHome + '/user.properties'
+  if os.path.isfile(propertiesPath):
+    branch = Popen(
+      'git rev-parse --abbrev-ref HEAD',
+      cwd=eclimHome, shell=True, stdout=PIPE
+    ).stdout.read().strip()
+    props = {}
+    for line in open(propertiesPath).read().split('\n'):
+      if not line or line.strip().startswith('#'):
+        continue
+      key, _, value = line.strip().partition('=')
+      props[key] = value
 
-  branch = Popen(
-    'git rev-parse --abbrev-ref HEAD',
-    cwd=eclimHome, shell=True, stdout=PIPE
-  ).stdout.read().strip()
-  props = {}
-  for line in open(propertiesPath).read().split('\n'):
-    if not line or line.strip().startswith('#'):
-      continue
-    key, _, value = line.strip().partition('=')
-    props[key] = value
+    branch_home = props.get('eclipse.home.%s' % branch)
+    eclipse_home = props.get('eclipse.home')
+    if branch_home or eclipse_home:
+      return props.get('eclipse.home.%s' % branch, props.get('eclipse.home'))
 
-  return props.get('eclipse.home.%s' % branch, props.get('eclipse.home'))
+  if 'ECLIM_ECLIPSE_HOME' in os.environ:
+    return os.environ['ECLIM_ECLIPSE_HOME']
+
+  print (
+    'The eclipse install location must be set using either an\n'
+    'ECLIM_ECLIPSE_HOME environment variable or eclipse.home in\n'
+    'a user.properties file.'
+  )
+  sys.exit(1)
 
 def getEclipseLauncher(eclipseHome):
   launcherJar = None
