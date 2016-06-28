@@ -54,7 +54,7 @@ public class Command
 
   public Command(OutputHandler handler, String[] cmd, String application)
   {
-    String[] jargs = {"java", "-Xmx256m", "-XX:MaxPermSize=128m"};
+    String[] jargs = {"java", "-Xmx256m"};
     String[] vmargs = getJvmArgs();
 
     this.handler = handler;

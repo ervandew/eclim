@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -314,10 +314,6 @@ Ex.
 
   # increase heap size
   -Xmx256M
-
-  # increase perm gen size
-  -XX:PermSize=64m
-  -XX:MaxPermSize=128m
 
 The eclim client will also utilize this file, but only to determine the
 nailgun server port should you choose to change the default.

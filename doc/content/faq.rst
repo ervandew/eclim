@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -120,10 +120,6 @@ options:
 
       # increase heap size
       -Xmx256M
-
-      # increase perm gen size
-      -XX:PermSize=64m
-      -XX:MaxPermSize=128m
 
    On Windows systems you can use the same steps
    :ref:`described <eclimd_options_windows>` above, for setting the workspace

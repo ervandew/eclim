@@ -6,8 +6,5 @@ nailgun.server.port=9092
 # increase heap space
 -Xmx1g
 
-# increase perm gen size
--XX:MaxPermSize=256m
-
 # work around bug in hotspot 19
 -XX:-UseCompressedOops

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2015  Eric Van Dewoestine
+# Copyright (C) 2005 - 2016  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -165,17 +165,8 @@ build_vmargs(){
   fi
 
   # add any eclipse vmargs not present
-  PERMGEN_SIZE="-XX:MaxPermSize=128m"
   if [ -f "$ECLIPSE_INI" -a -n "$PERL" ] ; then
     CONTENTS=$(cat "$ECLIPSE_INI" | perl -pe 's|\n| |g')
-    if [ "$(echo "$CONTENTS" | grep -- "--launcher.XXMaxPermSize" 2> /dev/null)" ] ; then
-      PERMGEN_SIZE=$(
-        echo "$CONTENTS" | perl -pe '
-          s|^.*--launcher.(XX)(MaxPermSize) (\w+).*|-\1:\2=\3|s
-        '
-      )
-    fi
-
     IFS=$'\n'
     IS_VMARGS=0
     for line in $(cat "$ECLIPSE_INI") ; do
@@ -200,12 +191,7 @@ build_vmargs(){
     done
   fi
 
-  # set a default perm gen size if one isn't set
-  if [[ "${ECLIM_VMARGS[@]}" != *-XX:MaxPermSize* ]]; then
-    ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" $PERMGEN_SIZE)
-  fi
-
-  # same deal for max heap space
+  # set a default for max heap space
   if [[ "${ECLIM_VMARGS[@]}" != *-Xmx* ]]; then
     ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" -Xmx256m)
   fi
