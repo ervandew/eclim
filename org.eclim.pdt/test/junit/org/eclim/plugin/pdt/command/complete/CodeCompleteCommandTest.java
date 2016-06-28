@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2016  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,13 +63,13 @@ public class CodeCompleteCommandTest
 
     result = results.get(1);
     assertEquals(result.get("completion"), "methodA1(");
-    assertEquals(result.get("menu"), "methodA1($str) - TestA");
-    assertEquals(result.get("info"), "TestA::methodA1($str)");
+    assertEquals(result.get("menu"), "methodA1($str) : void - TestA");
+    assertEquals(result.get("info"), "TestA::methodA1($str) : void");
 
     result = results.get(2);
     assertEquals(result.get("completion"), "methodA2()");
-    assertEquals(result.get("menu"), "methodA2() - TestA");
-    assertEquals(result.get("info"), "TestA::methodA2()");
+    assertEquals(result.get("menu"), "methodA2() : void - TestA");
+    assertEquals(result.get("info"), "TestA::methodA2() : void");
   }
 
   @Test
@@ -89,13 +89,13 @@ public class CodeCompleteCommandTest
 
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "methodA1(");
-    assertEquals(result.get("menu"), "methodA1($str) - TestA");
-    assertEquals(result.get("info"), "TestA::methodA1($str)");
+    assertEquals(result.get("menu"), "methodA1($str) : void - TestA");
+    assertEquals(result.get("info"), "TestA::methodA1($str) : void");
 
     result = results.get(1);
     assertEquals(result.get("completion"), "methodA2()");
-    assertEquals(result.get("menu"), "methodA2() - TestA");
-    assertEquals(result.get("info"), "TestA::methodA2()");
+    assertEquals(result.get("menu"), "methodA2() : void - TestA");
+    assertEquals(result.get("info"), "TestA::methodA2() : void");
   }
 
   @Test
@@ -140,13 +140,13 @@ public class CodeCompleteCommandTest
     assertEquals(result.get("info"), "Eclim\\Common");
 
     result = results.get(1);
-    assertEquals(result.get("completion"), "Test");
-    assertEquals(result.get("menu"), "Eclim\\Test - Components.php");
+    assertEquals(result.get("completion"), "Test\\");
+    assertEquals(result.get("menu"), "Eclim\\Test");
     assertEquals(result.get("info"), "Eclim\\Test");
 
     result = results.get(2);
-    assertEquals(result.get("completion"), "Test\\Nested");
-    assertEquals(result.get("menu"), "Eclim\\Test\\Nested - Components.php");
+    assertEquals(result.get("completion"), "Test\\Nested\\");
+    assertEquals(result.get("menu"), "Eclim\\Test\\Nested");
     assertEquals(result.get("info"), "Eclim\\Test\\Nested");
 
     results = (List<Map<String,Object>>)
@@ -158,8 +158,8 @@ public class CodeCompleteCommandTest
     assertEquals("Wrong number of results", 1, results.size());
 
     result = results.get(0);
-    assertEquals(result.get("completion"), "Lib");
-    assertEquals(result.get("menu"), "App\\Lib - lib.php");
+    assertEquals(result.get("completion"), "Lib\\");
+    assertEquals(result.get("menu"), "App\\Lib");
     assertEquals(result.get("info"), "App\\Lib");
 
     results = (List<Map<String,Object>>)
@@ -172,8 +172,8 @@ public class CodeCompleteCommandTest
 
     result = results.get(0);
     assertEquals(result.get("completion"), "MyFunction()");
-    assertEquals(result.get("menu"), "MyFunction() - App\\Lib");
-    assertEquals(result.get("info"), "App\\Lib::MyFunction()");
+    assertEquals(result.get("menu"), "MyFunction() : mixed - App\\Lib");
+    assertEquals(result.get("info"), "App\\Lib::MyFunction() : mixed");
 
     result = results.get(1);
     assertEquals(result.get("completion"), "MyClass");
@@ -229,13 +229,13 @@ public class CodeCompleteCommandTest
 
       Map<String,Object> result = results.get(0);
       assertEquals(result.get("completion"), "getName()");
-      assertEquals(result.get("menu"), "getName() - Test");
-      assertEquals(result.get("info"), "Test::getName()");
+      assertEquals(result.get("menu"), "getName() : void - Test");
+      assertEquals(result.get("info"), "Test::getName() : void");
 
       result = results.get(1);
       assertEquals(result.get("completion"), "getValue()");
-      assertEquals(result.get("menu"), "getValue() - Test");
-      assertEquals(result.get("info"), "Test::getValue()");
+      assertEquals(result.get("menu"), "getValue() : void - Test");
+      assertEquals(result.get("info"), "Test::getValue() : void");
 
       String[] newContents = new String[contents.length + 1];
       System.arraycopy(contents, 0, newContents, 0, contents.length - 1);

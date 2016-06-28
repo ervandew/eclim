@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2016  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,14 +64,15 @@ public class CodeCompleteCommandTest
         "-o", "234", "-e", "utf-8"
       });
 
-    assertEquals("Wrong number of results.", 7, results.size());
+    assertEquals("Wrong number of results.", 8, results.size());
 
     assertEquals(results.get(0).get("completion"), "java");
     assertEquals(results.get(1).get("completion"), "javac");
     assertEquals(results.get(2).get("completion"), "javacc");
-    assertEquals(results.get(3).get("completion"), "javadoc");
-    assertEquals(results.get(4).get("completion"), "javadoc2");
-    assertEquals(results.get(5).get("completion"), "javah");
-    assertEquals(results.get(6).get("completion"), "javaresource");
+    assertEquals(results.get(3).get("completion"), "javaconstant");
+    assertEquals(results.get(4).get("completion"), "javadoc");
+    assertEquals(results.get(5).get("completion"), "javadoc2");
+    assertEquals(results.get(6).get("completion"), "javah");
+    assertEquals(results.get(7).get("completion"), "javaresource");
   }
 }

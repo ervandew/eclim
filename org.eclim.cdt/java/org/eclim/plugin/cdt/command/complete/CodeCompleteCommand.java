@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2016  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,11 +119,11 @@ public class CodeCompleteCommand
     if (proposal instanceof CCompletionProposal){
       String displayString = proposal.getDisplayString();
       String completion = ((CCompletionProposal)proposal).getReplacementString();
-      if (displayString.lastIndexOf(')') > displayString.lastIndexOf('(') + 1 &&
-          (completion.length() > 0 &&
-           completion.charAt(completion.length() - 1) == ')'))
+      if (completion.length() > 0 &&
+          completion.lastIndexOf(')') > completion.lastIndexOf('(') + 1 &&
+          completion.charAt(completion.length() - 1) == ')')
       {
-        completion = completion.substring(0, completion.length() - 1);
+        completion = completion.substring(0, completion.lastIndexOf('(') + 1);
 
       // include completions
       } else if (completion.endsWith("/>")){

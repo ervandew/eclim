@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2016  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ function! TestCompletePhp() " {{{
   echo 'results = ' . string(results)
   call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
   call vunit#AssertEquals('Common', results[0].word, 'Wrong result.')
-  call vunit#AssertEquals('Test', results[1].word, 'Wrong result.')
-  call vunit#AssertEquals('Test\Nested', results[2].word, 'Wrong result.')
+  call vunit#AssertEquals('Test\', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('Test\Nested\', results[2].word, 'Wrong result.')
 
   call cursor(18, 13)
   let start = eclim#php#complete#CodeComplete(1, '')

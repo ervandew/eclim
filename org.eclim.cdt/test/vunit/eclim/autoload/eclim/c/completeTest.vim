@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2016  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ function! TestCppComplete() " {{{
   call vunit#AssertEquals('Test', results[0].word, 'Wrong first result.')
   call vunit#AssertEquals('test(', results[1].word, 'Wrong second result.')
   call vunit#AssertEquals('test(', results[2].word, 'Wrong third result.')
-  call vunit#AssertEquals('Test(', results[3].word, 'Wrong forth result.')
+  call vunit#AssertEquals('Test()', results[3].word, 'Wrong forth result.')
 
   let g:EclimCCompleteLayout = 'compact'
   let start = eclim#c#complete#CodeComplete(1, '')
@@ -86,7 +86,7 @@ function! TestCppComplete() " {{{
   call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
   call vunit#AssertEquals('Test', results[0].word, 'Wrong first result.')
   call vunit#AssertEquals('test(', results[1].word, 'Wrong second result.')
-  call vunit#AssertEquals('Test(', results[2].word, 'Wrong third result.')
+  call vunit#AssertEquals('Test()', results[2].word, 'Wrong third result.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

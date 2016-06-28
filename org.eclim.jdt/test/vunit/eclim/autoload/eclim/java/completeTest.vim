@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2016  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -94,36 +94,36 @@ function! TestCodeCompleteUnicode() " {{{
   edit! src/org/eclim/test/complete/TestUnicode.java
   call vunit#PeekRedir()
 
-  call cursor(6, 17)
+  call cursor(6, 18)
   let start = eclim#java#complete#CodeComplete(1, '')
   call vunit#AssertEquals(15, start, 'Wrong starting column.')
 
-  call cursor(6, 17)
+  call cursor(6, 18)
   let results = eclim#java#complete#CodeComplete(0, '')
   echom 'Results: ' . string(results)
   call vunit#PeekRedir()
   call vunit#AssertTrue(len(results) > 10, 'Not enough results.')
   call vunit#AssertTrue(len(results) < 30, 'Too many results.')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'println('.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'println'.*"),
     \ 'Results does not contain println()')
-  call vunit#AssertFalse(eclim#util#ListContains(results, ".*'append('.*"),
-    \ 'Results contains print()')
+  call vunit#AssertFalse(eclim#util#ListContains(results, ".*'append'.*"),
+    \ 'Results contains append()')
 
   " actually tests the unicode support of GetOffset
-  call cursor(16, 33)
+  call cursor(16, 34)
   let start = eclim#java#complete#CodeComplete(1, '')
   call vunit#AssertEquals(31, start, 'Wrong starting column.')
 
-  call cursor(16, 33)
+  call cursor(16, 34)
   let results = eclim#java#complete#CodeComplete(0, '')
   echom 'Results: ' . string(results)
   call vunit#PeekRedir()
   call vunit#AssertTrue(len(results) > 10, 'Not enough results.')
   call vunit#AssertTrue(len(results) < 30, 'Too many results.')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'println('.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'println'.*"),
     \ 'Results does not contain println()')
-  call vunit#AssertFalse(eclim#util#ListContains(results, ".*'append('.*"),
-    \ 'Results contains print()')
+  call vunit#AssertFalse(eclim#util#ListContains(results, ".*'append'.*"),
+    \ 'Results contains append()')
 endfunction " }}}
 
 function! TestCodeCompleteLinkedResource() " {{{

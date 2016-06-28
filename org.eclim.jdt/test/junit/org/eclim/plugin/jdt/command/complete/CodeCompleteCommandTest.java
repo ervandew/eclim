@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2016  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,10 @@ public class CodeCompleteCommandTest
     List<Map<String,Object>> completions = (List<Map<String,Object>>)
       results.get("completions");
 
-    assertEquals("Wrong number of completions.", 4, completions.size());
+    // as of eclipse neon (4.6), any method containing the prefix anywhere in
+    // the method name ('a' in this case) is returned as a proposal, with the
+    // prefixed versions at the top.
+    assertEquals("Wrong number of completions.", 22, completions.size());
 
     Map<String,Object> result = completions.get(0);
     assertEquals(result.get("completion"), "add(");
@@ -93,7 +96,7 @@ public class CodeCompleteCommandTest
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");
     assertEquals(result.get("type"), "f");
 
-    result = completions.get(completions.size() - 1);
+    result = completions.get(3);
     assertEquals(result.get("completion"), "addAll(");
     assertEquals(result.get("menu"), "addAll(Collection c) : boolean - List");
     assertEquals(result.get("info"), "addAll(Collection c) : boolean - List");
