@@ -91,7 +91,6 @@ public class CompletionProposalCollector
           case CompletionProposal.LOCAL_VARIABLE_REF:
           case CompletionProposal.VARIABLE_DECLARATION:
           case CompletionProposal.ANNOTATION_ATTRIBUTE_REF:
-          case CompletionProposal.POTENTIAL_METHOD_DECLARATION:
             proposals.add(proposal);
             super.accept(proposal);
             break;
