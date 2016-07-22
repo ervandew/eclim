@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2016  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -585,8 +585,16 @@ target(name: 'docs'){
   // sync to github pages repo/branch if it exists
   if (new File("${basedir}/gh-pages").exists()){
     sync(todir: 'gh-pages', overwrite: true){
-      fileset(dir: 'build/doc/site')
-      preserveintarget{ include(name: '.git/**/*') }
+      fileset(dir: 'build/doc/site'){
+        exclude(name: '.buildinfo')
+        exclude(name: '.doctrees/**/*')
+        exclude(name: '.doctrees/')
+      }
+      preserveintarget{
+        include(name: '.git/**/*')
+        include(name: '.gitignore')
+        include(name: '.nojekyll')
+      }
     }
   }
 }
