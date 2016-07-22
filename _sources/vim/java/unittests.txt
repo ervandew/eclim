@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ Configuration
 
   .. code-block:: cfg
 
-    org.eclim.java.junit.jvmargs=["-Xmx512m", "-XX:MaxPermSize=128m"]
+    org.eclim.java.junit.jvmargs=["-Xmx512m"]
 
 .. _org.eclim.java.junit.sysprops:
 

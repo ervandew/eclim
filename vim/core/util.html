@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -423,7 +424,7 @@ will open the url under the cursor.  By default all urls will open in your web
 browser, but you may optionally configure a list of url patterns to be opened
 via the netrw plugin.  The following example is configured to open all dtd, xml,
 xsd, and text files via netrw.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimOpenUrlInVimPatterns <span class="p">=</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimOpenUrlInVimPatterns <span class="p">=</span>
   \ [
     \ <span class="s1">&#39;\.\(dtd\|xml\|xsd\)$&#39;</span><span class="p">,</span>
     \ <span class="s1">&#39;\.txt$&#39;</span><span class="p">,</span>
@@ -432,13 +433,13 @@ xsd, and text files via netrw.</p>
 </div>
 <p>For urls that match one of these patterns, you may also define how the file is
 to be opened in Vim (split, edit, etc.).</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimOpenUrlInVimAction <span class="p">=</span> <span class="s1">&#39;split&#39;</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimOpenUrlInVimAction <span class="p">=</span> <span class="s1">&#39;split&#39;</span>
 </pre></div>
 </div>
 <p>If a url you want to open matches one
 of these patterns, but you want to force it to be opened in your browser, you
 can supply a bang (!) to force it to do so:</p>
-<div class="highlight-python"><div class="highlight"><pre>:OpenUrl!
+<div class="highlight-python"><div class="highlight"><pre><span></span>:OpenUrl!
 </pre></div>
 </div>
 <p><strong>Configuration</strong></p>
@@ -457,7 +458,7 @@ Defines the command used to open files matched by g:EclimOpenUrlInVimPatterns.</
 <li><p class="first"><strong>eclim#web#SearchEngine</strong>
 Helper function which provides the functionality needed to create search
 engine commands or mappings.</p>
-<div class="highlight-vim"><div class="highlight"><pre>command <span class="p">-</span>range <span class="p">-</span>nargs<span class="p">=</span>* Google <span class="k">call</span> eclim#web#SearchEngine<span class="p">(</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span>command <span class="p">-</span>range <span class="p">-</span>nargs<span class="p">=</span>* Google <span class="k">call</span> eclim#web#SearchEngine<span class="p">(</span>
   \ <span class="s1">&#39;http://www.google.com/search?q=&lt;query&gt;&#39;</span><span class="p">,</span> <span class="p">&lt;</span><span class="k">q</span><span class="p">-</span>args<span class="p">&gt;,</span> <span class="p">&lt;</span>line1<span class="p">&gt;,</span> <span class="p">&lt;</span>line2<span class="p">&gt;)</span>
 </pre></div>
 </div>
@@ -467,7 +468,7 @@ from vim.  This command can be invoked in a few ways.</p>
 <ol class="arabic">
 <li><p class="first">First by supplying the word or words to search for as arguments to
 the command.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>Google <span class="s2">&quot;vim eclim&quot;</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>Google <span class="s2">&quot;vim eclim&quot;</span>
 <span class="p">:</span>Google <span class="k">vim</span> eclim
 <span class="p">:</span>Google <span class="p">+</span><span class="k">vim</span> <span class="p">-</span>eclim
 </pre></div>
@@ -489,7 +490,7 @@ then execute the command.</p>
 <li><p class="first"><strong>eclim#web#WordLookup</strong>
 Helper function which can be used to create commands or mappings which lookup
 a word using an online reference like a dictionary or thesaurus.</p>
-<div class="highlight-vim"><div class="highlight"><pre>command <span class="p">-</span>nargs<span class="p">=</span>? Dictionary <span class="k">call</span> eclim#web#WordLookup<span class="p">(</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span>command <span class="p">-</span>nargs<span class="p">=</span>? Dictionary <span class="k">call</span> eclim#web#WordLookup<span class="p">(</span>
   \ <span class="s1">&#39;http://dictionary.reference.com/search?q=&lt;query&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;args&gt;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -516,8 +517,8 @@ argument to the command or it will otherwise use the word under the cursor.</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

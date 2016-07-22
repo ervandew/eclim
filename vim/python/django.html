@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -339,8 +340,8 @@ access to this script when running <code>:DjangoManage startproject &lt;project_
 <dd><p class="first">The command <strong>:DjangoTemplateOpen</strong> supports finding and opening a template
 referenced under the cursor.</p>
 <p>Ex.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="c"># w/ cursor on &#39;mytemplates/mytemplate.html&#39;</span>
-<span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;mytemplates/mytemplate.html&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="c1"># w/ cursor on &#39;mytemplates/mytemplate.html&#39;</span>
+<span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s1">&#39;mytemplates/mytemplate.html&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
@@ -350,9 +351,9 @@ referenced under the cursor.</p>
 <dd><p class="first">The command <strong>:DjangoViewOpen</strong> supports finding and opening a view referenced
 under the cursor.</p>
 <p>Ex.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="c"># w/ cursor on &#39;myproject.myapp.views&#39; or &#39;my_view&#39; on the second line.</span>
-<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;myproject.myapp.views&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="s">&#39;my_view&#39;</span><span class="p">),</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="c1"># w/ cursor on &#39;myproject.myapp.views&#39; or &#39;my_view&#39; on the second line.</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s1">&#39;myproject.myapp.views&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s1">r&#39;^$&#39;</span><span class="p">,</span> <span class="s1">&#39;my_view&#39;</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -399,7 +400,7 @@ attempt to locate the relevant resource depending on what is under the cursor.</
 <li><p class="first">If on a user defined tag, attempt to find the tag definition within the python
 tag definition file.</p>
 <p>Ex.</p>
-<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;mytag&#39; #}
+<div class="highlight-python"><div class="highlight"><pre><span></span>{# w/ cursor on &#39;mytag&#39; #}
 {% mytag somearg %}
 </pre></div>
 </div>
@@ -407,7 +408,7 @@ tag definition file.</p>
 <li><p class="first">If on a user defined filter, attempt to find the filter definition within the
 python filter definition file.</p>
 <p>Ex.</p>
-<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;myfilter&#39; #}
+<div class="highlight-python"><div class="highlight"><pre><span></span>{# w/ cursor on &#39;myfilter&#39; #}
 {{ somevalue|myfilter }}
 </pre></div>
 </div>
@@ -415,7 +416,7 @@ python filter definition file.</p>
 <li><p class="first">If on the tag/filter definition portion of of a 'load' tag, attempt to
 find the definition file.</p>
 <p>Ex.</p>
-<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;mytags&#39; #}
+<div class="highlight-python"><div class="highlight"><pre><span></span>{# w/ cursor on &#39;mytags&#39; #}
 {% load mytags %}
 </pre></div>
 </div>
@@ -423,7 +424,7 @@ find the definition file.</p>
 <li><p class="first">If on a reference to a template for ethier an 'extends' or 'include' tag,
 attempt to find that template file.</p>
 <p>Ex.</p>
-<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;include/mytemplate.html&#39; #}
+<div class="highlight-python"><div class="highlight"><pre><span></span>{# w/ cursor on &#39;include/mytemplate.html&#39; #}
 {% include &quot;include/mytemplate.html&quot; %}
 </pre></div>
 </div>
@@ -431,7 +432,7 @@ attempt to find that template file.</p>
 <li><p class="first">If on static file reference, as defined in a 'src' or 'href' attribute
 of an element, attempt to find that static file.</p>
 <p>Ex.</p>
-<div class="highlight-python"><div class="highlight"><pre>{# w/ cursor on &#39;/css/my.css&#39; #}
+<div class="highlight-python"><div class="highlight"><pre><span></span>{# w/ cursor on &#39;/css/my.css&#39; #}
 &lt;link rel=&quot;stylesheet&quot; href=&quot;/css/my.css&quot; type=&quot;text/css&quot; /&gt;
 </pre></div>
 </div>
@@ -441,7 +442,7 @@ or django project relative (relative to directory containing manage.py
 and settings.py) directories, though it will fallback to using eclim's locate
 file functionality.</p>
 <p>Ex.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPaths <span class="p">=</span> [<span class="s2">&quot;../static/&quot;</span>]
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPaths <span class="p">=</span> [<span class="s2">&quot;../static/&quot;</span>]
 </pre></div>
 </div>
 </li>
@@ -461,7 +462,7 @@ List of lists, where each list contains the name of the start and end
 tag, as well as any intermediary tags of any custom tags which have a
 body.</p>
 <p>Ex.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:HtmlDjangoUserBodyElements <span class="p">=</span> [
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:HtmlDjangoUserBodyElements <span class="p">=</span> [
     \ [<span class="s1">&#39;repeat&#39;</span><span class="p">,</span> <span class="s1">&#39;endrepeat&#39;</span>]<span class="p">,</span>
     \ [<span class="s1">&#39;try&#39;</span><span class="p">,</span> <span class="s1">&#39;except&#39;</span><span class="p">,</span> <span class="s1">&#39;finally&#39;</span><span class="p">,</span> <span class="s1">&#39;endtry&#39;</span>]<span class="p">,</span>
   \ ]
@@ -493,7 +494,7 @@ Used as a list of directories to search when looking for static files (js,
 css, etc). Expected to be a list of absolute or django project relative
 (relative to directory containing manage.py and settings.py) directories.</p>
 <p>Ex.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPaths <span class="p">=</span> [<span class="s2">&quot;../static/&quot;</span>]
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPaths <span class="p">=</span> [<span class="s2">&quot;../static/&quot;</span>]
 </pre></div>
 </div>
 </li>
@@ -506,11 +507,11 @@ file referenced by that custom tag. In this case you can set
 g:EclimDjangoStaticPattern to a vim regular expression which matches your
 custom tag. For example, if you have a custom tag called <code>static</code> to load
 static files like so:</p>
-<div class="highlight-html"><div class="highlight"><pre>{% static &#39;lib/somefile.js&#39; %}
+<div class="highlight-html"><div class="highlight"><pre><span></span>{% static &#39;lib/somefile.js&#39; %}
 </pre></div>
 </div>
 <p>Then you could set g:EclimDjangoStaticPattern to:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPattern <span class="p">=</span> <span class="s2">&quot;{%\\s*static([&#39;\&quot;]&lt;element&gt;[&#39;\&quot;]&quot;</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPattern <span class="p">=</span> <span class="s2">&quot;{%\\s*static([&#39;\&quot;]&lt;element&gt;[&#39;\&quot;]&quot;</span>
 </pre></div>
 </div>
 <p>Note that this pattern allows either <code>'</code> or <code>&quot;</code> to quote the static file
@@ -545,8 +546,8 @@ on the file found.</li>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

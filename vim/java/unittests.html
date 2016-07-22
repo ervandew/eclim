@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -317,7 +318,7 @@ methods from your tests.</p>
 <p>If you'd like to run a particular test you can do so by supplying the fully
 qualified class name of the test to run (you can use vim's tab completion here
 to alleviate having to type the full name):</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JUnit org.test.MyTest
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit org.test.MyTest
 </pre></div>
 </div>
 <p>Another way is to simply run <strong>:JUnit</strong> with no arguments and let it decide
@@ -336,17 +337,17 @@ the current method in that test and run just that test method.</li>
 <p>If you'd like to run all tests for the current file, regardless of whether the
 cursor is on a method or not, you can do so by running <strong>:JUnit</strong> with the '%'
 argument:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JUnit %
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit %
 </pre></div>
 </div>
 <p>For cases where you'd like to run all your unit tests you can run <strong>:JUnit</strong>
 with the '*' argument and eclim will locate all your test files and run them:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JUnit *
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit *
 </pre></div>
 </div>
 <p>You can also pass in an ant compatible <a class="reference external" href="http://ant.apache.org/manual/dirtasks.html#patterns">pattern</a> to match the tests
 you'd like to run:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JUnit **<span class="sr">/tests/</span>*Test
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit **<span class="sr">/tests/</span>*Test
 </pre></div>
 </div>
 </div>
@@ -400,7 +401,7 @@ stub will be inserted, otherwise a regular overriding stub will be generated.</p
 <li><p class="first"><strong>org.eclim.java.junit.output_dir</strong> -
 Defines the project relative location of the junit test results.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span class="na">org.eclim.java.junit.output_dir</span><span class="o">=</span><span class="s">build/test/results</span>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.output_dir</span><span class="o">=</span><span class="s">build/test/results</span>
 </pre></div>
 </div>
 </li>
@@ -410,7 +411,7 @@ Defines the project relative location of the junit test results.</p>
 Json formatted list of strings to supply as args to the jvm when forking to
 run unit tests.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span class="na">org.eclim.java.junit.jvmargs</span><span class="o">=</span><span class="s">[&quot;-Xmx512m&quot;, &quot;-XX:MaxPermSize=128m&quot;]</span>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.jvmargs</span><span class="o">=</span><span class="s">[&quot;-Xmx512m&quot;]</span>
 </pre></div>
 </div>
 </li>
@@ -420,7 +421,7 @@ run unit tests.</p>
 Json formatted list of strings to supply as system properties to the jvm when
 forking to run unit tests.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span class="na">org.eclim.java.junit.sysprops</span><span class="o">=</span><span class="s">[&quot;file.encoding=UTF8&quot;, &quot;foo.bar=baz&quot;]</span>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.sysprops</span><span class="o">=</span><span class="s">[&quot;file.encoding=UTF8&quot;, &quot;foo.bar=baz&quot;]</span>
 </pre></div>
 </div>
 </li>
@@ -430,7 +431,7 @@ forking to run unit tests.</p>
 Json formatted list of strings to supply as environment variables to the jvm
 when forking to run unit tests.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span class="na">org.eclim.java.junit.envvars</span><span class="o">=</span><span class="s">[&quot;FOO=bar&quot;]</span>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.envvars</span><span class="o">=</span><span class="s">[&quot;FOO=bar&quot;]</span>
 </pre></div>
 </div>
 </li>
@@ -451,7 +452,7 @@ $ECLIPSE_HOME/plugins/org.eclim.jdt_version/ directory.</p>
 </li>
 <li><p class="first">The second step is to add the <code>listener</code> attribute to your
 testng task which references the required eclim testng listener:</p>
-<div class="highlight-python"><div class="highlight"><pre>  ...
+<div class="highlight-python"><div class="highlight"><pre><span></span>  ...
 &lt;testng ... listener=&quot;org.eclim.testng.TestNgListener&quot;&gt;
   ...
 </pre></div>
@@ -463,7 +464,7 @@ testng task which references the required eclim testng listener:</p>
 target from vim and (as long as eclim is running) all failed tests will be
 added to your vim quickfix results.</p>
 <p>Ex. Assuming your ant task is named 'test':</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>Ant test
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>Ant test
 </pre></div>
 </div>
 </div>
@@ -484,8 +485,8 @@ added to your vim quickfix results.</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

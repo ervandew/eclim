@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -49,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -235,6 +235,7 @@
 <li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -306,6 +307,7 @@
 </ul>
 </li>
 <li class="dropdown"><a class="subnav-toggle reference internal" href="#what-s-new">What's New?<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li><a class="reference internal" href="#jul-21-2016">Jul 21, 2016</a></li>
 <li><a class="reference internal" href="#jul-25-2015">Jul 25, 2015</a></li>
 <li><a class="reference internal" href="#jan-22-2015">Jan 22, 2015</a></li>
 <li><a class="reference internal" href="#aug-24-2014">Aug 24, 2014</a></li>
@@ -423,11 +425,18 @@ C/C++ Developers&quot;, some other eclipse bundle).</li>
 <div class="section" id="what-s-new">
 <h2>What's New?<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
 <a class="reference external image-reference" href="index.rss"><img alt="Rss Feed for What's New" src="_images/rss.png" /></a>
+<div class="section" id="jul-21-2016">
+<h3>Jul 21, 2016<a class="headerlink" href="#jul-21-2016" title="Permalink to this headline">¶</a></h3>
+<p>A new version of eclim is now available with support for Eclipse 4.6 (Neon).</p>
+<ul class="simple">
+<li><a class="reference internal" href="changes.html#id1"><span>Eclim 2.6.0</span></a></li>
+</ul>
+</div>
 <div class="section" id="jul-25-2015">
 <h3>Jul 25, 2015<a class="headerlink" href="#jul-25-2015" title="Permalink to this headline">¶</a></h3>
 <p>A new version of eclim is now available with support for Eclipse 4.5 (Mars).</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id1"><span>Eclim 2.5.0</span></a></li>
+<li><a class="reference internal" href="changes.html#id2"><span>Eclim 2.5.0</span></a></li>
 </ul>
 </div>
 <div class="section" id="jan-22-2015">
@@ -435,7 +444,7 @@ C/C++ Developers&quot;, some other eclipse bundle).</li>
 <p>The latest version of eclim is now available with scala support re-enabled, new
 groovy support, java debugging support, many bug fixes, and more.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id2"><span>Eclim 2.4.1</span></a></li>
+<li><a class="reference internal" href="changes.html#id3"><span>Eclim 2.4.1</span></a></li>
 </ul>
 </div>
 <div class="section" id="aug-24-2014">
@@ -446,14 +455,14 @@ final release of ScalaIDE 4.0.0 for Luna, but I don't want to hold up the rest
 of eclim any longer. If you want to use eclim's scala support, you'll need to
 install the ScalaIDE 4.0.0 milestone and build eclim from the master git branch.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id3"><span>Eclim 2.4.0</span></a></li>
+<li><a class="reference internal" href="changes.html#id4"><span>Eclim 2.4.0</span></a></li>
 </ul>
 </div>
 <div class="section" id="may-07-2014">
 <h3>May 07, 2014<a class="headerlink" href="#may-07-2014" title="Permalink to this headline">¶</a></h3>
 <p>Release of eclim for indigo users.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id4"><span>Eclim 1.7.19</span></a></li>
+<li><a class="reference internal" href="changes.html#id5"><span>Eclim 1.7.19</span></a></li>
 </ul>
 </div>
 <div class="section" id="apr-12-2014">
@@ -461,7 +470,7 @@ install the ScalaIDE 4.0.0 milestone and build eclim from the master git branch.
 <p>Eclim has been updated to fix an issue on Windows that could prevent many
 features from working.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id5"><span>Eclim 2.3.4</span></a></li>
+<li><a class="reference internal" href="changes.html#id6"><span>Eclim 2.3.4</span></a></li>
 </ul>
 </div>
 <div class="section" id="apr-06-2014">
@@ -469,13 +478,13 @@ features from working.</p>
 <p>This release includes many bug fixes and refinements as well as a rewrite of
 eclim's python support to utilize pydev instead of rope.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id6"><span>Eclim 2.3.3</span></a></li>
+<li><a class="reference internal" href="changes.html#id7"><span>Eclim 2.3.3</span></a></li>
 </ul>
 <div class="alert">
 <p class="alert-heading first admonition-title">Warning</p>
 <p>Any exiting eclim python projects you have should be re-created with the new
 <code>python</code> nature:</p>
-<div class="last highlight-python"><div class="highlight"><pre>:ProjectCreate /path/to/project -n python
+<div class="last highlight-python"><div class="highlight"><pre><span></span>:ProjectCreate /path/to/project -n python
 </pre></div>
 </div>
 </div>
@@ -485,8 +494,8 @@ eclim's python support to utilize pydev instead of rope.</p>
 <p>This release fixes the extraction of the necessary vim files when installing
 scala support.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id7"><span>Eclim 2.3.2</span></a> for Eclipse 4.3 (Kepler).</li>
-<li><a class="reference internal" href="changes.html#id8"><span>Eclim 1.7.18</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+<li><a class="reference internal" href="changes.html#id8"><span>Eclim 2.3.2</span></a> for Eclipse 4.3 (Kepler).</li>
+<li><a class="reference internal" href="changes.html#id9"><span>Eclim 1.7.18</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
 </ul>
 </div>
 <div class="section" id="jul-27-2013">
@@ -494,7 +503,7 @@ scala support.</p>
 <p>The previous eclim installer for Kepler was still pointing at the Juno update
 site. This release remedies that.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id9"><span>Eclim 2.3.1</span></a> for Eclipse 4.3 (Kepler).</li>
+<li><a class="reference internal" href="changes.html#id10"><span>Eclim 2.3.1</span></a> for Eclipse 4.3 (Kepler).</li>
 </ul>
 </div>
 <div class="section" id="jul-21-2013">
@@ -503,8 +512,8 @@ site. This release remedies that.</p>
 support. The installer for eclim 2.3.0 now requires that you install against
 Kepler.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id10"><span>Eclim 2.3.0</span></a> for Eclipse 4.3 (Kepler).</li>
-<li><a class="reference internal" href="changes.html#id11"><span>Eclim 1.7.17</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+<li><a class="reference internal" href="changes.html#id11"><span>Eclim 2.3.0</span></a> for Eclipse 4.3 (Kepler).</li>
+<li><a class="reference internal" href="changes.html#id12"><span>Eclim 1.7.17</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
 </ul>
 </div>
 <div class="section" id="jul-14-2013">
@@ -516,8 +525,8 @@ as well, with the exception of scala support which has not been tested. Indigo
 support will continue but will likely end with the release of Luna, possibly
 sooner.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id12"><span>Eclim 2.2.7</span></a> for Eclipse 4.2 (Juno).</li>
-<li><a class="reference internal" href="changes.html#id13"><span>Eclim 1.7.16</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+<li><a class="reference internal" href="changes.html#id13"><span>Eclim 2.2.7</span></a> for Eclipse 4.2 (Juno).</li>
+<li><a class="reference internal" href="changes.html#id14"><span>Eclim 1.7.16</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
 </ul>
 </div>
 <div class="section" id="may-18-2013">
@@ -526,8 +535,8 @@ sooner.</p>
 22.0.0, scala is now supported for both Juno and Indigo, and there are a few
 other improvements and many bug fixes.</p>
 <ul class="simple">
-<li><a class="reference internal" href="changes.html#id14"><span>Eclim 2.2.6</span></a> for Eclipse 4.2 (Juno).</li>
-<li><a class="reference internal" href="changes.html#id15"><span>Eclim 1.7.14</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+<li><a class="reference internal" href="changes.html#id15"><span>Eclim 2.2.6</span></a> for Eclipse 4.2 (Juno).</li>
+<li><a class="reference internal" href="changes.html#id16"><span>Eclim 1.7.14</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
 </ul>
 <p><a class="reference internal" href="archive/news.html"><em>Eclim News Archive</em></a></p>
 </div>
@@ -549,8 +558,8 @@ other improvements and many bug fixes.</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

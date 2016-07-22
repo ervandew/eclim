@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -318,7 +319,7 @@
 <h3>Code Completion<a class="headerlink" href="#code-completion" title="Permalink to this headline">¶</a></h3>
 <p>Html code completion uses the standard
 <a class="reference internal" href="../code_completion.html"><em>Vim code completion mechanism</em></a> like so:</p>
-<div class="highlight-python"><div class="highlight"><pre>&lt;ht&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;ht&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
 
 &lt;html&gt;
   &lt;he&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
@@ -370,7 +371,7 @@ each other. If you'd like to use syntastic over eclim for validation, then
 simply disable eclim's validation.</p>
 <p>If you'd like to disable eclim's source code validation for all languages,
 eclim provides a global variable for that as well:</p>
-<div class="last highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:EclimFileTypeValidate <span class="p">=</span> <span class="m">0</span>
+<div class="last highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimFileTypeValidate <span class="p">=</span> <span class="m">0</span>
 </pre></div>
 </div>
 </div>
@@ -388,7 +389,7 @@ If set to 'severity', the validation results will be sorted by severity
 <h3>Code Completion<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Css code completion uses the standard
 <a class="reference internal" href="../code_completion.html"><em>Vim code completion mechanism</em></a> like so:</p>
-<div class="highlight-python"><div class="highlight"><pre>bo&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>bo&lt;Ctrl-X&gt;&lt;Ctrl-U&gt;
 
 body {
   font-&lt;Ctr-X&gt;&lt;Ctrl-U&gt;
@@ -444,8 +445,8 @@ If set to 'severity', the validation results will be sorted by severity
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

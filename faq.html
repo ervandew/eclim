@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -34,7 +34,7 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="eclim (eclipse + vim)" href="index.html" />
     <link rel="next" title="Features" href="features.html" />
-    <link rel="prev" title="Plugins" href="development/plugins.html" />
+    <link rel="prev" title="Building the eclim installer" href="development/installer.html" />
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -50,7 +50,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -236,6 +236,7 @@
 <li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="">FAQ / Troubleshooting</a><ul class="simple">
@@ -261,8 +262,8 @@
           
           
             
-  <li class="hidden-phone"><a href="development/plugins.html"
-         title="previous chapter">&laquo; Plugins</a></li>
+  <li class="hidden-phone"><a href="development/installer.html"
+         title="previous chapter">&laquo; Building the eclim installer</a></li>
   <li class="hidden-phone"><a href="features.html"
          title="next chapter">Features &raquo;</a></li>
           
@@ -321,7 +322,7 @@
 <div class="section" id="how-do-i-tell-eclim-which-eclipse-workspace-to-use">
 <span id="eclim-workspace"></span><h3>How do I tell eclim which eclipse workspace to use?<a class="headerlink" href="#how-do-i-tell-eclim-which-eclipse-workspace-to-use" title="Permalink to this headline">¶</a></h3>
 <p>To configure the workspace you can start eclimd like so:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ eclimd -Dosgi.instance.area.default=@user.home/another_workspace
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclimd -Dosgi.instance.area.default=@user.home/another_workspace
 </pre></div>
 </div>
 <p>Note the system property <code>osgi.instance.area.default</code>, which is used to
@@ -330,7 +331,7 @@ specify the location of your workspace.  Also note the variable
 <p>If you are running a unix variant (linux, mac osx, bsd, etc.) then you
 can specify the above system property in the .eclimrc file in your home
 directory.</p>
-<div class="highlight-python"><div class="highlight"><pre>$ echo &quot;osgi.instance.area.default=@user.home/another_workspace&quot; &gt;&gt; ~/.eclimrc
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ echo &quot;osgi.instance.area.default=@user.home/another_workspace&quot; &gt;&gt; ~/.eclimrc
 </pre></div>
 </div>
 <p id="eclimd-options-windows">For Windows users there are a couple alternatives to the unsupported
@@ -380,13 +381,13 @@ right mouse button.</p>
 For example, xml validation may require validating the file against a dtd or
 xsd located remotely.  If you are behind a proxy then you may need to provide
 eclim with the necessary proxy settings.</p>
-<div class="highlight-python"><div class="highlight"><pre>$ eclimd -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclimd -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080
 </pre></div>
 </div>
 <p>If you are running a unix variant (linux, mac osx, bsd, etc.) then you
 can specify the above system property in the .eclimrc file in your home
 directory.</p>
-<div class="highlight-python"><div class="highlight"><pre>$ echo -e &quot;http.proxyHost=my.proxy\nhttp.proxyPort=8080&quot; &gt;&gt; ~/.eclimrc
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ echo -e &quot;http.proxyHost=my.proxy\nhttp.proxyPort=8080&quot; &gt;&gt; ~/.eclimrc
 </pre></div>
 </div>
 <p>If your proxy requires authentication, you'll need to supply the
@@ -402,18 +403,14 @@ options:</p>
 <ol class="arabic">
 <li><p class="first">pass the necessary jvm args to eclimd. For example, to increase the heap
 size:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ eclimd -Xmx256M
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclimd -Xmx256M
 </pre></div>
 </div>
 </li>
 <li><p class="first">if you are using a unix variant, then you can add the necessary vm args to
 a .eclimrc file in your home directory.</p>
-<div class="highlight-python"><div class="highlight"><pre># increase heap size
--Xmx256M
-
-# increase perm gen size
--XX:PermSize=64m
--XX:MaxPermSize=128m
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># increase heap size</span>
+<span class="o">-</span><span class="n">Xmx256M</span>
 </pre></div>
 </div>
 <p>On Windows systems you can use the same steps
@@ -441,7 +438,7 @@ according to your setup:</p>
 <ol class="arabic">
 <li><p class="first">Headless eclimd users on any unix variant (Linux, OSX, etc) can simply add
 the property your .eclimrc file in your home directory:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># set the default file encoding</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># set the default file encoding</span>
 <span class="nb">file</span><span class="o">.</span><span class="n">encoding</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
 </pre></div>
 </div>
@@ -455,7 +452,7 @@ location.</p>
 <code>-Dfile.encoding=utf-8</code>) to your eclipse.ini file found in your eclipse
 install's root directory. Be sure to add the property on a new line after
 the <code>-vmargs</code> line:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="o">-</span><span class="n">vmargs</span>
 <span class="o">...</span>
 <span class="o">-</span><span class="n">Dfile</span><span class="o">.</span><span class="n">encoding</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
@@ -476,7 +473,7 @@ executing an autocmd from vim, like validating a file on write, are no longer
 echoed as errors to the user. Instead these errors are logged and only
 displayed if your eclim log level is set to a relevant level.  You can set the
 log level at any time by running:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">let</span> <span class="k">g</span>:EclimLogLevel <span class="p">=</span> <span class="s1">&#39;trace&#39;</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">let</span> <span class="k">g</span>:EclimLogLevel <span class="p">=</span> <span class="s1">&#39;trace&#39;</span>
 </pre></div>
 </div>
 <p>in vim, which in this case sets the logging to verbose (the default log level
@@ -507,7 +504,7 @@ see the <a class="reference internal" href="#ts-ftplugin"><span>file type sectio
 <li><p class="first">Next step is to make sure that the current file is in an eclipse project by
 running the following command in the vim windows containing the file you are
 working on.</p>
-<div class="highlight-python"><div class="highlight"><pre>:ProjectInfo
+<div class="highlight-python"><div class="highlight"><pre><span></span>:ProjectInfo
 </pre></div>
 </div>
 <p>If that returns an error that it is unable to determine the project, then see
@@ -516,7 +513,7 @@ the <a class="reference internal" href="#ts-workspace"><span>workspace section a
 </li>
 <li><p class="first">If the correct project info is found, then try running the completion again,
 if it still doesn't return any results run the command:</p>
-<div class="highlight-python"><div class="highlight"><pre>:messages
+<div class="highlight-python"><div class="highlight"><pre><span></span>:messages
 </pre></div>
 </div>
 <p>This will print out any messages that you might have missed.  If you see an
@@ -529,12 +526,12 @@ on <a class="reference internal" href="#ts-exception"><span>troubleshooting exce
 <span id="ts-ftplugin"></span><h3>I'm editing a [java, python, php, etc] file and none of the file type commands exist.<a class="headerlink" href="#i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist" title="Permalink to this headline">¶</a></h3>
 <p>This usually indicates that you don't have file type plugins enabled in vim.
 To check you can run:</p>
-<div class="highlight-python"><div class="highlight"><pre>:EclimValidate
+<div class="highlight-python"><div class="highlight"><pre><span></span>:EclimValidate
 </pre></div>
 </div>
 <p>If it complains about filetype plugin support not being found, then follow its
 directions on adding the following to your vimrc:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">filetype</span> plugin indent <span class="k">on</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">filetype</span> plugin indent <span class="k">on</span>
 </pre></div>
 </div>
 </div>
@@ -553,7 +550,7 @@ like a NullPointerException or some other exception which doesn't include a
 helpful message, then you may have encountered a bug.</p>
 <p>Once you've encountered this type of issue, the first step it to get more
 details which you can do by enabling eclim debugging in vim:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">let</span> <span class="k">g</span>:EclimLogLevel <span class="p">=</span> <span class="s1">&#39;trace&#39;</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">let</span> <span class="k">g</span>:EclimLogLevel <span class="p">=</span> <span class="s1">&#39;trace&#39;</span>
 </pre></div>
 </div>
 <p>Then you can perform the same action that triggered the error again. This time
@@ -561,7 +558,7 @@ you should receive the full stack trace of the error.</p>
 <p>If the error occurs while manually running a command (<code>:JavaSearch</code>, etc),
 then you can instead prepend <code>verbose</code> to the command to view the full stack
 trace:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">verbose</span> JavaSearch ...
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">verbose</span> JavaSearch ...
 </pre></div>
 </div>
 <p>Once you've obtained the stack trace, the next step it to send it to the
@@ -599,8 +596,8 @@ viPlugin site.</li>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

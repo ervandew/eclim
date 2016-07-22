@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -122,6 +122,13 @@ What's New?
    :title: Eclim: What's New
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
+
+Jul 21, 2016
+-------------
+
+A new version of eclim is now available with support for Eclipse 4.6 (Neon).
+
+- :ref:`Eclim 2.6.0 <2.6.0>`
 
 Jul 25, 2015
 -------------

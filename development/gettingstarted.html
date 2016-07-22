@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -299,11 +300,11 @@
 <li class="dropdown"><a class="subnav-toggle reference internal" href="#checking-out-the-code-and-building-it">Checking out the code and building it.<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
 <li><a class="reference internal" href="#check-out-the-code">1. Check out the code:</a></li>
 <li><a class="reference internal" href="#build-eclim">2. Build eclim:</a></li>
+<li><a class="reference internal" href="#add-eclim-as-a-project">3. Add eclim as a project:</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#coding-style">Coding Style</a></li>
 <li><a class="reference internal" href="#developing-submitting-patches">Developing / Submitting Patches</a></li>
-<li><a class="reference internal" href="#building-the-eclim-installer">Building the eclim installer</a></li>
 <li><a class="reference internal" href="#what-s-next">What's Next</a></li>
 </ul>
 </div>
@@ -314,13 +315,13 @@ fixing bugs or adding new functionality.</p>
 <h2>Checking out the code and building it.<a class="headerlink" href="#checking-out-the-code-and-building-it" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="check-out-the-code">
 <h3>1. Check out the code:<a class="headerlink" href="#check-out-the-code" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre>$ git clone git://github.com/ervandew/eclim.git
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ git clone git://github.com/ervandew/eclim.git
 </pre></div>
 </div>
 </div>
 <div class="section" id="build-eclim">
 <h3>2. Build eclim:<a class="headerlink" href="#build-eclim" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre>$ cd eclim
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd eclim
 $ ant -Declipse.home=/your/eclipse/home/dir
 </pre></div>
 </div>
@@ -332,25 +333,25 @@ writable as root, you can supply the <code>eclipse.local</code> property to tell
 where your eclipse user local directory is located and eclimd will be
 installed there (make sure to replace <code>&lt;version&gt;</code> portion of the path below
 accordingly):</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ant \
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant \
     -Declipse.home=/opt/eclipse \
     -Declipse.local=$HOME/.eclipse/org.eclipse.platform_&lt;version&gt;
 </pre></div>
 </div>
 <p>If you do not yet have a <code>.eclipse</code> directory in your home directory, you
 can run either of the following commands to create it:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ant -Declipse.home=/opt/eclipse eclipse.init
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant -Declipse.home=/opt/eclipse eclipse.init
 </pre></div>
 </div>
 <p>or</p>
-<div class="last highlight-python"><div class="highlight"><pre>$ /path/to/eclipse/eclipse -initialize
+<div class="last highlight-python"><div class="highlight"><pre><span></span>$ /path/to/eclipse/eclipse -initialize
 </pre></div>
 </div>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your eclipse home path contains a space, be sure to quote it:</p>
-<div class="last highlight-python"><div class="highlight"><pre>&gt; ant &quot;-Declipse.home=C:/Program Files/eclipse&quot;
+<div class="last highlight-python"><div class="highlight"><pre><span></span>&gt; ant &quot;-Declipse.home=C:/Program Files/eclipse&quot;
 </pre></div>
 </div>
 </div>
@@ -358,7 +359,7 @@ can run either of the following commands to create it:</p>
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your vimfiles directory is not located at the default location for your
 OS, then you can specify the location using the &quot;vim.files&quot; property:</p>
-<div class="last highlight-python"><div class="highlight"><pre>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
+<div class="last highlight-python"><div class="highlight"><pre><span></span>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
 </pre></div>
 </div>
 </div>
@@ -366,7 +367,7 @@ OS, then you can specify the location using the &quot;vim.files&quot; property:<
 find what eclipse plugins are available. It will then use that list to determine
 which eclim features/plugins should be built and will output a list like the one
 below showing what will be built vs what will be skipped:</p>
-<div class="highlight-python"><div class="highlight"><pre>[echo] ${eclipse}: /opt/eclipse
+<div class="highlight-python"><div class="highlight"><pre><span></span>[echo] ${eclipse}: /opt/eclipse
 [echo] # Skipping org.eclim.adt, missing com.android.ide.eclipse.adt
 [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
 [echo] # Skipping org.eclim.dltkruby, missing org.eclipse.dltk.ruby
@@ -385,7 +386,7 @@ eclipse feature that would be required to build those plugins.</p>
 properties, on the command line every time you build eclim, you can create a
 <code>user.properties</code> file at the eclim source root and put all your properties
 in there:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ vim user.properties
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ vim user.properties
 eclipse.home=/opt/eclipse
 eclipse.local=${user.home}/.eclipse/org.eclipse.platform_&lt;version&gt;
 vim.files=${user.home}/.vim/bundle/eclim
@@ -396,7 +397,7 @@ vim.files=${user.home}/.vim/bundle/eclim
 <p>The eclim vim help files, used by the <a class="reference internal" href="../vim/core/eclim.html#eclimhelp"><span>:EclimHelp</span></a> command,
 are not built by default. To build these you first need to install <a class="reference external" href="http://sphinx-doc.org">sphinx</a>,
 then run the following command:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ant vimdocs
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant vimdocs
 </pre></div>
 </div>
 <p>This target also supports the <code>vim.files</code> property if you want the docs
@@ -413,17 +414,25 @@ similar.</p>
 </div>
 </div>
 </div>
+<div class="section" id="add-eclim-as-a-project">
+<h3>3. Add eclim as a project:<a class="headerlink" href="#add-eclim-as-a-project" title="Permalink to this headline">¶</a></h3>
+<p>Once you built eclim, you can then <a class="reference internal" href="../eclimd.html#eclimd-start"><span>start the daemon</span></a> and
+add eclim as a project:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>:ProjectImport /path/to/git/checkout/of/eclim
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="coding-style">
 <span id="id1"></span><h2>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this headline">¶</a></h2>
 <p>When contributing code please try to adhere to the coding style of similar code
 so that eclim's source can retain consistency throughout. For java code, eclim
 includes a checkstyle configuration which can be run against the whole project:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ant checkstyle
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant checkstyle
 </pre></div>
 </div>
 <p>or against the current java file from within vim:</p>
-<div class="highlight-python"><div class="highlight"><pre>:Checkstyle
+<div class="highlight-python"><div class="highlight"><pre><span></span>:Checkstyle
 </pre></div>
 </div>
 </div>
@@ -433,61 +442,11 @@ includes a checkstyle configuration which can be run against the whole project:<
 fork. Github provides a nice <a class="reference external" href="http://help.github.com/forking/">guide to forking</a> which should get you started.</p>
 <p>Although using a github fork is preferred, you can of course still submit
 patches via email using git's format-patch command:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ git format-patch -M origin/master
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ git format-patch -M origin/master
 </pre></div>
 </div>
 <p>Running the above command will generate a series of patch files which can be
 submitted to the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim development group</a>.</p>
-</div>
-<div class="section" id="building-the-eclim-installer">
-<h2>Building the eclim installer<a class="headerlink" href="#building-the-eclim-installer" title="Permalink to this headline">¶</a></h2>
-<p>It should be rare that someone should need to build the eclim installer, but
-should the need arise here are the instructions for doing so.</p>
-<p>To build the installer you first need a couple external tools installed:</p>
-<ul>
-<li><p class="first"><a class="reference external" href="http://sphinx-doc.org">sphinx</a>: Sphinx is used to build the eclim documentation which is included in
-the installer.</p>
-<p>Eclim also uses a custom sphinx theme which is included in eclim as a git
-submodule. So before you can build the installer you will need to initialize
-the submodule:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ git submodule init
-$ git submodule update
-</pre></div>
-</div>
-</li>
-<li><p class="first"><a class="reference external" href="http://www.graphviz.org/">graphviz</a>:  The docs include a few uml diagrams which are generated using
-<a class="reference external" href="http://plantuml.sourceforge.net/">plantuml</a> (included in the eclim source tree) which in turn requires
-<a class="reference external" href="http://www.graphviz.org/">graphviz</a>.</p>
-</li>
-<li><p class="first"><a class="reference external" href="http://github.com/ervandew/formic">formic</a>: The eclim installer has been developed using the formic framework,
-and requires it to build the installer distributables.  Formic doesn't
-currently have an official release, so you'll need to check out the source
-code:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ git clone git://github.com/ervandew/formic.git
-</pre></div>
-</div>
-<p>After checking out the code, you'll need to build the formic distribution:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ cd formic
-$ ant dist
-</pre></div>
-</div>
-<p>Then extract the formic tar to the location of your choice</p>
-<div class="highlight-python"><div class="highlight"><pre>$ tar -zxvf build/dist/formic-0.2.0.tar.gz -C /location/of/your/choice
-</pre></div>
-</div>
-</li>
-</ul>
-<p>Once you have installed the above dependencies, you can then build the eclim
-installer with the following command.</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ant -Dformic.home=/your/formic/install/dir dist
-</pre></div>
-</div>
-<p>In lieu of supplying the formic home on the command line, you can instead put
-it in a <code>user.properties</code> file at the eclim source root:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ vim user.properties
-formic.home=/your/formic/install/dir
-</pre></div>
-</div>
 </div>
 <div class="section" id="what-s-next">
 <h2>What's Next<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
@@ -514,8 +473,8 @@ the detailed docs on how new features are added.</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -313,7 +314,7 @@
 issuing the command <strong>:JavaHierarchy</strong>.  This will open a temporary buffer with
 an inversed tree view of the type hierarchy with the current class / interface
 at the root.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">XmlCodeCompleteCommand</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">XmlCodeCompleteCommand</span>
   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">WstCodeCompleteCommand</span>
     <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AbstractCodeCompleteCommand</span>
       <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AbstractCommand</span>
@@ -347,7 +348,7 @@ entry in the hierarchy buffer.</li>
 <p>When viewing a java source file you can view the call hierarchy of a method by
 issuing the command <strong>:JavaCallHierarchy</strong>.  This will open a temporary buffer
 with an inversed tree view of the hierarchy of callers of the requested method.</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="n">foo</span><span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">:</span> <span class="n">Object</span> <span class="o">-</span> <span class="n">org</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">SomeClass</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">foo</span><span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">:</span> <span class="n">Object</span> <span class="o">-</span> <span class="n">org</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">SomeClass</span>
    <span class="nf">bar</span><span class="o">()</span> <span class="o">:</span> <span class="kt">void</span> <span class="o">-</span> <span class="n">org</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">AnotherClass</span>
      <span class="nf">main</span><span class="o">()</span> <span class="o">:</span> <span class="kt">void</span> <span class="o">-</span> <span class="n">org</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">MainClass</span>
    <span class="nf">baz</span><span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="o">:</span> <span class="kt">int</span> <span class="o">-</span> <span class="n">org</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">AnotherClass</span>
@@ -365,7 +366,13 @@ cursor using one of the following key bindings:</p>
 </ul>
 <p><strong>:JavaCallHierarchy</strong> can also be used to view the callees for a method by
 invoking the command with a <code>!</code>:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaCallHierarchy<span class="p">!</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaCallHierarchy<span class="p">!</span>
+</pre></div>
+</div>
+<p>By default the call hierarchy (caller and callee) will search across your entire
+workspace. If you want to limit the search to just the current project you can
+use the scope (<code>-s</code>) option:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaCallHierarchy <span class="p">-</span>s project
 </pre></div>
 </div>
 <div class="section" id="id1">
@@ -395,8 +402,8 @@ in the hierarchy buffer.</li>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

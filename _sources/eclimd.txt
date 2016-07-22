@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ The most mature usage scenario that eclim provides, is the running of a
 headless eclipse server and communicating with that server inside of vim.
 Starting and stopping of the headless eclipse instance is detailed below.
 
+.. _eclimd-start:
+
 **Starting eclimd**
 
 **Linux / Mac / BSD (and other unix based systems)**:
@@ -47,6 +49,8 @@ the eclimd.bat file found in your eclipse root directory:
   Even though an eclipse gui is not started in eclim's headless mode, eclipse
   still requires a running X server to function.  To run eclimd on a truely
   headless server, please see the :ref:`headless guide <install-headless>`.
+
+.. _eclimd-stop:
 
 **Stopping eclimd**
 
@@ -310,10 +314,6 @@ Ex.
 
   # increase heap size
   -Xmx256M
-
-  # increase perm gen size
-  -XX:PermSize=64m
-  -XX:MaxPermSize=128m
 
 The eclim client will also utilize this file, but only to determine the
 nailgun server port should you choose to change the default.

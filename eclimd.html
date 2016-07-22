@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -311,7 +312,7 @@
 <p>The most mature usage scenario that eclim provides, is the running of a
 headless eclipse server and communicating with that server inside of vim.
 Starting and stopping of the headless eclipse instance is detailed below.</p>
-<p><strong>Starting eclimd</strong></p>
+<p id="eclimd-start"><strong>Starting eclimd</strong></p>
 <p><strong>Linux / Mac / BSD (and other unix based systems)</strong>:
 To start eclimd from linux, simply execute the eclimd script found in your
 eclipse root directory: $ECLIPSE_HOME/eclimd</p>
@@ -329,22 +330,22 @@ the eclimd.bat file found in your eclipse root directory:
 still requires a running X server to function.  To run eclimd on a truely
 headless server, please see the <a class="reference internal" href="install.html#install-headless"><span>headless guide</span></a>.</p>
 </div>
-<p><strong>Stopping eclimd</strong></p>
+<p id="eclimd-stop"><strong>Stopping eclimd</strong></p>
 <p>To cleanly shutdown eclim use any one of the following.</p>
 <ul>
 <li><p class="first">From Vim:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>ShutdownEclim
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ShutdownEclim
 </pre></div>
 </div>
 </li>
 <li><p class="first">From a console:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ $ECLIPSE_HOME</span>/eclim -command shutdown
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nv">$ECLIPSE_HOME</span>/eclim -command shutdown
 </pre></div>
 </div>
 </li>
 <li><p class="first">Lastly you can use Ctrl-C at the console if you are running eclimd in the
 foreground, or issue a kill to the eclimd java process.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">kill</span> *pid*
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">kill</span> *pid*
 </pre></div>
 </div>
 <p>You will need to kill the java process since killing the eclimd or eclipse
@@ -433,13 +434,13 @@ prior to using the eclim version.</p>
 cut off or possible rendering issues when scrolling through the file.  If you
 experience either of these issues, try adding the following to your vimrc
 file, which should hopefully resolve those problems:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span><span class="k">m</span> <span class="c">&quot; turn off menu bar</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span><span class="k">m</span> <span class="c">&quot; turn off menu bar</span>
 <span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span>T <span class="c">&quot; turn off toolbar</span>
 </pre></div>
 </div>
 <p>Additionally, some users have reported that gvim's left scrollbar may also
 need to be disabled:</p>
-<div class="last highlight-vim"><div class="highlight"><pre><span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span>L <span class="c">&quot; turn off left scrollbar</span>
+<div class="last highlight-vim"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span>L <span class="c">&quot; turn off left scrollbar</span>
 <span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span><span class="k">l</span>
 </pre></div>
 </div>
@@ -503,7 +504,7 @@ will be evaluated by gvim instead of eclipse.  To remedy this situation,
 eclim provides a means to map eclipse shortcuts inside of gvim.  To register
 a shortcut, simply add your mappings to your vimrc, gvimrc, or other standard
 gvim file like so:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="c">&quot; maps Ctrl-F6 to eclipse&#39;s Ctrl-F6 key binding (switch editors)</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="c">&quot; maps Ctrl-F6 to eclipse&#39;s Ctrl-F6 key binding (switch editors)</span>
 nmap <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="k">c</span><span class="p">-</span>f6<span class="p">&gt;</span> :<span class="k">call</span> eclim#vimplugin#FeedKeys<span class="p">(</span><span class="s1">&#39;Ctrl+F6&#39;</span><span class="p">)&lt;</span><span class="k">cr</span><span class="p">&gt;</span>
 
 <span class="c">&quot; maps Ctrl-F7 to eclipse&#39;s Ctrl-F7 key binding (switch views)</span>
@@ -533,7 +534,7 @@ properties or vm args which you would like passed to eclimd at startup.  The
 format of this file is the same as the standard java properties file format
 with the exception of any vm args which you would like to include.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre># Bind eclimd to all interfaces
+<div class="highlight-cfg"><div class="highlight"><pre><span></span># Bind eclimd to all interfaces
 nailgun.server.host=0.0.0.0
 
 # Specifies the port that nailgun / eclimd listens on for client requests.
@@ -545,10 +546,6 @@ osgi.instance.area.default=@user.home/myworkspace
 
 # increase heap size
 -Xmx256M
-
-# increase perm gen size
--XX:PermSize=64m
--XX:MaxPermSize=128m
 </pre></div>
 </div>
 <p>The eclim client will also utilize this file, but only to determine the
@@ -560,7 +557,7 @@ your .eclimrc file.</p>
 </div>
 <p>Both the eclim and eclimd scripts also support a -f argument allowing you to
 specify an alternate location for your .eclimrc:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ eclimd -f ~/.my_eclimrc
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclimd -f ~/.my_eclimrc
 $ eclim -f ~/.my_eclimrc -command ping
 </pre></div>
 </div>
@@ -585,20 +582,20 @@ cannot be determined for you.</p>
 <ol class="arabic">
 <li><p class="first">All Users: Supply the nailgun port and eclipse workspace path when starting
 eclimd:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ eclimd -Dosgi.instance.area.default=@user.home/workspace1 -Dnailgun.server.port=9091
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclimd -Dosgi.instance.area.default=@user.home/workspace1 -Dnailgun.server.port=9091
 $ eclimd -Dosgi.instance.area.default=@user.home/workspace2 -Dnailgun.server.port=9092
 </pre></div>
 </div>
 <p>If you are using the eclimd view in the eclipse gui, then you can start the
 eclipse gui with the desired nailgun server port (note that you must place
 the -vmargs option before the list of jvm arguments):</p>
-<div class="highlight-python"><div class="highlight"><pre>$ eclipse -vmargs -Dnailgun.server.port=9092
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclipse -vmargs -Dnailgun.server.port=9092
 </pre></div>
 </div>
 </li>
 <li><p class="first">Linux, OSX, BSD Users: Specify the port and workspace in eclimrc files and
 start eclimd with the -f or --file argument:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ vim ~/.eclimrc1
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ vim ~/.eclimrc1
 osgi.instance.area.default=@user.home/workspace1
 nailgun.server.port=9091
 
@@ -648,11 +645,11 @@ you can drop in jar files which will be made available to eclim's nailgun
 server.</p>
 <p>The ext dir that eclim reads from is located in your vim files directory:</p>
 <p>Linux / BSD / OSX:</p>
-<div class="highlight-python"><div class="highlight"><pre>~/.eclim/resources/ext
+<div class="highlight-python"><div class="highlight"><pre><span></span>~/.eclim/resources/ext
 </pre></div>
 </div>
 <p>Windows:</p>
-<div class="highlight-python"><div class="highlight"><pre>$HOME/.eclim/resources/ext
+<div class="highlight-python"><div class="highlight"><pre><span></span>$HOME/.eclim/resources/ext
 </pre></div>
 </div>
 </div>
@@ -673,8 +670,8 @@ server.</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

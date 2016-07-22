@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -308,7 +309,7 @@
 <p>The first refactoring that eclim supports is <strong>:JavaRename</strong>, which can be used
 to rename various java elements.</p>
 <p>Example:</p>
-<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="nn">org.foo.bar</span><span class="o">;</span>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.foo.bar</span><span class="o">;</span>
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">bar</span><span class="o">(){</span>
@@ -318,11 +319,11 @@ to rename various java elements.</p>
 </div>
 <p>To rename the class from 'Foo' to 'Bar' you simply position the cursor over the
 class name 'Foo' and execute:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaRename Bar
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaRename Bar
 </pre></div>
 </div>
 <p>The result of which will the following prompt:</p>
-<div class="highlight-python"><div class="highlight"><pre>Rename &quot;Foo&quot; to &quot;Bar&quot;
+<div class="highlight-python"><div class="highlight"><pre><span></span>Rename &quot;Foo&quot; to &quot;Bar&quot;
 ([e]xecute / [p]review / [c]ancel):
 </pre></div>
 </div>
@@ -338,14 +339,14 @@ the bottom to execute the refactoring.</p>
 <p>The contents of the preview window will vary depending on what you are
 renaming.</p>
 <p>If we are renaming 'Foo' to 'Bar' the contents would be like so:</p>
-<div class="highlight-python"><div class="highlight"><pre> other: Rename compilation unit &#39;Foo.java&#39; to &#39;Bar.java&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span> other: Rename compilation unit &#39;Foo.java&#39; to &#39;Bar.java&#39;
 
 |Execute Refactoring|
 </pre></div>
 </div>
 <p>If we are renaming the method 'bar' to 'foo', the contents would look like
 so:</p>
-<div class="highlight-python"><div class="highlight"><pre>|diff|: /home/someuser/workspace/test_java/src/org/foo/bar/Foo.java
+<div class="highlight-python"><div class="highlight"><pre><span></span>|diff|: /home/someuser/workspace/test_java/src/org/foo/bar/Foo.java
 
 |Execute Refactoring|
 </pre></div>
@@ -394,7 +395,7 @@ vim sessions that might be affected by the renaming of a package.</p>
 another using the <strong>:JavaMove</strong> command.</p>
 <p>In this example the current file would be moved from its current package to the
 package <code>org.foo</code>:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaMove org.foo
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaMove org.foo
 </pre></div>
 </div>
 <p>Like the package renaming described in the previous section, the argument to
@@ -438,8 +439,8 @@ by the refactoring.  Possible values include 'vertical' or 'horizontal'.</li>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

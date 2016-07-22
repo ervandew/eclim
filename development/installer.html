@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Development Docs &mdash; eclim (eclipse + vim)</title>
+    <title>Building the eclim installer &mdash; eclim (eclipse + vim)</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -33,8 +33,9 @@
     <script type="text/javascript" src="../_static/bootstrap.scrollspy.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="eclim (eclipse + vim)" href="../index.html" />
-    <link rel="next" title="Developers Guide" href="gettingstarted.html" />
-    <link rel="prev" title="Xml / Dtd / Xsd" href="../vim/xml/index.html" />
+    <link rel="up" title="Development Docs" href="index.html" />
+    <link rel="next" title="FAQ / Troubleshooting" href="../faq.html" />
+    <link rel="prev" title="Plugins" href="plugins.html" />
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -225,7 +226,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current dropdown-submenu active"><a class="current reference internal" href="">Development Docs</a><ul class="dropdown-menu">
+<li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="index.html">Development Docs</a><ul class="current dropdown-menu">
 <li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Developers Guide</a><ul class="simple">
 </ul>
 </li>
@@ -236,7 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="installer.html">Building the eclim installer</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -262,10 +263,10 @@
           
           
             
-  <li class="hidden-phone"><a href="../vim/xml/index.html"
-         title="previous chapter">&laquo; Xml / Dtd / Xsd</a></li>
-  <li class="hidden-phone"><a href="gettingstarted.html"
-         title="next chapter">Developers Guide &raquo;</a></li>
+  <li class="hidden-phone"><a href="plugins.html"
+         title="previous chapter">&laquo; Plugins</a></li>
+  <li class="hidden-phone"><a href="../faq.html"
+         title="next chapter">FAQ / Troubleshooting &raquo;</a></li>
           
           
           
@@ -291,24 +292,56 @@
     <div class="content ">
       
       
-  <div class="section" id="development-docs">
-<h1>Development Docs<a class="headerlink" href="#development-docs" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
+  <div class="section" id="building-the-eclim-installer">
+<h1>Building the eclim installer<a class="headerlink" href="#building-the-eclim-installer" title="Permalink to this headline">¶</a></h1>
+<p>Unless you are working on improvements to the eclim installer, you shouldn't
+ever need to build it, but should the need arise here are the instructions for
+doing so.</p>
+<p>To build the installer you first need a couple external tools installed:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="http://sphinx-doc.org">sphinx</a>: Sphinx is used to build the eclim documentation which is included in
+the installer.</p>
+<p>Eclim also uses a custom sphinx theme which is included in eclim as a git
+submodule. So before you can build the installer you will need to initialize
+the submodule:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ git submodule init
+$ git submodule update
+</pre></div>
 </div>
-<p><a class="reference internal" href="gettingstarted.html"><em>Developers Guide</em></a></p>
-<dl class="docutils">
-<dt><a class="reference internal" href="architecture.html"><em>Architecture</em></a></dt>
-<dd>Explains the underlying architecture that eclim utilizes including an
-overview of the call sequence from vim to eclipse.</dd>
-<dt><a class="reference internal" href="commands.html"><em>Commands</em></a></dt>
-<dd>Details the process of adding a new command to vim which calls to
-a corresponding implementation in eclipse.</dd>
-<dt><a class="reference internal" href="plugins.html"><em>Plugins</em></a></dt>
-<dd>Details the process of adding a new plugin to eclim.</dd>
-<dt><a class="reference internal" href="installer.html"><em>Building the eclim installer</em></a></dt>
-<dd>Short guide on how to build the eclim installer.</dd>
-</dl>
-<p><strong>... More To Come</strong></p>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.graphviz.org/">graphviz</a>:  The docs include a few uml diagrams which are generated using
+<a class="reference external" href="http://plantuml.sourceforge.net/">plantuml</a> (included in the eclim source tree) which in turn requires
+<a class="reference external" href="http://www.graphviz.org/">graphviz</a>.</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://github.com/ervandew/formic">formic</a>: The eclim installer has been developed using the formic framework,
+and requires it to build the installer distributables.  Formic doesn't
+currently have an official release, so you'll need to check out the source
+code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ git clone git://github.com/ervandew/formic.git
+</pre></div>
+</div>
+<p>After checking out the code, you'll need to build the formic distribution:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd formic
+$ ant dist
+</pre></div>
+</div>
+<p>Then extract the formic tar to the location of your choice</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ tar -zxvf build/dist/formic-0.2.0.tar.gz -C /location/of/your/choice
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Once you have installed the above dependencies, you can then build the eclim
+installer with the following command.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant -Dformic.home=/your/formic/install/dir dist
+</pre></div>
+</div>
+<p>In lieu of supplying the formic home on the command line, you can instead put
+it in a <code>user.properties</code> file at the eclim source root:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ vim user.properties
+formic.home=/your/formic/install/dir
+</pre></div>
+</div>
 </div>
 
 
@@ -320,7 +353,7 @@ a corresponding implementation in eclipse.</dd>
   <div class="container">
     <p class="pull-right">
       
-  <a href="../_sources/development/index.txt"
+  <a href="../_sources/development/installer.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>

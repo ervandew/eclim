@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,6 +15,16 @@
 
 History of Changes
 ==================
+
+.. _2.6.0:
+
+2.6.0 (Jul. 21, 2016)
+---------------------
+
+Eclim:
+  - Eclim now supports, and requires, Eclipse 4.6 (Neon)
+
+| :gitlog:`Git Log (2.6.0) <2.5.0...2.6.0>`
 
 .. _2.5.0:
 

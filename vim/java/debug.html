@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.5.0',
+        VERSION:     'v2.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -51,7 +51,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.5.0</b></li>
+          <li><b class="navbar-text">v2.6.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -237,6 +237,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
@@ -315,15 +316,15 @@
 <ol class="arabic simple">
 <li>Start your java program with the debugging hooks enabled:</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre>$ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044 \
-    -classpath ./bin org.eclim.test.debug.Main
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044 \
+    -classpath ./bin org.test.debug.Main
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
 <li>Start vim with the <code>--servername</code> argument (eclimd currently sends debugger
 updates to vim using vim's remote invocation support):</li>
 </ol>
-<div class="highlight-python"><div class="highlight"><pre>$ vim --servername debug ...
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ vim --servername debug ...
 </pre></div>
 </div>
 <div class="alert alert-info">
@@ -335,7 +336,7 @@ instance running with that same name.</p>
 can then start your debug session using the <strong>:JavaDebugStart</strong> command.
 This command requires the hostname/IP and the port number on which the debug
 server is running.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaDebugStart localhost <span class="m">1044</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaDebugStart localhost <span class="m">1044</span>
 </pre></div>
 </div>
 </div>
@@ -347,7 +348,7 @@ exists, one will be created. If a breakpoint does exist, then
 <strong>:JavaDebugBreakpointToggle</strong> will toggle whether that breakpoint is enabled or
 not. If you'd like to delete the breakpoint on the current line instead of
 disabling it, then run the toggle command with the <code>!</code> option.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="c">&quot; create a breakpoint or toggle whether the current breakpoint is</span>
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="c">&quot; create a breakpoint or toggle whether the current breakpoint is</span>
 <span class="c">&quot; enabled/disabled</span>
 <span class="p">:</span>JavaDebugBreakpointToggle
 
@@ -363,7 +364,7 @@ disabling it, then run the toggle command with the <code>!</code> option.</p>
 <strong>:JavaDebugBreakpointsList</strong> command, which by default will list all
 breakpoints for the current file, or with the <code>!</code> suffix, it will list all
 breakpoints for the current project and all project dependencies.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaDebugBreakpointsList
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaDebugBreakpointsList
 <span class="p">:</span>JavaDebugBreakpointsList<span class="p">!</span>
 </pre></div>
 </div>
@@ -385,7 +386,7 @@ file or project when used on the class name or project name.</li>
 also remove all breakpoints in the current file using the
 <strong>:JavaDebugBreakpointRemove</strong> command, or with the <code>!</code> suffix, you can remove
 all breakpoints in the current project.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaDebugBreakpointRemove
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaDebugBreakpointRemove
 <span class="p">:</span>JavaDebugBreakpointRemove<span class="p">!</span>
 </pre></div>
 </div>
@@ -399,7 +400,7 @@ an action argument.</p>
 <li><strong>into</strong>: Step into a function</li>
 <li><strong>return</strong>: Return from current function</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>:JavaDebugStep over
+<div class="highlight-python"><div class="highlight"><pre><span></span>:JavaDebugStep over
 :JavaDebugStep into
 :JavaDebugStep return
 </pre></div>
@@ -438,7 +439,7 @@ and dependencies.</li>
 </ul>
 <p>If for some reason, the status window is not updated, or you accidentally closed it,
 you can manually refresh it by running <strong>:JavaDebugStatus</strong> command.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaDebugStatus
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaDebugStatus
 </pre></div>
 </div>
 </div>
@@ -456,7 +457,7 @@ using the following commands:</p>
 <div class="section" id="stop">
 <h2>Stop<a class="headerlink" href="#stop" title="Permalink to this headline">¶</a></h2>
 <p>To stop a debug session, you can use the <strong>:JavaDebugStop</strong> command.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>JavaDebugStop
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaDebugStop
 </pre></div>
 </div>
 </div>
@@ -519,8 +520,8 @@ this problem, run step into command outside the debug status window.</li>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 25, 2015<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Jul 21, 2016<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
