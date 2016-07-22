@@ -66,16 +66,10 @@ release = version
 
 extlinks = {
   'eclimdist': (
-    'http://sourceforge.net/projects/eclim/files/eclim/%(tag)s/eclim_%(tag)s.%%s/download' % {
+    'https://github.com/ervandew/eclim/releases/download/%(tag)s/eclim_%(tag)s.%%s' % {
       'tag': 'eclim_release',
     },
     'eclim_eclim_release.'
-  ),
-  'eclimdist_indigo': (
-    'http://sourceforge.net/projects/eclim/files/eclim/%(tag)s/eclim_%(tag)s.%%s/download' % {
-      'tag': 'eclim_release_indigo',
-    },
-    'eclim_eclim_release_indigo.'
   ),
   'gitlog': ('https://github.com/ervandew/eclim/compare/%s', ''),
 }
