@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2016  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ if !exists(":Maven")
     \ :call eclim#java#tools#MakeWithJavaBuildTool('eclim_maven', '<bang>', '<args>')
 endif
 if !exists(":MavenRepo")
-  command -nargs=0 -buffer
+  command -nargs=0
     \ MavenRepo :call eclim#java#maven#SetClasspathVariable('Maven', 'MAVEN_REPO', '')
 endif
 if !exists(":Mvn")
@@ -52,7 +52,7 @@ if !exists(":Mvn")
     \ :call eclim#java#tools#MakeWithJavaBuildTool('eclim_mvn', '<bang>', '<args>')
 endif
 if !exists(":MvnRepo")
-  command -nargs=* -buffer
+  command -nargs=*
     \ MvnRepo :call eclim#java#maven#SetClasspathVariable('Mvn', 'M2_REPO', '<args>')
 endif
 " }}}
