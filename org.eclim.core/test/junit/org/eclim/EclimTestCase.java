@@ -34,13 +34,13 @@ import org.junit.After;
  */
 public class EclimTestCase
 {
-  private HashMap<String,String> modified = new HashMap<String,String>();
+  private HashMap<String, String> modified = new HashMap<String, String>();
 
   @After
   public void resetModified()
-    throws Exception
+      throws Exception
   {
-    for (Map.Entry<String,String> entry : modified.entrySet()){
+    for (Map.Entry<String, String> entry : modified.entrySet()) {
       String[] parts = StringUtils.split(entry.getKey(), '|');
       String project = parts[0];
       String file = parts[1];
@@ -57,13 +57,15 @@ public class EclimTestCase
    * supplied project. After the test runs, that file will be restored to it's
    * original contents.
    *
-   * @param project The name of the project the file resides in.
-   * @param file The project relative path of the file.
+   * @param project
+   *          The name of the project the file resides in.
+   * @param file
+   *          The project relative path of the file.
    */
   protected void modifies(String project, String file)
   {
     String key = project + '|' + file;
-    if (!modified.containsKey(key)){
+    if (!modified.containsKey(key)) {
       String contents = Eclim.fileToString(project, file);
       modified.put(key, contents);
     }

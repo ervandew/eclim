@@ -1113,7 +1113,10 @@ junit = { pluginName ->
   compile("${pluginName}/test/junit", "build/test/junit/classes/${pluginName}"){
     ant.compilerarg(value: '-Xlint:-options')
     ant.include(name: '**/*.java')
-    ant.classpath{ant.pathelement(path: '${build.classes}/org.eclim')}
+    ant.classpath{
+      ant.pathelement(path: '${build.classes}/org.eclim')
+      ant.pathelement(path: '${build.classes}/org.eclim.jdt')
+    }
   }
 
   ant.path(id: 'junit'){
@@ -1130,6 +1133,7 @@ junit = { pluginName ->
       ant.path(refid: 'junit')
       ant.pathelement(path: "build/test/junit/classes/${pluginName}")
       ant.pathelement(path: '${build.classes}/org.eclim')
+      ant.pathelement(path: '${build.classes}/org.eclim.jdt')
       ant.fileset(dir: 'org.eclim/lib', includes: '*.jar', excludes: 'ant-*.jar')
     }
     ant.formatter(type: 'xml')
@@ -1141,6 +1145,8 @@ junit = { pluginName ->
     ant.sysproperty(key: 'eclipse.home', value: '${eclipse}')
     ant.sysproperty(key: 'eclim.version', value: '${eclim.version}')
     ant.sysproperty(key: 'eclimd.port', value: '${nailgun.server.port}')
+    ant.sysproperty(key: 'http.server.port', value: '${http.server.port}')
+    ant.sysproperty(key: 'http.server.host', value: '${http.server.host}')
   }
 }
 

@@ -25,12 +25,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
  */
 public class Logger
 {
-  private static String workspace = ResourcesPlugin
-      .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
-  static{
-    // set on class load so that the logger can log to:
-    // ${eclimd.workspace}/eclimd.log
-    System.setProperty("eclimd.workspace", workspace);
+  static {
+    initWorkspace();
   }
 
   private org.slf4j.Logger logger;
@@ -38,6 +34,30 @@ public class Logger
   private Logger (org.slf4j.Logger logger)
   {
     this.logger = logger;
+  }
+
+  /**
+   * set on class load so that the logger can log to:
+   * ${eclimd.workspace}/eclimd.log
+   *
+   * If we unit test the code we run the logger not in an eclipse environment
+   * --> the eclimd.workspace system property is already set from the running
+   * test-eclimd instance. We catch the exception which will be thrown here
+   * (Since ResourcesPlugin is not in the classpath).
+   *
+   * We could also have checked if the eclimd.workspace property is set and only
+   * set it if it is not set, but this would be a change in behavior --> we
+   * decided to catch the exception.
+   */
+  private static void initWorkspace()
+  {
+    try {
+      String workspace = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
+          .toOSString().replace('\\', '/');
+      System.setProperty("eclimd.workspace", workspace);
+    } catch (NoClassDefFoundError t) {
+      t = null; // ignore: means we are not running within eclipse
+    }
   }
 
   /**

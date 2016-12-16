@@ -2,6 +2,9 @@
 osgi.instance.area.default=@user.home/workspace.unittest
 
 nailgun.server.port=9092
+http.server.enabled=true
+http.server.port=9997
+http.server.host=localhost
 
 # increase heap space
 -Xmx1g
