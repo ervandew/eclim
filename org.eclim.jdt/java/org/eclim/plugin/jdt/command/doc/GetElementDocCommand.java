@@ -65,7 +65,8 @@ import org.eclipse.jface.text.IRegion;
     "OPTIONAL o offset ARG," +
     "OPTIONAL l length ARG," +
     "OPTIONAL e encoding ARG," +
-    "OPTIONAL u url ARG"
+    "OPTIONAL u url ARG," +
+    "OPTIONAL h htmlFlag ARG"
 )
 public class GetElementDocCommand
   extends AbstractCommand
@@ -112,6 +113,10 @@ public class GetElementDocCommand
       return null;
     }
 
+    if(returnHTML(commandLine)){
+      return info.getHtml();
+    }
+
     ArrayList<HashMap<String,String>> links =
       new ArrayList<HashMap<String,String>>();
     Matcher matcher = LINKS.matcher(info.getHtml());
@@ -140,5 +145,11 @@ public class GetElementDocCommand
     response.put("text", result);
     response.put("links", links);
     return response;
+  }
+
+  private boolean returnHTML(CommandLine commandLine)
+      throws Exception
+  {
+    return Boolean.parseBoolean(commandLine.getValue(Options.HTML_OPTION));
   }
 }

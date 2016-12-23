@@ -65,6 +65,7 @@ public class Options
   public static final String HELP = "help";
   public static final String HALT_OPTION = "h";
   public static final String HOST_OPTION = "h";
+  public static final String HTML_OPTION = "h";
   public static final String INDENT_OPTION = "i";
   public static final String INDEXED_OPTION = "i";
   public static final String JARS_OPTION = "j";

@@ -16,16 +16,17 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 import java.util.Map;
 
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
-
+import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Test case for GetElementDocCommand.
@@ -167,5 +168,15 @@ public class GetElementDocCommandTest
     assertTrue(text.startsWith(
         "|Object[0]| |java[1]|.|util[2]|.|Map[3]|.put(|Object[4]| key, |Object[5]| value)\n\n" +
         "Associates the specified value with the specified key in this map"));
+  }
+
+  @Test
+  public void htmlFlag(){
+    String results = (String)
+      Eclim.execute(new String[]{
+        "java_element_doc", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE, "-o", "255", "-l", "11", "-e", "utf-8", "-h", "true"
+      });
+    Assert.assertTrue("HTML Format expected", results.startsWith("<html><head>"));
   }
 }
