@@ -16,6 +16,9 @@
  */
 package org.eclim.plugin.groovy.command.complete;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +28,7 @@ import org.eclim.plugin.groovy.Groovy;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import junit.framework.Assert;
 
 /**
  * Test case for CodeCompleteCommand.
@@ -35,7 +38,9 @@ import static org.junit.Assert.*;
 public class CodeCompleteCommandTest
 {
   private static final String TEST_FILE =
-    "src/org/eclim/test/complete/TestCompletion.groovy";
+      "src/org/eclim/test/complete/TestCompletion.groovy";
+  private static final String TEST_JAVA_DOC_FILE =
+      "src/org/eclim/test/complete/TestCompletionJavaDoc.groovy";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -57,5 +62,81 @@ public class CodeCompleteCommandTest
 
     result = results.get(1);
     assertEquals(result.get("completion"), "addAll(");
+  }
+  
+  @Test
+  public void javaDoc(){
+    assertTrue("Groovy project doesn't exist.",
+        Eclim.projectExists(Groovy.TEST_PROJECT));
+    int count = getJavaDocCount("true");
+    // We do not compare with the actual number to make
+    // the test more robust ==> if something in eclipse
+    // changes and some elements do not exist anymore /
+    // do not have a javaDoc element the test still
+    // succeeds.
+    int minimalCount = 50;
+    Assert.assertTrue("We received some JavaDoc links", count > minimalCount);
+  }
+  
+  @Test
+  public void noJavaDocFalse(){
+    assertTrue("Groovy project doesn't exist.",
+        Eclim.projectExists(Groovy.TEST_PROJECT));
+    int count = getJavaDocCount("false");
+    Assert.assertEquals("We should receive no JavaDoc links, since the java doc flag is set to false", 0, count);
+  }
+  
+  @Test
+  public void noJavaDocEmpty(){
+    assertTrue("Groovy project doesn't exist.",
+        Eclim.projectExists(Groovy.TEST_PROJECT));
+    int count = getJavaDocCount("");
+    Assert.assertEquals("We should receive no JavaDoc links, since the java doc flag is set to empty string", 0, count);
+  }
+  
+  @Test
+  public void noJavaDocDefault(){
+    assertTrue("Groovy project doesn't exist.",
+        Eclim.projectExists(Groovy.TEST_PROJECT));
+    int count = getJavaDocCountNoJavaDocFlag();
+    Assert.assertEquals("We should receive no JavaDoc links, since the java doc flag is not set", 0, count);
+  }
+  
+  @SuppressWarnings("unchecked")
+  private int getJavaDocCount(String javaDocArg){
+    assertTrue("Groovy project doesn't exist.",
+        Eclim.projectExists(Groovy.TEST_PROJECT));
+
+    List<Map<String, String>> results = (List<Map<String, String>>) Eclim
+        .execute(new String[] { "groovy_complete", "-p", Groovy.TEST_PROJECT, "-f",
+            TEST_JAVA_DOC_FILE, "-l", "compact", "-o", "99", "-e", "utf-8", "-j", javaDocArg });
+    
+
+    return countJavaDocOccurence(results);
+  }
+
+  @SuppressWarnings("unchecked")
+  private int getJavaDocCountNoJavaDocFlag(){
+    assertTrue("Groovy project doesn't exist.",
+        Eclim.projectExists(Groovy.TEST_PROJECT));
+
+    List<Map<String, String>> results = (List<Map<String, String>>) Eclim
+        .execute(new String[] { "groovy_complete", "-p", Groovy.TEST_PROJECT, "-f",
+            TEST_JAVA_DOC_FILE, "-l", "compact", "-o", "99", "-e", "utf-8",});
+    
+    return countJavaDocOccurence(results);
+  }
+  
+  
+  private int countJavaDocOccurence(List<Map<String, String>> results)
+  {
+    int count = 0;
+    for(Map<String, String> result : results){
+      String javaDoc = result.get("javaDocURI");
+      if(javaDoc != null && !javaDoc.equals("")){
+        count++;
+      }
+    }
+    return count;
   }
 }

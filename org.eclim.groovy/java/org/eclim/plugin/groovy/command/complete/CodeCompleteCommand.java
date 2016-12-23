@@ -29,7 +29,7 @@ import org.codehaus.jdt.groovy.model.GroovyCompilationUnit;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
-
+import org.eclim.command.Options;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclim.plugin.core.util.ProjectUtils;
@@ -53,6 +53,14 @@ import org.eclipse.ui.ide.IDE;
 
 /**
  * Command which provides code completion for groovy files.
+ *
+ * @param javaDoc
+ *    The {@code javaDoc} parameter specifies if a javaDoc URI should be returned
+ *    for each of the completion proposals.
+ *    If {@code javaDoc} = true for each completion a eclipse style java doc URI
+ *    will be returned which can be converted to java doc over the
+ *    {@code java_element_doc} command.
+ *    If {@code javaDoc} = false no javadoc URI will be returned
  */
 @Command(
   name = "groovy_complete",
@@ -61,7 +69,8 @@ import org.eclipse.ui.ide.IDE;
     "REQUIRED f file ARG," +
     "REQUIRED o offset ARG," +
     "REQUIRED e encoding ARG," +
-    "REQUIRED l layout ARG"
+    "REQUIRED l layout ARG," +
+    "OPTIONAL j javaDoc ARG"
 )
 public final class CodeCompleteCommand
   extends org.eclim.plugin.jdt.command.complete.CodeCompleteCommand
@@ -104,9 +113,12 @@ public final class CodeCompleteCommand
       proposals = Collections.emptyList();
     }
 
+    boolean javaDocEnabled = Boolean
+        .parseBoolean(commandLine.getValue(Options.JAVA_DOC_OPTION));
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for(ICompletionProposal proposal : proposals){
-      results.add(createCompletionResult((IJavaCompletionProposal)proposal));
+      results.add(createCompletionResult((IJavaCompletionProposal) proposal,
+          javaDocEnabled));
     }
     Collections.sort(results, COMPLETION_COMPARATOR);
 
