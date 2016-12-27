@@ -177,7 +177,7 @@ public class SearchCommand
         results = positions;
       } else {
         results.addAll(positions);
-      }  
+      }
     }
 
     return results == null ? Collections.emptyList() : results;
@@ -190,8 +190,8 @@ public class SearchCommand
    * @param project The current project.
    */
   private String[] getSortKeys(IProject project)
-    throws Exception {
-
+    throws Exception
+  {
     String[] sortSettings = getPreferences()
       .getArrayValue(project, "org.eclim.java.search.sort");
 
