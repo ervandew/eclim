@@ -66,7 +66,7 @@ public abstract class AbstractCodeCompleteCommand
     if(COMPACT.equals(layout) && results.size() > 0){
       results = compact(results);
     }
-    Collections.sort(results);
+
     return getResponse(results);
   }
 

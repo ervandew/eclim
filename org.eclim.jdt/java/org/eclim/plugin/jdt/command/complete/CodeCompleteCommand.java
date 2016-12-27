@@ -168,7 +168,6 @@ public class CodeCompleteCommand
       case CompletionProposal.FIELD_REF:
       case CompletionProposal.LOCAL_VARIABLE_REF:
         type = CodeCompleteResult.VARIABLE;
-        type = CodeCompleteResult.VARIABLE;
         break;
       case CompletionProposal.METHOD_REF:
         type = CodeCompleteResult.FUNCTION;
@@ -185,6 +184,9 @@ public class CodeCompleteCommand
     // of whether the user ever views it.
     /*return new CodeCompleteResult(
         kind, completion, menu, proposal.getAdditionalProposalInfo());*/
-    return new CodeCompleteResult(completion, menu, menu, type, offset);
+    CodeCompleteResult result = new CodeCompleteResult(completion, menu, menu, type, offset);
+    result.setRelevance(proposal.getRelevance());
+
+    return result;
   }
 }

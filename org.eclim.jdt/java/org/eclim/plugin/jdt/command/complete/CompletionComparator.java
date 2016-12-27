@@ -55,6 +55,10 @@ public class CompletionComparator
       return -1;
     }
 
+    if (o1.getRelevance() != o2.getRelevance()) {
+        return o2.getRelevance() - o1.getRelevance();
+    }
+
     return Collator.getInstance(Locale.US).compare(
         new String(o1.getCompletion()), new String(o2.getCompletion()));
   }
