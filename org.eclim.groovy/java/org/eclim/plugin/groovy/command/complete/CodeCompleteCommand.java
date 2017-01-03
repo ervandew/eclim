@@ -70,7 +70,7 @@ import org.eclipse.ui.ide.IDE;
     "REQUIRED o offset ARG," +
     "REQUIRED e encoding ARG," +
     "REQUIRED l layout ARG," +
-    "OPTIONAL j javaDoc ARG"
+    "OPTIONAL j javaDoc ARG NOARG"
 )
 public final class CodeCompleteCommand
   extends org.eclim.plugin.jdt.command.complete.CodeCompleteCommand
@@ -113,8 +113,7 @@ public final class CodeCompleteCommand
       proposals = Collections.emptyList();
     }
 
-    boolean javaDocEnabled = Boolean
-        .parseBoolean(commandLine.getValue(Options.JAVA_DOC_OPTION));
+    boolean javaDocEnabled = commandLine.hasOption(Options.JAVA_DOC_OPTION);
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for(ICompletionProposal proposal : proposals){
       results.add(createCompletionResult((IJavaCompletionProposal) proposal,
