@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.dependency;
+package org.eclim.plugin.jdt.command.classpath;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -38,13 +38,13 @@ import org.junit.Test;
  */
 public class SimpleClasspathFileManipulatorTest
 {
-  private static final String TEST_FILES_BASE_FOLDER = "org.eclim.jdt/test/junit/org/eclim/plugin/jdt/command/dependency/testfiles/";
+  private static final String TEST_FILES_BASE_FOLDER = "org.eclim.jdt/test/junit/org/eclim/plugin/jdt/command/classpath/testfiles/";
   private static List<String> cleanupList = new ArrayList<String>();
   private String dependencyLocation1 = "/example/folder/bla.jar";
   private String dependencyLocation2 = "/example/folder/bla2.jar";
   private String dependencyLocation3 = "/example/folder/bla3.jar";
   private String dependencyLocation4 = "/example/folder/bla4.jar";
-  ClasspathFileManipulator classpathFileManipulator = new SimpleClasspathFileManipulator();;
+  ClasspathFileManipulator classpathFileManipulator = new SimpleClasspathFileManipulator();
 
   @Test
   public void normalAddJarDependencyToClasspath()

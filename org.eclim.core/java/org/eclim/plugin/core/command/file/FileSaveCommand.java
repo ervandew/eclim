@@ -34,6 +34,7 @@ import org.eclim.logging.Logger;
 import org.eclim.plugin.core.command.AbstractCommand;
 import org.eclim.plugin.core.util.PathUtil;
 import org.eclim.plugin.core.util.PathUtilException;
+import org.eclim.util.IOUtils;
 
 @Command(
       name = "file_save",
@@ -124,18 +125,10 @@ public class FileSaveCommand extends AbstractCommand
     copyInputStreamToFile(fileContent, file);
   }
 
-  // copied from
-  // http://stackoverflow.com/questions/43157/easy-way-to-write-contents-of-a-java-inputstream-to-an-outputstream
   private void copyInputStreamToFile(InputStream in, File file)
       throws IOException
   {
     OutputStream out = new FileOutputStream(file);
-    byte[] buf = new byte[1024];
-    int len;
-    while ((len = in.read(buf)) > 0) {
-      out.write(buf, 0, len);
-    }
-    out.close();
-    in.close();
+    IOUtils.copy(in, out);
   }
 }

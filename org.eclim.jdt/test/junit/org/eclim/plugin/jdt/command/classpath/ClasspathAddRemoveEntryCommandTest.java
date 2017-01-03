@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.dependency;
+package org.eclim.plugin.jdt.command.classpath;
 
 import static org.junit.Assert.assertTrue;
 
@@ -38,7 +38,7 @@ import com.google.gson.JsonParser;
 import junit.framework.Assert;
 
 /**
- * This test we upload a dependency jar, manipulate the classpat file such that
+ * In this test we upload a dependency jar, manipulate the classpat file such that
  * eclipse knows we uploaded a jar and then remove the dependency jar again.
  *
  * Test idea: Upload and remove a GSON Library and check that - before the
@@ -51,7 +51,7 @@ import junit.framework.Assert;
  *
  * @author Lukas Roth
  */
-public class JarUploadRemoveCommandTest
+public class ClasspathAddRemoveEntryCommandTest
 {
   private static final String TEST_FILE = "src/org/eclim/test/exampleClass.java";
   private static final String TEST_FILE_CONTENT = "package org.eclim.test;\nclass A{\nvoid f(){\nGsonB}\n}";
@@ -160,7 +160,7 @@ public class JarUploadRemoveCommandTest
       throws IOException
   {
     Map<String, String> uploadJarParams = new HashMap<String, String>();
-    uploadJarParams.put("command", "add_dependency");
+    uploadJarParams.put("command", "java_classpath_add_entry");
     uploadJarParams.put("p", Jdt.TEST_PROJECT);
     uploadJarParams.put("f", PATH_TO_DEPENDENCY);
     eclimHTTPClient.post(uploadJarParams);

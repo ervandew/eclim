@@ -1115,7 +1115,7 @@ junit = { pluginName ->
     ant.include(name: '**/*.java')
     ant.classpath{
       ant.pathelement(path: '${build.classes}/org.eclim')
-      ant.pathelement(path: '${build.classes}/org.eclim.jdt')
+      ant.pathelement(path: '${build.classes}' + "/${pluginName}")
     }
   }
 
@@ -1133,7 +1133,7 @@ junit = { pluginName ->
       ant.path(refid: 'junit')
       ant.pathelement(path: "build/test/junit/classes/${pluginName}")
       ant.pathelement(path: '${build.classes}/org.eclim')
-      ant.pathelement(path: '${build.classes}/org.eclim.jdt')
+      ant.pathelement(path: '${build.classes}' + "/${pluginName}")
       ant.fileset(dir: 'org.eclim/lib', includes: '*.jar', excludes: 'ant-*.jar')
     }
     ant.formatter(type: 'xml')

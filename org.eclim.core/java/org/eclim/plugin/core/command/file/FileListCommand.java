@@ -44,7 +44,7 @@ import org.eclim.plugin.core.util.PathUtilException;
  * {@code project}.
  *
  * Example response:
- * 
+ *
  * myFolder/
  * mySecFolder/
  * myFile.txt
@@ -55,7 +55,7 @@ import org.eclim.plugin.core.util.PathUtilException;
  * all the folders inclusive all subfolders and subfiles.
  *
  * Example response with {@code recursiveFlag} set to true:
- * 
+ *
  * myFolder/
  * myFolder/mySubFolder/
  * myFolder/mySubFolder/mySubFile.txt

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.dependency;
+package org.eclim.plugin.jdt.command.classpath;
 
 import org.eclim.Services;
 import org.eclim.annotation.Command;
@@ -28,7 +28,7 @@ import org.eclim.plugin.core.util.PathUtil;
 import org.eclim.plugin.core.util.PathUtilException;
 
 @Command(
-      name = "add_dependency",
+      name = "java_classpath_add_entry",
       options =
         "REQUIRED p project ARG," +
         "REQUIRED f relativeFilePath ARG"
@@ -48,10 +48,10 @@ import org.eclim.plugin.core.util.PathUtilException;
  * @author Lukas Roth
  *
  */
-public class AddDependencyCommand extends AbstractCommand
+public class ClasspathAddEntryCommand extends AbstractCommand
 {
   private static final Logger logger = Logger
-      .getLogger(AddDependencyCommand.class);
+      .getLogger(ClasspathAddEntryCommand.class);
 
   @Override
   public Object execute(CommandLine commandLine)

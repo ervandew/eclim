@@ -14,25 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.eclim.plugin.jdt.command.dependency;
+package org.eclim.plugin.jdt.command.classpath;
 
 /**
- * Exception thrown by the {@code ClasspathFileManipulator}.
+ * The {@code ClasspathFileManipulator} Interface should be implemented by all
+ * the classes which can manipulate an eclipse classpath file such that one can
+ * add/remove a jar dependencies.
  *
  * @author Lukas Roth
  *
  */
-public class ClasspathFileManipulatorException extends Exception
+public interface ClasspathFileManipulator
 {
-  private static final long serialVersionUID = -1988234200200654186L;
+  void addJarDependency(String dependencyFilePath, String classPathFilePath)
+      throws ClasspathFileManipulatorException;
 
-  public ClasspathFileManipulatorException(String message)
-  {
-    super(message);
-  }
-
-  public ClasspathFileManipulatorException(String message, Exception exception)
-  {
-    super(message, exception);
-  }
+  void removeJarDependency(String dependencyFilePath, String classPathFilePath)
+      throws ClasspathFileManipulatorException;
 }
