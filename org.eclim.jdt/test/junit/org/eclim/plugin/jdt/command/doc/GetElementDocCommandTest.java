@@ -25,7 +25,6 @@ import java.util.Map;
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -177,6 +176,6 @@ public class GetElementDocCommandTest
         "java_element_doc", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE, "-o", "255", "-l", "11", "-e", "utf-8", "-h", "true"
       });
-    Assert.assertTrue("HTML Format expected", results.startsWith("<html><head>"));
+    assertTrue("HTML Format expected", results.startsWith("<html><head>"));
   }
 }

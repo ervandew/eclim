@@ -66,7 +66,7 @@ import org.eclipse.jface.text.IRegion;
     "OPTIONAL l length ARG," +
     "OPTIONAL e encoding ARG," +
     "OPTIONAL u url ARG," +
-    "OPTIONAL h htmlFlag ARG"
+    "OPTIONAL h html NOARG"
 )
 public class GetElementDocCommand
   extends AbstractCommand
@@ -113,7 +113,7 @@ public class GetElementDocCommand
       return null;
     }
 
-    if(returnHTML(commandLine)){
+    if(commandLine.hasOption(Options.HTML_OPTION)){
       return info.getHtml();
     }
 
@@ -145,11 +145,5 @@ public class GetElementDocCommand
     response.put("text", result);
     response.put("links", links);
     return response;
-  }
-
-  private boolean returnHTML(CommandLine commandLine)
-      throws Exception
-  {
-    return Boolean.parseBoolean(commandLine.getValue(Options.HTML_OPTION));
   }
 }
