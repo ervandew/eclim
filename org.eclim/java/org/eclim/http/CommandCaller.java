@@ -171,9 +171,9 @@ public class CommandCaller implements Runnable
             (Exception) result);
       } else if (result instanceof CommandException) {
         CommandException commandException = (CommandException) result;
-        logger.error(messageCommandException, commandException);
         int statusCode = getStatusCode(commandException);
         String stringResult = (new Gson()).toJson(commandException);
+        logger.error(messageCommandException, stringResult);
         return new EclimHTTPResponse(stringResult, outOutputStream.toString(),
             errOutputStream.toString(), statusCode);
       }
