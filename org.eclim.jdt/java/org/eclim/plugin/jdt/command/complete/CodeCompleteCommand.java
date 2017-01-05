@@ -185,6 +185,9 @@ public class CodeCompleteCommand
     // of whether the user ever views it.
     /*return new CodeCompleteResult(
         kind, completion, menu, proposal.getAdditionalProposalInfo());*/
-    return new CodeCompleteResult(completion, menu, menu, type, offset);
+    CodeCompleteResult result = new CodeCompleteResult(completion, menu, menu, type,
+        offset);
+    result.setRelevance(proposal.getRelevance());
+    return result;
   }
 }

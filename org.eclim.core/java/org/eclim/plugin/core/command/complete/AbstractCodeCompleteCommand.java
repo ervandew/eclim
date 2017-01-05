@@ -277,10 +277,12 @@ public abstract class AbstractCodeCompleteCommand
       info.append(o.getMenu());
     }
 
-    return new CodeCompleteResult(
+    CodeCompleteResult res = new CodeCompleteResult(
         r.getCompletion(),
         "Overloaded, see preview...",
         info.toString(),
         r.getType());
+    res.setRelevance(r.getRelevance());
+    return res;
   }
 }
