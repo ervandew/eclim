@@ -163,32 +163,32 @@ public class CommandCaller implements Runnable
       ByteArrayOutputStream outOutputStream, ByteArrayOutputStream errOutputStream)
       throws CommandCallerException
   {
-    if (result != null) {
-      String messageCommandException = "Command throwed an exception";
-      if (result instanceof Exception) {
-        logger.error(messageCommandException, (Exception) result);
-        throw new CommandCallerException(messageCommandException,
-            (Exception) result);
-      } else if (result instanceof CommandException) {
-        CommandException commandException = (CommandException) result;
-        int statusCode = getStatusCode(commandException);
-        String stringResult = (new Gson()).toJson(commandException);
-        logger.error(messageCommandException, stringResult);
-        return new EclimHTTPResponse(stringResult, outOutputStream.toString(),
-            errOutputStream.toString(), statusCode);
-      }
-      GsonBuilder builder = new GsonBuilder();
-      if (commandLine.hasOption(Options.PRETTY_OPTION)) {
-        builder = builder.setPrettyPrinting();
-      }
-      String stringResult = builder.create().toJson(result);
-      return new EclimHTTPResponse(stringResult, outOutputStream.toString(),
-          errOutputStream.toString(), 200);
-    } else {
-      String msg = "System error: The result of the call to eclim is null";
-      logger.error(msg);
-      throw new CommandCallerException(msg);
+    if(result == null){
+      // There exist commands (e.g project_refresh)
+      // which return null even if they succeed
+      // -> we return an empty string if a command returns null
+      result = "";
     }
+    String messageCommandException = "Command throwed an exception";
+    if (result instanceof Exception) {
+      logger.error(messageCommandException, (Exception) result);
+      throw new CommandCallerException(messageCommandException,
+          (Exception) result);
+    } else if (result instanceof CommandException) {
+      CommandException commandException = (CommandException) result;
+      int statusCode = getStatusCode(commandException);
+      String stringResult = (new Gson()).toJson(commandException);
+      logger.error(messageCommandException, stringResult);
+      return new EclimHTTPResponse(stringResult, outOutputStream.toString(),
+          errOutputStream.toString(), statusCode);
+    }
+    GsonBuilder builder = new GsonBuilder();
+    if (commandLine.hasOption(Options.PRETTY_OPTION)) {
+      builder = builder.setPrettyPrinting();
+    }
+    String stringResult = builder.create().toJson(result);
+    return new EclimHTTPResponse(stringResult, outOutputStream.toString(),
+        errOutputStream.toString(), 200);
   }
 
   private int getStatusCode(CommandException commandException)
