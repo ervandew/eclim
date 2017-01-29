@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014
+ * Copyright (C) 2014 - 2016
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,12 +55,9 @@ import org.eclipse.ui.ide.IDE;
  * Command which provides code completion for groovy files.
  *
  * @param javaDoc
- *    The {@code javaDoc} parameter specifies if a javaDoc URI should be returned
- *    for each of the completion proposals.
- *    If {@code javaDoc} = true for each completion a eclipse style java doc URI
- *    will be returned which can be converted to java doc over the
- *    {@code java_element_doc} command.
- *    If {@code javaDoc} = false no javadoc URI will be returned
+ *   If {@code javaDoc} is set, then each completion result will include an
+ *   eclipse style javadoc URI which can supplied to the
+ *   {@code java_element_doc} command to obtain the javadoc content.
  */
 @Command(
   name = "groovy_complete",
@@ -70,7 +67,7 @@ import org.eclipse.ui.ide.IDE;
     "REQUIRED o offset ARG," +
     "REQUIRED e encoding ARG," +
     "REQUIRED l layout ARG," +
-    "OPTIONAL j javaDoc ARG NOARG"
+    "OPTIONAL j javaDoc NOARG"
 )
 public final class CodeCompleteCommand
   extends org.eclim.plugin.jdt.command.complete.CodeCompleteCommand
@@ -116,8 +113,8 @@ public final class CodeCompleteCommand
     boolean javaDocEnabled = commandLine.hasOption(Options.JAVA_DOC_OPTION);
     ArrayList<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
     for(ICompletionProposal proposal : proposals){
-      results.add(createCompletionResult((IJavaCompletionProposal) proposal,
-          javaDocEnabled));
+      results.add(createCompletionResult(
+            (IJavaCompletionProposal)proposal, javaDocEnabled));
     }
     Collections.sort(results, COMPLETION_COMPARATOR);
 

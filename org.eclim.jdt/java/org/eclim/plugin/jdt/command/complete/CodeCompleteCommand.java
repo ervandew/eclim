@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2016  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ public class CodeCompleteCommand
     String completion = null;
     String menu = proposal.getDisplayString();
     Integer offset = null;
-    String javaDocURI = "";
+    String javaDocURI = null;
 
     int kind = -1;
     if(proposal instanceof JavaCompletionProposal){
@@ -227,10 +227,9 @@ public class CodeCompleteCommand
       IJavaElement javaElement = getJavaElement(proposal);
       if (javaElement == null) {
         return "";
-      } else {
-        return JavaElementLinks.createURI(JavaElementLinks.JAVADOC_SCHEME,
-            javaElement);
       }
+      return JavaElementLinks.createURI(
+          JavaElementLinks.JAVADOC_SCHEME, javaElement);
     } catch (Exception e) {
       logger.error("Could not calculate the javaDoc link", e);
       return "";
@@ -242,8 +241,7 @@ public class CodeCompleteCommand
    * {@code proposal} does not contain an {@code IJavaElement} null will be
    * returned.
    *
-   * @param proposal
-   *          The proposal from which we want the IJavaElement
+   * @param proposal The proposal from which we want the IJavaElement
    * @return IJavaElement The IJavaElement which is behind the {@code proposal}
    *         if there is one.
    * @throws NoSuchMethodException
@@ -252,8 +250,10 @@ public class CodeCompleteCommand
    * @throws JavaModelException
    */
   private IJavaElement getJavaElement(IJavaCompletionProposal proposal)
-      throws NoSuchMethodException, IllegalAccessException,
-      InvocationTargetException, JavaModelException
+    throws NoSuchMethodException,
+           IllegalAccessException,
+           InvocationTargetException,
+           JavaModelException
   {
     if (!(AbstractJavaCompletionProposal.class
         .isAssignableFrom(proposal.getClass())))
@@ -261,20 +261,19 @@ public class CodeCompleteCommand
       // We do not throw an exception here since it may be that only some
       // elements cannot create a javaDocLink and not all of them.
       logger.error("The proposal " + proposal.toString() +
-          " does not inherit from class AbstractJavaCompletionProposal." +
-          " ==> We cannot create the javaDoc link.");
+          " does not inherit from class AbstractJavaCompletionProposal," +
+          " so a javaDoc link cannot be created.");
       return null;
     }
     Method getProposal = AbstractJavaCompletionProposal.class
         .getDeclaredMethod("getProposalInfo");
 
     getProposal.setAccessible(true);
-    ProposalInfo proposalInfo = (ProposalInfo) getProposal
-        .invoke((AbstractJavaCompletionProposal) proposal);
+    ProposalInfo proposalInfo = (ProposalInfo)getProposal
+      .invoke((AbstractJavaCompletionProposal) proposal);
     if (proposalInfo != null) {
       return proposalInfo.getJavaElement();
-    } else {
-      return null;
     }
+    return null;
   }
 }
