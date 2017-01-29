@@ -65,7 +65,8 @@ import org.eclipse.jface.text.IRegion;
     "OPTIONAL o offset ARG," +
     "OPTIONAL l length ARG," +
     "OPTIONAL e encoding ARG," +
-    "OPTIONAL u url ARG"
+    "OPTIONAL u url ARG," +
+    "OPTIONAL h html NOARG"
 )
 public class GetElementDocCommand
   extends AbstractCommand
@@ -110,6 +111,10 @@ public class GetElementDocCommand
       getHoverInfo.invoke(null, elements, null, null, null);
     if (info == null){
       return null;
+    }
+
+    if(commandLine.hasOption(Options.HTML_OPTION)){
+      return info.getHtml();
     }
 
     ArrayList<HashMap<String,String>> links =
