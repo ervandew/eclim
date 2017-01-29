@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2016  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,16 @@
  */
 package org.eclim.plugin.jdt.command.doc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 import java.util.Map;
 
 import org.eclim.Eclim;
 
 import org.eclim.plugin.jdt.Jdt;
+
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Test case for GetElementDocCommand.
@@ -170,11 +170,12 @@ public class GetElementDocCommandTest
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void htmlFlag(){
     String results = (String)
       Eclim.execute(new String[]{
         "java_element_doc", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-o", "255", "-l", "11", "-e", "utf-8", "-h", "true"
+        "-f", TEST_FILE, "-o", "255", "-l", "11", "-e", "utf-8", "-h"
       });
     assertTrue("HTML Format expected", results.startsWith("<html><head>"));
   }
