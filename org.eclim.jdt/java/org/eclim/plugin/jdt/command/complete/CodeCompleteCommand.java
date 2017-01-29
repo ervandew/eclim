@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.jdt.command.complete;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.List;
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
+import org.eclim.logging.Logger;
 
 import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
@@ -34,10 +36,13 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.ICompilationUnit;
-
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.text.java.AbstractJavaCompletionProposal;
 import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
 import org.eclipse.jdt.internal.ui.text.java.LazyJavaCompletionProposal;
-
+import org.eclipse.jdt.internal.ui.text.java.ProposalInfo;
+import org.eclipse.jdt.internal.ui.viewsupport.JavaElementLinks;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 
 /**
@@ -57,6 +62,8 @@ import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
+  private static final Logger logger = Logger.getLogger(CodeCompleteCommand.class);
+
   protected static final Comparator<CodeCompleteResult> COMPLETION_COMPARATOR =
     new CompletionComparator();
 
@@ -104,17 +111,40 @@ public class CodeCompleteCommand
    */
   protected CodeCompleteResult createCompletionResult(
       IJavaCompletionProposal proposal)
-    throws Exception
+      throws Exception
+  {
+    return createCompletionResult(proposal, false);
+  }
+
+  /**
+   * Create a CodeCompleteResult from the supplied CompletionProposal.
+   *
+   * @param proposal
+   *          The proposal.
+   * @param javaDocEnabled
+   *          Flag if a javaDoc URI should be added to the CodeCompleteResult. If
+   *          {@code javaDocEnabled} is true, the java doc URI corresponding to
+   *          the proposal will be added to the result. If {code javaDocEnabled}
+   *          is false the java doc URI is set to "".
+   * @return The result.
+   */
+  protected CodeCompleteResult createCompletionResult(
+      IJavaCompletionProposal proposal, boolean javaDocEnabled)
+      throws Exception
   {
     String completion = null;
     String menu = proposal.getDisplayString();
     Integer offset = null;
+    String javaDocURI = "";
 
     int kind = -1;
     if(proposal instanceof JavaCompletionProposal){
       JavaCompletionProposal lazy = (JavaCompletionProposal)proposal;
       completion = lazy.getReplacementString();
       offset = lazy.getReplacementOffset();
+      if(javaDocEnabled){
+        javaDocURI = getJavaDocLink(proposal);
+      }
     }else if(proposal instanceof LazyJavaCompletionProposal){
       LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)proposal;
       completion = lazy.getReplacementString();
@@ -123,6 +153,9 @@ public class CodeCompleteCommand
         .getDeclaredMethod("getProposal");
       getProposal.setAccessible(true);
       CompletionProposal cproposal = (CompletionProposal)getProposal.invoke(lazy);
+      if(javaDocEnabled){
+        javaDocURI = getJavaDocLink(proposal);
+      }
       if (cproposal != null){
         kind = cproposal.getKind();
       }
@@ -185,6 +218,63 @@ public class CodeCompleteCommand
     // of whether the user ever views it.
     /*return new CodeCompleteResult(
         kind, completion, menu, proposal.getAdditionalProposalInfo());*/
-    return new CodeCompleteResult(completion, menu, menu, type, offset);
+    return new CodeCompleteResult(completion, menu, menu, type, offset, javaDocURI);
+  }
+
+  private String getJavaDocLink(IJavaCompletionProposal proposal)
+  {
+    try {
+      IJavaElement javaElement = getJavaElement(proposal);
+      if (javaElement == null) {
+        return "";
+      } else {
+        return JavaElementLinks.createURI(JavaElementLinks.JAVADOC_SCHEME,
+            javaElement);
+      }
+    } catch (Exception e) {
+      logger.error("Could not calculate the javaDoc link", e);
+      return "";
+    }
+  }
+
+  /**
+   * Gets the {@code IJavaElement} which is behind the {@code proposal}. If the
+   * {@code proposal} does not contain an {@code IJavaElement} null will be
+   * returned.
+   *
+   * @param proposal
+   *          The proposal from which we want the IJavaElement
+   * @return IJavaElement The IJavaElement which is behind the {@code proposal}
+   *         if there is one.
+   * @throws NoSuchMethodException
+   * @throws IllegalAccessException
+   * @throws InvocationTargetException
+   * @throws JavaModelException
+   */
+  private IJavaElement getJavaElement(IJavaCompletionProposal proposal)
+      throws NoSuchMethodException, IllegalAccessException,
+      InvocationTargetException, JavaModelException
+  {
+    if (!(AbstractJavaCompletionProposal.class
+        .isAssignableFrom(proposal.getClass())))
+    {
+      // We do not throw an exception here since it may be that only some
+      // elements cannot create a javaDocLink and not all of them.
+      logger.error("The proposal " + proposal.toString() +
+          " does not inherit from class AbstractJavaCompletionProposal." +
+          " ==> We cannot create the javaDoc link.");
+      return null;
+    }
+    Method getProposal = AbstractJavaCompletionProposal.class
+        .getDeclaredMethod("getProposalInfo");
+
+    getProposal.setAccessible(true);
+    ProposalInfo proposalInfo = (ProposalInfo) getProposal
+        .invoke((AbstractJavaCompletionProposal) proposal);
+    if (proposalInfo != null) {
+      return proposalInfo.getJavaElement();
+    } else {
+      return null;
+    }
   }
 }

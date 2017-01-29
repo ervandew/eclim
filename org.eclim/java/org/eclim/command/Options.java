@@ -68,6 +68,7 @@ public class Options
   public static final String INDENT_OPTION = "i";
   public static final String INDEXED_OPTION = "i";
   public static final String JARS_OPTION = "j";
+  public static final String JAVA_DOC_OPTION = "j";
   public static final String LANG_OPTION = "l";
   public static final String LAUNCH_ID_OPTION = "l";
   public static final String LAYOUT_OPTION = "l";

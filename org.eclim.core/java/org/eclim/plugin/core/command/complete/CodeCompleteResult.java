@@ -51,6 +51,7 @@ public class CodeCompleteResult
   private String type;
   private Integer offset = null;
   private int relevance;
+  private String javaDocURI = "";
 
   /**
    * Constructs a new instance.
@@ -90,11 +91,28 @@ public class CodeCompleteResult
   public CodeCompleteResult (
       String completion, String menu, String info, String type, Integer offset)
   {
+    this(completion, menu, info, type, offset, StringUtils.EMPTY);
+  }
+
+  /**
+   * Constructs a new instance.
+   *
+   * @param completion The completion string.
+   * @param menu The menu text of the completion.
+   * @param info The completion info details.
+   * @param type The completion type.
+   * @param offset Starting offset at which the completion should be inserted
+   * @param javaDocURI The java doc URI link of the completion.
+   */
+  public CodeCompleteResult(String completion, String menu, String info,
+      String type, Integer offset, String javaDocURI)
+  {
     this.completion = completion;
     this.menu = menu;
     this.info = info;
     this.type = type != null ? type : StringUtils.EMPTY;
     this.offset = offset;
+    this.setJavaDocURI(javaDocURI);
 
     if(this.info != null){
       this.info = StringUtils.replace(this.info, "\n", "<br/>");
@@ -189,6 +207,22 @@ public class CodeCompleteResult
   public void setOffset(int offset)
   {
     this.offset = offset;
+  }
+
+  /**
+   * @return The javaDocURI
+   */
+  public String getJavaDocURI()
+  {
+    return javaDocURI;
+  }
+
+  /**
+   * @param javaDocURI The javaDocURI to set
+   */
+  public void setJavaDocURI(String javaDocURI)
+  {
+    this.javaDocURI = javaDocURI;
   }
 
   /**
