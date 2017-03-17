@@ -38,7 +38,7 @@ Configuration
 .. _g\:EclimPhpValidate:
 
 - **g:EclimPhpValidate** (Default: 1) -
-  If set to 0, disables source code validation.
+  If set to 0, disables source code validation. You will need to set this to 0 if you want to use another method of validation, for example, Syntastic.
 
   .. include:: /vim/validation.rst
      :start-after: begin-disable
