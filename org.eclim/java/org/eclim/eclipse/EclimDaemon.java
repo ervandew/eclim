@@ -34,7 +34,7 @@ import java.util.List;
 import org.eclim.Services;
 
 import org.eclim.command.ReloadCommand;
-
+import org.eclim.http.HTTPServer;
 import org.eclim.logging.Logger;
 
 import org.eclim.plugin.PluginResources;
@@ -82,6 +82,8 @@ public class EclimDaemon
   private boolean stopping;
   private NGServer server;
 
+  private HTTPServer httpServer;
+
   private EclimDaemon()
   {
   }
@@ -116,6 +118,8 @@ public class EclimDaemon
       InetAddress address = InetAddress.getByName(host);
       server = new NGServer(address, port, getExtensionClassLoader());
       server.setCaptureSystemStreams(false);
+
+      startHTTPServer();
 
       logger.info("Loading plugin org.eclim");
       PluginResources defaultResources = Services.getPluginResources("org.eclim");
@@ -176,6 +180,26 @@ public class EclimDaemon
     }
   }
 
+  private void startHTTPServer()
+      throws IOException
+  {
+    if (httpServerEnabled()){
+      String httpServerPort = Services.getPluginResources(BASE)
+          .getProperty("http.server.port", "9998");
+      String host = Services.getPluginResources(BASE)
+        .getProperty("http.server.host", "localhost");
+      httpServer = new HTTPServer();
+      httpServer.start(host, Integer.parseInt(httpServerPort));
+    }
+  }
+
+  private boolean httpServerEnabled()
+  {
+    String httpServerEnabled = Services.getPluginResources("org.eclim")
+        .getProperty("http.server.enabled");
+    return "true".equals(httpServerEnabled);
+  }
+
   public void stop()
     throws Exception
   {
@@ -183,6 +207,10 @@ public class EclimDaemon
       try{
         stopping = true;
         logger.info("Shutting down eclim...");
+
+        if (httpServer != null) {
+          httpServer.stop();
+        }
 
         if(server != null && server.isRunning()){
           server.shutdown(false /* exit vm */);

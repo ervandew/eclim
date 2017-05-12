@@ -233,6 +233,17 @@ public class CommandLine
     options.put(option, value);
   }
 
+  /**
+   * Adds another option to this command line.
+   *
+   * @param option The option.
+   * @param value The option value.
+   */
+  public void addRawOption(String option, Object value)
+  {
+    options.put(option, value);
+  }
+
   public String toString()
   {
     StringBuffer buffer = new StringBuffer();

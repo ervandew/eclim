@@ -62,6 +62,7 @@ public class Options
   public static final String FILE_OPTION = "f";
   public static final String FOLDER_OPTION = "f";
   public static final String FORCE_OPTION = "c"; // 'c' to avoid confusion in cleanup
+  public static final String CONTENT_OPTION = "c";
   public static final String HELP = "help";
   public static final String HALT_OPTION = "h";
   public static final String HOST_OPTION = "h";
@@ -89,6 +90,7 @@ public class Options
   public static final String PROPERTIES_OPTION = "r";
   public static final String REVISION_OPTION = "r";
   public static final String ROOT_OPTION = "r";
+  public static final String RECURSIVE_OPTION = "r";
   public static final String SCHEMA_OPTION = "s";
   public static final String SCOPE_OPTION = "s";
   public static final String SEARCH_OPTION = "s";
