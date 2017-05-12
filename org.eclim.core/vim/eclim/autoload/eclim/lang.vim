@@ -465,11 +465,12 @@ function! eclim#lang#Refactor(command)
       endfor
     finally
       exec curwin . 'winc w'
-      if cwd_return
-        exec 'cd ' . escape(cwd, ' ')
-      endif
     endtry
   finally
+    if cwd_return
+      exec 'cd ' . escape(cwd, ' ')
+    endif
+
     " re-enable swap files
     let bufnum = 1
     while bufnum <= bufend
