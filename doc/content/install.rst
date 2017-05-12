@@ -373,11 +373,21 @@ section for additional details):
 
 The last step is to start Xvfb followed by eclimd:
 
+.. note::
+  
+  Use this export to set an absolute path to Eclipse home for eclimd
+  
+  ::
+  
+.. code-block:: bash
+
+  $ export ECLIM_ECLIPSE_HOME=/usr/local/lib/eclipse # Works with official FreeBSD eclipse package
+
 ::
 
   $ Xvfb :1 -screen 0 1024x768x24 &
   $ DISPLAY=:1 ./eclipse/eclimd -b
-
+  
 When starting Xvfb you may receive some errors regarding font paths and
 possibly dbus and hal, but as long as Xvfb continues to run, you should be
 able to ignore these errors.
