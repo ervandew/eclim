@@ -672,6 +672,18 @@ public class JavaUtils
   }
 
   /**
+   * Enables a visibility check for code assist.
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public static void enableVisibilityCheck()
+  {
+    Map<String, String> options = JavaCore.getOptions();
+    options.put(JavaCore.CODEASSIST_VISIBILITY_CHECK, JavaCore.ENABLED);
+
+    JavaCore.setOptions((Hashtable)options);
+  }
+
+  /**
    * Loads the supplied map to be used in a template with the available
    * preferences.
    *

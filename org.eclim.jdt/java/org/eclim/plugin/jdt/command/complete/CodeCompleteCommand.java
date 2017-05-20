@@ -84,6 +84,7 @@ public class CodeCompleteCommand
     throws Exception
   {
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
+    JavaUtils.enableVisibilityCheck();
 
     CompletionProposalCollector collector =
       new CompletionProposalCollector(src);

@@ -152,4 +152,28 @@ public class CodeCompleteCommandTest
     assertEquals("Wrong error message",
         "Component cannot be resolved to a variable", error.get("message"));
   }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void completionProposesVisibleElementsOnly()
+  {
+    Map<String,Object> results = (Map<String,Object>)
+      Eclim.execute(new String[]{
+        "java_complete", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE,
+        "-o", "556", "-e", "utf-8", "-l", "standard"
+      });
+    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+      results.get("completions");
+
+    assertEquals(1, results.size());
+
+    Map<String,Object> result = completions.get(0);
+    assertEquals("publicMethod()", result.get("completion"));
+    assertEquals("publicMethod() : void - ClassWithPrivateMethod",
+        result.get("menu"));
+    assertEquals("publicMethod() : void - ClassWithPrivateMethod",
+        result.get("info"));
+    assertEquals("f", result.get("type"));
+  }
 }

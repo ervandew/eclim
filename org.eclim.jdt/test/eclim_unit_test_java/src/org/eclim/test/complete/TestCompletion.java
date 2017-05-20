@@ -27,4 +27,16 @@ public class TestCompletion
   {
     Component.
   }
+
+  public void testVisibilityOfProposal ()
+  {
+    ClassWithPrivateMethod c = new ClassWithPrivateMethod();
+    c.p
+  }
+}
+
+public class ClassWithPrivateMethod
+{
+  private void privateMethod() {}
+  public void publicMethod() {}
 }
