@@ -43,7 +43,8 @@ import org.eclipse.jdt.core.search.IJavaSearchConstants
 import org.eclipse.jdt.core.search.SearchEngine
 import org.eclipse.jdt.core.search.TypeNameMatch
 
-import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+import org.eclipse.jdt.internal.corext.refactoring.util.JavaElementUtil;
+
 import org.eclipse.jdt.internal.corext.util.TypeNameMatchCollector
 
 import org.scalaide.core.compiler.IScalaPresentationCompiler.Implicits._
@@ -133,7 +134,7 @@ class ImportCommand
       val document = ProjectUtils.getDocument(project, file)
       val ifile = ProjectUtils.getFile(project, file)
       val edit = TextEditUtils.createTextFileChange(ifile, changes, true).getEdit
-      JavaModelUtil.applyEdit(src, edit, true, null)
+      JavaElementUtil.applyEdit(src, edit, true, null)
 
       exception match {
         case Some(value) => throw value

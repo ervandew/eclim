@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -51,6 +53,7 @@ import org.eclipse.jdt.internal.ui.viewsupport.JavaElementLinks;
 import org.eclipse.jface.internal.text.html.HTML2TextReader;
 
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.TextPresentation;
 
 /**
  * Command to retrieve the java docs for an element.
@@ -135,7 +138,9 @@ public class GetElementDocCommand
 
     String html = buffer.toString();
     String result = IOUtils.toString(
-        new HTML2TextReader(new StringReader(html), null));
+        new HTML2TextReader(
+          new StringReader(html != null ? html : StringUtils.EMPTY),
+          new TextPresentation()));
     // remove \r for windows
     result = result.replaceAll("\r", "");
     // compact excessive spacing between sig and doc.

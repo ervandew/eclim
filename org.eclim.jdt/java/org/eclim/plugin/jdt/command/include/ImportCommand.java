@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationMessages;
 import org.eclipse.jdt.internal.corext.codemanipulation.ContextSensitiveImportRewriteContext;
 import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
 
-import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+import org.eclipse.jdt.internal.corext.refactoring.util.JavaElementUtil;
 
 import org.eclipse.jdt.ui.SharedASTProvider;
 
@@ -107,7 +107,7 @@ public class ImportCommand
 
       TextEdit rewrite = importRewrite.rewriteImports(null);
       edits.addChild(rewrite);
-      JavaModelUtil.applyEdit(src, edits, true, null);
+      JavaElementUtil.applyEdit(src, edits, true, null);
 
     }else{
       ChooseImport query = new ChooseImport(project, type);
@@ -127,7 +127,7 @@ public class ImportCommand
 
     TextEdit groupingEdit = importGroupingEdit(src, edits.getOffset() + 1);
     if (groupingEdit != null){
-      JavaModelUtil.applyEdit(src, groupingEdit, true, null);
+      JavaElementUtil.applyEdit(src, groupingEdit, true, null);
     }
 
     if (src.isWorkingCopy()) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ import org.eclipse.jdt.core.search.TypeNameMatch;
 import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationSettings;
 import org.eclipse.jdt.internal.corext.codemanipulation.OrganizeImportsOperation;
 
-import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+import org.eclipse.jdt.internal.corext.refactoring.util.JavaElementUtil;
 
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesSettings;
 
@@ -101,7 +101,7 @@ public class ImportOrganizeCommand
     }
 
     if (edit != null){
-      JavaModelUtil.applyEdit(src, edit, true, null);
+      JavaElementUtil.applyEdit(src, edit, true, null);
       if (src.isWorkingCopy()) {
         src.commitWorkingCopy(false, null);
       }
@@ -113,7 +113,7 @@ public class ImportOrganizeCommand
       if (edit == null){
         edit = groupingEdit;
       }
-      JavaModelUtil.applyEdit(src, groupingEdit, true, null);
+      JavaElementUtil.applyEdit(src, groupingEdit, true, null);
       if (src.isWorkingCopy()) {
         src.commitWorkingCopy(false, null);
       }

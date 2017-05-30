@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2016  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ public class CodeCompleteCommandTest
 
     Map<String,Object> result = results.get(0);
     assertEquals(result.get("completion"), "Common");
-    assertEquals(result.get("menu"), "Common - Eclim");
+    assertEquals(result.get("menu"), "Common - Eclim\\Common - Eclim");
     assertEquals(result.get("info"), "Eclim\\Common");
 
     result = results.get(1);
@@ -177,12 +177,12 @@ public class CodeCompleteCommandTest
 
     result = results.get(1);
     assertEquals(result.get("completion"), "MyClass");
-    assertEquals(result.get("menu"), "MyClass - App\\Lib");
+    assertEquals(result.get("menu"), "MyClass - App\\Lib\\MyClass - App\\Lib");
     assertEquals(result.get("info"), "App\\Lib\\MyClass");
 
     result = results.get(2);
     assertEquals(result.get("completion"), "MYCONST");
-    assertEquals(result.get("menu"), "MYCONST");
+    assertEquals(result.get("menu"), "MYCONST - App\\Lib");
     assertEquals(result.get("info"), "MYCONST = 'App\\Lib\\MYCONST'");
   }
 
