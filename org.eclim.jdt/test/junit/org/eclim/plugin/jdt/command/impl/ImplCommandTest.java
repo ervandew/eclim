@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.eclim.Eclim;
+import org.eclim.EclimTestCase;
 
 import org.eclim.plugin.jdt.Jdt;
 
@@ -36,6 +37,7 @@ import static org.junit.Assert.*;
  * @author Eric Van Dewoestine
  */
 public class ImplCommandTest
+  extends EclimTestCase
 {
   private static final String TEST_FILE =
     "src/org/eclim/test/impl/TestImpl.java";
@@ -52,6 +54,8 @@ public class ImplCommandTest
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
 
     Map<String,Object> result = (Map<String,Object>)
       Eclim.execute(new String[]{
@@ -73,7 +77,8 @@ public class ImplCommandTest
         (List<String>)superTypes.get(0).get("methods"));
     assertTrue(methods.contains("public void clear()"));
     assertTrue(methods.contains("public Set<Entry<Integer,String>> entrySet()"));
-    assertTrue(methods.contains("public String put(Integer,String)"));
+    assertTrue(methods.contains(
+          "public void putAll(java.util.Map\u003c? extends Integer,? extends String\u003e)"));
 
     assertEquals("java.util", superTypes.get(3).get("packageName"));
     assertEquals("interface Comparator<String>",
@@ -86,19 +91,21 @@ public class ImplCommandTest
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
         "-t", "org.eclim.test.impl.TestImpl",
-        "-s", "java.util.HashMap", "-m", "[\"put(Integer,String)\"]"
+        "-s", "java.util.HashMap", "-m", "[\"putAll(java.util.Map)\"]"
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Method not found or invalid.",
-        Pattern.compile("public String put\\(Integer key, String value\\)")
+        Pattern.compile(
+          "public void putAll\\(Map<\\? extends Integer, \\? extends String> m\\)")
         .matcher(contents).find());
 
     superTypes = (List<Map<String,Object>>)result.get("superTypes");
     assertEquals("java.util", superTypes.get(0).get("packageName"));
     assertEquals("class HashMap<Integer,String>", superTypes.get(0).get("signature"));
     methods = new HashSet<String>((List<String>)superTypes.get(0).get("methods"));
-    assertFalse(methods.contains("public String put(Integer,String)"));
+    assertFalse(methods.contains(
+          "public void putAll(java.util.Map\u003c? extends Integer,? extends String\u003e)"));
   }
 
   @Test
@@ -108,11 +115,22 @@ public class ImplCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
+    modifies(Jdt.TEST_PROJECT, TEST_FILE);
+    modifies(Jdt.TEST_PROJECT, TEST_SUB_FILE);
+
+    // put a method in the super class
+    Eclim.execute(new String[]{
+      "java_impl", "-p", Jdt.TEST_PROJECT,
+      "-f", TEST_FILE,
+      "-t", "org.eclim.test.impl.TestImpl",
+      "-s", "java.util.HashMap", "-m", "[\"put(Integer,String)\"]"
+    });
+
     Map<String,Object> result = (Map<String,Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_SUB_FILE,
-        "-o", "83", "-e", "utf-8"
+        "-o", "30", "-e", "utf-8"
       });
 
     assertEquals("org.eclim.test.impl.TestSubImpl", result.get("type"));
@@ -175,6 +193,8 @@ public class ImplCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
+    modifies(Jdt.TEST_PROJECT, TEST_NESTED_FILE);
+
     Map<String,Object> result = (Map<String,Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
@@ -213,6 +233,8 @@ public class ImplCommandTest
   {
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    modifies(Jdt.TEST_PROJECT, TEST_ANONYMOUS_FILE);
 
     Map<String,Object> result = (Map<String,Object>)
       Eclim.execute(new String[]{
