@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@ package org.eclim;
 
 import java.io.FileWriter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclim.util.IOUtils;
@@ -40,6 +42,7 @@ public class EclimTestCase
   public void resetModified()
     throws Exception
   {
+    List<String> projects = new ArrayList<String>();
     for (Map.Entry<String,String> entry : modified.entrySet()){
       String[] parts = StringUtils.split(entry.getKey(), '|');
       String project = parts[0];
@@ -49,6 +52,11 @@ public class EclimTestCase
       FileWriter writer = new FileWriter(path);
       writer.write(entry.getValue());
       IOUtils.closeQuietly(writer);
+      projects.add(project);
+    }
+
+    for (String project : projects){
+      Eclim.execute(new String[]{"project_refresh", "-p", project});
     }
   }
 
