@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -162,7 +162,7 @@ public class SearchCommandTest
       assertEquals(result.get("message"), "");
       assertEquals(result.get("column"), 9);
       int line = ((Integer)result.get("line")).intValue();
-      assertTrue(line > 130 && line < 140);
+      assertTrue(line > 50 && line < 150);
     }
   }
 
@@ -212,7 +212,7 @@ public class SearchCommandTest
           "#define	EXIT_FAILURE	1	/* Failing exit status.  */");
       assertEquals(result.get("column"), 9);
       int line = ((Integer)result.get("line")).intValue();
-      assertTrue(line > 130 && line < 140);
+      assertTrue(line > 50 && line < 150);
     }
   }
 
