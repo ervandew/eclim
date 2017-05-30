@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2012 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2017 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  */
 package eclim.plugin.sdt.command.src
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters._
 
 import scala.collection.mutable.ListBuffer
 
@@ -82,7 +82,7 @@ class SrcUpdateCommand
               problem.isWarning)
         }
       }
-      JavaConversions.bufferAsJavaList(errors)
+      errors.asJava
     }else{
       StringUtils.EMPTY
     }

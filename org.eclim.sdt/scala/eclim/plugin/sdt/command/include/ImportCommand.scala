@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2015 Eric Van Dewoestine
+ * Copyright (C) 2011 - 2017 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  */
 package eclim.plugin.sdt.command.include
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters._
 
 import scala.tools.refactoring.implementations.AddImportStatement
 
@@ -92,14 +92,14 @@ class ImportCommand
         IJavaSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
         new NullProgressMonitor)
 
-      val results = JavaConversions.asScalaBuffer(resultCollector).view.map { typeFound =>
+      val results = resultCollector.asScala.view.map { typeFound =>
         typeFound.getFullyQualifiedName()
       }.filter { fqn => !ImportUtils.isImportExcluded(project, fqn)}.sorted
 
       if (results.length == 1){
         addImport(file, offset, src, results.head)
       }else{
-        JavaConversions.seqAsJavaList(results)
+        results.asJava
       }
     }else{
       addImport(file, offset, src, importType)

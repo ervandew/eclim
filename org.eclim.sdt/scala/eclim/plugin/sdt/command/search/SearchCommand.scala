@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2014 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ package eclim.plugin.sdt.command.search
 
 import java.io.File
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters._
 
 import eclim.plugin.sdt.util.ScalaUtils
 
@@ -77,7 +77,7 @@ class SearchCommand
     val src = ScalaUtils.getSourceFile(project, file)
     val results = scalaLinks(src, offset, length)
     if (results != null)
-      JavaConversions.seqAsJavaList(results.filter(_ != null))
+      results.filter(_ != null).asJava
     else
       null
   }
