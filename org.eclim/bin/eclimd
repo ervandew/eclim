@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2016  Eric Van Dewoestine
+# Copyright (C) 2005 - 2017  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,6 +48,11 @@ if [ -z "$JAVA" ] ; then
       JAVA="$JAVA_HOME/jre/bin/java"
     fi
   fi
+  JAVA_VERSION=$(
+    $JAVA -version 2>&1 |
+      grep version |
+      perl -pe 's|.*"[0-9]\.(.*)\..*".*|\1|'
+  )
 fi
 
 if [ -z "$JAVA" ] ; then
@@ -161,7 +166,7 @@ build_vmargs(){
 
   ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/eclipse.ini"
   if `uname -a | grep -iq "darwin"` ; then
-    ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/Eclipse.app/Contents/MacOS/eclipse.ini"
+    ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/Eclipse.app/Contents/Eclipse/eclipse.ini"
   fi
 
   # add any eclipse vmargs not present
@@ -184,6 +189,16 @@ build_vmargs(){
       # Eclipse.app/Contents
       if [[ "$vmarg" == *-Xdock:icon* ]] ; then
         continue
+      fi
+      # ignore java 9 options if the current env is running a lower java
+      # version.
+      if [[ "$JAVA_VERSION" < "9" ]] ; then
+        if [[ "$vmarg" == *--add-modules* ]] ; then
+          continue
+        fi
+        if [[ "$vmarg" == *--permit-illegal-access* ]] ; then
+          continue
+        fi
       fi
       if [[ "${ECLIM_VMARGS[@]}" != *"$arg"* ]] ; then
         ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" $vmarg)
@@ -261,6 +276,7 @@ if [ $BACKGROUND -eq 1 ]; then
 else
   echo $JAVA -version
   $JAVA -version
+  echo "JAVA_VERSION=$JAVA_VERSION"
   echo ""
   echo $JAVA "${ARGS[@]}"
   CLASSPATH="" $JAVA "${ARGS[@]}"
