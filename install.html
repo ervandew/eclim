@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Download / Install &mdash; eclim (eclipse + vim)</title>
+    <title>Download / Install &#8212; eclim (eclipse + vim)</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,10 +18,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.6.0',
+        VERSION:     'v2.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -32,7 +33,8 @@
     <script type="text/javascript" src="_static/bootstrap.js"></script>
     <script type="text/javascript" src="_static/bootstrap.scrollspy.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Started" href="gettingstarted.html" />
     <link rel="prev" title="Welcome to Eclim" href="index.html" />
   
@@ -50,32 +52,20 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.6.0</b></li>
+          <li><b class="navbar-text">v2.7.0</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1 current active"><a class="current reference internal" href="">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="vim/index.html">Documentation</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/util.html">Utility Commands</a></li>
 </ul>
@@ -83,178 +73,86 @@
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/c/index.html">C/C++</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="vim/c/project.html">C/C++ Project Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/c/complete.html">C/C++ Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/c/validate.html">C/C++ Validation</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="vim/c/validate.html">C/C++ Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/search.html">C/C++ Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/c/inspection.html">C/C++ Code Inspection</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="vim/c/search.html">C/C++ Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="vim/groovy/complete.html">Groovy Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/groovy/validate.html">Groovy Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/groovy/validate.html">Groovy Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/debug.html">Java Debugging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/android.html">Android</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/debug.html">Java Debugging</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/android.html">Android</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/php/index.html">Php</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="vim/php/buildpath.html">Php Build Path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/php/complete.html">Php Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/php/validate.html">Php Validation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/php/search.html">Php Search</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/validate.html">Php Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/php/search.html">Php Search</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/ruby/complete.html">Ruby Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/ruby/validate.html">Ruby Validation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/ruby/search.html">Ruby Search</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/validate.html">Ruby Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/ruby/search.html">Ruby Search</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/scala/index.html">Scala</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="vim/scala/complete.html">Scala Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/scala/validate.html">Scala Validation</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/validate.html">Scala Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/search.html">Scala Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/scala/import.html">Automated Imports</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="vim/scala/search.html">Scala Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/scala/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="development/index.html">Development Docs</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development/architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -335,7 +233,7 @@ following requirements.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.vim.org/download.php">Vim</a> 7.1 or greater</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://eclipse.org/downloads/index.php">Eclipse 4.6.x (Neon)</a></p>
+<li><p class="first"><a class="reference external" href="http://eclipse.org/downloads/index.php">Eclipse 4.7.x (Oxygen)</a></p>
 </li>
 <li><p class="first">Mac and Linux users must also have make and gcc installed.</p>
 <p><strong>Minimum Vim Settings</strong>: In order for eclim to function properly, there is a
@@ -374,7 +272,7 @@ at least 'ON' for 'detection' and 'plugin', but if not, then update your
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
 <p>You can find the official eclim installer on eclim's github <a class="reference external" href="https://github.com/ervandew/eclim/releases/">releases page</a>:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar">eclim_2.6.0.jar</a></li>
+<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.0/eclim_2.7.0.jar">eclim_2.7.0.jar</a></li>
 </ul>
 <div class="section" id="third-party-packages">
 <h3>Third Party Packages<a class="headerlink" href="#third-party-packages" title="Permalink to this headline">¶</a></h3>
@@ -391,10 +289,10 @@ maintained by third parties:</p>
 <p>Eclim can be installed a few different ways depending on your preference and
 environment:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#installer"><span>Graphical Installer</span></a></li>
-<li><a class="reference internal" href="#installer-automated"><span>Unattended (automated) Installer</span></a></li>
-<li><a class="reference internal" href="#install-source"><span>Build from source</span></a></li>
-<li><a class="reference internal" href="#install-headless"><span>Install on a headless server</span></a></li>
+<li><a class="reference internal" href="#installer"><span class="std std-ref">Graphical Installer</span></a></li>
+<li><a class="reference internal" href="#installer-automated"><span class="std std-ref">Unattended (automated) Installer</span></a></li>
+<li><a class="reference internal" href="#install-source"><span class="std std-ref">Build from source</span></a></li>
+<li><a class="reference internal" href="#install-headless"><span class="std std-ref">Install on a headless server</span></a></li>
 </ul>
 <div class="section" id="graphical-installer">
 <span id="installer"></span><h3>Graphical Installer<a class="headerlink" href="#graphical-installer" title="Permalink to this headline">¶</a></h3>
@@ -406,10 +304,10 @@ environment:</p>
 installation procedure.</p>
 </div>
 <ul>
-<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar">eclim_2.6.0.jar</a></p>
+<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.0/eclim_2.7.0.jar">eclim_2.7.0.jar</a></p>
 </li>
 <li><p class="first"><strong>Next run the installer:</strong></p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -jar eclim_2.6.0.jar
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -jar eclim_2.7.0.jar
 </pre></div>
 </div>
 <p>Windows and OSX users should be able to simply double click on the jar file
@@ -417,9 +315,9 @@ to start the installer.</p>
 <p>After the installer starts up, simply follow the steps in the wizard
 to install eclim.</p>
 <p>If your machine is behind a proxy, take a look at the instructions for
-<a class="reference internal" href="#installer-proxy"><span>running the installer behind a proxy</span></a>.</p>
+<a class="reference internal" href="#installer-proxy"><span class="std std-ref">running the installer behind a proxy</span></a>.</p>
 <p>If you encounter an error running the installer, then consult the known
-<a class="reference internal" href="#installer-issues"><span>potential</span></a> issues below.</p>
+<a class="reference internal" href="#installer-issues"><span class="std std-ref">potential</span></a> issues below.</p>
 </li>
 </ul>
 </div>
@@ -429,7 +327,7 @@ to install eclim.</p>
 daemon will depend on how you intend to use eclim.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">More info on running the eclim daemon can be found in the <a class="reference internal" href="eclimd.html"><em>eclimd</em></a> docs.</p>
+<p class="last">More info on running the eclim daemon can be found in the <a class="reference internal" href="eclimd.html"><span class="doc">eclimd</span></a> docs.</p>
 </div>
 <p>If you plan on using eclim along with the eclipse gui, then simply start
 eclipse and open the eclimd view:</p>
@@ -443,13 +341,13 @@ eclipse and open the eclimd view:</p>
 <li><p class="first"><strong>Linux / Mac / BSD (and other unix based systems)</strong>:
 To start eclimd from linux, simply execute the eclimd script found in your
 eclipse root directory:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ $ECLIPSE_HOME/eclimd
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ $ECLIPSE_HOME/eclimd
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>Windows</strong>: The easiest way to start eclimd in windows is to double
 click on the eclimd.bat file found in your eclipse root directory:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>%ECLIPSE_HOME%/eclimd.bat
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">ECLIPSE_HOME</span><span class="o">%/</span><span class="n">eclimd</span><span class="o">.</span><span class="n">bat</span>
 </pre></div>
 </div>
 </li>
@@ -467,7 +365,7 @@ eclimd server is not running or something is preventing eclim from connecting
 to it.  If you receive this or any other errors you can start by first
 examining the eclimd output to see if it gives any info as to what went
 wrong.  If at this point you are unsure how to proceed you can view the
-<a class="reference internal" href="faq.html#troubleshooting"><span>troubleshooting guide</span></a> or feel free to post your
+<a class="reference internal" href="faq.html#troubleshooting"><span class="std std-ref">troubleshooting guide</span></a> or feel free to post your
 issue on the <a class="reference external" href="http://groups.google.com/group/eclim-user">eclim-user</a> mailing list.</p>
 <p>Example of a successful ping:</p>
 <img alt="_images/ping_success.png" src="_images/ping_success.png" />
@@ -478,7 +376,7 @@ issue on the <a class="reference external" href="http://groups.google.com/group/
 using the command <strong>:EclimValidate</strong>.  This will check
 various settings and options and report any problems. If all is ok
 you will receive the following message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Result: OK, required settings are valid.
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Result</span><span class="p">:</span> <span class="n">OK</span><span class="p">,</span> <span class="n">required</span> <span class="n">settings</span> <span class="n">are</span> <span class="n">valid</span><span class="o">.</span>
 </pre></div>
 </div>
 </li>
@@ -487,14 +385,14 @@ you will receive the following message:</p>
 <div class="section" id="running-the-installer-behind-a-proxy">
 <span id="installer-proxy"></span><h4>Running The Installer Behind a Proxy<a class="headerlink" href="#running-the-installer-behind-a-proxy" title="Permalink to this headline">¶</a></h4>
 <p>If you are behind a proxy, you may need to run the installer like so (be sure
-to take a look at the related <a class="reference internal" href="faq.html#eclim-proxy"><span>faq</span></a> as well):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -Dhttp.proxyHost<span class="o">=</span>my.proxy -Dhttp.proxyPort<span class="o">=</span><span class="m">8080</span> -jar eclim_2.6.0.jar
+to take a look at the related <a class="reference internal" href="faq.html#eclim-proxy"><span class="std std-ref">faq</span></a> as well):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -Dhttp.proxyHost<span class="o">=</span>my.proxy -Dhttp.proxyPort<span class="o">=</span><span class="m">8080</span> -jar eclim_2.7.0.jar
 </pre></div>
 </div>
 <p>If your proxy requires authentication, you'll need to supply the
 <code>-Dhttp.proxyUser</code> and <code>-Dhttp.proxyPassword</code> properties as well.</p>
 <p>You can also try the following which may be able to use your system proxy settings:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -Djava.net.useSystemProxies<span class="o">=</span><span class="nb">true</span> -jar eclim_2.6.0.jar
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -Djava.net.useSystemProxies<span class="o">=</span><span class="nb">true</span> -jar eclim_2.7.0.jar
 </pre></div>
 </div>
 </div>
@@ -503,11 +401,11 @@ to take a look at the related <a class="reference internal" href="faq.html#eclim
 <p>In some rare cases you might encounter one of the following errors:</p>
 <ol class="arabic">
 <li><p class="first">Any exception which denotes usage of gcj.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>java.lang.NullPointerException
-  at org.pietschy.wizard.HTMLPane.updateEditorColor(Unknown Source)
-  at org.pietschy.wizard.HTMLPane.setEditorKit(Unknown Source)
-  at javax.swing.JEditorPane.getEditorKit(libgcj.so.90)
-  ...
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">NullPointerException</span>
+  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">pietschy</span><span class="o">.</span><span class="n">wizard</span><span class="o">.</span><span class="n">HTMLPane</span><span class="o">.</span><span class="n">updateEditorColor</span><span class="p">(</span><span class="n">Unknown</span> <span class="n">Source</span><span class="p">)</span>
+  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">pietschy</span><span class="o">.</span><span class="n">wizard</span><span class="o">.</span><span class="n">HTMLPane</span><span class="o">.</span><span class="n">setEditorKit</span><span class="p">(</span><span class="n">Unknown</span> <span class="n">Source</span><span class="p">)</span>
+  <span class="n">at</span> <span class="n">javax</span><span class="o">.</span><span class="n">swing</span><span class="o">.</span><span class="n">JEditorPane</span><span class="o">.</span><span class="n">getEditorKit</span><span class="p">(</span><span class="n">libgcj</span><span class="o">.</span><span class="n">so</span><span class="o">.</span><span class="mi">90</span><span class="p">)</span>
+  <span class="o">...</span>
 </pre></div>
 </div>
 <p>Gcj (GNU Compile for Java), is not currently supported.  If you receive
@@ -515,14 +413,14 @@ any error which references libgcj, then gcj is your current default jvm.
 So, you'll need to install the openjdk or a jdk from oracle to resolve the
 installation error.</p>
 </li>
-<li><div class="first highlight-python"><div class="highlight"><pre><span></span>java.lang.IncompatibleClassChangeError
-  at org.formic.ant.logger.Log4jLogger.printMessage(Log4jLogger.java:51)
-  ...
+<li><div class="first highlight-default"><div class="highlight"><pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">IncompatibleClassChangeError</span>
+  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">formic</span><span class="o">.</span><span class="n">ant</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">Log4jLogger</span><span class="o">.</span><span class="n">printMessage</span><span class="p">(</span><span class="n">Log4jLogger</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">51</span><span class="p">)</span>
+  <span class="o">...</span>
 </pre></div>
 </div>
 <p>This is most likely caused by an incompatible version of log4j installed in
 your jave ext.dirs.  To combat this you can run the installer like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ java -Djava.ext.dirs -jar eclim_2.6.0.jar
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ java -Djava.ext.dirs -jar eclim_2.7.0.jar
 </pre></div>
 </div>
 </li>
@@ -540,7 +438,7 @@ system properties:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ java <span class="se">\</span>
   -Dvim.files<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
   -Declipse.home<span class="o">=</span>/opt/eclipse <span class="se">\</span>
-  -jar eclim_2.6.0.jar install
+  -jar eclim_2.7.0.jar install
 </pre></div>
 </div>
 <p>Please note that when using this install method, the installer will only
@@ -560,13 +458,13 @@ directory. Or if you want to omit the installation of the vim files
 <span id="install-source"></span><h3>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="check-out-the-code">
 <h4>1. Check out the code:<a class="headerlink" href="#check-out-the-code" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ git clone git://github.com/ervandew/eclim.git
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git://github.com/ervandew/eclim.git
 </pre></div>
 </div>
 </div>
 <div class="section" id="build-eclim">
 <h4>2. Build eclim:<a class="headerlink" href="#build-eclim" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd eclim
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd eclim
 $ ant -Declipse.home=/your/eclipse/home/dir
 </pre></div>
 </div>
@@ -578,25 +476,25 @@ writable as root, you can supply the <code>eclipse.local</code> property to tell
 where your eclipse user local directory is located and eclimd will be
 installed there (make sure to replace <code>&lt;version&gt;</code> portion of the path below
 accordingly):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant \
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant \
     -Declipse.home=/opt/eclipse \
     -Declipse.local=$HOME/.eclipse/org.eclipse.platform_&lt;version&gt;
 </pre></div>
 </div>
 <p>If you do not yet have a <code>.eclipse</code> directory in your home directory, you
 can run either of the following commands to create it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant -Declipse.home=/opt/eclipse eclipse.init
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant -Declipse.home=/opt/eclipse eclipse.init
 </pre></div>
 </div>
 <p>or</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>$ /path/to/eclipse/eclipse -initialize
+<div class="last highlight-default"><div class="highlight"><pre><span></span>$ /path/to/eclipse/eclipse -initialize
 </pre></div>
 </div>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your eclipse home path contains a space, be sure to quote it:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>&gt; ant &quot;-Declipse.home=C:/Program Files/eclipse&quot;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">ant</span> <span class="s2">&quot;-Declipse.home=C:/Program Files/eclipse&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -604,7 +502,7 @@ can run either of the following commands to create it:</p>
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your vimfiles directory is not located at the default location for your
 OS, then you can specify the location using the &quot;vim.files&quot; property:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
+<div class="last highlight-default"><div class="highlight"><pre><span></span>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
 </pre></div>
 </div>
 </div>
@@ -612,7 +510,7 @@ OS, then you can specify the location using the &quot;vim.files&quot; property:<
 find what eclipse plugins are available. It will then use that list to determine
 which eclim features/plugins should be built and will output a list like the one
 below showing what will be built vs what will be skipped:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[echo] ${eclipse}: /opt/eclipse
+<div class="highlight-default"><div class="highlight"><pre><span></span>[echo] ${eclipse}: /opt/eclipse
 [echo] # Skipping org.eclim.adt, missing com.android.ide.eclipse.adt
 [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
 [echo] # Skipping org.eclim.dltkruby, missing org.eclipse.dltk.ruby
@@ -631,7 +529,7 @@ eclipse feature that would be required to build those plugins.</p>
 properties, on the command line every time you build eclim, you can create a
 <code>user.properties</code> file at the eclim source root and put all your properties
 in there:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ vim user.properties
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ vim user.properties
 eclipse.home=/opt/eclipse
 eclipse.local=${user.home}/.eclipse/org.eclipse.platform_&lt;version&gt;
 vim.files=${user.home}/.vim/bundle/eclim
@@ -639,10 +537,10 @@ vim.files=${user.home}/.vim/bundle/eclim
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>The eclim vim help files, used by the <a class="reference internal" href="vim/core/eclim.html#eclimhelp"><span>:EclimHelp</span></a> command,
+<p>The eclim vim help files, used by the <a class="reference internal" href="vim/core/eclim.html#eclimhelp"><span class="std std-ref">:EclimHelp</span></a> command,
 are not built by default. To build these you first need to install <a class="reference external" href="http://sphinx-doc.org">sphinx</a>,
 then run the following command:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant vimdocs
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant vimdocs
 </pre></div>
 </div>
 <p>This target also supports the <code>vim.files</code> property if you want the docs
@@ -680,7 +578,7 @@ eclim:</p>
 <ul>
 <li><p class="first">Install a java jdk, xvfb, and the necessary build tools to compile eclim's
 nailgun client during installation (make, gcc, etc).</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ sudo apt-get install openjdk-6-jdk xvfb build-essential
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ sudo apt-get install openjdk-6-jdk xvfb build-essential
 </pre></div>
 </div>
 </li>
@@ -695,7 +593,7 @@ based browser like elinks, or you can navigate to the download page on your
 desktop and copy the download url and use wget to download the eclipse archive.
 Once downloaded, you can then extract the archive in the directory of your
 choice.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ wget &lt;eclipse_mirror&gt;/eclipse-&lt;version&gt;-linux-gtk.tar.gz
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ wget &lt;eclipse_mirror&gt;/eclipse-&lt;version&gt;-linux-gtk.tar.gz
 $ tar -zxf eclipse-&lt;version&gt;-linux-gtk.tar.gz
 </pre></div>
 </div>
@@ -709,10 +607,10 @@ C/C++ support for example). If not, you can install the required dependency
 using eclipse's p2 command line client. Make sure the command references the
 correct repository for your eclipse install (juno in this example) and that
 you have Xvfb running as described in the last step of this guide:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
-  -application org.eclipse.equinox.p2.director
-  -repository http://download.eclipse.org/releases/juno
-  -installIU org.eclipse.wst.web_ui.feature.feature.group
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DISPLAY</span><span class="o">=</span><span class="p">:</span><span class="mi">1</span> <span class="o">./</span><span class="n">eclipse</span><span class="o">/</span><span class="n">eclipse</span> <span class="o">-</span><span class="n">nosplash</span> <span class="o">-</span><span class="n">consolelog</span> <span class="o">-</span><span class="n">debug</span>
+  <span class="o">-</span><span class="n">application</span> <span class="n">org</span><span class="o">.</span><span class="n">eclipse</span><span class="o">.</span><span class="n">equinox</span><span class="o">.</span><span class="n">p2</span><span class="o">.</span><span class="n">director</span>
+  <span class="o">-</span><span class="n">repository</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">download</span><span class="o">.</span><span class="n">eclipse</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">juno</span>
+  <span class="o">-</span><span class="n">installIU</span> <span class="n">org</span><span class="o">.</span><span class="n">eclipse</span><span class="o">.</span><span class="n">wst</span><span class="o">.</span><span class="n">web_ui</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">group</span>
 </pre></div>
 </div>
 <p class="last">For a list of eclim plugins and which eclipse features they require, please
@@ -721,16 +619,16 @@ must be added to the dependency id found in that file when supplying it to
 the '-installIU' arg of the above command.</p>
 </div>
 <p>Once eclipse is installed, you can then install eclim utilizing the eclim
-installer's automated install option (see the <a class="reference internal" href="#installer-automated"><span>Unattended (automated) install</span></a>
+installer's automated install option (see the <a class="reference internal" href="#installer-automated"><span class="std std-ref">Unattended (automated) install</span></a>
 section for additional details):</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ java <span class="se">\</span>
   -Dvim.files<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
   -Declipse.home<span class="o">=</span>/opt/eclipse <span class="se">\</span>
-  -jar eclim_2.6.0.jar install
+  -jar eclim_2.7.0.jar install
 </pre></div>
 </div>
 <p>The last step is to start Xvfb followed by eclimd:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ Xvfb :1 -screen 0 1024x768x24 &amp;
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ Xvfb :1 -screen 0 1024x768x24 &amp;
 $ DISPLAY=:1 ./eclipse/eclimd -b
 </pre></div>
 </div>
@@ -759,7 +657,7 @@ plugins along with all the files eclim adds to your .vim or vimfiles directory
 <span id="id1"></span><h2>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline">¶</a></h2>
 <p>To uninstall eclim you can use any eclim distribution jar whose version is
 1.7.5 or greater by running it with the 'uninstaller' argument like so:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -jar eclim_2.6.0.jar uninstaller
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -jar eclim_2.7.0.jar uninstaller
 </pre></div>
 </div>
 <p>That will open a graphical wizard much like the install wizard which will ask
@@ -777,7 +675,7 @@ just need to supply your vim files and eclipse paths as system properties:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ java <span class="se">\</span>
   -Dvim.files<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
   -Declipse.home<span class="o">=</span>/opt/eclipse <span class="se">\</span>
-  -jar eclim_2.6.0.jar uninstall
+  -jar eclim_2.7.0.jar uninstall
 </pre></div>
 </div>
 <p><strong>Required Properties:</strong></p>
@@ -800,14 +698,14 @@ example) you can supply <code>-Dvim.skip=true</code> instead.</li>
   <div class="container">
     <p class="pull-right">
       
-  <a href="_sources/install.txt"
+  <a href="_sources/install.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 21, 2016<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
+      Last updated on Jul 12, 2017<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

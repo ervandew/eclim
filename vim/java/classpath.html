@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Eclipse Classpath Editing &mdash; eclim (eclipse + vim)</title>
+    <title>Eclipse Classpath Editing &#8212; eclim (eclipse + vim)</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,10 +18,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.6.0',
+        VERSION:     'v2.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -32,8 +33,8 @@
     <script type="text/javascript" src="../../_static/bootstrap.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap.scrollspy.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="../../index.html" />
-    <link rel="up" title="Java" href="index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Java Validation / Correction" href="validate.html" />
     <link rel="prev" title="Java" href="index.html" />
   
@@ -51,32 +52,20 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.6.0</b></li>
+          <li><b class="navbar-text">v2.7.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="../index.html">Documentation</a><ul class="current dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../core/util.html">Utility Commands</a></li>
 </ul>
@@ -84,178 +73,86 @@
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../c/index.html">C/C++</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../c/project.html">C/C++ Project Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../c/complete.html">C/C++ Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../c/validate.html">C/C++ Validation</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../c/validate.html">C/C++ Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/search.html">C/C++ Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../c/inspection.html">C/C++ Code Inspection</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../c/search.html">C/C++ Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../groovy/index.html">Groovy</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../groovy/complete.html">Groovy Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../groovy/validate.html">Groovy Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../groovy/validate.html">Groovy Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current dropdown-submenu active"><a class="reference internal" href="index.html">Java</a><ul class="current dropdown-menu">
-<li class="toctree-l3 current active"><a class="current reference internal" href="">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Java Debugging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="android.html">Android</a></li>
+<li class="toctree-l3"><a class="reference internal" href="webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="debug.html">Java Debugging</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="android.html">Android</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../php/index.html">Php</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../php/buildpath.html">Php Build Path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../php/complete.html">Php Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../php/validate.html">Php Validation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../php/search.html">Php Search</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../php/validate.html">Php Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../php/search.html">Php Search</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../ruby/index.html">Ruby</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/buildpath.html">Ruby Interpreters / Build Path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../ruby/complete.html">Ruby Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../ruby/validate.html">Ruby Validation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../ruby/search.html">Ruby Search</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/validate.html">Ruby Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ruby/search.html">Ruby Search</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../scala/index.html">Scala</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../scala/complete.html">Scala Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../scala/validate.html">Scala Validation</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../scala/validate.html">Scala Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/search.html">Scala Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scala/import.html">Automated Imports</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../scala/search.html">Scala Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../scala/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../../development/index.html">Development Docs</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../development/architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -321,8 +218,8 @@ and variables.</p>
 server to update the project's classpath, and will report any errors via vim's
 location list (:help location-list).</p>
 <p class="last">In addition to directly editing the <code>.classpath</code> file, you may also use
-<a class="reference internal" href="#classpath-maven"><span>maven's support</span></a> for maintaining the eclipse
-classpath.  For users who use <a class="reference external" href="http://jayasoft.org/ivy">ivy</a>, eclim also provides a means to <a class="reference internal" href="#classpath-ivy"><span>auto
+<a class="reference internal" href="#classpath-maven"><span class="std std-ref">maven's support</span></a> for maintaining the eclipse
+classpath.  For users who use <a class="reference external" href="http://jayasoft.org/ivy">ivy</a>, eclim also provides a means to <a class="reference internal" href="#classpath-ivy"><span class="std std-ref">auto
 update the eclipse classpath</span></a> when saving changes to your
 ivy.xml.</p>
 </div>
@@ -356,7 +253,7 @@ limitation with Eclipse).</p>
 </div>
 <p>You may optionally supply the path to the source for this jar and the entry
 created will include the <code>sourcepath</code> attribute:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>:NewJarEntry lib/commons-beanutils-1.8.3.jar lib/commons-beanutils-1.8.3-sources.jar
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">NewJarEntry</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">beanutils</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="mf">3.</span><span class="n">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">beanutils</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="n">sources</span><span class="o">.</span><span class="n">jar</span>
 </pre></div>
 </div>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;classpathentry</span> <span class="na">kind=</span><span class="s">&quot;lib&quot;</span> <span class="na">path=</span><span class="s">&quot;lib/commons-beanutils-1.8.3.jar&quot;</span>
@@ -364,7 +261,7 @@ created will include the <code>sourcepath</code> attribute:</p>
 </pre></div>
 </div>
 <p>In addition to the source path you can all supply the path to the javadocs:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>:NewJarEntry lib/commons-beanutils-1.8.3.jar lib/commons-beanutils-1.8.3-sources.jar lib/commons-beanutils-1.8.3-javadoc.jar
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">NewJarEntry</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">beanutils</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="mf">3.</span><span class="n">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">beanutils</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="n">sources</span><span class="o">.</span><span class="n">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">beanutils</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="n">javadoc</span><span class="o">.</span><span class="n">jar</span>
 </pre></div>
 </div>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;classpathentry</span> <span class="na">kind=</span><span class="s">&quot;lib&quot;</span> <span class="na">path=</span><span class="s">&quot;lib/commons-beanutils-1.8.3.jar&quot;</span>
@@ -415,7 +312,7 @@ Deletes the variable with the supplied name.</li>
 <span id="classpath-src-javadocs"></span><h2>Source and Javadoc location<a class="headerlink" href="#source-and-javadoc-location" title="Permalink to this headline">¶</a></h2>
 <p>For your <code>var</code> and <code>lib</code> classpath entries, if you didn't do so when you
 created the entry, you can configure the location for that entry's source code
-and javadocs, like the example below, allowing you to <a class="reference internal" href="search.html#javasearch"><span>jump to the source</span></a> or <a class="reference internal" href="javadoc.html#javadocsearch"><span>lookup the docs</span></a> of classes, etc found
+and javadocs, like the example below, allowing you to <a class="reference internal" href="search.html#javasearch"><span class="std std-ref">jump to the source</span></a> or <a class="reference internal" href="javadoc.html#javadocsearch"><span class="std std-ref">lookup the docs</span></a> of classes, etc found
 in that library. Note that the javadoc location must be a url, whether it be on
 the local file system (file:, <a class="reference external" href="jar:file">jar:file</a>:) or remote (http:).</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;classpathentry</span> <span class="na">exported=</span><span class="s">&quot;true&quot;</span> <span class="na">kind=</span><span class="s">&quot;lib&quot;</span> <span class="na">path=</span><span class="s">&quot;lib/hibernate-4.0.jar&quot;</span>
@@ -431,11 +328,11 @@ the local file system (file:, <a class="reference external" href="jar:file">jar:
 <p>If your javadoc location is a jar in your workspace (in the curent project or
 another project), then the url must be in the form (where <code>&lt;project_name&gt;</code>
 is replaced with your project's name):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>jar:platform:/resource/&lt;project_name&gt;/path/to/javadoc.jar!/
+<div class="highlight-default"><div class="highlight"><pre><span></span>jar:platform:/resource/&lt;project_name&gt;/path/to/javadoc.jar!/
 </pre></div>
 </div>
 <p>If the jar file is outside of your workspace, then it would be in the form:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>jar:file:/your/absolute/path/to/javadoc.jar!/
+<div class="last highlight-default"><div class="highlight"><pre><span></span>jar:file:/your/absolute/path/to/javadoc.jar!/
 </pre></div>
 </div>
 </div>
@@ -450,8 +347,8 @@ users).</p>
 <p class="last">For additional information on the Eclipse plugin from maven, you may visit
 their online documentation for <a class="reference external" href="http://maven.apache.org/maven-1.x/plugins/eclipse/">maven 1.x</a> or <a class="reference external" href="http://maven.apache.org/guides/mini/guide-ide-eclipse.html">maven 2.x</a>.</p>
 </div>
-<ul id="mavenrepo">
-<span id="mvnrepo"></span><li><p class="first">Initial Setup</p>
+<span id="mvnrepo"></span><ul id="mavenrepo">
+<li><p class="first">Initial Setup</p>
 <p>To initialize maven's support for updating the eclipse classpath you first need
 to set the <code>M2_REPO</code> (or <code>MAVEN_REPO</code> for 1.x) classpath variable in the
 Eclipse workspace by executing the following command in vim:</p>
@@ -468,11 +365,11 @@ Eclipse workspace by executing the following command in vim:</p>
 <p>Once you have performed the initial setup, updating the Eclipse
 <code>.classpath</code> file is as easy as executing the following at a command line:</p>
 <p>maven 2.x:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>mvn eclipse:eclipse
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">eclipse</span><span class="p">:</span><span class="n">eclipse</span>
 </pre></div>
 </div>
 <p>maven 1.x:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>maven eclipse
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">maven</span> <span class="n">eclipse</span>
 </pre></div>
 </div>
 <p>or in Vim:</p>
@@ -502,7 +399,7 @@ vimrc:</p>
 <p>This feature simply updates the entries in your project's <code>.classpath</code>
 file, it does not download any newly added jars. When you'd like maven to
 download those new jars, you can run the following from the command line:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>mvn dependency:resolve
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">dependency</span><span class="p">:</span><span class="n">resolve</span>
 </pre></div>
 </div>
 <p>or from within Vim:</p>
@@ -558,7 +455,7 @@ Something like the example from the ivy docs:</p>
 </pre></div>
 </div>
 <p>You can then run this target from the command line:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>ant resolve
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ant</span> <span class="n">resolve</span>
 </pre></div>
 </div>
 <p>or from within Vim</p>
@@ -594,14 +491,14 @@ attribute notifying eclim that the entry should be preserved.</p>
   <div class="container">
     <p class="pull-right">
       
-  <a href="../../_sources/vim/java/classpath.txt"
+  <a href="../../_sources/vim/java/classpath.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 21, 2016<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
+      Last updated on Jul 12, 2017<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

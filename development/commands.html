@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Commands &mdash; eclim (eclipse + vim)</title>
+    <title>Commands &#8212; eclim (eclipse + vim)</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,10 +18,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'v2.6.0',
+        VERSION:     'v2.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +33,8 @@
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.scrollspy.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="../index.html" />
-    <link rel="up" title="Development Docs" href="index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Plugins" href="plugins.html" />
     <link rel="prev" title="Architecture" href="architecture.html" />
   
@@ -51,32 +52,20 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.6.0</b></li>
+          <li><b class="navbar-text">v2.7.0</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../vim/index.html">Documentation</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/util.html">Utility Commands</a></li>
 </ul>
@@ -84,178 +73,86 @@
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/c/index.html">C/C++</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../vim/c/project.html">C/C++ Project Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/c/complete.html">C/C++ Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/validate.html">C/C++ Validation</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/validate.html">C/C++ Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/search.html">C/C++ Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/c/inspection.html">C/C++ Code Inspection</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/search.html">C/C++ Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/inspection.html">C/C++ Code Inspection</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../vim/groovy/complete.html">Groovy Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/groovy/validate.html">Groovy Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/groovy/validate.html">Groovy Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/debug.html">Java Debugging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/android.html">Android</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/debug.html">Java Debugging</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/android.html">Android</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/php/index.html">Php</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../vim/php/buildpath.html">Php Build Path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/php/complete.html">Php Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/php/validate.html">Php Validation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/php/search.html">Php Search</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/php/validate.html">Php Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/php/search.html">Php Search</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/ruby/complete.html">Ruby Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/validate.html">Ruby Validation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/search.html">Ruby Search</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/validate.html">Ruby Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/search.html">Ruby Search</a></li>
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/scala/index.html">Scala</a><ul class="dropdown-menu">
 <li class="toctree-l3"><a class="reference internal" href="../vim/scala/complete.html">Scala Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/scala/validate.html">Scala Validation</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../vim/scala/validate.html">Scala Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/scala/search.html">Scala Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/scala/import.html">Automated Imports</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/scala/search.html">Scala Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/scala/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="index.html">Development Docs</a><ul class="current dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -379,7 +276,7 @@ bundle.</p>
 <p>When registering the command with the <code>&#64;Command</code> annotation, you give it a
 name and a comma separated list of options. Each option consists of 4 parts in
 the form of:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>REQUIRED|OPTIONAL s longname ARG|NOARG|ANY
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">REQUIRED</span><span class="o">|</span><span class="n">OPTIONAL</span> <span class="n">s</span> <span class="n">longname</span> <span class="n">ARG</span><span class="o">|</span><span class="n">NOARG</span><span class="o">|</span><span class="n">ANY</span>
 </pre></div>
 </div>
 <p>Where each part is defined as:</p>
@@ -416,7 +313,7 @@ update site which should include source bundles. Once you've extracted that
 file, you can tell this target to extract source bundles from a specified
 directory. Here is an example of extracting the source from an unpacked dltk
 update site:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
 </pre></div>
 </div>
 </li>
@@ -427,7 +324,7 @@ update site:</p>
 <p>Once you've created your command you then need to compile the code using eclim's
 ant build file. After you've done that you can then start eclimd and execute
 your command from the command line to test it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclim -pretty -command echo -p eclim -f org.eclim.core/plugin.properties -o 42 -e utf-8
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ eclim -pretty -command echo -p eclim -f org.eclim.core/plugin.properties -o 42 -e utf-8
 </pre></div>
 </div>
 <div class="alert alert-info">
@@ -437,7 +334,7 @@ every change by using eclim's <code>reload</code> command which will reload all 
 eclim's plugin bundles with the exception of org.eclim.core (so unfortunately
 it won't help with our example above if we put that command in the
 org.eclim.core bundle):</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>$ eclim -command reload
+<div class="last highlight-default"><div class="highlight"><pre><span></span>$ eclim -command reload
 </pre></div>
 </div>
 </div>
@@ -498,7 +395,7 @@ response printed in vim.</p>
 <p>Now that you know the basics, you can explore the many existing eclim commands
 found in the eclim source code to see detailed examples of how to access various
 eclipse features to expose them for use in vim or the editor of your choice.</p>
-<p>You should also take a look at the eclim <a class="reference internal" href="plugins.html"><em>Plugins</em></a>
+<p>You should also take a look at the eclim <a class="reference internal" href="plugins.html"><span class="doc">Plugins</span></a>
 documentation which documents how to create a new eclim plugin, including
 information on adding new eclim settings, managing the plugin's dependencies
 through its <code>META-INF/MANIFEST.MF</code>, etc.</p>
@@ -514,14 +411,14 @@ through its <code>META-INF/MANIFEST.MF</code>, etc.</p>
   <div class="container">
     <p class="pull-right">
       
-  <a href="../_sources/development/commands.txt"
+  <a href="../_sources/development/commands.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 21, 2016<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.6
+      Last updated on Jul 12, 2017<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

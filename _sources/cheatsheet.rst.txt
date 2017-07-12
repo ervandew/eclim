@@ -222,6 +222,7 @@ Java Commands
 - :ref:`:Jps <:Jps>` -
   Opens window with information about the currently running java processes.
 - :ref:`:Validate <:Validate_java>` - Manually runs source code validation.
+- :ref:`:JavaNew <:JavaNew>`- Creates a new class, interface, enum, or annotation.
 
 
 Java .classpath Commands
