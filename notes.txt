@@ -530,9 +530,14 @@ NOTES {{{
        $ ant dist
        $ git push
        $ git push --tags
-    2) create sourceforge release
-       - update windows and linux download pages with latest file to download.
+    2) create a release on github
     3) update documentation website
+       $ ant docs
+       $ cd gh-pages
+       $ git a 0-n
+       $ git ci -m "eclim docs <version>"
+       $ git push
+       http://ervandew.github.io/eclim/
   }}}
 
   Eclipse Docs {{{
