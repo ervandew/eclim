@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2014  Eric Van Dewoestine
+  Copyright (C) 2005 - 2016  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -148,12 +148,12 @@
       To build eclim, you must use ant 1.7.1 or greater.
     </fail>
 
-    <path id="gant-classpath">
-      <fileset dir="ant/lib" includes="*.jar"/>
-      <fileset dir="org.eclim" includes="lib/*.jar"/>
-    </path>
-    <taskdef name="gant" classname="org.codehaus.gant.ant.Gant"
-        classpathref="gant-classpath"/>
+    <taskdef name="gant" classname="org.codehaus.gant.ant.Gant">
+      <classpath>
+        <fileset dir="ant/lib" includes="*.jar"/>
+        <fileset dir="org.eclim" includes="lib/*.jar"/>
+      </classpath>
+    </taskdef>
 
     <property name="target" value="deploy"/>
     <gant
