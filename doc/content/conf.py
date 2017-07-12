@@ -30,7 +30,7 @@ sys.path.append(os.path.abspath('../theme'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
   'sphinx.ext.extlinks',
-  'sphinxcontrib.plantuml',
+  'plantuml',
   'eclim.sphinx.include',
   'eclim.sphinx.vimdoc',
   'eclim.sphinx.rss',
