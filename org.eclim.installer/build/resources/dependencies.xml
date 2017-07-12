@@ -56,7 +56,7 @@
   </feature>
 
   <feature id="sdt">
-    <dependency id="org.scala-ide.sdt.feature" version="4.6.0">
+    <dependency id="org.scala-ide.sdt.feature" version="4.6.1">
       <site url="http://download.scala-ide.org/sdk/lithium/e46/scala212/stable/site"/>
     </dependency>
   </feature>
