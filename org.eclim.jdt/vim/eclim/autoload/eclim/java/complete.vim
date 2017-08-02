@@ -75,7 +75,7 @@ function! eclim#java#complete#CodeComplete(findstart, base) " {{{
         call eclim#java#complete#ImportThenComplete(imports)
       else
         let func = "eclim#java#complete#ImportThenComplete(" . string(imports) . ")"
-        call feedkeys("\<c-e>\<c-r>=" . func . "\<cr>", 'n')
+        call feedkeys("\<c-r>=" . func . "\<cr>", 'n')
       endif
       " prevents supertab's completion chain from attempting the next
       " completion in the chain.
