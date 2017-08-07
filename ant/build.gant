@@ -991,6 +991,7 @@ def compile(srcdir, destdir, failonerror=true, errorproperty=null, nested){
       destdir: destdir,
       srcdir: srcdir,
       classpathref: 'classpath',
+      encoding: 'UTF-8',
       debug: 'on', optimize: false, deprecation: '${javac.deprecation}',
       target: '${javac.target}', source: '${javac.target}',
       failonerror: failonerror,

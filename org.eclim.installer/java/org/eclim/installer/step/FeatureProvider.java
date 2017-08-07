@@ -40,19 +40,22 @@ public class FeatureProvider
   public static final String[] FEATURES = {
     "jdt", "adt", "wst", "cdt",
     "dltk", "dltkruby", "pdt",
-    "pydev", "sdt", "groovy"
+    "pydev", "sdt", "groovy",
+    "kotlin"
   };
 
   private static final String[][] FEATURES_DEPENDS = {
     null, {"jdt", "wst"}, null, null,
     null, {"dltk"}, {"dltk", "wst"},
-    null, {"jdt"}, {"jdt"}
+    null, {"jdt"}, {"jdt"},
+    {"jdt"}
   };
 
   private static final String[][] FEATURES_EXCLUSIVE = {
     null, null, null, null,
     null, null, null,
-    null, null, null
+    null, null, null,
+    null
   };
 
   @Override
