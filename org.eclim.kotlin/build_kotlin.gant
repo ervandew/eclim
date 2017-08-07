@@ -1,19 +1,13 @@
 feature_kotlin = 'org.jetbrains.kotlin.feature'
 
-target(name: 'org.eclim.kotlin.classpath'){
-    pluginClasspath{
+target(name: 'org.eclim.kotlin.classpath') {
+    pluginClasspath {
         include(name: 'dropins/**/plugins/*kotlin*.jar')
         include(name: 'plugins/*kotlin*.jar')
     }
 }
 
-target(name: 'org.eclim.kotlin.plugin.compile'){
-    taskdef(resource: 'org/jetbrains/kotlin/ant/antlib.xml'){
-        classpath {
-            path(refid: 'classpath')
-            fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')
-        }
-    }
+target(name: 'org.eclim.kotlin.plugin.compile') {
 
     mkdir(dir: '${build.classes}/org.eclim.kotlin')
     javac(
@@ -24,11 +18,10 @@ target(name: 'org.eclim.kotlin.plugin.compile'){
     {
         include(name: '**/*.java')
         classpath{fileset(dir: '${build.classes}/org.eclim.kotlin', includes: 'org.eclim/**')}
-        classpath{
+        classpath {
             pathelement(path: '${build.classes}/org.eclim.kotlin')
             fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')
         }
-        // withKotlin()
     }
     copy(todir: '${build.classes}/org.eclim.kotlin'){
         fileset(dir: "org.eclim.kotlin/java", includes: "eclim/**", excludes: '**/*.java')
