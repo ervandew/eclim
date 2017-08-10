@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.ui.builder.AspectsUtils;
 import org.jetbrains.kotlin.ui.editors.KotlinFileEditor;
 import org.jetbrains.kotlin.ui.editors.codeassist.KotlinCompletionProcessor;
 
+
 @Command(name    = "kotlin_complete",
          options = "REQUIRED p project  ARG,"
                  + "REQUIRED f file     ARG,"
