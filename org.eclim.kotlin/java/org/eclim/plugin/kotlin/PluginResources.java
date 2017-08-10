@@ -9,14 +9,10 @@ import org.eclim.plugin.kotlin.project.KotlinProjectManager;
 
 public final class PluginResources extends AbstractPluginResources {
     public static final String BUNDLE_BASENAME = "org/eclim/plugin/kotlin/messages";
-
-    /**
-     * The eclipse nature id for this plugin.
-     */
     public static final String NATURE = KotlinNature.KOTLIN_NATURE;
 
     @Override
-    public void initialize(String name) {
+    public void initialize(final String name) {
         super.initialize(name);
 
         ProjectNatureFactory.addNature("kotlin", new String[] { NATURE, JavaCore.NATURE_ID, });

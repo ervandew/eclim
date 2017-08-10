@@ -30,7 +30,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 public final class SrcUpdateCommand extends AbstractCommand {
 
     @Override
-    public Object execute(CommandLine commandLine) throws Exception {
+    public Object execute(final CommandLine commandLine) throws Exception {
         final String file = commandLine.getValue(Options.FILE_OPTION);
         final String projectName = commandLine.getValue(Options.PROJECT_OPTION);
         final IProject project = ProjectUtils.getProject(projectName, true);
@@ -49,7 +49,7 @@ public final class SrcUpdateCommand extends AbstractCommand {
                     continue;
                 }
 
-                int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
+                final int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
                 errors.add(new Error(problem.getMessage(), filename, lineColumn[0], lineColumn[1], problem.isWarning()));
             }
 

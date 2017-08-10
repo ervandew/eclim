@@ -30,15 +30,15 @@ import org.jetbrains.kotlin.ui.editors.codeassist.KotlinCompletionProcessor;
 public final class CodeCompleteCommand extends org.eclim.plugin.jdt.command.complete.CodeCompleteCommand {
 
     @Override
-    protected Object getResponse(List<CodeCompleteResult> results) {
+    protected Object getResponse(final List<CodeCompleteResult> results) {
         return results;
     }
 
     @Override
-    protected List<CodeCompleteResult> getCompletionResults(CommandLine commandLine,
-                                                            String project,
-                                                            String file,
-                                                            int offset) throws Exception {
+    protected List<CodeCompleteResult> getCompletionResults(final CommandLine commandLine,
+                                                            final String project,
+                                                            final String file,
+                                                            final int offset) throws Exception {
         final IFile ifile = ProjectUtils.getFile(ProjectUtils.getProject(project, true), file);
 
         if (!AspectsUtils.isKotlinFile(ifile)) return Collections.emptyList();
@@ -58,14 +58,13 @@ public final class CodeCompleteCommand extends org.eclim.plugin.jdt.command.comp
         final List<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>(proposals.length);
 
         for (ICompletionProposal proposal : proposals) {
-            String moreInfo   = proposal.getAdditionalProposalInfo();
-            String completion = proposal.getDisplayString();
-            String shortDesc  = proposal.getDisplayString();
-            String desc       = proposal.getDisplayString();
+            final String moreInfo   = proposal.getAdditionalProposalInfo();
+            final String shortDesc  = proposal.getDisplayString();
+            final String desc       = proposal.getDisplayString();
+            final String completion = proposal.getDisplayString();
+            final String completionText = (moreInfo != null) ? completion : moreInfo;
 
-            if (moreInfo != null) completion = moreInfo;
-
-            results.add(new CodeCompleteResult(completion, shortDesc, desc));
+            results.add(new CodeCompleteResult(completionText, shortDesc, desc));
         }
 
         return results;
