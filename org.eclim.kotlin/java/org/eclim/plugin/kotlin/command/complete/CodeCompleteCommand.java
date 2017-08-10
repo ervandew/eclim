@@ -1,6 +1,7 @@
 package org.eclim.plugin.kotlin.command.complete;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclim.annotation.Command;
@@ -39,9 +40,8 @@ public final class CodeCompleteCommand extends org.eclim.plugin.jdt.command.comp
                                                             String file,
                                                             int offset) throws Exception {
         final IFile ifile = ProjectUtils.getFile(ProjectUtils.getProject(project, true), file);
-        final List<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>();
 
-        if (!AspectsUtils.isKotlinFile(ifile)) return results;
+        if (!AspectsUtils.isKotlinFile(ifile)) return Collections.emptyList();
 
         final IWorkbenchPage page       = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         final IEditorPart editorPart    = IDE.openEditor(page, ifile, false);
@@ -53,7 +53,9 @@ public final class CodeCompleteCommand extends org.eclim.plugin.jdt.command.comp
 
         ( (ITextEditor) ktEditor).close(false);
 
-        if (proposals == null) return results;
+        if (proposals == null) return Collections.emptyList();
+
+        final List<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>(proposals.length);
 
         for (ICompletionProposal proposal : proposals) {
             String moreInfo   = proposal.getAdditionalProposalInfo();
@@ -68,4 +70,5 @@ public final class CodeCompleteCommand extends org.eclim.plugin.jdt.command.comp
 
         return results;
     }
+
 }
