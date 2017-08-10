@@ -27,40 +27,46 @@ import org.eclipse.jdt.core.compiler.IProblem;
                 + "OPTIONAL v validate NOARG,"
                 + "OPTIONAL b build NOARG"
       )
-public final class SrcUpdateCommand extends AbstractCommand {
+public final class SrcUpdateCommand extends AbstractCommand
+{
 
-    @Override
-    public Object execute(final CommandLine commandLine) throws Exception {
-        final String file = commandLine.getValue(Options.FILE_OPTION);
-        final String projectName = commandLine.getValue(Options.PROJECT_OPTION);
-        final IProject project = ProjectUtils.getProject(projectName, true);
-        final IFile ifile = ProjectUtils.getFile(project, file);
+  @Override
+  public Object execute(final CommandLine commandLine) throws Exception
+  {
+    final String file = commandLine.getValue(Options.FILE_OPTION);
+    final String projectName = commandLine.getValue(Options.PROJECT_OPTION);
+    final IProject project = ProjectUtils.getProject(projectName, true);
+    final IFile ifile = ProjectUtils.getFile(project, file);
 
-        // validate the src file.
-        if (commandLine.hasOption(Options.VALIDATE_OPTION)) {
-            final ICompilationUnit src = JavaCore.createCompilationUnitFrom(ifile);
-            final IProblem[] problems = JavaUtils.getProblems(src);
-            final List<Error> errors = new ArrayList<Error>(problems.length);
-            final String filename = src.getResource().getLocation().toOSString().replace('\\', '/');
-            final FileOffsets offsets = FileOffsets.compile(filename);
+    // validate the src file.
+    if(commandLine.hasOption(Options.VALIDATE_OPTION)){
+      final ICompilationUnit src = JavaCore.createCompilationUnitFrom(ifile);
+      final IProblem[] problems = JavaUtils.getProblems(src);
+      final List<Error> errors = new ArrayList<Error>(problems.length);
+      final String filename = src.getResource().getLocation().toOSString()
+          .replace('\\', '/');
+      final FileOffsets offsets = FileOffsets.compile(filename);
 
-            for (IProblem problem : problems) {
-                if (problem.getID() == IProblem.Task) {
-                    continue;
-                }
-
-                final int[] lineColumn = offsets.offsetToLineColumn(problem.getSourceStart());
-                errors.add(new Error(problem.getMessage(), filename, lineColumn[0], lineColumn[1], problem.isWarning()));
-            }
-
-            if (commandLine.hasOption(Options.BUILD_OPTION)) {
-                project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, new NullProgressMonitor());
-            }
-
-            return errors;
+      for(IProblem problem : problems){
+        if(problem.getID() == IProblem.Task){
+          continue;
         }
 
-        return StringUtils.EMPTY;
+        final int[] lineColumn = offsets
+            .offsetToLineColumn(problem.getSourceStart());
+        errors.add(new Error(problem.getMessage(), filename, lineColumn[0],
+            lineColumn[1], problem.isWarning()));
+      }
+
+      if(commandLine.hasOption(Options.BUILD_OPTION)){
+        project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD,
+                      new NullProgressMonitor());
+      }
+
+      return errors;
     }
+
+    return StringUtils.EMPTY;
+  }
 
 }

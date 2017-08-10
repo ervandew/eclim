@@ -27,47 +27,57 @@ import org.jetbrains.kotlin.ui.editors.codeassist.KotlinCompletionProcessor;
                  + "REQUIRED e encoding ARG,"
                  + "REQUIRED l layout   ARG,"
                  + "OPTIONAL j javaDoc  NOARG")
-public final class CodeCompleteCommand extends org.eclim.plugin.jdt.command.complete.CodeCompleteCommand {
+public final class CodeCompleteCommand
+    extends org.eclim.plugin.jdt.command.complete.CodeCompleteCommand
+{
 
-    @Override
-    protected Object getResponse(final List<CodeCompleteResult> results) {
-        return results;
+  @Override
+  protected Object getResponse(final List<CodeCompleteResult> results)
+  {
+    return results;
+  }
+
+  @Override
+  protected List<CodeCompleteResult> getCompletionResults(
+      final CommandLine commandLine, final String project, final String file,
+      final int offset) throws Exception
+  {
+    final IFile ifile = ProjectUtils
+        .getFile(ProjectUtils.getProject(project, true), file);
+
+    if (!AspectsUtils.isKotlinFile(ifile))
+      return Collections.emptyList();
+
+    final IWorkbenchPage page = PlatformUI.getWorkbench()
+        .getActiveWorkbenchWindow().getActivePage();
+    final IEditorPart editorPart = IDE.openEditor(page, ifile, false);
+    final KotlinFileEditor ktEditor = (KotlinFileEditor) editorPart;
+    final ISourceViewer viewer = ktEditor.getViewer();
+
+    final KotlinCompletionProcessor completer = new KotlinCompletionProcessor(
+        ktEditor, null, true);
+    final ICompletionProposal[] proposals = completer
+        .computeCompletionProposals(viewer, offset);
+
+    ((ITextEditor) ktEditor).close(false);
+
+    if (proposals == null)
+      return Collections.emptyList();
+
+    final List<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>(
+        proposals.length);
+
+    for(ICompletionProposal proposal : proposals){
+      final String moreInfo = proposal.getAdditionalProposalInfo();
+      final String shortDesc = proposal.getDisplayString();
+      final String desc = proposal.getDisplayString();
+      final String completion = proposal.getDisplayString();
+      final String completionText = (moreInfo != null) ? moreInfo : completion;
+
+      results.add(new CodeCompleteResult(completionText, shortDesc, desc));
     }
 
-    @Override
-    protected List<CodeCompleteResult> getCompletionResults(final CommandLine commandLine,
-                                                            final String project,
-                                                            final String file,
-                                                            final int offset) throws Exception {
-        final IFile ifile = ProjectUtils.getFile(ProjectUtils.getProject(project, true), file);
-
-        if (!AspectsUtils.isKotlinFile(ifile)) return Collections.emptyList();
-
-        final IWorkbenchPage page       = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        final IEditorPart editorPart    = IDE.openEditor(page, ifile, false);
-        final KotlinFileEditor ktEditor = (KotlinFileEditor) editorPart;
-        final ISourceViewer viewer      = ktEditor.getViewer();
-
-        final KotlinCompletionProcessor completer = new KotlinCompletionProcessor(ktEditor, null, true);
-        final ICompletionProposal[] proposals     = completer.computeCompletionProposals(viewer, offset);
-
-        ( (ITextEditor) ktEditor).close(false);
-
-        if (proposals == null) return Collections.emptyList();
-
-        final List<CodeCompleteResult> results = new ArrayList<CodeCompleteResult>(proposals.length);
-
-        for (ICompletionProposal proposal : proposals) {
-            final String moreInfo   = proposal.getAdditionalProposalInfo();
-            final String shortDesc  = proposal.getDisplayString();
-            final String desc       = proposal.getDisplayString();
-            final String completion = proposal.getDisplayString();
-            final String completionText = (moreInfo != null) ? completion : moreInfo;
-
-            results.add(new CodeCompleteResult(completionText, shortDesc, desc));
-        }
-
-        return results;
-    }
+    return results;
+  }
 
 }
