@@ -14,7 +14,7 @@ target(name: 'org.eclim.jdt.build.eclipse'){
       destdir: '${build.classes}/testng',
       srcdir: 'ant/ext/testng',
       debug: 'on', optimize: false,
-      target: '1.6', source: '1.6',
+      target: '1.8', source: '1.8',
       failonerror: true,
       includeantruntime: false){
     classpath{fileset(dir: 'ant/lib', includes: 'testng-*.jar')}

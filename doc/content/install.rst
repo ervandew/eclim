@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ Requirements
 Before beginning the installation, first confirm that you have met the
 following requirements.
 
-- `Java Development Kit`_ 1.7 or greater
+- `Java Development Kit`_ 1.8 or greater
 - `Vim`_ 7.1 or greater
 - `Eclipse eclipse_version`_
 - Mac and Linux users must also have make and gcc installed.

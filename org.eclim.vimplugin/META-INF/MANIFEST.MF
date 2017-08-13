@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Vendor: eclim.org
 Bundle-SymbolicName: org.eclim.vimplugin; singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Version: ${eclim.version}
 Bundle-Localization: plugin
 Bundle-Activator: org.vimplugin.VimPlugin
