@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013
+ * Copyright (C) 2012 - 2017
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,13 +92,21 @@ public class PluginResources
       AnalysisPreferenceInitializer.NAMES_TO_IGNORE_UNUSED_VARIABLE,
       AnalysisPreferenceInitializer.NAMES_TO_IGNORE_UNUSED_IMPORT,
       AnalysisPreferenceInitializer.NAMES_TO_CONSIDER_GLOBALS,
+      AnalysisPreferenceInitializer.SEVERITY_UNUSED_IMPORT,
+      AnalysisPreferenceInitializer.SEVERITY_UNUSED_WILD_IMPORT,
+      AnalysisPreferenceInitializer.SEVERITY_UNUSED_VARIABLE,
+      AnalysisPreferenceInitializer.SEVERITY_UNUSED_PARAMETER,
     });
     Preferences.addOptionHandler(handler);
     PreferenceFactory.addOptions(PythonNature.PYTHON_NATURE_ID,
       "PYDEV org.python.pydev.TAB_WIDTH \\d+\n" +
       "PYDEV com.python.pydev.analysis.NAMES_TO_CONSIDER_GLOBALS\n" +
       "PYDEV com.python.pydev.analysis.NAMES_TO_IGNORE_UNUSED_VARIABLE\n" +
-      "PYDEV com.python.pydev.analysis.NAMES_TO_IGNORE_UNUSED_IMPORT"
+      "PYDEV com.python.pydev.analysis.NAMES_TO_IGNORE_UNUSED_IMPORT\n" +
+      "PYDEV com.python.pydev.analysis.SEVERITY_UNUSED_IMPORT (-1|[0-2])\n" +
+      "PYDEV com.python.pydev.analysis.SEVERITY_UNUSED_WILD_IMPORT (-1|[0-2])\n" +
+      "PYDEV com.python.pydev.analysis.SEVERITY_UNUSED_VARIABLE (-1|[0-2])\n" +
+      "PYDEV com.python.pydev.analysis.SEVERITY_UNUSED_PARAMETER (-1|[0-2])"
     );
 
     // pre-init the builtin completions for the python natures so that users
