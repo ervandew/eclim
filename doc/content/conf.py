@@ -53,7 +53,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'eclim'
-copyright = '2005 - 2012, Eric Van Dewoestine'
+copyright = '2005 - 2017, Eric Van Dewoestine'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -114,7 +114,6 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme = 'bootstrap'
-html_translator_class = 'bootstrap.HTMLTranslator'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -272,3 +271,7 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+def setup(app):
+  import bootstrap
+  app.set_translator('html', bootstrap.HTMLTranslator)
