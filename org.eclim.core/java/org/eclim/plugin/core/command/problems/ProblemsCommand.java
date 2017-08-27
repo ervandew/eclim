@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.command.problems;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -75,6 +76,7 @@ import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
   name = "problems",
   options =
     "REQUIRED p project ARG," +
+    "OPTIONAL f file ARG," +    // specifying a file only filters warnings
     "OPTIONAL e errors NOARG"
 )
 public class ProblemsCommand
@@ -91,7 +93,11 @@ public class ProblemsCommand
 
     String name = commandLine.getValue(Options.PROJECT_OPTION);
     boolean errorsOnly = commandLine.hasOption(Options.ERRORS_OPTION);
+    String fileName = commandLine.getValue(Options.FILE_OPTION);
     IProject project = ProjectUtils.getProject(name);
+
+    File fileFilter = (fileName != null) ?
+      getCanonicalFile(new File(fileName)) : null;
 
     ContentGeneratorDescriptor descriptor =
       MarkerSupportRegistry.getInstance().getDefaultContentGenDescriptor();
@@ -126,6 +132,11 @@ public class ProblemsCommand
     CollectionUtils.addAll(projects, project.getReferencedProjects());
     CollectionUtils.addAll(projects, project.getReferencingProjects());
 
+	// store the last path and use it to know when to update the
+	// current file. Only used if we are filtering warnings by file.
+    String lastPath = null;
+    File fileCur = null;
+
     Method getMarker = null;
     for (Object markerEntry : markers){
       if (getMarker == null){
@@ -155,6 +166,23 @@ public class ProblemsCommand
           continue;
         }
 
+
+
+        String path = resource.getLocation().toOSString().replace('\\', '/');
+        File file = new File(path);
+
+        if ((severity != IMarker.SEVERITY_ERROR) && fileFilter != null) {
+          // try to minimize the number of calls to getCanonicalFile
+          // by only updating fileCur when the path has changed
+          if ((fileCur == null) || !path.equals(lastPath)) {
+            fileCur = getCanonicalFile(file);
+            lastPath = path;
+          }
+          if (!fileFilter.equals(fileCur)) {
+            continue;
+          }
+        }
+
         int offset = attributes.containsKey("charStart") ?
           ((Integer)attributes.get("charStart")).intValue() : 1;
         int line = attributes.containsKey("lineNumber") ?
@@ -162,8 +190,8 @@ public class ProblemsCommand
         int[] pos = {1, 1};
 
         String message = (String)attributes.get("message");
-        String path = resource.getLocation().toOSString().replace('\\', '/');
-        File file = new File(path);
+
+
         if (file.isFile() && file.exists() && offset > 0){
           pos = FileUtils.offsetToLineColumn(path, offset);
         }
@@ -182,6 +210,25 @@ public class ProblemsCommand
     Collections.sort(problems, new ProblemComparator(project));
 
     return problems;
+  }
+
+  /** Attempt to get the canonical file for the specified path. If
+   * the canonical File cannot be obtained, returns the absolute
+   * file, instead.
+   *
+   * @param path the path to get the canonical file of
+   *
+   * @return the canonical file or, failing that, the absolute file
+   */
+  private File getCanonicalFile(File file) {
+    File result;
+    try {
+      result = file.getCanonicalFile();
+    }
+    catch (IOException e) {
+      result = file.getAbsoluteFile();
+    }
+    return result;
   }
 
   private void waitOnBuild()
@@ -217,8 +264,8 @@ public class ProblemsCommand
 
     /**
      * {@inheritDoc}
-     * @see Comparator#compare(T,T)
-     */
+	 * @see Comparator#compare(T,T)
+	 */
     public int compare(Error e1, Error e2)
     {
       String ef1 = e1.getFilename();
