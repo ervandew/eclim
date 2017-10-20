@@ -54,8 +54,8 @@ Commands
 - **:EclimDisable** -
   Allows you to temporarily disable all communication with eclimd for the
   current vim session.  Useful if you need to shutdown eclimd for one reason or
-  antoher, and would like to disable vim's attempts to communicate with the
-  non-existant server.
+  another, and would like to disable vim's attempts to communicate with the
+  non-existent server.
 
 .. _\:EclimEnable:
 
