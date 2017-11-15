@@ -221,14 +221,20 @@ public class VariableView
     }
 
     for (IVariable var : vars) {
-      JDIVariable jvar = (JDIVariable) var;
-      if (jvar.isSynthetic() ||
-          ignoreVar(jvar))
-      {
-        continue;
+      if (var instanceof JDIVariable) {
+        JDIVariable jdivar = (JDIVariable) var;
+        if (jdivar.isSynthetic() ||
+            ignoreVar(jdivar))
+        {
+          continue;
+        }
+      }
+      if (!(var instanceof IJavaVariable)) {
+	  continue;
       }
 
-      JDIValue value = (JDIValue) var.getValue();
+      IJavaVariable jvar = (IJavaVariable) var;
+      IJavaValue value = (IJavaValue)var.getValue();
       boolean isLeafNode = !((value != null) &&
         (value instanceof IJavaObject) &&
         value.hasVariables());
