@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2016  Eric Van Dewoestine
+  Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -160,8 +160,6 @@
         file="ant/build.gant"
         target="${target}"
         inheritAll="true"
-        useCache="true"
-        cacheDir="build/temp/gant"
       />
   </target>
 
