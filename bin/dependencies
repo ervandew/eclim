@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
-# Copyright (C) 2005 - 2016  Eric Van Dewoestine
+# Copyright (C) 2005 - 2017  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #
 # Author: Eric Van Dewoestine
 ##
+from __future__ import print_function
 
 import os
 import re
@@ -30,19 +31,8 @@ import tempfile
 
 from collections import defaultdict
 from subprocess import Popen, PIPE
-from urllib import urlopen
 from xml.dom.minidom import parse
 from zipfile import ZipFile
-
-# hack until multi update site support is added to installer/dependencies
-updateSites = {
-  'org.scala-ide.sdt.feature': [
-    'http://download.scala-ide.org/sdk/e37/scala29/dev/site/',
-    'http://download.scala-ide.org/sdk/e37/scala210/dev/site/',
-    'http://download.scala-ide.org/sdk/e38/scala29/dev/site/',
-    'http://download.scala-ide.org/sdk/e38/scala210/dev/site/',
-  ]
-}
 
 def main():
   eclimHome = getEclimHome()
@@ -57,7 +47,14 @@ def main():
   actionable = compareInstalled(
     dependencies, installedFeatures, availableFeatures)
   if actionable:
-    response = raw_input('\nInstall/Upgrade dependencies? (y/n): ')
+    prompt = '\nInstall/Upgrade dependencies? (y/n): '
+    try:
+      # python 2
+      response = raw_input(prompt)
+    except NameError:
+      # python 3
+      response = input(prompt)
+
     if response == 'y':
       installUpgrade(eclipseLauncher, actionable)
 
@@ -86,7 +83,7 @@ def getEclipseHome(eclimHome):
   if 'ECLIM_ECLIPSE_HOME' in os.environ:
     return os.environ['ECLIM_ECLIPSE_HOME']
 
-  print (
+  print(
     'The eclipse install location must be set using either an\n'
     'ECLIM_ECLIPSE_HOME environment variable or eclipse.home in\n'
     'a user.properties file.'
@@ -101,25 +98,18 @@ def getEclipseLauncher(eclipseHome):
 
 def getDependencies(eclimHome):
   dependencies = []
-  dom = parse(file(os.path.join(
-    eclimHome, 'org.eclim.installer/build/resources/dependencies.xml')))
-  for dependencyElement in dom.getElementsByTagName('dependency'):
-    name = dependencyElement.getAttribute('id')
-    sites = dependencyElement.getElementsByTagName('site')
-    site = sites[0].getAttribute('url') if sites else None
-    if not site and name in updateSites:
-      sites = updateSites[name]
-      if len(sites) == 1:
-        site = sites[0]
-      else:
-        for i, site in enumerate(sites):
-          print '%s. %s' % (i, site)
-        choice = raw_input('Choose the update site to use for %s: ' % name)
-        if choice.isdigit():
-          site = sites[int(choice)]
-
-    version = Version(dependencyElement.getAttribute('version'))
-    dependencies.append(Dependency(name, version, site))
+  path = os.path.join(
+    eclimHome,
+    'org.eclim.installer/build/resources/dependencies.xml',
+  )
+  with open(path) as f:
+    dom = parse(f)
+    for dependencyElement in dom.getElementsByTagName('dependency'):
+      name = dependencyElement.getAttribute('id')
+      sites = dependencyElement.getElementsByTagName('site')
+      site = sites[0].getAttribute('url')
+      version = Version(dependencyElement.getAttribute('version'))
+      dependencies.append(Dependency(name, version, site))
 
   return dependencies
 
@@ -148,7 +138,7 @@ def getAvailableFeatures(eclipseLauncher, sites):
     else:
       response = urlopen(site + 'content.jar')
       if response.code == 200:
-        print 'reading content.xml from %scontent.jar ...' % site,
+        print('reading content.xml from %scontent.jar ... ' % site, end='')
         sys.stdout.flush()
         temp = tempfile.TemporaryFile()
         try:
@@ -157,7 +147,7 @@ def getAvailableFeatures(eclipseLauncher, sites):
         finally:
           temp.close()
         elementName = 'unit'
-        print 'done'
+        print('done')
 
     if dom:
       try:
@@ -176,17 +166,20 @@ def getAvailableFeatures(eclipseLauncher, sites):
         '-application org.eclipse.equinox.p2.director ' \
         '-repository %s ' \
         '-list' % (eclipseLauncher, site)
-      print 'running: %s ...' % cmd,
+      print('running: %s ... ' % cmd, end='')
       sys.stdout.flush()
       process = Popen(cmd, shell=True, stdout=PIPE)
       stdout, stderr = process.communicate()
       if process.returncode:
-        print >> sys.stderr, 'abort: repository list failed.'
-        print >> sys.stderr, stderr
+        print('abort: repository list failed.', file=sys.stderr)
+        if stdout:
+          print(stdout, file=sys.stderr)
+        if stderr:
+          print(stderr, file=sys.stderr)
         sys.exit(process.returncode)
-      print 'done'
+      print('done')
 
-      for line in stdout.split('\n'):
+      for line in stdout.decode().split('\n'):
         name, _, version = line.partition('=')
         if name.endswith('.feature.group'):
           name = name.replace('.feature.group', '')
@@ -199,7 +192,7 @@ def compareDependenciesXml(dependencies, availableFeatures):
   for feature in availableFeatures:
     availableByName[feature.name].append(feature)
 
-  print '\ndependencies.xml'
+  print('\ndependencies.xml')
   for dependency in dependencies:
     if dependency.name not in availableByName:
       print('  [\033[1;31m*\033[0m] %s not found at %s' % (
@@ -230,7 +223,7 @@ def compareInstalled(dependencies, installedFeatures, availableFeatures):
   for feature in availableFeatures:
     availableByName[feature.name].append(feature)
 
-  print '\ninstalled'
+  print('\ninstalled')
   actionable = []
   for dependency in dependencies:
     installed = installedByName.get(dependency.name)
@@ -274,23 +267,68 @@ def installUpgrade(eclipseLauncher, actionable):
       '-repository %s ' \
       '-installIU %s.feature.group' % (
         eclipseLauncher, dependency.site, dependency.name)
-    print 'running: %s ...' % cmd,
+    print('running: %s ... ' % cmd, end='')
     sys.stdout.flush()
     process = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
     if process.returncode:
-      print >> sys.stderr, 'abort: repository list failed.'
-      print >> sys.stderr, stdout
-      print >> sys.stderr, stderr
+      print('abort: repository list failed.', file=sys.stderr)
+      if stdout:
+        print(stdout, file=sys.stderr)
+      if stderr:
+        print(stderr, file=sys.stderr)
       sys.exit(process.returncode)
-    print 'done'
-    print stdout
+    print('done')
+    print(stdout)
+
+def urlopen(url):
+  try:
+    # python 2
+    from urllib import urlopen
+    return urlopen(url)
+  except ImportError:
+    # python 3
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    try:
+      return urlopen(url)
+    except HTTPError as he:
+      return he
 
 class Dependency(object):
   def __init__(self, name, version, site):
     self.name = name
     self.version = version
     self.site = site
+
+  def __eq__(self, other):
+    return \
+      self.name == other.name and \
+      self.version == other.version
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  def __cmp__(self, other):
+    if self.name != other.name:
+      raise ValueError('Cannot compare different dependencies.')
+
+    return self.version.__cmp__(other.version)
+
+  def __lt__(self, other):
+    return self.__cmp__(other) < 0
+
+  def __le__(self, other):
+    return self.__cmp__(other) <= 0
+
+  def __gt__(self, other):
+    return self.__cmp__(other) > 0
+
+  def __ge__(self, other):
+    return self.__cmp__(other) >= 0
+
+  def __hash__(self):
+    return hash((self.name, hash(self.version)))
 
   def __str__(self):
     return 'dependency: %s-%s' % (self.name, self.version)
@@ -313,13 +351,16 @@ class Version(object):
     self.major, self.minor, self.patch = [int(p) for p in parts[:3]]
 
   def __hash__(self):
-    return hash(str(self))
+    return hash((self.major, self.minor, self.patch))
 
   def __eq__(self, other):
     return \
       self.major == other.major and \
       self.minor == other.minor and \
       self.patch == other.patch
+
+  def __ne__(self, other):
+    return not (self == other)
 
   def __cmp__(self, other):
     if self.major != other.major:
@@ -329,6 +370,18 @@ class Version(object):
     if self.patch != other.patch:
       return self.patch - other.patch
     return 0
+
+  def __lt__(self, other):
+    return self.__cmp__(other) < 0
+
+  def __le__(self, other):
+    return self.__cmp__(other) <= 0
+
+  def __gt__(self, other):
+    return self.__cmp__(other) > 0
+
+  def __ge__(self, other):
+    return self.__cmp__(other) >= 0
 
   def __str__(self):
     return '%i.%i.%i' % (self.major, self.minor, self.patch)
@@ -340,7 +393,7 @@ if __name__ == '__main__':
   try:
     main()
   except KeyboardInterrupt:
-    print ''
+    print('')
     sys.exit(0)
 
 # vim:ft=python
