@@ -298,17 +298,17 @@ target(name: 'deploy.eclipse'){
     try{
       exec(executable: 'ln', dir: '${eclipse.dest}',
           failonerror: true, errorproperty: 'ignore'){
-        arg(line: '-rs ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim .')
+        arg(line: '-rs "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim" .')
       }
       exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
-        arg(line: '-rs ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd .')
+        arg(line: '-rs "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd" .')
       }
     }catch(e){
       exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
-        arg(line: '-s ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim .')
+        arg(line: '-s "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim" .')
       }
       exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
-        arg(line: '-s ${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd .')
+        arg(line: '-s "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd" .')
       }
     }
   }
