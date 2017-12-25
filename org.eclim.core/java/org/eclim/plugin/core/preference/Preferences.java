@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,13 @@ import org.eclim.logging.Logger;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 
+import org.eclipse.core.runtime.CoreException;
+
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+
+import org.osgi.service.prefs.BackingStoreException;
 
 import com.google.gson.Gson;
 
@@ -182,7 +186,6 @@ public class Preferences
    * @return A map of key values.
    */
   public Map<String, String> getValues()
-    throws Exception
   {
     return getValues(null);
   }
@@ -194,60 +197,65 @@ public class Preferences
    * @return A map of key values.
    */
   public Map<String, String> getValues(IProject project)
-    throws Exception
   {
-    String cacheKey = project != null ? project.getName() : GLOBAL;
+    try{
+      String cacheKey = project != null ? project.getName() : GLOBAL;
 
-    // eclim preferences
-    Map<String, String> prefVals = preferenceValues.get(cacheKey);
-    if(prefVals == null){
-      prefVals = new HashMap<String, String>();
-      preferenceValues.put(cacheKey, prefVals);
+      // eclim preferences
+      Map<String, String> prefVals = preferenceValues.get(cacheKey);
+      if(prefVals == null){
+        prefVals = new HashMap<String, String>();
+        preferenceValues.put(cacheKey, prefVals);
 
-      IScopeContext context = InstanceScope.INSTANCE;
+        IScopeContext context = InstanceScope.INSTANCE;
 
-      // global
-      IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
-      initializeDefaultPreferences(globalPrefs);
-      for(String key : globalPrefs.keys()){
-        prefVals.put(key, globalPrefs.get(key, null));
-      }
-
-      // project
-      if (project != null){
-        context = new ProjectScope(project);
-        IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
-        for(String key : projectPrefs.keys()){
-          prefVals.put(key, projectPrefs.get(key, null));
+        // global
+        IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
+        initializeDefaultPreferences(globalPrefs);
+        for(String key : globalPrefs.keys()){
+          prefVals.put(key, globalPrefs.get(key, null));
         }
-      }
-    }
 
-    // eclipse option
-    Map<String, String> optVals = optionValues.get(cacheKey);
-    if(optVals == null){
-      optVals = new HashMap<String, String>();
-      optionValues.put(cacheKey, optVals);
-      for(OptionHandler handler : optionHandlers.values()){
-        String nature = handler.getNature();
-        if (CORE.equals(nature) ||
-            project == null ||
-            project.getNature(nature) != null)
-        {
-          Map<String, String> ops = project == null ?
-            handler.getValues() : handler.getValues(project);
-          if (ops != null){
-            optVals.putAll(ops);
+        // project
+        if (project != null){
+          context = new ProjectScope(project);
+          IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
+          for(String key : projectPrefs.keys()){
+            prefVals.put(key, projectPrefs.get(key, null));
           }
         }
       }
-    }
 
-    Map<String, String> all =
-      new HashMap<String, String>(preferenceValues.size() + optionValues.size());
-    all.putAll(optVals);
-    all.putAll(prefVals);
-    return all;
+      // eclipse option
+      Map<String, String> optVals = optionValues.get(cacheKey);
+      if(optVals == null){
+        optVals = new HashMap<String, String>();
+        optionValues.put(cacheKey, optVals);
+        for(OptionHandler handler : optionHandlers.values()){
+          String nature = handler.getNature();
+          if (CORE.equals(nature) ||
+              project == null ||
+              project.getNature(nature) != null)
+          {
+            Map<String, String> ops = project == null ?
+              handler.getValues() : handler.getValues(project);
+            if (ops != null){
+              optVals.putAll(ops);
+            }
+          }
+        }
+      }
+
+      Map<String, String> all =
+        new HashMap<String, String>(preferenceValues.size() + optionValues.size());
+      all.putAll(optVals);
+      all.putAll(prefVals);
+      return all;
+    }catch(BackingStoreException bse){
+      throw new RuntimeException(bse);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   /**
@@ -257,7 +265,6 @@ public class Preferences
    * @return The value or null if not found.
    */
   public String getValue(String name)
-    throws Exception
   {
     return getValues(null).get(name);
   }
@@ -270,7 +277,6 @@ public class Preferences
    * @return The value or null if not found.
    */
   public String getValue(IProject project, String name)
-    throws Exception
   {
     return getValues(project).get(name);
   }
@@ -282,7 +288,6 @@ public class Preferences
    * @return The value or -1 if not found.
    */
   public int getIntValue(String name)
-    throws Exception
   {
     return getIntValue(null, name);
   }
@@ -295,7 +300,6 @@ public class Preferences
    * @return The value or -1 if not found.
    */
   public int getIntValue(IProject project, String name)
-    throws Exception
   {
     String value = getValues(project).get(name);
     return value != null ? Integer.parseInt(value) : -1;
@@ -308,7 +312,6 @@ public class Preferences
    * @return The possibly empty array value.
    */
   public String[] getArrayValue(String name)
-    throws Exception
   {
     return getArrayValue(null, name);
   }
@@ -321,7 +324,6 @@ public class Preferences
    * @return The possibly empty array value.
    */
   public String[] getArrayValue(IProject project, String name)
-    throws Exception
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
@@ -337,7 +339,6 @@ public class Preferences
    * @return The possibly empty set.
    */
   public Set<String> getSetValue(String name)
-    throws Exception
   {
     return getSetValue(null, name);
   }
@@ -351,7 +352,6 @@ public class Preferences
    */
   @SuppressWarnings("unchecked")
   public Set<String> getSetValue(IProject project, String name)
-    throws Exception
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
@@ -368,7 +368,6 @@ public class Preferences
    * @return The Map value or null if not found
    */
   public Map<String,String> getMapValue(String name)
-    throws Exception
   {
     return getMapValue(null, name);
   }
@@ -379,11 +378,9 @@ public class Preferences
    * @param project The project.
    * @param name The name of the option/preference.
    * @return The Map value or and empty array if not found.
-   * @throws Exception
    */
   @SuppressWarnings("unchecked")
   public Map<String,String> getMapValue(IProject project, String name)
-    throws Exception
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
@@ -399,7 +396,6 @@ public class Preferences
    * @return Array of Option.
    */
   public Option[] getOptions()
-    throws Exception
   {
     return getOptions(null);
   }
@@ -411,7 +407,6 @@ public class Preferences
    * @return Array of Option.
    */
   public Option[] getOptions(IProject project)
-    throws Exception
   {
     ArrayList<OptionInstance> results = new ArrayList<OptionInstance>();
     Map<String, String> options = new HashMap<String, String>();
@@ -420,50 +415,62 @@ public class Preferences
     IScopeContext context = InstanceScope.INSTANCE;
     IEclipsePreferences globalPrefs = context.getNode(NODE_NAME);
     initializeDefaultPreferences(globalPrefs);
-    for(String key : globalPrefs.keys()){
-      options.put(key, globalPrefs.get(key, null));
+    try{
+      for(String key : globalPrefs.keys()){
+        options.put(key, globalPrefs.get(key, null));
+      }
+    }catch(BackingStoreException bse){
+      throw new RuntimeException(bse);
     }
 
     // project
     if (project != null){
       context = new ProjectScope(project);
       IEclipsePreferences projectPrefs = context.getNode(NODE_NAME);
-      for(String key : projectPrefs.keys()){
-        options.put(key, projectPrefs.get(key, null));
-      }
-    }
-
-    for(OptionHandler handler : optionHandlers.values()){
-      String nature = handler.getNature();
-      if (CORE.equals(nature) ||
-          project == null ||
-          project.getNature(nature) != null)
-      {
-        Map<String, String> ops = project == null ?
-          handler.getValues() : handler.getValues(project);
-        if (ops != null){
-          options.putAll(ops);
+      try{
+        for(String key : projectPrefs.keys()){
+          options.put(key, projectPrefs.get(key, null));
         }
+      }catch(BackingStoreException bse){
+        throw new RuntimeException(bse);
       }
     }
 
-    for(String key : options.keySet()){
-      String value = options.get(key);
-      Option option = this.options.get(key);
-      if(option == null){
-        option = this.preferences.get(key);
-      }
-
-      if(option != null && value != null){
-        String nature = option.getNature();
+    try{
+      for(OptionHandler handler : optionHandlers.values()){
+        String nature = handler.getNature();
         if (CORE.equals(nature) ||
             project == null ||
             project.getNature(nature) != null)
         {
-          OptionInstance instance = new OptionInstance(option, value);
-          results.add(instance);
+          Map<String, String> ops = project == null ?
+            handler.getValues() : handler.getValues(project);
+          if (ops != null){
+            options.putAll(ops);
+          }
         }
       }
+
+      for(String key : options.keySet()){
+        String value = options.get(key);
+        Option option = this.options.get(key);
+        if(option == null){
+          option = this.preferences.get(key);
+        }
+
+        if(option != null && value != null){
+          String nature = option.getNature();
+          if (CORE.equals(nature) ||
+              project == null ||
+              project.getNature(nature) != null)
+          {
+            OptionInstance instance = new OptionInstance(option, value);
+            results.add(instance);
+          }
+        }
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return results.toArray(new Option[results.size()]);
@@ -476,7 +483,6 @@ public class Preferences
    * @param value The option/preference value.
    */
   public void setValue(String name, String value)
-    throws Exception
   {
     setValue(null, name, value);
   }
@@ -489,7 +495,6 @@ public class Preferences
    * @param value The value of the option/preference.
    */
   public void setValue(IProject project, String name, String value)
-    throws IllegalArgumentException, Exception
   {
     if(name.startsWith(NODE_NAME)){
       setPreference(NODE_NAME, project, name, value);
@@ -529,7 +534,6 @@ public class Preferences
    */
   public void setPreference(
       String nodeName, IProject project, String name, String value)
-    throws IllegalArgumentException, Exception
   {
     IScopeContext context = InstanceScope.INSTANCE;
 
@@ -541,27 +545,31 @@ public class Preferences
       pref = options.get(name);
     }
 
-    // set global
-    if (project == null){
-      validateValue(pref, name, value);
-      globalPrefs.put(name, value);
-      globalPrefs.flush();
-
-    }else{
-      context = new ProjectScope(project);
-      IEclipsePreferences projectPrefs = context.getNode(nodeName);
-
-      // if project value is the same as the global, then remove it.
-      if(value.equals(globalPrefs.get(name, null))){
-        projectPrefs.remove(name);
-        projectPrefs.flush();
-
-      // if project value differs from global, then persist it.
-      }else{
+    try{
+      // set global
+      if (project == null){
         validateValue(pref, name, value);
-        projectPrefs.put(name, value);
-        projectPrefs.flush();
+        globalPrefs.put(name, value);
+        globalPrefs.flush();
+
+      }else{
+        context = new ProjectScope(project);
+        IEclipsePreferences projectPrefs = context.getNode(nodeName);
+
+        // if project value is the same as the global, then remove it.
+        if(value.equals(globalPrefs.get(name, null))){
+          projectPrefs.remove(name);
+          projectPrefs.flush();
+
+        // if project value differs from global, then persist it.
+        }else{
+          validateValue(pref, name, value);
+          projectPrefs.put(name, value);
+          projectPrefs.flush();
+        }
       }
+    }catch(BackingStoreException bse){
+      throw new RuntimeException(bse);
     }
     preferenceValues.clear();
   }
@@ -573,7 +581,6 @@ public class Preferences
    * @param preferences The eclipse preferences.
    */
   private void initializeDefaultPreferences(IEclipsePreferences preferences)
-    throws Exception
   {
     String node = preferences.name();
     for(Preference preference : this.preferences.values()){
@@ -582,7 +589,11 @@ public class Preferences
         preferences.put(preference.getName(), preference.getDefaultValue());
       }
     }
-    preferences.flush();
+    try{
+      preferences.flush();
+    }catch(BackingStoreException bse){
+      throw new RuntimeException(bse);
+    }
   }
 
   /**
@@ -594,7 +605,6 @@ public class Preferences
    * @param value The value of the option/preference.
    */
   private void validateValue(Option option, String name, String value)
-    throws IllegalArgumentException
   {
     if(option != null){
       Validator validator = option.getValidator();

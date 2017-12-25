@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,9 +52,7 @@ import org.eclipse.wst.jsdt.core.compiler.IProblem;
 public class JavaScriptSrcUpdateCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -124,27 +122,19 @@ public class JavaScriptSrcUpdateCommand
       return problems;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void acceptProblem(IProblem problem)
     {
       problems.add(problem);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void beginReporting(){}
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void endReporting(){}
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isActive()
     {
       return true;

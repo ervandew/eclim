@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,12 @@ import org.eclim.util.CollectionUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
- * Implementation of {@link ProjectManager} for groovy projects.
+ * Implementation of {@link org.eclim.plugin.core.project.ProjectManager} for
+ * groovy projects.
  *
  * @author Eric Van Dewoestine
  */
@@ -43,7 +45,6 @@ public class GroovyProjectManager
 {
   @Override
   public void create(IProject project, CommandLine commandLine)
-    throws Exception
   {
     super.create(project, commandLine);
 
@@ -51,13 +52,17 @@ public class GroovyProjectManager
     // remove the groovy nature so that we can use the GroovyRuntime method call
     // below to add all the necessary classpath container entries that the java
     // project manager either removes or prevents the creation of.
-    IProjectDescription desc = project.getDescription();
-    String[] natureIds = desc.getNatureIds();
-    ArrayList<String> modified = new ArrayList<String>();
-    CollectionUtils.addAll(modified, natureIds);
-    modified.remove(PluginResources.NATURE);
-    desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
-    project.setDescription(desc, new NullProgressMonitor());
+    try{
+      IProjectDescription desc = project.getDescription();
+      String[] natureIds = desc.getNatureIds();
+      ArrayList<String> modified = new ArrayList<String>();
+      CollectionUtils.addAll(modified, natureIds);
+      modified.remove(PluginResources.NATURE);
+      desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
+      project.setDescription(desc, new NullProgressMonitor());
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     GroovyRuntime.addGroovyRuntime(project);
   }

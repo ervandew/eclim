@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.plugin.jdt.command.search;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -190,7 +191,6 @@ public class SearchCommand
    * @param project The current project.
    */
   private String[] getSortKeys(IProject project)
-    throws Exception
   {
     String[] sortSettings = getPreferences()
       .getArrayValue(project, "org.eclim.java.search.sort");
@@ -211,9 +211,11 @@ public class SearchCommand
 
   /**
    * Returns the sort key associated with the given <code>Position</code>.
+   *
+   * @param position The Position instance.
+   * @param sortKeys The array of sort keys to search through.
    */
   private String getSortKey(Position position, String[] sortKeys)
-    throws Exception
   {
     String path = ProjectUtils.getProjectRelativePath(position.getFilename());
     if (path != null){
@@ -234,7 +236,6 @@ public class SearchCommand
    * @return The search results.
    */
   public List<SearchMatch> executeSearch(CommandLine commandLine)
-    throws Exception
   {
     int context = -1;
     if(commandLine.hasOption(Options.CONTEXT_OPTION)){
@@ -359,7 +360,6 @@ public class SearchCommand
    */
   protected List<SearchMatch> search(
       SearchPattern pattern, IJavaSearchScope scope)
-    throws CoreException
   {
     return search(pattern, scope, new SearchRequestor());
   }
@@ -375,13 +375,16 @@ public class SearchCommand
    */
   protected List<SearchMatch> search(
       SearchPattern pattern, IJavaSearchScope scope, SearchRequestor requestor)
-    throws CoreException
   {
     if(pattern != null){
       SearchEngine engine = new SearchEngine();
       SearchParticipant[] participants =
         new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
-      engine.search(pattern, participants, scope, requestor, null);
+      try{
+        engine.search(pattern, participants, scope, requestor, null);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
     return requestor.getMatches();
   }
@@ -397,7 +400,6 @@ public class SearchCommand
    */
   protected IJavaElement getElement(
       IJavaProject javaProject, String filename, int offset, int length)
-    throws Exception
   {
     ICodeAssist code = null;
     try{
@@ -408,9 +410,13 @@ public class SearchCommand
     }
 
     if (code != null){
-      IJavaElement[] elements = code.codeSelect(offset, length);
-      if(elements != null && elements.length > 0){
-        return elements[0];
+      try{
+        IJavaElement[] elements = code.codeSelect(offset, length);
+        if(elements != null && elements.length > 0){
+          return elements[0];
+        }
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
       }
     }
     return null;
@@ -437,7 +443,6 @@ public class SearchCommand
    * @return The Position.
    */
   protected Position createPosition(IProject project, SearchMatch match)
-    throws Exception
   {
     IJavaElement element = (IJavaElement)match.getElement();
     IJavaElement parent = JavaUtils.getPrimaryElement(element);
@@ -476,48 +481,54 @@ public class SearchCommand
           file = path.toOSString() + '/' + classFile + ".class";
         }
 
-        // android injects its jdk classes, so filter those out if the project
-        // doesn't have the android nature.
-        if (ANDROID_JDK_URL.matcher(file).matches() &&
-            project != null && !project.hasNature(ANDROID_NATURE))
-        {
-          return null;
-        }
-
-        // if a source path attachment exists, use it.
-        IPath srcPath = root.getSourceAttachmentPath();
-        if(srcPath != null){
-          String rootPath;
-          IProject elementProject = root.getJavaProject().getProject();
-
-          // determine if src path is project relative or file system absolute.
-          if(srcPath.isAbsolute() &&
-             elementProject.getName().equals(srcPath.segment(0)))
+        try{
+          // android injects its jdk classes, so filter those out if the project
+          // doesn't have the android nature.
+          if (ANDROID_JDK_URL.matcher(file).matches() &&
+              project != null && !project.hasNature(ANDROID_NATURE))
           {
-            rootPath = ProjectUtils.getFilePath(elementProject,
-                srcPath.toString());
-          }else{
-            rootPath = srcPath.toOSString();
+            return null;
           }
-          String srcFile = FileUtils.toUrl(
-              rootPath + File.separator + classFile + ".java");
 
-          // see if source file exists at source path.
-          FileSystemManager fsManager = VFS.getManager();
-          FileObject fileObject = fsManager.resolveFile(srcFile.replace("%", "%25"));
-          if(fileObject.exists()){
-            file = srcFile;
+          // if a source path attachment exists, use it.
+          IPath srcPath = root.getSourceAttachmentPath();
+          if(srcPath != null){
+            String rootPath;
+            IProject elementProject = root.getJavaProject().getProject();
 
-          // jdk sources on osx are under a "src/" dir in the jar
-          }else if (Os.isFamily(Os.FAMILY_MAC)){
-            srcFile = FileUtils.toUrl(
-                rootPath + File.separator + "src" +
-                File.separator + classFile + ".java");
-            fileObject = fsManager.resolveFile(srcFile.replace("%", "%25"));
+            // determine if src path is project relative or file system absolute.
+            if(srcPath.isAbsolute() &&
+               elementProject.getName().equals(srcPath.segment(0)))
+            {
+              rootPath = ProjectUtils.getFilePath(elementProject,
+                  srcPath.toString());
+            }else{
+              rootPath = srcPath.toOSString();
+            }
+            String srcFile = FileUtils.toUrl(
+                rootPath + File.separator + classFile + ".java");
+
+            // see if source file exists at source path.
+            FileSystemManager fsManager = VFS.getManager();
+            FileObject fileObject = fsManager.resolveFile(srcFile.replace("%", "%25"));
             if(fileObject.exists()){
               file = srcFile;
+
+            // jdk sources on osx are under a "src/" dir in the jar
+            }else if (Os.isFamily(Os.FAMILY_MAC)){
+              srcFile = FileUtils.toUrl(
+                  rootPath + File.separator + "src" +
+                  File.separator + classFile + ".java");
+              fileObject = fsManager.resolveFile(srcFile.replace("%", "%25"));
+              if(fileObject.exists()){
+                file = srcFile;
+              }
             }
           }
+        }catch(IOException ioe){
+          throw new RuntimeException(ioe);
+        }catch(CoreException ce){
+          throw new RuntimeException(ce);
         }
       }
     }else{
@@ -540,7 +551,6 @@ public class SearchCommand
    * @return The IJavaSearchScope equivalent.
    */
   protected IJavaSearchScope getScope(String scope, IJavaProject project)
-    throws Exception
   {
     if(project == null){
       return SearchEngine.createWorkspaceScope();

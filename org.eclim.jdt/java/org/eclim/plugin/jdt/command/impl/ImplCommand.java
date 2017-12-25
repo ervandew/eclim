@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ import org.eclim.plugin.jdt.util.MethodUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclipse.core.resources.IWorkspaceRunnable;
+
+import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IImportDeclaration;
@@ -89,7 +91,6 @@ import com.google.gson.Gson;
 public class ImplCommand
   extends AbstractCommand
 {
-
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -116,49 +117,52 @@ public class ImplCommand
    * @return The IType to be edited.
    */
   protected IType getType(ICompilationUnit src, CommandLine commandLine)
-    throws Exception
   {
     IType type = null;
 
-    // If a qualified name for the type being modified was supplied
-    if (commandLine.hasOption(Options.TYPE_OPTION)) {
-      IJavaProject javaProject = src.getJavaProject();
-      String typeFQN = commandLine.getValue(Options.TYPE_OPTION);
-      int indexOfDollar = typeFQN.indexOf("$");
+    try{
+      // If a qualified name for the type being modified was supplied
+      if (commandLine.hasOption(Options.TYPE_OPTION)) {
+        IJavaProject javaProject = src.getJavaProject();
+        String typeFQN = commandLine.getValue(Options.TYPE_OPTION);
+        int indexOfDollar = typeFQN.indexOf("$");
 
-      // If we are dealing with an anonymous inner class, findType does not work
-      // so lets find it starting at the class containing the anonymous class.
-      if (indexOfDollar > 0) {
-        String primaryTypeFQN = typeFQN.substring(0, indexOfDollar);
-        IType primaryType = javaProject.findType(primaryTypeFQN);
+        // If we are dealing with an anonymous inner class, findType does not work
+        // so lets find it starting at the class containing the anonymous class.
+        if (indexOfDollar > 0) {
+          String primaryTypeFQN = typeFQN.substring(0, indexOfDollar);
+          IType primaryType = javaProject.findType(primaryTypeFQN);
 
-        LinkedList<IJavaElement> todo = new LinkedList<IJavaElement>();
-        todo.add(primaryType);
-        while (!todo.isEmpty()) {
-          IJavaElement element = todo.removeFirst();
+          LinkedList<IJavaElement> todo = new LinkedList<IJavaElement>();
+          todo.add(primaryType);
+          while (!todo.isEmpty()) {
+            IJavaElement element = todo.removeFirst();
 
-          if (element instanceof IType) {
-            IType tempType = (IType) element;
-            String name = tempType.getFullyQualifiedName();
-            if (name.equals(typeFQN)) {
-              type = tempType;
-              break;
+            if (element instanceof IType) {
+              IType tempType = (IType) element;
+              String name = tempType.getFullyQualifiedName();
+              if (name.equals(typeFQN)) {
+                type = tempType;
+                break;
+              }
+            }
+
+            if (element instanceof IParent) {
+              for (IJavaElement child : ((IParent)element).getChildren()) {
+                todo.add(child);
+              }
             }
           }
-
-          if (element instanceof IParent) {
-            for (IJavaElement child : ((IParent)element).getChildren()) {
-              todo.add(child);
-            }
-          }
+        // Else it is a normal class/interface so find works
+        } else {
+            type = javaProject.findType(typeFQN);
         }
-      // Else it is a normal class/interface so find works
+      // If not, we need to find it based on the current selection
       } else {
-          type = javaProject.findType(typeFQN);
+        type = TypeUtils.getType(src, getOffset(commandLine));
       }
-    // If not, we need to find it based on the current selection
-    } else {
-      type = TypeUtils.getType(src, getOffset(commandLine));
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return type;
@@ -184,29 +188,32 @@ public class ImplCommand
       IJavaElement sibling,
       int pos,
       CommandLine commandLine)
-    throws Exception
   {
-    RefactoringASTParser parser =
-      new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
-    CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
-    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
+    try{
+      RefactoringASTParser parser =
+        new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+      CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
+      ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
 
-    String superType = commandLine.getValue(Options.SUPERTYPE_OPTION);
-    List<IMethodBinding> overridable = getOverridableMethods(cu, typeBinding);
-    List<IMethodBinding> override = new ArrayList<IMethodBinding>();
-    for (IMethodBinding binding : overridable){
-      ITypeBinding declBinding = binding.getDeclaringClass();
-      String fqn = declBinding.getQualifiedName().replaceAll("<.*?>", "");
-      if (fqn.equals(superType) && isChosen(chosen, binding)){
-        override.add(binding);
+      String superType = commandLine.getValue(Options.SUPERTYPE_OPTION);
+      List<IMethodBinding> overridable = getOverridableMethods(cu, typeBinding);
+      List<IMethodBinding> override = new ArrayList<IMethodBinding>();
+      for (IMethodBinding binding : overridable){
+        ITypeBinding declBinding = binding.getDeclaringClass();
+        String fqn = declBinding.getQualifiedName().replaceAll("<.*?>", "");
+        if (fqn.equals(superType) && isChosen(chosen, binding)){
+          override.add(binding);
+        }
       }
-    }
 
-    if (override.size() > 0){
-      return new AddUnimplementedMethodsOperation(
-          cu, typeBinding,
-          override.toArray(new IMethodBinding[override.size()]),
-          pos, true, true, true);
+      if (override.size() > 0){
+        return new AddUnimplementedMethodsOperation(
+            cu, typeBinding,
+            override.toArray(new IMethodBinding[override.size()]),
+            pos, true, true, true);
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return null;
   }
@@ -235,7 +242,6 @@ public class ImplCommand
    * @return An ImplResult
    */
   protected ImplResult getImplResult(ICompilationUnit src, IType type)
-    throws Exception
   {
     List<IMethodBinding> overridable = getOverridableMethods(src, type);
     return getImplResult(type.getFullyQualifiedName(), overridable);
@@ -282,13 +288,16 @@ public class ImplCommand
    */
   protected List<IMethodBinding> getOverridableMethods(
       ICompilationUnit src, IType type)
-    throws Exception
   {
-    RefactoringASTParser parser =
-      new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
-    CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
-    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
-    return getOverridableMethods(cu, typeBinding);
+    try{
+      RefactoringASTParser parser =
+        new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
+      CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
+      ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
+      return getOverridableMethods(cu, typeBinding);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   /**
@@ -300,7 +309,6 @@ public class ImplCommand
    */
   protected List<IMethodBinding> getOverridableMethods(
       CompilationUnit cu, ITypeBinding typeBinding)
-    throws Exception
   {
     if(!typeBinding.isClass()){
       throw new IllegalArgumentException(
@@ -338,7 +346,6 @@ public class ImplCommand
 
   private void insertMethods(
       ICompilationUnit src, IType type, CommandLine commandLine)
-    throws Exception
   {
     String methodsOption = commandLine.getValue(Options.METHOD_OPTION);
     HashSet<String> chosen = null;
@@ -350,67 +357,71 @@ public class ImplCommand
       }
     }
 
-    int pos = -1;
-    int len = src.getBuffer().getLength();
-    final IJavaElement sibling;
-    if (commandLine.hasOption(Options.OFFSET_OPTION)) {
-      sibling = getSibling(type, getOffset(commandLine));
-    } else {
-      sibling = getSibling(type);
-    }
-    if (sibling != null){
-      pos = getOffset(sibling);
-    }
-
-    IWorkspaceRunnable op = getImplOperation(
-        src, type, chosen, sibling, pos, commandLine);
-    if (op != null){
-      String lineDelim = src.findRecommendedLineSeparator();
-      IImportDeclaration[] imports = src.getImports();
-      int importsEnd = -1;
-      if (imports.length > 0){
-        ISourceRange last = imports[imports.length - 1].getSourceRange();
-        importsEnd = last.getOffset() + last.getLength() + lineDelim.length();
+    try{
+      int pos = -1;
+      int len = src.getBuffer().getLength();
+      final IJavaElement sibling;
+      if (commandLine.hasOption(Options.OFFSET_OPTION)) {
+        sibling = getSibling(type, getOffset(commandLine));
+      } else {
+        sibling = getSibling(type);
+      }
+      if (sibling != null){
+        pos = getOffset(sibling);
       }
 
-      op.run(null);
+      IWorkspaceRunnable op = getImplOperation(
+          src, type, chosen, sibling, pos, commandLine);
+      if (op != null){
+        String lineDelim = src.findRecommendedLineSeparator();
+        IImportDeclaration[] imports = src.getImports();
+        int importsEnd = -1;
+        if (imports.length > 0){
+          ISourceRange last = imports[imports.length - 1].getSourceRange();
+          importsEnd = last.getOffset() + last.getLength() + lineDelim.length();
+        }
 
-      // an op.getResultingEdit() would be nice here, but we'll make do w/ what
-      // we got and caculate our own edit offset/length combo so we can format
-      // the new code.
-      int offset = pos != -1 ? pos : (len - 1 - lineDelim.length());
-      int newLen = src.getBuffer().getLength();
-      int length = newLen - len - 1;
+        op.run(null);
 
-      // a more accurate length estimate can be found by locating the
-      //  sibling at its new position and taking the difference.
-      //  this prevents the formatting from screwing up the sibling's formatting
-      final IJavaElement[] newSiblings = sibling == null ?
-          null : src.findElements(sibling);
-      if (newSiblings != null && newSiblings.length == 1) {
-        // not sure what it would mean if there were more than one...
-        length = getOffset(newSiblings[0]) - offset;
+        // an op.getResultingEdit() would be nice here, but we'll make do w/ what
+        // we got and caculate our own edit offset/length combo so we can format
+        // the new code.
+        int offset = pos != -1 ? pos : (len - 1 - lineDelim.length());
+        int newLen = src.getBuffer().getLength();
+        int length = newLen - len - 1;
+
+        // a more accurate length estimate can be found by locating the
+        //  sibling at its new position and taking the difference.
+        //  this prevents the formatting from screwing up the sibling's formatting
+        final IJavaElement[] newSiblings = sibling == null ?
+            null : src.findElements(sibling);
+        if (newSiblings != null && newSiblings.length == 1) {
+          // not sure what it would mean if there were more than one...
+          length = getOffset(newSiblings[0]) - offset;
+        }
+
+        // the change in length may include newly added imports, so handle that as
+        // best we can
+        int importLenChange = 0;
+        imports = src.getImports();
+        if (importsEnd != -1){
+          ISourceRange last = imports[imports.length - 1].getSourceRange();
+          importLenChange = last.getOffset() + last.getLength() +
+            lineDelim.length() - importsEnd;
+        }else if(imports.length > 0){
+          ISourceRange first = imports[0].getSourceRange();
+          ISourceRange last = imports[imports.length - 1].getSourceRange();
+          importLenChange = last.getOffset() + last.getLength() +
+            (lineDelim.length() * 2) - first.getOffset();
+        }
+
+        offset += importLenChange;
+        length -= importLenChange;
+
+        JavaUtils.format(src, CodeFormatter.K_COMPILATION_UNIT, offset, length);
       }
-
-      // the change in length may include newly added imports, so handle that as
-      // best we can
-      int importLenChange = 0;
-      imports = src.getImports();
-      if (importsEnd != -1){
-        ISourceRange last = imports[imports.length - 1].getSourceRange();
-        importLenChange = last.getOffset() + last.getLength() +
-          lineDelim.length() - importsEnd;
-      }else if(imports.length > 0){
-        ISourceRange first = imports[0].getSourceRange();
-        ISourceRange last = imports[imports.length - 1].getSourceRange();
-        importLenChange = last.getOffset() + last.getLength() +
-          (lineDelim.length() * 2) - first.getOffset();
-      }
-
-      offset += importLenChange;
-      length -= importLenChange;
-
-      JavaUtils.format(src, CodeFormatter.K_COMPILATION_UNIT, offset, length);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
   }
 
@@ -441,55 +452,64 @@ public class ImplCommand
   }
 
   private int getOffset(IJavaElement element)
-    throws Exception
   {
-    return ((ISourceReference) element).getSourceRange().getOffset();
+    try{
+      return ((ISourceReference) element).getSourceRange().getOffset();
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   private IJavaElement getSibling(IType type)
-    throws Exception
   {
     IJavaElement sibling = null;
 
-    // insert after last method
-    IMethod[] methods = type.getMethods();
-    if (methods.length > 0){
-      sibling = MethodUtils.getMethodAfter(type, methods[methods.length - 1]);
-    }
+    try{
+      // insert after last method
+      IMethod[] methods = type.getMethods();
+      if (methods.length > 0){
+        sibling = MethodUtils.getMethodAfter(type, methods[methods.length - 1]);
+      }
 
-    // insert before inner classes.
-    if (sibling == null){
-      IType[] types = type.getTypes();
-      // find the first non-enum type.
-      for (int ii = 0; ii < types.length; ii++){
-        if(!types[ii].isEnum()){
-          sibling = types[ii];
-          break;
+      // insert before inner classes.
+      if (sibling == null){
+        IType[] types = type.getTypes();
+        // find the first non-enum type.
+        for (int ii = 0; ii < types.length; ii++){
+          if(!types[ii].isEnum()){
+            sibling = types[ii];
+            break;
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return sibling;
   }
 
   private IJavaElement getSibling(IType type, int offset)
-    throws Exception
   {
-    // insert before the offset
-    IMethod[] methods = type.getMethods();
-    for (IMethod method : methods) {
-      if (getOffset(method) >= offset) {
-        return method;
-      }
-    }
-
-    // insert before inner classes.
-    IType[] types = type.getTypes();
-    // find the first non-enum type.
-    for (IType subtype : types) {
-        if (getOffset(subtype) >= offset) {
-            return subtype;
+    try{
+      // insert before the offset
+      IMethod[] methods = type.getMethods();
+      for (IMethod method : methods) {
+        if (getOffset(method) >= offset) {
+          return method;
         }
+      }
+
+      // insert before inner classes.
+      IType[] types = type.getTypes();
+      // find the first non-enum type.
+      for (IType subtype : types) {
+          if (getOffset(subtype) >= offset) {
+              return subtype;
+          }
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return null;

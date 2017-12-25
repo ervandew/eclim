@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,7 @@ public class CssValidateCommand
 {
   private static final String URI_PREFIX = "file:/";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -121,10 +119,6 @@ public class CssValidateCommand
     return errors;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see WstValidateCommand#toFile(String)
-   */
   @Override
   protected String toFile(String uri)
   {

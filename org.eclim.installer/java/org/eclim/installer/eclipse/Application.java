@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * Portions of this class that are copied from the eclipse source are the
  * copyright (c) of IBM Corporation and others, and released under the Eclipse
@@ -386,65 +386,44 @@ public class Application
     private double totalWorked;
     private boolean canceled;
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#beginTask(String,int)
-     */
+    @Override
     public void beginTask(String name, int totalWork)
     {
       System.out.println("beginTask: totalWork=" + totalWork + " name=" + name);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#done()
-     */
+    @Override
     public void done()
     {
       System.out.println("done");
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#internalWorked(double)
-     */
+    @Override
     public void internalWorked(double work)
     {
       totalWorked += work;
       System.out.println("internalWorked: " + totalWorked);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#isCanceled()
-     */
+    @Override
     public boolean isCanceled()
     {
       return canceled;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#setCanceled(boolean)
-     */
+    @Override
     public void setCanceled(boolean canceled)
     {
       this.canceled = canceled;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#setTaskName(String)
-     */
+    @Override
     public void setTaskName(String name)
     {
       System.out.println("setTaskName: " + name);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#subTask(String)
-     */
+    @Override
     public void subTask(String name)
     {
       if (name != null && !name.trim().equals(StringUtils.EMPTY)){
@@ -452,10 +431,7 @@ public class Application
       }
     }
 
-    /**
-     * {@inheritDoc}
-     * @see IProgressMonitor#worked(int)
-     */
+    @Override
     public void worked(int work)
     {
       totalWorked += work;

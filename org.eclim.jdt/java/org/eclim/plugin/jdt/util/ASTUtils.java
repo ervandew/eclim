@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@ package org.eclim.plugin.jdt.util;
 
 import org.eclim.logging.Logger;
 
+import org.eclipse.core.runtime.CoreException;
+
 import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -34,6 +36,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.NodeFinder;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 
 import org.eclipse.text.edits.TextEdit;
@@ -53,14 +56,12 @@ public class ASTUtils
 
   /**
    * Gets the AST CompilationUnit for the supplied ICompilationUnit.
-   * <p/>
    * Equivalent of getCompilationUnit(src, false).
    *
    * @param src The ICompilationUnit.
    * @return The CompilationUnit.
    */
   public static CompilationUnit getCompilationUnit(ICompilationUnit src)
-    throws Exception
   {
     return getCompilationUnit(src, false);
   }
@@ -75,7 +76,6 @@ public class ASTUtils
    */
   public static CompilationUnit getCompilationUnit(
       ICompilationUnit src, boolean recordModifications)
-    throws Exception
   {
     ASTParser parser = ASTParser.newParser(AST.JLS4);
     parser.setSource(src);
@@ -94,7 +94,6 @@ public class ASTUtils
    * @return The CompilationUnit.
    */
   public static CompilationUnit getCompilationUnit(IClassFile clazz)
-    throws Exception
   {
     ASTParser parser = ASTParser.newParser(AST.JLS4);
     parser.setSource(clazz);
@@ -103,26 +102,32 @@ public class ASTUtils
 
   /**
    * Commits any changes made to the supplied CompilationUnit.
-   * <p/>
+   * <p>
    * Note: The method expects that the CompilationUnit is recording the
    * modifications (getCompilationUnit(src, true) was used).
+   * </p>
    *
    * @param src The original ICompilationUnit.
    * @param node The CompilationUnit ast node.
    */
   public static void commitCompilationUnit(
       ICompilationUnit src, CompilationUnit node)
-    throws Exception
   {
-    Document document = new Document(src.getBuffer().getContents());
-    TextEdit edits = node.rewrite(
-        document, src.getJavaProject().getOptions(true));
-    edits.apply(document);
-    src.getBuffer().setContents(document.get());
-    if (src.isWorkingCopy()) {
-        src.commitWorkingCopy(false, null);
+    try{
+      Document document = new Document(src.getBuffer().getContents());
+      TextEdit edits = node.rewrite(
+          document, src.getJavaProject().getOptions(true));
+      edits.apply(document);
+      src.getBuffer().setContents(document.get());
+      if (src.isWorkingCopy()) {
+          src.commitWorkingCopy(false, null);
+      }
+      src.save(null, false);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }catch(BadLocationException ble){
+      throw new RuntimeException(ble);
     }
-    src.save(null, false);
   }
 
   /**
@@ -133,7 +138,6 @@ public class ASTUtils
    * @return The node at the specified offset.
    */
   public static ASTNode findNode(CompilationUnit cu, int offset)
-    throws Exception
   {
     NodeFinder finder = new NodeFinder(cu, offset, 1);
     //return finder.getCoveredNode();
@@ -151,7 +155,6 @@ public class ASTUtils
    */
   public static ASTNode findNode(
       CompilationUnit cu, int offset, IJavaElement element)
-    throws Exception
   {
     ASTNode node = findNode(cu, offset);
     if(node == null){
@@ -197,7 +200,6 @@ public class ASTUtils
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
   private static ASTNode resolveNode(ASTNode node, Class type)
-    throws Exception
   {
     if(node == null){
       return null;

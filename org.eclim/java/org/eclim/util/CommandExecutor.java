@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,6 @@ public class CommandExecutor
    * process.
    */
   public static CommandExecutor execute(String[] cmd)
-    throws Exception
   {
     return execute(cmd, -1);
   }
@@ -63,17 +62,20 @@ public class CommandExecutor
    * process.
    */
   public static CommandExecutor execute(String[] cmd, long timeout)
-    throws Exception
   {
     CommandExecutor executor = new CommandExecutor(cmd);
 
     Thread thread = new Thread(executor);
     thread.start();
 
-    if(timeout > 0){
-      thread.join(timeout);
-    }else{
-      thread.join();
+    try{
+      if(timeout > 0){
+        thread.join(timeout);
+      }else{
+        thread.join();
+      }
+    }catch(InterruptedException ie){
+      throw new RuntimeException(ie);
     }
 
     return executor;

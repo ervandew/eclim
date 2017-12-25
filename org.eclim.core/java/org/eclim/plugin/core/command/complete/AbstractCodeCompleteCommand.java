@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,6 @@ public abstract class AbstractCodeCompleteCommand
    */
   protected List<CodeCompleteResult> getCompletionResults(
       CommandLine commandLine, String project, String file, int offset)
-    throws Exception
   {
     ICompletionProposal[] proposals =
       getCompletionProposals(commandLine, project, file, offset);
@@ -117,7 +116,6 @@ public abstract class AbstractCodeCompleteCommand
    */
   protected ICompletionProposal[] getCompletionProposals(
       CommandLine commandLine, String project, String file, int offset)
-    throws Exception
   {
     IContentAssistProcessor processor =
       getContentAssistProcessor(commandLine, project, file);
@@ -140,7 +138,6 @@ public abstract class AbstractCodeCompleteCommand
    */
   protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
-    throws Exception
   {
     throw new UnsupportedOperationException();
   }
@@ -155,7 +152,6 @@ public abstract class AbstractCodeCompleteCommand
    */
   protected ISourceViewer getTextViewer(
       CommandLine commandLine, String project, String file)
-    throws Exception
   {
     int offset = getOffset(commandLine);
     return new DummyTextViewer(

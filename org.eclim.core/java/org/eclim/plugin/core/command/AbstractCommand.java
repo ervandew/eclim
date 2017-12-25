@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,6 @@ public abstract class AbstractCommand
    * @return The char offset.
    */
   public int getOffset(CommandLine commandLine)
-    throws Exception
   {
     return getOffset(commandLine, Options.OFFSET_OPTION);
   }
@@ -80,7 +79,6 @@ public abstract class AbstractCommand
    * @return The char offset.
    */
   public int getOffset(CommandLine commandLine, String option)
-    throws Exception
   {
     int offset = commandLine.getIntValue(option);
     if (offset == -1){

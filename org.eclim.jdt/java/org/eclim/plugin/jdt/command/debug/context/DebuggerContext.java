@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,13 +98,17 @@ public class DebuggerContext
 
   /**
    * Starts the debug session by creating the debug target with given parameters.
+   *
+   * @param project The IProject.
+   * @param host The host to bind the debugging session to.
+   * @param port The port to bind the debugging session to.
+   * @param vimInstanceId The id of the vim instance to communicate with.
    */
   public DebuggerContext(
       IProject project,
       String host,
       int port,
       String vimInstanceId)
-    throws Exception
   {
     this.project = project;
     this.host = host;
@@ -118,7 +122,6 @@ public class DebuggerContext
   }
 
   public void start()
-    throws Exception
   {
     logger.info(
         "Starting debug session at " + host + ":" + port +
@@ -128,20 +131,26 @@ public class DebuggerContext
     DebugPlugin.getDefault().addDebugEventListener(listener);
 
     ILaunchConfiguration config = null;
+    ISourceLocator srcLocator = null;
 
     ArrayList<IProject> projects = new ArrayList<IProject>();
-    projects.add(project);
-    CollectionUtils.addAll(projects, project.getReferencedProjects());
-    CollectionUtils.addAll(projects, project.getReferencingProjects());
-
     ArrayList<IJavaProject> javaProjects = new ArrayList<IJavaProject>();
-    for (IProject p : projects) {
-      if (p.exists() && p.hasNature(JavaCore.NATURE_ID)){
-        javaProjects.add(JavaUtils.getJavaProject(p));
+    projects.add(project);
+
+    try{
+      CollectionUtils.addAll(projects, project.getReferencedProjects());
+      CollectionUtils.addAll(projects, project.getReferencingProjects());
+
+      for (IProject p : projects) {
+        if (p.exists() && p.hasNature(JavaCore.NATURE_ID)){
+          javaProjects.add(JavaUtils.getJavaProject(p));
+        }
       }
+      srcLocator = new JavaSourceLocator(
+          javaProjects.toArray(new IJavaProject[javaProjects.size()]), true);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-    ISourceLocator srcLocator = new JavaSourceLocator(
-        javaProjects.toArray(new IJavaProject[javaProjects.size()]), true);
 
     ILaunch launch = new Launch(config, ILaunchManager.DEBUG_MODE, srcLocator);
     IProgressMonitor monitor = null;
@@ -163,6 +172,8 @@ public class DebuggerContext
 
   /**
    * Suspends the debug session.
+   *
+   * @throws DebugException on failure.
    */
   public void suspend()
     throws DebugException
@@ -176,6 +187,8 @@ public class DebuggerContext
 
   /**
    * Disconnects the debug session.
+   *
+   * @throws DebugException on failure.
    */
   public void stop()
     throws DebugException
@@ -191,6 +204,8 @@ public class DebuggerContext
 
   /**
    * Terminates the debug session.
+   *
+   * @throws DebugException on failure.
    */
   public void terminate()
     throws DebugException
@@ -205,6 +220,8 @@ public class DebuggerContext
 
   /**
    * Resumes execution from the current breakpoint.
+   *
+   * @throws DebugException on failure.
    */
   public void resume()
     throws DebugException

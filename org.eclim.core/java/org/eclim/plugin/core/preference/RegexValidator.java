@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,19 +33,13 @@ public class RegexValidator
     this.regex = regex;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Validator#isValid(Object)
-   */
+  @Override
   public boolean isValid(Object value)
   {
     return value != null && ((String)value).matches(regex);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Validator#getMessage(String,Object)
-   */
+  @Override
   public String getMessage(String name, Object value)
   {
     return Services.getMessage("setting.invalid.regex", value, regex);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,13 +41,8 @@ import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
 public class SymbolEntryCommand
   extends AbstractSettingEntryCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see AbstractSettingEntryCommand#createEntry(CommandLine)
-   */
   @Override
   protected ICLanguageSettingEntry createEntry(CommandLine commandLine)
-    throws Exception
   {
     String name = commandLine.getValue(Options.NAME_OPTION);
     String value = commandLine.getValue(Options.VALUE_OPTION);

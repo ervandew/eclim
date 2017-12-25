@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,6 @@ public class OptionHandler
 
   @Override
   public Map<String,String> getValues()
-    throws Exception
   {
     Map<String,String> values = new HashMap<String,String>();
     values.put(AdtPrefs.PREFS_SDK_DIR, AdtPrefs.getPrefs().getOsSdkFolder());
@@ -52,14 +51,12 @@ public class OptionHandler
 
   @Override
   public Map<String,String> getValues(IProject project)
-    throws Exception
   {
     return getValues();
   }
 
   @Override
   public void setOption(String name, String value)
-    throws Exception
   {
     AdtPrefs prefs = AdtPrefs.getPrefs();
     if (AdtPrefs.PREFS_SDK_DIR.equals(name)){
@@ -77,7 +74,6 @@ public class OptionHandler
 
   @Override
   public void setOption(IProject project, String name, String value)
-    throws Exception
   {
     setOption(name, value);
   }

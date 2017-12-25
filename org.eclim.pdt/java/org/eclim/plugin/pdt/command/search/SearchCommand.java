@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,6 @@ public class SearchCommand
 
   @Override
   protected IModelElement[] getElements(ISourceModule src, int offset, int length)
-    throws Exception
   {
     IModelElement[] elements = super.getElements(src, offset, length);
     // disabled for now to retain compatibility with eclipse 4.2

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,6 @@ public class CommandLine
    * @return The argument supplied to the option.
    */
   public String getValue(String name)
-    throws Exception
   {
     String value = null;
     Object val = options.get(name);
@@ -120,7 +119,6 @@ public class CommandLine
    * @return The argument supplied to the option.
    */
   public Object getRawValue(String name)
-    throws Exception
   {
     return options.get(name);
   }
@@ -134,7 +132,6 @@ public class CommandLine
    * @return The argument supplied to the option or the default value.
    */
   public String getValue(String name, String dflt)
-    throws Exception
   {
     String value = getValue(name);
     return value != null ? value : dflt;
@@ -147,7 +144,6 @@ public class CommandLine
    * @return The arguments supplied to the option.
    */
   public String[] getValues(String name)
-    throws Exception
   {
     String[] values = null;
     Object val = options.get(name);
@@ -183,7 +179,6 @@ public class CommandLine
    * @return The option as an int value, or -1 if option not supplied.
    */
   public int getIntValue(String name)
-    throws Exception
   {
     String arg = getValue(name);
     return arg != null ? Integer.parseInt(arg) : -1;
@@ -196,7 +191,6 @@ public class CommandLine
    * @return The option as a long value, or -1 if option not supplied.
    */
   public long getLongValue(String name)
-    throws Exception
   {
     String arg = getValue(name);
     return arg != null ? Long.parseLong(arg) : -1;

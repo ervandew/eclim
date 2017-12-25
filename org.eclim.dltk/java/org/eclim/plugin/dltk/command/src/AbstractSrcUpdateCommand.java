@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,9 +53,7 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 public abstract class AbstractSrcUpdateCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -103,7 +101,6 @@ public abstract class AbstractSrcUpdateCommand
    * @param reporter The problem reporter.
    */
   protected void parse(IProject project, IFile file, Reporter reporter)
-    throws Exception
   {
     // lame cast, but we have to use the SourceModule for pdt.
     IModuleSource module = (IModuleSource)DltkUtils.getSourceModule(file);

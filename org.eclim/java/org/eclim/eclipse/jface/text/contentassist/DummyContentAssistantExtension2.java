@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,39 +33,29 @@ public class DummyContentAssistantExtension2
 {
 // IContentAssistant
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void install(ITextViewer textViewer)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void uninstall()
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String showPossibleCompletions()
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String showContextInformation()
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public IContentAssistProcessor getContentAssistProcessor(String contentType)
   {
     return null;
@@ -73,51 +63,37 @@ public class DummyContentAssistantExtension2
 
 // IContentAssistantExtension2
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void addCompletionListener(ICompletionListener listener)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void removeCompletionListener(ICompletionListener listener)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setRepeatedInvocationMode(boolean cycling)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setShowEmptyList(boolean showEmpty)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setStatusLineVisible(boolean show)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setStatusMessage(String message)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setEmptyMessage(String message)
   {
   }

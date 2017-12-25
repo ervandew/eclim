@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,7 @@ public interface OptionHandler
    *
    * @return Map of option names to option values, or null if none.
    */
-  public Map<String, String> getValues()
-    throws Exception;
+  public Map<String, String> getValues();
 
   /**
    * Gets the manage options as a Map for the supplied project.
@@ -48,8 +47,7 @@ public interface OptionHandler
    * @param project The project.
    * @return Map of option names to option values, or null if none.
    */
-  public Map<String, String> getValues(IProject project)
-    throws Exception;
+  public Map<String, String> getValues(IProject project);
 
   /**
    * Sets the supplied option.
@@ -57,8 +55,7 @@ public interface OptionHandler
    * @param name The option name.
    * @param value The option value.
    */
-  public void setOption(String name, String value)
-    throws Exception;
+  public void setOption(String name, String value);
 
   /**
    * Sets the supplied option for the specified project.
@@ -67,6 +64,5 @@ public interface OptionHandler
    * @param name The option name.
    * @param value The option value.
    */
-  public void setOption(IProject project, String name, String value)
-    throws Exception;
+  public void setOption(IProject project, String name, String value);
 }

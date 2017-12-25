@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,28 +33,19 @@ public class ValidationContext
     this.uris = new String[]{uri};
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IValidationContext#getURIs()
-   */
+  @Override
   public String[] getURIs()
   {
     return uris;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IValidationContext#loadModel(String)
-   */
+  @Override
   public Object loadModel(String name)
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IValidationContext#loadModel(String,Object[])
-   */
+  @Override
   public Object loadModel(String name, Object[] params)
   {
     return null;

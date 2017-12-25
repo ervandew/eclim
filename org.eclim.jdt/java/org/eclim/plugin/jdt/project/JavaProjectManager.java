@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.project;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -103,7 +105,6 @@ public class JavaProjectManager
 
   @Override
   public void create(IProject project, CommandLine commandLine)
-    throws Exception
   {
     String depends = commandLine.getValue(Options.DEPENDS_OPTION);
     create(project, depends);
@@ -111,12 +112,15 @@ public class JavaProjectManager
 
   @Override
   public List<Error> update(IProject project, CommandLine commandLine)
-    throws Exception
   {
     String buildfile = commandLine.getValue(Options.BUILD_FILE_OPTION);
 
     IJavaProject javaProject = JavaUtils.getJavaProject(project);
-    javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+    try{
+      javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     // validate that .classpath xml is well formed and valid.
     PluginResources resources = (PluginResources)
@@ -166,19 +170,16 @@ public class JavaProjectManager
 
   @Override
   public void refresh(IProject project, CommandLine commandLine)
-    throws Exception
   {
   }
 
   @Override
   public void refresh(IProject project, IFile file)
-    throws Exception
   {
   }
 
   @Override
   public void delete(IProject project, CommandLine commandLine)
-    throws Exception
   {
   }
 
@@ -191,86 +192,89 @@ public class JavaProjectManager
    * @param depends Comma separated project names this project depends on.
    */
   protected void create(IProject project, String depends)
-    throws Exception
   {
-    // with scala-ide installed, apparently this needs to be explicitly done
-    IProjectDescription desc = project.getDescription();
-    if(!desc.hasNature(PluginResources.NATURE)){
-      String[] natures = desc.getNatureIds();
-      String[] newNatures = new String[natures.length + 1];
-      System.arraycopy(natures, 0, newNatures, 0, natures.length);
-      newNatures[natures.length] = PluginResources.NATURE;
-      desc.setNatureIds(newNatures);
-      project.setDescription(desc, new NullProgressMonitor());
-    }
-
-    IJavaProject javaProject = JavaCore.create(project);
-    ((JavaProject)javaProject).configure();
-
-    if (!project.getFile(CLASSPATH).exists()) {
-      ArrayList<IClasspathEntry> classpath = new ArrayList<IClasspathEntry>();
-      boolean source = false;
-      boolean container = false;
-
-      ClassPathDetector detector = new ClassPathDetector(project, null);
-      for (IClasspathEntry entry : detector.getClasspath()){
-        if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
-          source = true;
-        } else if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER){
-          container = true;
-        }
-        classpath.add(entry);
+    try{
+      // with scala-ide installed, apparently this needs to be explicitly done
+      IProjectDescription desc = project.getDescription();
+      if(!desc.hasNature(PluginResources.NATURE)){
+        String[] natures = desc.getNatureIds();
+        String[] newNatures = new String[natures.length + 1];
+        System.arraycopy(natures, 0, newNatures, 0, natures.length);
+        newNatures[natures.length] = PluginResources.NATURE;
+        desc.setNatureIds(newNatures);
+        project.setDescription(desc, new NullProgressMonitor());
       }
 
-      // default source folder
-      if (!source){
-        IResource src;
-        IPreferenceStore store = PreferenceConstants.getPreferenceStore();
-        String name = store.getString(PreferenceConstants.SRCBIN_SRCNAME);
-        boolean srcBinFolders = store.getBoolean(
-            PreferenceConstants.SRCBIN_FOLDERS_IN_NEWPROJ);
-        if (srcBinFolders && name.length() > 0) {
-          src = javaProject.getProject().getFolder(name);
-        } else {
-          src = javaProject.getProject();
-        }
+      IJavaProject javaProject = JavaCore.create(project);
+      ((JavaProject)javaProject).configure();
 
-        classpath.add(
-            new CPListElement(
-              javaProject, IClasspathEntry.CPE_SOURCE, src.getFullPath(), src)
-            .getClasspathEntry());
+      if (!project.getFile(CLASSPATH).exists()) {
+        ArrayList<IClasspathEntry> classpath = new ArrayList<IClasspathEntry>();
+        boolean source = false;
+        boolean container = false;
 
-        File srcPath = new File(
-            ProjectUtils.getFilePath(project, src.getFullPath().toString()));
-        if (!srcPath.exists()){
-          srcPath.mkdirs();
-        }
-      }
-
-      // default containers
-      if (!container){
-        for (IClasspathEntry entry : PreferenceConstants.getDefaultJRELibrary()){
+        ClassPathDetector detector = new ClassPathDetector(project, null);
+        for (IClasspathEntry entry : detector.getClasspath()){
+          if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
+            source = true;
+          } else if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER){
+            container = true;
+          }
           classpath.add(entry);
         }
-      }
 
-      // dependencies on other projects
-      for (IClasspathEntry entry : createOrUpdateDependencies(javaProject, depends)){
-        classpath.add(entry);
-      }
+        // default source folder
+        if (!source){
+          IResource src;
+          IPreferenceStore store = PreferenceConstants.getPreferenceStore();
+          String name = store.getString(PreferenceConstants.SRCBIN_SRCNAME);
+          boolean srcBinFolders = store.getBoolean(
+              PreferenceConstants.SRCBIN_FOLDERS_IN_NEWPROJ);
+          if (srcBinFolders && name.length() > 0) {
+            src = javaProject.getProject().getFolder(name);
+          } else {
+            src = javaProject.getProject();
+          }
 
-      javaProject.setRawClasspath(
-          classpath.toArray(new IClasspathEntry[classpath.size()]), null);
+          classpath.add(
+              new CPListElement(
+                javaProject, IClasspathEntry.CPE_SOURCE, src.getFullPath(), src)
+              .getClasspathEntry());
 
-      // output location
-      IPath output = detector.getOutputLocation();
-      if (output == null){
-        output = BuildPathsBlock.getDefaultOutputLocation(javaProject);
+          File srcPath = new File(
+              ProjectUtils.getFilePath(project, src.getFullPath().toString()));
+          if (!srcPath.exists()){
+            srcPath.mkdirs();
+          }
+        }
+
+        // default containers
+        if (!container){
+          for (IClasspathEntry entry : PreferenceConstants.getDefaultJRELibrary()){
+            classpath.add(entry);
+          }
+        }
+
+        // dependencies on other projects
+        for (IClasspathEntry entry : createOrUpdateDependencies(javaProject, depends)){
+          classpath.add(entry);
+        }
+
+        javaProject.setRawClasspath(
+            classpath.toArray(new IClasspathEntry[classpath.size()]), null);
+
+        // output location
+        IPath output = detector.getOutputLocation();
+        if (output == null){
+          output = BuildPathsBlock.getDefaultOutputLocation(javaProject);
+        }
+        javaProject.setOutputLocation(output, null);
       }
-      javaProject.setOutputLocation(output, null);
+      javaProject.makeConsistent(null);
+      javaProject.save(null, false);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-    javaProject.makeConsistent(null);
-    javaProject.save(null, false);
   }
 
   /**
@@ -278,10 +282,10 @@ public class JavaProjectManager
    *
    * @param project The project.
    * @param depends The comma seperated list of project names.
+   * @return Array of IClasspathEntry.
    */
   protected IClasspathEntry[] createOrUpdateDependencies(
       IJavaProject project, String depends)
-    throws Exception
   {
     if(depends != null){
       String[] dependPaths = StringUtils.split(depends, ',');
@@ -336,32 +340,37 @@ public class JavaProjectManager
    */
   protected List<Error> setClasspath(
       IJavaProject javaProject, IClasspathEntry[] entries, String classpath)
-    throws Exception
   {
-    FileOffsets offsets = FileOffsets.compile(classpath);
-    String classpathValue = IOUtils.toString(new FileInputStream(classpath));
     ArrayList<Error> errors = new ArrayList<Error>();
-    for(IClasspathEntry entry : entries){
-      IJavaModelStatus status = JavaConventions
-        .validateClasspathEntry(javaProject, entry, true);
-      if(!status.isOK()){
-        errors.add(createErrorForEntry(
-              javaProject, entry, status, offsets, classpath, classpathValue));
+    try{
+      FileOffsets offsets = FileOffsets.compile(classpath);
+      String classpathValue = IOUtils.toString(new FileInputStream(classpath));
+      for(IClasspathEntry entry : entries){
+        IJavaModelStatus status = JavaConventions
+          .validateClasspathEntry(javaProject, entry, true);
+        if(!status.isOK()){
+          errors.add(createErrorForEntry(
+                javaProject, entry, status, offsets, classpath, classpathValue));
+        }
       }
-    }
 
-    IJavaModelStatus status = JavaConventions.validateClasspath(
-        javaProject, entries, javaProject.getOutputLocation());
+      IJavaModelStatus status = JavaConventions.validateClasspath(
+          javaProject, entries, javaProject.getOutputLocation());
 
-    // always set the classpathValue anyways, so that the user can correct the
-    // file.
-    //if(status.isOK() && errors.isEmpty()){
-      javaProject.setRawClasspath(entries, null);
-      javaProject.makeConsistent(null);
-    //}
+      // always set the classpathValue anyways, so that the user can correct the
+      // file.
+      //if(status.isOK() && errors.isEmpty()){
+        javaProject.setRawClasspath(entries, null);
+        javaProject.makeConsistent(null);
+      //}
 
-    if(!status.isOK()){
-      errors.add(new Error(status.getMessage(), classpath, 1, 1, false));
+      if(!status.isOK()){
+        errors.add(new Error(status.getMessage(), classpath, 1, 1, false));
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
     }
     return errors;
   }
@@ -384,7 +393,6 @@ public class JavaProjectManager
       FileOffsets offsets,
       String filename,
       String contents)
-    throws Exception
   {
     int line = 0;
     int col = 0;
@@ -413,7 +421,6 @@ public class JavaProjectManager
    */
   protected IClasspathEntry[] mergeWithBuildfile(
       IJavaProject project, String buildfile)
-    throws Exception
   {
     String filename = FileUtils.getBaseName(buildfile);
     Parser parser = PARSERS.get(filename);
@@ -424,7 +431,12 @@ public class JavaProjectManager
     ArrayList<IClasspathEntry> results = new ArrayList<IClasspathEntry>();
 
     // load the results with all the non library entries.
-    IClasspathEntry[] entries = project.getRawClasspath();
+    IClasspathEntry[] entries = null;
+    try{
+      entries = project.getRawClasspath();
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
     for(IClasspathEntry entry : entries){
       if (entry.getEntryKind() != IClasspathEntry.CPE_LIBRARY &&
           entry.getEntryKind() != IClasspathEntry.CPE_VARIABLE)
@@ -510,7 +522,6 @@ public class JavaProjectManager
    */
   protected IClasspathEntry createEntry(
       IWorkspaceRoot root, IJavaProject project, Dependency dependency)
-    throws Exception
   {
     if(dependency.isVariable()){
       return JavaCore.newVariableEntry(dependency.getPath(), null, null, true);

@@ -37,10 +37,7 @@ public class FeedKeys
 {
   private static final Logger logger = Logger.getLogger(FeedKeys.class);
 
-  /**
-   * {@inheritDoc}
-   * @see IVimListener#handleEvent(VimEvent)
-   */
+  @Override
   public void handleEvent(VimEvent ve)
     throws VimException
   {

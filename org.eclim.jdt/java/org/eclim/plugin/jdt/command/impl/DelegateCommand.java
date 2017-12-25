@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 import org.eclim.plugin.jdt.util.TypeUtils;
 
 import org.eclipse.core.resources.IWorkspaceRunnable;
+
+import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
@@ -124,13 +126,16 @@ public class DelegateCommand
 
   @Override
   protected IType getType(ICompilationUnit src, CommandLine commandLine)
-    throws Exception
   {
     if (commandLine.hasOption(Options.VARIABLE_OPTION)){
       String var = commandLine.getValue(Options.VARIABLE_OPTION);
       String[] parts = StringUtils.split(var, ".");
       String typeName = StringUtils.join(parts, '.', 0, parts.length - 1);
-      return src.getJavaProject().findType(typeName.replace('$', '.'));
+      try{
+        return src.getJavaProject().findType(typeName.replace('$', '.'));
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
     return super.getType(src, commandLine);
   }
@@ -143,12 +148,16 @@ public class DelegateCommand
       IJavaElement sibling,
       int pos,
       CommandLine commandLine)
-    throws Exception
   {
     RefactoringASTParser parser =
       new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
     CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
-    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
+    ITypeBinding typeBinding = null;
+    try{
+      typeBinding = ASTNodes.getTypeBinding(cu, type);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     String superType = commandLine.getValue(Options.SUPERTYPE_OPTION);
     List<DelegateEntry> delegatable = getDelegatableMethods(cu, typeBinding);
@@ -174,7 +183,6 @@ public class DelegateCommand
 
   @Override
   protected ImplResult getImplResult(ICompilationUnit src, IType type)
-    throws Exception
   {
     List<DelegateEntry> delegatable = getDelegatableMethods(src, type);
     List<IMethodBinding> methods =
@@ -189,21 +197,29 @@ public class DelegateCommand
 
   private List<DelegateEntry> getDelegatableMethods(
       ICompilationUnit src, IType type)
-    throws Exception
   {
     RefactoringASTParser parser =
       new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
     CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
-    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
+    ITypeBinding typeBinding = null;
+    try{
+      typeBinding = ASTNodes.getTypeBinding(cu, type);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
     return getDelegatableMethods(cu, typeBinding);
   }
 
   private List<DelegateEntry> getDelegatableMethods(
       CompilationUnit cu, ITypeBinding typeBinding)
-    throws Exception
   {
-    IVariableBinding variable = ASTNodeSearchUtil
-      .getFieldDeclarationFragmentNode(field.get(), cu).resolveBinding();
+    IVariableBinding variable = null;
+    try{
+      variable = ASTNodeSearchUtil
+        .getFieldDeclarationFragmentNode(field.get(), cu).resolveBinding();
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
     DelegateEntry[] entries =
       StubUtility2.getDelegatableMethods(typeBinding);
     ArrayList<DelegateEntry> delegatable = new ArrayList<DelegateEntry>();

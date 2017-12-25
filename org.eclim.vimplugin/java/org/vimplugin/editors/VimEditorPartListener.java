@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,10 +116,7 @@ public class VimEditorPartListener
     }*/
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IPartListener#partActivated(IWorkbenchPart)
-   */
+  @Override
   public void partActivated(IWorkbenchPart part)
   {
     if (part instanceof VimEditor){
@@ -132,34 +129,22 @@ public class VimEditorPartListener
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IPartListener#partBroughtToTop(IWorkbenchPart)
-   */
+  @Override
   public void partBroughtToTop(IWorkbenchPart part)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IPartListener#partClosed(IWorkbenchPart)
-   */
+  @Override
   public void partClosed(IWorkbenchPart part)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IPartListener#partDeactivated(IWorkbenchPart)
-   */
+  @Override
   public void partDeactivated(IWorkbenchPart part)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IPartListener#partOpened(IWorkbenchPart)
-   */
+  @Override
   public void partOpened(IWorkbenchPart part)
   {
   }

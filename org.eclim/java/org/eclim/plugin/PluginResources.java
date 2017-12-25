@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,8 +54,7 @@ public interface PluginResources
    *
    * @return The command instance.
    */
-  public Command getCommand(String name)
-    throws Exception;
+  public Command getCommand(String name);
 
   /**
    * Determines if this instance contains the command with the supplied name.
@@ -85,7 +84,6 @@ public interface PluginResources
 
   /**
    * Gets a property by name.
-   * <p/>
    * Properties defined by plugin.properties at the root of the plugin.
    *
    * @param name The property name.
@@ -95,7 +93,6 @@ public interface PluginResources
 
   /**
    * Gets a property by name.
-   * <p/>
    * Properties defined by plugin.properties at the root of the plugin.
    *
    * @param name The property name.
@@ -123,8 +120,7 @@ public interface PluginResources
   /**
    * Closes this resource instance and releases any held resources.
    */
-  public void close()
-    throws Exception;
+  public void close();
 
   /**
    * Gets the name of the plugin resources (org.eclim.ant, org.eclim.jdt, etc.).

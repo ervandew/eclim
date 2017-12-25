@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import org.eclim.plugin.dltk.project.DltkProjectManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.dltk.core.ISourceModule;
@@ -50,12 +51,15 @@ public class PhpProjectManager
 
   @Override
   public void refresh(IProject project, IFile file)
-    throws Exception
   {
     IEditorInput input = new FileEditorInput(file);
     ISourceModule module = PHPUiPlugin.getEditorInputTypeRoot(input);
     if (module != null){
-      module.makeConsistent(new NullProgressMonitor());
+      try{
+        module.makeConsistent(new NullProgressMonitor());
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
       // alternate to makeConsistent where moduleDecl can be obtained using
       // PHPSourceParserFactory.parse, like in SrcUpdateCommmand.
       //ISourceModuleInfoCache sourceModuleInfoCache = ModelManager

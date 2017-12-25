@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,20 +42,12 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 public class SearchCommand
   extends org.eclim.plugin.dltk.command.search.SearchCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getNature()
-   */
   @Override
   protected String getNature()
   {
     return ProjectNatureFactory.getNatureForAlias("ruby");
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.dltk.command.search.SearchCommand#getElementSeparator()
-   */
   @Override
   protected String getElementSeparator()
   {

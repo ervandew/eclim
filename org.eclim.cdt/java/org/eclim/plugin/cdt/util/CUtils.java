@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import org.eclipse.cdt.core.model.ITranslationUnit;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
 /**
@@ -47,7 +48,6 @@ public class CUtils
    * @return The project.
    */
   public static ICProject getCProject(String project)
-    throws Exception
   {
     return getCProject(ProjectUtils.getProject(project, true));
   }
@@ -59,22 +59,25 @@ public class CUtils
    * @return The c project.
    */
   public static ICProject getCProject(IProject project)
-    throws Exception
   {
     if(ProjectUtils.getPath(project) == null){
       throw new IllegalArgumentException(
           Services.getMessage("project.location.null", project.getName()));
     }
 
-    if (!project.hasNature(PluginResources.NATURE_C) &&
-        !project.hasNature(PluginResources.NATURE_CPP))
-    {
-      String name =
-        ProjectNatureFactory.getAliasForNature(PluginResources.NATURE_C) + " / " +
-        ProjectNatureFactory.getAliasForNature(PluginResources.NATURE_CPP);
+    try{
+      if (!project.hasNature(PluginResources.NATURE_C) &&
+          !project.hasNature(PluginResources.NATURE_CPP))
+      {
+        String name =
+          ProjectNatureFactory.getAliasForNature(PluginResources.NATURE_C) + " / " +
+          ProjectNatureFactory.getAliasForNature(PluginResources.NATURE_CPP);
 
-      throw new IllegalArgumentException(Services.getMessage(
-            "project.missing.nature", project.getName(), name));
+        throw new IllegalArgumentException(Services.getMessage(
+              "project.missing.nature", project.getName(), name));
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     ICProject cproject = CoreModel.getDefault().create(project);
@@ -95,7 +98,6 @@ public class CUtils
    * @return The compilation unit.
    */
   public static ITranslationUnit getTranslationUnit(String project, String file)
-    throws Exception
   {
     return getTranslationUnit(getCProject(project), file);
   }
@@ -109,20 +111,23 @@ public class CUtils
    */
   public static ITranslationUnit getTranslationUnit(
       ICProject project, String file)
-    throws Exception
   {
-    Path path = new Path(ProjectUtils.getFilePath(project.getProject(), file));
-    ITranslationUnit src =
-      CoreModelUtil.findTranslationUnitForLocation(path, project);
-    if(src == null || !src.exists()){
-      throw new IllegalArgumentException(
-          Services.getMessage("cdt.src.file.not.found", file));
+    try{
+      Path path = new Path(ProjectUtils.getFilePath(project.getProject(), file));
+      ITranslationUnit src =
+        CoreModelUtil.findTranslationUnitForLocation(path, project);
+      if(src == null || !src.exists()){
+        throw new IllegalArgumentException(
+            Services.getMessage("cdt.src.file.not.found", file));
+      }
+
+      // force sync w/ file on disk
+      src.close();
+      src.open(null);
+
+      return src;
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-
-    // force sync w/ file on disk
-    src.close();
-    src.open(null);
-
-    return src;
   }
 }

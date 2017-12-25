@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.dltk.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import org.eclim.util.IOUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -79,12 +81,16 @@ public class DltkUtils
    * @return The IModuleSource
    */
   public static IModuleSource getModuleSource(IFile file)
-    throws Exception
   {
-    InputStream in = file.getContents();
+    InputStream in = null;
     try {
+      in = file.getContents();
       String path = file.getLocation().toOSString();
       return new ModuleSource(path, IOUtils.toString(in));
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }finally{
       IOUtils.closeQuietly(in);
     }
@@ -97,7 +103,6 @@ public class DltkUtils
    * @return The ISourceModule
    */
   public static ISourceModule getSourceModule(IFile file)
-    throws Exception
   {
     // This block to find the ISourceModule is mostly copied from:
     // org.eclipse.dltk.ruby.internal.debug.ui.console.RubyConsoleSourceModuleLookup
@@ -105,7 +110,12 @@ public class DltkUtils
     IPath path = file.getFullPath();
     IProject project = file.getProject();
     IScriptProject scriptProject = DLTKCore.create(project);
-    IProjectFragment[] roots = scriptProject.getProjectFragments();
+    IProjectFragment[] roots = null;
+    try{
+      roots = scriptProject.getProjectFragments();
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
     ISourceModule module = null;
     for (int j = 0, rootCount = roots.length; j < rootCount; j++) {
       final IProjectFragment root = roots[j];

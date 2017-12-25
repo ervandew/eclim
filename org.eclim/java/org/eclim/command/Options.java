@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.ParseException;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -159,7 +160,6 @@ public class Options
    * @return The command line.
    */
   public CommandLine parse(String[] args)
-    throws Exception
   {
     // manually parse out the command option value so that the command specific
     // options can be added before running the automated parse.
@@ -188,7 +188,11 @@ public class Options
     }
 
     CommandLineParser parser = new GnuParser();
-    return new CommandLine(command, parser.parse(options, args), args);
+    try{
+      return new CommandLine(command, parser.parse(options, args), args);
+    }catch(ParseException pe){
+      throw new RuntimeException(pe);
+    }
   }
 
   /**

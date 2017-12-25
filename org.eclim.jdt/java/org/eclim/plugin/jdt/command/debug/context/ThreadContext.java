@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,8 @@ public class ThreadContext
 
   /**
    * Explicitly sets the stepping thread.
+   *
+   * @param thread The IJavaThread
    */
   public synchronized void setSteppingThread(IJavaThread thread)
   {
@@ -102,6 +104,9 @@ public class ThreadContext
 
   /**
    * Suspends the given thread.
+   *
+   * @param threadId The id of the thread to suspend.
+   * @throws DebugException on failure.
    */
   public void suspend(long threadId)
     throws DebugException
@@ -114,6 +119,9 @@ public class ThreadContext
 
   /**
    * Resumes execution of the given thread.
+   *
+   * @param threadId The id of the thread to resume.
+   * @throws DebugException on failure.
    */
   public void resume(long threadId)
     throws DebugException

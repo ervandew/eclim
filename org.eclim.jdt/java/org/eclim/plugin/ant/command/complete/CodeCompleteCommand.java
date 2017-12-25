@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,10 +49,6 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 public class CodeCompleteCommand
   extends AbstractCodeCompleteCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#createCodeCompletionResult(ICompletionProposal)
-   */
   @Override
   protected CodeCompleteResult createCodeCompletionResult(
       ICompletionProposal proposal)
@@ -61,13 +57,9 @@ public class CodeCompleteCommand
         getCompletion(proposal), getMenu(proposal), getInfo(proposal));
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getContentAssistProcessor(CommandLine,String,String)
-   */
+  @Override
   protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
-    throws Exception
   {
     AntModel model = (AntModel)AntUtils.getAntModel(project, file);
     AntEditorCompletionProcessor processor =
@@ -75,10 +67,7 @@ public class CodeCompleteCommand
     return processor;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractCodeCompleteCommand#getCompletion(ICompletionProposal)
-   */
+  @Override
   protected String getCompletion(ICompletionProposal proposal)
   {
     String completion = super.getCompletion(proposal);
@@ -102,10 +91,6 @@ public class CodeCompleteCommand
       super(completion, menu, info);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see CodeCompleteResult#equals(Object)
-     */
     @Override
     public boolean equals(Object other)
     {
@@ -123,10 +108,6 @@ public class CodeCompleteCommand
       return equal;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see CodeCompleteResult#hashCode()
-     */
     @Override
     public int hashCode()
     {

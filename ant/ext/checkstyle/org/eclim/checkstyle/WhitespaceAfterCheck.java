@@ -69,10 +69,6 @@ public class WhitespaceAfterCheck
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see com.puppycrawl.tools.checkstyle.api.AbstractViolationReporter#getMessageBundle()
-   */
   @Override
   protected String getMessageBundle()
   {

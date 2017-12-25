@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.plugin.core.project;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,8 +26,10 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -51,11 +54,14 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 import org.w3c.dom.Document;
+
+import org.xml.sax.SAXException;
 
 /**
  * Class that handles registering and retrieving of {@link ProjectManager}s.
@@ -130,7 +136,6 @@ public class ProjectManagement
    */
   public static void create(
       String name, String folder, CommandLine commandLine)
-    throws Exception
   {
     String[] aliases = StringUtils.split(
         commandLine.getValue(Options.NATURE_OPTION), ',');
@@ -163,7 +168,11 @@ public class ProjectManagement
     deleteStaleProject(name, folder);
     IProject project = createProject(
         name, folder, (String[])natures.toArray(new String[natures.size()]));
-    project.open(null);
+    try{
+      project.open(null);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
     // calling refresh for those project created against an existing code base.
     // performing a preemptive refresh prevents ProjectUtils.getFile
     // (IFile.refreshLocal) from kicking off a rebuild workspace job, which in
@@ -192,7 +201,6 @@ public class ProjectManagement
    */
   protected static IProject createProject(
       String name, String folder, String[] natures)
-    throws Exception
   {
     // create the project if it doesn't already exist.
     IProject project = ProjectUtils.getProject(name, true);
@@ -216,7 +224,11 @@ public class ProjectManagement
         IProjectDescription description = workspace.newProjectDescription(name);
         description.setLocation(location);
         description.setNatureIds(natures);
-        project.create(description, null/*monitor*/);
+        try{
+          project.create(description, null/*monitor*/);
+        }catch(CoreException ce){
+          throw new RuntimeException(ce);
+        }
 
       // project is at the workspace root, requires jumping through eclipse
       // hoops
@@ -229,7 +241,11 @@ public class ProjectManagement
         if(!project.exists()){
           IProjectDescription description = workspace.newProjectDescription(relName);
           description.setNatureIds(natures);
-          project.create(description, null/*monitor*/);
+          try{
+            project.create(description, null/*monitor*/);
+          }catch(CoreException ce){
+            throw new RuntimeException(ce);
+          }
           // FIXME: eclipse will ignore this name change.  need to find the
           // proper way to rename a project in the workspace root if we want to
           // support this.
@@ -241,20 +257,24 @@ public class ProjectManagement
 
     // project exists, so just add any missing requested natures
     }else{
-      IProjectDescription desc = project.getDescription();
-      String[] natureIds = desc.getNatureIds();
-      ArrayList<String> modified = new ArrayList<String>();
-      ArrayList<String> newNatures = new ArrayList<String>();
-      CollectionUtils.addAll(modified, natureIds);
-      for(String natureId : natures){
-        if (!modified.contains(natureId)){
-          modified.add(natureId);
-          newNatures.add(natureId);
+      try{
+        IProjectDescription desc = project.getDescription();
+        String[] natureIds = desc.getNatureIds();
+        ArrayList<String> modified = new ArrayList<String>();
+        ArrayList<String> newNatures = new ArrayList<String>();
+        CollectionUtils.addAll(modified, natureIds);
+        for(String natureId : natures){
+          if (!modified.contains(natureId)){
+            modified.add(natureId);
+            newNatures.add(natureId);
+          }
         }
-      }
 
-      desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
-      project.setDescription(desc, new NullProgressMonitor());
+        desc.setNatureIds((String[])modified.toArray(new String[modified.size()]));
+        project.setDescription(desc, new NullProgressMonitor());
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
 
     return project;
@@ -267,7 +287,6 @@ public class ProjectManagement
    * @param folder The project folder.
    */
   protected static void deleteStaleProject(String name, String folder)
-    throws Exception
   {
     // check for same project location w/ diff project name, or a stale
     // .project file.
@@ -278,13 +297,29 @@ public class ProjectManagement
             "/projectDescription/name/text()");
         factory = DocumentBuilderFactory.newInstance();
       }
-      Document document = factory.newDocumentBuilder().parse(projectFile);
-      String projectName = (String)xpath.evaluate(document);
+
+      String projectName = null;
+      try{
+        Document document = factory.newDocumentBuilder().parse(projectFile);
+        projectName = (String)xpath.evaluate(document);
+      }catch(IOException ioe){
+        throw new RuntimeException(ioe);
+      }catch(SAXException se){
+        throw new RuntimeException(se);
+      }catch(ParserConfigurationException pce){
+        throw new RuntimeException(pce);
+      }catch(XPathExpressionException xpee){
+        throw new RuntimeException(xpee);
+      }
 
       if(!projectName.equals(name)){
         IProject project = ProjectUtils.getProject(projectName);
         if(project.exists()){
-          project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
+          try{
+            project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
+          }catch(CoreException ce){
+            throw new RuntimeException(ce);
+          }
         }else{
           projectFile.delete();
         }
@@ -297,22 +332,26 @@ public class ProjectManagement
    *
    * @param project The project.
    * @param commandLine The command line for the project create command.
+   * @return A List of Error instances or an empty List if there were no errors.
    */
   public static List<Error> update(IProject project, CommandLine commandLine)
-    throws Exception
   {
     ProjectUtils.assertExists(project);
 
     ArrayList<Error> errors = new ArrayList<Error>();
 
-    for (String nature : managers.keySet()){
-      if(project.hasNature(nature)){
-        ProjectManager manager = ProjectManagement.getProjectManager(nature);
-        List<Error> errs = manager.update(project, commandLine);
-        if(errs != null){
-          errors.addAll(errs);
+    try{
+      for (String nature : managers.keySet()){
+        if(project.hasNature(nature)){
+          ProjectManager manager = ProjectManagement.getProjectManager(nature);
+          List<Error> errs = manager.update(project, commandLine);
+          if(errs != null){
+            errors.addAll(errs);
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return errors;
   }
@@ -325,7 +364,6 @@ public class ProjectManagement
    * @param commandLine The command line for the project delete command.
    */
   public static void delete(IProject project, CommandLine commandLine)
-    throws Exception
   {
     ProjectUtils.assertExists(project);
 
@@ -345,7 +383,11 @@ public class ProjectManagement
     }catch(Exception e){
       logger.debug("Failed to perform nature level delete.", e);
     }finally{
-      project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
+      try{
+        project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
   }
 
@@ -356,26 +398,28 @@ public class ProjectManagement
    * @param commandLine The command line for the project refresh command.
    */
   public static void refresh(IProject project, CommandLine commandLine)
-    throws Exception
   {
     refresh(project, commandLine, true);
   }
 
   private static void refresh(
       IProject project, CommandLine commandLine, boolean refreshNatures)
-    throws Exception
   {
     ProjectUtils.assertExists(project);
 
-    project.refreshLocal(IResource.DEPTH_INFINITE, null);
+    try{
+      project.refreshLocal(IResource.DEPTH_INFINITE, null);
 
-    if (refreshNatures){
-      for (String nature : managers.keySet()){
-        if(project.hasNature(nature)){
-          ProjectManager manager = ProjectManagement.getProjectManager(nature);
-          manager.refresh(project, commandLine);
+      if (refreshNatures){
+        for (String nature : managers.keySet()){
+          if(project.hasNature(nature)){
+            ProjectManager manager = ProjectManagement.getProjectManager(nature);
+            manager.refresh(project, commandLine);
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     Preferences.getInstance().clearProjectValueCache(project);

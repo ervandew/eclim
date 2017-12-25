@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,6 +81,7 @@ import org.eclipse.cdt.internal.ui.viewsupport.IndexUI;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.search.ui.text.Match;
@@ -367,30 +368,32 @@ public class SearchCommand
    * @return The ICProject array representing the scope.
    */
   protected ICProject[] getScope(String scope, ICProject project)
-    throws Exception
   {
-    if (project == null || SCOPE_ALL.equals(scope)){
-      ArrayList<ICProject> elements = new ArrayList<ICProject>();
-      IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-      for (IProject p : projects){
-        if(p.isOpen() && (
-              p.hasNature(CProjectNature.C_NATURE_ID) ||
-              p.hasNature(CCProjectNature.CC_NATURE_ID)))
-        {
-          elements.add(CoreModel.getDefault().create(p));
-        }
-      }
-      return elements.toArray(new ICProject[elements.size()]);
-    }
-
     ArrayList<ICProject> elements = new ArrayList<ICProject>();
-    elements.add(project);
-    IProject[] depends = project.getProject().getReferencedProjects();
-    for (IProject p : depends){
-      if(!p.isOpen()){
-        p.open(null);
+    try{
+      if (project == null || SCOPE_ALL.equals(scope)){
+        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+        for (IProject p : projects){
+          if(p.isOpen() && (
+                p.hasNature(CProjectNature.C_NATURE_ID) ||
+                p.hasNature(CCProjectNature.CC_NATURE_ID)))
+          {
+            elements.add(CoreModel.getDefault().create(p));
+          }
+        }
+        return elements.toArray(new ICProject[elements.size()]);
       }
-      elements.add(CoreModel.getDefault().create(p));
+
+      elements.add(project);
+      IProject[] depends = project.getProject().getReferencedProjects();
+      for (IProject p : depends){
+        if(!p.isOpen()){
+          p.open(null);
+        }
+        elements.add(CoreModel.getDefault().create(p));
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return elements.toArray(new ICProject[elements.size()]);
   }

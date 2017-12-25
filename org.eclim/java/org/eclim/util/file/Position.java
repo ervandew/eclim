@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,6 @@ public class Position
    * @param length The length of this position (number of characters from the
    *   offset).
    * @return The Position instance.
-   * @throws Exception
    */
   public static Position fromOffset(
       String filename, String message, int offset, int length)
@@ -88,7 +87,6 @@ public class Position
    * @param line The line number within the file.
    * @param column The column number within the file.
    * @return The Position instance.
-   * @throws Exception
    */
   public static Position fromLineColumn(
       String filename, String message, int line, int column)

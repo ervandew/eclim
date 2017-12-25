@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,17 +30,11 @@ public class RefactorException
   private static final long serialVersionUID = 1L;
   private RefactoringStatus status;
 
-  /**
-   * @see RuntimeException#RuntimeException()
-   */
   public RefactorException()
   {
     super();
   }
 
-  /**
-   * @see RuntimeException#RuntimeException(String)
-   */
   public RefactorException(String message)
   {
     super(message);

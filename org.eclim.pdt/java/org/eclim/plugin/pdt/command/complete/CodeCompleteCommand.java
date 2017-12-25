@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,6 @@ public class CodeCompleteCommand
   @Override
   protected ScriptCompletionProposalCollector getCompletionCollector(
       ISourceModule module)
-    throws Exception
   {
     // Using a regular document doesn't work... if at some point passing null
     // for the document stops working, then look at:

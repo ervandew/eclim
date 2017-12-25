@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,10 +38,6 @@ import org.eclipse.php.internal.core.project.PHPNature;
 public class SrcUpdateCommand
   extends AbstractSrcUpdateCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see AbstractSrcUpdateCommand#getNature()
-   */
   @Override
   protected String getNature()
   {

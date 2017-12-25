@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 - 2012 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2017 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -795,20 +795,11 @@ public class VimEditor
     }
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.eclipse.ui.editors.text.TextEditor#createActions()
-   */
   @Override
   protected void createActions() {
     super.createActions();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see TextEditor#doSetInput(IEditorInput)
-   */
   @Override
   protected void doSetInput(IEditorInput input)
     throws CoreException
@@ -846,10 +837,6 @@ public class VimEditor
     super.doSetInput(input);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IPersistable#saveState(IMemento)
-   */
   @Override
   public void saveState(IMemento arg0) {
     // no-op for now.  prevents error on closing of eclipse while a VimEditor

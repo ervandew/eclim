@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,13 +45,8 @@ import org.eclipse.core.runtime.Path;
 public class IncludeEntryCommand
   extends AbstractSettingEntryCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see AbstractSettingEntryCommand#createEntry(CommandLine)
-   */
   @Override
   protected ICLanguageSettingEntry createEntry(CommandLine commandLine)
-    throws Exception
   {
     String dir = commandLine.getValue(Options.DIR_OPTION);
     dir = FileUtils.removeTrailingSlash(dir);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,39 +81,27 @@ public class VimViewer
 
   // ISourceViewer
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#configure(SourceViewerConfiguration)
-   */
+  @Override
   public void configure(SourceViewerConfiguration configuration)
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#setAnnotationHover(IAnnotationHover)
-   */
+  @Override
   public void setAnnotationHover(IAnnotationHover annotationHover)
   {
     // no-op
     //System.out.println("## setAnnotationHover: " + annotationHover);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#setDocument(IDocument,IAnnotationModel)
-   */
+  @Override
   public void setDocument(IDocument document, IAnnotationModel annotationModel)
   {
     //System.out.println("## setDocument: " + annotationModel);
     setDocument(document);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#setDocument(IDocument,IAnnotationModel,int,int)
-   */
+  @Override
   public void setDocument(
       IDocument document, IAnnotationModel annotationModel,
       int modelRangeOffset, int modelRangeLength)
@@ -122,94 +110,64 @@ public class VimViewer
     setDocument(document, modelRangeOffset, modelRangeLength);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#getAnnotationModel()
-   */
+  @Override
   public IAnnotationModel getAnnotationModel()
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#setRangeIndicator(Annotation)
-   */
+  @Override
   public void setRangeIndicator(Annotation rangeIndicator)
   {
     // FIXME
     //System.out.println("## setRangeIndicator: " + rangeIndicator);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#setRangeIndication(int,int,boolean)
-   */
+  @Override
   public void setRangeIndication(int offset, int length, boolean moveCursor)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#getRangeIndication()
-   */
+  @Override
   public IRegion getRangeIndication()
   {
     // FIXME
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#removeRangeIndication()
-   */
+  @Override
   public void removeRangeIndication()
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ISourceViewer#showAnnotations(boolean)
-   */
+  @Override
   public void showAnnotations(boolean show)
   {
   }
 
   // ITextViewer
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getTextWidget()
-   */
+  @Override
   public StyledText getTextWidget()
   {
     return textWidget;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setUndoManager(IUndoManager)
-   */
+  @Override
   public void setUndoManager(IUndoManager manager)
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setTextDoubleClickStrategy(ITextDoubleClickStrategy,String)
-   */
+  @Override
   public void setTextDoubleClickStrategy(
       ITextDoubleClickStrategy strategy, String contentType)
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setAutoIndentStrategy(IAutoIndentStrategy,String)
-   */
+  @Override
   @SuppressWarnings("deprecation")
   public void setAutoIndentStrategy(
       org.eclipse.jface.text.IAutoIndentStrategy strategy, String contentType)
@@ -217,139 +175,94 @@ public class VimViewer
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setTextHover(ITextHover,String)
-   */
+  @Override
   public void setTextHover(ITextHover textViewerHover, String contentType)
   {
     // FIXME
     //System.out.println("## setTextHover: " + textViewerHover);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#activatePlugins()
-   */
+  @Override
   public void activatePlugins()
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#resetPlugins()
-   */
+  @Override
   public void resetPlugins()
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#addViewportListener(IViewportListener)
-   */
+  @Override
   public void addViewportListener(IViewportListener listener)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#removeViewportListener(IViewportListener)
-   */
+  @Override
   public void removeViewportListener(IViewportListener listener)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#addTextListener(ITextListener)
-   */
+  @Override
   public void addTextListener(ITextListener listener)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#removeTextListener(ITextListener)
-   */
+  @Override
   public void removeTextListener(ITextListener listener)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#addTextInputListener(ITextInputListener)
-   */
+  @Override
   public void addTextInputListener(ITextInputListener listener)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#removeTextInputListener(ITextInputListener)
-   */
+  @Override
   public void removeTextInputListener(ITextInputListener listener)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setDocument(IDocument)
-   */
+  @Override
   public void setDocument(IDocument document)
   {
     this.document = document;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getDocument()
-   */
+  @Override
   public IDocument getDocument()
   {
     return document;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setEventConsumer(IEventConsumer)
-   */
+  @Override
   public void setEventConsumer(IEventConsumer consumer)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setEditable(boolean)
-   */
+  @Override
   public void setEditable(boolean editable)
   {
     // FIXME
     //System.out.println("## setEditable: " + editable);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#isEditable()
-   */
+  @Override
   public boolean isEditable()
   {
     // FIXME
     return true;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setDocument(IDocument,int,int)
-   */
+  @Override
   public void setDocument(
       IDocument document, int modelRangeOffset, int modelRangeLength)
   {
@@ -358,29 +271,20 @@ public class VimViewer
     //System.out.println("## setDocument: " + modelRangeOffset + ':' + modelRangeLength);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setVisibleRegion(int,int)
-   */
+  @Override
   public void setVisibleRegion(int offset, int length)
   {
     // FIXME
     //System.out.println("## setVisibleRegion: " + offset + ':' + length);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#resetVisibleRegion()
-   */
+  @Override
   public void resetVisibleRegion()
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getVisibleRegion()
-   */
+  @Override
   public IRegion getVisibleRegion()
   {
     // FIXME
@@ -388,96 +292,66 @@ public class VimViewer
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#overlapsWithVisibleRegion(int,int)
-   */
+  @Override
   public boolean overlapsWithVisibleRegion(int offset, int length)
   {
     // FIXME
     return false;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#changeTextPresentation(TextPresentation,boolean)
-   */
+  @Override
   public void changeTextPresentation(
       TextPresentation presentation, boolean controlRedraw)
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#invalidateTextPresentation()
-   */
+  @Override
   public void invalidateTextPresentation()
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setTextColor(Color)
-   */
+  @Override
   public void setTextColor(Color color)
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setTextColor(Color,int,int,boolean)
-   */
+  @Override
   public void setTextColor(
       Color color, int offset, int length, boolean controlRedraw)
   {
     // no-op
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getTextOperationTarget()
-   */
+  @Override
   public ITextOperationTarget getTextOperationTarget()
   {
     // FIXME
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getFindReplaceTarget()
-   */
+  @Override
   public IFindReplaceTarget getFindReplaceTarget()
   {
     // FIXME
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setDefaultPrefixes(String[],String)
-   */
+  @Override
   public void setDefaultPrefixes(String[] defaultPrefixes, String contentType)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setIndentPrefixes(String[],String)
-   */
+  @Override
   public void setIndentPrefixes(String[] indentPrefixes, String contentType)
   {
     // FIXME
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setSelectedRange(int,int)
-   */
+  @Override
   public void setSelectedRange(int offset, int length)
   {
     try{
@@ -491,90 +365,63 @@ public class VimViewer
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getSelectedRange()
-   */
+  @Override
   public Point getSelectedRange()
   {
     // FIXME
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getSelectionProvider()
-   */
+  @Override
   public ISelectionProvider getSelectionProvider()
   {
     // FIXME
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#revealRange(int,int)
-   */
+  @Override
   public void revealRange(int offset, int length)
   {
     // FIXME
     //System.out.println("## revealRange: " + offset + ':' + length);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#setTopIndex(int)
-   */
+  @Override
   public void setTopIndex(int index)
   {
     // FIXME
     //System.out.println("## setTopIndex: " + index);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getTopIndex()
-   */
+  @Override
   public int getTopIndex()
   {
     // FIXME
     return 0;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getTopIndexStartOffset()
-   */
+  @Override
   public int getTopIndexStartOffset()
   {
     // FIXME
     return 0;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getBottomIndex()
-   */
+  @Override
   public int getBottomIndex()
   {
     // FIXME
     return 0;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getBottomIndexEndOffset()
-   */
+  @Override
   public int getBottomIndexEndOffset()
   {
     // FIXME
     return 0;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.text.ITextViewer#getTopInset()
-   */
+  @Override
   public int getTopInset()
   {
     // FIXME
@@ -583,68 +430,44 @@ public class VimViewer
 
   // ITextViewerExtension
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#prependVerifyKeyListener(VerifyKeyListener)
-   */
+  @Override
   public void prependVerifyKeyListener(VerifyKeyListener listener)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#appendVerifyKeyListener(VerifyKeyListener)
-   */
+  @Override
   public void appendVerifyKeyListener(VerifyKeyListener listener)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#removeVerifyKeyListener(VerifyKeyListener)
-   */
+  @Override
   public void removeVerifyKeyListener(VerifyKeyListener listener)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#getControl()
-   */
+  @Override
   public Control getControl()
   {
     return getTextWidget();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#setMark(int)
-   */
+  @Override
   public void setMark(int arg0)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#getMark()
-   */
+  @Override
   public int getMark()
   {
     return -1;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#setRedraw(boolean)
-   */
+  @Override
   public void setRedraw(boolean redraw)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ITextViewerExtension#getRewriteTarget()
-   */
+  @Override
   public IRewriteTarget getRewriteTarget()
   {
     return null;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,14 @@
 package org.eclim.plugin.jdt.project.classpath;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+
+import org.xml.sax.SAXException;
 
 /**
  * Abstract base class for parsers that work with xml files.
@@ -34,14 +38,21 @@ public abstract class AbstractXmlParser
 
   @Override
   public Dependency[] parse(String filename)
-    throws Exception
   {
     if(factory == null){
       factory = DocumentBuilderFactory.newInstance();
     }
 
-    Document document = factory.newDocumentBuilder().parse(new File(filename));
-    return parse(document);
+    try{
+      Document document = factory.newDocumentBuilder().parse(new File(filename));
+      return parse(document);
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
+    }catch(SAXException se){
+      throw new RuntimeException(se);
+    }catch(ParserConfigurationException pce){
+      throw new RuntimeException(pce);
+    }
   }
 
   /**
@@ -50,6 +61,5 @@ public abstract class AbstractXmlParser
    * @param document The document.
    * @return The array of Dependency.
    */
-  public abstract Dependency[] parse(Document document)
-    throws Exception;
+  public abstract Dependency[] parse(Document document);
 }

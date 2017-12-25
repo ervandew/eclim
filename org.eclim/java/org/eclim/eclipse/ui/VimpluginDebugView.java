@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2008 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,10 +33,6 @@ public class VimpluginDebugView
 {
   private static Text log;
 
-  /**
-   * {@inheritDoc}
-   * @see ViewPart#createPartControl(Composite)
-   */
   @Override
   public void createPartControl(Composite parent)
   {
@@ -45,10 +41,6 @@ public class VimpluginDebugView
         SWT.LEFT | SWT.MULTI | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ViewPart#dispose()
-   */
   @Override
   public void dispose()
   {
@@ -56,10 +48,6 @@ public class VimpluginDebugView
     log = null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see ViewPart#setFocus()
-   */
   @Override
   public void setFocus()
   {

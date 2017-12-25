@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,6 @@ import org.eclipse.core.runtime.IPath;
 public class MvnDependency
   extends Dependency
 {
-  /**
-   * @see Dependency#Dependency(String,String,String,IPath)
-   */
   public MvnDependency(String org, String name, String version, IPath path)
   {
     super(org, name, version, path);

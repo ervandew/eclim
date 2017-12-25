@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,6 +112,8 @@ public class IOUtils
    *
    * @param in The InputStream.
    * @param out The OutputStream.
+   * @throws IOException If there is a problem reading from or writing to the
+   * streams.
    */
   public static void copy(InputStream in, OutputStream out)
     throws IOException
@@ -128,6 +130,8 @@ public class IOUtils
    *
    * @param in The Reader.
    * @param out The Writer.
+   * @throws IOException If there is a problem reading from or writing to the
+   * streams.
    */
   public static void copy(Reader in, Writer out)
     throws IOException
@@ -144,6 +148,7 @@ public class IOUtils
    *
    * @param in The input stream to read from.
    * @return a list of lines read.
+   * @throws IOException If there is a problem reading from the input stream.
    */
   public static List<String> readLines(InputStream in)
     throws IOException
@@ -162,6 +167,7 @@ public class IOUtils
    *
    * @param lines List of lines to write.
    * @param out The output stream to write to.
+   * @throws IOException If there is a problem writing to the output stream.
    */
   public static void writeLines(List<String> lines, OutputStream out)
     throws IOException
@@ -179,6 +185,7 @@ public class IOUtils
    *
    * @param in The InputStream to read.
    * @return The InputStream contents.
+   * @throws IOException If there is a problem reading from the input stream.
    */
   public static String toString(InputStream in)
     throws IOException
@@ -192,6 +199,7 @@ public class IOUtils
    *
    * @param in The Reader to read.
    * @return The Reader contents.
+   * @throws IOException If there is a problem reading from the input stream.
    */
   public static String toString(Reader in)
     throws IOException

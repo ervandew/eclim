@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,8 +42,10 @@ public class ProblemLocation
 
   /**
    * Default Constructor.
+   *
+   * @param problem An IProblem instance.
    */
-  public ProblemLocation (IProblem problem)
+  public ProblemLocation(IProblem problem)
   {
     id = problem.getID();
     offset = problem.getSourceStart();
@@ -52,67 +54,51 @@ public class ProblemLocation
     error = problem.isError();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public ASTNode getCoveredNode(CompilationUnit astRoot)
   {
     NodeFinder finder = new NodeFinder(astRoot, offset, length);
     return finder.getCoveredNode();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public ASTNode getCoveringNode(CompilationUnit astRoot)
   {
     NodeFinder finder = new NodeFinder(astRoot, offset, length);
     return finder.getCoveringNode();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public int getLength()
   {
     return length;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public int getOffset()
   {
     return offset;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String[] getProblemArguments()
   {
     return arguments;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public int getProblemId()
   {
     return id;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public boolean isError()
   {
     return error;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String getMarkerType()
   {
     return IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER;

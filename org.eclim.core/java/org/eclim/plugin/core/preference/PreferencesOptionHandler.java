@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * OptionHandler which works uses IEclipsePreferences as the back end.
@@ -105,21 +107,18 @@ public class PreferencesOptionHandler
 
   @Override
   public Map<String,String> getValues()
-    throws Exception
   {
     return getValues(InstanceScope.INSTANCE);
   }
 
   @Override
   public Map<String,String> getValues(IProject project)
-    throws Exception
   {
     return getValues(supportsProjectScope ?
         new ProjectScope(project) : InstanceScope.INSTANCE);
   }
 
   private Map<String,String> getValues(IScopeContext scope)
-    throws Exception
   {
     Map<String, String> values = new HashMap<String,String>();
 
@@ -137,30 +136,31 @@ public class PreferencesOptionHandler
 
   @Override
   public void setOption(String name, String value)
-    throws Exception
   {
     setOption(InstanceScope.INSTANCE, name, value);
   }
 
   @Override
   public void setOption(IProject project, String name, String value)
-    throws Exception
   {
     setOption(supportsProjectScope ?
         new ProjectScope(project) : InstanceScope.INSTANCE, name, value);
   }
 
   private void setOption(IScopeContext scope, String name, String value)
-    throws Exception
   {
-    for (String qualifier : supportedPreferences.keySet()){
-      String relName = name.replaceFirst(qualifier + '.', "");
-      if (supportedPreferences.get(qualifier).contains(relName)){
-        IEclipsePreferences prefs = scope.getNode(qualifier);
-        prefs.put(relName, value);
-        prefs.flush();
-        return;
+    try{
+      for (String qualifier : supportedPreferences.keySet()){
+        String relName = name.replaceFirst(qualifier + '.', "");
+        if (supportedPreferences.get(qualifier).contains(relName)){
+          IEclipsePreferences prefs = scope.getNode(qualifier);
+          prefs.put(relName, value);
+          prefs.flush();
+          return;
+        }
       }
+    }catch(BackingStoreException bse){
+      throw new RuntimeException(bse);
     }
   }
 }

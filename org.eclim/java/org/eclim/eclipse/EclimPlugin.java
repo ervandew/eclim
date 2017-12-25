@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,11 +48,7 @@ public class EclimPlugin
     plugin = this;
   }
 
-  /**
-   * This method is called upon plug-in activation
-   *
-   * @param context The bundle context.
-   */
+  @Override
   public void start(BundleContext context)
     throws Exception
   {
@@ -66,11 +62,7 @@ public class EclimPlugin
     System.setProperty("eclim.home", home);
   }
 
-  /**
-   * This method is called when the plug-in is stopped
-   *
-   * @param context The bundle context.
-   */
+  @Override
   public void stop(BundleContext context)
     throws Exception
   {
@@ -80,6 +72,8 @@ public class EclimPlugin
 
   /**
    * Returns the shared instance.
+   *
+   * @return EclimPlugin instance.
    */
   public static EclimPlugin getDefault()
   {

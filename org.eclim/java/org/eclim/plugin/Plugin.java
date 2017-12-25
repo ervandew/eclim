@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,16 +62,15 @@ public class Plugin
 
   /**
    * Returns the shared instance.
+   *
+   * @return Plugin instance.
    */
   public static Plugin getDefault()
   {
     return plugin;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.osgi.framework.BundleActivator#start(BundleContext)
-   */
+  @Override
   public void start(BundleContext context)
     throws Exception
   {
@@ -127,10 +126,7 @@ public class Plugin
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.osgi.framework.BundleActivator#stop(BundleContext)
-   */
+  @Override
   public void stop(BundleContext context)
     throws Exception
   {
@@ -188,10 +184,7 @@ public class Plugin
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see BundleListener#bundleChanged(BundleEvent)
-   */
+  @Override
   public void bundleChanged(BundleEvent event)
   {
     Bundle bundle = event.getBundle();

@@ -46,9 +46,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class ProjectInfoCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {

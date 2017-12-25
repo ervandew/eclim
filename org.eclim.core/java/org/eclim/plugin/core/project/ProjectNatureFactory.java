@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.eclim.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
+
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * Factory for registering project natures.
@@ -134,13 +136,16 @@ public class ProjectNatureFactory
    * @return Array of aliases.
    */
   public static String[] getProjectNatureAliases(IProject project)
-    throws Exception
   {
     ArrayList<String> aliases = new ArrayList<String>();
-    for(String key : natureAliases.keySet()){
-      if(project.hasNature(getNatureForAlias(key))){
-        aliases.add(key);
+    try{
+      for(String key : natureAliases.keySet()){
+        if(project.hasNature(getNatureForAlias(key))){
+          aliases.add(key);
+        }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return aliases.toArray(new String[aliases.size()]);
@@ -153,16 +158,19 @@ public class ProjectNatureFactory
    * @return Array of natures.
    */
   public static String[] getProjectNatures(IProject project)
-    throws Exception
   {
     ArrayList<String> natures = new ArrayList<String>();
-    for(String key : natureAliases.keySet()){
-      String[] ids = natureAliases.get(key);
-      for (String id : ids){
-        if(project.hasNature(id)){
-          natures.add(id);
+    try{
+      for(String key : natureAliases.keySet()){
+        String[] ids = natureAliases.get(key);
+        for (String id : ids){
+          if(project.hasNature(id)){
+            natures.add(id);
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return natures.toArray(new String[natures.size()]);

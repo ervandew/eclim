@@ -34,6 +34,7 @@ import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.core.resources.IWorkspaceRunnable;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -125,7 +126,6 @@ public class JUnitImplCommand
   @Override
   protected List<IMethodBinding> getOverridableMethods(
       CompilationUnit cu, ITypeBinding typeBinding)
-    throws Exception
   {
     HashSet<String> testMethods = new HashSet<String>();
     for (IMethodBinding method : typeBinding.getDeclaredMethods()){
@@ -166,12 +166,16 @@ public class JUnitImplCommand
       IJavaElement sibling,
       int pos,
       CommandLine commandLine)
-    throws Exception
   {
     RefactoringASTParser parser =
       new RefactoringASTParser(ASTProvider.SHARED_AST_LEVEL);
     CompilationUnit cu = parser.parse(type.getCompilationUnit(), true);
-    ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
+    ITypeBinding typeBinding = null;
+    try{
+      typeBinding = ASTNodes.getTypeBinding(cu, type);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     String superType = commandLine.getValue(Options.SUPERTYPE_OPTION);
     List<IMethodBinding> testable = getOverridableMethods(cu, typeBinding);

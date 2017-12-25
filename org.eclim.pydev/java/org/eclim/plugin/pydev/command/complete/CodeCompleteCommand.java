@@ -34,6 +34,7 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 
@@ -82,7 +83,6 @@ public class CodeCompleteCommand
   @Override
   protected ICompletionProposal[] getCompletionProposals(
       CommandLine commandLine, String projectName, String fileName, int offset)
-    throws Exception
   {
     ISourceViewer viewer = getTextViewer(commandLine, projectName, fileName);
     IProject project = ProjectUtils.getProject(projectName);
@@ -99,8 +99,13 @@ public class CodeCompleteCommand
     // matches
     if(results != null && results.length > 0){
       IDocument document = ProjectUtils.getDocument(project, fileName);
-      IRegion region = document.getLineInformationOfOffset(offset);
-      String prefix = document.get(region.getOffset(), offset - region.getOffset());
+      String prefix = null;
+      try{
+        IRegion region = document.getLineInformationOfOffset(offset);
+        prefix = document.get(region.getOffset(), offset - region.getOffset());
+      }catch(BadLocationException ble){
+        throw new RuntimeException(ble);
+      }
 
       Matcher matcher = PREFIX.matcher(prefix);
       if (matcher.find()){

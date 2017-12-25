@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Eric Van Dewoestine
+ * Copyright (C) 2014 - 2017 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,7 +82,6 @@ public class VimClient
   }
 
   public String remoteExpr(String arg)
-    throws Exception
   {
     String[] cmd = {
       executable,
@@ -115,9 +114,8 @@ public class VimClient
     remoteSend(call.toString());
   }
 
-  /** Like remoteFunctionCall but returns the result as a String */
+  /* Like remoteFunctionCall but returns the result as a String */
   public String remoteFunctionExpr(String function, String...args)
-    throws Exception
   {
     StringBuilder call = new StringBuilder()
       .append(function).append('(');

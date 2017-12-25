@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2016  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.cdt.command.complete;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang.StringUtils;
@@ -55,6 +56,7 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.swt.SWT;
 
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.PartInitException;
 
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -78,14 +80,17 @@ public class CodeCompleteCommand
   @Override
   protected ICompletionProposal[] getCompletionProposals(
       CommandLine commandLine, String projectName, String file, int offset)
-    throws Exception
   {
     IProject project = ProjectUtils.getProject(projectName);
 
     CEditor editor = new CEditor();
     IEditorInput input =
       new FileEditorInput(ProjectUtils.getFile(project, file));
-    editor.init(new EclimEditorSite(), input);
+    try{
+      editor.init(new EclimEditorSite(), input);
+    }catch(PartInitException pie){
+      throw new RuntimeException(pie);
+    }
     editor.setInput(input);
 
     CTextTools textTools = CUIPlugin.getDefault().getTextTools();
@@ -104,20 +109,27 @@ public class CodeCompleteCommand
     viewer.setDocument(ProjectUtils.getDocument(project, file));
 
     ContentAssistant ca = (ContentAssistant)config.getContentAssistant(viewer);
-    Method computeCompletionProposals =
-      ContentAssistant.class.getDeclaredMethod(
-          "computeCompletionProposals", ITextViewer.class, Integer.TYPE);
-    computeCompletionProposals.setAccessible(true);
+    try{
+      Method computeCompletionProposals =
+        ContentAssistant.class.getDeclaredMethod(
+            "computeCompletionProposals", ITextViewer.class, Integer.TYPE);
+      computeCompletionProposals.setAccessible(true);
 
-    return (ICompletionProposal[])
-      computeCompletionProposals.invoke(ca, viewer, offset);
+      return (ICompletionProposal[])
+        computeCompletionProposals.invoke(ca, viewer, offset);
+    }catch(NoSuchMethodException nsme){
+      throw new RuntimeException(nsme);
+    }catch(IllegalAccessException iae){
+      throw new RuntimeException(iae);
+    }catch(InvocationTargetException ite){
+      throw new RuntimeException(ite);
+    }
   }
 
   @Override
   protected String getCompletion(ICompletionProposal proposal)
   {
     if (proposal instanceof CCompletionProposal){
-      String displayString = proposal.getDisplayString();
       String completion = ((CCompletionProposal)proposal).getReplacementString();
       if (completion.length() > 0 &&
           completion.lastIndexOf(')') > completion.lastIndexOf('(') + 1 &&

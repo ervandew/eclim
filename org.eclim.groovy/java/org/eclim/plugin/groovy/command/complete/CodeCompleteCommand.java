@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - 2016
+ * Copyright (C) 2014 - 2017
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
 
+import org.eclipse.core.runtime.CoreException;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 
@@ -49,15 +51,16 @@ import org.eclipse.jdt.ui.text.java.JavaContentAssistInvocationContext;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
+import org.eclipse.ui.PartInitException;
+
 import org.eclipse.ui.ide.IDE;
 
 /**
  * Command which provides code completion for groovy files.
  *
- * @param javaDoc
- *   If {@code javaDoc} is set, then each completion result will include an
- *   eclipse style javadoc URI which can supplied to the
- *   {@code java_element_doc} command to obtain the javadoc content.
+ * If {@code javaDoc} is set, then each completion result will include an
+ * eclipse style javadoc URI which can supplied to the {@code java_element_doc}
+ * command to obtain the javadoc content.
  */
 @Command(
   name = "groovy_complete",
@@ -82,7 +85,6 @@ public final class CodeCompleteCommand
   @Override
   protected List<CodeCompleteResult> getCompletionResults(
       CommandLine commandLine, String project, String file, int offset)
-    throws Exception
   {
     IFile ifile = ProjectUtils.getFile(
         ProjectUtils.getProject(project, true), file);
@@ -90,11 +92,21 @@ public final class CodeCompleteCommand
 
     // ensure opens with Groovy editor
     if(unit instanceof GroovyCompilationUnit){
-      unit.getResource().setPersistentProperty(
-          IDE.EDITOR_KEY, GroovyEditor.EDITOR_ID);
+      try{
+        unit.getResource().setPersistentProperty(
+            IDE.EDITOR_KEY, GroovyEditor.EDITOR_ID);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
 
-    JavaEditor editor = (JavaEditor)EditorUtility.openInEditor(unit);
+    JavaEditor editor = null;
+    try{
+      editor = (JavaEditor)EditorUtility.openInEditor(unit);
+    }catch(PartInitException pie){
+      throw new RuntimeException(pie);
+    }
+
     JavaSourceViewer viewer = (JavaSourceViewer)editor.getViewer();
     JavaContentAssistInvocationContext context =
       new JavaContentAssistInvocationContext(viewer, offset, editor);

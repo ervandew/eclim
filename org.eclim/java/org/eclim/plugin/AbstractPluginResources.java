@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,47 +75,42 @@ public abstract class AbstractPluginResources
     pluginName = index != -1 ? name.substring(index + 1) : name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String getName()
   {
     return name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Collection<? extends Class<? extends Command>> getCommandClasses()
   {
     return commands.values();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Command getCommand(String name)
-    throws Exception
   {
     if(!containsCommand(name)){
       throw new RuntimeException(
           Services.getMessage("command.not.found", name));
     }
     Class<? extends Command> cc = commands.get(name);
-    return cc.newInstance();
+    try{
+      return cc.newInstance();
+    }catch(IllegalAccessException iae){
+      throw new RuntimeException(iae);
+    }catch(InstantiationException ie){
+      throw new RuntimeException(ie);
+    }
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public boolean containsCommand(String name)
   {
     return commands.containsKey(name);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String getMessage(String key, Object... args)
   {
     ResourceBundle bundle = getResourceBundle();
@@ -123,9 +118,7 @@ public abstract class AbstractPluginResources
     return MessageFormat.format(message, args);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public ResourceBundle getResourceBundle()
   {
     if (bundle == null){
@@ -135,17 +128,13 @@ public abstract class AbstractPluginResources
     return bundle;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String getProperty(String name)
   {
     return getProperty(name, null);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String getProperty(String name, String defaultValue)
   {
     if (properties == null){
@@ -160,9 +149,7 @@ public abstract class AbstractPluginResources
     return System.getProperty(name, properties.getProperty(name, defaultValue));
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public URL getResource(String resource)
   {
     // short circuit resources we know are missing
@@ -206,9 +193,7 @@ public abstract class AbstractPluginResources
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public InputStream getResourceAsStream(String resource)
   {
     try{
@@ -222,18 +207,12 @@ public abstract class AbstractPluginResources
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void close()
-    throws Exception
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see PluginResources#registerCommand(Class)
-   */
+  @Override
   public void registerCommand(Class<? extends Command> command)
   {
     org.eclim.annotation.Command info = (org.eclim.annotation.Command)
@@ -252,18 +231,12 @@ public abstract class AbstractPluginResources
    */
   protected abstract String getBundleBaseName();
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public boolean equals(Object other)
   {
     return ((PluginResources)other).getName().equals(getName());
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int hashCode()
   {

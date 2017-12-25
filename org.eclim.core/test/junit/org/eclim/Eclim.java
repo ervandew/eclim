@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,6 @@ public class Eclim
 
   /**
    * Executes eclim using the supplied arguments.
-   * <p/>
    * The "-command" argument will be prepended to the argument array you supply.
    *
    * @param args The arguments to pass to eclim.
@@ -71,7 +70,6 @@ public class Eclim
 
   /**
    * Executes eclim using the supplied arguments.
-   * <p/>
    * The "-command" argument will be prepended to the argument array you supply.
    *
    * @param args The arguments to pass to eclim.
@@ -86,7 +84,6 @@ public class Eclim
 
   /**
    * Executes eclim using the supplied arguments.
-   * <p/>
    * The "-command" argument will be prepended to the argument array you supply.
    *
    * @param args The arguments to pass to eclim.
@@ -100,7 +97,6 @@ public class Eclim
 
   /**
    * Executes eclim using the supplied arguments.
-   * <p/>
    * The "-command" argument will be prepended to the argument array you supply.
    *
    * @param args The arguments to pass to eclim.

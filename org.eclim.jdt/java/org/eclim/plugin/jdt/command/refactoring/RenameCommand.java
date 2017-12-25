@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ import org.eclim.plugin.core.command.refactoring.Refactor;
 import org.eclim.plugin.core.command.refactoring.RefactorException;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
+
+import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
@@ -87,7 +89,6 @@ public class RenameCommand
 {
   @Override
   public Refactor createRefactoring(CommandLine commandLine)
-    throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
@@ -98,30 +99,34 @@ public class RenameCommand
     int flags = RenameSupport.UPDATE_REFERENCES;
 
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
-    IJavaElement[] elements = src.codeSelect(offset, length);
-    if(elements == null || elements.length == 0){
-      throw new RefactorException();
-    }
-
-    IJavaElement element = elements[0];
-
-    // check for element outside any user project
-    if (element instanceof IMember){
-      ICompilationUnit cu = ((IMember)element).getCompilationUnit();
-      if (cu == null){
-        throw new RefactorException(Services.getMessage(
-              "rename.element.unable", element.getElementName()));
+    try{
+      IJavaElement[] elements = src.codeSelect(offset, length);
+      if(elements == null || elements.length == 0){
+        throw new RefactorException();
       }
+
+      IJavaElement element = elements[0];
+
+      // check for element outside any user project
+      if (element instanceof IMember){
+        ICompilationUnit cu = ((IMember)element).getCompilationUnit();
+        if (cu == null){
+          throw new RefactorException(Services.getMessage(
+                "rename.element.unable", element.getElementName()));
+        }
+      }
+
+      JavaRenameProcessor processor = getProcessor(element, name, flags);
+      Refactoring refactoring = new RenameRefactoring(processor);
+
+      // create a more descriptive name than the default.
+      String desc = refactoring.getName() +
+        " (" + element.getElementName() + " -> " + name + ')';
+
+      return new Refactor(desc, refactoring);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-
-    JavaRenameProcessor processor = getProcessor(element, name, flags);
-    Refactoring refactoring = new RenameRefactoring(processor);
-
-    // create a more descriptive name than the default.
-    String desc = refactoring.getName() +
-      " (" + element.getElementName() + " -> " + name + ')';
-
-    return new Refactor(desc, refactoring);
   }
 
   /**
@@ -134,45 +139,52 @@ public class RenameCommand
    */
   private JavaRenameProcessor getProcessor(
       IJavaElement element, String name, int flags)
-    throws Exception
   {
     JavaRenameProcessor processor;
-    if (element instanceof IPackageFragment){
-      processor = new RenamePackageProcessor((IPackageFragment)element);
-      // hack to force renaming of sub packages.
-      Field renameSubpackages =
-        RenamePackageProcessor.class.getDeclaredField("fRenameSubpackages");
-      renameSubpackages.setAccessible(true);
-      renameSubpackages.setBoolean(processor, true);
-    }else if (element instanceof IType){
-      processor = new RenameTypeProcessor((IType)element);
-    }else if (element instanceof IMethod){
-      IMethod method = (IMethod)element;
-      if (MethodChecks.isVirtual(method)) {
-        processor = new RenameVirtualMethodProcessor(method);
-      } else {
-        processor = new RenameNonVirtualMethodProcessor(method);
+    try{
+      if (element instanceof IPackageFragment){
+        processor = new RenamePackageProcessor((IPackageFragment)element);
+        // hack to force renaming of sub packages.
+        Field renameSubpackages =
+          RenamePackageProcessor.class.getDeclaredField("fRenameSubpackages");
+        renameSubpackages.setAccessible(true);
+        renameSubpackages.setBoolean(processor, true);
+      }else if (element instanceof IType){
+        processor = new RenameTypeProcessor((IType)element);
+      }else if (element instanceof IMethod){
+        IMethod method = (IMethod)element;
+        if (MethodChecks.isVirtual(method)) {
+          processor = new RenameVirtualMethodProcessor(method);
+        } else {
+          processor = new RenameNonVirtualMethodProcessor(method);
+        }
+      }else if (element instanceof IField){
+        IField field = (IField)element;
+        if (JdtFlags.isEnum(field)){
+          processor = new RenameEnumConstProcessor(field);
+        }else {
+          flags |= RenameSupport.UPDATE_GETTER_METHOD;
+          flags |= RenameSupport.UPDATE_SETTER_METHOD;
+          RenameFieldProcessor renameField = new RenameFieldProcessor(field);
+          renameField.setRenameGetter(
+              (flags & RenameSupport.UPDATE_GETTER_METHOD) != 0);
+          renameField.setRenameSetter(
+              (flags & RenameSupport.UPDATE_SETTER_METHOD) != 0);
+          processor = renameField;
+        }
+      }else if (element instanceof ITypeParameter){
+        processor = new RenameTypeParameterProcessor((ITypeParameter)element);
+      }else if (element instanceof ILocalVariable){
+        processor = new RenameLocalVariableProcessor((ILocalVariable)element);
+      }else{
+        return null;
       }
-    }else if (element instanceof IField){
-      IField field = (IField)element;
-      if (JdtFlags.isEnum(field)){
-        processor = new RenameEnumConstProcessor(field);
-      }else {
-        flags |= RenameSupport.UPDATE_GETTER_METHOD;
-        flags |= RenameSupport.UPDATE_SETTER_METHOD;
-        RenameFieldProcessor renameField = new RenameFieldProcessor(field);
-        renameField.setRenameGetter(
-            (flags & RenameSupport.UPDATE_GETTER_METHOD) != 0);
-        renameField.setRenameSetter(
-            (flags & RenameSupport.UPDATE_SETTER_METHOD) != 0);
-        processor = renameField;
-      }
-    }else if (element instanceof ITypeParameter){
-      processor = new RenameTypeParameterProcessor((ITypeParameter)element);
-    }else if (element instanceof ILocalVariable){
-      processor = new RenameLocalVariableProcessor((ILocalVariable)element);
-    }else{
-      return null;
+    }catch(NoSuchFieldException nsfe){
+      throw new RuntimeException(nsfe);
+    }catch(IllegalAccessException iae){
+      throw new RuntimeException(iae);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     processor.setNewElementName(name);

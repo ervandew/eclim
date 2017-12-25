@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.eclim.Services;
 
@@ -58,7 +59,6 @@ public class MvnParser
 
   @Override
   public Dependency[] parse(Document document)
-    throws Exception
   {
     if(xpath == null){
       xpath = XmlUtils.createXPathExpression(
@@ -71,8 +71,12 @@ public class MvnParser
     }
     IPath path = new Path(MVN_REPO);
 
-    NodeList results = (NodeList)
-      xpath.evaluate(document, XPathConstants.NODESET);
+    NodeList results = null;
+    try{
+      results = (NodeList)xpath.evaluate(document, XPathConstants.NODESET);
+    }catch(XPathExpressionException xpee){
+      throw new RuntimeException(xpee);
+    }
     ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
     for(int ii = 0; ii < results.getLength(); ii++){
       Element element = (Element)results.item(ii);

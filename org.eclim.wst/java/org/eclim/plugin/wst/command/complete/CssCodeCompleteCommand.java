@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
+import java.io.IOException;
+
 import org.eclim.annotation.Command;
 
 import org.eclim.command.CommandLine;
@@ -28,6 +30,8 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+
+import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
@@ -64,7 +68,6 @@ public class CssCodeCompleteCommand
   @Override
   protected IContentAssistProcessor getContentAssistProcessor(
       CommandLine commandLine, String project, String file)
-    throws Exception
   {
     return new CSSContentAssistProcessor();
   }
@@ -72,14 +75,23 @@ public class CssCodeCompleteCommand
   @Override
   protected ISourceViewer getTextViewer(
       CommandLine commandLine, String project, String file)
-    throws Exception
   {
     IFile ifile = ProjectUtils.getFile(
         ProjectUtils.getProject(project, true), file);
-    ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+    try{
+      ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
-    IStructuredModel model =
-      StructuredModelManager.getModelManager().getModelForRead(ifile);
+    IStructuredModel model = null;
+    try{
+      model = StructuredModelManager.getModelManager().getModelForRead(ifile);
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     if (viewer == null) {
       viewer = new StructuredTextViewer(

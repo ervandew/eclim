@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package org.eclim.plugin.jdt.command.src;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
@@ -51,6 +52,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -86,9 +88,7 @@ public class ClassPrototypeCommand
   private static final String OBJECT = "java/lang/Object";
   private static final String ANNOTATION = "java/lang/annotation/Annotation";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -139,13 +139,14 @@ public class ClassPrototypeCommand
    * @param writer The writer to output the prototype to.
    */
   protected void prototype(String file, Writer writer)
-    throws Exception
   {
     FileInputStream in = null;
     try{
       in = new FileInputStream(file);
       ClassReader reader = new ClassReader(in);
       reader.accept(new AsmClassVisitor(new PrintWriter(writer)), false);
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
     }finally{
       IOUtils.closeQuietly(in);
     }
@@ -158,7 +159,6 @@ public class ClassPrototypeCommand
    * @return The resulting prototype.
    */
   protected String prototype(IType type)
-    throws Exception
   {
     Set<String> imports = new TreeSet<String>();
     StringBuffer buffer = new StringBuffer();
@@ -189,80 +189,83 @@ public class ClassPrototypeCommand
    */
   protected void prototype(
       StringBuffer buffer, IType type, String indent, Set<String> imports)
-    throws Exception
   {
-    buffer.append(indent);
-    prototypeFlags(buffer, type);
+    try{
+      buffer.append(indent);
+      prototypeFlags(buffer, type);
 
-    int flags = type.getFlags();
-    if(Flags.isEnum(flags)){
-      buffer.append("enum ");
-    }else if(Flags.isInterface(flags)){
-      buffer.append("interface ");
-    }else if(Flags.isAnnotation(flags)){
-      buffer.append("@interface ");
-    }else{
-      buffer.append("class ");
-    }
-    buffer.append(type.getElementName());
-
-    // extends
-    String superclass = type.getSuperclassName();
-    if(superclass != null){
-      buffer.append('\n').append(indent).append(INDENT)
-        .append("extends ").append(superclass);
-    }
-
-    // implements
-    String[] interfaces = type.getSuperInterfaceNames();
-    if(interfaces != null && interfaces.length > 0){
-      buffer.append('\n').append(indent).append(INDENT).append("implements ");
-      for(int ii = 0; ii < interfaces.length; ii++){
-        if(ii != 0){
-          buffer.append(", ");
-        }
-        buffer.append(interfaces[ii]);
+      int flags = type.getFlags();
+      if(Flags.isEnum(flags)){
+        buffer.append("enum ");
+      }else if(Flags.isInterface(flags)){
+        buffer.append("interface ");
+      }else if(Flags.isAnnotation(flags)){
+        buffer.append("@interface ");
+      }else{
+        buffer.append("class ");
       }
-    }
+      buffer.append(type.getElementName());
 
-    buffer.append('\n').append(indent).append("{\n");
+      // extends
+      String superclass = type.getSuperclassName();
+      if(superclass != null){
+        buffer.append('\n').append(indent).append(INDENT)
+          .append("extends ").append(superclass);
+      }
 
-    int length = buffer.length();
+      // implements
+      String[] interfaces = type.getSuperInterfaceNames();
+      if(interfaces != null && interfaces.length > 0){
+        buffer.append('\n').append(indent).append(INDENT).append("implements ");
+        for(int ii = 0; ii < interfaces.length; ii++){
+          if(ii != 0){
+            buffer.append(", ");
+          }
+          buffer.append(interfaces[ii]);
+        }
+      }
 
-    // fields
-    IField[] fields = type.getFields();
-    for(int ii = 0; ii < fields.length; ii++){
-      prototypeField(buffer, fields[ii], indent + INDENT, imports);
-    }
+      buffer.append('\n').append(indent).append("{\n");
 
-    // methods
-    IMethod[] methods = type.getMethods();
-    if(methods != null && methods.length > 0){
-      for(int ii = 0; ii < methods.length; ii++){
+      int length = buffer.length();
+
+      // fields
+      IField[] fields = type.getFields();
+      for(int ii = 0; ii < fields.length; ii++){
+        prototypeField(buffer, fields[ii], indent + INDENT, imports);
+      }
+
+      // methods
+      IMethod[] methods = type.getMethods();
+      if(methods != null && methods.length > 0){
+        for(int ii = 0; ii < methods.length; ii++){
+          if(length != buffer.length()){
+            buffer.append('\n');
+          }
+          length = buffer.length();
+          prototypeMethod(buffer, methods[ii], indent + INDENT, imports);
+        }
+      }
+
+      // inner classes, enums, etc.
+      IType[] types = type.getTypes();
+      if(types != null && types.length > 0){
         if(length != buffer.length()){
           buffer.append('\n');
         }
-        length = buffer.length();
-        prototypeMethod(buffer, methods[ii], indent + INDENT, imports);
-      }
-    }
-
-    // inner classes, enums, etc.
-    IType[] types = type.getTypes();
-    if(types != null && types.length > 0){
-      if(length != buffer.length()){
-        buffer.append('\n');
-      }
-      for(int ii = 0; ii < types.length; ii++){
-        if(ii > 0){
+        for(int ii = 0; ii < types.length; ii++){
+          if(ii > 0){
+            buffer.append('\n');
+          }
+          prototype(buffer, types[ii], indent + INDENT, imports);
           buffer.append('\n');
         }
-        prototype(buffer, types[ii], indent + INDENT, imports);
-        buffer.append('\n');
       }
-    }
 
-    buffer.append(indent).append("}");
+      buffer.append(indent).append("}");
+    }catch(JavaModelException jme){
+      throw new RuntimeException(jme);
+    }
   }
 
   /**
@@ -275,41 +278,44 @@ public class ClassPrototypeCommand
    */
   protected void prototypeField(
       StringBuffer buffer, IField field, String indent, Set<String> imports)
-    throws Exception
   {
-    String fieldName = field.getElementName();
-    if(fieldName.indexOf("$") == -1){
-      buffer.append(indent);
-      prototypeFlags(buffer, field);
+    try{
+      String fieldName = field.getElementName();
+      if(fieldName.indexOf("$") == -1){
+        buffer.append(indent);
+        prototypeFlags(buffer, field);
 
-      String type = field.getTypeSignature();
-      String typeName = Signature.getSignatureSimpleName(type);
-      buffer.append(typeName).append(' ').append(field.getElementName());
+        String type = field.getTypeSignature();
+        String typeName = Signature.getSignatureSimpleName(type);
+        buffer.append(typeName).append(' ').append(field.getElementName());
 
-      addImport(imports, type);
+        addImport(imports, type);
 
-      Object defaultValue = field.getConstant();
-      if(defaultValue != null){
-        buffer.append(" = ");
-        if(typeName.equals("char")){
-          buffer.append('\'').append(defaultValue).append('\'');
-        }else if(typeName.equals("int") ||
-            typeName.equals("long") ||
-            typeName.equals("short") ||
-            typeName.equals("double") ||
-            typeName.equals("float") ||
-            typeName.equals("boolean") ||
-            typeName.equals("byte"))
-        {
-          buffer.append(defaultValue);
-        }else if(defaultValue instanceof String){
-          buffer.append('"').append(defaultValue).append('"');
-        }else{
-          logger.warn("Unhandled constant value: '{}' '{}'",
-              defaultValue.getClass().getName(), defaultValue);
+        Object defaultValue = field.getConstant();
+        if(defaultValue != null){
+          buffer.append(" = ");
+          if(typeName.equals("char")){
+            buffer.append('\'').append(defaultValue).append('\'');
+          }else if(typeName.equals("int") ||
+              typeName.equals("long") ||
+              typeName.equals("short") ||
+              typeName.equals("double") ||
+              typeName.equals("float") ||
+              typeName.equals("boolean") ||
+              typeName.equals("byte"))
+          {
+            buffer.append(defaultValue);
+          }else if(defaultValue instanceof String){
+            buffer.append('"').append(defaultValue).append('"');
+          }else{
+            logger.warn("Unhandled constant value: '{}' '{}'",
+                defaultValue.getClass().getName(), defaultValue);
+          }
         }
+        buffer.append(";\n");
       }
-      buffer.append(";\n");
+    }catch(JavaModelException jme){
+      throw new RuntimeException(jme);
     }
   }
 
@@ -323,50 +329,53 @@ public class ClassPrototypeCommand
    */
   protected void prototypeMethod(
       StringBuffer buffer, IMethod method, String indent, Set<String> imports)
-    throws Exception
   {
-    String methodName = method.getElementName();
-    if(methodName.indexOf("$") == -1 && !methodName.equals("<clinit>")){
-      buffer.append(indent);
-      prototypeFlags(buffer, method);
-      String returnType = method.getReturnType();
-      String returnTypeName = Signature.getSignatureSimpleName(returnType);
+    try{
+      String methodName = method.getElementName();
+      if(methodName.indexOf("$") == -1 && !methodName.equals("<clinit>")){
+        buffer.append(indent);
+        prototypeFlags(buffer, method);
+        String returnType = method.getReturnType();
+        String returnTypeName = Signature.getSignatureSimpleName(returnType);
 
-      addImport(imports, returnType);
+        addImport(imports, returnType);
 
-      buffer.append(returnTypeName)
-        .append(' ').append(methodName).append(" (");
+        buffer.append(returnTypeName)
+          .append(' ').append(methodName).append(" (");
 
-      // parameters
-      String[] paramNames = method.getParameterNames();
-      String[] paramTypes = method.getParameterTypes();
-      if(paramNames.length > 0){
-        for(int ii = 0; ii < paramNames.length; ii++){
-          if(ii != 0){
-            buffer.append(", ");
+        // parameters
+        String[] paramNames = method.getParameterNames();
+        String[] paramTypes = method.getParameterTypes();
+        if(paramNames.length > 0){
+          for(int ii = 0; ii < paramNames.length; ii++){
+            if(ii != 0){
+              buffer.append(", ");
+            }
+            addImport(imports, paramTypes[ii]);
+
+            String typeName = Signature.getSignatureSimpleName(paramTypes[ii]);
+            buffer.append(typeName).append(' ').append(paramNames[ii]);
           }
-          addImport(imports, paramTypes[ii]);
-
-          String typeName = Signature.getSignatureSimpleName(paramTypes[ii]);
-          buffer.append(typeName).append(' ').append(paramNames[ii]);
         }
-      }
 
-      buffer.append(")");
+        buffer.append(")");
 
-      // throws
-      String[] exceptions = method.getExceptionTypes();
-      if(exceptions.length > 0){
-        buffer.append('\n').append(indent).append(INDENT).append("throws ");
-        for(int ii = 0; ii < exceptions.length; ii++){
-          if(ii != 0){
-            buffer.append(", ");
+        // throws
+        String[] exceptions = method.getExceptionTypes();
+        if(exceptions.length > 0){
+          buffer.append('\n').append(indent).append(INDENT).append("throws ");
+          for(int ii = 0; ii < exceptions.length; ii++){
+            if(ii != 0){
+              buffer.append(", ");
+            }
+            buffer.append(Signature.getSignatureSimpleName(exceptions[ii]));
           }
-          buffer.append(Signature.getSignatureSimpleName(exceptions[ii]));
         }
-      }
 
-      buffer.append(";\n");
+        buffer.append(";\n");
+      }
+    }catch(JavaModelException jme){
+      throw new RuntimeException(jme);
     }
   }
 
@@ -377,38 +386,41 @@ public class ClassPrototypeCommand
    * @param member The member instance.
    */
   protected void prototypeFlags(StringBuffer buffer, IMember member)
-    throws Exception
   {
-    int flags = member.getFlags();
+    try{
+      int flags = member.getFlags();
 
-    if(Flags.isPublic(flags)){
-      buffer.append("public ");
-    }else if(Flags.isProtected(flags)){
-      buffer.append("protected ");
-    }else if(Flags.isPrivate(flags)){
-      buffer.append("private ");
-    }
+      if(Flags.isPublic(flags)){
+        buffer.append("public ");
+      }else if(Flags.isProtected(flags)){
+        buffer.append("protected ");
+      }else if(Flags.isPrivate(flags)){
+        buffer.append("private ");
+      }
 
-    if(Flags.isStatic(flags)){
-      buffer.append("static ");
-    }
-    if(Flags.isFinal(flags)){
-      buffer.append("final ");
-    }
-    if(Flags.isAbstract(flags)){
-      buffer.append("abstract ");
-    }
-    if(Flags.isNative(flags)){
-      buffer.append("native ");
-    }
-    if(Flags.isTransient(flags)){
-      buffer.append("transient ");
-    }
-    if(Flags.isVolatile(flags)){
-      buffer.append("volatile ");
-    }
-    if(Flags.isSynchronized(flags)){
-      buffer.append("synchronized ");
+      if(Flags.isStatic(flags)){
+        buffer.append("static ");
+      }
+      if(Flags.isFinal(flags)){
+        buffer.append("final ");
+      }
+      if(Flags.isAbstract(flags)){
+        buffer.append("abstract ");
+      }
+      if(Flags.isNative(flags)){
+        buffer.append("native ");
+      }
+      if(Flags.isTransient(flags)){
+        buffer.append("transient ");
+      }
+      if(Flags.isVolatile(flags)){
+        buffer.append("volatile ");
+      }
+      if(Flags.isSynchronized(flags)){
+        buffer.append("synchronized ");
+      }
+    }catch(JavaModelException jme){
+      throw new RuntimeException(jme);
     }
   }
 
@@ -448,10 +460,7 @@ public class ClassPrototypeCommand
       this.writer = writer;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visit(int,int,String,String,String,String[])
-     */
+    @Override
     public void visit(
         int version, int access,
         String name, String signature,
@@ -511,26 +520,17 @@ public class ClassPrototypeCommand
       classBuffer.append("{\n");
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitSource(String,String)
-     */
+    @Override
     public void visitSource(String source, String debug)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitOuterClass(String,String,String)
-     */
+    @Override
     public void visitOuterClass(String owner, String name, String desc)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitAnnotation(String,boolean)
-     */
+    @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible)
     {
       writer.print('@');
@@ -538,28 +538,19 @@ public class ClassPrototypeCommand
       return new AsmAnnotationVisitor();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitAttribute(Attribute)
-     */
+    @Override
     public void visitAttribute(Attribute attr)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitInnerClass(String,String,String,int)
-     */
+    @Override
     public void visitInnerClass(
         String name, String outerName, String innerName, int access)
     {
       flushClassDeclaration();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitField(int,String,String,String,Object)
-     */
+    @Override
     public FieldVisitor visitField(
         int access, String name, String desc, String signature, Object value)
     {
@@ -567,10 +558,7 @@ public class ClassPrototypeCommand
       return new AsmFieldVisitor(access, name, desc, value);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitMethod(int,String,String,String,String[])
-     */
+    @Override
     public MethodVisitor visitMethod(
         int access, String name, String desc, String signature, String[] exceptions)
     {
@@ -587,10 +575,7 @@ public class ClassPrototypeCommand
       }
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ClassVisitor#visitEnd()
-     */
+    @Override
     public void visitEnd()
     {
       flushClassDeclaration();
@@ -708,10 +693,7 @@ public class ClassPrototypeCommand
       private boolean wrote = false;
       private boolean wroteOpenParen = false;
 
-      /**
-       * {@inheritDoc}
-       * @see AnnotationVisitor#visit(String,Object)
-       */
+      @Override
       public void visit(String name, Object value)
       {
         if(name != null){
@@ -723,10 +705,7 @@ public class ClassPrototypeCommand
         }
       }
 
-      /**
-       * {@inheritDoc}
-       * @see AnnotationVisitor#visitEnum(String,String,String)
-       */
+      @Override
       public void visitEnum(String name, String desc, String value)
       {
         writeOpenParen();
@@ -736,28 +715,19 @@ public class ClassPrototypeCommand
         wrote = true;
       }
 
-      /**
-       * {@inheritDoc}
-       * @see AnnotationVisitor#visitAnnotation(String,String)
-       */
+      @Override
       public AnnotationVisitor visitAnnotation(String name, String desc)
       {
         return new AsmAnnotationVisitor();
       }
 
-      /**
-       * {@inheritDoc}
-       * @see AnnotationVisitor#visitArray(String)
-       */
+      @Override
       public AnnotationVisitor visitArray(String name)
       {
         return new AsmAnnotationVisitor();
       }
 
-      /**
-       * {@inheritDoc}
-       * @see AnnotationVisitor#visitEnd()
-       */
+      @Override
       public void visitEnd()
       {
         if (wrote){
@@ -805,196 +775,127 @@ public class ClassPrototypeCommand
         this.exceptions = exceptions;
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitAnnotationDefault()
-       */
+      @Override
       public AnnotationVisitor visitAnnotationDefault()
       {
         return new AsmAnnotationVisitor();
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitAnnotation(String,boolean)
-       */
+      @Override
       public AnnotationVisitor visitAnnotation(String desc, boolean visible)
       {
         return new AsmAnnotationVisitor();
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitParameterAnnotation(int,String,boolean)
-       */
+      @Override
       public AnnotationVisitor visitParameterAnnotation(
           int parameter, String desc, boolean visible)
       {
         return new AsmAnnotationVisitor();
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitAttribute(Attribute)
-       */
+      @Override
       public void visitAttribute(Attribute attr)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitCode()
-       */
+      @Override
       public void visitCode()
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitInsn(int)
-       */
+      @Override
       public void visitInsn(int opcode)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitIntInsn(int,int)
-       */
+      @Override
       public void visitIntInsn(int opcode, int operand)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitVarInsn(int,int)
-       */
+      @Override
       public void visitVarInsn(int opcode, int var)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitTypeInsn(int,String)
-       */
+      @Override
       public void visitTypeInsn(int opcode, String desc)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitFieldInsn(int,String,String,String)
-       */
+      @Override
       public void visitFieldInsn(
           int opcode, String owner, String name, String desc)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitMethodInsn(int,String,String,String)
-       */
+      @Override
       public void visitMethodInsn(
           int opcode, String owner, String name, String desc)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitJumpInsn(int,Label)
-       */
+      @Override
       public void visitJumpInsn(int opcode, Label operand)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitLabel(Label)
-       */
+      @Override
       public void visitLabel(Label label)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitLdcInsn(Object)
-       */
+      @Override
       public void visitLdcInsn(Object cst)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitIincInsn(int,int)
-       */
+      @Override
       public void visitIincInsn(int var, int increment)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitTableSwitchInsn(int,int,Label,Label[])
-       */
+      @Override
       public void visitTableSwitchInsn(
           int min, int max, Label dflt, Label[] labels)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitLookupSwitchInsn(Label,int[],Label[])
-       */
+      @Override
       public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitMultiANewArrayInsn(String,int)
-       */
+      @Override
       public void visitMultiANewArrayInsn(String desc, int dims)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitTryCatchBlock(Label,Label,Label,String)
-       */
+      @Override
       public void visitTryCatchBlock(
           Label start, Label end, Label handler, String type)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitLocalVariable(String,String,String,Label,Label,int)
-       */
+      @Override
       public void visitLocalVariable(
           String name, String desc, String signature,
           Label start, Label end, int index)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitLineNumber(int,Label)
-       */
+      @Override
       public void visitLineNumber(int line, Label start)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitMaxs(int,int)
-       */
+      @Override
       public void visitMaxs(int maxStack, int maxLocal)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitEnd()
-       */
+      @Override
       public void visitEnd()
       {
         // skip static initializers
@@ -1113,27 +1014,18 @@ public class ClassPrototypeCommand
         this.value = value;
       }
 
-      /**
-       * {@inheritDoc}
-       * @see MethodVisitor#visitAnnotation(String,boolean)
-       */
+      @Override
       public AnnotationVisitor visitAnnotation(String desc, boolean visible)
       {
         return new AsmAnnotationVisitor();
       }
 
-      /**
-       * {@inheritDoc}
-       * @see FieldVisitor#visitAttribute(Attribute)
-       */
+      @Override
       public void visitAttribute(Attribute attr)
       {
       }
 
-      /**
-       * {@inheritDoc}
-       * @see FieldVisitor#visitEnd()
-       */
+      @Override
       public void visitEnd()
       {
         writer.print(INDENT);

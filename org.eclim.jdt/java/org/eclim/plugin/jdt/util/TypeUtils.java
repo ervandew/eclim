@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ import org.eclim.plugin.jdt.command.search.SearchRequestor;
 import org.eclim.util.StringUtils;
 
 import org.eclim.util.file.Position;
+
+import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -67,10 +69,15 @@ public class TypeUtils
    * @return The IType.
    */
   public static IType getType(ICompilationUnit src, int offset)
-    throws Exception
   {
-    IJavaElement element = src.getElementAt(offset);
+    IJavaElement element = null;
     IType type = null;
+
+    try{
+      element = src.getElementAt(offset);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     // offset outside the class source (Above the package declaration most
     // likely)
@@ -105,12 +112,15 @@ public class TypeUtils
    * @return The position.
    */
   public static Position getPosition(IType type, ISourceReference reference)
-    throws Exception
   {
-    ISourceRange range = reference.getSourceRange();
-    return Position.fromOffset(
-        type.getResource().getLocation().toOSString(), null,
-        range.getOffset(), range.getLength());
+    try{
+      ISourceRange range = reference.getSourceRange();
+      return Position.fromOffset(
+          type.getResource().getLocation().toOSString(), null,
+          range.getOffset(), range.getLength());
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   /**
@@ -120,37 +130,40 @@ public class TypeUtils
    * @return The signature.
    */
   public static String getTypeSignature(TypeInfo typeInfo)
-    throws Exception
   {
     StringBuffer buffer = new StringBuffer();
-    IType type = typeInfo.getType();
-    int flags = type.getFlags();
-    if(Flags.isPublic(flags)){
-      buffer.append("public ");
-    }
+    try{
+      IType type = typeInfo.getType();
+      int flags = type.getFlags();
+      if(Flags.isPublic(flags)){
+        buffer.append("public ");
+      }
 
-    buffer.append(type.isClass() ? "class " : "interface ");
-    IJavaElement parent = type.getParent();
-    if(parent.getElementType() == IJavaElement.TYPE){
-      buffer.append(type.getParent().getElementName()).append('.');
-    }else if(parent.getElementType() == IJavaElement.CLASS_FILE){
-      int index = parent.getElementName().indexOf('$');
-      if(index != -1){
-        buffer.append(parent.getElementName().substring(0, index)).append('.');
-      }
-    }
-    buffer.append(type.getElementName());
-    String[] params = typeInfo.getTypeParameters();
-    String[] args = typeInfo.getTypeArguments();
-    if (params != null && params.length > 0 && args != null && args.length > 0){
-      buffer.append('<');
-      for (int ii = 0; ii < args.length; ii++){
-        if (ii > 0){
-          buffer.append(',');
+      buffer.append(type.isClass() ? "class " : "interface ");
+      IJavaElement parent = type.getParent();
+      if(parent.getElementType() == IJavaElement.TYPE){
+        buffer.append(type.getParent().getElementName()).append('.');
+      }else if(parent.getElementType() == IJavaElement.CLASS_FILE){
+        int index = parent.getElementName().indexOf('$');
+        if(index != -1){
+          buffer.append(parent.getElementName().substring(0, index)).append('.');
         }
-        buffer.append(args[ii]);
       }
-      buffer.append('>');
+      buffer.append(type.getElementName());
+      String[] params = typeInfo.getTypeParameters();
+      String[] args = typeInfo.getTypeArguments();
+      if (params != null && params.length > 0 && args != null && args.length > 0){
+        buffer.append('<');
+        for (int ii = 0; ii < args.length; ii++){
+          if (ii > 0){
+            buffer.append(',');
+          }
+          buffer.append(args[ii]);
+        }
+        buffer.append('>');
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return buffer.toString();
   }
@@ -164,16 +177,19 @@ public class TypeUtils
    * @return The super type that contains the method, or null if none.
    */
   public static TypeInfo getSuperTypeContainingMethod(IType type, IMethod method)
-    throws Exception
   {
-    TypeInfo[] types = getSuperTypes(type);
-    for(TypeInfo info : types){
-      IMethod[] methods = info.getType().getMethods();
-      for (IMethod m : methods){
-        if(m.isSimilar(method)){
-          return info;
+    try{
+      TypeInfo[] types = getSuperTypes(type);
+      for(TypeInfo info : types){
+        IMethod[] methods = info.getType().getMethods();
+        for (IMethod m : methods){
+          if(m.isSimilar(method)){
+            return info;
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return null;
   }
@@ -188,17 +204,20 @@ public class TypeUtils
    */
   public static Object[] getSuperTypeContainingMethod(
       IType type, String signature)
-    throws Exception
   {
-    TypeInfo[] types = getSuperTypes(type);
-    for(TypeInfo info : types){
-      IMethod[] methods = info.getType().getMethods();
-      for (IMethod method : methods){
-        String sig = MethodUtils.getMinimalMethodSignature(method, info);
-        if(sig.equals(signature)){
-          return new Object[]{info, method};
+    try{
+      TypeInfo[] types = getSuperTypes(type);
+      for(TypeInfo info : types){
+        IMethod[] methods = info.getType().getMethods();
+        for (IMethod method : methods){
+          String sig = MethodUtils.getMinimalMethodSignature(method, info);
+          if(sig.equals(signature)){
+            return new Object[]{info, method};
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return null;
   }
@@ -213,7 +232,6 @@ public class TypeUtils
    */
   public static String getBaseTypeFromGeneric(
       IType type, String typeSignature)
-    throws Exception
   {
     int arrayCount = Signature.getArrayCount(typeSignature);
     if(arrayCount > 0){
@@ -226,7 +244,11 @@ public class TypeUtils
     ITypeParameter param = type.getTypeParameter(
         Signature.getSignatureSimpleName(typeSignature));
     if(param.exists()){
-      result = param.getBounds()[0];
+      try{
+        result = param.getBounds()[0];
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }else{
       result =  Signature.getSignatureSimpleName(
           Signature.getTypeErasure(typeSignature));
@@ -251,39 +273,42 @@ public class TypeUtils
    */
   public static IType findUnqualifiedType(
       ICompilationUnit src, String typeName)
-    throws Exception
   {
-    String name = "." + typeName;
+    try{
+      String name = "." + typeName;
 
-    // strip of generic type if present.
-    int index = name.indexOf('<');
-    if(index != -1){
-      name = name.substring(0, index);
-    }
-
-    // search imports
-    IImportDeclaration[] imports = src.getImports();
-    for(IImportDeclaration decl : imports){
-      if(decl.getElementName().endsWith(name)){
-        return src.getJavaProject().findType(decl.getElementName());
+      // strip of generic type if present.
+      int index = name.indexOf('<');
+      if(index != -1){
+        name = name.substring(0, index);
       }
-    }
 
-    // attempt to find in current package.
-    IPackageDeclaration[] packages = src.getPackageDeclarations();
-    if(packages != null && packages.length > 0){
-      name = packages[0].getElementName() + name;
-    }else{
-      name = typeName;
-    }
-    IType type = src.getJavaProject().findType(name);
+      // search imports
+      IImportDeclaration[] imports = src.getImports();
+      for(IImportDeclaration decl : imports){
+        if(decl.getElementName().endsWith(name)){
+          return src.getJavaProject().findType(decl.getElementName());
+        }
+      }
 
-    // last effort, search java.lang
-    if(type == null){
-      type = src.getJavaProject().findType("java.lang." + typeName);
-    }
+      // attempt to find in current package.
+      IPackageDeclaration[] packages = src.getPackageDeclarations();
+      if(packages != null && packages.length > 0){
+        name = packages[0].getElementName() + name;
+      }else{
+        name = typeName;
+      }
+      IType type = src.getJavaProject().findType(name);
 
-    return type;
+      // last effort, search java.lang
+      if(type == null){
+        type = src.getJavaProject().findType("java.lang." + typeName);
+      }
+
+      return type;
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   /**
@@ -294,7 +319,6 @@ public class TypeUtils
    * @return Array of types.
    */
   public static TypeInfo[] getSuperTypes(IType type)
-    throws Exception
   {
     return getSuperTypes(type, false);
   }
@@ -309,7 +333,6 @@ public class TypeUtils
    * @return Array of types.
    */
   public static TypeInfo[] getSuperTypes(IType type, boolean returnNotFound)
-    throws Exception
   {
     TypeInfo[] interfaces = getInterfaces(type, returnNotFound);
     TypeInfo[] superClasses = getSuperClasses(type, returnNotFound);
@@ -329,7 +352,6 @@ public class TypeUtils
    * @return Array of superclass types.
    */
   public static TypeInfo[] getSuperClasses(IType type)
-    throws Exception
   {
     return getSuperClasses(type, false);
   }
@@ -343,17 +365,20 @@ public class TypeUtils
    * @return Array of superclass types.
    */
   public static TypeInfo[] getSuperClasses(IType type, boolean returnNotFound)
-    throws Exception
   {
     ArrayList<TypeInfo> types = new ArrayList<TypeInfo>();
 
-    getSuperClasses(type, types, returnNotFound, null);
+    try{
+      getSuperClasses(type, types, returnNotFound, null);
 
-    // add java.lang.Object if not already added
-    IType objectType = type.getJavaProject().findType("java.lang.Object");
-    TypeInfo objectTypeInfo = new TypeInfo(objectType, null, null);
-    if(!types.contains(objectTypeInfo)){
-      types.add(objectTypeInfo);
+      // add java.lang.Object if not already added
+      IType objectType = type.getJavaProject().findType("java.lang.Object");
+      TypeInfo objectTypeInfo = new TypeInfo(objectType, null, null);
+      if(!types.contains(objectTypeInfo)){
+        types.add(objectTypeInfo);
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return (TypeInfo[])types.toArray(new TypeInfo[types.size()]);
@@ -366,7 +391,6 @@ public class TypeUtils
    * @return Array of interface types.
    */
   public static TypeInfo[] getInterfaces(IType type)
-    throws Exception
   {
     return getInterfaces(type, false);
   }
@@ -380,7 +404,6 @@ public class TypeUtils
    * @return Array of interface types.
    */
   public static TypeInfo[] getInterfaces(IType type, boolean returnNotFound)
-    throws Exception
   {
     ArrayList<TypeInfo> types = new ArrayList<TypeInfo>();
     getInterfaces(type, types, returnNotFound, null);
@@ -402,7 +425,6 @@ public class TypeUtils
       List<TypeInfo> superclasses,
       boolean includeNotFound,
       TypeInfo baseType)
-    throws Exception
   {
     TypeInfo superclassInfo = getSuperClass(type, baseType);
     if (superclassInfo != null){
@@ -419,7 +441,12 @@ public class TypeUtils
       getSuperClasses(
           superclassInfo.getType(), superclasses, includeNotFound, baseType);
     }else if(superclassInfo == null && includeNotFound){
-      String typeName = type.getSuperclassName();
+      String typeName = null;
+      try{
+        typeName = type.getSuperclassName();
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
       if(typeName != null){
         // get a handle only reference to the super class that wasn't found.
         try{
@@ -444,7 +471,6 @@ public class TypeUtils
    * @return The superclass type or null if none.
    */
   public static TypeInfo getSuperClass(IType type)
-    throws Exception
   {
     return getSuperClass(type, null);
   }
@@ -456,47 +482,50 @@ public class TypeUtils
    * @return The superclass type or null if none.
    */
   private static TypeInfo getSuperClass(IType type, TypeInfo baseType)
-    throws Exception
   {
-    String superclassSig = type.getSuperclassTypeSignature();
-    if(superclassSig != null){
-      String qualifier = Signature.getSignatureQualifier(superclassSig);
-      qualifier =
-        (qualifier != null && !qualifier.equals(StringUtils.EMPTY)) ?
-        qualifier + '.' : StringUtils.EMPTY;
-      String superclass =
-        qualifier + Signature.getSignatureSimpleName(superclassSig);
-      String[] args = Signature.getTypeArguments(superclassSig);
-      String[] typeArgs = new String[args.length];
-      for (int ii = 0; ii < args.length; ii++){
-        typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
-      }
-      if (baseType != null &&
-          baseType.getTypeArguments().length == typeArgs.length)
-      {
-        typeArgs = baseType.getTypeArguments();
-      }
+    try{
+      String superclassSig = type.getSuperclassTypeSignature();
+      if(superclassSig != null){
+        String qualifier = Signature.getSignatureQualifier(superclassSig);
+        qualifier =
+          (qualifier != null && !qualifier.equals(StringUtils.EMPTY)) ?
+          qualifier + '.' : StringUtils.EMPTY;
+        String superclass =
+          qualifier + Signature.getSignatureSimpleName(superclassSig);
+        String[] args = Signature.getTypeArguments(superclassSig);
+        String[] typeArgs = new String[args.length];
+        for (int ii = 0; ii < args.length; ii++){
+          typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
+        }
+        if (baseType != null &&
+            baseType.getTypeArguments().length == typeArgs.length)
+        {
+          typeArgs = baseType.getTypeArguments();
+        }
 
-      String[][] types = type.resolveType(superclass);
-      if(types != null){
-        for(String[] typeInfo : types){
-          String typeName = typeInfo[0] + "." + typeInfo[1];
-          IType found = type.getJavaProject().findType(typeName);
-          if (found != null){
-            ITypeParameter[] params = found.getTypeParameters();
-            String[] typeParams = new String[params.length];
-            for (int ii = 0; ii < params.length; ii++){
-              typeParams[ii] = params[ii].getElementName();
+        String[][] types = type.resolveType(superclass);
+        if(types != null){
+          for(String[] typeInfo : types){
+            String typeName = typeInfo[0] + "." + typeInfo[1];
+            IType found = type.getJavaProject().findType(typeName);
+            if (found != null){
+              ITypeParameter[] params = found.getTypeParameters();
+              String[] typeParams = new String[params.length];
+              for (int ii = 0; ii < params.length; ii++){
+                typeParams[ii] = params[ii].getElementName();
+              }
+              return new TypeInfo(found, typeParams, typeArgs);
             }
-            return new TypeInfo(found, typeParams, typeArgs);
+          }
+        }else{
+          IType found = type.getJavaProject().findType(superclass);
+          if (found != null){
+            return new TypeInfo(found, null, typeArgs);
           }
         }
-      }else{
-        IType found = type.getJavaProject().findType(superclass);
-        if (found != null){
-          return new TypeInfo(found, null, typeArgs);
-        }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return null;
   }
@@ -509,28 +538,31 @@ public class TypeUtils
    * @return Array of interface types.
    */
   public static IType[] getSuperInterfaces(IType type)
-    throws Exception
   {
-    String[] parents = type.getSuperInterfaceNames();
-    ArrayList<IType> interfaces = new ArrayList<IType>(parents.length);
-    for(String parent : parents){
-      String[][] types = type.resolveType(parent);
-      if(types != null){
-        for(String[] typeInfo : types){
-          String typeName = typeInfo[0] + "." + typeInfo[1];
-          IType found = type.getJavaProject().findType(typeName);
+    try{
+      String[] parents = type.getSuperInterfaceNames();
+      ArrayList<IType> interfaces = new ArrayList<IType>(parents.length);
+      for(String parent : parents){
+        String[][] types = type.resolveType(parent);
+        if(types != null){
+          for(String[] typeInfo : types){
+            String typeName = typeInfo[0] + "." + typeInfo[1];
+            IType found = type.getJavaProject().findType(typeName);
+            if(found != null){
+              interfaces.add(found);
+            }
+          }
+        }else{
+          IType found = type.getJavaProject().findType(parent);
           if(found != null){
             interfaces.add(found);
           }
         }
-      }else{
-        IType found = type.getJavaProject().findType(parent);
-        if(found != null){
-          interfaces.add(found);
-        }
       }
+      return interfaces.toArray(new IType[interfaces.size()]);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-    return interfaces.toArray(new IType[interfaces.size()]);
   }
 
   /**
@@ -547,79 +579,82 @@ public class TypeUtils
       List<TypeInfo> interfaces,
       boolean includeNotFound,
       TypeInfo baseType)
-    throws Exception
   {
-    // directly implemented interfaces.
-    String[] parentSigs = type.getSuperInterfaceTypeSignatures();
-    for(String parentSig : parentSigs){
-      String parent = Signature.getSignatureSimpleName(parentSig);
+    try{
+      // directly implemented interfaces.
+      String[] parentSigs = type.getSuperInterfaceTypeSignatures();
+      for(String parentSig : parentSigs){
+        String parent = Signature.getSignatureSimpleName(parentSig);
 
-      String[] args = Signature.getTypeArguments(parentSig);
-      String[] typeArgs = new String[args.length];
-      for (int ii = 0; ii < args.length; ii++){
-        typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
-      }
-      if (baseType != null &&
-          baseType.getTypeArguments().length == typeArgs.length)
-      {
-        typeArgs = baseType.getTypeArguments();
-      }
-
-      IType found = null;
-      String[][] types = type.resolveType(parent);
-      if(types != null){
-        for(String[] typeInfo : types){
-          String typeName = typeInfo[0] + "." + typeInfo[1];
-          found = type.getJavaProject().findType(typeName);
+        String[] args = Signature.getTypeArguments(parentSig);
+        String[] typeArgs = new String[args.length];
+        for (int ii = 0; ii < args.length; ii++){
+          typeArgs[ii] = Signature.getSignatureSimpleName(args[ii]);
         }
-      }else{
-        found = type.getJavaProject().findType(parent);
-      }
-
-      if(found != null){
-        ITypeParameter[] params = found.getTypeParameters();
-        String[] typeParams = new String[params.length];
-        for (int ii = 0; ii < params.length; ii++){
-          typeParams[ii] = params[ii].getElementName();
+        if (baseType != null &&
+            baseType.getTypeArguments().length == typeArgs.length)
+        {
+          typeArgs = baseType.getTypeArguments();
         }
-        TypeInfo typeInfo = new TypeInfo(found, typeParams, typeArgs);
-        if (!interfaces.contains(typeInfo)){
-          interfaces.add(typeInfo);
-          if (baseType == null ||
-              baseType.getTypeArguments().length !=
-                typeInfo.getTypeArguments().length)
-          {
-            baseType = typeInfo;
+
+        IType found = null;
+        String[][] types = type.resolveType(parent);
+        if(types != null){
+          for(String[] typeInfo : types){
+            String typeName = typeInfo[0] + "." + typeInfo[1];
+            found = type.getJavaProject().findType(typeName);
           }
-          getInterfaces(found, interfaces, includeNotFound, baseType);
+        }else{
+          found = type.getJavaProject().findType(parent);
         }
-      }else if(found == null && includeNotFound){
-        String typeName = parent;
-        if(typeName != null){
-          // get a handle only reference to the super class that wasn't found.
-          try{
-            found = type.getType(typeName);
-            TypeInfo typeInfo = new TypeInfo(found, null, typeArgs);
-            if(!interfaces.contains(typeInfo)){
-              interfaces.add(typeInfo);
+
+        if(found != null){
+          ITypeParameter[] params = found.getTypeParameters();
+          String[] typeParams = new String[params.length];
+          for (int ii = 0; ii < params.length; ii++){
+            typeParams[ii] = params[ii].getElementName();
+          }
+          TypeInfo typeInfo = new TypeInfo(found, typeParams, typeArgs);
+          if (!interfaces.contains(typeInfo)){
+            interfaces.add(typeInfo);
+            if (baseType == null ||
+                baseType.getTypeArguments().length !=
+                  typeInfo.getTypeArguments().length)
+            {
+              baseType = typeInfo;
             }
-          }catch(Exception e){
-            // don't let the error cause the command to fail.
-            logger.warn("Unable to get a handle to interface not found: '" +
-                typeName + "'", e);
+            getInterfaces(found, interfaces, includeNotFound, baseType);
           }
+        }else if(found == null && includeNotFound){
+          String typeName = parent;
+          if(typeName != null){
+            // get a handle only reference to the super class that wasn't found.
+            try{
+              found = type.getType(typeName);
+              TypeInfo typeInfo = new TypeInfo(found, null, typeArgs);
+              if(!interfaces.contains(typeInfo)){
+                interfaces.add(typeInfo);
+              }
+            }catch(Exception e){
+              // don't let the error cause the command to fail.
+              logger.warn("Unable to get a handle to interface not found: '" +
+                  typeName + "'", e);
+            }
+          }
+        }else if(found == null){
+          logger.warn("Unable to resolve implmented interface '{}' for '{}'",
+              parent, type.getFullyQualifiedName());
         }
-      }else if(found == null){
-        logger.warn("Unable to resolve implmented interface '{}' for '{}'",
-            parent, type.getFullyQualifiedName());
       }
-    }
 
-    // indirectly implemented parents
-    TypeInfo superclassInfo = getSuperClass(type);
-    if(superclassInfo != null){
-      getInterfaces(
-          superclassInfo.getType(), interfaces, includeNotFound, superclassInfo);
+      // indirectly implemented parents
+      TypeInfo superclassInfo = getSuperClass(type);
+      if(superclassInfo != null){
+        getInterfaces(
+            superclassInfo.getType(), interfaces, includeNotFound, superclassInfo);
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
   }
 
@@ -654,7 +689,6 @@ public class TypeUtils
    * @return A possibly empty array of IType results found.
    */
   public static IType[] findTypes(IJavaProject javaProject, String name)
-    throws Exception
   {
     SearchPattern pattern =
       SearchPattern.createPattern(name,
@@ -667,7 +701,11 @@ public class TypeUtils
     SearchEngine engine = new SearchEngine();
     SearchParticipant[] participants =
       new SearchParticipant[]{SearchEngine.getDefaultSearchParticipant()};
-    engine.search(pattern, participants, scope, requestor, null);
+    try{
+      engine.search(pattern, participants, scope, requestor, null);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     ArrayList<IType> types = new ArrayList<IType>();
     if (requestor.getMatches().size() > 0){

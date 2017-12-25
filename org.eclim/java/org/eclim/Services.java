@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,6 @@ public class Services
    * @return The command implementation.
    */
   public static Command getCommand(String name)
-    throws Exception
   {
     for(PluginResources resources : pluginResources.values()){
       if(resources.containsCommand(name)){
@@ -188,6 +187,7 @@ public class Services
    * Remove the supplied PluginResources.
    *
    * @param resources The PluginResources to remove.
+   * @return The PluginResources removed.
    */
   public static PluginResources removePluginResources(PluginResources resources)
   {
@@ -206,19 +206,13 @@ public class Services
      */
     public static final String NAME = "org.eclim";
 
-    /**
-     * {@inheritDoc}
-     * @see AbstractPluginResources#getBundleBaseName()
-     */
+    @Override
     protected String getBundleBaseName()
     {
       return "org/eclim/messages";
     }
 
-    /**
-     * {@inheritDoc}
-     * @see PluginResources#getName()
-     */
+    @Override
     public String getName()
     {
       return NAME;

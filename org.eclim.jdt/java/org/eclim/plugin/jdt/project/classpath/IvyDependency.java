@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,18 +29,12 @@ public class IvyDependency
 {
   private static final String JARS = "jars";
 
-  /**
-   * @see Dependency#Dependency(String,String,String,IPath)
-   */
   public IvyDependency(String org, String name, String version, IPath path)
   {
     super(org, name, version, path);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see Dependency#resolveArtifact()
-   */
+  @Override
   public String resolveArtifact()
   {
     StringBuffer buffer = new StringBuffer();

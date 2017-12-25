@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ package org.eclim.plugin.jdt.project.classpath;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.eclim.Services;
 
@@ -56,7 +57,6 @@ public class IvyParser
 
   @Override
   public Dependency[] parse(Document document)
-    throws Exception
   {
     if(xpath == null){
       xpath = XmlUtils.createXPathExpression(
@@ -69,8 +69,12 @@ public class IvyParser
     }
     IPath path = new Path(IVY_REPO);
 
-    NodeList results = (NodeList)
-      xpath.evaluate(document, XPathConstants.NODESET);
+    NodeList results = null;
+    try{
+      results = (NodeList)xpath.evaluate(document, XPathConstants.NODESET);
+    }catch(XPathExpressionException xpee){
+      throw new RuntimeException(xpee);
+    }
     Dependency[] dependencies = new Dependency[results.getLength()];
     for(int ii = 0; ii < results.getLength(); ii++){
       Element element = (Element)results.item(ii);

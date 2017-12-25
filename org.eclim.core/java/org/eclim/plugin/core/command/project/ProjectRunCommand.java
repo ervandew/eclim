@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012-2014 Tyler Dodge, Daniel Leong, Eric Van Dewoestine
+ * Copyright (C) 2012-2017 Tyler Dodge, Daniel Leong, Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -408,11 +408,10 @@ public class ProjectRunCommand
   {
     @Override
     public void prepare(String launchId)
-      throws Exception
     {
       // NB client-specific errors can be returned here in the future,
       //  possibly via constructor
-      throw new Exception(
+      throw new RuntimeException(
           "Vim must be running in server mode:\n" +
           "Example: vim --servername <name>");
     }
@@ -448,12 +447,11 @@ public class ProjectRunCommand
 
     @Override
     public void prepare(String launchId)
-      throws Exception
     {
       final String rawResult = client.remoteFunctionExpr(
           "eclim#project#run#onPrepareOutput", projectName, configName, launchId);
       if (rawResult == null) {
-        throw new Exception("Timeout preparing output buffer");
+        throw new RuntimeException("Timeout preparing output buffer");
       }
 
       bufNo = rawResult.trim();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,10 +78,7 @@ public class EclipseStep
     super(name, properties);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.step.GuiStep#init()
-   */
+  @Override
   public Component init()
   {
     final JPanel panel =
@@ -110,19 +107,13 @@ public class EclipseStep
     return panel;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#displayed()
-   */
+  @Override
   public void displayed()
   {
     eclipseHomeChooser.getTextField().requestFocus();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.formic.wizard.WizardStep#proceed()
-   */
+  @Override
   public boolean proceed()
   {
     boolean proceed = super.proceed();

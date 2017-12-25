@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package org.eclim.plugin.adt.project;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.ParseException;
 
 import org.eclim.command.CommandLine;
 import org.eclim.command.Error;
@@ -35,6 +37,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -60,7 +63,6 @@ public class AndroidProjectManager
   @Override
   @SuppressWarnings("static-access")
   public void create(IProject project, CommandLine commandLine)
-    throws Exception
   {
     String[] args = commandLine.getValues(Options.ARGS_OPTION);
     GnuParser parser = new GnuParser();
@@ -73,7 +75,12 @@ public class AndroidProjectManager
         OptionBuilder.hasArg().isRequired().withLongOpt("application").create());
     options.addOption(OptionBuilder.hasArg().withLongOpt("activity").create());
     options.addOption(OptionBuilder.withLongOpt("library").create());
-    org.apache.commons.cli.CommandLine cli = parser.parse(options, args);
+    org.apache.commons.cli.CommandLine cli = null;
+    try{
+      cli = parser.parse(options, args);
+    }catch(ParseException pe){
+      throw new RuntimeException(pe);
+    }
 
     Sdk sdk = Sdk.getCurrent();
 
@@ -99,8 +106,13 @@ public class AndroidProjectManager
 
     // gross: the android NewProjectCreator expects to be the one to create the
     // project, so we have to, ug, delete the project first.
-    IProjectDescription description = project.getDescription();
-    project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
+    IProjectDescription description = null;
+    try{
+      description = project.getDescription();
+      project.delete(false/*deleteContent*/, true/*force*/, null/*monitor*/);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     // Would be nice to use public static create method, but it doesn't provide
     // the option for package name, activity name, app name, etc.
@@ -133,40 +145,47 @@ public class AndroidProjectManager
         null,
         true);
 
-    project.getNature(AdtConstants.NATURE_DEFAULT).configure();
+    try{
+      project.getNature(AdtConstants.NATURE_DEFAULT).configure();
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   @SuppressWarnings("rawtypes")
   private Object invoke(Object obj, String name, Class[] params, Object... args)
-    throws Exception
   {
-    Method method = obj.getClass().getDeclaredMethod(name, params);
-    method.setAccessible(true);
-    return method.invoke(obj, args);
+    try{
+      Method method = obj.getClass().getDeclaredMethod(name, params);
+      method.setAccessible(true);
+      return method.invoke(obj, args);
+    }catch(NoSuchMethodException nsme){
+      throw new RuntimeException(nsme);
+    }catch(IllegalAccessException iae){
+      throw new RuntimeException(iae);
+    }catch(InvocationTargetException ite){
+      throw new RuntimeException(ite);
+    }
   }
 
   @Override
   public List<Error> update(IProject project, CommandLine commandLine)
-    throws Exception
   {
     return null;
   }
 
   @Override
   public void delete(IProject project, CommandLine commandLine)
-    throws Exception
   {
   }
 
   @Override
   public void refresh(IProject project, CommandLine commandLine)
-    throws Exception
   {
   }
 
   @Override
   public void refresh(IProject project, IFile file)
-    throws Exception
   {
   }
 }

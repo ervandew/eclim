@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package org.eclim.util.file;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.Enumeration;
@@ -31,6 +32,7 @@ import javax.naming.CompositeName;
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 
@@ -66,13 +68,16 @@ public class FileUtils
    */
   public static int byteOffsetToCharOffset(
       String filename, int byteOffset, String encoding)
-    throws Exception
   {
-    FileSystemManager fsManager = VFS.getManager();
-    FileObject file = fsManager.resolveFile(filename.replace("%", "%25"));
+    try{
+      FileSystemManager fsManager = VFS.getManager();
+      FileObject file = fsManager.resolveFile(filename.replace("%", "%25"));
 
-    return byteOffsetToCharOffset(
-        file.getContent().getInputStream(), byteOffset, encoding);
+      return byteOffsetToCharOffset(
+          file.getContent().getInputStream(), byteOffset, encoding);
+    }catch(FileSystemException fse){
+      throw new RuntimeException(fse);
+    }
   }
 
   /**
@@ -87,7 +92,6 @@ public class FileUtils
    */
   public static int byteOffsetToCharOffset(
       InputStream in, int byteOffset, String encoding)
-    throws Exception
   {
     if (encoding == null){
       encoding = UTF8;
@@ -101,6 +105,8 @@ public class FileUtils
       String value = new String(bytes, encoding);
 
       return value.length();
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
     }finally{
       IOUtils.closeQuietly(bin);
     }
@@ -115,7 +121,6 @@ public class FileUtils
    * @return The line and column int array.
    */
   public static int[] offsetToLineColumn(String filename, int offset)
-    throws Exception
   {
     FileOffsets offsets = FileOffsets.compile(filename);
     return offsets.offsetToLineColumn(offset);
@@ -130,7 +135,6 @@ public class FileUtils
    * @return The line and column int array.
    */
   public static int[] offsetToLineColumn(InputStream in, int offset)
-    throws Exception
   {
     FileOffsets offsets = FileOffsets.compile(in);
     return offsets.offsetToLineColumn(offset);
@@ -144,13 +148,14 @@ public class FileUtils
    * @return The Matcher.
    */
   public static Matcher matcher(Pattern pattern, String file)
-    throws Exception
   {
     FileInputStream is = null;
     try{
       is = new FileInputStream(file);
       String contents = IOUtils.toString(is);
       return pattern.matcher(contents);
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
     }finally{
       IOUtils.closeQuietly(is);
     }
@@ -159,11 +164,12 @@ public class FileUtils
   /**
    * Translates a file name that does not conform to the standard url file
    * format.
-   * <p/>
-   * Main purpose is to convert paths like:<br/>
-   * <code>/opt/sun-jdk-1.5.0.05/src.zip/javax/swing/Spring.java</code><br/>
-   * to<br/>
+   * <p>
+   * Main purpose is to convert paths like:<br>
+   * <code>/opt/sun-jdk-1.5.0.05/src.zip/javax/swing/Spring.java</code><br>
+   * to<br>
    * <code>zip:file:///opt/sun-jdk-1.5.0.05/src.zip!/javax/swing/Spring.java</code>
+   * </p>
    *
    * @param file The file to translate.
    * @return The translated file.
@@ -271,9 +277,6 @@ public class FileUtils
     return ext;
   }
 
-  /**
-   *
-   */
   public static String getPath(String path)
   {
     IPath p = null;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ import org.eclim.plugin.core.command.refactoring.RefactorException;
 import org.eclim.plugin.jdt.util.JavaUtils;
 
 import org.eclipse.core.resources.IResource;
+
+import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -75,7 +77,6 @@ public class MoveCommand
 {
   @Override
   public Refactor createRefactoring(CommandLine commandLine)
-    throws Exception
   {
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
@@ -92,32 +93,36 @@ public class MoveCommand
             src.getElementName()));
     }
 
-    if(!pack.exists()){
-      pack = root.createPackageFragment(packName, true, null);
+    try{
+      if(!pack.exists()){
+        pack = root.createPackageFragment(packName, true, null);
+      }
+
+      IMovePolicy policy = ReorgPolicyFactory.createMovePolicy(
+          new IResource[0],
+          new IJavaElement[]{src});
+
+      JavaMoveProcessor processor = new JavaMoveProcessor(policy);
+      IReorgDestination destination =
+        ReorgDestinationFactory.createDestination(pack);
+      RefactoringStatus status = processor.setDestination(destination);
+      if (status.hasError()){
+        throw new RefactorException(status);
+      }
+
+      Shell shell = EclimPlugin.getShell();
+      processor.setCreateTargetQueries(new CreateTargetQueries(shell));
+      processor.setReorgQueries(new ReorgQueries(shell));
+
+      Refactoring refactoring = new MoveRefactoring(processor);
+
+      // create a more descriptive name than the default.
+      String desc = refactoring.getName() +
+        " (" + src.getElementName() + " -> " + pack.getElementName() + ')';
+
+      return new Refactor(desc, refactoring);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-
-    IMovePolicy policy = ReorgPolicyFactory.createMovePolicy(
-        new IResource[0],
-        new IJavaElement[]{src});
-
-    JavaMoveProcessor processor = new JavaMoveProcessor(policy);
-    IReorgDestination destination =
-      ReorgDestinationFactory.createDestination(pack);
-    RefactoringStatus status = processor.setDestination(destination);
-    if (status.hasError()){
-      throw new RefactorException(status);
-    }
-
-    Shell shell = EclimPlugin.getShell();
-    processor.setCreateTargetQueries(new CreateTargetQueries(shell));
-    processor.setReorgQueries(new ReorgQueries(shell));
-
-    Refactoring refactoring = new MoveRefactoring(processor);
-
-    // create a more descriptive name than the default.
-    String desc = refactoring.getName() +
-      " (" + src.getElementName() + " -> " + pack.getElementName() + ')';
-
-    return new Refactor(desc, refactoring);
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,9 +61,7 @@ public class OptionHandler
 
   @Override
   public Map<String, String> getValues()
-    throws Exception
   {
-    @SuppressWarnings("unchecked")
     Map<String, String> coreOptions = JavaCore.getOptions();
     Map<String, String> options = new Hashtable<String, String>();
     options.putAll(coreOptions);
@@ -73,7 +71,6 @@ public class OptionHandler
 
   @Override
   public Map<String, String> getValues(IProject project)
-    throws Exception
   {
     IJavaProject javaProject = JavaCore.create(project);
     if(!javaProject.exists()){
@@ -81,7 +78,6 @@ public class OptionHandler
             "project.not.found", project.getName()));
     }
 
-    @SuppressWarnings("unchecked")
     Map<String, String> coreOptions = javaProject.getOptions(true);
     Map<String, String> options = new Hashtable<String, String>();
     options.putAll(coreOptions);
@@ -94,7 +90,6 @@ public class OptionHandler
   }
 
   private Map<String, String> getUIValues(IProject project)
-    throws Exception
   {
     Hashtable<String, String> options = new Hashtable<String, String>();
 
@@ -131,9 +126,7 @@ public class OptionHandler
 
   @Override
   public void setOption(String name, String value)
-    throws Exception
   {
-    @SuppressWarnings("unchecked")
     Map<String, String> options = JavaCore.getOptions();
 
     if (name.equals(JavaCore.COMPILER_SOURCE)){
@@ -149,7 +142,6 @@ public class OptionHandler
 
   @Override
   public void setOption(IProject project, String name, String value)
-    throws Exception
   {
     IJavaProject javaProject = JavaCore.create(project);
     if(!javaProject.exists()){
@@ -157,9 +149,7 @@ public class OptionHandler
           Services.getMessage("project.not.found", project.getName()));
     }
 
-    @SuppressWarnings("unchecked")
     Map<String, String> global = javaProject.getOptions(true);
-    @SuppressWarnings("unchecked")
     Map<String, String> options = javaProject.getOptions(false);
 
     Object current = global.get(name);

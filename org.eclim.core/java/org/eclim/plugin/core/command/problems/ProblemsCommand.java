@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,9 +80,7 @@ import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 public class ProblemsCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   @SuppressWarnings("rawtypes")
   public Object execute(CommandLine commandLine)
     throws Exception
@@ -215,10 +213,7 @@ public class ProblemsCommand
         Pattern.compile("^\\Q" + ProjectUtils.getPath(project) + "\\E\\b.*");
     }
 
-    /**
-     * {@inheritDoc}
-     * @see Comparator#compare(T,T)
-     */
+    @Override
     public int compare(Error e1, Error e2)
     {
       String ef1 = e1.getFilename();
@@ -245,10 +240,7 @@ public class ProblemsCommand
       return result;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see Comparator#equals(Object)
-     */
+    @Override
     public boolean equals(Object obj)
     {
       return super.equals(obj);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,11 +165,11 @@ public class Dependency
 
   /**
    * Converts this dependency into a usable String.
-   * <p/>
-   * Ex.<br/>
+   * <p>
+   * Ex.<br>
    * For a dependency with the name 'commons-lang' and a version '1.0.2' this
    * method will return 'commons-lang-1.0.2.jar'.
-   * <p/>
+   * </p>
    * Subclasses are free to override this method if necessary.
    *
    * @return The string representation.

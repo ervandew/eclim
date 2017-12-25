@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,7 @@ public class PluginResources
    */
   public static final String JAVASCRIPT_NATURE = JavaScriptCore.NATURE_ID;
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.PluginResources#initialize(String)
-   */
+  @Override
   public void initialize(String name)
   {
     super.initialize(name);
@@ -54,10 +51,7 @@ public class PluginResources
     ProjectNatureFactory.addNature("javascript", JAVASCRIPT_NATURE);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AbstractPluginResources#getBundleBaseName()
-   */
+  @Override
   protected String getBundleBaseName()
   {
     return "org/eclim/plugin/wst/messages";

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import org.eclim.plugin.core.util.ProjectUtils;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -49,7 +50,6 @@ public class ClasspathUtils
    * @return Array of paths.
    */
   public static String[] getClasspath(IJavaProject project)
-    throws Exception
   {
     HashSet<IJavaProject> visited = new HashSet<IJavaProject>();
     ArrayList<String> paths = new ArrayList<String>();
@@ -64,10 +64,14 @@ public class ClasspathUtils
    * @return Array of paths.
    */
   public static String[] getSrcPaths(IJavaProject project)
-    throws Exception
   {
     ArrayList<String> paths = new ArrayList<String>();
-    IClasspathEntry[] entries = project.getResolvedClasspath(true);
+    IClasspathEntry[] entries = null;
+    try{
+      entries = project.getResolvedClasspath(true);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
     for (IClasspathEntry entry : entries){
       if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
         paths.add(ProjectUtils.getFilePath(
@@ -87,7 +91,6 @@ public class ClasspathUtils
       List<String> paths,
       Set<IJavaProject> visited,
       boolean isFirstProject)
-    throws Exception
   {
     if(visited.contains(javaProject)){
       return;

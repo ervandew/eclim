@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,6 +124,9 @@ public class VariableView
   /**
    * Returns the variable view for the thread currently being stepped through.
    * If there is no such thread, then a <code>null</code> is returned.
+   *
+   * @return List of variables.
+   * @throws DebugException on failure.
    */
   public List<String> get()
     throws DebugException
@@ -135,27 +138,26 @@ public class VariableView
 
     if (thread == null) {
       return null;
-    } else {
-      this.viewingThread = thread;
-      List<String> results = new ArrayList<String>();
-
-      // Protect against variable information unavailable for native
-      // methods
-      try {
-        IStackFrame stackFrame = thread.getTopStackFrame();
-        if (stackFrame != null) {
-          process(thread.getTopStackFrame().getVariables(), results, ROOT_DEPTH);
-        }
-      } catch (DebugException e) {
-        // Suppress exception as it is possible to get an error when the current
-        // stack frame points to native method. Variable information is not
-        // available in this case.
-        if (logger.isDebugEnabled()) {
-          logger.debug("Unable to get variables", e);
-        }
-      }
-      return results;
     }
+    this.viewingThread = thread;
+    List<String> results = new ArrayList<String>();
+
+    // Protect against variable information unavailable for native
+    // methods
+    try {
+      IStackFrame stackFrame = thread.getTopStackFrame();
+      if (stackFrame != null) {
+        process(thread.getTopStackFrame().getVariables(), results, ROOT_DEPTH);
+      }
+    } catch (DebugException e) {
+      // Suppress exception as it is possible to get an error when the current
+      // stack frame points to native method. Variable information is not
+      // available in this case.
+      if (logger.isDebugEnabled()) {
+        logger.debug("Unable to get variables", e);
+      }
+    }
+    return results;
   }
 
   public List<String> expandValue(long valueId)
@@ -212,6 +214,7 @@ public class VariableView
    * @param vars variables
    * @param results final results containing the variable text
    * @param depth current nesting depth in the tree hierarchy
+   * @throws DebugException on failure.
    */
   private void process(IVariable[] vars, List<String> results, int depth)
     throws DebugException
@@ -266,6 +269,10 @@ public class VariableView
 
   /**
    * Returns the toString value of the Java object.
+   *
+   * @param valueId The id of the value.
+   * @return The string value of the value.
+   * @throws DebugException on failure.
    */
   public String getDetail(long valueId)
     throws DebugException

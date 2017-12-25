@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ public class VimUtils
    * @return The vim compatable string.
    */
   public static String translateLineColumn(String filename, int offset)
-    throws Exception
   {
     if(offset >= 0){
       int[] pos = FileUtils.offsetToLineColumn(filename, offset);
@@ -54,7 +53,6 @@ public class VimUtils
    * @return The vim compatable string.
    */
   public static String translateLineColumn(Position position)
-    throws Exception
   {
     if(position.getOffset() != -1){
       int[] pos = FileUtils.offsetToLineColumn(

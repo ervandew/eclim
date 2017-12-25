@@ -198,10 +198,6 @@ public class LeftCurly
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see com.puppycrawl.tools.checkstyle.api.AbstractViolationReporter#getMessageBundle()
-   */
   @Override
   protected String getMessageBundle()
   {

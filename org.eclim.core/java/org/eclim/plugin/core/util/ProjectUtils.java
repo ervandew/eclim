@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package org.eclim.plugin.core.util;
 import java.io.File;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.eclim.Services;
 
@@ -36,6 +37,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -56,7 +58,6 @@ public class ProjectUtils
    * @return The path or null if not found.
    */
   public static String getPath(String project)
-    throws Exception
   {
     return getPath(getProject(project));
   }
@@ -68,7 +69,6 @@ public class ProjectUtils
    * @return The path or null if not found.
    */
   public static String getPath(IProject project)
-    throws Exception
   {
     IPath path = getIPath(project);
     return path != null ? path.toOSString().replace('\\', '/') : null;
@@ -81,12 +81,17 @@ public class ProjectUtils
    * @return The path or null if not found.
    */
   public static String getProjectRelativePath(String path)
-    throws Exception
   {
     // can't use URLEncoder on the full file since the colon in 'C:' gets
     // encoded as well.
     //URI uri = new URI("file://" + URLEncoder.encode(file, "UTF-8"));
-    URI uri = new URI("file://" + path.replaceAll(" ", "%20"));
+    URI uri = null;
+    try{
+      uri = new URI("file://" + path.replaceAll(" ", "%20"));
+    }catch(URISyntaxException use){
+      throw new RuntimeException(use);
+    }
+
     IFile[] files = ResourcesPlugin
       .getWorkspace().getRoot().findFilesForLocationURI(uri);
 
@@ -103,7 +108,6 @@ public class ProjectUtils
    * @return The path or null if not found.
    */
   public static IPath getIPath(IProject project)
-    throws Exception
   {
     IPath path = project.getRawLocation();
 
@@ -124,7 +128,6 @@ public class ProjectUtils
    * @return The project which may or may not exist.
    */
   public static IProject getProject(String name)
-    throws Exception
   {
     return getProject(name, false);
   }
@@ -138,13 +141,16 @@ public class ProjectUtils
    * @return The project which may or may not exist.
    */
   public static IProject getProject(String name, boolean open)
-    throws Exception
   {
     IProject project =
       ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 
     if(open && project.exists() && !project.isOpen()){
-      project.open(null);
+      try{
+        project.open(null);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
 
     return project;
@@ -158,7 +164,6 @@ public class ProjectUtils
    * @return The absolute file path.
    */
   public static String getFilePath(String project, String file)
-    throws Exception
   {
     return getFilePath(getProject(project), file);
   }
@@ -171,7 +176,6 @@ public class ProjectUtils
    * @return The absolute file path.
    */
   public static String getFilePath(IProject project, String file)
-    throws Exception
   {
     file = file.replace('\\', '/');
     if(file.startsWith("/" + project.getName())){
@@ -210,7 +214,6 @@ public class ProjectUtils
    * @return The IFile.
    */
   public static IFile getFile(String project, String file)
-    throws Exception
   {
     return getFile(getProject(project), file);
   }
@@ -224,10 +227,13 @@ public class ProjectUtils
    * @return The IFile.
    */
   public static IFile getFile(IProject project, String file)
-    throws Exception
   {
     if (!project.isOpen()){
-      project.open(null);
+      try{
+        project.open(null);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
     String path = getPath(project);
     path = path.replace('\\', '/');
@@ -238,7 +244,11 @@ public class ProjectUtils
     //String file = file.substring(path.length());
 
     IFile ifile = project.getFile(file);
-    ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+    try{
+      ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     // invoke any nature specific file refreshing
     String[] natures = ProjectNatureFactory.getProjectNatures(project);
@@ -254,30 +264,26 @@ public class ProjectUtils
 
   /**
    * Gets the IDocument instance for the given file.
-   * <p/>
-   * Borrowed from org.eclipse.ant.internal.ui.AntUtil
+   * <p>Borrowed from org.eclipse.ant.internal.ui.AntUtil</p>
    *
    * @param project The project name.
    * @param file The file.
    * @return The IDocument.
    */
   public static IDocument getDocument(String project, String file)
-    throws Exception
   {
     return getDocument(getProject(project), file);
   }
 
   /**
    * Gets the IDocument instance for the given file.
-   * <p/>
-   * Borrowed from org.eclipse.ant.internal.ui.AntUtil
+   * <p>Borrowed from org.eclipse.ant.internal.ui.AntUtil</p>
    *
    * @param project The project.
    * @param file The file.
    * @return The IDocument.
    */
   public static IDocument getDocument(IProject project, String file)
-    throws Exception
   {
     // using IFile would ensure that ifile.getProject() (used by at least pdt
     // internally) would result in the proper project reference, but seems to
@@ -297,7 +303,11 @@ public class ProjectUtils
         manager.getTextFileBuffer(location, LocationKind.LOCATION);
       if (buffer == null) {
         //no existing file buffer..create one
-        manager.connect(location, LocationKind.LOCATION, new NullProgressMonitor());
+        try{
+          manager.connect(location, LocationKind.LOCATION, new NullProgressMonitor());
+        }catch(CoreException ce){
+          throw new RuntimeException(ce);
+        }
         connected = true;
         buffer = manager.getTextFileBuffer(location, LocationKind.LOCATION);
         if (buffer == null) {
@@ -337,7 +347,6 @@ public class ProjectUtils
    * @param project The project.
    */
   public static void assertExists(IProject project)
-    throws Exception
   {
     if(project == null || !project.exists()){
       throw new IllegalArgumentException(

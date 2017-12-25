@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,7 @@ public class EclimWorkbenchWindow
     super(null, null);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchWindow#getActivePage()
-   */
+  @Override
   public IWorkbenchPage getActivePage()
   {
     try{
@@ -62,19 +59,13 @@ public class EclimWorkbenchWindow
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchWindow#getShell()
-   */
+  @Override
   public Shell getShell()
   {
     return EclimPlugin.getShell();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchWindow#run(boolean,boolean,IRunnableWithProgress)
-   */
+  @Override
   public void run(
       boolean fork, boolean cancelable, IRunnableWithProgress runnable)
     throws InvocationTargetException,
@@ -83,10 +74,6 @@ public class EclimWorkbenchWindow
     // no-op to prevent super class from running.
   }
 
-  /**
-   * {@inheritDoc}
-   * @see WorkbenchWindow#fillActionBars(int)
-   */
   @Override
   public void fillActionBars(int flags)
   {

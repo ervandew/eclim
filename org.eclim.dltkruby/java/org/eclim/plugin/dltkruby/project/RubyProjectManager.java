@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.dltk.core.DLTKCore;
@@ -56,18 +57,21 @@ public class RubyProjectManager
 {
   @Override
   public void create(IProject project, CommandLine commandLine)
-    throws Exception
   {
     super.create(project, commandLine);
 
     // for some reason, when creating a dltk ruby project, the dltk script
     // builder is not added to the .project, so here we force it to be added.
-    IProjectNature nature = project.getNature(RubyNature.NATURE_ID);
-    nature.configure();
+    try{
+      IProjectNature nature = project.getNature(RubyNature.NATURE_ID);
+      nature.configure();
 
-    IScriptProject scriptProject = DLTKCore.create(project);
-    scriptProject.makeConsistent(null);
-    scriptProject.save(null, false);
+      IScriptProject scriptProject = DLTKCore.create(project);
+      scriptProject.makeConsistent(null);
+      scriptProject.save(null, false);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   // that last block doesn't seem to flush the previous interpreter's
@@ -122,12 +126,15 @@ public class RubyProjectManager
 
   @Override
   public void refresh(IProject project, IFile file)
-    throws Exception
   {
     try{
       ISourceModule module = DltkUtils.getSourceModule(file);
       if (module != null){
-        module.makeConsistent(new NullProgressMonitor());
+        try{
+          module.makeConsistent(new NullProgressMonitor());
+        }catch(CoreException ce){
+          throw new RuntimeException(ce);
+        }
       }
     }catch(IllegalArgumentException iae){
       // ignore

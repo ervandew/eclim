@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,9 +46,7 @@ public class ConsoleAppender
     super.activateOptions();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public synchronized void setWriter(Writer writer)
   {
     if(!writerSet){
@@ -76,44 +74,34 @@ public class ConsoleAppender
       this.out = out;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void close()
     {
       // don't close System.out or System.err
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void flush()
       throws IOException
     {
       out.flush();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void write(final byte[] bytes)
       throws IOException
     {
       out.write(bytes);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void write(final byte[] bytes, final int offset, final int length)
       throws IOException
     {
       out.write(bytes, offset, length);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void write(final int bytes)
       throws IOException
     {

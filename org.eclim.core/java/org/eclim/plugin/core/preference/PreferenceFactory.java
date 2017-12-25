@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,7 +116,6 @@ public class PreferenceFactory
 
   /**
    * Breaks the supplied attribute string into an array of attributes.
-   * <p/>
    * <ul>
    *   <li>index 0: name</li>
    *   <li>index 1: default value</li>
@@ -158,7 +157,6 @@ public class PreferenceFactory
 
   /**
    * Breaks the supplied attribute string into an array of attributes.
-   * <p/>
    * <ul>
    *   <li>index 0: name</li>
    *   <li>index 1: validation regex</li>

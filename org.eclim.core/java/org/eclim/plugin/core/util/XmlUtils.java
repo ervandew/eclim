@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 package org.eclim.plugin.core.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,11 +33,13 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang.SystemUtils;
@@ -90,12 +91,15 @@ public class XmlUtils
    * @return An XPathExpression.
    */
   public static XPathExpression createXPathExpression(String xpath)
-    throws Exception
   {
-    if(XPATH == null){
-      XPATH = XPathFactory.newInstance().newXPath();
+    try{
+      if(XPATH == null){
+        XPATH = XPathFactory.newInstance().newXPath();
+      }
+      return XPATH.compile(xpath);
+    }catch(XPathExpressionException xpee){
+      throw new RuntimeException(xpee);
     }
-    return XPATH.compile(xpath);
   }
 
   /**
@@ -106,7 +110,6 @@ public class XmlUtils
    * @return A possibly empty array of errors.
    */
   public static List<Error> validateXml(String project, String filename)
-    throws Exception
   {
     return validateXml(project, filename, false, null);
   }
@@ -122,7 +125,6 @@ public class XmlUtils
    */
   public static List<Error> validateXml(
       String project, String filename, boolean schema)
-    throws Exception
   {
     return validateXml(project, filename, schema, null);
   }
@@ -142,7 +144,6 @@ public class XmlUtils
       String filename,
       boolean schema,
       DefaultHandler handler)
-    throws Exception
   {
     try{
       filename = ProjectUtils.getFilePath(project, filename);
@@ -186,10 +187,23 @@ public class XmlUtils
             false)
         );
       return errors;
-    }catch(FileNotFoundException fnfe){
+    }catch(SAXException se){
       ArrayList<Error> errors = new ArrayList<Error>();
       errors.add(new Error(
-            "FileNotFoundException: " + fnfe.getMessage(), filename, 1, 1, false));
+            "SAXException: " + se.getMessage(), filename, 1, 1, false));
+      return errors;
+    }catch(ParserConfigurationException pce){
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(new Error(
+            "ParserConfigurationException: " + pce.getMessage(),
+            filename, 1, 1, false));
+      return errors;
+    }catch(IOException ioe){
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(
+          new Error(
+            "IOException: " + ioe.getMessage(),
+            filename, 1, 1, false));
       return errors;
     }
   }
@@ -204,37 +218,37 @@ public class XmlUtils
    */
   public static List<Error> validateXml(
       String project, String filename, String schema)
-    throws Exception
   {
-    SAXParserFactory factory = SAXParserFactory.newInstance();
-    factory.setNamespaceAware(true);
-    factory.setValidating(true);
-    factory.setFeature("http://apache.org/xml/features/validation/schema", true);
-    factory.setFeature(
-        "http://apache.org/xml/features/validation/schema-full-checking", true);
-
-    SAXParser parser = factory.newSAXParser();
-    parser.setProperty(
-        "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-        "http://www.w3.org/2001/XMLSchema");
-    if(!schema.startsWith("file:")){
-      schema = "file://" + schema;
-    }
-    parser.setProperty(
-        "http://java.sun.com/xml/jaxp/properties/schemaSource", schema);
-    parser.setProperty(
-        "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
-        schema.replace('\\', '/'));
-
-    filename = ProjectUtils.getFilePath(project, filename);
-    filename = filename.replace('\\', '/');
-
-    ErrorAggregator errorHandler = new ErrorAggregator(filename);
-    EntityResolver entityResolver = new EntityResolver(
-        FileUtils.getFullPath(filename));
     try{
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      factory.setNamespaceAware(true);
+      factory.setValidating(true);
+      factory.setFeature("http://apache.org/xml/features/validation/schema", true);
+      factory.setFeature(
+          "http://apache.org/xml/features/validation/schema-full-checking", true);
+
+      SAXParser parser = factory.newSAXParser();
+      parser.setProperty(
+          "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+          "http://www.w3.org/2001/XMLSchema");
+      if(!schema.startsWith("file:")){
+        schema = "file://" + schema;
+      }
+      parser.setProperty(
+          "http://java.sun.com/xml/jaxp/properties/schemaSource", schema);
+      parser.setProperty(
+          "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
+          schema.replace('\\', '/'));
+
+      filename = ProjectUtils.getFilePath(project, filename);
+      filename = filename.replace('\\', '/');
+
+      ErrorAggregator errorHandler = new ErrorAggregator(filename);
+      EntityResolver entityResolver = new EntityResolver(
+          FileUtils.getFullPath(filename));
       parser.parse(new File(filename),
           getHandler(null, errorHandler, entityResolver));
+      return errorHandler.getErrors();
     }catch(SAXParseException spe){
       ArrayList<Error> errors = new ArrayList<Error>();
       errors.add(
@@ -246,9 +260,25 @@ public class XmlUtils
             false)
         );
       return errors;
+    }catch(SAXException se){
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(new Error(
+            "SAXException: " + se.getMessage(), filename, 1, 1, false));
+      return errors;
+    }catch(ParserConfigurationException pce){
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(new Error(
+            "ParserConfigurationException: " + pce.getMessage(),
+            filename, 1, 1, false));
+      return errors;
+    }catch(IOException ioe){
+      ArrayList<Error> errors = new ArrayList<Error>();
+      errors.add(
+          new Error(
+            "IOException: " + ioe.getMessage(),
+            filename, 1, 1, false));
+      return errors;
     }
-
-    return errorHandler.getErrors();
   }
 
   /**

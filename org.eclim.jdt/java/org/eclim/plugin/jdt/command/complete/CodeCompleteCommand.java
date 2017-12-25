@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2016  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,15 +34,20 @@ import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
+import org.eclipse.core.runtime.CoreException;
+
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
+
 import org.eclipse.jdt.internal.ui.text.java.AbstractJavaCompletionProposal;
 import org.eclipse.jdt.internal.ui.text.java.JavaCompletionProposal;
 import org.eclipse.jdt.internal.ui.text.java.LazyJavaCompletionProposal;
 import org.eclipse.jdt.internal.ui.text.java.ProposalInfo;
+
 import org.eclipse.jdt.internal.ui.viewsupport.JavaElementLinks;
+
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 
 /**
@@ -81,13 +86,16 @@ public class CodeCompleteCommand
   @Override
   protected List<CodeCompleteResult> getCompletionResults(
       CommandLine commandLine, String project, String file, int offset)
-    throws Exception
   {
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
 
     CompletionProposalCollector collector =
       new CompletionProposalCollector(src);
-    src.codeComplete(offset, collector);
+    try{
+      src.codeComplete(offset, collector);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     IJavaCompletionProposal[] proposals =
       collector.getJavaCompletionProposals();
@@ -111,7 +119,6 @@ public class CodeCompleteCommand
    */
   protected CodeCompleteResult createCompletionResult(
       IJavaCompletionProposal proposal)
-      throws Exception
   {
     return createCompletionResult(proposal, false);
   }
@@ -130,7 +137,6 @@ public class CodeCompleteCommand
    */
   protected CodeCompleteResult createCompletionResult(
       IJavaCompletionProposal proposal, boolean javaDocEnabled)
-      throws Exception
   {
     String completion = null;
     String menu = proposal.getDisplayString();
@@ -149,10 +155,19 @@ public class CodeCompleteCommand
       LazyJavaCompletionProposal lazy = (LazyJavaCompletionProposal)proposal;
       completion = lazy.getReplacementString();
       offset = lazy.getReplacementOffset();
-      Method getProposal = LazyJavaCompletionProposal.class
-        .getDeclaredMethod("getProposal");
-      getProposal.setAccessible(true);
-      CompletionProposal cproposal = (CompletionProposal)getProposal.invoke(lazy);
+      CompletionProposal cproposal = null;
+      try{
+        Method getProposal = LazyJavaCompletionProposal.class
+          .getDeclaredMethod("getProposal");
+        getProposal.setAccessible(true);
+        cproposal = (CompletionProposal)getProposal.invoke(lazy);
+      }catch(NoSuchMethodException nsme){
+        throw new RuntimeException(nsme);
+      }catch(IllegalAccessException iae){
+        throw new RuntimeException(iae);
+      }catch(InvocationTargetException ite){
+        throw new RuntimeException(ite);
+      }
       if(javaDocEnabled){
         javaDocURI = getJavaDocLink(proposal);
       }

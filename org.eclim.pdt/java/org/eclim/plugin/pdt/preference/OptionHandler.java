@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.pdt.preference;
 
+import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +32,8 @@ import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.php.internal.core.PHPCoreConstants;
 
 import org.eclipse.php.internal.ui.PHPUiPlugin;
+
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Option handler for pdt/php options.
@@ -47,20 +51,14 @@ public class OptionHandler
   private IPersistentPreferenceStore store;
   private Map<String, String> options;
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.plugin.core.preference.OptionHandler#getNature()
-   */
+  @Override
   public String getNature()
   {
     return NATURE;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Map<String, String> getValues()
-    throws Exception
   {
     if(options == null){
       options = new HashMap<String, String>();
@@ -73,11 +71,8 @@ public class OptionHandler
     //return DLTKCore.getOptions();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Map<String, String> getValues(IProject project)
-    throws Exception
   {
     /*IScriptProject scriptProject = DLTKCore.create(project);
     if(!scriptProject.exists()){
@@ -88,18 +83,19 @@ public class OptionHandler
     return scriptProject.getOptions(true);*/
     IEclipsePreferences preferences = getPreferences(project);
     Map<String, String> map = getValues();
-    for(String key : preferences.keys()){
-      map.put(PREFIX + key, preferences.get(key, null));
+    try{
+      for(String key : preferences.keys()){
+        map.put(PREFIX + key, preferences.get(key, null));
+      }
+    }catch(BackingStoreException bse){
+      throw new RuntimeException(bse);
     }
 
     return map;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setOption(String name, String value)
-    throws Exception
   {
     /*Map<String,String> options = DLTKCore.getOptions();
 
@@ -113,23 +109,28 @@ public class OptionHandler
       getValues().put(VERSION, value);
       IPersistentPreferenceStore store = getPreferences();
       store.setValue(name.substring(PREFIX.length()), value);
-      store.save();
+      try{
+        store.save();
+      }catch(IOException ioe){
+        throw new RuntimeException(ioe);
+      }
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setOption(IProject project, String name, String value)
-    throws Exception
   {
-    IEclipsePreferences preferences = getPreferences(project);
+    try{
+      IEclipsePreferences preferences = getPreferences(project);
 
-    if(name.startsWith(PREFIX)){
-      name = name.substring(PREFIX.length());
+      if(name.startsWith(PREFIX)){
+        name = name.substring(PREFIX.length());
+      }
+      preferences.put(name, value);
+      preferences.flush();
+    }catch(BackingStoreException bse){
+      throw new RuntimeException(bse);
     }
-    preferences.put(name, value);
-    preferences.flush();
   }
 
   private IPersistentPreferenceStore getPreferences()

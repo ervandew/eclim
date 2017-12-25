@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,17 +45,17 @@ public class ViewAppender
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public void setView(String view)
-    throws ClassNotFoundException,
-           NoSuchMethodException
   {
-    Class viewClass = Class.forName(view);
-    logAccessor = viewClass.getMethod("getLog");
+    try{
+      Class viewClass = Class.forName(view);
+      logAccessor = viewClass.getMethod("getLog");
+    }catch(ClassNotFoundException cnfe){
+      throw new RuntimeException(cnfe);
+    }catch(NoSuchMethodException nsme){
+      throw new RuntimeException(nsme);
+    }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AppenderSkeleton#append(LoggingEvent)
-   */
   @Override
   protected void append(final LoggingEvent event)
   {
@@ -94,19 +94,13 @@ public class ViewAppender
     }
   }
 
-  /**
-   * {@inheritDoc}
-   * @see AppenderSkeleton#requiresLayout()
-   */
+  @Override
   public boolean requiresLayout()
   {
     return true;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.apache.log4j.Appender#close()
-   */
+  @Override
   public void close()
   {
   }

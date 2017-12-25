@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Daniel Leong
+ * Copyright (C) 2014 - 2017 Daniel Leong
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,6 +111,8 @@ public class EclimLaunchManager implements Runnable
   }
 
   /**
+   * @param launch ILaunch instance.
+   * @param output OutputHandler instance.
    * @throws IllegalArgumentException if the OutputHandler
    *  provided doesn't support async output and we're trying
    *  to perform it. The original exception can be retreived
@@ -219,14 +221,13 @@ public class EclimLaunchManager implements Runnable
   public interface OutputHandler
   {
     /**
-     * NB: If your OutputHandler's prepare might take
-     *  a non-trivial amount of time, you MUST
-     *  queue up any outputs that come along before
-     *  you started. Future work could abstract that
-     *  out as necessary
+     * If your OutputHandler's prepare might take a non-trivial amount of time,
+     * you MUST queue up any outputs that come along before you started. Future
+     * work could abstract that out as necessary
+     *
+     * @param launchId The launch id.
      */
-    public void prepare(final String launchId)
-      throws Exception;
+    public void prepare(final String launchId);
     public void sendErr(String line);
     public void sendOut(String line);
     public void sendTerminated();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import org.eclipse.ant.internal.ui.model.LocationProvider;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 import org.eclipse.jface.text.IDocument;
@@ -47,14 +48,12 @@ public class AntUtils
    * @return The ant model.
    */
   public static IAntModel getAntModel(String project, String antFile)
-    throws Exception
   {
     return getAntModel(project, antFile, null);
   }
 
   /**
    * Gets an ant model for the given file.
-   * <p/>
    * Based on similar method in org.eclipse.ant.internal.ui.AntUtil
    *
    * @param project The project name.
@@ -65,7 +64,6 @@ public class AntUtils
    */
   public static IAntModel getAntModel(
       String project, String antFile, IProblemRequestor requestor)
-    throws Exception
   {
     // must refresh the file before grabbing the document.
     final IFile file = AntUtil.getFileForLocation(
@@ -73,7 +71,11 @@ public class AntUtils
     if (file == null) {
       throw new RuntimeException("Invalid project or file location");
     }
-    file.refreshLocal(IResource.DEPTH_INFINITE, null);
+    try{
+      file.refreshLocal(IResource.DEPTH_INFINITE, null);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     IDocument doc = ProjectUtils.getDocument(project, antFile);
     //final String filepath = ProjectUtils.getFilePath(project, antFile);

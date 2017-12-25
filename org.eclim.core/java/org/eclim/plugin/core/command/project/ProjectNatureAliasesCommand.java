@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,7 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 public class ProjectNatureAliasesCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+@Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {

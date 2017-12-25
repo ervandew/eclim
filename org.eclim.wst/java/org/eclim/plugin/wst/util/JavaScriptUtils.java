@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ import org.eclim.plugin.wst.PluginResources;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
+
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
@@ -43,9 +45,7 @@ public class JavaScriptUtils
    * @param project The name of the project.
    * @return The project.
    */
-  public static IJavaScriptProject getJavaScriptProject(String project)
-    throws Exception
-  {
+  public static IJavaScriptProject getJavaScriptProject(String project){
     return getJavaScriptProject(ProjectUtils.getProject(project, true));
   }
 
@@ -55,19 +55,21 @@ public class JavaScriptUtils
    * @param project The IProject.
    * @return The javascript project.
    */
-  public static IJavaScriptProject getJavaScriptProject(IProject project)
-    throws Exception
-  {
+  public static IJavaScriptProject getJavaScriptProject(IProject project){
     if(ProjectUtils.getPath(project) == null){
       throw new IllegalArgumentException(
           Services.getMessage("project.location.null", project.getName()));
     }
 
-    if(!project.hasNature(PluginResources.JAVASCRIPT_NATURE)){
-      String alias = ProjectNatureFactory
-        .getAliasForNature(PluginResources.JAVASCRIPT_NATURE);
-      throw new IllegalArgumentException(Services.getMessage(
-            "project.missing.nature", project.getName(), alias));
+    try{
+      if(!project.hasNature(PluginResources.JAVASCRIPT_NATURE)){
+        String alias = ProjectNatureFactory
+          .getAliasForNature(PluginResources.JAVASCRIPT_NATURE);
+        throw new IllegalArgumentException(Services.getMessage(
+              "project.missing.nature", project.getName(), alias));
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     IJavaScriptProject javascriptProject = JavaScriptCore.create(project);
@@ -86,9 +88,7 @@ public class JavaScriptUtils
    * @param file The absolute path to the file.
    * @return The compilation unit or null if not found.
    */
-  public static IJavaScriptUnit getJavaScriptUnit(String project, String file)
-    throws Exception
-  {
+  public static IJavaScriptUnit getJavaScriptUnit(String project, String file){
     IJavaScriptProject javascriptProject = getJavaScriptProject(project);
     return getJavaScriptUnit(javascriptProject, file);
   }
@@ -102,10 +102,13 @@ public class JavaScriptUtils
    */
   public static IJavaScriptUnit getJavaScriptUnit(
       IJavaScriptProject project, String file)
-    throws Exception
   {
     if (!project.isOpen()){
-      project.open(null);
+      try{
+        project.open(null);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
     }
     return JavaScriptCore.createCompilationUnitFrom(
         ProjectUtils.getFile(project.getProject(), file));

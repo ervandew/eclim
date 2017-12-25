@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,10 +183,14 @@ public class SearchCommand
    * @param length The length of the element.
    * @return Array of IModelElement.
    */
-  protected IModelElement[] getElements(ISourceModule src, int offset, int length)
-    throws Exception
+  protected IModelElement[] getElements(
+      ISourceModule src, int offset, int length)
   {
-    return src.codeSelect(offset, length);
+    try{
+      return src.codeSelect(offset, length);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   /**
@@ -198,8 +202,8 @@ public class SearchCommand
    *
    * @return The IDLTKSearchScope.
    */
-  protected IDLTKSearchScope getScope(String scope, int type, IProject project)
-    throws Exception
+  protected IDLTKSearchScope getScope(
+      String scope, int type, IProject project)
   {
     boolean includeInterpreterEnvironment = false;
     DLTKSearchScopeFactory factory = DLTKSearchScopeFactory.getInstance();
@@ -211,15 +215,19 @@ public class SearchCommand
       toolkit = dltkManager.getLanguageToolkit(dltkManager.getNatureId());
     }
     if (toolkit == null && project != null){
-      for(String nature : ProjectManagement.getProjectManagerNatures()){
-        if(project.hasNature(nature)){
-          manager = ProjectManagement.getProjectManager(nature);
-          if(manager instanceof DltkProjectManager){
-            DltkProjectManager dltkManager = (DltkProjectManager)manager;
-            toolkit = dltkManager.getLanguageToolkit(dltkManager.getNatureId());
-            break;
+      try{
+        for(String nature : ProjectManagement.getProjectManagerNatures()){
+          if(project.hasNature(nature)){
+            manager = ProjectManagement.getProjectManager(nature);
+            if(manager instanceof DltkProjectManager){
+              DltkProjectManager dltkManager = (DltkProjectManager)manager;
+              toolkit = dltkManager.getLanguageToolkit(dltkManager.getNatureId());
+              break;
+            }
           }
         }
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
       }
     }
     IDLTKSearchScope searchScope = null;

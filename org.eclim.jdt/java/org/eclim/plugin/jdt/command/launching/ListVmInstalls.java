@@ -23,10 +23,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 public class ListVmInstalls
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {

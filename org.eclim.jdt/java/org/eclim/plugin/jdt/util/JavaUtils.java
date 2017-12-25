@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.plugin.jdt.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ import org.eclim.util.file.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -95,6 +97,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.text.java.IQuickAssistProcessor;
 import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 
@@ -128,7 +131,6 @@ public class JavaUtils
    * @return The project.
    */
   public static IJavaProject getJavaProject(String project)
-    throws Exception
   {
     return getJavaProject(ProjectUtils.getProject(project, true));
   }
@@ -140,18 +142,21 @@ public class JavaUtils
    * @return The java project.
    */
   public static IJavaProject getJavaProject(IProject project)
-    throws Exception
   {
     if(ProjectUtils.getPath(project) == null){
       throw new IllegalArgumentException(
           Services.getMessage("project.location.null", project.getName()));
     }
 
-    if(!project.hasNature(PluginResources.NATURE)){
-      throw new IllegalArgumentException(Services.getMessage(
-            "project.missing.nature",
-            project.getName(),
-            ProjectNatureFactory.getAliasForNature(PluginResources.NATURE)));
+    try{
+      if(!project.hasNature(PluginResources.NATURE)){
+        throw new IllegalArgumentException(Services.getMessage(
+              "project.missing.nature",
+              project.getName(),
+              ProjectNatureFactory.getAliasForNature(PluginResources.NATURE)));
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     IJavaProject javaProject = JavaCore.create(project);
@@ -174,7 +179,6 @@ public class JavaUtils
    * @throws IllegalArgumentException If the file is not found.
    */
   public static ICompilationUnit getCompilationUnit(String project, String file)
-    throws Exception
   {
     IJavaProject javaProject = getJavaProject(project);
     return getCompilationUnit(javaProject, file);
@@ -189,7 +193,6 @@ public class JavaUtils
    * @throws IllegalArgumentException If the file is not found.
    */
   public static ICompilationUnit getCompilationUnit(String file)
-    throws Exception
   {
     IProject[] projects =
       ResourcesPlugin.getWorkspace().getRoot().getProjects();
@@ -217,7 +220,6 @@ public class JavaUtils
    */
   public static ICompilationUnit getCompilationUnit(
       IJavaProject project, String file)
-    throws Exception
   {
     ICompilationUnit src = JavaCore.createCompilationUnitFrom(
         ProjectUtils.getFile(project.getProject(), file));
@@ -238,17 +240,20 @@ public class JavaUtils
    */
   public static ICompilationUnit findCompilationUnit(
       String project, String file)
-    throws Exception
   {
-    IPath path = Path.fromOSString(file);
+    try{
+      IPath path = Path.fromOSString(file);
 
-    IJavaProject javaProject = getJavaProject(project);
-    javaProject.open(null);
-    //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+      IJavaProject javaProject = getJavaProject(project);
+      javaProject.open(null);
+      //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
-    ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
+      ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
 
-    return src;
+      return src;
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
   }
 
   /**
@@ -258,22 +263,25 @@ public class JavaUtils
    * @return The compilation unit or null if not found.
    */
   public static ICompilationUnit findCompilationUnit(String file)
-    throws Exception
   {
     IPath path = Path.fromOSString(file);
     IProject[] projects =
       ResourcesPlugin.getWorkspace().getRoot().getProjects();
-    for(IProject project : projects){
-      if (project.hasNature(JavaCore.NATURE_ID)){
-        IJavaProject javaProject = getJavaProject(project);
-        javaProject.open(null);
-        //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
+    try{
+      for(IProject project : projects){
+        if (project.hasNature(JavaCore.NATURE_ID)){
+          IJavaProject javaProject = getJavaProject(project);
+          javaProject.open(null);
+          //javaProject.getResource().refreshLocal(IResource.DEPTH_INFINITE, null);
 
-        ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
-        if(src != null){
-          return src;
+          ICompilationUnit src = (ICompilationUnit)javaProject.findElement(path);
+          if(src != null){
+            return src;
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return null;
   }
@@ -287,40 +295,45 @@ public class JavaUtils
    * @return The IClassFile.
    */
   public static IClassFile findClassFile(IJavaProject project, String path)
-    throws Exception
   {
-    if(path.startsWith("/") ||
-        path.toLowerCase().startsWith("jar:") ||
-        path.toLowerCase().startsWith("zip:"))
-    {
-      FileSystemManager fsManager = VFS.getManager();
-      FileObject file = fsManager.resolveFile(path.replace("%", "%25"));
-      if(file.exists()){
-        BufferedReader in = null;
-        try{
-          in = new BufferedReader(
-              new InputStreamReader(file.getContent().getInputStream()));
-          String pack = null;
-          String line = null;
-          while((line = in.readLine()) != null){
-            Matcher matcher = PACKAGE_LINE.matcher(line);
-            if (matcher.matches()){
-              pack = matcher.group(1);
-              break;
+    try{
+      if(path.startsWith("/") ||
+          path.toLowerCase().startsWith("jar:") ||
+          path.toLowerCase().startsWith("zip:"))
+      {
+        FileSystemManager fsManager = VFS.getManager();
+        FileObject file = fsManager.resolveFile(path.replace("%", "%25"));
+        if(file.exists()){
+          BufferedReader in = null;
+          try{
+            in = new BufferedReader(
+                new InputStreamReader(file.getContent().getInputStream()));
+            String pack = null;
+            String line = null;
+            while((line = in.readLine()) != null){
+              Matcher matcher = PACKAGE_LINE.matcher(line);
+              if (matcher.matches()){
+                pack = matcher.group(1);
+                break;
+              }
             }
-          }
-          if (pack != null){
-            String name = pack + '.' +
-              FileUtils.getFileName(file.getName().getPath());
-            IType type = project.findType(name);
-            if (type != null){
-              return type.getClassFile();
+            if (pack != null){
+              String name = pack + '.' +
+                FileUtils.getFileName(file.getName().getPath());
+              IType type = project.findType(name);
+              if (type != null){
+                return type.getClassFile();
+              }
             }
+          }finally{
+            IOUtils.closeQuietly(in);
           }
-        }finally{
-          IOUtils.closeQuietly(in);
         }
       }
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return null;
   }
@@ -350,7 +363,6 @@ public class JavaUtils
    * @return The offset or -1 if it could not be determined.
    */
   public static int getElementOffset(IJavaElement element)
-    throws Exception
   {
     IJavaElement parent = getPrimaryElement(element);
     CompilationUnit cu = null;
@@ -368,7 +380,12 @@ public class JavaUtils
     }
 
     if (cu != null) {
-      ASTNode[] nodes = ASTNodeSearchUtil.getDeclarationNodes(element, cu);
+      ASTNode[] nodes = null;
+      try{
+        nodes = ASTNodeSearchUtil.getDeclarationNodes(element, cu);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
       if (nodes != null && nodes.length > 0){
         int offset = nodes[0].getStartPosition();
         if (nodes[0] instanceof BodyDeclaration){
@@ -385,27 +402,32 @@ public class JavaUtils
 
   /**
    * Gets the IDocument for the supplied src file.
-   * <p/>
+   * <p>
    * Code borrowed from org.eclipse.jdt.internal.core.JavaModelOperation.
+   * </p>
    *
    * @param src The src file.
    * @return The IDocument.
    */
   public static IDocument getDocument(ICompilationUnit src)
-    throws Exception
   {
-    IBuffer buffer = src.getBuffer();
-    if(buffer instanceof IDocument){
-      return (IDocument)buffer;
+    try{
+      IBuffer buffer = src.getBuffer();
+      if(buffer instanceof IDocument){
+        return (IDocument)buffer;
+      }
+      return new DocumentAdapter(buffer);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-    return new DocumentAdapter(buffer);
   }
 
   /**
    * Gets the fully qualified name of the supplied java element.
-   * <p/>
+   * <p>
    * NOTE: For easy of determining fields and method segments, they are appended
    * with a javadoc style '#' instead of the normal '.'.
+   * </p>
    *
    * @param element The IJavaElement.
    *
@@ -452,10 +474,11 @@ public class JavaUtils
 
   /**
    * Constructs a compilation unit relative name for the supplied type.
-   * <p/>
+   * <p>
    * If the type is imported, in java.lang, or in the same package as the source
    * file, then the type name returned is unqualified, otherwise the name
    * returned is the fully qualified type name.
+   * </p>
    *
    * @param src The compilation unit.
    * @param type The type.
@@ -464,7 +487,6 @@ public class JavaUtils
    */
   public static String getCompilationUnitRelativeTypeName(
       ICompilationUnit src, IType type)
-    throws Exception
   {
     String typeName = type.getFullyQualifiedName().replace('$', '.');
     if(JavaUtils.containsImport(src, type)){
@@ -497,7 +519,6 @@ public class JavaUtils
    * @return true if the src file has a qualifying import.
    */
   public static boolean containsImport(ICompilationUnit src, String type)
-    throws Exception
   {
     return containsImport(src, src.getType(type));
   }
@@ -511,36 +532,39 @@ public class JavaUtils
    * @return true if the src file has a qualifying import.
    */
   public static boolean containsImport(ICompilationUnit src, IType type)
-    throws Exception
   {
-    String typePkg = type.getPackageFragment().getElementName();
+    try{
+      String typePkg = type.getPackageFragment().getElementName();
 
-    IPackageDeclaration[] packages = src.getPackageDeclarations();
-    String pkg = packages.length > 0 ? packages[0].getElementName() : null;
+      IPackageDeclaration[] packages = src.getPackageDeclarations();
+      String pkg = packages.length > 0 ? packages[0].getElementName() : null;
 
-    // classes in same package are auto imported.
-    if ((pkg == null && typePkg == null) ||
-        (pkg != null && pkg.equals(typePkg)))
-    {
-      return true;
-    }
-
-    // java.lang is auto imported.
-    if(JAVA_LANG.equals(typePkg)){
-      return true;
-    }
-
-    typePkg = typePkg + ".*";
-    String typeName = type.getFullyQualifiedName().replace('$', '.');
-
-    IImportDeclaration[] imports = src.getImports();
-    for (int ii = 0; ii < imports.length; ii++){
-      String name = imports[ii].getElementName();
-      if(name.equals(typeName) || name.equals(typePkg)){
+      // classes in same package are auto imported.
+      if ((pkg == null && typePkg == null) ||
+          (pkg != null && pkg.equals(typePkg)))
+      {
         return true;
       }
+
+      // java.lang is auto imported.
+      if(JAVA_LANG.equals(typePkg)){
+        return true;
+      }
+
+      typePkg = typePkg + ".*";
+      String typeName = type.getFullyQualifiedName().replace('$', '.');
+
+      IImportDeclaration[] imports = src.getImports();
+      for (int ii = 0; ii < imports.length; ii++){
+        String name = imports[ii].getElementName();
+        if(name.equals(typeName) || name.equals(typePkg)){
+          return true;
+        }
+      }
+      return false;
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
-    return false;
   }
 
   /**
@@ -552,74 +576,79 @@ public class JavaUtils
    * @param length The length of the region to format.
    */
   public static void format(ICompilationUnit src, int kind, int offset, int length)
-    throws Exception
   {
-    IBuffer buffer = src.getBuffer();
-    String contents = buffer.getContents();
-    String delimiter = StubUtility.getLineDelimiterUsed(src);
-    DefaultCodeFormatter formatter =
-      new DefaultCodeFormatter(src.getJavaProject().getOptions(true));
+    try{
+      IBuffer buffer = src.getBuffer();
+      String contents = buffer.getContents();
+      String delimiter = StubUtility.getLineDelimiterUsed(src);
+      DefaultCodeFormatter formatter =
+        new DefaultCodeFormatter(src.getJavaProject().getOptions(true));
 
-    // when the eclipse indent settings differ from vim (tabs vs spaces) then
-    // the inserted method's indent may be a bit off. this is a workaround to
-    // force reformatting of the code from the start of the line to the start of
-    // the next set of code following the new method. Doesn't quite fix indent
-    // formatting of methods in nested classes.
-    while (offset > 0 &&
-        !IndentManipulation.isLineDelimiterChar(buffer.getChar(offset - 1)))
-    {
-      offset--;
-      length++;
-    }
-    while ((offset + length) < contents.length() &&
-        IndentManipulation.isLineDelimiterChar(buffer.getChar(offset + length)))
-    {
-      length++;
-    }
+      // when the eclipse indent settings differ from vim (tabs vs spaces) then
+      // the inserted method's indent may be a bit off. this is a workaround to
+      // force reformatting of the code from the start of the line to the start of
+      // the next set of code following the new method. Doesn't quite fix indent
+      // formatting of methods in nested classes.
+      while (offset > 0 &&
+          !IndentManipulation.isLineDelimiterChar(buffer.getChar(offset - 1)))
+      {
+        offset--;
+        length++;
+      }
+      while ((offset + length) < contents.length() &&
+          IndentManipulation.isLineDelimiterChar(buffer.getChar(offset + length)))
+      {
+        length++;
+      }
 
-    TextEdit edits = formatter.format(kind, contents, offset, length, 0, delimiter);
-    if (edits != null) {
-      int oldLength = contents.length();
-      Document document = new Document(contents);
-      edits.apply(document);
+      TextEdit edits = formatter.format(kind, contents, offset, length, 0, delimiter);
+      if (edits != null) {
+        int oldLength = contents.length();
+        Document document = new Document(contents);
+        edits.apply(document);
 
-      String formatted = document.get();
+        String formatted = document.get();
 
-      // jdt formatter can introduce trailing whitespace (javadoc comments), so
-      // we'll remove all trailing whitespace from the formatted section (unless
-      // the user has configured eclim not to do so).
-      length += formatted.length() - oldLength;
-      if (offset < (offset + length)){
-        String stripTrailingWhitespace = Preferences.getInstance().getValue(
-          src.getJavaProject().getProject(),
-          "org.eclim.java.format.strip_trialing_whitespace");
-        if ("true".equals(stripTrailingWhitespace)){
-          String pre = formatted.substring(0, offset);
-          StringBuffer section = new StringBuffer(
-              formatted.substring(offset, offset + length));
-          StringBuffer post = new StringBuffer(
-              formatted.substring(offset + length));
-          // account for section not ending at a line delimiter
-          while (!section.toString().endsWith(delimiter) && post.length() > 0){
-            section.append(post.charAt(0));
-            post.deleteCharAt(0);
+        // jdt formatter can introduce trailing whitespace (javadoc comments), so
+        // we'll remove all trailing whitespace from the formatted section (unless
+        // the user has configured eclim not to do so).
+        length += formatted.length() - oldLength;
+        if (offset < (offset + length)){
+          String stripTrailingWhitespace = Preferences.getInstance().getValue(
+            src.getJavaProject().getProject(),
+            "org.eclim.java.format.strip_trialing_whitespace");
+          if ("true".equals(stripTrailingWhitespace)){
+            String pre = formatted.substring(0, offset);
+            StringBuffer section = new StringBuffer(
+                formatted.substring(offset, offset + length));
+            StringBuffer post = new StringBuffer(
+                formatted.substring(offset + length));
+            // account for section not ending at a line delimiter
+            while (!section.toString().endsWith(delimiter) && post.length() > 0){
+              section.append(post.charAt(0));
+              post.deleteCharAt(0);
+            }
+
+            Matcher matcher = TRAILING_WHITESPACE.matcher(section);
+            String stripped = matcher.replaceAll(StringUtils.EMPTY);
+
+            src.getBuffer().setContents(pre + stripped + post);
+          }else{
+            src.getBuffer().setContents(formatted);
           }
-
-          Matcher matcher = TRAILING_WHITESPACE.matcher(section);
-          String stripped = matcher.replaceAll(StringUtils.EMPTY);
-
-          src.getBuffer().setContents(pre + stripped + post);
         }else{
           src.getBuffer().setContents(formatted);
         }
-      }else{
-        src.getBuffer().setContents(formatted);
-      }
 
-      if (src.isWorkingCopy()) {
-        src.commitWorkingCopy(true, null);
+        if (src.isWorkingCopy()) {
+          src.commitWorkingCopy(true, null);
+        }
+        src.save(null, false);
       }
-      src.save(null, false);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }catch(BadLocationException ble){
+      throw new RuntimeException(ble);
     }
   }
 
@@ -641,7 +670,6 @@ public class JavaUtils
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public static void setCompilerSourceCompliance(String version)
-    throws Exception
   {
     Map<String, String> options = JavaCore.getOptions();
     options.put(JavaCore.COMPILER_SOURCE, version);
@@ -657,10 +685,8 @@ public class JavaUtils
    * @param project The java project.
    * @param version The java version.
    */
-  @SuppressWarnings("unchecked")
   public static void setCompilerSourceCompliance(
       IJavaProject project, String version)
-    throws Exception
   {
     // using project.setOption(String,String) doesn't save the setting.
     Map<String, String> options = project.getOptions(false);
@@ -681,7 +707,6 @@ public class JavaUtils
    */
   public static void loadPreferencesForTemplate(
       IProject project, Preferences preferences, Map<String, Object> values)
-    throws Exception
   {
     Map<String, String> options = preferences.getValues(project);
     for(String key : options.keySet()){
@@ -697,7 +722,6 @@ public class JavaUtils
    * @return The problems.
    */
   public static IProblem[] getProblems(ICompilationUnit src)
-    throws Exception
   {
     return getProblems(src, null);
   }
@@ -710,16 +734,19 @@ public class JavaUtils
    * @return The problems.
    */
   public static IProblem[] getProblems(ICompilationUnit src, int[] ids)
-    throws Exception
   {
-    ICompilationUnit workingCopy = src.getWorkingCopy(null);
-
     ProblemRequestor requestor = new ProblemRequestor(ids);
     try{
-      workingCopy.discardWorkingCopy();
-      workingCopy.becomeWorkingCopy(requestor, null);
-    }finally{
-      workingCopy.discardWorkingCopy();
+      ICompilationUnit workingCopy = src.getWorkingCopy(null);
+
+      try{
+        workingCopy.discardWorkingCopy();
+        workingCopy.becomeWorkingCopy(requestor, null);
+      }finally{
+        workingCopy.discardWorkingCopy();
+      }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     List<IProblem> problems = requestor.getProblems();
     return (IProblem[])problems.toArray(new IProblem[problems.size()]);
@@ -727,15 +754,15 @@ public class JavaUtils
 
   /**
    * Gets array of IQuickFixProcessor(s).
-   * <p/>
+   * <p>
    * Based on
    * org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionProcessor#getCorrectionProcessors()
+   * </p>
    *
    * @param src The src file to get processors for.
    * @return quick fix processors.
    */
   public static IQuickFixProcessor[] getQuickFixProcessors(ICompilationUnit src)
-    throws Exception
   {
     if (correctionProcessors == null) {
       correctionProcessors = getProcessorDescriptors("quickFixProcessors", true);
@@ -751,16 +778,16 @@ public class JavaUtils
 
   /**
    * Gets array of IQuickAssistProcessor(s).
-   * <p/>
+   * <p>
    * Based on
    * org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionProcessor#getAssistProcessors()
+   * </p>
    *
    * @param src The src file to get processors for.
    * @return quick assist processors.
    */
   public static IQuickAssistProcessor[] getQuickAssistProcessors(
       ICompilationUnit src)
-    throws Exception
   {
     if (assistProcessors == null) {
       assistProcessors = getProcessorDescriptors("quickAssistProcessors", false);
@@ -776,7 +803,6 @@ public class JavaUtils
 
   private static ContributedProcessorDescriptor[] getProcessorDescriptors(
       String id, boolean testMarkerTypes)
-    throws Exception
   {
     IConfigurationElement[] elements = Platform.getExtensionRegistry()
       .getConfigurationElementsFor(JavaUI.ID_PLUGIN, id);
@@ -826,9 +852,7 @@ public class JavaUtils
       return problems;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void acceptProblem(IProblem problem)
     {
       if(ids != null){
@@ -843,19 +867,13 @@ public class JavaUtils
       }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void beginReporting(){}
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void endReporting(){}
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isActive()
     {
       return true;

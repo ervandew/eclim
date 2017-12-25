@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,6 @@ public abstract class AbstractCodeCompleteCommand
    * @return The ISourceModule.
    */
   protected ISourceModule getSourceModule(IFile file)
-    throws Exception
   {
     return DltkUtils.getSourceModule(file);
   }
@@ -110,17 +109,18 @@ public abstract class AbstractCodeCompleteCommand
    * @return The completion collector.
    */
   protected abstract ScriptCompletionProposalCollector getCompletionCollector(
-      ISourceModule module)
-    throws Exception;
+      ISourceModule module);
 
   /**
    * Get the completion from the proposal.
    *
+   * @param document The IDocument.
+   * @param offset The offset in the document.
    * @param proposal The IScriptCompletionProposal.
    * @return The completion.
    */
   protected String getCompletion(
-      IDocument doccument, int offset, IScriptCompletionProposal proposal)
+      IDocument document, int offset, IScriptCompletionProposal proposal)
   {
     return proposal.getDisplayString().trim();
   }

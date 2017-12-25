@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2009  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,10 +44,6 @@ public class URLProgressInputStream
     progressBar.setIndeterminate(false);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see FilterInputStream#read()
-   */
   @Override
   public int read()
     throws IOException
@@ -57,10 +53,6 @@ public class URLProgressInputStream
     return value;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see FilterInputStream#read(byte[])
-   */
   @Override
   public int read(byte[] b)
     throws IOException
@@ -68,10 +60,6 @@ public class URLProgressInputStream
     return read(b, 0, b.length);
   }
 
-  /**
-   * {@inheritDoc}
-   * @see FilterInputStream#read(byte[],int,int)
-   */
   @Override
   public int read(byte[] b, int off, int len)
     throws IOException
@@ -86,10 +74,6 @@ public class URLProgressInputStream
     return result;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see FilterInputStream#skip(long)
-   */
   @Override
   public long skip(long n)
     throws IOException

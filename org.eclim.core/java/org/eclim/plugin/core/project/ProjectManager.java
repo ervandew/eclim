@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2010  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,7 @@ public interface ProjectManager
    * @param project The project.
    * @param commandLine The command line for the project create command.
    */
-  public void create(IProject project, CommandLine commandLine)
-    throws Exception;
+  public void create(IProject project, CommandLine commandLine);
 
   /**
    * Updates a project.
@@ -49,8 +48,7 @@ public interface ProjectManager
    *
    * @return Array of Error if any errors encountered during update.
    */
-  public List<Error> update(IProject project, CommandLine commandLine)
-    throws Exception;
+  public List<Error> update(IProject project, CommandLine commandLine);
 
   /**
    * Removes the nature(s) from a project that this manager manages, or deletes
@@ -59,8 +57,7 @@ public interface ProjectManager
    * @param project The project.
    * @param commandLine The command line for the project create command.
    */
-  public void delete(IProject project, CommandLine commandLine)
-    throws Exception;
+  public void delete(IProject project, CommandLine commandLine);
 
   /**
    * Refreshes a project by synchronizing it against the files on disk.
@@ -68,8 +65,7 @@ public interface ProjectManager
    * @param project The project.
    * @param commandLine The command line for the project create command.
    */
-  public void refresh(IProject project, CommandLine commandLine)
-    throws Exception;
+  public void refresh(IProject project, CommandLine commandLine);
 
   /**
    * Refreshes a project file.
@@ -77,6 +73,5 @@ public interface ProjectManager
    * @param project The project.
    * @param file The file to refresh.
    */
-  public void refresh(IProject project, IFile file)
-    throws Exception;
+  public void refresh(IProject project, IFile file);
 }

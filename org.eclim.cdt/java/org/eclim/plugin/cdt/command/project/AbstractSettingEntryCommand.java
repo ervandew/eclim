@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@ import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 
 import org.eclipse.core.resources.IProject;
 
+import org.eclipse.core.runtime.CoreException;
+
 /**
  * Abstract super class for commands which add or delete c setting entries.
  *
@@ -51,10 +53,7 @@ public abstract class AbstractSettingEntryCommand
   private static final String ADD = "add";
   private static final String DELETE = "delete";
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclim.command.Command#execute(CommandLine)
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -76,7 +75,6 @@ public abstract class AbstractSettingEntryCommand
    * @return The result.
    */
   protected String add(CommandLine commandLine)
-    throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String lang = commandLine.getValue(Options.LANG_OPTION);
@@ -101,7 +99,11 @@ public abstract class AbstractSettingEntryCommand
       }
     }
 
-    CCorePlugin.getDefault().setProjectDescription(project, desc);
+    try{
+      CCorePlugin.getDefault().setProjectDescription(project, desc);
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
+    }
 
     return Services.getMessage("entry.added");
   }
@@ -113,7 +115,6 @@ public abstract class AbstractSettingEntryCommand
    * @return The result.
    */
   protected String delete(CommandLine commandLine)
-    throws Exception
   {
     String projectName = commandLine.getValue(Options.PROJECT_OPTION);
     String lang = commandLine.getValue(Options.LANG_OPTION);
@@ -146,7 +147,11 @@ public abstract class AbstractSettingEntryCommand
     }
 
     if(deleted){
-      CCorePlugin.getDefault().setProjectDescription(project, desc);
+      try{
+        CCorePlugin.getDefault().setProjectDescription(project, desc);
+      }catch(CoreException ce){
+        throw new RuntimeException(ce);
+      }
       return Services.getMessage("entry.deleted");
     }
     return Services.getMessage("entry.not.found", entry.getName());
@@ -158,6 +163,5 @@ public abstract class AbstractSettingEntryCommand
    * @param commandLine The command line instance.
    * @return The ICLanguageSettingEntry.
    */
-  protected abstract ICLanguageSettingEntry createEntry(CommandLine commandLine)
-    throws Exception;
+  protected abstract ICLanguageSettingEntry createEntry(CommandLine commandLine);
 }

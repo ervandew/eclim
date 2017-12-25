@@ -1,7 +1,7 @@
 /*
  * Vimplugin
  *
- * Copyright (c) 2007 by The Vimplugin Project.
+ * Copyright (c) 2007 - 2017 by The Vimplugin Project.
  *
  * Released under the GNU General Public License
  * with ABSOLUTELY NO WARRANTY.
@@ -89,10 +89,7 @@ public class VimPreferences
   public void init(IWorkbench workbench) {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.jface.preference.IPreferencePage#performOk()
-   */
+  @Override
   public boolean performOk()
   {
     boolean result = super.performOk();

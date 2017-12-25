@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,172 +52,117 @@ public class EclimEditorSite
     window = new EclimWorkbenchWindow();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchPartSite#getId()
-   */
+  @Override
   public String getId()
   {
     return StringUtils.EMPTY;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchPartSite#getPluginId()
-   */
+  @Override
   public String getPluginId()
   {
     return "org.eclim";
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchPartSite#getRegisteredName()
-   */
+  @Override
   public String getRegisteredName()
   {
     return StringUtils.EMPTY;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchPartSite#registerContextMenu(String,MenuManager,ISelectionProvider)
-   */
+  @Override
   public void registerContextMenu(
       String arg0, MenuManager arg1, ISelectionProvider arg2)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchPartSite#registerContextMenu(MenuManager,ISelectionProvider)
-   */
+  @Override
   public void registerContextMenu(MenuManager arg0, ISelectionProvider arg1)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchPartSite#getKeyBindingService()
-   */
+  @Override
   @SuppressWarnings("deprecation")
   public org.eclipse.ui.IKeyBindingService getKeyBindingService()
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchPartSite#getPart()
-   */
+  @Override
   public IWorkbenchPart getPart()
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchSite#getPage()
-   */
+  @Override
   public IWorkbenchPage getPage()
   {
     return window.getActivePage();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchSite#getSelectionProvider()
-   */
+  @Override
   public ISelectionProvider getSelectionProvider()
   {
     return selectionProvider;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchSite#getShell()
-   */
+  @Override
   public Shell getShell()
   {
     return EclimPlugin.getShell();
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchSite#getWorkbenchWindow()
-   */
+  @Override
   public IWorkbenchWindow getWorkbenchWindow()
   {
     return window;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.IWorkbenchSite#setSelectionProvider(ISelectionProvider)
-   */
+  @Override
   public void setSelectionProvider(ISelectionProvider provider)
   {
     this.selectionProvider = provider;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.core.runtime.IAdaptable#getAdapter(Class)
-   */
+  @Override
+  @SuppressWarnings("unchecked")
   public Object getAdapter(Class arg0)
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.services.IServiceLocator#getService(Class)
-   */
+  @Override
+  @SuppressWarnings("unchecked")
   public Object getService(Class arg0)
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.eclipse.ui.services.IServiceLocator#hasService(Class)
-   */
+  @Override
   public boolean hasService(Class arg0)
   {
     return false;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IEditorSite#getActionBarContributor()
-   */
+  @Override
   public IEditorActionBarContributor getActionBarContributor()
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IEditorSite#getActionBars()
-   */
+  @Override
   public IActionBars getActionBars()
   {
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IEditorSite#registerContextMenu(MenuManager,ISelectionProvider,boolean)
-   */
+  @Override
   public void registerContextMenu(
       MenuManager arg0, ISelectionProvider arg1, boolean arg2)
   {
   }
 
-  /**
-   * {@inheritDoc}
-   * @see IEditorSite#registerContextMenu(String,MenuManager,ISelectionProvider,boolean)
-   */
+  @Override
   public void registerContextMenu(
       String arg0, MenuManager arg1, ISelectionProvider arg2, boolean arg3)
   {

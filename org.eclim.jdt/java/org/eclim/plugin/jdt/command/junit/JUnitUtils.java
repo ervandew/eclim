@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclim.plugin.jdt.util.TypeUtils;
 
+import org.eclipse.core.runtime.CoreException;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
@@ -49,7 +51,6 @@ public class JUnitUtils
    * @return The test ICompilationUnit or null if one could not be found.
    */
   public static ICompilationUnit findTest(IJavaProject javaProject, IType type)
-    throws Exception
   {
     // possible names to try.
     String[] names = new String[]{
@@ -75,38 +76,39 @@ public class JUnitUtils
    * @return The ICompilationUnit or null if one could not be found.
    */
   public static ICompilationUnit findClass(IJavaProject javaProject, IType type)
-    throws Exception
   {
     String name = type.getElementName();
     Matcher matcher = TESTING_CLASS_NAME.matcher(name);
 
     IType found = null;
-
-    // test class uses a Test prefix or suffix, so remove that and search for
-    // the fully qualified result matching the same package name.
-    if (matcher.matches()){
-      name = matcher.group(2);
-      if (name == null){
-        name = matcher.group(1);
+    try{
+      // test class uses a Test prefix or suffix, so remove that and search for
+      // the fully qualified result matching the same package name.
+      if (matcher.matches()){
+        name = matcher.group(2);
+        if (name == null){
+          name = matcher.group(1);
+        }
+        String fqn = type.getPackageFragment().getElementName() + '.' + name;
+        found = javaProject.findType(fqn);
       }
-      String fqn = type.getPackageFragment().getElementName() + '.' + name;
-      found = javaProject.findType(fqn);
-    }
 
-    // no type found by removing Test prefix / suffix with the same package, so
-    // search for the unqualified name (sans the Test prefix / suffix).
-    if (found == null){
-      IType[] types = findTypes(javaProject, type, name);
-      if (types.length == 1){
-        found = types[0];
+      // no type found by removing Test prefix / suffix with the same package, so
+      // search for the unqualified name (sans the Test prefix / suffix).
+      if (found == null){
+        IType[] types = findTypes(javaProject, type, name);
+        if (types.length == 1){
+          found = types[0];
+        }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return found != null ? found.getCompilationUnit() : null;
   }
 
   private static IType[] findTypes(
       IJavaProject javaProject, IType ignore, String name)
-    throws Exception
   {
     ArrayList<IType> types = new ArrayList<IType>();
     for (IType type : TypeUtils.findTypes(javaProject, name)){
@@ -126,7 +128,6 @@ public class JUnitUtils
    * @return The test IMethod or null if one could not be found.
    */
   public static IMethod findTestMethod(ICompilationUnit testSrc, IMethod method)
-    throws Exception
   {
     String testName = "test" + StringUtils.capitalize(method.getElementName());
     StringBuffer testNameWithParams = new StringBuffer(testName);
@@ -143,11 +144,15 @@ public class JUnitUtils
       testName,
       method.getElementName(),
     };
-    for (String name : methodNames){
-      IMethod test = testSrc.getTypes()[0].getMethod(name, null);
-      if (test != null && test.exists()){
-        return test;
+    try{
+      for (String name : methodNames){
+        IMethod test = testSrc.getTypes()[0].getMethod(name, null);
+        if (test != null && test.exists()){
+          return test;
+        }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
     return null;
   }
@@ -161,50 +166,53 @@ public class JUnitUtils
    * @return The IMethod or null if one could not be found.
    */
   public static IMethod findClassMethod(ICompilationUnit src, IMethod testMethod)
-    throws Exception
   {
     ICompilationUnit testSrc = testMethod.getCompilationUnit();
     if (testSrc == null){
       return null;
     }
 
-    IType testType = testSrc.getTypes()[0];
+    try{
+      IType testType = testSrc.getTypes()[0];
 
-    // brute force since we can't assume a naming convention.
-    IMethod[] methods = src.getTypes()[0].getMethods();
-    for (IMethod method : methods){
-      String testName = "test" + StringUtils.capitalize(method.getElementName());
-      StringBuffer testNameWithParams = new StringBuffer(testName);
-      appendParameterNamesToMethodName(
-          testNameWithParams, method.getParameterTypes());
-      replaceIllegalCharacters(testNameWithParams);
+      // brute force since we can't assume a naming convention.
+      IMethod[] methods = src.getTypes()[0].getMethods();
+      for (IMethod method : methods){
+        String testName = "test" + StringUtils.capitalize(method.getElementName());
+        StringBuffer testNameWithParams = new StringBuffer(testName);
+        appendParameterNamesToMethodName(
+            testNameWithParams, method.getParameterTypes());
+        replaceIllegalCharacters(testNameWithParams);
 
-      StringBuffer nameWithParams = new StringBuffer(method.getElementName());
-      appendParameterNamesToMethodName(nameWithParams, method.getParameterTypes());
-      replaceIllegalCharacters(nameWithParams);
+        StringBuffer nameWithParams = new StringBuffer(method.getElementName());
+        appendParameterNamesToMethodName(nameWithParams, method.getParameterTypes());
+        replaceIllegalCharacters(nameWithParams);
 
-      String[] methodNames = new String[]{
-        testNameWithParams.toString(),
-        nameWithParams.toString(),
-      };
-      for (String name : methodNames){
-        if (testMethod.equals(testType.getMethod(name, null))){
-          return method;
+        String[] methodNames = new String[]{
+          testNameWithParams.toString(),
+          nameWithParams.toString(),
+        };
+        for (String name : methodNames){
+          if (testMethod.equals(testType.getMethod(name, null))){
+            return method;
+          }
         }
       }
-    }
 
-    for (IMethod method : methods){
-      String testName = "test" + StringUtils.capitalize(method.getElementName());
-      String[] methodNames = new String[]{
-        testName,
-        method.getElementName(),
-      };
-      for (String name : methodNames){
-        if (testMethod.equals(testType.getMethod(name, null))){
-          return method;
+      for (IMethod method : methods){
+        String testName = "test" + StringUtils.capitalize(method.getElementName());
+        String[] methodNames = new String[]{
+          testName,
+          method.getElementName(),
+        };
+        for (String name : methodNames){
+          if (testMethod.equals(testType.getMethod(name, null))){
+            return method;
+          }
         }
       }
+    }catch(CoreException ce){
+      throw new RuntimeException(ce);
     }
 
     return null;

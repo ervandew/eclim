@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
@@ -180,11 +181,9 @@ public abstract class AbstractRefactorCommand
    * @param commandLine The original command line.
    * @return The refactoring change.
    */
-  public abstract Refactor createRefactoring(CommandLine commandLine)
-    throws Exception;
+  public abstract Refactor createRefactoring(CommandLine commandLine);
 
   private ArrayList<HashMap<String,String>> previewChanges(Change change)
-    throws Exception
   {
     ArrayList<HashMap<String,String>> results =
       new ArrayList<HashMap<String,String>>();
@@ -210,7 +209,6 @@ public abstract class AbstractRefactorCommand
   }
 
   private String previewChange(Change change, String file)
-    throws Exception
   {
     if (change instanceof CompositeChange){
       for (Change c : ((CompositeChange)change).getChildren()){
@@ -225,7 +223,11 @@ public abstract class AbstractRefactorCommand
         String path = text.getFile().getLocation()
           .toOSString().replace('\\', '/');
         if (path.equals(file)){
-          return text.getPreviewContent(new NullProgressMonitor());
+          try{
+            return text.getPreviewContent(new NullProgressMonitor());
+          }catch(CoreException ce){
+            throw new RuntimeException(ce);
+          }
         }
       }
     }

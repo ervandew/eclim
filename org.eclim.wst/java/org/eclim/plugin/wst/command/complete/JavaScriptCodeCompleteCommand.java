@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,7 @@ import org.eclipse.wst.jsdt.core.Signature;
 public class JavaScriptCodeCompleteCommand
   extends AbstractCommand
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object execute(CommandLine commandLine)
     throws Exception
   {
@@ -74,10 +72,6 @@ public class JavaScriptCodeCompleteCommand
     private ArrayList<CodeCompleteResult> results =
       new ArrayList<CodeCompleteResult>();
 
-    /**
-     * {@inheritDoc}
-     * @see org.eclipse.wst.jsdt.core.CompletionRequestor#accept(CompletionProposal)
-     */
     @Override
     public void accept(CompletionProposal proposal)
     {

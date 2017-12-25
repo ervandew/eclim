@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 package org.eclim.plugin.cdt.project;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -109,7 +110,6 @@ public class CProjectManager
 
   @Override
   public void create(final IProject project, CommandLine commandLine)
-    throws Exception
   {
     // TODO: - support other project types:
     //         executable, shared library, static library
@@ -168,7 +168,6 @@ public class CProjectManager
 
   @Override
   public List<Error> update(IProject project, CommandLine commandLine)
-    throws Exception
   {
     PluginResources resources = (PluginResources)
       Services.getPluginResources(PluginResources.NAME);
@@ -196,7 +195,12 @@ public class CProjectManager
     ICProject cproject = CoreModel.getDefault().create(project);
     String dotcproject = project.getFile(".cproject").getRawLocation().toOSString();
     FileOffsets offsets = FileOffsets.compile(dotcproject);
-    String cprojectValue = IOUtils.toString(new FileInputStream(dotcproject));
+    String cprojectValue = null;
+    try{
+      cprojectValue = IOUtils.toString(new FileInputStream(dotcproject));
+    }catch(IOException ioe){
+      throw new RuntimeException(ioe);
+    }
     for (IPathEntry entry : entries){
       ICModelStatus status =
         CoreModel.validatePathEntry(cproject, entry, true, true);
@@ -210,13 +214,11 @@ public class CProjectManager
 
   @Override
   public void delete(IProject project, CommandLine commandLine)
-    throws Exception
   {
   }
 
   @Override
   public void refresh(IProject project, CommandLine commandLine)
-    throws Exception
   {
     ICProject cproject = CUtils.getCProject(project);
     CCorePlugin.getIndexManager().reindex(cproject);
@@ -226,7 +228,6 @@ public class CProjectManager
 
   @Override
   public void refresh(IProject project, IFile file)
-    throws Exception
   {
   }
 
@@ -245,7 +246,6 @@ public class CProjectManager
       String contents,
       IPathEntry entry,
       ICModelStatus status)
-    throws Exception
   {
     int line = 0;
     int col = 0;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ public interface Parser
   /**
    * Returns the classpath var that all entries from the build file will be
    * prefixed with.
+   *
+   * @return the classpath var.
    */
   public String getClasspathVar();
 
@@ -37,6 +39,5 @@ public interface Parser
    * @param filename The file to parse.
    * @return The array of Dependency.
    */
-  public Dependency[] parse(String filename)
-    throws Exception;
+  public Dependency[] parse(String filename);
 }

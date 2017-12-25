@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,7 @@ import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 public class CompletionComparator
   implements Comparator<CodeCompleteResult>
 {
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public int compare(CodeCompleteResult o1, CodeCompleteResult o2)
   {
     if(o1 == null && o2 == null){
@@ -59,9 +57,7 @@ public class CompletionComparator
         new String(o1.getCompletion()), new String(o2.getCompletion()));
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public boolean equals(Object obj)
   {
     if(obj instanceof CompletionComparator){

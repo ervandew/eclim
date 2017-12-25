@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ public class HierarchyNode
    * @param children The children for this node.
    */
   public HierarchyNode(IType type, List<HierarchyNode> children)
-    throws Exception
   {
     this.name = TypeUtils.getTypeSignature(new TypeInfo(type, null, null));
     this.qualified = JavaUtils.getFullyQualifiedName(type);
