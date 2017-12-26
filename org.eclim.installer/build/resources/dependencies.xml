@@ -60,4 +60,11 @@
       <site url="http://download.scala-ide.org/sdk/lithium/e46/scala212/stable/site"/>
     </dependency>
   </feature>
+
+   <feature id="kotlin">
+    <dependency id="org.jetbrains.kotlin.feature" version="0.8.2">
+      <site url="https://dl.bintray.com/jetbrains/kotlin/eclipse-plugin/0.8.2/"/>
+    </dependency>
+   </feature>
+
 </dependencies>

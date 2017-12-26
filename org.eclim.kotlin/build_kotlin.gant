@@ -1,0 +1,29 @@
+feature_kotlin = 'org.jetbrains.kotlin.feature'
+
+target(name: 'org.eclim.kotlin.classpath') {
+    pluginClasspath {
+        include(name: 'dropins/**/plugins/*kotlin*.jar')
+        include(name: 'plugins/*kotlin*.jar')
+    }
+}
+
+target(name: 'org.eclim.kotlin.plugin.compile') {
+
+    mkdir(dir: '${build.classes}/org.eclim.kotlin')
+    javac(
+        srcdir: 'org.eclim.kotlin/java',
+        destdir: '${build.classes}/org.eclim.kotlin',
+        classpathref: 'classpath',
+        deprecation: true)
+    {
+        include(name: '**/*.java')
+        classpath{fileset(dir: '${build.classes}/org.eclim.kotlin', includes: 'org.eclim/**')}
+        classpath {
+            pathelement(path: '${build.classes}/org.eclim.kotlin')
+            fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')
+        }
+    }
+    copy(todir: '${build.classes}/org.eclim.kotlin'){
+        fileset(dir: "org.eclim.kotlin/java", includes: "eclim/**", excludes: '**/*.java')
+    }
+}
