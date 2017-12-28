@@ -119,6 +119,17 @@ Step 1: Run the installer
   After the installer starts up, simply follow the steps in the wizard
   to install eclim.
 
+  .. note::
+
+    OSX users: eclim considers your eclipse home to be the subdirectory
+    that contains the eclipse ``plugins`` folder, ``eclipse.ini`` file,
+    etc.—which is the ``Eclipse.app/Contents/Eclipse`` subdirectory inside
+    your ``Eclipse.app`` installation. So when the installer prompts you
+    for the **Eclipse Home** location, put the absolute path to that
+    ``Eclipse.app/Contents/Eclipse`` subdirectory; for example:
+    "``/Users/foo/java-mars/Eclipse.app/Contents/Eclipse``" or
+    "``/Applications/eclipse/java-mars/Eclipse.app/Contents/Eclipse``".
+
   If your machine is behind a proxy, take a look at the instructions for
   :ref:`running the installer behind a proxy <installer-proxy>`.
 
@@ -279,6 +290,25 @@ dependencies, you can reference eclim's `installer dependencies`_ file).
 **Required Properties:**
 
 * **eclipse.home** - The absolute path to your eclipse installation.
+
+  .. note::
+
+    OSX users: eclim considers your eclipse installation to be in the
+    subdirectory that contains the eclipse ``plugins`` folder, ``eclipse.ini``
+    file, etc.—which is the ``Eclipse.app/Contents/Eclipse`` subdirectory inside
+    your ``Eclipse.app`` installation. So you must run the installer like this:
+
+    .. code-block:: bash
+
+      $ java \
+        -Dvim.files=$HOME/.vim \
+        -Declipse.home=/Users/foo/java-mars/Eclipse.app/Contents/Eclipse \
+        -jar eclim_eclim_release.jar install
+
+    ...replacing ``/Users/foo/java-mars/Eclipse.app/Contents/Eclipse`` with the
+    actual absolute path to the ``Eclipse.app/Contents/Eclipse`` directory in
+    your particular ``Eclipse.app`` installation.
+
 * **vim.files** (or **vim.skip=true**) - The absolute path to your vim files
   directory. Or if you want to omit the installation of the vim files
   (emacs-eclim users for example) you can supply ``-Dvim.skip=true`` instead.
