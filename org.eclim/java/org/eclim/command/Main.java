@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,6 +98,10 @@ public class Main
         public void run() {
           try{
             results[0] = command.execute(commandLine);
+          }catch(RuntimeException re){
+            Throwable cause = re.getCause();
+            results[0] = cause != null ? cause : re;
+            logger.error("Command failed", re);
           }catch(Exception e){
             results[0] = e;
             logger.error("Command failed", e);
@@ -125,15 +129,15 @@ public class Main
         }
         context.out.println(builder.create().toJson(result));
       }
-    }catch(ParseException e){
+    }catch(ParseException pe){
       context.out.println(
-          Services.getMessage(e.getClass().getName(), e.getMessage()));
+          Services.getMessage(pe.getClass().getName(), pe.getMessage()));
       logger.debug("Main - exit on error");
       System.exit(1);
-    }catch(Throwable e){
+    }catch(Throwable t){
       logger.debug("Command triggered exception: " +
-          Arrays.toString(context.getArgs()), e);
-      e.printStackTrace(context.err);
+          Arrays.toString(context.getArgs()), t);
+      t.printStackTrace(context.err);
 
       logger.debug("Main - exit on error");
       System.exit(1);
