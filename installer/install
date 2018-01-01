@@ -358,10 +358,12 @@ def step_plugins(options, eclim):
 def step_dependencies(options, eclipse, plugins):
   eclipse.gc()
 
-  dependencies = set()
+  dependencies = []
   sites = set()
   for plugin in plugins:
-    dependencies = dependencies.union(set(plugin.dependencies))
+    for dependency in plugin.dependencies:
+      if dependency not in dependencies:
+        dependencies.append(dependency)
 
   print('\nChecking for required eclipse dependencies...')
   actions = eclipse.to_install(dependencies)
