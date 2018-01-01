@@ -26,6 +26,7 @@ following requirements.
 - `Java Development Kit`_ 1.8 or greater
 - `Vim`_ 7.1 or greater
 - `Eclipse eclipse_version`_
+- python (2.7 or 3.x)
 - make
 - gcc
 

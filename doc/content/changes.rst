@@ -16,6 +16,20 @@
 History of Changes
 ==================
 
+.. _2.7.1:
+
+2.7.1 (Jan. 01, 2018)
+---------------------
+
+Eclim:
+  - Eclim updated to support Eclipse 4.7.2 (Oxygen)
+  - Eclim updated to latest versions of dltk, pydev, and scalaide.
+  - All new installer that supports several different eclipse file system
+    layouts, including the one from the eclipse GUI installer.
+  - Windows support has been removed.
+
+| :gitlog:`Git Log (2.7.1) <2.7.0...2.7.1>`
+
 .. _2.7.0:
 
 2.7.0 (Jul. 12, 2017)

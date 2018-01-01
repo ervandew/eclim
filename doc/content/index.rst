@@ -123,6 +123,19 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Jan 01, 2018
+-------------
+
+Eclim has an all new installer that runs entirely on the command line and now
+supports the new Eclipse directory layout used by the Eclipse GUI installer.
+
+.. note::
+
+  Windows support has been removed. Going forward eclim will only officially
+  support Linux and OSX.
+
+- :ref:`Eclim 2.7.1 <2.7.1>`
+
 Jul 12, 2017
 -------------
 
