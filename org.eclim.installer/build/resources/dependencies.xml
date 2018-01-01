@@ -50,7 +50,7 @@
   </feature>
 
   <feature id="pydev">
-    <dependency id="org.python.pydev.feature" version="5.7.0">
+    <dependency id="org.python.pydev.feature" version="6.2.0">
       <site url="http://pydev.org/updates"/>
     </dependency>
   </feature>

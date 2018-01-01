@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Eric Van Dewoestine
+ * Copyright (C) 2013 - 2017 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,9 @@ public class ListGrammarVersionsCommand
         double iversion = Double.parseDouble(parts[0] + '.' + parts[1]);
         for (String grammar : IPythonNature.Versions.ALL_PYTHON_VERSIONS){
           grammar = grammar.replace("python ", "");
+          if (grammar.equals("interpreter")){
+            continue;
+          }
           double gversion = Double.parseDouble(grammar);
           if (gversion <= iversion && grammar.charAt(0) == version.charAt(0)){
             grammars.add(grammar);

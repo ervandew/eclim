@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Eric Van Dewoestine
+ * Copyright (C) 2013 - 2017 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ public class SetInterpreterCommand
     }
 
     if (version == null){
-      version = nature.getVersion();
+      version = nature.getVersion(true);
     }
 
     // ensure the version is valid for the new interpreter
