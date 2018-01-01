@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,11 +34,7 @@ endif
 let command = result
 let command .= ' --nailgun-port ' . instance.port
 let command .= ' -command javadoc $*'
-if has('win32') || has('win64') || has('win32unix')
-  let command = 'cmd /c " ' . command . ' "'
-else
-  let command = substitute(command, '"', '', 'g')
-endif
+let command = substitute(command, '"', '', 'g')
 exec 'CompilerSet makeprg=' . escape(command, ' "')
 
 exec 'CompilerSet errorformat=' .

@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -42,14 +42,8 @@ endfunction " }}}
 function s:InitInterpreters() " {{{
   let interpreters = eclim#dltk#interpreter#GetInterpreters('ruby')
   if len(interpreters) == 0
-    let path = ''
-    if !has('win32') && !has('win64')
-      silent! let path =
-        \ substitute(eclim#util#System('which ruby 2> /dev/null'), '\n$', '', '')
-    else
-      let paths = escape(substitute($PATH, ';', ',', 'g'), ' ')
-      let path = substitute(findfile('ruby.exe', paths, ';'), '\', '/', 'g')
-    endif
+    let paths = escape(substitute($PATH, ';', ',', 'g'), ' ')
+    let path = substitute(findfile('ruby.exe', paths, ';'), '\', '/', 'g')
     let answer = 0
     if path != ''
       let answer = eclim#util#PromptConfirm(

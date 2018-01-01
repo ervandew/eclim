@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -213,9 +213,6 @@ function! s:GetResultsDir() " {{{
   let root = eclim#project#util#GetCurrentProjectRoot()
   let path = substitute(path, '<project>', root, '')
   let path = path != '' && path !~ '/$' ? path . '/' : path
-  if path != '' && has('win32unix')
-    let path = eclim#cygwin#CygwinPath(path)
-  endif
   return path
 endfunction " }}}
 

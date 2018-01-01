@@ -131,17 +131,11 @@ public class SearchCommandTest
       });
 
     result = results.get(0);
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      assertTrue(((String)result.get("filename"))
-          .endsWith("/include/stdio.h"));
-      assertEquals(result.get("message"), "");
-    }else{
-      assertEquals(result.get("filename"), "/usr/include/stdio.h");
-      assertEquals(result.get("message"), "");
-      assertEquals(result.get("column"), 12);
-      int line = ((Integer)result.get("line")).intValue();
-      assertTrue(line > 600 && line < 750);
-    }
+    assertEquals(result.get("filename"), "/usr/include/stdio.h");
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("column"), 12);
+    int line = ((Integer)result.get("line")).intValue();
+    assertTrue(line > 600 && line < 750);
 
     // EXIT_SUCCESS
     results = (List<Map<String,Object>>)
@@ -151,19 +145,11 @@ public class SearchCommandTest
       });
 
     result = results.get(0);
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      assertTrue(((String)result.get("filename"))
-          .endsWith("/include/stdlib.h"));
-      assertEquals(result.get("message"), "");
-      assertEquals(result.get("line"), 33);
-      assertEquals(result.get("column"), 9);
-    }else{
-      assertEquals(result.get("filename"), "/usr/include/stdlib.h");
-      assertEquals(result.get("message"), "");
-      assertEquals(result.get("column"), 9);
-      int line = ((Integer)result.get("line")).intValue();
-      assertTrue(line > 50 && line < 150);
-    }
+    assertEquals(result.get("filename"), "/usr/include/stdlib.h");
+    assertEquals(result.get("message"), "");
+    assertEquals(result.get("column"), 9);
+    line = ((Integer)result.get("line")).intValue();
+    assertTrue(line > 50 && line < 150);
   }
 
   @Test
@@ -201,19 +187,12 @@ public class SearchCommandTest
       });
 
     Map<String,Object> result = results.get(0);
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      assertTrue(((String)result.get("filename"))
-          .endsWith("/include/stdlib.h"));
-      assertEquals(result.get("line"), 34);
-      assertEquals(result.get("column"), 9);
-    }else{
-      assertEquals(result.get("filename"), "/usr/include/stdlib.h");
-      assertEquals(result.get("message"),
-          "#define	EXIT_FAILURE	1	/* Failing exit status.  */");
-      assertEquals(result.get("column"), 9);
-      int line = ((Integer)result.get("line")).intValue();
-      assertTrue(line > 50 && line < 150);
-    }
+    assertEquals(result.get("filename"), "/usr/include/stdlib.h");
+    assertEquals(result.get("message"),
+        "#define	EXIT_FAILURE	1	/* Failing exit status.  */");
+    assertEquals(result.get("column"), 9);
+    int line = ((Integer)result.get("line")).intValue();
+    assertTrue(line > 50 && line < 150);
   }
 
   @Test

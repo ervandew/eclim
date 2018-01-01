@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -63,25 +63,6 @@ function! eclim#python#django#manage#Manage(args) " {{{
         call eclim#util#Echo(result)
       endif
       return
-    endif
-
-    " on windows the django-admin.py script probably won't be on the path, so
-    " attempt to find it
-    if has('win32') || has('win64')
-      let interpreter = eclim#python#project#GetInterpreter()
-      if interpreter !~# '^python\d*'
-        let path = fnamemodify(interpreter, ':p:h')
-        if filereadable(path . '/' . g:EclimDjangoAdmin)
-          let command = interpreter . ' ' . path . '/' . g:EclimDjangoAdmin
-          let result = eclim#util#System(command . ' ' . a:args)
-          if v:shell_error
-            call eclim#util#EchoError(result)
-          elseif result != ''
-            call eclim#util#Echo(result)
-          endif
-          return
-        endif
-      endif
     endif
 
     call eclim#util#EchoError(

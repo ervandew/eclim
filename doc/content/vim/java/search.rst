@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -193,14 +193,6 @@ When invoked, the alternate search will perform the following\:
 This may seem a bit complicated for a simple search, but in practice it's
 actually quite simple, and as usual, I'm open to any and all comments and
 suggestions.
-
-.. note::
-
-  Alternate searching is bound to the performance of the file system and as
-  such, the response time on Windows can be significantly slower than Linux.
-  This is most noticable when searching for 'implementors', 'references', and
-  'all'.  The number of and depth of the directories in your Vim 'path' option
-  may also impact performance.
 
 Configuration
 -------------

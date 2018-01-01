@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,11 +32,7 @@ function! TestFindInclude() " {{{
   call vunit#PeekRedir()
 
   let name = bufname('%')
-  if has('win32') || has('win64')
-    call vunit#AssertTrue(name =~ '\\include\\stdio\.h', 'Wrong result file: ' . name)
-  else
-    call vunit#AssertEquals(name, '/usr/include/stdio.h', 'Wrong result file.')
-  endif
+  call vunit#AssertEquals(name, '/usr/include/stdio.h', 'Wrong result file.')
   bdelete
 
   call cursor(3, 14)
@@ -57,11 +53,7 @@ function! TestSearchElement() " {{{
   call vunit#PeekRedir()
 
   let name = bufname('%')
-  if has('win32') || has('win64')
-    call vunit#AssertTrue(name =~ '\\include\\stdlib\.h', 'Wrong result file: ' . name)
-  else
-    call vunit#AssertEquals(name, '/usr/include/stdlib.h', 'Wrong result file.')
-  endif
+  call vunit#AssertEquals(name, '/usr/include/stdlib.h', 'Wrong result file.')
   call vunit#AssertTrue(getline('.') =~ '#define\s\+EXIT_SUCCESS', 'Wrong line: ' . getline('.'))
   bdelete
 
@@ -71,11 +63,7 @@ function! TestSearchElement() " {{{
   call vunit#PeekRedir()
 
   let name = bufname('%')
-  if has('win32') || has('win64')
-    call vunit#AssertTrue(name =~ '\\include\\stdio\.h', 'Wrong result file: ' . name)
-  else
-    call vunit#AssertEquals(name, '/usr/include/stdio.h', 'Wrong result file.')
-  endif
+  call vunit#AssertEquals(name, '/usr/include/stdio.h', 'Wrong result file.')
   call vunit#AssertTrue(getline('.') =~ 'extern\s\+int\s\+puts\>', 'Wrong line: ' . getline('.'))
   bdelete
 

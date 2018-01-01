@@ -111,23 +111,13 @@ public class Eclim
     assertNotNull("Please configure property eclipse.home", ECLIM);
 
     String[] arguments = null;
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      String eclimCmd = ECLIM + ".bat";
-      String drive = eclimCmd.substring(0, 2);
-      arguments = new String[3];
-      arguments[0] = "cmd.exe";
-      arguments[1] = "/c";
-      arguments[2] = drive + " && \"" + eclimCmd + "\" --nailgun-port " +
-        PORT + " " + PRETTY + " " + COMMAND + " \"" + StringUtils.join(args, "\" \"") + "\"";
-    }else{
-      arguments = new String[args.length + 5];
-      System.arraycopy(args, 0, arguments, 5, args.length);
-      arguments[0] = ECLIM;
-      arguments[1] = "--nailgun-port";
-      arguments[2] = PORT;
-      arguments[3] = PRETTY;
-      arguments[4] = COMMAND;
-    }
+    arguments = new String[args.length + 5];
+    System.arraycopy(args, 0, arguments, 5, args.length);
+    arguments[0] = ECLIM;
+    arguments[1] = "--nailgun-port";
+    arguments[2] = PORT;
+    arguments[3] = PRETTY;
+    arguments[4] = COMMAND;
 
     System.out.println("Command: " + StringUtils.join(arguments, ' '));
 

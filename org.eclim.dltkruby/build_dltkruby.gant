@@ -6,11 +6,7 @@ target(name: 'org.eclim.dltkruby.test'){
   depends('test.init')
 
   // create interpreter before creating the project
-  if (Os.isFamily(Os.FAMILY_WINDOWS)){
-    property(name: 'ruby.path', value: 'C:/Ruby/bin/ruby.exe')
-  }else{
-    property(name: 'ruby.path', value: '/usr/bin/ruby')
-  }
+  property(name: 'ruby.path', value: '/usr/bin/ruby')
   sleep(seconds: 1)
   echo('removing ruby interpreter')
   eclim('-command dltk_remove_interpreter -l ruby -p "${ruby.path}"')

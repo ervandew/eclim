@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -167,12 +167,8 @@ The following is a list of some of the common Vim variables available.
 
   - | Firefox
     | let g:EclimBrowser = 'firefox'
-  - | Mozilla
-    | let g:EclimBrowser = 'mozilla'
-  - | Opera
-    | let g:EclimBrowser = 'opera'
-  - | IE
-    | let g:EclimBrowser = 'iexplore'
+  - | Chromium
+    | let g:EclimBrowser = 'chromium'
 
   Note: The above examples assume that the browser executable is in your path.
   On windows machines they won't be by default, so you will need to add them.

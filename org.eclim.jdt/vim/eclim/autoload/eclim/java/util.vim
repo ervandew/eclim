@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -312,9 +312,6 @@ function! eclim#java#util#ReadClassPrototype() " {{{
   let file = eclim#Execute(command)
   if string(file) != '0'
     let bufnum = bufnr('%')
-    if has('win32unix')
-      let file = eclim#cygwin#CygwinPath(file)
-    endif
     silent exec "keepjumps edit! " . escape(file, ' ')
 
     exec 'bdelete ' . bufnum

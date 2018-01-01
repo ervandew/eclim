@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -118,13 +118,6 @@ function! eclim#Execute(command, ...) " {{{
   let exec = get(options, 'exec', 0)
   let [retcode, result] = eclim#client#nailgun#Execute(instance, command, exec)
   let result = substitute(result, '\n$', '', '')
-
-  " not sure this is the best place to handle this, but when using the python
-  " client, the result has a trailing ctrl-m on windows.  also account for
-  " running under cygwin vim.
-  if has('win32') || has('win64') || has('win32unix')
-    let result = substitute(result, "\<c-m>$", '', '')
-  endif
 
   " an echo during startup causes an annoying issue with vim.
   "call eclim#util#Echo(' ')
@@ -271,10 +264,6 @@ function! eclim#SaveSettings(command, project) " {{{
       let index += 1
     endwhile
     call writefile([string(settings)], tempfile)
-
-    if has('win32unix')
-      let tempfile = eclim#cygwin#WindowsPath(tempfile)
-    endif
 
     let command = a:command
     let command = substitute(command, '<project>', a:project, '')
@@ -558,10 +547,6 @@ endfunction " }}}
 function! eclim#UserHome() " {{{
   if exists('g:EclimUserHome')
     let home = g:EclimUserHome
-  elseif has('win32unix')
-    let home = eclim#cygwin#WindowsHome()
-  elseif has('win32') || has('win64')
-    let home = expand('$USERPROFILE')
   else
     let home = $HOME
   endif

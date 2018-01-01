@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2016  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -129,12 +129,6 @@ function! TestCompleteCss() " {{{
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*font-weight.*"),
     \ 'Results does not contain font-weight')
 endfunction " }}}
-
-" html completion doesn't work on headless eclimd on windows due to hang in
-" native method call.
-if has('win32') || has('win64')
-  finish
-endif
 
 function! TestCompleteHtml() " {{{
   edit! php/complete/test.php

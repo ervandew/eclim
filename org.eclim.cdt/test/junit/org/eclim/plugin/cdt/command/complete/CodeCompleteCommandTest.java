@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,6 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completeAll()
   {
-    // c/c++ code completion disabled on windows
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      return;
-    }
-
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 
@@ -71,11 +66,6 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completePrefix()
   {
-    // c/c++ code completion disabled on windows
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      return;
-    }
-
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Cdt.TEST_PROJECT));
 

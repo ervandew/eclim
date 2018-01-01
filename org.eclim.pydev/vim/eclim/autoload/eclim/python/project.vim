@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2012 - 2014  Eric Van Dewoestine
+" Copyright (C) 2012 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -86,9 +86,6 @@ function! eclim#python#project#ProjectInterpreter(arg) " {{{
     if filereadable(fnamemodify(path, ':p'))
       let path = fnamemodify(path, ':p')
       let path = substitute(path, '\', '/', 'g')
-      if has('win32unix')
-        let path = eclim#cygwin#WindowsPath(path)
-      endif
     endif
 
     let command = s:command_set_interpreter
@@ -143,9 +140,6 @@ function! eclim#python#project#InterpreterAdd(args) " {{{
   let path = fnamemodify(args[-1], ':p')
   let path = substitute(path, '\ ', ' ', 'g')
   let path = substitute(path, '\', '/', 'g')
-  if has('win32unix')
-    let path = eclim#cygwin#WindowsPath(path)
-  endif
 
   call eclim#util#Echo("Adding interpreter...")
   let command = s:command_add_interperter

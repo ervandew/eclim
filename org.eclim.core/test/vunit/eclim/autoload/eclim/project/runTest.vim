@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2014  Eric Van Dewoestine
+" Copyright (C) 2014 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -44,11 +44,6 @@ function! TearDown() " {{{
 endfunction " }}}
 
 function! TestProjectRun() " {{{
-  " not currently supported on Windows.
-  if has('win32') || has('win64')
-    return
-  endif
-
   edit! eclim_unit_test/src/org/eclim/test/Main.java
 
   call vunit#AssertEquals(winnr('$'), 1)

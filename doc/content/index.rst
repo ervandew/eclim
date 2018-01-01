@@ -65,8 +65,8 @@ There are three primary usage scenarios in which eclim is designed to be used:
    eclipse interface full time, but want to use gvim as an embedded eclipse
    editor. Just like the previous use case, the eclim server is run inside of
    the eclipse gui and the embedded gvim will interact with it just like
-   external vim instances would. This feature is only support on Windows and
-   Unix systems (where gvim is compiled with the gtk gui).
+   external vim instances would. This feature is only support Linux systems
+   (where gvim is compiled with the gtk gui).
 
    .. note::
 

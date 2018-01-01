@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2014  Eric Van Dewoestine
+" Copyright (C) 2014 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -91,11 +91,7 @@ endfunction " }}}
 
 function! s:Delete(file) " {{{
   if isdirectory(a:file)
-    if has('win32') || has('win64')
-      call system('rmdir ' . a:file . ' /s /q')
-    else
-      call system('rm -r ' . a:file)
-    endif
+    call system('rm -r ' . a:file)
   else
     call delete(a:file)
   endif

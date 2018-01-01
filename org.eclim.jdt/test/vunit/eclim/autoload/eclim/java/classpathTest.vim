@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -158,21 +158,13 @@ function! TestCommandCompleteVarAndDir()
     call vunit#AssertTrue(result =~ '^JRE', 'Var does not begin with JRE.')
   endfor
 
-  if has('win32') || has('win64')
-    let results = eclim#java#classpath#CommandCompleteVarAndDir(
-      \ 'JRE', 'VariableCreate JRE /D', 23)
-    call vunit#AssertTrue(len(results) >= 1, 'Not enough dir results.')
-    call vunit#AssertTrue(eclim#util#ListContains(results, '/Documents\ and\ Settings/'),
-      \ 'Missing /Document and Settings/ entry.')
-  else
-    let results = eclim#java#classpath#CommandCompleteVarAndDir(
-      \ 'JRE', 'VariableCreate JRE /b', 23)
-    call vunit#AssertTrue(len(results) > 1, 'Not enough dir results.')
-    call vunit#AssertTrue(eclim#util#ListContains(results, '/boot/'),
-      \ 'Missing /boot/ entry.')
-    call vunit#AssertTrue(eclim#util#ListContains(results, '/bin/'),
-      \ 'Missing /bin/ entry.')
-  endif
+  let results = eclim#java#classpath#CommandCompleteVarAndDir(
+    \ 'JRE', 'VariableCreate JRE /b', 23)
+  call vunit#AssertTrue(len(results) > 1, 'Not enough dir results.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, '/boot/'),
+    \ 'Missing /boot/ entry.')
+  call vunit#AssertTrue(eclim#util#ListContains(results, '/bin/'),
+    \ 'Missing /bin/ entry.')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

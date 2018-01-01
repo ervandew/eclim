@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,8 +32,7 @@
 " client, so we are only going to default to python on windows machines
 " where there is an actual potential benefit to using it.
 call eclim#AddVimSetting(
-  \ 'Core', 'g:EclimNailgunClient',
-  \ has('python') && (has('win32') || has('win64')) ? 'python' : 'external',
+  \ 'Core', 'g:EclimNailgunClient', 'external',
   \ 'Sets the eclim nailgun client to use when communicating with eclimd.',
   \ '\(external\|python\)')
 
@@ -261,9 +260,6 @@ endif
 
 if !exists("g:EclimSeparator")
   let g:EclimSeparator = '/'
-  if has("win32") || has("win64")
-    let g:EclimSeparator = '\'
-  endif
 endif
 
 let g:EclimQuote = "['\"]"

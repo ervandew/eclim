@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -123,12 +123,6 @@ function! eclim#client#nailgun#Execute(instance, command, ...) " {{{
     let command = escape(command, '%#')
   endif
 
-  " on windows/cygwin where cmd.exe is used, we need to escape any '^'
-  " characters in the command args.
-  if has('win32') || has('win64') || has('win32unix')
-    let command = substitute(command, '\^', '^^', 'g')
-  endif
-
   let eclim = result . ' --nailgun-server localhost --nailgun-port ' . a:instance.port . ' ' . command
   if exec
     let eclim = '!' . eclim
@@ -141,19 +135,8 @@ endfunction " }}}
 function! eclim#client#nailgun#GetEclimCommand(home) " {{{
   " Gets the command to exexute eclim.
   let command = a:home . 'bin/eclim'
-
-  if has('win32') || has('win64') || has('win32unix')
-    let command = command . '.bat'
-  endif
-
   if !filereadable(command)
     return [1, 'Could not locate file: ' . command]
-  endif
-
-  if has('win32unix')
-    " in cygwin, we must use 'cmd /c' to prevent issues with eclim script +
-    " some arg containing spaces causing a failure to invoke the script.
-    return [0, 'cmd /c "' . eclim#cygwin#WindowsPath(command) . '"']
   endif
   return [0, '"' . command . '"']
 endfunction " }}}

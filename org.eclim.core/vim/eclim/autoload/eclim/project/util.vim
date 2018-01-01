@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -99,9 +99,6 @@ function! eclim#project#util#ProjectCreate(args) " {{{
 
   let folder = fnamemodify(expand(args[0]), ':p')
   let folder = substitute(folder, '\', '/', 'g')
-  if has('win32unix')
-    let folder = eclim#cygwin#WindowsPath(folder)
-  endif
   let command = substitute(s:command_create, '<folder>', folder, '')
 
   let name = substitute(a:args, '.* -p\s\+\(.\{-}\)\(\s\+-\(d\|n\)\>.*\|$\)', '\1', '')
@@ -192,9 +189,6 @@ endfunction " }}}
 function! eclim#project#util#ProjectImport(arg) " {{{
   let folder = fnamemodify(expand(a:arg), ':p')
   let folder = substitute(folder, '\', '/', 'g')
-  if has('win32unix')
-    let folder = eclim#cygwin#WindowsPath(folder)
-  endif
   let command = substitute(s:command_import, '<folder>', folder, '')
 
   let naturesDict = {}
@@ -283,9 +277,6 @@ function! eclim#project#util#ProjectMove(args) " {{{
   endif
   let dir = expand(dir)
   let dir = substitute(fnamemodify(dir, ':p'), '\', '/', 'g')
-  if has('win32unix')
-    let dir = eclim#cygwin#WindowsPath(dir)
-  endif
 
   if exists('g:EclimProjectMovePrompt') && !g:EclimProjectMovePrompt
     let response = 1
@@ -998,7 +989,7 @@ function! eclim#project#util#GetProjectRelativeFilePath(...) " {{{
 
   let file = substitute(fnamemodify(file, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'
-  if has('win32') || has('win64') || has('macunix')
+  if has('macunix')
     let pattern .= '\c'
   endif
   let result = substitute(file, get(project, 'path', '') . pattern, '', '')
@@ -1036,34 +1027,6 @@ function! eclim#project#util#GetProjects() " {{{
         continue
       endif
 
-      if has('win32unix')
-        " gather paths to translate
-        let winpaths = []
-        for project in results
-          call add(winpaths, project['path'])
-          if has_key(project, 'links')
-            for key in sort(keys(project['links']))
-              call add(winpaths, project['links'][key])
-            endfor
-          endif
-        endfor
-
-        let cygpaths = eclim#cygwin#CygwinPath(winpaths)
-
-        " update each project with the cygwin version of its paths
-        let index = 0
-        for project in results
-          let project['path'] = cygpaths[index]
-          let index += 1
-          if has_key(project, 'links')
-            for key in sort(keys(project['links']))
-              let project['links'][key] = cygpaths[index]
-              let index += 1
-            endfor
-          endif
-        endfor
-      endif
-
       for project in results
         let project['workspace'] = instance.workspace
       endfor
@@ -1086,7 +1049,7 @@ function! eclim#project#util#GetProject(path) " {{{
 
   let path = substitute(fnamemodify(path, ':p'), '\', '/', 'g')
   let pattern = '\(/\|$\)'
-  if has('win32') || has('win64') || has('macunix')
+  if has('macunix')
     let pattern .= '\c'
   endif
 

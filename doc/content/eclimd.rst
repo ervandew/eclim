@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ Starting and stopping of the headless eclipse instance is detailed below.
 
 **Starting eclimd**
 
-**Linux / Mac / BSD (and other unix based systems)**:
 To start eclimd from linux, simply execute the eclimd script found in your
-eclipse root directory: $ECLIPSE_HOME/eclimd
+eclipse root directory ($ECLIPSE_HOME/eclimd) or the path indicated at the end
+of the command line installer process.
 
 .. begin-eclimd-user
 
@@ -40,10 +40,6 @@ eclipse root directory: $ECLIPSE_HOME/eclimd
   be running vim.
 
 .. end-eclimd-user
-
-**Windows**: The easiest way to start eclimd in windows is to double click on
-the eclimd.bat file found in your eclipse root directory:
-%ECLIPSE_HOME%/eclimd.bat
 
 .. note::
   Even though an eclipse gui is not started in eclim's headless mode, eclipse
@@ -128,8 +124,8 @@ Embedded gvim
 -------------
 
 .. note::
-  Embedding is only supported on Windows and Unix systems (where gvim is
-  compiled with the gtk gui).
+  Embedding is only supported on Linux systems (where gvim is compiled with the
+  gtk gui).
 
   Embedding of macvim for OSX is not supported since macvim does not currently
   have the ability to be embedded like gvim. Macvim can still be used to open
@@ -355,8 +351,7 @@ cannot be determined for you.
 
 Below are some different ways in which you can configure your eclimd instances:
 
-1. All Users: Supply the nailgun port and eclipse workspace path when starting
-   eclimd:
+1. Supply the nailgun port and eclipse workspace path when starting eclimd:
 
    ::
 
@@ -371,8 +366,8 @@ Below are some different ways in which you can configure your eclimd instances:
 
      $ eclipse -vmargs -Dnailgun.server.port=9092
 
-2. Linux, OSX, BSD Users: Specify the port and workspace in eclimrc files and
-   start eclimd with the -f or --file argument:
+2. Specify the port and workspace in eclimrc files and start eclimd with the -f
+   or --file argument:
 
    ::
 
@@ -392,18 +387,6 @@ Below are some different ways in which you can configure your eclimd instances:
      The -f/--file argument is not supported by eclipse so the above option is
      only available when using a headless eclimd instance.
 
-3. Windows Users: Create Windows shortcuts:
-
-   - In Windows Explorer, open your eclipse folder.
-   - Hold down the right mouse button and drag the eclimd.bat file to where
-     you want the shortcut to exist (like your desktop) and release the
-     right mouse button.
-   - Choose "Create Shortcut(s) Here"
-   - Right click the shortcut and choose "Properties"
-   - | On the "Shortcut" tab edit the "Target:" field and append:
-     | -Dosgi.instance.area.default=\@user.home/workspace1 -Dnailgun.server.port=9091
-   - Repeat this process for your other workspaces.
-
 .. _eclimd-extdir:
 
 Hosting third party nailgun apps in eclimd
@@ -417,17 +400,9 @@ server.
 
 The ext dir that eclim reads from is located in your vim files directory:
 
-Linux / BSD / OSX:
-
 ::
 
   ~/.eclim/resources/ext
-
-Windows:
-
-::
-
-  $HOME/.eclim/resources/ext
 
 .. _eclim user: http://groups.google.com/group/eclim-user
 .. _vimplugin: http://vimplugin.org

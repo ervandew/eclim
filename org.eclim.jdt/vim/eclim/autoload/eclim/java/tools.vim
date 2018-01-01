@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -243,14 +243,8 @@ endfunction " }}}
 
 function! s:OpenConsole(id) " {{{
   call eclim#util#Echo('Executing...')
-
-  if has('win32') || has('win64')
-    call eclim#util#Exec('silent! !start jconsole ' . a:id)
-  else
-    call eclim#util#Exec('silent! !jconsole ' . a:id . ' &')
-  endif
+  call eclim#util#Exec('silent! !jconsole ' . a:id . ' &')
   exec "normal! \<c-l>"
-
   call eclim#util#Echo(' ')
 endfunction " }}}
 

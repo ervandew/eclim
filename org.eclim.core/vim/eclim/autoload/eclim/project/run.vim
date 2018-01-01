@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -82,11 +82,6 @@ function! eclim#project#run#ProjectRun(...) " {{{
   "   config: The name of the configuration to run for the current project
   
   if !eclim#EclimAvailable()
-    return
-  endif
-
-  if has('win32') || has('win64')
-    call eclim#util#EchoError(':ProjectRun is not currently supported on Windows')
     return
   endif
 

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -226,9 +226,6 @@ function! eclim#common#util#ReadFile() " {{{
   if string(file) != '0'
     let project = exists('b:eclim_project') ? b:eclim_project : ''
     let bufnum = bufnr('%')
-    if has('win32unix')
-      let file = eclim#cygwin#CygwinPath(file)
-    endif
     silent exec "keepalt keepjumps edit! " . escape(file, ' ')
     if project != ''
       let b:eclim_project = project

@@ -128,8 +128,7 @@ target(name: 'init'){
   // set location of vim files if not already set
   if (!hasVariable('vim.files')){
     property(name: 'vim.files', value: (
-      Os.isFamily(Os.FAMILY_WINDOWS) ?
-      '${user.home}/vimfiles' : '${user.home}/.vim'
+      '${user.home}/.vim'
     ))
   }
 
@@ -268,48 +267,30 @@ target(name: 'deploy.eclipse'){
     fileset(dir: '${build.plugins}', includes: '**/*')
   }
 
-  if (Os.isFamily(Os.FAMILY_WINDOWS)){
-    // remove the current eclimd/eclim/ng files
-    delete{ fileset(dir: '${eclipse}', includes: 'eclim*,ng.exe') }
-
-    // the vimfiles will look for eclim and ng in the plugin's bin dir in
-    // accordance to the .eclimd_instances file, but third party eclim clients
-    // may continue to expect them at the eclipse root, so we'll copy them
-    // there.
-    copy(todir: '${eclipse}'){
-      fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
-          includes: 'eclimd.bat,eclim.bat,ng.exe')
+  replace(file: '${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd',
+      token: '#$${eclipse.home}', value: 'ECLIM_ECLIPSE_HOME="${eclipse}"')
+  chmod(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
+      includes: '**/*', perm: 'ugo+x')
+  // java symlink support sucks, especially if the link is broken
+  exec(executable: 'rm', errorproperty: 'ignore'){
+    arg(line: '"${eclipse.dest}/eclim" "${eclipse.dest}/eclimd"')
+  }
+  // if ln supports it (gnu), make the links relative, otherwise fallback to
+  // absolute
+  try{
+    exec(executable: 'ln', dir: '${eclipse.dest}',
+        failonerror: true, errorproperty: 'ignore'){
+      arg(line: '-rs "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim" .')
     }
-  }else{
-    delete{
-      fileset(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
-          includes: '*.bat,*.exe')
+    exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
+      arg(line: '-rs "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd" .')
     }
-    replace(file: '${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd',
-        token: '#$${eclipse.home}', value: 'ECLIM_ECLIPSE_HOME="${eclipse}"')
-    chmod(dir: '${eclim.plugins}/org.eclim_${eclim.version}/bin',
-        includes: '**/*', perm: 'ugo+x')
-    // java symlink support sucks, especially if the link is broken
-    exec(executable: 'rm', errorproperty: 'ignore'){
-      arg(line: '"${eclipse.dest}/eclim" "${eclipse.dest}/eclimd"')
+  }catch(e){
+    exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
+      arg(line: '-s "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim" .')
     }
-    // if ln supports it (gnu), make the links relative, otherwise fallback to
-    // absolute
-    try{
-      exec(executable: 'ln', dir: '${eclipse.dest}',
-          failonerror: true, errorproperty: 'ignore'){
-        arg(line: '-rs "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim" .')
-      }
-      exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
-        arg(line: '-rs "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd" .')
-      }
-    }catch(e){
-      exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
-        arg(line: '-s "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclim" .')
-      }
-      exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
-        arg(line: '-s "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd" .')
-      }
+    exec(executable: 'ln', dir: '${eclipse.dest}', failonerror: true){
+      arg(line: '-s "${eclim.plugins}/org.eclim_${eclim.version}/bin/eclimd" .')
     }
   }
 
@@ -356,13 +337,6 @@ target(name: 'deploy.vim'){
 
 target(name: 'test.init'){
   depends('init')
-
-  // we can't overwrite jar files on windows while eclimd is running so we skip
-  // the deploy here and instead require the user to ensure the latest code has
-  // been deployed prior to testing.
-  if (!Os.isFamily(Os.FAMILY_WINDOWS)){
-    depends('deploy')
-  }
 
   property(file: 'org.eclim.core/test/eclimrc.test')
   property(name: 'test.include', value: '**/*Test')
@@ -499,8 +473,6 @@ target(name: 'installer'){
     {
       fileset(dir: "$build_plugins/$artifact_name", includes: '**/*'){
         exclude(name: 'bin/ng')
-        exclude(name: '**/*.bat')
-        exclude(name: '**/*.exe')
       }
     }
   }
@@ -896,12 +868,7 @@ def getGitAvailable(){
   }
 
   syspath = getSysPath()
-  if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-    ant.available(file: 'git.cmd', filepath: syspath, property: 'git.available')
-    ant.available(file: 'git.exe', filepath: syspath, property: 'git.available')
-  }else{
-    ant.available(file: 'git', filepath: syspath, property: 'git.available')
-  }
+  ant.available(file: 'git', filepath: syspath, property: 'git.available')
   return hasVariable('git.available')
 }
 
@@ -1235,28 +1202,14 @@ eclim = { args, port=null, failonerror=true, dir=null ->
   }
 
   try {
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      if (dir == null){
-        eclimCmd = binding.getVariable('eclipse') + '/eclim.bat'
-      }else{
-        eclimCmd = dir + '/eclim.bat'
-      }
-      drive = eclimCmd.substring(0, 2)
-      ant.exec(executable: 'cmd.exe', failonerror: failonerror,
-          output: 'build/eclim.log', append: false){
-        ant.arg(value: '/c')
-        ant.arg(value: "${drive} && \"${eclimCmd}\" --nailgun-port ${port} ${args}")
-      }
+    if (dir == null){
+      eclimCmd = binding.getVariable('eclipse') + '/eclim'
     }else{
-      if (dir == null){
-        eclimCmd = binding.getVariable('eclipse') + '/eclim'
-      }else{
-        eclimCmd = dir + '/eclim'
-      }
-      ant.exec(executable: eclimCmd, failonerror: failonerror,
-          output: 'build/eclim.log', append: false){
-        ant.arg(line: "--nailgun-port ${port} ${args}")
-      }
+      eclimCmd = dir + '/eclim'
+    }
+    ant.exec(executable: eclimCmd, failonerror: failonerror,
+        output: 'build/eclim.log', append: false){
+      ant.arg(line: "--nailgun-port ${port} ${args}")
     }
   }catch(BuildException be){
     log = new File("${basedir}/build/eclim.log")
@@ -1279,7 +1232,7 @@ def execute(exe, args, failonerror=true, output=null, suppresserror=false){
     failonerror: failonerror,
     logError: true,
   ]
-  values['executable'] = Os.isFamily(Os.FAMILY_WINDOWS) ? 'cmd.exe' : exe
+  values['executable'] = exe
   if (output != null){
     values['output'] = output
   }
@@ -1288,12 +1241,7 @@ def execute(exe, args, failonerror=true, output=null, suppresserror=false){
   }
 
   ant.exec(values){
-    if (Os.isFamily(Os.FAMILY_WINDOWS)){
-      ant.arg(value: '/c')
-      ant.arg(line: "${exe} ${args}")
-    }else{
-      ant.arg(line: args)
-    }
+    ant.arg(line: args)
   }
 
   return binding.getVariable(name).trim()

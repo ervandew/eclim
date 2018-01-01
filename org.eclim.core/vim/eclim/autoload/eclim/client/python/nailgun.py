@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2011  Eric Van Dewoestine
+Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -207,8 +207,7 @@ class Nailgun(object):
     """
     This function just mimics the function with the same name from the C
     client.  We don't really care which file descriptor the server tells us to
-    write to - STDOUT and STDERR are the same on VIM side (see eclim.bat,
-    "2>&1" at the end of command).
+    write to - STDOUT and STDERR are the same on VIM side.
     """
     received = self.recvBlocked(lenPayload)
     return received

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -141,10 +141,6 @@ function! eclim#common#locate#LocateFile(action, file, ...) " {{{
   else
     call eclim#util#Echo('Unable to locate file pattern "' . file . '".')
     return
-  endif
-
-  if has('win32unix')
-    let result = eclim#cygwin#CygwinPath(result)
   endif
 
   call eclim#util#GoToBufferWindowOrOpen(eclim#util#Simplify(result), action)
@@ -312,14 +308,6 @@ function! s:LocateFileSelection(sel) " {{{
   let sel = a:sel
   let prev_sel = b:selection
 
-  " bad hack for gvim on windows
-  let start_sel = b:start_selection
-  let double_defer = 0
-  if sel =~ '^[np]$' && (has('win32') || has('win64'))
-    let double_defer = b:start_selection == 1
-    let b:start_selection = 0
-  endif
-
   let winnr = winnr()
   noautocmd exec bufwinnr(b:results_bufnum) . 'winc w'
 
@@ -341,14 +329,7 @@ function! s:LocateFileSelection(sel) " {{{
 
   exec 'let b:selection = ' . sel
 
-  if double_defer
-    augroup locate_file
-      autocmd!
-      autocmd CursorMovedI <buffer> call <SID>LocateFileCompletionAutocmdDeferred()
-    augroup END
-  else
-    call s:LocateFileCompletionAutocmdDeferred()
-  endif
+  call s:LocateFileCompletionAutocmdDeferred()
 
   return ''
 endfunction " }}}
@@ -358,10 +339,6 @@ function! s:LocateFileSelect(action) " {{{
     let &updatetime = g:eclim_locate_default_updatetime
 
     let file = eclim#util#Simplify(b:completions[b:selection - 1].info)
-    if has('win32unix')
-      let file = eclim#cygwin#CygwinPath(file)
-    endif
-
     let bufnum = b:bufnum
     let winnr = b:winnr
     let winrestcmd = b:winrestcmd
@@ -627,9 +604,6 @@ endfunction " }}}
 
 function! eclim#common#locate#LocateFileFromFileList(pattern, file) " {{{
   let file = a:file
-  if has('win32unix')
-    let file = eclim#cygwin#WindowsPath(file)
-  endif
   if eclim#EclimAvailable(0)
     let command = substitute(s:LocateFileCommand(a:pattern), '<scope>', 'list', '')
     let command .= ' -f "' . file . '"'

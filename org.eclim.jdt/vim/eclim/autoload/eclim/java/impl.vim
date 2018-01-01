@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -68,11 +68,7 @@ function! eclim#java#impl#Constructor(first, last, bang) " {{{
   endif
   if len(properties) > 0
     let json = substitute(string(properties), "'", '"', 'g')
-    if has('win32') || has('win64')
-      let command .= ' -r "' . json . '"'
-    else
-      let command .= " -r '" . json . "'"
-    endif
+    let command .= " -r '" . json . "'"
   endif
 
   let result = eclim#Execute(command)

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2016  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,32 +43,6 @@ directory.
 
   $ echo "osgi.instance.area.default=@user.home/another_workspace" >> ~/.eclimrc
 
-.. _eclimd_options_windows:
-
-For Windows users there are a couple alternatives to the unsupported
-.eclimrc:
-
-1. Your first option is to add a new environment variable:
-
-   - | Windows 2000: :menuselection:`Control Panel --> System --> Advanced --> Environment Variables`
-     | Windows XP: :menuselection:`Control Panel --> Performance And Maintenance --> System --> Advanced --> Environment Variables`
-   - | Under "User variables..." click "New..."
-     | Variable Name: ECLIMD_OPTS
-     | Variable Value: -Dosgi.instance.area.default=\@user.home/another_workspace
-
-   - Then you can start eclimd as normal (via the eclimd.bat file).
-
-2. The second option is to create a shortcut to the eclimd.bat file:
-
-   - In Windows Explorer, open your eclipse folder.
-   - Hold down the right mouse button and drag the eclimd.bat file to where
-     you want the shortcut to exist (like your desktop) and release the
-     right mouse button.
-   - Choose "Create Shortcut(s) Here"
-   - Right click the shortcut and choose "Properties"
-   - | On the "Shortcut" tab edit the "Target:" field and append:
-     | -Dosgi.instance.area.default=\@user.home/another_workspace
-
 .. _eclim_proxy:
 
 How can I configure eclim to use a proxy?
@@ -94,10 +68,6 @@ directory.
 If your proxy requires authentication, you'll need to supply the
 ``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
 
-On Windows systems you can use the same steps
-:ref:`described <eclimd_options_windows>` above, for setting the workspace
-location, to also set the proxy settings.
-
 .. _eclim_memory:
 
 How do I specify jvm memory arguments for eclim (fix OutOfMemory errors).
@@ -120,10 +90,6 @@ options:
 
       # increase heap size
       -Xmx256M
-
-   On Windows systems you can use the same steps
-   :ref:`described <eclimd_options_windows>` above, for setting the workspace
-   location, to also specify the jvm memory args.
 
 If you are using the headed version of eclimd, then setting the jvm memory
 arguments for eclim is the same procedure as setting them for eclipse.  Details
@@ -153,19 +119,14 @@ To set the default encoding you can set the ``file.encoding`` system property
 according to your setup:
 
 1. Headless eclimd users on any unix variant (Linux, OSX, etc) can simply add
-   the property your .eclimrc file in your home directory:
+   the following property to your .eclimrc file in your home directory:
 
    ::
 
      # set the default file encoding
      file.encoding=utf-8
 
-2. Headless eclimd users on Windows can add the system property (eg.
-   ``-Dfile.encoding=utf-8``) using the same steps
-   :ref:`described <eclimd_options_windows>` above, for setting the workspace
-   location.
-
-3. Headed eclimd users can add the system property (eg.
+2. Headed eclimd users can add the system property (eg.
    ``-Dfile.encoding=utf-8``) to your eclipse.ini file found in your eclipse
    install's root directory. Be sure to add the property on a new line after
    the ``-vmargs`` line:

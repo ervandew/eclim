@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -32,15 +32,9 @@ endif
 " }}}
 
 " Script Variables {{{
-  let s:win_browsers = [
-      \ 'C:/Program Files/Opera/Opera.exe',
-      \ 'C:/Program Files/Mozilla Firefox/firefox.exe',
-      \ 'C:/Program Files/Internet Explorer/iexplore.exe'
-    \ ]
-
   let s:browsers = [
       \ 'xdg-open', 'chromium', 'opera', 'firefox', 'konqueror',
-      \ 'epiphany', 'mozilla', 'netscape', 'iexplore'
+      \ 'epiphany', 'mozilla', 'netscape'
     \ ]
 " }}}
 
@@ -49,11 +43,6 @@ function! eclim#web#OpenUrl(url, ...) " {{{
 
   if !exists('s:browser') || s:browser == ''
     let s:browser = s:DetermineBrowser()
-
-    " slight hack for IE which doesn't like the url to be quoted.
-    if s:browser =~ 'iexplore' && !has('win32unix')
-      let s:browser = substitute(s:browser, '"', '', 'g')
-    endif
   endif
 
   if s:browser == ''
@@ -159,22 +148,15 @@ function! s:DetermineBrowser() " {{{
         \ '\1 "<url>" \2', '')
     endif
 
-    if has("win32") || has("win64")
-      " add 'start' to run process in background if necessary.
-      if browser !~ '^[!]\?start'
-        let browser = 'start ' . browser
-      endif
-    else
-      " add '&' to run process in background if necessary.
-      if browser !~ '&\s*$' &&
-       \ browser !~ '^\(/[/a-zA-Z0-9]\+/\)\?\<\(links\|lynx\|elinks\|w3m\)\>'
-        let browser = browser . ' &'
-      endif
+    " add '&' to run process in background if necessary.
+    if browser !~ '&\s*$' &&
+     \ browser !~ '^\(/[/a-zA-Z0-9]\+/\)\?\<\(links\|lynx\|elinks\|w3m\)\>'
+      let browser = browser . ' &'
+    endif
 
-      " add redirect of std out and error if necessary.
-      if browser !~ '/dev/null'
-        let browser = substitute(browser, '\s*&\s*$', '&> /dev/null &', '')
-      endif
+    " add redirect of std out and error if necessary.
+    if browser !~ '/dev/null'
+      let browser = substitute(browser, '\s*&\s*$', '&> /dev/null &', '')
     endif
 
     if browser !~ '^\s*!'
@@ -183,28 +165,7 @@ function! s:DetermineBrowser() " {{{
 
   " user did not specify a browser, so attempt to find a suitable one.
   else
-    if has('win32') || has('win64') || has('win32unix')
-      " Note: this version may not like .html suffixes on windows 2000
-      if executable('rundll32')
-        let browser = 'rundll32 url.dll,FileProtocolHandler <url>'
-      endif
-      " this doesn't handle local files very well or '&' in the url.
-      "let browser = '!cmd /c start <url>'
-      if browser == ''
-        for name in s:win_browsers
-          if has('win32unix')
-            let name = eclim#cygwin#CygwinPath(name)
-          endif
-          if executable(name)
-            let browser = name
-            if has('win32unix')
-              let browser = '"' . browser . '"'
-            endif
-            break
-          endif
-        endfor
-      endif
-    elseif has('mac')
+    if has('mac')
       let browser = '!open "<url>"'
     else
       for name in s:browsers

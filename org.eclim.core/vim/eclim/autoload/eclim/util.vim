@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -181,11 +181,6 @@ endfunction " }}}
 " functions.
 function! eclim#util#EscapeBufferName(name)
   let name = a:name
-  " escaping the space in cygwin could lead to the dos path error message that
-  " cygwin throws when a dos path is referenced.
-  if !has('win32unix')
-    let name = escape(a:name, ' ')
-  endif
   return substitute(name, '\(.\{-}\)\[\(.\{-}\)\]\(.\{-}\)', '\1[[]\2[]]\3', 'g')
 endfunction " }}}
 
@@ -714,9 +709,6 @@ endfunction " }}}
 
 " MakeWithCompiler(compiler, bang, args) {{{
 " Executes :make using the supplied compiler.
-" Note: on windows the make program will be executed manually if the 'tee'
-" progam is available (only the cygwin version is currenty supported) to allow
-" the display of the make program output while running.
 function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
   if exists('g:current_compiler')
     let saved_compiler = g:current_compiler
@@ -727,10 +719,6 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
   if !exists('saved_compiler')
     let saved_makeprg = &makeprg
     let saved_errorformat = &errorformat
-  endif
-  if has('win32') || has('win64')
-    let saved_shellpipe = &shellpipe
-    set shellpipe=>\ %s\ 2<&1
   endif
 
   try
@@ -755,21 +743,6 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
       let &l:errorformat=substitute(&errorformat, '\M,%-G%.%#$', '', '')
       exec 'Dispatch' . a:bang . ' _ ' . a:args
 
-    " windows machines where 'tee' is available
-    elseif (has('win32') || has('win64')) &&
-         \ (executable('tee') || executable('wtee'))
-      doautocmd QuickFixCmdPre make
-      let resultfile = eclim#util#Exec(make_cmd, 2)
-      if filereadable(resultfile)
-        if a:bang == ''
-          exec 'cfile ' . escape(resultfile, ' ')
-        else
-          exec 'cgetfile ' . escape(resultfile, ' ')
-        endif
-        call delete(resultfile)
-      endif
-      silent doautocmd QuickFixCmdPost make
-
     " all other platforms
     else
       call eclim#util#EchoTrace('make: ' . make_cmd)
@@ -786,9 +759,6 @@ function! eclim#util#MakeWithCompiler(compiler, bang, args, ...)
     else
       let &makeprg = saved_makeprg
       let &errorformat = saved_errorformat
-    endif
-    if has('win32') || has('win64')
-      let &shellpipe = saved_shellpipe
     endif
     if exists('w:quickfix_dir')
       exec 'lcd ' . escape(w:quickfix_dir, ' ')
@@ -961,10 +931,6 @@ function! s:ParseLocationEntry(entry)
     if type == entry
       let type = ''
     endif
-  endif
-
-  if has('win32unix')
-    let file = eclim#cygwin#CygwinPath(file)
   endif
 
   let dict = {
@@ -1374,29 +1340,18 @@ function! eclim#util#System(cmd, ...)
   let saveshelltemp = &shelltemp
   let saveshellxquote = &shellxquote
 
-  if has("win32") || has("win64")
-    set shell=cmd.exe
-    set shellcmdflag=/c
-    set shellpipe=>%s\ 2>&1
-    set shellquote=
-    set shellredir=>%s\ 2>&1
-    set noshellslash
-    set shelltemp
-    set shellxquote=
+  if executable('/bin/bash')
+    set shell=/bin/bash
   else
-    if executable('/bin/bash')
-      set shell=/bin/bash
-    else
-      set shell=/bin/sh
-    endif
-    set shellcmdflag=-c
-    set shellpipe=2>&1\|\ tee
-    set shellquote=
-    set shellredir=>%s\ 2>&1
-    set noshellslash
-    set shelltemp
-    set shellxquote=
+    set shell=/bin/sh
   endif
+  set shellcmdflag=-c
+  set shellpipe=2>&1\|\ tee
+  set shellquote=
+  set shellredir=>%s\ 2>&1
+  set noshellslash
+  set shelltemp
+  set shellxquote=
 
   try
     " use exec
@@ -1406,19 +1361,7 @@ function! eclim#util#System(cmd, ...)
       let exec_output = len(a:000) > 1 ? a:000[1] : 0
       if exec_output
         let outfile = g:EclimTempDir . '/eclim_exec_output.txt'
-        if has('win32') || has('win64') || has('win32unix')
-          let cmd = substitute(cmd, '^!', '', '')
-          if has('win32unix')
-            let cmd = '!cmd /c "' . cmd . ' 2>&1 " | tee "' . outfile . '"'
-          elseif executable('tee') || executable('wtee')
-            let tee = executable('wtee') ? 'wtee' : 'tee'
-            let cmd = '!cmd /c "' . cmd . ' 2>&1 | ' . tee . ' "' . outfile . '" "'
-          else
-            let cmd = '!cmd /c "' . cmd . ' >"' . outfile . '" 2>&1 "'
-          endif
-        else
-          let cmd .= ' 2>&1| tee "' . outfile . '"'
-        endif
+        let cmd .= ' 2>&1| tee "' . outfile . '"'
       endif
 
       try
@@ -1440,18 +1383,6 @@ function! eclim#util#System(cmd, ...)
       let begin = localtime()
       let cmd = a:cmd
       try
-        " Dos is pretty bad at dealing with quoting of commands resulting in
-        " eclim calls failing if the path to the eclim bat/cmd file is quoted
-        " and there is a quoted arg in that command as well. We can fix this
-        " by wrapping the whole command in quotes with a space between the
-        " quotes and the actual command.
-        if (has('win32') || has('win64')) && a:cmd =~ '^"'
-          let cmd = '" ' . cmd . ' "'
-        " same issue, but handle the fact that we prefix eclim calls with
-        " 'cmd /c' for cygwin
-        elseif has('win32unix') && a:cmd =~? '^cmd /c "[a-z]'
-          let cmd = 'cmd /c " ' . substitute(cmd, '^cmd /c ', '', '') . ' "'
-        endif
         let result = system(cmd)
       finally
         call eclim#util#EchoTrace('system: ' . cmd, localtime() - begin)

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -417,15 +417,8 @@ function! eclim#lang#Refactor(command)
         if has_key(info, 'to')
           let file = info.from
           let newfile = info.to
-          if has('win32unix')
-            let newfile = eclim#cygwin#CygwinPath(newfile)
-          endif
         else
           let file = info.file
-        endif
-
-        if has('win32unix')
-          let file = eclim#cygwin#CygwinPath(file)
         endif
 
         " ignore unchanged directories
@@ -562,9 +555,6 @@ function! eclim#lang#RefactorPreviewLink()
       " split relative to the original window
       exec b:winnr . 'winc w'
 
-      if has('win32unix')
-        let file = eclim#cygwin#CygwinPath(file)
-      endif
       let name = fnamemodify(file, ':t:r')
       let ext = fnamemodify(file, ':e')
       exec printf('silent below new %s.current.%s', name, ext)

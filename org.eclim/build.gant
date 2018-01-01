@@ -2,28 +2,26 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 target(name: 'org.eclim.build.eclipse'){
   // build nailgun
-  if(!Os.isFamily(Os.FAMILY_WINDOWS)){
-    uptodate(property: 'ng.uptodate', targetfile: 'org.eclim/nailgun/ng') {
-      srcfiles(dir: 'org.eclim/nailgun'){
-        include(name: 'src/c/ng.c')
-        include(name: 'Makefile.in')
-        include(name: 'configure')
-        include(name: 'configure.ac')
-      }
+  uptodate(property: 'ng.uptodate', targetfile: 'org.eclim/nailgun/ng') {
+    srcfiles(dir: 'org.eclim/nailgun'){
+      include(name: 'src/c/ng.c')
+      include(name: 'Makefile.in')
+      include(name: 'configure')
+      include(name: 'configure.ac')
     }
-    try{
-      ngUptodate = binding.getVariable('ng.uptodate')
-    }catch(Exception e){
-      ngUptodate = false
-    }
-    if (!ngUptodate) {
-      exec(executable: 'org.eclim/nailgun/configure',
-        dir: 'org.eclim/nailgun', resolveexecutable: 'true', failonerror: 'true')
-      exec(executable: 'make', dir: 'org.eclim/nailgun', failonerror: 'true')
-    }
-    copy(file: 'org.eclim/nailgun/ng',
-        todir: '${build.plugins}/org.eclim_${eclim.version}/bin')
   }
+  try{
+    ngUptodate = binding.getVariable('ng.uptodate')
+  }catch(Exception e){
+    ngUptodate = false
+  }
+  if (!ngUptodate) {
+    exec(executable: 'org.eclim/nailgun/configure',
+      dir: 'org.eclim/nailgun', resolveexecutable: 'true', failonerror: 'true')
+    exec(executable: 'make', dir: 'org.eclim/nailgun', failonerror: 'true')
+  }
+  copy(file: 'org.eclim/nailgun/ng',
+      todir: '${build.plugins}/org.eclim_${eclim.version}/bin')
 
   // patch nailgun jar file
   jar(jarfile: '${build.plugins}/org.eclim_${eclim.version}/lib/nailgun-0.7.1.jar',

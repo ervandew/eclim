@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -181,9 +181,6 @@ public class JavaCommand
     IVMInstall jvm = JavaRuntime.getVMInstall(javaProject);
     if (jvm != null){
       String path = jvm.getInstallLocation() + "/bin/java";
-      if (Os.isFamily(Os.FAMILY_WINDOWS)){
-        path += ".exe";
-      }
       if (new File(path).exists()){
         java.setJvm(path);
       }

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2017  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -70,8 +70,6 @@
 
   let s:tree_count = 0
   let s:refresh_nesting = 0
-
-  let s:has_ls = executable('ls') && !(has('win32') || has('win64'))
 
   let s:vcol = 0
 " }}}
@@ -812,10 +810,8 @@ function! eclim#tree#ExpandDir() " {{{
   let contents = eclim#tree#ListDir(dir)
   let [dirs, files] = s:NormalizeEntries(contents)
 
-  if s:has_ls
-    call map(dirs, 'substitute(v:val, "@$", "", "")')
-    call map(files, 'substitute(v:val, "@$", "", "")')
-  endif
+  call map(dirs, 'substitute(v:val, "@$", "", "")')
+  call map(files, 'substitute(v:val, "@$", "", "")')
 
   " filter files
   let filtered = []
@@ -913,24 +909,22 @@ endfunction " }}}
 
 function! s:RewriteSpecial(file) " {{{
   let file = a:file
-  if s:has_ls
-    let info = ''
-    let file = substitute(file, '@$', '', '')
+  let info = ''
+  let file = substitute(file, '@$', '', '')
 
-    " symbolic links
-    let tmpfile = file =~ '/$' ? strpart(file, 0, len(file) - 1) : file
-    if getftype(tmpfile) == 'link'
-      if info == ''
-        let info = eclim#util#System('ls -ldF ' . tmpfile)
-      endif
-      let linkto = substitute(info, '.*-> \(.*\)\n', '\1', '')
-
-      if linkto =~ '//$'
-        let linkto = strpart(linkto, 0, len(linkto) - 1)
-      endif
-
-      let file = tmpfile . ' -> ' . linkto
+  " symbolic links
+  let tmpfile = file =~ '/$' ? strpart(file, 0, len(file) - 1) : file
+  if getftype(tmpfile) == 'link'
+    if info == ''
+      let info = eclim#util#System('ls -ldF ' . tmpfile)
     endif
+    let linkto = substitute(info, '.*-> \(.*\)\n', '\1', '')
+
+    if linkto =~ '//$'
+      let linkto = strpart(linkto, 0, len(linkto) - 1)
+    endif
+
+    let file = tmpfile . ' -> ' . linkto
   endif
 
   if exists('b:links')
@@ -982,32 +976,19 @@ endfunction " }}}
 function! eclim#tree#ListDir(dir, ...) " {{{
   " Optional args:
   "   execute_actions
-  if s:has_ls
-    let ls = 'ls -1F'
-    if b:view_hidden
-      let ls .= 'A'
-    endif
-    let contents = split(eclim#util#System(ls . " '" . a:dir . "'"), '\n')
-    if !b:view_hidden && &wildignore != ''
-      let pattern = substitute(escape(&wildignore, '.~'), '\*', '.*', 'g')
-      let pattern = '\(' . join(split(pattern, ','), '\|') . '\)$'
-      " Note: symlinks have a trailing @, so remove that before comparing
-      " against pattern
-      call filter(contents, 'substitute(v:val, "@$", "", "") !~ pattern')
-    endif
-    call map(contents, 'a:dir . v:val')
-  else
-    if !b:view_hidden
-      let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*', 1), '\n')
-    else
-      let contents = split(eclim#util#Globpath(escape(a:dir, ','), '*'), '\n')
-      let contents = split(eclim#util#Globpath(escape(a:dir, ','), '.*'), '\n') + contents
-    endif
-
-    " append trailing '/' to dirs if necessary
-    call map(contents,
-      \ 'isdirectory(v:val) ? substitute(v:val, "\\([^/]\\)$", "\\1/", "") : v:val')
+  let ls = 'ls -1F'
+  if b:view_hidden
+    let ls .= 'A'
   endif
+  let contents = split(eclim#util#System(ls . " '" . a:dir . "'"), '\n')
+  if !b:view_hidden && &wildignore != ''
+    let pattern = substitute(escape(&wildignore, '.~'), '\*', '.*', 'g')
+    let pattern = '\(' . join(split(pattern, ','), '\|') . '\)$'
+    " Note: symlinks have a trailing @, so remove that before comparing
+    " against pattern
+    call filter(contents, 'substitute(v:val, "@$", "", "") !~ pattern')
+  endif
+  call map(contents, 'a:dir . v:val')
 
   if exists('b:dir_actions') && (!a:0 || a:1)
     for l:Action in b:dir_actions

@@ -26,7 +26,8 @@ following requirements.
 - `Java Development Kit`_ 1.8 or greater
 - `Vim`_ 7.1 or greater
 - `Eclipse eclipse_version`_
-- Mac and Linux users must also have make and gcc installed.
+- make
+- gcc
 
   **Minimum Vim Settings**: In order for eclim to function properly, there is a
   minimum set of vim options that must be enabled in your vimrc file (:h vimrc).
@@ -41,7 +42,7 @@ following requirements.
       :echo &compatible
 
     Which should output '0', but if not, then add the following to your ~/.vimrc
-    files (_vimrc on Windows):
+    files:
 
     .. code-block:: vim
 
@@ -57,7 +58,7 @@ following requirements.
 
     Which should output 'filetype detection:ON  plugin:ON indent:ON', showing
     at least 'ON' for 'detection' and 'plugin', but if not, then update your
-    ~/.vimrc (_vimrc on Windows) to include:
+    ~/.vimrc to include:
 
     .. code-block:: vim
 
@@ -142,20 +143,12 @@ If you plan on using eclim without the eclipse gui, then:
 
 - start the eclimd server.
 
-  - **Linux / Mac / BSD (and other unix based systems)**:
-    To start eclimd from linux, simply execute the eclimd script found in your
-    eclipse root directory:
+  To start eclimd, simply execute the eclimd script found in your eclipse root
+  directory (or the path specified at the end of the command line installer):
 
-    ::
+  ::
 
-      $ $ECLIPSE_HOME/eclimd
-
-  - **Windows**: The easiest way to start eclimd in windows is to double
-    click on the eclimd.bat file found in your eclipse root directory:
-
-    ::
-
-      %ECLIPSE_HOME%/eclimd.bat
+    $ $ECLIPSE_HOME/eclimd
 
 Once you have the eclim daemon (headed or headless) running, you can then test
 eclim:

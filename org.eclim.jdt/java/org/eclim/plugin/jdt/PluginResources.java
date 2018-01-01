@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2017  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,46 +195,6 @@ public class PluginResources
             logger.debug("Trying location: {}", jreSrc);
             if(jreSrc.toFile().exists()){
               break;
-            }
-          }
-
-          // other possibilities on windows machines:
-          // library path: C:/.../jre<version>/
-          // src archive:  C:/.../jdk<version>/src.zip
-          //   or
-          // library path: C:/.../jre<major>/
-          // src archive:  C:/.../jdk1.<major>.<minor>_<patch>/src.zip
-          if (!jreSrc.toFile().exists() && Os.isFamily(Os.FAMILY_WINDOWS)){
-            String path = libraryPath.toOSString()
-              .replaceFirst("\\\\(lib\\\\)rt.jar", "");
-
-            // first scenerio
-            String altHome = path.replaceFirst(
-                "jre(\\d+\\.\\d+\\.\\d+_\\d+)", "jdk$1");
-            if (!altHome.equals(path)){
-              jreSrc = new Path(altHome).append("src.zip");
-            }
-
-            // second scenerio
-            if (!jreSrc.toFile().exists()){
-              String base = FileUtils.getBaseName(path);
-              final String major = base.replaceFirst("^jre(\\d)$", "$1");
-              if (!major.equals(base)){
-                File dir = new File(FileUtils.getFullPath(path));
-                String[] jdks = dir.list(new FilenameFilter(){
-                  private final Pattern JDK =
-                    Pattern.compile("jdk\\d+\\." + major + "\\.\\d+_\\d+");
-                  public boolean accept(File dir, String name){
-                    return JDK.matcher(name).matches();
-                  }
-                });
-                for (String jdk : jdks){
-                  jreSrc = new Path(dir.toString()).append(jdk).append("src.zip");
-                  if (jreSrc.toFile().exists()){
-                    break;
-                  }
-                }
-              }
             }
           }
 
