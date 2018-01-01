@@ -333,13 +333,15 @@ def step_plugins(options, eclim):
       plugin = plugins[choice]
       requires = plugin.get('requires')
       if requires:
-        for requirement in requires:
+        for requirement in reversed(requires):
           if requirement not in result:
-            print(
-              '%s requires %s, adding to selected' %
-              (plugin['id'], requirement)
-            )
-            result.append(plugins_by_id[requirement])
+            required = plugins_by_id[requirement]
+            if required not in result:
+              print(
+                '%s requires %s, adding to selected' %
+                (plugin['id'], requirement)
+              )
+              result.insert(len(result) - 1, required)
       result.append(plugins_by_id[plugin['id']])
 
     print('Eclim plugins to install:')
