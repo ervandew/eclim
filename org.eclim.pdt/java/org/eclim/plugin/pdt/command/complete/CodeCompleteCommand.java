@@ -60,12 +60,9 @@ public class CodeCompleteCommand
 
   @Override
   protected ScriptCompletionProposalCollector getCompletionCollector(
-      ISourceModule module)
+      IDocument document, ISourceModule module)
   {
-    // Using a regular document doesn't work... if at some point passing null
-    // for the document stops working, then look at:
-    // php.internal.core.codeassist.contexts.AbstractCompletionContext.determineDocument
-    return new PHPCompletionProposalCollector(null /*document*/, module, true);
+    return new PHPCompletionProposalCollector(document, module, true);
   }
 
   @Override
@@ -99,6 +96,11 @@ public class CodeCompleteCommand
       String completion = line;
       completion = completion.replace(prefix, StringUtils.EMPTY);
       completion = completion.replace(suffix, StringUtils.EMPTY);
+
+      // remove trailing ::
+      if (completion.endsWith("::")){
+        completion = completion.substring(0, completion.length() - 2);
+      }
 
       matcher = METHOD_WITH_ARGS.matcher(completion);
       if (matcher.find()){

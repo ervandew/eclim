@@ -8,13 +8,13 @@
   </feature>
 
   <feature id="dltk">
-    <dependency id="org.eclipse.dltk.core" version="5.8.0">
+    <dependency id="org.eclipse.dltk.core" version="5.8.2">
       <site url="http://download.eclipse.org/releases/oxygen/"/>
     </dependency>
   </feature>
 
   <feature id="dltkruby">
-    <dependency id="org.eclipse.dltk.ruby" version="5.8.0">
+    <dependency id="org.eclipse.dltk.ruby" version="5.8.2">
       <site url="http://download.eclipse.org/releases/oxygen/"/>
     </dependency>
   </feature>
@@ -26,7 +26,7 @@
   </feature>
 
   <feature id="pdt">
-    <dependency id="org.eclipse.php" version="5.0.0">
+    <dependency id="org.eclipse.php" version="5.2.0">
       <site url="http://download.eclipse.org/releases/oxygen/"/>
     </dependency>
   </feature>

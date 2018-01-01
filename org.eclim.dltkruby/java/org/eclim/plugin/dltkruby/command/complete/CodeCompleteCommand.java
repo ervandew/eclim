@@ -57,7 +57,7 @@ public class CodeCompleteCommand
 
   @Override
   protected ScriptCompletionProposalCollector getCompletionCollector(
-      ISourceModule module)
+      IDocument document, ISourceModule module)
   {
     return new RubyCompletionProposalCollector(module);
   }

@@ -68,7 +68,8 @@ public abstract class AbstractCodeCompleteCommand
       .getInt(PreferenceConstants.CODEASSIST_TIMEOUT);*/
     int timeout = 5000;
     ISourceModule module = getSourceModule(ifile);
-    ScriptCompletionProposalCollector collector = getCompletionCollector(module);
+    ScriptCompletionProposalCollector collector =
+      getCompletionCollector(document, module);
     module.codeComplete(offset, collector, timeout);
 
     IScriptCompletionProposal[] proposals =
@@ -105,11 +106,12 @@ public abstract class AbstractCodeCompleteCommand
   /**
    * Get the completion collector used to collect the completion proposals.
    *
+   * @param document The IDocument instance.
    * @param module The source module.
    * @return The completion collector.
    */
   protected abstract ScriptCompletionProposalCollector getCompletionCollector(
-      ISourceModule module);
+      IDocument document, ISourceModule module);
 
   /**
    * Get the completion from the proposal.
