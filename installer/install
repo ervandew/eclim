@@ -86,6 +86,7 @@ def main():
   # make the terminal easily accessible w/out passing it around everywhere
   __builtins__.terminal = Terminal(debug=options.debug)
 
+  terminal.debug('python version: %s', platform.python_version())
   terminal.debug('eclim version: %s', eclim.version)
   terminal.debug('installer directory: %s', eclim.home)
 
