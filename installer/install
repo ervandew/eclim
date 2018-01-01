@@ -1,0 +1,1203 @@
+#!/usr/bin/env python
+
+# Copyright (C) 2017  Eric Van Dewoestine
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+##
+# Command line installer for eclim.
+#
+# Author: Eric Van Dewoestine
+##
+from __future__ import print_function
+
+import collections
+import json
+import optparse
+import os
+import platform
+import re
+import readline
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+import zipfile
+
+from xml.dom import minidom
+from xml.etree import ElementTree
+
+def main():
+  eclim = Eclim()
+  if not eclim.version:
+    print('Unable to determine the eclim version.')
+    report_bug()
+
+  parser = optparse.OptionParser(prog='eclim_%s.bin' % eclim.version)
+  parser.add_option(
+    '--debug',
+    dest='debug',
+    action='store_true',
+    help='Print debug information.',
+  )
+  parser.add_option(
+    '--proxy',
+    dest='proxy',
+    help=
+      'Proxy information ([username:password]@host:port): '
+      'eg. proxy.mycompany.com:8080',
+  )
+  parser.add_option(
+    '--yes',
+    dest='yes',
+    action='store_true',
+    help='Instead of prompting y/n on some steps, assume the answer is yes.',
+  )
+  parser.add_option(
+    '--eclipse',
+    dest='eclipse',
+    help='The eclipse home directory to use.',
+  )
+  parser.add_option(
+    '--vimfiles',
+    dest='vimfiles',
+    help='The vimfiles directory to use.',
+  )
+  parser.add_option(
+    '--plugins',
+    dest='plugins',
+    help='Comma separated list of eclim plugins to install (eg. jdt,pydev,pdt).',
+  )
+
+  options, args = parser.parse_args(sys.argv[1:])
+
+  # make the terminal easily accessible w/out passing it around everywhere
+  __builtins__.terminal = Terminal(debug=options.debug)
+
+  terminal.debug('eclim version: %s', eclim.version)
+  terminal.debug('installer directory: %s', eclim.home)
+
+  if args == ['uninstall']:
+    uninstall(options, eclim)
+  elif not args:
+    install(options, eclim)
+  else:
+    print('abort: unrecognized args: %s' % ' '.join(args))
+    sys.exit(1)
+
+def install(options, eclim):
+  print('Welcome to the installer for eclim %s.\n' % eclim.version)
+
+  eclipse = step_eclipse(options)
+  if not options.eclipse:
+    print('')
+
+  eclim.vimfiles = step_vimfiles(options)
+  if not options.eclipse:
+    print('')
+
+  plugins = step_plugins(options, eclim)
+  if not options.plugins:
+    print('')
+
+  step_dependencies(options, eclipse, plugins)
+  step_update_site(eclim, plugins)
+  step_eclim_uninstall(eclim, eclipse)
+  step_eclim_install(eclim, eclipse, plugins)
+
+def uninstall(options, eclim):
+  print('Welcome to the eclim uninstaller.\n')
+  print('Before eclim can be uninstalled, you will need to specify the ')
+  print('eclipse and vimfiles locations where you currently have eclim ')
+  print('installed.\n')
+
+  eclipse = step_eclipse(options)
+  print('')
+
+  eclim.vimfiles = step_vimfiles(options, uninstall=True)
+  print('')
+
+  step_eclim_uninstall(eclim, eclipse, uninstall=True)
+
+def step_eclipse(options):
+  proxy = Proxy(options.proxy)
+
+  if options.eclipse:
+    home = options.eclipse
+    if home.startswith('~'):
+      home = os.path.expanduser(home)
+    eclipse = Eclipse(home, proxy)
+    if not eclipse.valid():
+      print(
+        'The eclipse launcher/executable could not be found in: %s' % home
+      )
+      sys.exit(1)
+    return eclipse
+
+  darwin = platform.system().lower() == 'darwin'
+  if darwin:
+    print('Please specify the path to your Eclipse.app directory.')
+    print('  Ex: /Applications/Eclipse.app')
+    print('      ~/Applications/Eclipse.app')
+  else:
+    print('Please specify the root directory of your eclipse install.')
+    print('  Ex: /opt/eclipse')
+    print('      /usr/local/eclipse')
+
+  eclipse = None
+  while not eclipse:
+    home = terminal.prompt_directory()
+    eclipse = Eclipse(home, proxy)
+    if not eclipse.valid():
+      print(
+        'The eclipse launcher/executable could not be found in that directory.'
+      )
+      eclipse = None
+
+  return eclipse
+
+def step_vimfiles(options, uninstall=False):
+  if options.vimfiles:
+    vimfiles = options.vimfiles
+    if vimfiles.startswith('~'):
+      vimfiles = os.path.expanduser(vimfiles)
+    if vimfiles and not os.access(vimfiles, os.W_OK):
+      print('You do not appear to have write access to that directory.')
+      sys.exit(1)
+    return vimfiles
+
+  if uninstall:
+    print(
+      'Please specify the directory where you currently '
+      'have the eclim vimfiles installed.'
+    )
+    print(
+      'If you do not have the eclim vimfiles installed '
+      '(eg: emacs-eclim users), then type: skip'
+    )
+  else:
+    print(
+      'Please specify the directory where you would like '
+      'the eclim vimfiles installed.'
+    )
+    print(
+      'If you do not want to install the vimfiles '
+      '(eg: emacs-eclim users), then type: skip'
+    )
+
+  print('  Ex: ~/.vim')
+  print('      ~/.vim/bundle/eclim')
+
+  vimfiles = None
+  while not vimfiles:
+    vimfiles = terminal.prompt_directory(ignore='skip')
+    if vimfiles == 'skip':
+      return vimfiles
+
+    if vimfiles and not os.access(vimfiles, os.W_OK):
+      print('You do not appear to have write access to that directory.')
+      vimfiles = None
+
+  return vimfiles
+
+def step_plugins(options, eclim):
+  plugins_by_id = {p.name: p for p in eclim.plugins()}
+  plugins = [
+    {'id': 'jdt', 'name': 'Java Development', 'requires': None},
+    {'id': 'wst', 'name': 'Web Development', 'requires': None},
+    {'id': 'cdt', 'name': 'C/C++ Development', 'requires': None},
+    {'id': 'dltkruby', 'name': 'Ruby Development', 'requires': ['dltk']},
+    {'id': 'pdt', 'name': 'Php Development', 'requires': ['dltk', 'wst']},
+    {'id': 'pydev', 'name': 'Python Development', 'requires': None},
+    {'id': 'sdt', 'name': 'Scala Development', 'requires': ['jdt']},
+    {'id': 'groovy', 'name': 'Groovy Development', 'requires': ['jdt']},
+    {'id': 'adt', 'name': 'Android Development', 'requires': ['jdt', 'wst']},
+  ]
+  names = {p['id']: p['name'] for p in plugins}
+
+  if options.plugins:
+    requires_by_id = {p['id']: p['requires'] for p in plugins}
+    result = []
+    invalid = False
+    for choice in options.plugins.split(','):
+      if choice not in requires_by_id:
+        invalid = True
+        print('invalid plugin name: %s' % choice)
+        continue
+
+      requires = requires_by_id[choice]
+      if requires:
+        for requirement in requires:
+          if requirement not in result:
+            result.append(plugins_by_id[requirement])
+      result.append(plugins_by_id[choice])
+
+    if invalid:
+      sys.exit(1)
+
+    print('Eclim plugins to install:')
+    for r in result:
+      if r.name in names:
+        print('  %s' % names[r.name])
+      else:
+        terminal.debug('  %s', r.name)
+
+    return result
+
+  print('Choose which eclim features you would like to install.')
+  print('Type the number for each feature you want to install:')
+  print('  Ex (Java and Python): 0 5')
+  print('  Ex (Java and Python): 0,5')
+  print('  Ex (Java, Web, and C/C++): 0-2')
+  for i, plugin in enumerate(plugins):
+    print('%s) %s' % (i, plugin['name']))
+
+  chosen = []
+  while not chosen:
+    response = terminal.prompt('> ')
+    buf = None
+    invalid = []
+    index = -1
+    for part in re.split(r'(\d+)', response.strip()):
+      index += len(part)
+      part = part.strip()
+      if not part or part == ',':
+        continue
+
+      if part.isdigit():
+        if buf and buf.endswith('-'):
+          chosen.append('%s%s' % (buf, part))
+          buf = None
+        else:
+          if buf and buf.isdigit():
+            chosen.append(buf)
+          buf = part
+      elif buf and part == '-':
+        buf += part
+      elif part == ',':
+        if buf.isdigit():
+          chosen.append(buf)
+          buf = None
+        else:
+          invalid.append('Unexpected comma at index %s' % index)
+      else:
+        invalid.append('Unexpected character "%s" at index %s' % (part, index))
+
+    if buf:
+      if buf.isdigit():
+        chosen.append(buf)
+      else:
+        invalid.append('Trailing character "%s" at index %s' % (buf[-1], index))
+
+    index = 0
+    for choice in chosen[:]:
+      if '-' in choice:
+        start, _, end = choice.partition('-')
+        chosen.pop(index)
+        for c in range(int(start), int(end) + 1):
+          if c >= len(plugins):
+            invalid.append('Invalid choice: %s' % c)
+          chosen.insert(index, c)
+          index += 1
+      else:
+        choice = int(choice)
+        if choice >= len(plugins):
+          invalid.append('Invalid choice: %s' % choice)
+        chosen[index] = int(choice)
+        index += 1
+
+    if invalid:
+      chosen = []
+      for inv in invalid:
+        print(inv)
+
+    chosen = set(chosen)
+    chosen = list(chosen)
+    chosen.sort()
+
+    result = []
+    for choice in chosen:
+      plugin = plugins[choice]
+      requires = plugin.get('requires')
+      if requires:
+        for requirement in requires:
+          if requirement not in result:
+            print(
+              '%s requires %s, adding to selected' %
+              (plugin['id'], requirement)
+            )
+            result.append(plugins_by_id[requirement])
+      result.append(plugins_by_id[plugin['id']])
+
+    print('Eclim plugins to install:')
+    for r in result:
+      if r.name in names:
+        print('  %s' % names[r.name])
+    response = terminal.prompt('Is this correct? (y/n): ') \
+      if not options.yes else 'y'
+    if response.strip().lower() == 'y':
+      return result
+
+    chosen = []
+
+def step_dependencies(options, eclipse, plugins):
+  eclipse.gc()
+
+  dependencies = set()
+  sites = set()
+  for plugin in plugins:
+    dependencies = dependencies.union(set(plugin.dependencies))
+
+  print('\nChecking for required eclipse dependencies...')
+  actions = eclipse.to_install(dependencies)
+  missing = [a for a in actions if a.missing]
+  if missing:
+    print('\nThe following required dependencies could not be found:')
+    for action in missing:
+      if action.version:
+        print('  [%s] %s, version %s, not found.' % (
+          terminal.red('*'),
+          dependency.name,
+          action.version,
+        ))
+      else:
+        print('  [%s] %s not found.' % (terminal.red('*'), dependency.name))
+    sys.exit(1)
+
+  actionable = [a for a in actions if not a.missing]
+  action_required = bool(actionable)
+  if action_required:
+    print('')
+
+  for action in actionable:
+    dependency = action.dependency
+    if action.install:
+      print('[%s] Install %s (%s)' % (
+        terminal.green('*'),
+        dependency.name,
+        dependency.version,
+      ))
+    else:
+      print('[%s] Upgrade %s (%s)' % (
+        terminal.yellow('*'),
+        dependency.name,
+        dependency.version,
+      ))
+
+  if action_required:
+    if not options.yes:
+      response = terminal.prompt('Install/Upgrade dependencies? (y/n): ')
+      if response.strip().lower() != 'y':
+        sys.exit(0)
+
+    for action in actions:
+      if action.missing:
+        continue
+
+      dependency = action.dependency
+      eclipse.execute(
+        '-application', 'org.eclipse.equinox.p2.director',
+        '-repository', dependency.site,
+        '-installIU', '%s.feature.group' % dependency.name,
+      )
+
+def step_update_site(eclim, plugins):
+  update_site = os.path.join(eclim.home, 'update-site')
+  name_re = re.compile(r'\${name}')
+  for path, _, filenames in os.walk(update_site):
+    if not filenames:
+      continue
+
+    for filename in filenames:
+      if not filename.endswith('.xml'):
+        continue
+
+      filepath = os.path.join(path, filename)
+
+      tree = ElementTree.parse(filepath)
+      parents = {e: p for p in tree.iter() for e in p}
+      for template in tree.findall('.//*[@template]'):
+        template.attrib.pop('template')
+        text = ElementTree.tostring(template)
+        parent = parents.get(template)
+        index = list(parent).index(template)
+
+        parent.remove(template)
+        for i, plugin in enumerate(plugins):
+          element = ElementTree.fromstring(name_re.sub(plugin.name, text))
+          parent.insert(index + i, element)
+
+      # ElementTree.write doesn't seem to provide the ability to preserve the
+      # original xml declaration lines, so we'll read those from the original
+      # file and write them in the new file manually.
+      with open(filepath, 'r+') as xml:
+        declarations = []
+        for line in xml.readlines():
+          if not line.startswith('<?'):
+            break
+
+          declarations.append(line)
+
+        xml.seek(0)
+        xml.truncate()
+        for line in declarations:
+          xml.write(line)
+        tree.write(xml)
+
+def step_eclim_uninstall(eclim, eclipse, uninstall=False):
+  eclim_feature = eclipse.installed(feature_name='org.eclim')
+  if eclim_feature:
+    print('\nUninstalling eclim (%s)...' % eclim_feature.version)
+
+    # stop any running eclimd instances
+    instances = os.path.expanduser(
+      os.path.join('~', '.eclim', '.eclimd_instances')
+    )
+    if os.path.exists(instances):
+      with open(instances) as f:
+        lines = f.readlines()
+      for line in lines:
+        instance = json.loads(line)
+        client = os.path.join(instance['home'], 'bin', 'eclim')
+        if os.path.exists(client):
+          subprocess.call([
+            client,
+            '--nailgun-port',
+            str(instance['port']),
+            '-command',
+            'shutdown',
+          ])
+
+    eclipse.execute(
+      '-application', 'org.eclipse.equinox.p2.director',
+      '-uninstallIU', 'org.eclim.feature.group',
+    )
+    eclipse.gc()
+
+  elif uninstall:
+    print('No eclim feature was found in your eclipse installation.')
+
+  eclipse_dir = eclipse.local or eclipse.home
+  eclimd_symlink = os.path.join(eclipse_dir, 'eclimd')
+  if os.path.lexists(eclimd_symlink):
+    os.unlink(eclimd_symlink)
+
+  if eclim.vimfiles != 'skip':
+    eclim_dot_vim = os.path.join(eclim.vimfiles, 'plugin', 'eclim.vim')
+    if os.path.exists(eclim_dot_vim):
+      os.unlink(eclim_dot_vim)
+    eclim_vimfiles = os.path.join(eclim.vimfiles, 'eclim')
+    if os.path.exists(eclim_vimfiles):
+      shutil.rmtree(eclim_vimfiles)
+
+  if uninstall:
+    print('')
+    print('------------------------------')
+    print('The eclim uninstall completed.')
+
+def step_eclim_install(eclim, eclipse, plugins):
+  print('\nInstalling eclim...')
+  eclipse.execute(
+    '-application', 'org.eclipse.equinox.p2.director',
+    '-repository', 'file://%s/update-site' % eclim.home,
+    '-installIU', 'org.eclim.feature.group',
+  )
+  # find where eclim was installed and create an eclimd symlink
+  eclim_feature = eclipse.installed(feature_name='org.eclim')
+  if not eclim_feature:
+    print('\nUnable to locate where the eclipse p2 director installed eclim.')
+    report_bug()
+
+  eclim_plugin_dir = os.path.join(
+    os.path.dirname(eclim_feature.path),
+    'plugins',
+    'org.eclim_%s' % eclim.version,
+  )
+
+  nailgun_configure = os.path.join(eclim_plugin_dir, 'nailgun', 'configure')
+  eclimd_bin = os.path.join(eclim_plugin_dir, 'bin', 'eclimd')
+  executables = [
+    nailgun_configure,
+    eclimd_bin,
+    os.path.join(eclim_plugin_dir, 'bin', 'eclim'),
+  ]
+  for executable in executables:
+    if not os.path.exists(executable):
+      print(
+        '\nThe %s file could not be found at:' %
+        os.path.basename(executable)
+      )
+      print('  %s' % executable)
+      report_bug()
+
+    # add executable permission to executable files
+    x_perm = stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+    os.chmod(executable, os.stat(executable).st_mode | x_perm)
+
+  # replace "#${eclipse.home}" in eclimd file
+  with open(eclimd_bin, 'r') as f:
+    eclimd_content = f.read()
+  eclimd_content = eclimd_content.replace(
+    '#${eclipse.home}',
+    'ECLIM_ECLIPSE_HOME="%s"' % eclipse.home,
+  )
+  with open(eclimd_bin, 'w') as f:
+    f.write(eclimd_content)
+
+  # configure and build nailgun
+  nailgun_dir = os.path.join(eclim_plugin_dir, 'nailgun')
+  execute(os.path.join(nailgun_dir, 'configure'), cwd=nailgun_dir)
+  execute('make', cwd=nailgun_dir)
+  shutil.move(
+    os.path.join(nailgun_dir, 'ng'),
+    os.path.join(eclim_plugin_dir, 'bin'),
+  )
+
+  # create a symlink for eclimd
+  eclipse_dir = eclipse.local or eclipse.home
+  eclimd_symlink = os.path.join(eclipse_dir, 'eclimd')
+  try:
+    os.symlink(eclimd_bin, eclimd_symlink)
+    eclimd = eclimd_symlink
+  except OSError as ex:
+    terminal.debug('unable to create eclimd symlink: %s', str(ex))
+    eclimd = eclimd_bin
+
+  if eclim.vimfiles != 'skip':
+    # install vimfiles for selected eclim plugins
+    vim_plugins = os.path.join(eclim.home, 'vim-plugins')
+    for name in ['core', 'vimplugin'] + [p.name for p in plugins]:
+      plugin_name = 'org.eclim.%s' % name
+      root = os.path.join(vim_plugins, plugin_name)
+      for path, _, filenames in os.walk(root):
+        for filename in filenames:
+          src = os.path.join(path, filename)
+          dest = os.path.join(eclim.vimfiles, os.path.relpath(src, start=root))
+          dirname = os.path.dirname(dest)
+          if not os.path.exists(dirname):
+            os.makedirs(dirname)
+          shutil.copy(src, dest)
+
+  print('')
+  print('-----------------------------------------')
+  print('The eclim install completed successfully.')
+  print('You can now start the eclimd server by executing the script:')
+  print('  %s' % eclimd)
+  print('\nFor more information please see the eclimd server documentation:')
+  print('  http://eclim.org/eclimd.html')
+  print('For information on using eclim, please visit the getting started guide:')
+  print('  http://eclim.org/gettingstarted.html')
+
+def report_bug():
+  print('This probably indicates a bug with the installer.')
+  print('Please report this issue on github:')
+  print('  https://github.com/ervandew/eclim/issues')
+  sys.exit(1)
+
+def execute(cmd, cwd=None):
+  print('running: %s ... ' % cmd, end='')
+  sys.stdout.flush()
+  process = subprocess.Popen(cmd, cwd=cwd, shell=True, stdout=subprocess.PIPE)
+  stdout, stderr = process.communicate()
+  if process.returncode:
+    print('abort: command failed.', file=sys.stderr)
+    if stdout:
+      print(stdout, file=sys.stderr)
+    if stderr:
+      print(stderr, file=sys.stderr)
+    sys.exit(process.returncode)
+  print('done')
+  return stdout, stderr
+
+class Terminal(object):
+
+  def __init__(self, debug=False):
+    self.color_supported = True
+    self.debug_enabled = debug
+
+  def debug(self, message, *args):
+    if self.debug_enabled:
+      if args:
+        message = message % args
+      print('debug: %s' % message)
+
+  def prompt(self, text, complete=False):
+    completer = Completer()
+    if complete:
+      completer.enable()
+
+    try:
+      try:
+        # python 2
+        return raw_input(text)
+      except NameError:
+        # python 3
+        return input(text)
+    except EOFError: # user hit ctrl-d
+      print('')
+      sys.exit(0)
+    finally:
+      if complete:
+        completer.disable()
+
+  def prompt_directory(self, ignore=None):
+    result = self.prompt('> ', complete=True)
+    result = result.strip()
+
+    if ignore and result == ignore:
+      return ignore
+
+    if result.startswith('~'):
+      result = os.path.expanduser(result)
+    result = os.path.abspath(result)
+
+    if not os.path.exists(result):
+      print('No such directory: %s' % result)
+      return None
+    if not os.path.isdir(result):
+      print('Please choose a directory.')
+      return None
+
+    return result
+
+  def color(self, color_code, text):
+    if self.color_supported:
+      return '\033[1;%sm%s\033[0m' % (color_code, text)
+    return text
+
+  def red(self, text):
+    return self.color('31', text)
+
+  def green(self, text):
+    return self.color('32', text)
+
+  def yellow(self, text):
+    return self.color('33', text)
+
+class Completer(object):
+
+  def __init__(self):
+    self.enabled = False
+
+  def enable(self):
+    self.enabled = True
+    delims = readline.get_completer_delims()
+    delims = delims.replace('/', '')
+    delims = delims.replace('~', '')
+    delims = delims.replace('-', '')
+    delims = delims.replace(' ', '')
+    readline.set_completer(self)
+    readline.set_completer_delims(delims)
+
+    darwin = platform.system().lower() == 'darwin'
+    if darwin:
+      readline.parse_and_bind('bind -e')
+      readline.parse_and_bind('bind \'\t\' rl_complete')
+    else:
+      readline.parse_and_bind('tab: complete')
+
+  def disable(self):
+    self.enabled = False
+
+  def __call__(self, text, state):
+    results = []
+    if self.enabled:
+      if text.startswith('~'):
+        text = os.path.expanduser(text)
+      if text.startswith(os.path.sep):
+        if text.endswith(os.path.sep):
+          dirname = text
+        else:
+          dirname = os.path.dirname(text)
+
+        for path in os.listdir(dirname):
+          path = os.path.join(dirname, path)
+          if path.startswith(text):
+            if path.startswith(text) and os.path.isdir(path):
+              path += os.path.sep
+              results.append(path)
+
+    return results[state]
+
+class Proxy(object):
+
+  def __init__(self, proxy_string):
+    self.username = None
+    self.password = None
+    self.hostname = None
+    self.port = None
+
+    if proxy_string:
+      if '@' in proxy_string:
+        user_pass, _, host_port = proxy_string.partition('@')
+      else:
+        user_pass = None
+        host_port = proxy_string
+
+      if user_pass:
+        self.username, _, self.password = user_pass.partition(':')
+      if host_port:
+        self.hostname, _, self.port = host_port.partition(':')
+        if self.port and not self.port.isdigit():
+          print('abort: proxy port must be an integer')
+          sys.exit(1)
+
+  @property
+  def jvmargs(self):
+    if self.username or self.hostname:
+      args = []
+      if self.username:
+        args.append('"-Dhttp.proxyUser=%s"' % self.username)
+      if self.password:
+        args.append('"-Dhttp.proxyPassword=%s"' % self.password)
+      if self.hostname:
+        args.append('-Dhttp.proxyHost=%s' % self.hostname)
+      if self.port:
+        args.append('-Dhttp.proxyPort=%s' % self.port)
+      return args
+
+    return ['-Djava.net.useSystemProxies=true']
+
+class Eclim(object):
+
+  def __init__(self, home=None):
+    self.home = home or os.path.dirname(os.path.abspath(sys.argv[0]))
+
+    # determine the version
+    self.version = None
+    features = os.path.join(self.home, 'update-site', 'features')
+    if os.path.exists(features):
+      for path in os.listdir(features):
+        if path.startswith('org.eclim_'):
+          self.version = re.sub(r'org.eclim_(.*)\.jar', r'\1', path)
+
+  def plugins(self):
+    plugins = []
+    path = os.path.join(self.home, 'dependencies.xml')
+    with open(path) as f:
+      dom = minidom.parse(f)
+      for featureElement in dom.getElementsByTagName('feature'):
+        dependencies = []
+        dependencyElements = featureElement.getElementsByTagName('dependency')
+        for dependencyElement in dependencyElements:
+          name = dependencyElement.getAttribute('id')
+          sites = dependencyElement.getElementsByTagName('site')
+          site = sites[0].getAttribute('url')
+          version = Version(dependencyElement.getAttribute('version'))
+          dependencies.append(Dependency(name, version, site))
+
+        plugins.append(Plugin(featureElement.getAttribute('id'), dependencies))
+
+    return plugins
+
+  def dependencies(self):
+    dependencies = []
+    path = os.path.join(self.home, 'dependencies.xml')
+    with open(path) as f:
+      dom = minidom.parse(f)
+      for dependencyElement in dom.getElementsByTagName('dependency'):
+        name = dependencyElement.getAttribute('id')
+        sites = dependencyElement.getElementsByTagName('site')
+        site = sites[0].getAttribute('url')
+        version = Version(dependencyElement.getAttribute('version'))
+        dependencies.append(Dependency(name, version, site))
+
+    return dependencies
+
+class Eclipse(object):
+
+  def __init__(self, home, proxy):
+    self.home = home
+    self.proxy = proxy
+
+    self.local = None
+    self.p2pool = None
+    self.launcher = None
+    self.executable = None
+    self.initialized = False
+
+    # osx
+    darwin = platform.system().lower() == 'darwin'
+    if darwin:
+      self.home = os.path.join(self.home, 'Contents', 'Eclipse')
+
+    plugins = os.path.join(self.home, 'plugins')
+    if os.path.exists(plugins):
+      for name in os.listdir(plugins):
+        if name.startswith('org.eclipse.equinox.launcher_') and \
+           name.endswith('.jar'):
+          self.launcher = os.path.join(plugins, name)
+          break
+
+    if not self.launcher:
+      if darwin:
+        # using 'home' instead of 'self.home' so we start at '.../Eclipse.app'
+        exe = os.path.join(home, 'Contents', 'MacOS', 'eclipse')
+        if os.path.exists(exe):
+          self.executable = exe
+      else:
+        possibles = [os.path.join(self.home, 'eclipse')]
+        for exe in possibles:
+          if os.path.exists(exe):
+            self.executable = exe
+            break
+
+    # check if features/plugins are stored outside of the eclipse home/local
+    # (eg: ~/.p2/pool)
+    ini = os.path.join(self.home, 'eclipse.ini')
+    terminal.debug('eclipse ini:      %s (exists: %s)', ini, os.path.exists(ini))
+    if os.path.exists(ini):
+      with open(ini, 'r') as f:
+        prev_line = None
+        for line in f.readlines():
+          line = line.strip()
+          if prev_line == '--launcher.library':
+            self.p2pool = re.sub(r'(.*)/plugins/.*', r'\1', line)
+            # if the p2pool path is relative to eclipse.ini, make it absolute
+            if self.p2pool.startswith('..'):
+              self.p2pool = os.path.abspath(os.path.join(self.home, self.p2pool))
+            break
+          prev_line = line
+
+    terminal.debug('eclipse p2pool:   %s', self.p2pool)
+    terminal.debug('eclipse launcher: %s', self.launcher)
+    if not self.launcher:
+      terminal.debug('eclipse executable: %s', self.executable)
+
+  def valid(self):
+    return self.launcher or self.executable
+
+  def _initialize(self):
+    if not self.initialized and (self.launcher or self.executable):
+      info = self.execute('-initialize', '-debug')
+      pattern = re.compile(
+        r'.*Configuration location:\n\s+(.*?)\n.*',
+        flags=re.DOTALL,
+      )
+      if pattern.match(info):
+        configuration = pattern.sub(r'\1', info)
+        if configuration.startswith('file:'):
+          configuration = configuration[5:]
+
+        local = os.path.abspath(os.path.join(configuration, '..'))
+        if local != self.home:
+          self.local = local
+          terminal.debug('eclipse local: %s', self.local)
+
+    self.initialized = True
+
+  def gc(self):
+    self.execute(
+      '-clean',
+      '-refresh',
+      '-application', 'org.eclipse.equinox.p2.garbagecollector.application',
+    )
+
+  def execute(self, *args):
+    assert self.launcher or self.executable, \
+      'Unable to locate eclipse launcher or executable.'
+
+    if '-initialize' not in args:
+      self._initialize()
+
+    vmargs = self.proxy.jvmargs
+    if self.launcher:
+      cmd = 'java %s -jar %s %s' % (
+        ' '.join(vmargs),
+        self.launcher,
+        ' '.join(args),
+      )
+    else:
+      cmd = '%s -nosplash %s -vmargs %s' % (
+        self.executable,
+        ' '.join(args),
+        ' '.join(vmargs),
+      )
+
+    stdout, stderr = execute(cmd)
+    return stdout
+
+  def installed(self, feature_name=None):
+    self._initialize()
+
+    features = set()
+    paths = [self.home]
+    if self.local:
+      paths.append(self.local)
+    if self.p2pool:
+      paths.append(self.p2pool)
+
+    for path in paths:
+      features_path = os.path.join(path, 'features')
+      if not os.path.exists(features_path):
+        terminal.debug('features path does not exist: %s', features_path)
+        continue
+
+      terminal.debug('examining features path: %s', features_path)
+      for name in os.listdir(features_path):
+        name, frag, version = re.split(r'(_\d)', name, 1)
+        version = frag.replace('_', '') + version
+        # if we are only looking for a specific feature, then just return that.
+        if feature_name and name == feature_name:
+          return Feature(name, Version(version), path=features_path)
+
+        # if we are looking for all features, then add to the set
+        if not feature_name:
+          features.add(Feature(name, Version(version)))
+
+    return features
+
+  def available(self, sites):
+    self._initialize()
+
+    features = set()
+    for site in sites:
+      dom = None
+
+      # site.xml
+      response = self.urlopen(site + 'site.xml')
+      if response.code == 200:
+        dom = minidom.parse(response)
+        elementName = 'feature'
+
+      # content.jar
+      else:
+        response = self.urlopen(site + 'content.jar')
+        if response.code == 200:
+          print('reading content.xml from %scontent.jar ... ' % site, end='')
+          sys.stdout.flush()
+          temp = tempfile.TemporaryFile()
+          try:
+            shutil.copyfileobj(response, temp)
+            dom = minidom.parse(zipfile.ZipFile(temp).open('content.xml'))
+          finally:
+            temp.close()
+          elementName = 'unit'
+          print('done')
+
+      if dom:
+        try:
+          for element in dom.getElementsByTagName(elementName):
+            name = element.getAttribute('id')
+            if elementName == 'feature' or name.endswith('.feature.group'):
+              name = name.replace('.feature.group', '')
+              version = Version(element.getAttribute('version'))
+              features.add(Feature(name, version, site))
+        finally:
+          dom.unlink()
+
+      # use eclipse to list the info
+      else:
+        stdout = self.execute(
+          '-application', 'org.eclipse.equinox.p2.director',
+          '-repository', site,
+          '-list',
+        )
+        for line in stdout.decode().split('\n'):
+          name, _, version = line.partition('=')
+          if name.endswith('.feature.group'):
+            name = name.replace('.feature.group', '')
+            features.add(Feature(name, Version(version), site))
+
+    return features
+
+  def to_install(self, dependencies):
+    sites = {d.site for d in dependencies}
+    available = self.available(sites)
+    installed = self.installed()
+
+    installed_by_name = {f.name: f for f in installed}
+    available_by_name = collections.defaultdict(list)
+    for feature in available:
+      available_by_name[feature.name].append(feature)
+
+    actionable = []
+    for dependency in dependencies:
+      # dependency not found at the update site provided
+      if dependency.name not in available_by_name:
+        actionable.append(DependencyAction(dependency, missing=True))
+        continue
+
+      versions = set([
+        a.version
+        for a in available_by_name[dependency.name]
+        if a.version >= dependency.version
+      ])
+      versions = list(versions)
+      versions.sort()
+
+      # the required or newer dependency version was not found at the update
+      # site provided
+      if not versions:
+        actionable.append(
+          DependencyAction(dependency, dependency.version, missing=True))
+        continue
+
+      feature = installed_by_name.get(dependency.name)
+      # dependency not yet installed
+      if not feature:
+        actionable.append(
+          DependencyAction(dependency, versions[0], install=True)
+        )
+        continue
+
+      # dependency already installed, but needs to be upgraded
+      if feature.version < dependency.version:
+        # logic above should ensure this is never None after the following
+        # loop.
+        version = None
+        for v in versions:
+          if v.version >= dependency.version:
+            version = v
+            break
+        actionable.append(DependencyAction(dependency, version, upgrade=True))
+
+    return actionable
+
+  def urlopen(self, url):
+    try:
+      # python 2
+      from urllib import urlopen
+      return urlopen(url)
+    except ImportError:
+      # python 3
+      from urllib.request import urlopen
+      from urllib.error import HTTPError
+      try:
+        return urlopen(url)
+      except HTTPError as he:
+        return he
+
+class Comparable(object):
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  def __lt__(self, other):
+    return self.__cmp__(other) < 0
+
+  def __le__(self, other):
+    return self.__cmp__(other) <= 0
+
+  def __gt__(self, other):
+    return self.__cmp__(other) > 0
+
+  def __ge__(self, other):
+    return self.__cmp__(other) >= 0
+
+class Plugin(object):
+
+  def __init__(self, name, dependencies):
+    self.name = name
+    self.dependencies = dependencies
+
+  def __str__(self):
+    return 'plugin: %s dependencies: %s' % (
+      self.name,
+      ', '.join('%s (%s)' % (d.name, d.version) for d in self.dependencies)
+    )
+
+  def __repr__(self):
+    return str(self)
+
+class DependencyAction(object):
+
+  def __init__(
+    self,
+    dependency,
+    version=None,
+    install=False,
+    upgrade=False,
+    missing=False,
+  ):
+    self.dependency = dependency
+    self.version = version
+    self.install = install
+    self.upgrade = upgrade
+    self.missing = missing
+
+class Dependency(Comparable):
+  def __init__(self, name, version, site):
+    self.name = name
+    self.version = version
+    self.site = site
+
+  def __eq__(self, other):
+    return \
+      self.name == other.name and \
+      self.version == other.version
+
+  def __cmp__(self, other):
+    if self.name != other.name:
+      raise ValueError('Cannot compare different dependencies.')
+
+    return self.version.__cmp__(other.version)
+
+  def __hash__(self):
+    return hash((self.name, hash(self.version)))
+
+  def __str__(self):
+    return 'dependency: %s-%s' % (self.name, self.version)
+
+  def __repr__(self):
+    return str(self)
+
+class Feature(Dependency):
+  def __init__(self, name, version, site=None, path=None):
+    super(Feature, self).__init__(name, version, site)
+    self.path = path
+
+  def __str__(self):
+    return 'feature: %s-%s' % (self.name, self.version.versionString)
+
+class Version(Comparable):
+  def __init__(self, versionString):
+    self.versionString = versionString
+    parts = versionString.split('.', 4)
+    assert len(parts) >= 3, 'Invalid version string: %s' % versionString
+    self.major, self.minor, self.patch = [int(p) for p in parts[:3]]
+
+  def __hash__(self):
+    return hash((self.major, self.minor, self.patch))
+
+  def __eq__(self, other):
+    return \
+      self.major == other.major and \
+      self.minor == other.minor and \
+      self.patch == other.patch
+
+  def __cmp__(self, other):
+    if self.major != other.major:
+      return self.major - other.major
+    if self.minor != other.minor:
+      return self.minor - other.minor
+    if self.patch != other.patch:
+      return self.patch - other.patch
+    return 0
+
+  def __str__(self):
+    return '%i.%i.%i' % (self.major, self.minor, self.patch)
+
+  def __repr__(self):
+    return str(self)
+
+if __name__ == '__main__':
+  try:
+    main()
+  except KeyboardInterrupt:
+    print('')
+    sys.exit(0)
+
+# vim:ft=python

@@ -6,6 +6,7 @@
 /.ropeproject
 /build
 /gh-pages
+/installer/installc
 /org.eclim/nailgun/config.log
 /org.eclim/nailgun/config.status
 /org.eclim/nailgun/Makefile

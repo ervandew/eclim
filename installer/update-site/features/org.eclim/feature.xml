@@ -32,15 +32,10 @@
       version="${eclim.version}"
       unpack="true"/>
 
-#foreach($feature in $installer.context.getKeysByPrefix("featureList", true))
-  #if($installer.context.getValue("${feature}"))
-    #set($name = $feature.replace("featureList.", ""))
-
   <plugin
-      id="org.eclim.$name"
+      id="org.eclim.${name}"
       version="${eclim.version}"
-      unpack="false"/>
-  #end
-#end
+      unpack="false"
+      template="true"/>
 
 </feature>

@@ -13,12 +13,25 @@
   </mappings>
   <artifacts>
     <artifact
-        classifier="osgi.bundle"
-        id="org.eclim.installer"
+        classifier="org.eclipse.update.feature"
+        id="org.eclim"
         version="${eclim.version}"/>
     <artifact
-        classifier="org.eclipse.update.feature"
-        id="org.eclim.installer"
+        classifier="osgi.bundle"
+        id="org.eclim"
         version="${eclim.version}"/>
+    <artifact
+        classifier="osgi.bundle"
+        id="org.eclim.core"
+        version="${eclim.version}"/>
+    <artifact
+        classifier="osgi.bundle"
+        id="org.eclim.vimplugin"
+        version="${eclim.version}"/>
+    <artifact
+        classifier="osgi.bundle"
+        id="org.eclim.${name}"
+        version="${eclim.version}"
+        template="true"/>
   </artifacts>
 </repository>

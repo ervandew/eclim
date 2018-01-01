@@ -35,38 +35,45 @@ from xml.dom.minidom import parse
 from zipfile import ZipFile
 
 def main():
-  eclimHome = getEclimHome()
-  eclipseHome = getEclipseHome(eclimHome)
-  eclipseLauncher = getEclipseLauncher(eclipseHome)
-  dependencies = getDependencies(eclimHome)
-  installedFeatures = getInstalledFeatures(eclipseHome)
-  availableFeatures = getAvailableFeatures(
-    eclipseLauncher, set(d.site for d in dependencies if d.site))
+  path = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
+  module = os.path.join(path, 'installer', 'install')
+  try:
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('install', module)
+    install = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(install)
+  except ImportError:
+    import imp
+    with open(module, 'r') as f:
+      install = imp.load_module('<none>', f, module, ('', 'r', imp.PY_SOURCE))
 
-  compareDependenciesXml(dependencies, availableFeatures)
-  actionable = compareInstalled(
-    dependencies, installedFeatures, availableFeatures)
+  __builtins__.terminal = install.Terminal()
+
+  eclim = install.Eclim(home=os.path.join(path, 'installer'))
+  eclipseHome = getEclipseHome(eclim)
+  if not os.path.exists(eclipseHome):
+    print('Directory not found: %s' % eclipseHome)
+    sys.exit(1)
+
+  proxy = install.Proxy(None) # add proxy support later if necessary
+  eclipse = install.Eclipse(eclipseHome, proxy)
+  dependencies = eclim.dependencies()
+  installed = eclipse.installed()
+  available = eclipse.available(set(d.site for d in dependencies if d.site))
+
+  compareDependenciesXml(dependencies, available)
+  actionable = compareInstalled(dependencies, installed, available)
   if actionable:
-    prompt = '\nInstall/Upgrade dependencies? (y/n): '
-    try:
-      # python 2
-      response = raw_input(prompt)
-    except NameError:
-      # python 3
-      response = input(prompt)
-
+    response = terminal.prompt('Install/Upgrade dependencies? (y/n): ')
     if response == 'y':
-      installUpgrade(eclipseLauncher, actionable)
+      installUpgrade(eclipse, actionable)
 
-def getEclimHome():
-  return os.path.dirname(sys.path[0])
-
-def getEclipseHome(eclimHome):
-  propertiesPath = eclimHome + '/user.properties'
+def getEclipseHome(eclim):
+  propertiesPath = os.path.join(os.path.dirname(eclim.home), 'user.properties')
   if os.path.isfile(propertiesPath):
     branch = Popen(
       'git rev-parse --abbrev-ref HEAD',
-      cwd=eclimHome, shell=True, stdout=PIPE
+      cwd=eclim.home, shell=True, stdout=PIPE
     ).stdout.read().strip()
     props = {}
     for line in open(propertiesPath).read().split('\n'):
@@ -90,103 +97,6 @@ def getEclipseHome(eclimHome):
   )
   sys.exit(1)
 
-def getEclipseLauncher(eclipseHome):
-  launcherJar = None
-  for name in os.listdir(eclipseHome + '/plugins'):
-    if name.startswith('org.eclipse.equinox.launcher_') and name.endswith('.jar'):
-      return eclipseHome + '/plugins/' + name
-
-def getDependencies(eclimHome):
-  dependencies = []
-  path = os.path.join(
-    eclimHome,
-    'org.eclim.installer/build/resources/dependencies.xml',
-  )
-  with open(path) as f:
-    dom = parse(f)
-    for dependencyElement in dom.getElementsByTagName('dependency'):
-      name = dependencyElement.getAttribute('id')
-      sites = dependencyElement.getElementsByTagName('site')
-      site = sites[0].getAttribute('url')
-      version = Version(dependencyElement.getAttribute('version'))
-      dependencies.append(Dependency(name, version, site))
-
-  return dependencies
-
-def getInstalledFeatures(eclipseHome):
-  # Note: doesn't handle disabled features or features installed in user local
-  # eclipse home.
-  features = []
-  for name in os.listdir(eclipseHome + '/features'):
-    name, frag, version = re.split(r'(_\d)', name, 1)
-    version = Version(frag.replace('_', '') + version)
-    features.append(Feature(name, version))
-  return features
-
-def getAvailableFeatures(eclipseLauncher, sites):
-  features = []
-  for site in sites:
-    dom = None
-
-    # site.xml
-    response = urlopen(site + 'site.xml')
-    if response.code == 200:
-      dom = parse(response)
-      elementName = 'feature'
-
-    # content.jar
-    else:
-      response = urlopen(site + 'content.jar')
-      if response.code == 200:
-        print('reading content.xml from %scontent.jar ... ' % site, end='')
-        sys.stdout.flush()
-        temp = tempfile.TemporaryFile()
-        try:
-          shutil.copyfileobj(response, temp)
-          dom = parse(ZipFile(temp).open('content.xml'))
-        finally:
-          temp.close()
-        elementName = 'unit'
-        print('done')
-
-    if dom:
-      try:
-        for element in dom.getElementsByTagName(elementName):
-          name = element.getAttribute('id')
-          if elementName == 'feature' or name.endswith('.feature.group'):
-            name = name.replace('.feature.group', '')
-            version = Version(element.getAttribute('version'))
-            features.append(Feature(name, version, site))
-      finally:
-        dom.unlink()
-
-    # use eclipse to list the info
-    else:
-      cmd = 'java -jar %s ' \
-        '-application org.eclipse.equinox.p2.director ' \
-        '-repository %s ' \
-        '-list' % (eclipseLauncher, site)
-      print('running: %s ... ' % cmd, end='')
-      sys.stdout.flush()
-      process = Popen(cmd, shell=True, stdout=PIPE)
-      stdout, stderr = process.communicate()
-      if process.returncode:
-        print('abort: repository list failed.', file=sys.stderr)
-        if stdout:
-          print(stdout, file=sys.stderr)
-        if stderr:
-          print(stderr, file=sys.stderr)
-        sys.exit(process.returncode)
-      print('done')
-
-      for line in stdout.decode().split('\n'):
-        name, _, version = line.partition('=')
-        if name.endswith('.feature.group'):
-          name = name.replace('.feature.group', '')
-          features.append(Feature(name, Version(version), site))
-
-  return features
-
 def compareDependenciesXml(dependencies, availableFeatures):
   availableByName = defaultdict(list)
   for feature in availableFeatures:
@@ -209,185 +119,74 @@ def compareDependenciesXml(dependencies, availableFeatures):
           dependency, dependency.site
         ))
       elif len(versions) == 1 and dependency.version in versions:
-        print('  [\033[1;32m*\033[0m] %s is up to date.' % dependency.name)
+        print('  [\033[1;32m*\033[0m] %s (%s) is up to date.' % (
+          dependency.name,
+          dependency.version,
+        ))
       else:
         if dependency.version in versions:
           versions.remove(dependency.version)
-        print('  [\033[1;33m*\033[0m] %s has the following updates available: %s' % (
-          dependency.name, ', '.join([str(v) for v in sorted(versions, reverse=True)])
+        print('  [\033[1;33m*\033[0m] %s (%s) has the following updates available: %s' % (
+          dependency.name,
+          dependency.version,
+          ', '.join([str(v) for v in sorted(versions, reverse=True)]),
         ))
 
-def compareInstalled(dependencies, installedFeatures, availableFeatures):
-  installedByName = dict((f.name, f) for f in installedFeatures)
+def compareInstalled(dependencies, installed, available):
+  installedByName = dict((f.name, f) for f in installed)
   availableByName = defaultdict(list)
-  for feature in availableFeatures:
+  for feature in available:
     availableByName[feature.name].append(feature)
 
   print('\ninstalled')
   actionable = []
   for dependency in dependencies:
-    installed = installedByName.get(dependency.name)
-    if not installed:
+    feature = installedByName.get(dependency.name)
+    if not feature:
       print('  [\033[1;31m*\033[0m] %s not installed' % (dependency.name))
       actionable.append((dependency, 'install'))
     else:
       versions = set([
         f.version
         for f in availableByName[dependency.name]
-        if f.version >= installed.version
+        if f.version >= feature.version
       ])
       if not versions:
         print('  [\033[1;31m*\033[0m] %s not found at %s' % (
-          dependency, dependency.site
+          dependency,
+          dependency.site
         ))
-      elif len(versions) == 1 and installed.version in versions:
-        print('  [\033[1;32m*\033[0m] %s is up to date.' % dependency.name)
+      elif len(versions) == 1 and feature.version in versions:
+        print('  [\033[1;32m*\033[0m] %s (%s) is up to date.' % (
+          dependency.name,
+          dependency.version,
+        ))
       else:
-        if installed.version in versions:
-          versions.remove(installed.version)
+        if feature.version in versions:
+          versions.remove(feature.version)
         versions = sorted(versions, reverse=True)
-        print('  [\033[1;33m*\033[0m] %s has the following updates available: %s' % (
-          dependency.name, ', '.join([str(v) for v in versions])
+        print('  [\033[1;33m*\033[0m] %s (%s) has the following updates available: %s' % (
+          dependency.name,
+          dependency.version,
+          ', '.join([str(v) for v in versions]),
         ))
         actionable.append((dependency, 'upgrade'))
 
   installUpgrade = []
   for dependency, action in actionable:
-    available = set([f for f in availableByName[dependency.name]])
-    if available:
-      available = sorted(available, reverse=True)
-      installUpgrade.append((dependency, available[0], action))
+    if dependency.name in availableByName:
+      features = sorted(availableByName[dependency.name], reverse=True)
+      installUpgrade.append((dependency, features[0], action))
 
   return installUpgrade
 
-def installUpgrade(eclipseLauncher, actionable):
+def installUpgrade(eclipse, actionable):
   for dependency, feature, action in actionable:
-    cmd = 'java -jar %s ' \
-      '-application org.eclipse.equinox.p2.director ' \
-      '-repository %s ' \
-      '-installIU %s.feature.group' % (
-        eclipseLauncher, dependency.site, dependency.name)
-    print('running: %s ... ' % cmd, end='')
-    sys.stdout.flush()
-    process = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
-    stdout, stderr = process.communicate()
-    if process.returncode:
-      print('abort: repository list failed.', file=sys.stderr)
-      if stdout:
-        print(stdout, file=sys.stderr)
-      if stderr:
-        print(stderr, file=sys.stderr)
-      sys.exit(process.returncode)
-    print('done')
-    print(stdout)
-
-def urlopen(url):
-  try:
-    # python 2
-    from urllib import urlopen
-    return urlopen(url)
-  except ImportError:
-    # python 3
-    from urllib.request import urlopen
-    from urllib.error import HTTPError
-    try:
-      return urlopen(url)
-    except HTTPError as he:
-      return he
-
-class Dependency(object):
-  def __init__(self, name, version, site):
-    self.name = name
-    self.version = version
-    self.site = site
-
-  def __eq__(self, other):
-    return \
-      self.name == other.name and \
-      self.version == other.version
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  def __cmp__(self, other):
-    if self.name != other.name:
-      raise ValueError('Cannot compare different dependencies.')
-
-    return self.version.__cmp__(other.version)
-
-  def __lt__(self, other):
-    return self.__cmp__(other) < 0
-
-  def __le__(self, other):
-    return self.__cmp__(other) <= 0
-
-  def __gt__(self, other):
-    return self.__cmp__(other) > 0
-
-  def __ge__(self, other):
-    return self.__cmp__(other) >= 0
-
-  def __hash__(self):
-    return hash((self.name, hash(self.version)))
-
-  def __str__(self):
-    return 'dependency: %s-%s' % (self.name, self.version)
-
-  def __repr__(self):
-    return str(self)
-
-class Feature(Dependency):
-  def __init__(self, name, version, site=None):
-    super(Feature, self).__init__(name, version, site)
-
-  def __str__(self):
-    return 'feature: %s-%s' % (self.name, self.version.versionString)
-
-class Version(object):
-  def __init__(self, versionString):
-    self.versionString = versionString
-    parts = versionString.split('.', 4)
-    assert len(parts) >= 3, 'Invalid version string: %s' % versionString
-    self.major, self.minor, self.patch = [int(p) for p in parts[:3]]
-
-  def __hash__(self):
-    return hash((self.major, self.minor, self.patch))
-
-  def __eq__(self, other):
-    return \
-      self.major == other.major and \
-      self.minor == other.minor and \
-      self.patch == other.patch
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  def __cmp__(self, other):
-    if self.major != other.major:
-      return self.major - other.major
-    if self.minor != other.minor:
-      return self.minor - other.minor
-    if self.patch != other.patch:
-      return self.patch - other.patch
-    return 0
-
-  def __lt__(self, other):
-    return self.__cmp__(other) < 0
-
-  def __le__(self, other):
-    return self.__cmp__(other) <= 0
-
-  def __gt__(self, other):
-    return self.__cmp__(other) > 0
-
-  def __ge__(self, other):
-    return self.__cmp__(other) >= 0
-
-  def __str__(self):
-    return '%i.%i.%i' % (self.major, self.minor, self.patch)
-
-  def __repr__(self):
-    return str(self)
+    eclipse.execute(
+      '-application', 'org.eclipse.equinox.p2.director',
+      '-repository', dependency.site,
+      '-installIU', '%s.feature.group' % dependency.name,
+    )
 
 if __name__ == '__main__':
   try:

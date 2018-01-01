@@ -109,7 +109,7 @@ target(name: 'init'){
     // id, if last tag is not at the head)
     version = execute('git', 'describe')
     // handle 4 part eclim version number tag before next step to ensure a
-    // valid osgi verion number
+    // valid osgi version number
     version = version.replaceFirst(/^(\d+\.\d+\.\d+)(\.\d+)(.*)?/, '$1$3')
     // ensure version is a valid osgi version
     version = version.replaceFirst(/^(\d+\.\d+\.\d+)-(\d+-\w+)$/, '$1.$2')
@@ -397,13 +397,12 @@ target(name: 'dist'){
   // load dependencies.xml so we know if any plugins are disabled
   slurper = new XmlSlurper(true, false, true)
   slurper.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, 'all')
-  dependencies = slurper.parse(
-    new File('org.eclim.installer/build/resources/dependencies.xml'))
+  dependencies = slurper.parse(new File('installer/dependencies.xml'))
 
   // validate that all released plugins will be built.
   new File('.').eachDirMatch(~/org\.eclim(\.\w*|$)/){ dir ->
     name = dir.getName()
-    if (name != 'org.eclim.installer' && !pluginNames.contains(name)){
+    if (!pluginNames.contains(name)){
       id = name.split('\\.')[-1]
       dep = dependencies.feature.findAll{ f -> f.@id == id }[0]
       if (dep.@status != 'unreleased'){
@@ -434,36 +433,6 @@ target(name: 'dist'){
     }
   }
 
-  copy(todir: '${build.update-site}'){
-    fileset(dir: 'org.eclim.installer/build/resources/update-sites/eclim')
-    filtermapper{
-      replacestring(from: 'org.eclim', to: 'org.eclim_${eclim.version}')
-    }
-  }
-  replace(dir: '${build.update-site}', includes: '**/*.xml'){
-    replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
-  }
-
-  // eclipse site archive
-  zip(destfile: '${build.installer}/eclim-update-site.zip'){
-    fileset(dir: '${build.update-site}', includes: '**/*')
-    zipfileset(prefix: 'plugins', dir: '${build.plugins}'){
-      include(name: 'org.eclim_${eclim.version}/**/*')
-      include(name: 'org.eclim.*_${eclim.version}/**/*')
-      exclude(name: 'org.eclim.installer*_${eclim.version}/**/*')
-      exclude(name: 'org.eclim.installer*_${eclim.version}')
-    }
-  }
-
-  // vim plugins jar
-  zip(destfile: '${build.installer}/vim-plugins.zip'){
-    fileset(dir: '${build.vimfiles}', includes: '**/*')
-    zipfileset(dir: 'build/doc/vimdocs', includes: '**/*.txt',
-      prefix: 'org.eclim.core/eclim/doc')
-  }
-
-  installer()
-
   // full source tar
   version = binding.getVariable('eclim.version')
   new File("${basedir}/build/.version").withWriter(){ out ->
@@ -490,16 +459,69 @@ target(name: 'dist'){
       exclude(name: 'org.eclim/nailgun/ng')
     }
   }
+
+  installer()
 }
 
 target(name: 'installer'){
   depends('init')
-  exec(executable: '${formic.home}/bin/formic', failonerror: true, dir: '.'){
-    arg(value: '-Declipse.home=${eclipse}')
-    arg(value: '-Declim.version=${eclim.version}')
-    arg(value: '-buildfile')
-    arg(value: 'org.eclim.installer/build/build.xml')
+
+  copy(todir: '${build.installer}'){
+    fileset(dir: 'installer'){
+      exclude(name: 'install.bin') // header for self extracting file
+      exclude(name: 'installc') // the compiled install python file
+    }
+    filtermapper{
+      replacestring(from: 'org.eclim', to: 'org.eclim_${eclim.version}')
+    }
   }
+  replace(dir: '${build.installer}/update-site', includes: '**/*.xml'){
+    replacefilter(token: '$${eclim.version}', value: '${eclim.version}')
+  }
+
+  version = binding.getVariable('eclim.version')
+  build_installer = binding.getVariable('build.installer')
+  build_plugins = binding.getVariable('build.plugins')
+
+  // eclipse feature
+  jar(destfile: "$build_installer/update-site/features/org.eclim_${version}.jar"){
+    fileset(dir:
+      "$build_installer/update-site/features/org.eclim_$version",
+      includes: '**/*')
+  }
+  delete(dir: "$build_installer/update-site/features/org.eclim_$version")
+
+  // eclipse plugins
+  pluginNames.each(){ plugin ->
+    artifact_name = "${plugin}_${version}"
+    jar(destfile: "$build_installer/update-site/plugins/${artifact_name}.jar",
+      filesetmanifest: 'merge')
+    {
+      fileset(dir: "$build_plugins/$artifact_name", includes: '**/*'){
+        exclude(name: 'bin/ng')
+        exclude(name: '**/*.bat')
+        exclude(name: '**/*.exe')
+      }
+    }
+  }
+
+  // vim plugins
+  copy(todir: '${build.installer}/vim-plugins'){
+    fileset(dir: '${build.vimfiles}', includes: '**/*')
+  }
+  copy(todir: '${build.installer}/vim-plugins/org.eclim.core/eclim/doc'){
+    fileset(dir: 'build/doc/vimdocs', includes: '**/*.txt')
+  }
+
+  tar(destfile: 'build/temp/installer.tar.gz', compression: 'gzip'){
+    tarfileset(dir: '${build.installer}', includes: '**/*')
+  }
+
+  concat(destfile: 'build/dist/eclim_${eclim.version}.bin', binary: true){
+    fileset(file: 'installer/install.bin')
+    fileset(file: 'build/temp/installer.tar.gz')
+  }
+  chmod(file: 'build/dist/eclim_${eclim.version}.bin', perm: 'ugo+x')
 }
 
 target(name: 'javadoc'){
@@ -912,7 +934,6 @@ def pluginInclude(name){
 def initPlugins(){
   names = []
   features = []
-  exclude = ['org.eclim.installer']
 
   pluginWhiteList = []
   pluginWhiteListStr = getVariable('plugin.whitelist')
@@ -959,7 +980,7 @@ def initPlugins(){
   // enable eclim plugins whose required features have been found
   new File('.').eachDirMatch(~/org\.eclim\.\w*/){ dir ->
     name = dir.getName()
-    if (!exclude.contains(name) && !defaults.contains(name)){
+    if (!defaults.contains(name)){
       if (pluginWhiteList.size() > 0 && !pluginWhiteList.contains(name)) {
         ant.echo("# Skipping ${name} since it's not in whitelist")
         return

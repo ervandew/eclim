@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# Copyright (C) 2017  Eric Van Dewoestine
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+required=(
+  'python'
+  'make'
+  'gcc'
+)
+for requirement in ${required[@]} ; do
+  if ! [ -x "$(command -v $requirement)" ] ; then
+    echo "You must have $requirement installed and in your PATH."
+    requirement_missing=1
+  fi
+done
+
+if [ -n "$requirement_missing" ] ; then
+  echo "abort: missing one or more requirements."
+  exit 1
+fi
+
+DARWIN=false
+if $(uname -a | grep -iq "darwin") ; then
+  DARWIN=true
+fi
+
+# on OSX nailgun/configure could fail with the message:
+#   C compiler cannot create executables
+# one reason could be that the user needs to agree to the Xcode/iOS license
+# before we can configure/compile nailgun. running gcc -v should catch that.
+GCC_OUTPUT=$(gcc -v 2>&1)
+if [ $? -ne 0 ] ; then
+  echo "abort: error testing gcc."
+  echo ""
+  echo "-------- gcc output"
+  echo $GCC_OUTPUT
+  echo "--------"
+
+  if [ $DARWIN = true ] ; then
+    echo "
+OSX users: If you see a message above that you need to accept the Xcode/iOS
+license, please run:
+  $ sudo xcodebuild -license accept
+Then you can re-try the eclim installer.
+
+Do not run the eclim installer as root unless you actually want the eclim
+eclipse plugins and vimfiles installed in a root owned shared location.
+    "
+  fi
+  exit 1
+fi
+
+TEMPDIR=$(mktemp -d -t eclim-installer.XXXX)
+
+# determine start of archive
+ARCHIVE_START=$(awk '/^__BEGIN_ARCHIVE__/ { print NR + 1; exit 0; }' $0)
+
+TAR_VERSION=$(tar --version | head -1)
+# Take the archive portion of this file and extract it.
+if [[ "$TAR_VERSION" =~ "GNU" ]] ; then
+  tail -n +$ARCHIVE_START $0 | \
+    tar xz --owner=$USER --group=$(id -gn) -C "$TEMPDIR" -f -
+else
+  tail -n +$ARCHIVE_START $0 | tar xz -C "$TEMPDIR" -f -
+fi
+
+chmod +x "$TEMPDIR/install"
+"$TEMPDIR/install" "$@"
+
+rm -r "$TEMPDIR"
+
+exit
+
+__BEGIN_ARCHIVE__

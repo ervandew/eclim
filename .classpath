@@ -8,10 +8,6 @@
   <classpathentry kind="lib" path="ant/lib/eclim-checkstyle.jar"/>
   <classpathentry kind="lib" path="ant/lib/junit-4.9.jar"/>
   <classpathentry kind="lib" path="ant/lib/testng-5.1-jdk15.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/lib/ant-1.8.2.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/lib/foxtrot-3.0.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/lib/looks-2.1.4.jar"/>
-  <classpathentry kind="var" path="FORMIC_HOME/lib/miglayout-3.5.0.jar"/>
   <classpathentry kind="output" path="build/bin"/>
   <classpathentry kind="src" path="org.eclim/java"/>
   <classpathentry kind="src" path="org.eclim.adt/java"/>
@@ -37,5 +33,4 @@
   <classpathentry kind="src" path="org.eclim.vimplugin/java"/>
   <classpathentry kind="src" path="org.eclim.wst/java"/>
   <classpathentry kind="src" path="org.eclim.wst/test/junit"/>
-  <classpathentry exported="true" kind="src" path="/formic"/>
 </classpath>

@@ -40,7 +40,7 @@ if [ "$1" = "-?" -o "$1" = "-h" -o "$1" = "--help" ] ; then
 fi
 
 if [ -z "$JAVA" ] ; then
-  JAVA=$(which java 2> /dev/null)
+  JAVA=$(command -v java)
   if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/bin/java" ] ; then
       JAVA="$JAVA_HOME/bin/java"
@@ -53,6 +53,8 @@ if [ -z "$JAVA" ] ; then
       grep version |
       perl -pe 's|.*"[0-9]\.(.*)\..*".*|\1|'
   )
+  # cast to an int
+  JAVA_VERSION=$(($JAVA_VERSION + 0))
 fi
 
 if [ -z "$JAVA" ] ; then
@@ -62,8 +64,13 @@ if [ -z "$JAVA" ] ; then
   exit 1
 fi
 
+DARWIN=false
+if $(uname -a | grep -iq "darwin") ; then
+  DARWIN=true
+fi
+
 ##
-# Determines eclim's home directory and sets the ECLIM_HOME var to that path.
+# Set ECLIM_HOME to eclim's home directory.
 #
 resolve_eclim_home(){
   FILEPATH="$0"
@@ -72,7 +79,7 @@ resolve_eclim_home(){
   # readlink -f is easier, but not supported on mac or bsd
   while [ -h "$FILEPATH" ] ; do
     PREV=$FILEPATH
-    FILEPATH=`readlink "$FILEPATH"`
+    FILEPATH="$(readlink "$FILEPATH")"
     if [ -z "$FILEPATH" -o "$FILEPATH" = "$PREV" ] ; then
       FILEPATH=$PREV
       break
@@ -81,28 +88,37 @@ resolve_eclim_home(){
     # handle relative symlinks (neither eclim build nor installer create these,
     # so must have been created by the user or 3rd party installer)
     if [ ! -f "$FILEPATH" ] ; then
-      PREVDIR=`dirname "$PREV"`
-      FILEPATH=$PREVDIR/$FILEPATH
+      PREVDIR="$(dirname "$PREV")"
+      FILEPATH="$PREVDIR/$FILEPATH"
     fi
   done
 
-  CURPATH=`dirname "$FILEPATH"`
-  ECLIM_HOME=`cd "$CURPATH/.." ; pwd`
+  CURPATH="$(dirname "$FILEPATH")"
+  ECLIM_HOME="$(cd "$CURPATH/.." ; pwd)"
 }
 
 ##
-# Determines the eclipse home path and the eclipse launcher jar and sets
-# ECLIM_ECLIPSE_HOME and ECLIPSE_LAUNCHER to those results.
+# Set ECLIM_ECLIPSE_HOME to the eclipse home path.
 #
-resolve_eclipse_launcher(){
+resolve_eclipse_home(){
   #${eclipse.home}
   if [ -z "$ECLIM_ECLIPSE_HOME" -o ! -d "$ECLIM_ECLIPSE_HOME" ]; then
-    ECLIM_ECLIPSE_HOME=`cd "$ECLIM_HOME/../../"; pwd`
+    ECLIM_ECLIPSE_HOME="$(cd "$ECLIM_HOME/../../"; pwd)"
   fi
+}
 
-  # Find the least modified launcher.
-  ECLIPSE_LAUNCHER=`find "$ECLIM_ECLIPSE_HOME/plugins" \
-    -name 'org.eclipse.equinox.launcher_*.jar' -exec ls -1t "{}" + | head -n1`
+##
+# Set ECLIPSE_LAUNCHER to the eclipse launcher jar path.
+#
+resolve_eclipse_launcher(){
+  PLUGINS="$ECLIM_ECLIPSE_HOME/plugins"
+
+  # find the launcher jar (last modified if there is more than one)
+  ECLIPSE_LAUNCHER="$(
+    find "$PLUGINS" \
+      -name 'org.eclipse.equinox.launcher_*.jar' \
+      -exec ls -1t "{}" + | head -n1
+  )"
 
   if [ ! -e "$ECLIPSE_LAUNCHER" ]; then
     echo "Unable to locate the eclipse launcher jar." 1>&2
@@ -121,7 +137,7 @@ build_vmargs(){
   fi
 
   # attempt to grab properties from .eclimrc if available.
-  PERL=`which perl 2> /dev/null`
+  PERL="$(command -v perl)"
   if [ -f "$ECLIMRC" -a -n "$PERL" ] ; then
     IFS=$'\n'
     for vmarg in $(cat "$ECLIMRC" | perl -pe '
@@ -145,28 +161,40 @@ build_vmargs(){
     done
   fi
 
+  ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/eclipse.ini"
+
   # ensure that the correct jvm environment is used, but only force the
   # architecture if we find the swt jars, since linux distros may have the swt
   # libraries outside of eclipse.
-  SWT=`ls $ECLIM_ECLIPSE_HOME/plugins/org.eclipse.swt.*.jar 2> /dev/null`
+  SWT="$(ls $ECLIM_ECLIPSE_HOME/plugins/org.eclipse.swt.*.jar 2> /dev/null)"
+  if [ -z "$SWT" ] ; then
+    P2POOL=$(
+      grep -A 1 -- \
+        "--launcher\.library" \
+        $ECLIM_ECLIPSE_HOME/eclipse.ini 2> /dev/null | \
+        tail -1
+    )
+    if [[ "$P2POOL" == ..* ]] ; then
+      P2POOL="$(cd "$ECLIM_ECLIPSE_HOME/$P2POOL" ; pwd)"
+      P2POOL="$(dirname "$(dirname "$P2POOL")")"
+    fi
+    if [ -n "$P2POOL" ] ; then
+      SWT="$(ls $P2POOL/plugins/org.eclipse.swt.*.jar 2> /dev/null)"
+    fi
+  fi
   if [ -n "$SWT" ] ; then
-    if `echo "$SWT" | grep -q "x86_64"` ; then
+    if $(echo "$SWT" | grep -q "x86_64") ; then
       ARCH=-d64
     else
       ARCH=-d32
     fi
 
-    if ! `$JAVA $ARCH -version 2> /dev/null` ; then
+    if ! $($JAVA $ARCH -version 2> /dev/null) ; then
       echo "Your jvm does not support the architecture required " \
         "for the version of eclipse you have installed: $ARCH"
       exit 1;
     fi
     ECLIM_VMARGS=($ARCH "${ECLIM_VMARGS[@]}")
-  fi
-
-  ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/eclipse.ini"
-  if `uname -a | grep -iq "darwin"` ; then
-    ECLIPSE_INI="$ECLIM_ECLIPSE_HOME/Eclipse.app/Contents/Eclipse/eclipse.ini"
   fi
 
   # add any eclipse vmargs not present
@@ -190,13 +218,22 @@ build_vmargs(){
       if [[ "$vmarg" == *-Xdock:icon* ]] ; then
         continue
       fi
+      # ignore oomph (eclipse installer) crap
+      if [[ "$vmarg" == *oomph* ]] ; then
+        continue
+      fi
       # ignore java 9 options if the current env is running a lower java
       # version.
-      if [[ "$JAVA_VERSION" < "9" ]] ; then
+      if [[ $JAVA_VERSION -lt 9 ]] ; then
         if [[ "$vmarg" == *--add-modules* ]] ; then
           continue
         fi
         if [[ "$vmarg" == *--permit-illegal-access* ]] ; then
+          continue
+        fi
+        # UseStringDeduplication was added in java 8 update 20, but the user
+        # may have a java 8 version without that support.
+        if [[ "$vmarg" == *UseStringDeduplication* ]] ; then
           continue
         fi
       fi
@@ -212,7 +249,7 @@ build_vmargs(){
   fi
 
   # for osx
-  if `uname -a | grep -iq "darwin"` ; then
+  if [ $DARWIN = true ] ; then
     if [[ "${ECLIM_VMARGS}[@]" != *-XstartOnFirstThread* ]]; then
       ECLIM_VMARGS=("${ECLIM_VMARGS[@]}" -XstartOnFirstThread)
     fi
@@ -252,6 +289,7 @@ while true ; do
 done
 
 resolve_eclim_home
+resolve_eclipse_home
 resolve_eclipse_launcher
 
 declare -a ECLIM_VMARGS=("$@")

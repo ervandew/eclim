@@ -68,7 +68,7 @@ Download
 
 You can find the official eclim installer on eclim's github `releases page`_:
 
-- :eclimdist:`jar`
+- :eclimdist:`bin`
 
 .. _releases page: https://github.com/ervandew/eclim/releases/
 
@@ -87,15 +87,15 @@ Installing / Upgrading
 Eclim can be installed a few different ways depending on your preference and
 environment:
 
-- :ref:`Graphical Installer <installer>`
-- :ref:`Unattended (automated) Installer <installer-automated>`
+- :ref:`Interactive Command Line Installer <installer>`
+- :ref:`Unattended Command Line Installer <installer-automated>`
 - :ref:`Build from source <install-source>`
 - :ref:`Install on a headless server <install-headless>`
 
 .. _installer:
 
-Graphical Installer
--------------------
+Interactive Command Line Installer
+----------------------------------
 
 Step 1: Run the installer
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -105,25 +105,18 @@ Step 1: Run the installer
   If you have eclipse running, please close it prior to starting the
   installation procedure.
 
-- **First download the installer:**  :eclimdist:`jar`
+- **First download the installer:**  :eclimdist:`bin`
 
 - **Next run the installer:**
 
   .. code-block:: bash
 
-    $ java -jar eclim_eclim_release.jar
+    $ ./eclim_eclim_release.bin
 
-  Windows and OSX users should be able to simply double click on the jar file
-  to start the installer.
-
-  After the installer starts up, simply follow the steps in the wizard
-  to install eclim.
+  After the installer starts up, simply follow the steps to install eclim.
 
   If your machine is behind a proxy, take a look at the instructions for
   :ref:`running the installer behind a proxy <installer-proxy>`.
-
-  If you encounter an error running the installer, then consult the known
-  :ref:`potential <installer-issues>` issues below.
 
 Step 2: Test the installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -205,83 +198,35 @@ to take a look at the related :ref:`faq <eclim_proxy>` as well):
 
 .. code-block:: bash
 
-  $ java -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080 -jar eclim_eclim_release.jar
+  $ ./eclim_eclim_release.bin --proxy my.proxy:8080
 
-If your proxy requires authentication, you'll need to supply the
-``-Dhttp.proxyUser`` and ``-Dhttp.proxyPassword`` properties as well.
-
-You can also try the following which may be able to use your system proxy settings:
+If your proxy requires authentication, you'll need to supply the username and
+password as well:
 
 .. code-block:: bash
 
-  $ java -Djava.net.useSystemProxies=true -jar eclim_eclim_release.jar
-
-.. _installer-issues:
-
-Potential Installation Issues
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In some rare cases you might encounter one of the following errors:
-
-1. Any exception which denotes usage of gcj.
-   ::
-
-     java.lang.NullPointerException
-       at org.pietschy.wizard.HTMLPane.updateEditorColor(Unknown Source)
-       at org.pietschy.wizard.HTMLPane.setEditorKit(Unknown Source)
-       at javax.swing.JEditorPane.getEditorKit(libgcj.so.90)
-       ...
-
-   Gcj (GNU Compile for Java), is not currently supported.  If you receive
-   any error which references libgcj, then gcj is your current default jvm.
-   So, you'll need to install the openjdk or a jdk from oracle to resolve the
-   installation error.
-
-2. ::
-
-    java.lang.IncompatibleClassChangeError
-      at org.formic.ant.logger.Log4jLogger.printMessage(Log4jLogger.java:51)
-      ...
-
-   This is most likely caused by an incompatible version of log4j installed in
-   your jave ext.dirs.  To combat this you can run the installer like so\:
-
-   ::
-
-     $ java -Djava.ext.dirs -jar eclim_eclim_release.jar
-
-If you encounter an error not covered here, then please report it to the
-eclim-user_ mailing list.
+  $ ./eclim_eclim_release.bin --proxy myuser:mypass@my.proxy:8080
 
 .. _installer-automated:
 
 Unattended (automated) install
 ------------------------------
 
-As of eclim 1.5.6 the eclim installer supports the ability to run an automated
-install without launching the installer gui.  Simply run the installer as shown
-below, supplying the location of your vim files and your eclipse install via
-system properties:
+The eclim installer supports the ability to run an automated
+install without prompting the user for any input, as long as you supply all the
+necessary input it requires.
+
+Simply run the installer as shown
+below, supplying the location of your eclipse install, vim files location, and
+the plugins you wish to install:
 
 .. code-block:: bash
 
-  $ java \
-    -Dvim.files=$HOME/.vim \
-    -Declipse.home=/opt/eclipse \
-    -jar eclim_eclim_release.jar install
-
-Please note that when using this install method, the installer will only
-install eclim features whose third party dependecies are already present in
-your eclipse installation.  So before installing eclim, you must make sure that
-you've already installed the necessary dependencies (for a full list of
-dependencies, you can reference eclim's `installer dependencies`_ file).
-
-**Required Properties:**
-
-* **eclipse.home** - The absolute path to your eclipse installation.
-* **vim.files** (or **vim.skip=true**) - The absolute path to your vim files
-  directory. Or if you want to omit the installation of the vim files
-  (emacs-eclim users for example) you can supply ``-Dvim.skip=true`` instead.
+  $ ./eclim_eclim_release.bin \
+    --yes \
+    --eclipse=/opt/eclipse \
+    --vimfiles=$HOME/.vim \
+    --plugins=jdt,pydev
 
 .. _install-source:
 
@@ -332,44 +277,23 @@ desktop and copy the download url and use wget to download the eclipse archive.
 Once downloaded, you can then extract the archive in the directory of your
 choice.
 
+.. note::
+
+  When downloading an eclipse distribution, make sure you download one of their
+  `archives <http://eclipse.org/downloads/eclipse-packages/>`_ vs the eclipse
+  installer. An archive can simply be extracted to install eclipse, but the
+  eclipse installer (their default download) may require a gui to install.
+
 ::
 
   $ wget <eclipse_mirror>/eclipse-<version>-linux-gtk.tar.gz
   $ tar -zxf eclipse-<version>-linux-gtk.tar.gz
 
-.. note::
-
-  Depending on what distribution of eclipse you installed and what eclim
-  features you would like to be installed, you may need to install additional
-  eclipse features.  If you installed eclipse from your package manager then
-  your package manager may also have the required dependency (eclipse-cdt for
-  C/C++ support for example). If not, you can install the required dependency
-  using eclipse's p2 command line client. Make sure the command references the
-  correct repository for your eclipse install (juno in this example) and that
-  you have Xvfb running as described in the last step of this guide:
-
-  ::
-
-    DISPLAY=:1 ./eclipse/eclipse -nosplash -consolelog -debug
-      -application org.eclipse.equinox.p2.director
-      -repository http://download.eclipse.org/releases/juno
-      -installIU org.eclipse.wst.web_ui.feature.feature.group
-
-  For a list of eclim plugins and which eclipse features they require, please
-  see the `installer dependencies`_.  Note that the suffix '.feature.group'
-  must be added to the dependency id found in that file when supplying it to
-  the '-installIU' arg of the above command.
-
-Once eclipse is installed, you can then install eclim utilizing the eclim
-installer's automated install option (see the :ref:`installer-automated`
-section for additional details):
+Once eclipse is installed, you can then install eclim normally:
 
 .. code-block:: bash
 
-  $ java \
-    -Dvim.files=$HOME/.vim \
-    -Declipse.home=/opt/eclipse \
-    -jar eclim_eclim_release.jar install
+  $ ./eclim_eclim_release.bin
 
 The last step is to start Xvfb followed by eclimd:
 
@@ -404,21 +328,11 @@ plugins along with all the files eclim adds to your .vim or vimfiles directory
 Uninstall
 =========
 
-To uninstall eclim you can use any eclim distribution jar whose version is
-1.7.5 or greater by running it with the 'uninstaller' argument like so:
+To uninstall eclim you can use the eclim installer like so:
 
 .. code-block:: bash
 
-  $ java -jar eclim_eclim_release.jar uninstaller
-
-That will open a graphical wizard much like the install wizard which will ask
-you again for the location of your vimfiles and eclipse home where you've
-installed eclim and will then remove the eclim installation accordingly.
-
-.. note::
-
-  The uninstaller is backwards compatible and can be used to uninstall older
-  versions of eclim.
+  $ ./eclim_eclim_release.bin uninstall
 
 .. _uninstall-automated:
 
@@ -426,25 +340,17 @@ Unattended (automated) uninstall
 --------------------------------
 
 Like the installer, the uninstaller also supports an unattended uninstall. You
-just need to supply your vim files and eclipse paths as system properties:
+just need to supply your eclipse and vim files directories:
 
 .. code-block:: bash
 
-  $ java \
-    -Dvim.files=$HOME/.vim \
-    -Declipse.home=/opt/eclipse \
-    -jar eclim_eclim_release.jar uninstall
-
-**Required Properties:**
-
-* **eclipse.home** - The absolute path to your eclipse installation.
-* **vim.files** (or **vim.skip=true**) - The absolute path to your vim files
-  directory. Or if you never installed the vim files (emacs-eclim users for
-  example) you can supply ``-Dvim.skip=true`` instead.
+  $ ./eclim_eclim_release.bin
+    --eclipse=/opt/eclipse \
+    --vimfiles=$HOME/.vim \
+    uninstall
 
 .. _java development kit: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _eclipse.org: http://eclipse.org/downloads/
 .. _eclipse eclipse_version: http://eclipse.org/downloads/index.php
 .. _vim: http://www.vim.org/download.php
 .. _eclim-user: http://groups.google.com/group/eclim-user
-.. _installer dependencies: https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml
