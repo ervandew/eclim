@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Java Search &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -206,8 +203,8 @@
 <p>Pattern searching provides a means to widen a search beyond a single element.  A
 pattern search can be executed using the command</p>
 <p><strong>:JavaSearch</strong> -p &lt;pattern&gt; [-t &lt;type&gt; -x &lt;context&gt; -s &lt;scope&gt; -i -a &lt;action&gt;]</p>
-<p>When there is more than 1 result, those results will be placed into vim's
-quickfix list (:help quickfix) so that you can easily navigate them using vim's
+<p>When there is more than 1 result, those results will be placed into vim’s
+quickfix list (:help quickfix) so that you can easily navigate them using vim’s
 quickfix commands.</p>
 <p>Vim command completion is supported through out the command with the excption
 of the pattern to search for.</p>
@@ -274,7 +271,7 @@ may simply invoke <strong>:JavaSearch</strong> supplying only the pattern.</p>
 </pre></div>
 </div>
 <p>However, please note that camel case searching does not permit wild card
-characters ('*', '?').</p>
+characters (‘*’, ‘?’).</p>
 </div>
 <div class="section" id="element-search">
 <h2>Element Search<a class="headerlink" href="#element-search" title="Permalink to this headline">¶</a></h2>
@@ -306,18 +303,18 @@ utilize the alternate searching requires no change in behavior or commands, but
 to achieve the best results, you should know how it works.</p>
 <p>The first thing worth noting is that the alternate search is currently a bit
 limited.  It only supports searches involving types (classes, interfaces,
-annotations, and enums).  It doesn't currently have any support for methods or
+annotations, and enums).  It doesn’t currently have any support for methods or
 fields.</p>
 <p>Secondly, it can only search for and locate types within the current source
 tree.  Searching across the jdk source or other third party source files without
 setting up an Eclipse or similar classpath, is difficult at worst, and slow at
 best.</p>
-<p>With that said, I've found that when I'm walking through a third party source
+<p>With that said, I’ve found that when I’m walking through a third party source
 tree, my main focus is on finding referenced classes / interfaces quickly and
 easily, and the eclim alternate searching does just that.</p>
 <p>Invoking the search is the same as the standard search mechanism.  You simply
 use the same <strong>:JavaSearch</strong> command as you normally would.  The only difference
-is that the alternate search doesn't support the -t option and will notify you
+is that the alternate search doesn’t support the -t option and will notify you
 of such if supplied.</p>
 <p>When invoked, the alternate search will perform the following:</p>
 <ul>
@@ -326,9 +323,9 @@ and search from the resulting directory.</p>
 <p>Ex.  When editing a file /usr/local/java/foo/src/org/foo/bar/Baz.java, the
 alternate search will first search the directory /usr/local/java/foo/src.</p>
 </li>
-<li><p class="first">If no files are found in that directory, then it will proceed to search Vim's
-'path' option (:h 'path' for more info on this option).</p>
-<p>As an example, I have my 'path' set to '/usr/local/java/java-src' and in that
+<li><p class="first">If no files are found in that directory, then it will proceed to search Vim’s
+‘path’ option (:h ‘path’ for more info on this option).</p>
+<p>As an example, I have my ‘path’ set to ‘/usr/local/java/java-src’ and in that
 directory is where I store all my third party source distributions (hibernate,
 spring, axis, etc.).</p>
 </li>
@@ -344,26 +341,18 @@ results for.</p>
 <li><p class="first">Once eclim has narrowed the search down to the specific type to proceed with,
 it will then attempt to narrow the search down to a specific source
 distribution directory.  To do this it locates the relevant entry from the
-'path' option, tacks on one more level of the path from the resulting file,
+‘path’ option, tacks on one more level of the path from the resulting file,
 and commences its search from there.</p>
 <p>Ex.  When searching for all implementors of MyType, if eclim finds
 a file /usr/local/java/java-src/myproject/core/src/org/my/MyType.java
-and a 'path' entry of /usr/local/java/java-src exists, then eclim
+and a ‘path’ entry of /usr/local/java/java-src exists, then eclim
 will deduce that that search must continue in the directory
 /usr/local/java/java-src/myproject.</p>
 </li>
 </ul>
-<p>This may seem a bit complicated for a simple search, but in practice it's
-actually quite simple, and as usual, I'm open to any and all comments and
+<p>This may seem a bit complicated for a simple search, but in practice it’s
+actually quite simple, and as usual, I’m open to any and all comments and
 suggestions.</p>
-<div class="alert alert-info">
-<p class="alert-heading first admonition-title">Note</p>
-<p class="last">Alternate searching is bound to the performance of the file system and as
-such, the response time on Windows can be significantly slower than Linux.
-This is most noticable when searching for 'implementors', 'references', and
-'all'.  The number of and depth of the directories in your Vim 'path' option
-may also impact performance.</p>
-</div>
 </div>
 <div class="section" id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
@@ -381,13 +370,13 @@ this setting like so:</p>
 </ul>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul id="g-eclimjavasearchsingleresult">
-<li><p class="first"><strong>g:EclimJavaSearchSingleResult</strong> (Default: 'split') -
+<li><p class="first"><strong>g:EclimJavaSearchSingleResult</strong> (Default: ‘split’) -
 Determines what action to take when a only a single result is found.</p>
 <p>Possible values include:</p>
 <ul class="simple">
-<li>'split' - open the result in a new window via &quot;split&quot;.</li>
-<li>'edit' - open the result in the current window.</li>
-<li>'tabnew' - open the result in a new tab.</li>
+<li>‘split’ - open the result in a new window via “split”.</li>
+<li>‘edit’ - open the result in the current window.</li>
+<li>‘tabnew’ - open the result in a new tab.</li>
 </ul>
 <p>This setting overrides the global default for all supported language types
 which can be set using the <strong>g:EclimDefaultFileOpenAction</strong> setting which
@@ -395,7 +384,7 @@ accepts the same possible values.</p>
 </li>
 </ul>
 <ul class="simple">
-<li><strong>g:EclimQuickFixOpen</strong> (Default: 'botright copen')
+<li><strong>g:EclimQuickFixOpen</strong> (Default: ‘botright copen’)
 Specifies the command used to open the quickfix window when multiple results
 are found.</li>
 <li><strong>g:EclimQuickFixHeight</strong> (Default: 10) -
@@ -425,9 +414,9 @@ struts-config.xml).</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

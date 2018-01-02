@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Commands &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -211,13 +208,13 @@ using the <code>&#64;Command</code> annotation. They then define an <code>execut
 can return any object that can be serialized appropriately using <a class="reference external" href="http://code.google.com/p/google-gson/">gson</a>.</p>
 <p>Here is an example of a trivial command which returns a map of the arguments it
 was supplied, with the supplied project and file paths converted to absolute
-paths and the file byte offset converted to a character offset (eclim's vim
+paths and the file byte offset converted to a character offset (eclim’s vim
 function <code>eclim#util#GetOffset()</code> returns the offset in bytes since getting a
 character offset in vim with multi byte characters is less reliable, but most
 eclipse APIs expect character offsets):</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">Eclim's source code is grouped by bundles (org.eclim, org.eclim.core, etc),
+<p class="last">Eclim’s source code is grouped by bundles (org.eclim, org.eclim.core, etc),
 each of which has <code>java</code> directory containing the java source code for that
 bundle.</p>
 </div>
@@ -289,27 +286,27 @@ of additional arguments. In the case of <code>ANY</code>, you should only have o
 option with that value and when running the command from the command line,
 that option should be supplied last.</li>
 </ol>
-<p>That should give you the basics on what's involved with creating a new command,
+<p>That should give you the basics on what’s involved with creating a new command,
 but the biggest hurdle for creating most commands is locating and deciphering
 the eclipse API calls that are necessary to implement the feature you want.
-Unfortunately most of the eclipse code that you'll need to hook into will most
-likely have little to no documentation so you're going to have to dig through
+Unfortunately most of the eclipse code that you’ll need to hook into will most
+likely have little to no documentation so you’re going to have to dig through
 the eclipse code. Eclim does provide a couple ant tasks to at least help you to
 quickly extract any docs or source code found in your eclipse install:</p>
 <ul>
 <li><p class="first"><strong>eclipse.doc:</strong> This target will extract any doc jars from your eclipse
-install to a 'doc' directory in your eclipse home (or user local eclipse
+install to a ‘doc’ directory in your eclipse home (or user local eclipse
 home).</p>
 </li>
 <li><p class="first"><strong>eclipse.src:</strong> This target will extract any src jars from your eclipse
-install to a 'src' directory in your eclipse home (or user local eclipse
+install to a ‘src’ directory in your eclipse home (or user local eclipse
 home). If you download the sdk version of eclipse then the jdt and all the
 core eclipse source will be available. Some other plugins provide sdk versions
 which include the source code and this target can extract those as well, but
-some plugins don't seem to have this option when installing via eclipse's
+some plugins don’t seem to have this option when installing via eclipse’s
 update manager (and may not include the source when installed from a system
 package manager). For those you can often download a zip version of their
-update site which should include source bundles. Once you've extracted that
+update site which should include source bundles. Once you’ve extracted that
 file, you can tell this target to extract source bundles from a specified
 directory. Here is an example of extracting the source from an unpacked dltk
 update site:</p>
@@ -321,8 +318,8 @@ update site:</p>
 </div>
 <div class="section" id="running-a-command">
 <h2>Running a Command<a class="headerlink" href="#running-a-command" title="Permalink to this headline">¶</a></h2>
-<p>Once you've created your command you then need to compile the code using eclim's
-ant build file. After you've done that you can then start eclimd and execute
+<p>Once you’ve created your command you then need to compile the code using eclim’s
+ant build file. After you’ve done that you can then start eclimd and execute
 your command from the command line to test it:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ eclim -pretty -command echo -p eclim -f org.eclim.core/plugin.properties -o 42 -e utf-8
 </pre></div>
@@ -330,9 +327,9 @@ your command from the command line to test it:</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>As you are developing your commands, you can avoid restarting eclimd after
-every change by using eclim's <code>reload</code> command which will reload all of
-eclim's plugin bundles with the exception of org.eclim.core (so unfortunately
-it won't help with our example above if we put that command in the
+every change by using eclim’s <code>reload</code> command which will reload all of
+eclim’s plugin bundles with the exception of org.eclim.core (so unfortunately
+it won’t help with our example above if we put that command in the
 org.eclim.core bundle):</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span>$ eclim -command reload
 </pre></div>
@@ -346,13 +343,13 @@ first defining a new vim command in
 <code>org.eclim.core/vim/eclim/plugin/eclim.vim</code>:</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">If the command should only be available for a specific file type, then you'd
+<p class="last">If the command should only be available for a specific file type, then you’d
 put it in a <code>vim/eclim/ftplugin/somefiltetype.vim</code> file instead.</p>
 </div>
 <div class="highlight-vim"><div class="highlight"><pre><span></span>command EclimEcho :<span class="k">call</span> eclim#echo#Echo<span class="p">()</span>
 </pre></div>
 </div>
-<p>Now that we've created the command, we then need to define our
+<p>Now that we’ve created the command, we then need to define our
 <code>eclim#echo#Echo()</code> function accordingly in
 <code>org.eclim.core/vim/eclim/autoload/eclim/echo.vim</code>:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="c">&quot; Script Variables {{{</span>
@@ -389,7 +386,7 @@ put it in a <code>vim/eclim/ftplugin/somefiltetype.vim</code> file instead.</p>
 <span class="k">endfunction</span> <span class="c">&quot; }}}</span>
 </pre></div>
 </div>
-<p>And that's all there is to it. After re-building eclim, restarting eclimd, and
+<p>And that’s all there is to it. After re-building eclim, restarting eclimd, and
 restarting vim, you can now execute the command <code>:EclimEcho</code> to see the
 response printed in vim.</p>
 <p>Now that you know the basics, you can explore the many existing eclim commands
@@ -397,7 +394,7 @@ found in the eclim source code to see detailed examples of how to access various
 eclipse features to expose them for use in vim or the editor of your choice.</p>
 <p>You should also take a look at the eclim <a class="reference internal" href="plugins.html"><span class="doc">Plugins</span></a>
 documentation which documents how to create a new eclim plugin, including
-information on adding new eclim settings, managing the plugin's dependencies
+information on adding new eclim settings, managing the plugin’s dependencies
 through its <code>META-INF/MANIFEST.MF</code>, etc.</p>
 </div>
 </div>
@@ -416,9 +413,9 @@ through its <code>META-INF/MANIFEST.MF</code>, etc.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

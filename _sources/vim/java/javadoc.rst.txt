@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ While editing java code, if you'd like to view the javadoc of the element under
 the cursor, you can run the **:JavaDocPreview** command which will open vim's
 preview window with the element's javadoc content. In the preview window any
 links to classes, methods, etc. in the javadoc will be highlighted and you can
-view follow those links by hitting ``<cr>`` on the link. You can also use
+follow those links by hitting ``<cr>`` on the link. You can also use
 ``<c-o>`` to navigate back to the previous javadoc preview and ``<c-i>`` to
 navigate forward.
 

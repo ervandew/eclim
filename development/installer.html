@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Building the eclim installer &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -191,7 +188,7 @@
       
   <div class="section" id="building-the-eclim-installer">
 <h1>Building the eclim installer<a class="headerlink" href="#building-the-eclim-installer" title="Permalink to this headline">¶</a></h1>
-<p>Unless you are working on improvements to the eclim installer, you shouldn't
+<p>Unless you are working on improvements to the eclim installer, you shouldn’t
 ever need to build it, but should the need arise here are the instructions for
 doing so.</p>
 <p>To build the installer you first need a couple external tools installed:</p>
@@ -210,33 +207,10 @@ $ git submodule update
 <a class="reference external" href="http://plantuml.sourceforge.net/">plantuml</a> (included in the eclim source tree) which in turn requires
 <a class="reference external" href="http://www.graphviz.org/">graphviz</a>.</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://github.com/ervandew/formic">formic</a>: The eclim installer has been developed using the formic framework,
-and requires it to build the installer distributables.  Formic doesn't
-currently have an official release, so you'll need to check out the source
-code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git://github.com/ervandew/formic.git
-</pre></div>
-</div>
-<p>After checking out the code, you'll need to build the formic distribution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd formic
-$ ant dist
-</pre></div>
-</div>
-<p>Then extract the formic tar to the location of your choice</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ tar -zxvf build/dist/formic-0.2.0.tar.gz -C /location/of/your/choice
-</pre></div>
-</div>
-</li>
 </ul>
 <p>Once you have installed the above dependencies, you can then build the eclim
 installer with the following command.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant -Dformic.home=/your/formic/install/dir dist
-</pre></div>
-</div>
-<p>In lieu of supplying the formic home on the command line, you can instead put
-it in a <code>user.properties</code> file at the eclim source root:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ vim user.properties
-formic.home=/your/formic/install/dir
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant dist
 </pre></div>
 </div>
 </div>
@@ -255,9 +229,9 @@ formic.home=/your/formic/install/dir
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

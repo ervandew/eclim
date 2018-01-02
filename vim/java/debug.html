@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Java Debugging &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -219,17 +216,17 @@
 </div>
 <ol class="arabic simple" start="2">
 <li>Start vim with the <code>--servername</code> argument (eclimd currently sends debugger
-updates to vim using vim's remote invocation support):</li>
+updates to vim using vim’s remote invocation support):</li>
 </ol>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ vim --servername debug ...
 </pre></div>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">The server name you choose doesn't matter as long as you don't have another vim
+<p class="last">The server name you choose doesn’t matter as long as you don’t have another vim
 instance running with that same name.</p>
 </div>
-<p>Once you've got your java program running and vim started with a servername, you
+<p>Once you’ve got your java program running and vim started with a servername, you
 can then start your debug session using the <strong>:JavaDebugStart</strong> command.
 This command requires the hostname/IP and the port number on which the debug
 server is running.</p>
@@ -243,7 +240,7 @@ server is running.</p>
 line and run the <strong>:JavaDebugBreakpointToggle</strong> command. If now breakpoint
 exists, one will be created. If a breakpoint does exist, then
 <strong>:JavaDebugBreakpointToggle</strong> will toggle whether that breakpoint is enabled or
-not. If you'd like to delete the breakpoint on the current line instead of
+not. If you’d like to delete the breakpoint on the current line instead of
 disabling it, then run the toggle command with the <code>!</code> option.</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="c">&quot; create a breakpoint or toggle whether the current breakpoint is</span>
 <span class="c">&quot; enabled/disabled</span>
@@ -361,15 +358,15 @@ using the following commands:</p>
 <div class="section" id="configuration">
 <span id="javadebugthreadresumeall"></span><span id="javadebugthreadresume"></span><span id="javadebugthreadsuspendall"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <ul class="simple" id="g-eclimjavadebuglinehighlight">
-<li><strong>g:EclimJavaDebugLineHighlight</strong> (Default: 'DebugBreak')
+<li><strong>g:EclimJavaDebugLineHighlight</strong> (Default: ‘DebugBreak’)
 Highlight group to use for showing the current line being debugged.</li>
 </ul>
 <ul class="simple" id="g-eclimjavadebuglinesigntext">
-<li><strong>g:EclimJavaDebugLineSignText</strong> (Default: '•')
+<li><strong>g:EclimJavaDebugLineSignText</strong> (Default: ‘•’)
 Text to use on sign column for showing the current line being debugged.</li>
 </ul>
 <ul class="simple" id="g-eclimjavadebugstatuswinorientation">
-<li><strong>g:EclimJavaDebugStatusWinOrientation</strong> (Default: 'vertical')
+<li><strong>g:EclimJavaDebugStatusWinOrientation</strong> (Default: ‘vertical’)
 Sets the orientation for the splits inside the debug status windows;
 if they should be tiled vertically or horizontally.
 Possible values:
@@ -391,7 +388,7 @@ This is only applicable when the orientation is vertical.</li>
 <h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Expanding a variable shows an empty line with just a dot.
-You probably haven't pressed the &lt;Enter&gt; key on the variable.
+You probably haven’t pressed the &lt;Enter&gt; key on the variable.
 Nested variables are retreived one level at a time from the server to be
 performant. Since we are using VIM folds, any mapping that simply opens a
 fold will not cause variables to be retrieved.</li>
@@ -416,9 +413,9 @@ this problem, run step into command outside the debug status window.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

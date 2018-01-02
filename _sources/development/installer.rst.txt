@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,44 +38,13 @@ To build the installer you first need a couple external tools installed:
   plantuml_ (included in the eclim source tree) which in turn requires
   graphviz_.
 
-* formic_: The eclim installer has been developed using the formic framework,
-  and requires it to build the installer distributables.  Formic doesn't
-  currently have an official release, so you'll need to check out the source
-  code:
-
-  ::
-
-    $ git clone git://github.com/ervandew/formic.git
-
-  After checking out the code, you'll need to build the formic distribution:
-
-  ::
-
-    $ cd formic
-    $ ant dist
-
-  Then extract the formic tar to the location of your choice
-
-  ::
-
-    $ tar -zxvf build/dist/formic-0.2.0.tar.gz -C /location/of/your/choice
-
 Once you have installed the above dependencies, you can then build the eclim
 installer with the following command.
 
 ::
 
-  $ ant -Dformic.home=/your/formic/install/dir dist
+  $ ant dist
 
-In lieu of supplying the formic home on the command line, you can instead put
-it in a ``user.properties`` file at the eclim source root:
-
-::
-
-  $ vim user.properties
-  formic.home=/your/formic/install/dir
-
-.. _formic: http://github.com/ervandew/formic
 .. _graphviz: http://www.graphviz.org/
 .. _plantuml: http://plantuml.sourceforge.net/
 .. _sphinx: http://sphinx-doc.org

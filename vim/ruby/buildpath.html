@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Ruby Interpreters / Build Path &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -202,7 +199,7 @@
 <div class="section" id="interpreters">
 <span id="rubyinterpreterlist"></span><span id="rubyinterpreterremove"></span><span id="rubyinterpreteradd"></span><h2>Interpreters<a class="headerlink" href="#interpreters" title="Permalink to this headline">¶</a></h2>
 <p>When creating your first ruby project you will be prompted to configure a new
-interpreter if you haven't already done so in eclipse. You can also manually
+interpreter if you haven’t already done so in eclipse. You can also manually
 manage your ruby interpreters with the following commands:</p>
 <ul class="simple">
 <li><strong>:RubyInterpreterAdd</strong> [-n &lt;name&gt;] &lt;path&gt; - Add a ruby interpreter.</li>
@@ -211,7 +208,7 @@ manage your ruby interpreters with the following commands:</p>
 </ul>
 <p>If you have more than one interpreter configured when you create subsequent
 projects you will be prompted to choose the interpreter to use. If you remove an
-interpreter used by one of your projects, you'll have to go back to that project
+interpreter used by one of your projects, you’ll have to go back to that project
 and edit its <code>.buildpath</code> file and change the interpreter name in the
 container entry.</p>
 <p>Example (wrapped for readability): Changing <code>ruby1.9</code> to <code>ruby1.8</code>:</p>
@@ -235,22 +232,22 @@ ever is he default interpreter:</p>
 <div class="section" id="build-path">
 <h2>Build Path<a class="headerlink" href="#build-path" title="Permalink to this headline">¶</a></h2>
 <p>Source code completion, searching, and other features make use of the
-<a class="reference external" href="http://eclipse.org/dltk/">eclipse dltk's</a> .buildpath to locate resources.
+<a class="reference external" href="http://eclipse.org/dltk/">eclipse dltk’s</a> .buildpath to locate resources.
 When you first create a dltk project (currently <a class="reference internal" href="../php/index.html"><span class="doc">php</span></a> or
 <a class="reference internal" href="index.html"><span class="doc">ruby</span></a>), a <code>.buildpath</code> file is created in the
-project's root directory.  If your project depends on any source files located
-outside your project or in another project, then you'll need to edit your
+project’s root directory.  If your project depends on any source files located
+outside your project or in another project, then you’ll need to edit your
 .buildpath accordingly.</p>
 <p>To help you do this, eclim provides several commands to ease the creation of
 new build path entries and variables, all of which are made available when
 you edit your .buildpath file in vim.  Also when you write the <code>.buildpath</code>
-file, Vim will issue a command to the eclim server to update the project's
-build path, and will report any errors via vim's location list (:help
+file, Vim will issue a command to the eclim server to update the project’s
+build path, and will report any errors via vim’s location list (:help
 location-list).</p>
 <p>The following is a list of commands that eclim provides while editing your
 .buildpath.</p>
 <ul id="newsrcentry-dltk">
-<li><p class="first"><strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...] -
+<li><p class="first"><strong>:NewSrcEntry</strong> &lt;dir&gt; [&lt;dir&gt; …] -
 Adds one or more new entries which reference source directories in your project.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;buildpathentry</span> <span class="na">external=</span><span class="s">&quot;true&quot;</span> <span class="na">kind=</span><span class="s">&quot;lib&quot;</span> <span class="na">path=</span><span class="s">&quot;src/php&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
@@ -259,7 +256,7 @@ Adds one or more new entries which reference source directories in your project.
 </li>
 </ul>
 <ul id="newlibentry-dltk">
-<li><p class="first"><strong>:NewLibEntry</strong> &lt;dir&gt; [&lt;dir&gt; ...] -
+<li><p class="first"><strong>:NewLibEntry</strong> &lt;dir&gt; [&lt;dir&gt; …] -
 Adds one or more new entries which reference external source
 directories.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;buildpathentry</span> <span class="na">external=</span><span class="s">&quot;true&quot;</span> <span class="na">kind=</span><span class="s">&quot;lib&quot;</span> <span class="na">path=</span><span class="s">&quot;/usr/local/php/cake_1.1.16.5421&quot;</span><span class="nt">/&gt;</span>
@@ -269,7 +266,7 @@ directories.</p>
 </li>
 </ul>
 <ul id="newprojectentry-dltk">
-<li><p class="first"><strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; ...] -
+<li><p class="first"><strong>:NewProjectEntry</strong> &lt;project&gt; [&lt;project&gt; …] -
 Adds one or more new entries which reference other projects.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;buildpathentry</span> <span class="na">combineaccessrules=</span><span class="s">&quot;false&quot;</span> <span class="na">kind=</span><span class="s">&quot;prj&quot;</span> <span class="na">path=</span><span class="s">&quot;/test_project&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
@@ -294,9 +291,9 @@ Adds one or more new entries which reference other projects.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

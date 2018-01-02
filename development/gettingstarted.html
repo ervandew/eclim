@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Developers Guide &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -202,7 +199,7 @@
 </li>
 <li><a class="reference internal" href="#coding-style">Coding Style</a></li>
 <li><a class="reference internal" href="#developing-submitting-patches">Developing / Submitting Patches</a></li>
-<li><a class="reference internal" href="#what-s-next">What's Next</a></li>
+<li><a class="reference internal" href="#what-s-next">What’s Next</a></li>
 </ul>
 </div>
 </div>
@@ -255,7 +252,7 @@ can run either of the following commands to create it:</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your vimfiles directory is not located at the default location for your
-OS, then you can specify the location using the &quot;vim.files&quot; property:</p>
+OS, then you can specify the location using the “vim.files” property:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
 </pre></div>
 </div>
@@ -279,7 +276,7 @@ below showing what will be built vs what will be skipped:</p>
 </div>
 <p>In this case we can see that four eclim plugins will be skipped along with the
 eclipse feature that would be required to build those plugins.</p>
-<p>If you don't want to supply the eclipse home directory, or any other
+<p>If you don’t want to supply the eclipse home directory, or any other
 properties, on the command line every time you build eclim, you can create a
 <code>user.properties</code> file at the eclim source root and put all your properties
 in there:</p>
@@ -306,7 +303,7 @@ patched to behave differently than the upstream version, resulting in one or
 more eclim supplied sphinx extensions not loading. Another issue you may run
 into is the docutils package, which sphinx depends on, is outdated on
 debian/ubuntu, resulting in another set of errors.</p>
-<p class="last">So to get around these issues you'll need to install sphinx using <a class="reference external" href="http://pip.readthedocs.org/en/latest/index.html">pip</a> or
+<p class="last">So to get around these issues you’ll need to install sphinx using <a class="reference external" href="http://pip.readthedocs.org/en/latest/index.html">pip</a> or
 similar.</p>
 </div>
 </div>
@@ -323,7 +320,7 @@ add eclim as a project:</p>
 <div class="section" id="coding-style">
 <span id="id1"></span><h2>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this headline">¶</a></h2>
 <p>When contributing code please try to adhere to the coding style of similar code
-so that eclim's source can retain consistency throughout. For java code, eclim
+so that eclim’s source can retain consistency throughout. For java code, eclim
 includes a checkstyle configuration which can be run against the whole project:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ ant checkstyle
 </pre></div>
@@ -338,7 +335,7 @@ includes a checkstyle configuration which can be run against the whole project:<
 <p>The preferred means of developing and submitting patches is to use a github
 fork. Github provides a nice <a class="reference external" href="http://help.github.com/forking/">guide to forking</a> which should get you started.</p>
 <p>Although using a github fork is preferred, you can of course still submit
-patches via email using git's format-patch command:</p>
+patches via email using git’s format-patch command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ git format-patch -M origin/master
 </pre></div>
 </div>
@@ -346,8 +343,8 @@ patches via email using git's format-patch command:</p>
 submitted to the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim development group</a>.</p>
 </div>
 <div class="section" id="what-s-next">
-<h2>What's Next<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
-<p>Now that you're familiar with the basics of building and patching eclim, the
+<h2>What’s Next<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
+<p>Now that you’re familiar with the basics of building and patching eclim, the
 next step is to familiarize yourself with the eclim architecture and to review
 the detailed docs on how new features are added.</p>
 <p>All of that and more can be found in the
@@ -369,9 +366,9 @@ the detailed docs on how new features are added.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Download / Install &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -200,11 +197,10 @@
 </ul>
 </li>
 <li class="dropdown"><a class="subnav-toggle reference internal" href="#installing-upgrading">Installing / Upgrading<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
-<li class="dropdown"><a class="subnav-toggle reference internal" href="#graphical-installer">Graphical Installer<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
+<li class="dropdown"><a class="subnav-toggle reference internal" href="#interactive-command-line-installer">Interactive Command Line Installer<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
 <li><a class="reference internal" href="#step-1-run-the-installer">Step 1: Run the installer</a></li>
 <li><a class="reference internal" href="#step-2-test-the-installation">Step 2: Test the installation</a></li>
 <li><a class="reference internal" href="#running-the-installer-behind-a-proxy">Running The Installer Behind a Proxy</a></li>
-<li><a class="reference internal" href="#potential-installation-issues">Potential Installation Issues</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#unattended-automated-install">Unattended (automated) install</a></li>
@@ -229,24 +225,28 @@
 <p>Before beginning the installation, first confirm that you have met the
 following requirements.</p>
 <ul>
-<li><p class="first"><a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Development Kit</a> 1.7 or greater</p>
+<li><p class="first"><a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Development Kit</a> 1.8 or greater</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.vim.org/download.php">Vim</a> 7.1 or greater</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://eclipse.org/downloads/index.php">Eclipse 4.7.x (Oxygen)</a></p>
 </li>
-<li><p class="first">Mac and Linux users must also have make and gcc installed.</p>
+<li><p class="first">python (2.7 or 3.x)</p>
+</li>
+<li><p class="first">make</p>
+</li>
+<li><p class="first">gcc</p>
 <p><strong>Minimum Vim Settings</strong>: In order for eclim to function properly, there is a
 minimum set of vim options that must be enabled in your vimrc file (:h vimrc).</p>
 <ul>
 <li><p class="first"><strong>set nocompatible</strong></p>
-<p>Execute :h 'compatible' for more info.  You can confirm that
+<p>Execute :h ‘compatible’ for more info.  You can confirm that
 compatibliity is turned off by executing the following in vim:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>echo &amp;<span class="nb">compatible</span>
 </pre></div>
 </div>
-<p>Which should output '0', but if not, then add the following to your ~/.vimrc
-files (_vimrc on Windows):</p>
+<p>Which should output ‘0’, but if not, then add the following to your ~/.vimrc
+files:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">nocompatible</span>
 </pre></div>
 </div>
@@ -257,9 +257,9 @@ that file type plugins are enabled by executing the following:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">filetype</span>
 </pre></div>
 </div>
-<p>Which should output 'filetype detection:ON  plugin:ON indent:ON', showing
-at least 'ON' for 'detection' and 'plugin', but if not, then update your
-~/.vimrc (_vimrc on Windows) to include:</p>
+<p>Which should output ‘filetype detection:ON  plugin:ON indent:ON’, showing
+at least ‘ON’ for ‘detection’ and ‘plugin’, but if not, then update your
+~/.vimrc to include:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">filetype</span> plugin indent <span class="k">on</span>
 </pre></div>
 </div>
@@ -270,9 +270,9 @@ at least 'ON' for 'detection' and 'plugin', but if not, then update your
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
-<p>You can find the official eclim installer on eclim's github <a class="reference external" href="https://github.com/ervandew/eclim/releases/">releases page</a>:</p>
+<p>You can find the official eclim installer on eclim’s github <a class="reference external" href="https://github.com/ervandew/eclim/releases/">releases page</a>:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.0/eclim_2.7.0.jar">eclim_2.7.0.jar</a></li>
+<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.1/eclim_2.7.1.bin">eclim_2.7.1.bin</a></li>
 </ul>
 <div class="section" id="third-party-packages">
 <h3>Third Party Packages<a class="headerlink" href="#third-party-packages" title="Permalink to this headline">¶</a></h3>
@@ -289,13 +289,13 @@ maintained by third parties:</p>
 <p>Eclim can be installed a few different ways depending on your preference and
 environment:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#installer"><span class="std std-ref">Graphical Installer</span></a></li>
-<li><a class="reference internal" href="#installer-automated"><span class="std std-ref">Unattended (automated) Installer</span></a></li>
+<li><a class="reference internal" href="#installer"><span class="std std-ref">Interactive Command Line Installer</span></a></li>
+<li><a class="reference internal" href="#installer-automated"><span class="std std-ref">Unattended Command Line Installer</span></a></li>
 <li><a class="reference internal" href="#install-source"><span class="std std-ref">Build from source</span></a></li>
 <li><a class="reference internal" href="#install-headless"><span class="std std-ref">Install on a headless server</span></a></li>
 </ul>
-<div class="section" id="graphical-installer">
-<span id="installer"></span><h3>Graphical Installer<a class="headerlink" href="#graphical-installer" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="interactive-command-line-installer">
+<span id="installer"></span><h3>Interactive Command Line Installer<a class="headerlink" href="#interactive-command-line-installer" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="step-1-run-the-installer">
 <h4>Step 1: Run the installer<a class="headerlink" href="#step-1-run-the-installer" title="Permalink to this headline">¶</a></h4>
 <div class="alert alert-info">
@@ -304,20 +304,15 @@ environment:</p>
 installation procedure.</p>
 </div>
 <ul>
-<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.0/eclim_2.7.0.jar">eclim_2.7.0.jar</a></p>
+<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.1/eclim_2.7.1.bin">eclim_2.7.1.bin</a></p>
 </li>
 <li><p class="first"><strong>Next run the installer:</strong></p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -jar eclim_2.7.0.jar
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin
 </pre></div>
 </div>
-<p>Windows and OSX users should be able to simply double click on the jar file
-to start the installer.</p>
-<p>After the installer starts up, simply follow the steps in the wizard
-to install eclim.</p>
+<p>After the installer starts up, simply follow the steps to install eclim.</p>
 <p>If your machine is behind a proxy, take a look at the instructions for
 <a class="reference internal" href="#installer-proxy"><span class="std std-ref">running the installer behind a proxy</span></a>.</p>
-<p>If you encounter an error running the installer, then consult the known
-<a class="reference internal" href="#installer-issues"><span class="std std-ref">potential</span></a> issues below.</p>
 </li>
 </ul>
 </div>
@@ -337,21 +332,11 @@ eclipse and open the eclimd view:</p>
 <p>If you plan on using eclim without the eclipse gui, then:</p>
 <ul>
 <li><p class="first">start the eclimd server.</p>
-<ul>
-<li><p class="first"><strong>Linux / Mac / BSD (and other unix based systems)</strong>:
-To start eclimd from linux, simply execute the eclimd script found in your
-eclipse root directory:</p>
+<p>To start eclimd, simply execute the eclimd script found in your eclipse root
+directory (or the path specified at the end of the command line installer):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ $ECLIPSE_HOME/eclimd
 </pre></div>
 </div>
-</li>
-<li><p class="first"><strong>Windows</strong>: The easiest way to start eclimd in windows is to double
-click on the eclimd.bat file found in your eclipse root directory:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">ECLIPSE_HOME</span><span class="o">%/</span><span class="n">eclimd</span><span class="o">.</span><span class="n">bat</span>
-</pre></div>
-</div>
-</li>
-</ul>
 </li>
 </ul>
 <p>Once you have the eclim daemon (headed or headless) running, you can then test
@@ -386,73 +371,31 @@ you will receive the following message:</p>
 <span id="installer-proxy"></span><h4>Running The Installer Behind a Proxy<a class="headerlink" href="#running-the-installer-behind-a-proxy" title="Permalink to this headline">¶</a></h4>
 <p>If you are behind a proxy, you may need to run the installer like so (be sure
 to take a look at the related <a class="reference internal" href="faq.html#eclim-proxy"><span class="std std-ref">faq</span></a> as well):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -Dhttp.proxyHost<span class="o">=</span>my.proxy -Dhttp.proxyPort<span class="o">=</span><span class="m">8080</span> -jar eclim_2.7.0.jar
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin --proxy my.proxy:8080
 </pre></div>
 </div>
-<p>If your proxy requires authentication, you'll need to supply the
-<code>-Dhttp.proxyUser</code> and <code>-Dhttp.proxyPassword</code> properties as well.</p>
-<p>You can also try the following which may be able to use your system proxy settings:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -Djava.net.useSystemProxies<span class="o">=</span><span class="nb">true</span> -jar eclim_2.7.0.jar
+<p>If your proxy requires authentication, you’ll need to supply the username and
+password as well:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin --proxy myuser:mypass@my.proxy:8080
 </pre></div>
 </div>
-</div>
-<div class="section" id="potential-installation-issues">
-<span id="installer-issues"></span><h4>Potential Installation Issues<a class="headerlink" href="#potential-installation-issues" title="Permalink to this headline">¶</a></h4>
-<p>In some rare cases you might encounter one of the following errors:</p>
-<ol class="arabic">
-<li><p class="first">Any exception which denotes usage of gcj.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">NullPointerException</span>
-  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">pietschy</span><span class="o">.</span><span class="n">wizard</span><span class="o">.</span><span class="n">HTMLPane</span><span class="o">.</span><span class="n">updateEditorColor</span><span class="p">(</span><span class="n">Unknown</span> <span class="n">Source</span><span class="p">)</span>
-  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">pietschy</span><span class="o">.</span><span class="n">wizard</span><span class="o">.</span><span class="n">HTMLPane</span><span class="o">.</span><span class="n">setEditorKit</span><span class="p">(</span><span class="n">Unknown</span> <span class="n">Source</span><span class="p">)</span>
-  <span class="n">at</span> <span class="n">javax</span><span class="o">.</span><span class="n">swing</span><span class="o">.</span><span class="n">JEditorPane</span><span class="o">.</span><span class="n">getEditorKit</span><span class="p">(</span><span class="n">libgcj</span><span class="o">.</span><span class="n">so</span><span class="o">.</span><span class="mi">90</span><span class="p">)</span>
-  <span class="o">...</span>
-</pre></div>
-</div>
-<p>Gcj (GNU Compile for Java), is not currently supported.  If you receive
-any error which references libgcj, then gcj is your current default jvm.
-So, you'll need to install the openjdk or a jdk from oracle to resolve the
-installation error.</p>
-</li>
-<li><div class="first highlight-default"><div class="highlight"><pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">IncompatibleClassChangeError</span>
-  <span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="n">formic</span><span class="o">.</span><span class="n">ant</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">Log4jLogger</span><span class="o">.</span><span class="n">printMessage</span><span class="p">(</span><span class="n">Log4jLogger</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">51</span><span class="p">)</span>
-  <span class="o">...</span>
-</pre></div>
-</div>
-<p>This is most likely caused by an incompatible version of log4j installed in
-your jave ext.dirs.  To combat this you can run the installer like so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ java -Djava.ext.dirs -jar eclim_2.7.0.jar
-</pre></div>
-</div>
-</li>
-</ol>
-<p>If you encounter an error not covered here, then please report it to the
-<a class="reference external" href="http://groups.google.com/group/eclim-user">eclim-user</a> mailing list.</p>
 </div>
 </div>
 <div class="section" id="unattended-automated-install">
 <span id="installer-automated"></span><h3>Unattended (automated) install<a class="headerlink" href="#unattended-automated-install" title="Permalink to this headline">¶</a></h3>
-<p>As of eclim 1.5.6 the eclim installer supports the ability to run an automated
-install without launching the installer gui.  Simply run the installer as shown
-below, supplying the location of your vim files and your eclipse install via
-system properties:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java <span class="se">\</span>
-  -Dvim.files<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
-  -Declipse.home<span class="o">=</span>/opt/eclipse <span class="se">\</span>
-  -jar eclim_2.7.0.jar install
+<p>The eclim installer supports the ability to run an automated
+install without prompting the user for any input, as long as you supply all the
+necessary input it requires.</p>
+<p>Simply run the installer as shown
+below, supplying the location of your eclipse install, vim files location, and
+the plugins you wish to install:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin <span class="se">\</span>
+  --yes <span class="se">\</span>
+  --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
+  --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
+  --plugins<span class="o">=</span>jdt,pydev
 </pre></div>
 </div>
-<p>Please note that when using this install method, the installer will only
-install eclim features whose third party dependecies are already present in
-your eclipse installation.  So before installing eclim, you must make sure that
-you've already installed the necessary dependencies (for a full list of
-dependencies, you can reference eclim's <a class="reference external" href="https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml">installer dependencies</a> file).</p>
-<p><strong>Required Properties:</strong></p>
-<ul class="simple">
-<li><strong>eclipse.home</strong> - The absolute path to your eclipse installation.</li>
-<li><strong>vim.files</strong> (or <strong>vim.skip=true</strong>) - The absolute path to your vim files
-directory. Or if you want to omit the installation of the vim files
-(emacs-eclim users for example) you can supply <code>-Dvim.skip=true</code> instead.</li>
-</ul>
 </div>
 <div class="section" id="building-from-source">
 <span id="install-source"></span><h3>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h3>
@@ -501,7 +444,7 @@ can run either of the following commands to create it:</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your vimfiles directory is not located at the default location for your
-OS, then you can specify the location using the &quot;vim.files&quot; property:</p>
+OS, then you can specify the location using the “vim.files” property:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
 </pre></div>
 </div>
@@ -525,7 +468,7 @@ below showing what will be built vs what will be skipped:</p>
 </div>
 <p>In this case we can see that four eclim plugins will be skipped along with the
 eclipse feature that would be required to build those plugins.</p>
-<p>If you don't want to supply the eclipse home directory, or any other
+<p>If you don’t want to supply the eclipse home directory, or any other
 properties, on the command line every time you build eclim, you can create a
 <code>user.properties</code> file at the eclim source root and put all your properties
 in there:</p>
@@ -552,7 +495,7 @@ patched to behave differently than the upstream version, resulting in one or
 more eclim supplied sphinx extensions not loading. Another issue you may run
 into is the docutils package, which sphinx depends on, is outdated on
 debian/ubuntu, resulting in another set of errors.</p>
-<p class="last">So to get around these issues you'll need to install sphinx using <a class="reference external" href="http://pip.readthedocs.org/en/latest/index.html">pip</a> or
+<p class="last">So to get around these issues you’ll need to install sphinx using <a class="reference external" href="http://pip.readthedocs.org/en/latest/index.html">pip</a> or
 similar.</p>
 </div>
 </div>
@@ -561,30 +504,30 @@ similar.</p>
 <div class="section" id="installing-on-a-headless-server">
 <span id="install-headless"></span><h3>Installing on a headless server<a class="headerlink" href="#installing-on-a-headless-server" title="Permalink to this headline">¶</a></h3>
 <p>The eclim daemon supports running both inside of the eclipse gui and as a
-&quot;headless&quot; non-gui server. However, even in the headless mode, eclipse still
+“headless” non-gui server. However, even in the headless mode, eclipse still
 requires a running X server to function. If you are running eclim on a desktop
-then this isn't a problem, but some users would like to run the eclim daemon on
-a truly headless server. To achieve this, you can make use of X.Org's Xvfb
+then this isn’t a problem, but some users would like to run the eclim daemon on
+a truly headless server. To achieve this, you can make use of X.Org’s Xvfb
 server.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">This guide uses the Ubuntu server distribution to illustrate the process of
 setting up a headless server, but you should be able to run Xvfb on the
 distro of your choice by translating the package names used here to your
-distro's equivalents.</p>
+distro’s equivalents.</p>
 </div>
 <p>The first step is to install the packages that are required to run eclipse and
 eclim:</p>
 <ul>
-<li><p class="first">Install a java jdk, xvfb, and the necessary build tools to compile eclim's
+<li><p class="first">Install a java jdk, xvfb, and the necessary build tools to compile eclim’s
 nailgun client during installation (make, gcc, etc).</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ sudo apt-get install openjdk-6-jdk xvfb build-essential
 </pre></div>
 </div>
 </li>
 </ul>
-<p>Then you'll need to install eclipse. You may do so by installing it from your
-distro's package manager or using a version found on <a class="reference external" href="http://eclipse.org/downloads/">eclipse.org</a>. If you
+<p>Then you’ll need to install eclipse. You may do so by installing it from your
+distro’s package manager or using a version found on <a class="reference external" href="http://eclipse.org/downloads/">eclipse.org</a>. If you
 choose to install a version from you package manager, make sure that the
 version to be installed is compatible with eclim since the package manager
 version can often be out of date. If you choose to install an <a class="reference external" href="http://eclipse.org/downloads/">eclipse.org</a>
@@ -593,38 +536,19 @@ based browser like elinks, or you can navigate to the download page on your
 desktop and copy the download url and use wget to download the eclipse archive.
 Once downloaded, you can then extract the archive in the directory of your
 choice.</p>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p class="last">When downloading an eclipse distribution, make sure you download one of their
+<a class="reference external" href="http://eclipse.org/downloads/eclipse-packages/">archives</a> vs the eclipse
+installer. An archive can simply be extracted to install eclipse, but the
+eclipse installer (their default download) may require a gui to install.</p>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ wget &lt;eclipse_mirror&gt;/eclipse-&lt;version&gt;-linux-gtk.tar.gz
 $ tar -zxf eclipse-&lt;version&gt;-linux-gtk.tar.gz
 </pre></div>
 </div>
-<div class="alert alert-info">
-<p class="alert-heading first admonition-title">Note</p>
-<p>Depending on what distribution of eclipse you installed and what eclim
-features you would like to be installed, you may need to install additional
-eclipse features.  If you installed eclipse from your package manager then
-your package manager may also have the required dependency (eclipse-cdt for
-C/C++ support for example). If not, you can install the required dependency
-using eclipse's p2 command line client. Make sure the command references the
-correct repository for your eclipse install (juno in this example) and that
-you have Xvfb running as described in the last step of this guide:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DISPLAY</span><span class="o">=</span><span class="p">:</span><span class="mi">1</span> <span class="o">./</span><span class="n">eclipse</span><span class="o">/</span><span class="n">eclipse</span> <span class="o">-</span><span class="n">nosplash</span> <span class="o">-</span><span class="n">consolelog</span> <span class="o">-</span><span class="n">debug</span>
-  <span class="o">-</span><span class="n">application</span> <span class="n">org</span><span class="o">.</span><span class="n">eclipse</span><span class="o">.</span><span class="n">equinox</span><span class="o">.</span><span class="n">p2</span><span class="o">.</span><span class="n">director</span>
-  <span class="o">-</span><span class="n">repository</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">download</span><span class="o">.</span><span class="n">eclipse</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">juno</span>
-  <span class="o">-</span><span class="n">installIU</span> <span class="n">org</span><span class="o">.</span><span class="n">eclipse</span><span class="o">.</span><span class="n">wst</span><span class="o">.</span><span class="n">web_ui</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">group</span>
-</pre></div>
-</div>
-<p class="last">For a list of eclim plugins and which eclipse features they require, please
-see the <a class="reference external" href="https://github.com/ervandew/eclim/blob/master/org.eclim.installer/build/resources/dependencies.xml">installer dependencies</a>.  Note that the suffix '.feature.group'
-must be added to the dependency id found in that file when supplying it to
-the '-installIU' arg of the above command.</p>
-</div>
-<p>Once eclipse is installed, you can then install eclim utilizing the eclim
-installer's automated install option (see the <a class="reference internal" href="#installer-automated"><span class="std std-ref">Unattended (automated) install</span></a>
-section for additional details):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java <span class="se">\</span>
-  -Dvim.files<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
-  -Declipse.home<span class="o">=</span>/opt/eclipse <span class="se">\</span>
-  -jar eclim_2.7.0.jar install
+<p>Once eclipse is installed, you can then install eclim normally:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin
 </pre></div>
 </div>
 <p>The last step is to start Xvfb followed by eclimd:</p>
@@ -635,7 +559,7 @@ $ DISPLAY=:1 ./eclipse/eclimd -b
 <p>When starting Xvfb you may receive some errors regarding font paths and
 possibly dbus and hal, but as long as Xvfb continues to run, you should be
 able to ignore these errors.</p>
-<p>The first time you start eclimd you may want to omit the 'start' argument so
+<p>The first time you start eclimd you may want to omit the ‘start’ argument so
 that you can see the output on the console to ensure that eclimd starts
 correctly.</p>
 <div class="alert alert-info">
@@ -655,36 +579,20 @@ plugins along with all the files eclim adds to your .vim or vimfiles directory
 </div>
 <div class="section" id="uninstall">
 <span id="id1"></span><h2>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline">¶</a></h2>
-<p>To uninstall eclim you can use any eclim distribution jar whose version is
-1.7.5 or greater by running it with the 'uninstaller' argument like so:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java -jar eclim_2.7.0.jar uninstaller
+<p>To uninstall eclim you can use the eclim installer like so:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin uninstall
 </pre></div>
-</div>
-<p>That will open a graphical wizard much like the install wizard which will ask
-you again for the location of your vimfiles and eclipse home where you've
-installed eclim and will then remove the eclim installation accordingly.</p>
-<div class="alert alert-info">
-<p class="alert-heading first admonition-title">Note</p>
-<p class="last">The uninstaller is backwards compatible and can be used to uninstall older
-versions of eclim.</p>
 </div>
 <div class="section" id="unattended-automated-uninstall">
 <span id="uninstall-automated"></span><h3>Unattended (automated) uninstall<a class="headerlink" href="#unattended-automated-uninstall" title="Permalink to this headline">¶</a></h3>
 <p>Like the installer, the uninstaller also supports an unattended uninstall. You
-just need to supply your vim files and eclipse paths as system properties:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ java <span class="se">\</span>
-  -Dvim.files<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
-  -Declipse.home<span class="o">=</span>/opt/eclipse <span class="se">\</span>
-  -jar eclim_2.7.0.jar uninstall
+just need to supply your eclipse and vim files directories:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin
+  --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
+  --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
+  uninstall
 </pre></div>
 </div>
-<p><strong>Required Properties:</strong></p>
-<ul class="simple">
-<li><strong>eclipse.home</strong> - The absolute path to your eclipse installation.</li>
-<li><strong>vim.files</strong> (or <strong>vim.skip=true</strong>) - The absolute path to your vim files
-directory. Or if you never installed the vim files (emacs-eclim users for
-example) you can supply <code>-Dvim.skip=true</code> instead.</li>
-</ul>
 </div>
 </div>
 </div>
@@ -703,9 +611,9 @@ example) you can supply <code>-Dvim.skip=true</code> instead.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

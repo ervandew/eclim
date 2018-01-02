@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Eclim Manage / Config &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -212,7 +209,7 @@ Shuts down the current running eclimd instance.</li>
 </ul>
 <ul id="vimsettings">
 <li><p class="first"><strong>:VimSettings</strong> -
-Allows you to view and edit all of eclim's vim client settings. Settings
+Allows you to view and edit all of eclim’s vim client settings. Settings
 edited here will be stored at <code>$HOME/.eclim/.eclim_settings</code>.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
@@ -230,8 +227,8 @@ command on the <a class="reference internal" href="project.html"><span class="do
 <li><strong>:EclimDisable</strong> -
 Allows you to temporarily disable all communication with eclimd for the
 current vim session.  Useful if you need to shutdown eclimd for one reason or
-antoher, and would like to disable vim's attempts to communicate with the
-non-existant server.</li>
+another, and would like to disable vim’s attempts to communicate with the
+non-existent server.</li>
 </ul>
 <ul class="simple" id="eclimenable">
 <li><strong>:EclimEnable</strong> -
@@ -239,7 +236,7 @@ Re-enables communication with eclimd (the converse of <strong>:EclimDisable</str
 </ul>
 <ul class="simple" id="eclimhelp">
 <li><strong>:EclimHelp</strong> [&lt;topic&gt;] -
-Similar to vim's :help command, with the exception that this command is
+Similar to vim’s :help command, with the exception that this command is
 limited to opening topics for eclim.</li>
 </ul>
 <ul id="eclimhelpgrep">
@@ -270,44 +267,44 @@ various commands that add contact or author information to a file.</li>
 Should be set to the version number of your project.  This is used by various
 commands that add version info to a file or utilize the version number in
 some other manner.</p>
-<p>Defaults to &quot;1.0&quot;.</p>
+<p>Defaults to “1.0”.</p>
 </li>
 </ul>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <p>The following is a list of some of the common Vim variables available.</p>
 <ul id="g-eclimloglevel">
-<li><p class="first"><strong>g:EclimLogLevel</strong> (Default: 'info')</p>
+<li><p class="first"><strong>g:EclimLogLevel</strong> (Default: ‘info’)</p>
 <p>This variable allows you to control the level of output from eclim as
 follows:</p>
 <ul class="simple">
-<li>'trace' - Show all trace, debug, info, warning, and error messages.</li>
-<li>'debug' - Show all debug, info, warning, and error messages.</li>
-<li>'info' - Show all info, warning, and error messages.</li>
-<li>'warning' - Show only warning, and error messages.</li>
-<li>'error' - Show only error messages.</li>
-<li>'off' - Don't display any messages.</li>
+<li>‘trace’ - Show all trace, debug, info, warning, and error messages.</li>
+<li>‘debug’ - Show all debug, info, warning, and error messages.</li>
+<li>‘info’ - Show all info, warning, and error messages.</li>
+<li>‘warning’ - Show only warning, and error messages.</li>
+<li>‘error’ - Show only error messages.</li>
+<li>‘off’ - Don’t display any messages.</li>
 </ul>
 <p>Each level also has a corresponding variable to set the highlighting group
 used for the text.</p>
 <ul class="simple" id="g-eclimhighlighterror">
-<li><strong>g:EclimHighlightError</strong> (Default: &quot;Error&quot;)</li>
+<li><strong>g:EclimHighlightError</strong> (Default: “Error”)</li>
 </ul>
 <ul class="simple" id="g-eclimhighlightwarning">
-<li><strong>g:EclimHighlightWarning</strong> (Default: &quot;WarningMsg&quot;)</li>
+<li><strong>g:EclimHighlightWarning</strong> (Default: “WarningMsg”)</li>
 </ul>
 <ul class="simple" id="g-eclimhighlightinfo">
-<li><strong>g:EclimHighlightInfo</strong> (Default: &quot;Statement&quot;)</li>
+<li><strong>g:EclimHighlightInfo</strong> (Default: “Statement”)</li>
 </ul>
 <ul class="simple" id="g-eclimhighlightdebug">
-<li><strong>g:EclimHighlightDebug</strong> (Default: &quot;Normal&quot;)</li>
+<li><strong>g:EclimHighlightDebug</strong> (Default: “Normal”)</li>
 </ul>
 <ul class="simple" id="g-eclimhighlighttrace">
-<li><strong>g:EclimHighlightTrace</strong> (Default: &quot;Normal&quot;)</li>
+<li><strong>g:EclimHighlightTrace</strong> (Default: “Normal”)</li>
 </ul>
 </li>
 </ul>
 <ul id="g-eclimsignlevel">
-<li><p class="first"><strong>g:EclimSignLevel</strong> (Default: 'info')</p>
+<li><p class="first"><strong>g:EclimSignLevel</strong> (Default: ‘info’)</p>
 <p>Behaves just like <strong>g:EclimLogLevel</strong> except this applies
 to placing of Vim signs for displaying validation errors / warnings,
 or marking quickfix/location list entries.</p>
@@ -323,27 +320,17 @@ set one in your vimrc.</p>
 <ul>
 <li><div class="first line-block">
 <div class="line">Firefox</div>
-<div class="line">let g:EclimBrowser = 'firefox'</div>
+<div class="line">let g:EclimBrowser = ‘firefox’</div>
 </div>
 </li>
 <li><div class="first line-block">
-<div class="line">Mozilla</div>
-<div class="line">let g:EclimBrowser = 'mozilla'</div>
-</div>
-</li>
-<li><div class="first line-block">
-<div class="line">Opera</div>
-<div class="line">let g:EclimBrowser = 'opera'</div>
-</div>
-</li>
-<li><div class="first line-block">
-<div class="line">IE</div>
-<div class="line">let g:EclimBrowser = 'iexplore'</div>
+<div class="line">Chromium</div>
+<div class="line">let g:EclimBrowser = ‘chromium’</div>
 </div>
 </li>
 </ul>
 <p>Note: The above examples assume that the browser executable is in your path.
-On windows machines they won't be by default, so you will need to add them.</p>
+On windows machines they won’t be by default, so you will need to add them.</p>
 </li>
 </ul>
 <ul id="g-eclimshowcurrenterror">
@@ -356,12 +343,12 @@ any error exists.  Setting this variable to 0 disables this feature.</p>
 <ul id="g-eclimmakelcd">
 <li><p class="first"><strong>g:EclimMakeLCD</strong> (Default: 1)</p>
 <p>When set to a non-0 value, all eclim based make commands (:Ant, :Maven, :Mvn,
-etc) will change to the current file's project root before executing.</p>
+etc) will change to the current file’s project root before executing.</p>
 <p>Enabling this has the benefit of allowing you to run these commands from any
 file regardless of where it was opened from without having to worry about the
 directory it is executing from.  For example if you have a file open from
 project A and split a file from project B, you can execute <strong>:Ant</strong> from the
-project B file and it will utilize project B's build.xml even though your
+project B file and it will utilize project B’s build.xml even though your
 current working directory is in project A.</p>
 </li>
 </ul>
@@ -394,9 +381,9 @@ prompted to choose from a list of choices.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

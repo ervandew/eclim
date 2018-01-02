@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Scala Validation &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -200,9 +197,9 @@
 </div>
 <p>When saving a scala source file that resides in a project, eclim will update
 that source file in Eclipse and will report any validation errors found. Any
-errors will be placed in the current window's location list (:help
+errors will be placed in the current window’s location list (:help
 location-list) and the corresponding lines in the source file will be marked
-via Vim's :sign functionality with '&gt;&gt;' markers in the left margin.</p>
+via Vim’s :sign functionality with ‘&gt;&gt;’ markers in the left margin.</p>
 <p>Automatic validation of scala source files can be disabled via the
 <strong>g:EclimScalaValidate</strong> variable (described below). If you choose to disable
 automatic validation, you can still use the <strong>:Validate</strong> command to manually
@@ -213,8 +210,8 @@ validate the current file.</p>
 <ul class="simple" id="g-eclimscalavalidate">
 <li><strong>g:EclimScalaValidate</strong> (Default: 1) -
 If set to 0, disables source code validation.</li>
-<li><strong>g:EclimValidateSortResults</strong> (Default: 'occurrence') -
-If set to 'severity', the validation results will be sorted by severity
+<li><strong>g:EclimValidateSortResults</strong> (Default: ‘occurrence’) -
+If set to ‘severity’, the validation results will be sorted by severity
 (errors &gt; warnings &gt; info &gt; etc.)</li>
 </ul>
 </div>
@@ -234,9 +231,9 @@ If set to 'severity', the validation results will be sorted by severity
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

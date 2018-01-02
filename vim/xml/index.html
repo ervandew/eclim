@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Xml / Dtd / Xsd &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -222,7 +219,7 @@
 <p>If you have xml files that do not have a .xml extension then eclipse may not
 recognize it as an xml file resulting in validation, completion, etc not
 working. Although the vim side may have the correct file type set, you may
-still need to add the file's extension to the list of xml content types in the
+still need to add the file’s extension to the list of xml content types in the
 eclipse gui:</p>
 <p class="last"><span class="menuselection">Preferences ‣ General ‣ Content Types ‣ Text ‣ XML</span></p>
 </div>
@@ -248,7 +245,7 @@ eclipse gui:</p>
 <div class="section" id="definition-lookup">
 <h3>Definition Lookup<a class="headerlink" href="#definition-lookup" title="Permalink to this headline">¶</a></h3>
 <p>When editing xml files, eclim provides a couple commands which allow you to
-quickly and easily open the file's data definition and optionally jump to the
+quickly and easily open the file’s data definition and optionally jump to the
 definition of a particular element.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
@@ -272,10 +269,10 @@ corresponding schema definition file.</li>
 <div class="section" id="validation">
 <span id="xml-validation"></span><h3>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h3>
 <p>When editing a xml file eclim will default to validating the file when it is
-written.  Any errors will be added to the current window's location list (:help
-location-list) and their corresponding line number noted via Vim's sign
+written.  Any errors will be added to the current window’s location list (:help
+location-list) and their corresponding line number noted via Vim’s sign
 functionality.</p>
-<p>If you don't want xml files validated when saving them, you can set the
+<p>If you don’t want xml files validated when saving them, you can set the
 g:EclimXmlValidate variable described in the configuration section below.</p>
 <p>Regardless of whether you have validation enabled upon saving or not, the
 following command is still available for validating xml files on demand.</p>
@@ -306,8 +303,8 @@ content from a web service).</p>
 <ul class="simple" id="g-eclimxmlvalidate">
 <li><strong>g:EclimXmlValidate</strong> (Defualt: 1) -
 If set to 0, disables xml validation when saving the file.</li>
-<li><strong>g:EclimValidateSortResults</strong> (Default: 'occurrence') -
-If set to 'severity', the validation results will be sorted by severity
+<li><strong>g:EclimValidateSortResults</strong> (Default: ‘occurrence’) -
+If set to ‘severity’, the validation results will be sorted by severity
 (errors &gt; warnings &gt; info &gt; etc.)</li>
 </ul>
 </div>
@@ -317,8 +314,8 @@ If set to 'severity', the validation results will be sorted by severity
 <div class="section" id="id3">
 <h3>Validation<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>When editing a dtd file eclim will default to validating the file when it is
-written. Any errors will be added to the current window's location list (:help
-location-list) and their corresponding line number noted via Vim's sign
+written. Any errors will be added to the current window’s location list (:help
+location-list) and their corresponding line number noted via Vim’s sign
 functionality.</p>
 <p>If you do not want your dtd files validated automatically when saved, you can
 set the <a class="reference internal" href="#g-eclimdtdvalidate"><span class="xref std std-ref">g:EclimDtdValidate</span></a> variable described in the configuration
@@ -333,8 +330,8 @@ file.</p>
 <ul class="simple" id="g-eclimdtdvalidate">
 <li><strong>g:EclimDtdValidate</strong> (Default: 1) -
 If set to 0, disables validation when saving the file.</li>
-<li><strong>g:EclimValidateSortResults</strong> (Default: 'occurrence') -
-If set to 'severity', the validation results will be sorted by severity
+<li><strong>g:EclimValidateSortResults</strong> (Default: ‘occurrence’) -
+If set to ‘severity’, the validation results will be sorted by severity
 (errors &gt; warnings &gt; info &gt; etc.)</li>
 </ul>
 </div>
@@ -344,8 +341,8 @@ If set to 'severity', the validation results will be sorted by severity
 <div class="section" id="id6">
 <h3>Validation<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>When editing a xsd file eclim will default to validating the file when it is
-written.  Any errors will be added to the current window's location list (:help
-location-list) and their corresponding line number noted via Vim's sign
+written.  Any errors will be added to the current window’s location list (:help
+location-list) and their corresponding line number noted via Vim’s sign
 functionality.</p>
 <p>If you do not want your xsd files validated automatically when saved, you can
 set the <a class="reference internal" href="#g-eclimxsdvalidate"><span class="xref std std-ref">g:EclimXsdValidate</span></a> variable described in the configuration
@@ -360,8 +357,8 @@ file.</p>
 <ul class="simple" id="g-eclimxsdvalidate">
 <li><strong>g:EclimXsdValidate</strong> (Default: 1) -
 If set to 0, disables validation when saving the file.</li>
-<li><strong>g:EclimValidateSortResults</strong> (Default: 'occurrence') -
-If set to 'severity', the validation results will be sorted by severity
+<li><strong>g:EclimValidateSortResults</strong> (Default: ‘occurrence’) -
+If set to ‘severity’, the validation results will be sorted by severity
 (errors &gt; warnings &gt; info &gt; etc.)</li>
 </ul>
 </div>
@@ -382,9 +379,9 @@ If set to 'severity', the validation results will be sorted by severity
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

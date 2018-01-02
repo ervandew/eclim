@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Maven &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -209,29 +206,29 @@ eclim also provides commands for running maven 1.x or 2.x.</p>
 </div>
 <p>which perform the following steps:</p>
 <ul class="simple">
-<li>Save any previous 'makeprg' and 'errorformat' option settings so that
+<li>Save any previous ‘makeprg’ and ‘errorformat’ option settings so that
 you can define your own settings for the :make command.</li>
-<li>Set 'makeprg' to execute maven or mvn with the --find option so that it
+<li>Set ‘makeprg’ to execute maven or mvn with the –find option so that it
 will search for your pom file in the current directory or in a parent
 directory.</li>
-<li>Set 'errorformat' to recognize the following errors:<ul>
+<li>Set ‘errorformat’ to recognize the following errors:<ul>
 <li>javac errors.</li>
 <li>javadoc errors.</li>
 <li>junit errors / failures.</li>
 </ul>
 </li>
 <li>Execute :make.</li>
-<li>Restore your previous 'makeprg' and 'errorformat' option settings.</li>
+<li>Restore your previous ‘makeprg’ and ‘errorformat’ option settings.</li>
 </ul>
 <p>Additionally, if <a class="reference internal" href="../core/eclim.html#g-eclimmakelcd"><span class="xref std std-ref">g:EclimMakeLCD</span></a> is enabled (which it is by default),
-then the execution of maven will be performed from the current buffer's project
-root directory, ensuring that mavens's build file discovery method is performed
-from the buffer's working directory and not your own.</p>
+then the execution of maven will be performed from the current buffer’s project
+root directory, ensuring that mavens’s build file discovery method is performed
+from the buffer’s working directory and not your own.</p>
 <p>Note that <strong>:Mvn</strong> MUST have this enabled since maven 2.x no
 longer has support for the <code>--find</code> option.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">Both <strong>:Maven</strong> and <strong>:Mvn</strong> also supports use of '!' (:Maven!) just like
+<p class="last">Both <strong>:Maven</strong> and <strong>:Mvn</strong> also supports use of ‘!’ (:Maven!) just like
 :make does, which tells Vim not to jump to the first error if one exists.</p>
 </div>
 </div>
@@ -251,9 +248,9 @@ longer has support for the <code>--find</code> option.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Logging (log4j, etc) &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -216,7 +213,7 @@ implementation.</p>
 (commons-logging, slf4j, log4j, and jdk).  However, if you happen to use an
 alternate logging framework, or perhaps a home grown framework, eclim also
 provides the means to supply a custom template.  To utilize it, simply set the
-<strong>org.eclim.java.logging.impl</strong> setting to &quot;custom&quot; and add your template to
+<strong>org.eclim.java.logging.impl</strong> setting to “custom” and add your template to
 <code>~/.eclim/resources/jdt/templates/logger.gst</code>.  Two variables will be
 supplied to your template: <code>var</code>, which is the logger instance variable, and
 <code>class</code>, which is the class name of the current class you are implementing.</p>
@@ -237,14 +234,14 @@ If set to a value greater than 0, then this plugin will be disabled.</li>
 </ul>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Eclim Settings</span></a></p>
 <ul id="org-eclim-java-logging-impl">
-<li><p class="first"><strong>org.eclim.java.logging.impl</strong> (Default: &quot;commons-logging&quot;) -
+<li><p class="first"><strong>org.eclim.java.logging.impl</strong> (Default: “commons-logging”) -
 Determines which logging implementation to use.</p>
-<p>Possible values include &quot;commons-logging&quot;, &quot;slf4j&quot;, &quot;log4j&quot;, &quot;jdk&quot;, and
-&quot;custom&quot;.</p>
+<p>Possible values include “commons-logging”, “slf4j”, “log4j”, “jdk”, and
+“custom”.</p>
 </li>
 </ul>
 <ul class="simple" id="org-eclim-java-logging-template">
-<li><strong>org.eclim.java.logging.template</strong> (Default: 'logger.gst') -
+<li><strong>org.eclim.java.logging.template</strong> (Default: ‘logger.gst’) -
 Determines the name of the template to use for the custom logger.  The name
 must be a file name relative to ~/.eclim/resources/jdt/templates/.</li>
 </ul>
@@ -255,8 +252,8 @@ must be a file name relative to ~/.eclim/resources/jdt/templates/.</li>
 <div class="section" id="validation">
 <h3>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h3>
 <p>When editing a log4j xml file eclim will default to validating the file when it
-is written. Any errors will be added to the current window's location list
-(:help location-list) and their corresponding line number noted via Vim's sign
+is written. Any errors will be added to the current window’s location list
+(:help location-list) and their corresponding line number noted via Vim’s sign
 functionality.</p>
 <p>Eclim also combines the above validation with <a class="reference internal" href="../xml/index.html#xml-validation"><span class="std std-ref">xml validation</span></a> to validate that the file is well formed.</p>
 <p>If you do not want your log4j files validated automatically when saved, you can
@@ -290,9 +287,9 @@ If set to 0, disables validation when saving the file.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Utility Commands &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -195,7 +192,7 @@
 general purpose commands that are useful in and outside the scope of eclim.</p>
 <ul class="simple" id="tcd">
 <li><strong>:Tcd</strong> dir -
-Mimics vim's :lcd command but sets the current working directory local to the
+Mimics vim’s :lcd command but sets the current working directory local to the
 current tab instead of just the current window.</li>
 </ul>
 <ul class="simple" id="difflastsaved">
@@ -240,47 +237,47 @@ Opens a temporary window with a list of all the currently listed buffers in
 vim (like :buffers).  From this list you can open any of the files using one
 of the following shortcuts:</p>
 <ul class="simple">
-<li><strong>E</strong> (shift-e) - Open the file with 'edit'.</li>
-<li><strong>S</strong> (shift-s) - Open the file with 'split'.</li>
-<li><strong>V</strong> (shift-v) - Open the file with 'vsplit'.</li>
-<li><strong>T</strong> (shift-t) - Open the file with 'tabnew'.</li>
+<li><strong>E</strong> (shift-e) - Open the file with ‘edit’.</li>
+<li><strong>S</strong> (shift-s) - Open the file with ‘split’.</li>
+<li><strong>V</strong> (shift-v) - Open the file with ‘vsplit’.</li>
+<li><strong>T</strong> (shift-t) - Open the file with ‘tabnew’.</li>
 <li><strong>D</strong> (shift-d) - Deletes the buffer and removes it from the list.</li>
 <li><strong>?</strong> - View the help buffer.</li>
 </ul>
 <p>In addition to the above mappings you can also use &lt;return&gt; to execute the
 configured default action on the buffer under the cursor.</p>
 <p>To configure the default action you can set the following variable:</p>
-<p><strong>g:EclimBuffersDefaultAction</strong> (defaults to 'split')</p>
+<p><strong>g:EclimBuffersDefaultAction</strong> (defaults to ‘split’)</p>
 <p>Note that eclim will track the tab where buffers are opened and closed
 allowing <strong>:Buffers</strong> to filter the list to those whose primary tab is the
 current tab, or for buffers not open, show those that were last open on the
 current tab. If however you would like to still see all listed buffers, you
-can append '!' to the command: <code>:Buffers!</code></p>
+can append ‘!’ to the command: <code>:Buffers!</code></p>
 <p>By default entries will be sorted by path name, but you may change the
 sorting via these two variables:</p>
 <p><strong>Configuration</strong></p>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul class="simple" id="g-eclimbufferssort">
-<li><strong>g:EclimBuffersSort</strong> (defaults to 'path')  Supports one
-of 'path', 'status' (active or hidden), 'bufnr'.</li>
+<li><strong>g:EclimBuffersSort</strong> (defaults to ‘path’)  Supports one
+of ‘path’, ‘status’ (active or hidden), ‘bufnr’.</li>
 </ul>
 <ul class="simple" id="g-eclimbufferssortdirection">
-<li><strong>g:EclimBuffersSortDirection</strong> (defaults to 'asc')
-Supports one of 'asc' or 'desc'.</li>
+<li><strong>g:EclimBuffersSortDirection</strong> (defaults to ‘asc’)
+Supports one of ‘asc’ or ‘desc’.</li>
 </ul>
 <ul class="simple" id="g-eclimbufferstabtracking">
 <li><strong>g:EclimBuffersTabTracking</strong> (defaults to 1)
 When set to a non-0 value, eclim will keep track of which tabs buffers are
 opened on allowing the <code>:Buffers</code> command to filter the list of buffers to
 those accessed by the current tab. As noted above, you can still view all
-buffers with this option enabled by using <code>:Buffers!</code> ('!' appended).</li>
+buffers with this option enabled by using <code>:Buffers!</code> (‘!’ appended).</li>
 </ul>
 <ul class="simple" id="g-eclimbuffersdeleteontabclose">
 <li><strong>g:EclimBuffersDeleteOnTabClose</strong> (defaults to 0)
 When set to a non-0 value and <code>g:EclimBuffersTabTracking</code> is enabled, then
 eclim will delete any non-active buffers associated with the current tab
 when that tab is closed. The can be useful if you use a tab per project
-workflow and would like to close a project's tab and have any buffers for
+workflow and would like to close a project’s tab and have any buffers for
 that project deleted as well.</li>
 </ul>
 </li>
@@ -293,7 +290,7 @@ buffers window.</li>
 </ul>
 <ul id="only">
 <li><p class="first"><strong>:Only</strong> -
-Alternative for vim's :only command.  The purpose of this command and the
+Alternative for vim’s :only command.  The purpose of this command and the
 original vim version is to close all but the current window.  Unfortunately
 there is no way to tell the vim version to exclude some windows you may wish
 to keep open (taglist, quickfix, etc.).  The eclim version provides that
@@ -302,14 +299,14 @@ variables.</p>
 <p><strong>Configuration</strong></p>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul class="simple" id="g-eclimonlyexclude">
-<li><strong>g:EclimOnlyExclude</strong> (defaults to '^NONE$') -
+<li><strong>g:EclimOnlyExclude</strong> (defaults to ‘^NONE$’) -
 Regex used to match buffer names for windows that should not be closed when
 issuing the :Only command.</li>
 </ul>
 <ul class="simple" id="g-eclimonlyexcludefixed">
 <li><strong>g:EclimOnlyExcludeFixed</strong> (defaults to 1)
-When non-0 all fixed windows (ones which have 'winfixwidth' or
-'winfixheight' set) will be preserved when issuing the :Only command.</li>
+When non-0 all fixed windows (ones which have ‘winfixwidth’ or
+‘winfixheight’ set) will be preserved when issuing the :Only command.</li>
 </ul>
 </li>
 </ul>
@@ -346,7 +343,7 @@ can supply a bang (!) to force it to do so:</p>
 Defines a list of url patterns to open in Vim via netrw.</li>
 </ul>
 <ul class="simple" id="g-eclimopenurlinvimaction">
-<li><strong>g:EclimOpenUrlInVimAction</strong> (Default: 'split') -
+<li><strong>g:EclimOpenUrlInVimAction</strong> (Default: ‘split’) -
 Defines the command used to open files matched by g:EclimOpenUrlInVimPatterns.</li>
 </ul>
 </li>
@@ -371,7 +368,7 @@ the command.</p>
 </pre></div>
 </div>
 <p>Note that you can supply the arguments to the command just as you would
-when using the search input via google's homepage, allowing you to utilize
+when using the search input via google’s homepage, allowing you to utilize
 the full querying capabilities of google.</p>
 </li>
 <li><p class="first">The second method is to issue the command with no arguments. The
@@ -413,9 +410,9 @@ argument to the command or it will otherwise use the word under the cursor.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

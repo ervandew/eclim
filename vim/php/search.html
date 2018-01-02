@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Php Search &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -205,8 +202,8 @@
 <p>Pattern searching provides a means to widen a search beyond a single
 element.  A pattern search can be executed using the command</p>
 <p><strong>:PhpSearch</strong> -p &lt;pattern&gt; [-t &lt;type&gt; -s &lt;scope&gt; -i -a &lt;action&gt;]</p>
-<p>When there is more than 1 result, those results will be placed into vim's
-quickfix list (:help quickfix) so that you can easily navigate them using vim's
+<p>When there is more than 1 result, those results will be placed into vim’s
+quickfix list (:help quickfix) so that you can easily navigate them using vim’s
 quickfix commands.</p>
 <p>Vim command completion is supported through out the command with the exception
 of the pattern to search for.</p>
@@ -274,13 +271,13 @@ will search the configured include path for the file.</li>
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul id="g-eclimphpsearchsingleresult">
-<li><p class="first"><strong>g:EclimPhpSearchSingleResult</strong> (Default: 'split') -
+<li><p class="first"><strong>g:EclimPhpSearchSingleResult</strong> (Default: ‘split’) -
 Determines what action to take when a only a single result is found.</p>
 <p>Possible values include:</p>
 <ul class="simple">
-<li>'split' - open the result in a new window via &quot;split&quot;.</li>
-<li>'edit' - open the result in the current window.</li>
-<li>'tabnew' - open the result in a new tab.</li>
+<li>‘split’ - open the result in a new window via “split”.</li>
+<li>‘edit’ - open the result in the current window.</li>
+<li>‘tabnew’ - open the result in a new tab.</li>
 </ul>
 <p>This setting overrides the global default for all supported language types
 which can be set using the <strong>g:EclimDefaultFileOpenAction</strong> setting which
@@ -288,7 +285,7 @@ accepts the same possible values.</p>
 </li>
 </ul>
 <ul class="simple">
-<li><strong>g:EclimQuickFixOpen</strong> (Default: 'botright copen')
+<li><strong>g:EclimQuickFixOpen</strong> (Default: ‘botright copen’)
 Specifies the command used to open the quickfix window when multiple results
 are found.</li>
 <li><strong>g:EclimQuickFixHeight</strong> (Default: 10) -
@@ -312,9 +309,9 @@ display search results.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

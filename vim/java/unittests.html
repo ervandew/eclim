@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Unit Tests &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -210,10 +207,10 @@
 <span id="id1"></span><h2>JUnit<a class="headerlink" href="#junit" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="executing-tests">
 <h3>Executing tests.<a class="headerlink" href="#executing-tests" title="Permalink to this headline">¶</a></h3>
-<p>Eclim's <strong>:JUnit</strong> command allows you to execute individual test or individual
+<p>Eclim’s <strong>:JUnit</strong> command allows you to execute individual test or individual
 methods from your tests.</p>
-<p>If you'd like to run a particular test you can do so by supplying the fully
-qualified class name of the test to run (you can use vim's tab completion here
+<p>If you’d like to run a particular test you can do so by supplying the fully
+qualified class name of the test to run (you can use vim’s tab completion here
 to alleviate having to type the full name):</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit org.test.MyTest
 </pre></div>
@@ -222,7 +219,7 @@ to alleviate having to type the full name):</p>
 what to run based on the current context of the cursor:</p>
 <ul class="simple">
 <li>If you have a junit test file open and the cursor is not inside one of the
-test methods, then all of the current file's test methods will be executed.</li>
+test methods, then all of the current file’s test methods will be executed.</li>
 <li>If the cursor is on or inside of a test method, then just that method will be
 run.</li>
 <li>If you have a regular class open and run <strong>:JUnit</strong>, eclim will attempt to
@@ -231,19 +228,19 @@ locate the corresponding test and run it.</li>
 attempt to locate the test and then locate the corresponding test method for
 the current method in that test and run just that test method.</li>
 </ul>
-<p>If you'd like to run all tests for the current file, regardless of whether the
-cursor is on a method or not, you can do so by running <strong>:JUnit</strong> with the '%'
+<p>If you’d like to run all tests for the current file, regardless of whether the
+cursor is on a method or not, you can do so by running <strong>:JUnit</strong> with the ‘%’
 argument:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit %
 </pre></div>
 </div>
-<p>For cases where you'd like to run all your unit tests you can run <strong>:JUnit</strong>
-with the '*' argument and eclim will locate all your test files and run them:</p>
+<p>For cases where you’d like to run all your unit tests you can run <strong>:JUnit</strong>
+with the ‘*’ argument and eclim will locate all your test files and run them:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit *
 </pre></div>
 </div>
 <p>You can also pass in an ant compatible <a class="reference external" href="http://ant.apache.org/manual/dirtasks.html#patterns">pattern</a> to match the tests
-you'd like to run:</p>
+you’d like to run:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit **<span class="sr">/tests/</span>*Test
 </pre></div>
 </div>
@@ -274,13 +271,13 @@ instead of <strong>:JavaImpl</strong>, you use <strong>:JUnitImpl</strong> to op
 methods to implement.</p>
 <p>To determine what class the current test is for, eclim expects that the
 standard naming convention for tests is followed, where the test has the same
-fully qualified class name as the target class with a 'Test' suffix.</p>
+fully qualified class name as the target class with a ‘Test’ suffix.</p>
 <p>So for the test <code>org.foo.bar.BazTest</code>, the exepected class being tested would
 be <code>org.foo.bar.Baz</code>.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">Eclim also supports tests with a 'Test' prefix instead of a suffix and in
-the case of neither a 'Test' prefix or suffix, it will search for a class of
+<p class="last">Eclim also supports tests with a ‘Test’ prefix instead of a suffix and in
+the case of neither a ‘Test’ prefix or suffix, it will search for a class of
 the same name in a different package should you perhaps use a package
 convention for your tests rather than a class name convention.</p>
 </div>
@@ -337,10 +334,10 @@ when forking to run unit tests.</p>
 </div>
 <div class="section" id="testng">
 <h2>TestNG<a class="headerlink" href="#testng" title="Permalink to this headline">¶</a></h2>
-<p>Currently eclim's support for <a class="reference external" href="http://testng.org/doc">TestNG</a> is limited to supporting Vim's :make in
-conjunction with ant to populate vim's quickfix results with failed tests.</p>
-<p>By default TestNG's output to the console is very terse.  So in order to support
-monitoring of failed tests via vim's error format, eclim provides a custom
+<p>Currently eclim’s support for <a class="reference external" href="http://testng.org/doc">TestNG</a> is limited to supporting Vim’s :make in
+conjunction with ant to populate vim’s quickfix results with failed tests.</p>
+<p>By default TestNG’s output to the console is very terse.  So in order to support
+monitoring of failed tests via vim’s error format, eclim provides a custom
 TestNG listener which must be installed into your build environment.</p>
 <ol class="arabic">
 <li><p class="first">The first step is to place the <code>eclim-testng.jar</code> file in your TestNG
@@ -360,7 +357,7 @@ testng task which references the required eclim testng listener:</p>
 <p>Once you have completed that setup, you should then be able to run your ant
 target from vim and (as long as eclim is running) all failed tests will be
 added to your vim quickfix results.</p>
-<p>Ex. Assuming your ant task is named 'test':</p>
+<p>Ex. Assuming your ant task is named ‘test’:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>Ant test
 </pre></div>
 </div>
@@ -381,9 +378,9 @@ added to your vim quickfix results.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

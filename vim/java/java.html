@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Java / Jps &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -215,7 +212,7 @@ the more advance support provided by eclipse, ant, or maven.</p>
 </div>
 <p>The <strong>:Java</strong> will locate the main class to run using the following steps:</p>
 <ol class="arabic simple">
-<li>if the first argument is '%' (:Java %) then run the current class.</li>
+<li>if the first argument is ‘%’ (:Java %) then run the current class.</li>
 <li>if the setting <a class="reference internal" href="#org-eclim-java-run-mainclass"><span class="std std-ref">org.eclim.java.run.mainclass</span></a> is set, then use the value as the fully
 qualified class name to run.</li>
 <li>lastly, attempt to locate a class containing a static main method, if only
@@ -234,7 +231,7 @@ Json formatted list of default jvm args.</li>
 <div class="section" id="echo-the-classpath-for-the-current-project">
 <span id="javaclasspath"></span><h3>Echo the classpath for the current project<a class="headerlink" href="#echo-the-classpath-for-the-current-project" title="Permalink to this headline">¶</a></h3>
 <p>When editing a java file, eclim provides the command <strong>:JavaClasspath</strong> which
-will echo the project's resolved classpath entries separated by the system path
+will echo the project’s resolved classpath entries separated by the system path
 separator or a supplied
 delimiter:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaClasspath
@@ -296,9 +293,9 @@ passed to the JVM.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

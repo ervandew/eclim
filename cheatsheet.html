@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Cheatsheet &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -228,7 +225,7 @@ reference.</p>
 <li><a class="reference internal" href="vim/core/eclim.html#pingeclim"><span class="std std-ref">:PingEclim</span></a> - Pings eclimd server.</li>
 <li><a class="reference internal" href="vim/core/eclim.html#shutdowneclim"><span class="std std-ref">:ShutdownEclim</span></a> - Shuts down eclimd server.</li>
 <li><a class="reference internal" href="vim/core/eclim.html#vimsettings"><span class="std std-ref">:VimSettings</span></a> -
-View / edit eclim's vim client settings.</li>
+View / edit eclim’s vim client settings.</li>
 <li><a class="reference internal" href="vim/core/eclim.html#workspacesettings"><span class="std std-ref">:WorkspaceSettings</span></a> -
 View / edit global workspace settings.</li>
 <li><a class="reference internal" href="vim/core/eclim.html#eclimdisable"><span class="std std-ref">:EclimDisable</span></a> -
@@ -243,7 +240,7 @@ Search the eclim documentation in vim.</li>
 <h2>Project Commands<a class="headerlink" href="#project-commands" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="vim/core/project.html#projectcreate"><span class="std std-ref">:ProjectCreate</span></a>
-&lt;folder&gt; [-p &lt;project_name&gt;] -n &lt;nature&gt; ... [-d &lt;project_dependency&gt; ...] -
+&lt;folder&gt; [-p &lt;project_name&gt;] -n &lt;nature&gt; … [-d &lt;project_dependency&gt; …] -
 Create a new project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectimport"><span class="std std-ref">:ProjectImport</span></a> &lt;folder&gt; -
 Import a project from an existing eclipse project folder.</li>
@@ -253,7 +250,7 @@ View / edit project settings.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectdelete"><span class="std std-ref">:ProjectDelete</span></a> &lt;project&gt; - Delete a project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectrename"><span class="std std-ref">:ProjectRename</span></a> [&lt;project&gt;] &lt;name&gt; - Rename a project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectmove"><span class="std std-ref">:ProjectMove</span></a> [&lt;project&gt;] &lt;dir&gt; - Move a project.</li>
-<li><a class="reference internal" href="vim/core/project.html#projectrefresh"><span class="std std-ref">:ProjectRefresh</span></a> [&lt;project&gt; &lt;project&gt; ...] -
+<li><a class="reference internal" href="vim/core/project.html#projectrefresh"><span class="std std-ref">:ProjectRefresh</span></a> [&lt;project&gt; &lt;project&gt; …] -
 Refresh supplied list of projects against the current files on disk.  If
 no project names supplied, refresh the current project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectrefreshall"><span class="std std-ref">:ProjectRefreshAll</span></a> - Refresh all projects.</li>
@@ -265,31 +262,31 @@ Echos info for the current or supplied project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectclose"><span class="std std-ref">:ProjectClose</span></a> [&lt;project&gt;] - Closes a project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectnatures"><span class="std std-ref">:ProjectNatures</span></a> [&lt;project&gt;] -
 View the configured natures for one or all projects.</li>
-<li><a class="reference internal" href="vim/core/project.html#projectnatureadd"><span class="std std-ref">:ProjectNatureAdd</span></a> &lt;project&gt; [&lt;nature&gt; ...] -
+<li><a class="reference internal" href="vim/core/project.html#projectnatureadd"><span class="std std-ref">:ProjectNatureAdd</span></a> &lt;project&gt; [&lt;nature&gt; …] -
 Add one or more natures to a project.</li>
-<li><a class="reference internal" href="vim/core/project.html#projectnatureremove"><span class="std std-ref">:ProjectNatureRemove</span></a> &lt;project&gt; [&lt;nature&gt; ...] -
+<li><a class="reference internal" href="vim/core/project.html#projectnatureremove"><span class="std std-ref">:ProjectNatureRemove</span></a> &lt;project&gt; [&lt;nature&gt; …] -
 Remove one or more natures from a project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectproblems"><span class="std std-ref">:ProjectProblems</span></a> [&lt;project&gt;] -
-Populates vim's quickfix with all eclipse build errors and warnings for the
+Populates vim’s quickfix with all eclipse build errors and warnings for the
 current, or specified project, and all related projects.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectcd"><span class="std std-ref">:ProjectCD</span></a> -
 Changes the global current working directory to the root directory of the
-current file's project (executes a :cd).</li>
+current file’s project (executes a :cd).</li>
 <li><a class="reference internal" href="vim/core/project.html#projectlcd"><span class="std std-ref">:ProjectLCD</span></a> -
 Changes the current working directory of the current window to the root
-directory of the current file's project (executes a :lcd).</li>
-<li><a class="reference internal" href="vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> [&lt;project&gt; &lt;project&gt; ...] -
+directory of the current file’s project (executes a :lcd).</li>
+<li><a class="reference internal" href="vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> [&lt;project&gt; &lt;project&gt; …] -
 Opens navigable a tree for one or more projects.</li>
 <li><a class="reference internal" href="vim/core/project.html#projectstree"><span class="std std-ref">:ProjectsTree</span></a> - Opens a tree containing all projects.</li>
 <li><a class="reference internal" href="vim/core/project.html#projecttab"><span class="std std-ref">:ProjectTab</span></a> &lt;project&gt; - Opens a new tab containing the project tree
-and the tab local working directory set to the supplied project's root.</li>
-<li><a class="reference internal" href="vim/core/project.html#projectgrep"><span class="std std-ref">:ProjectGrep</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+and the tab local working directory set to the supplied project’s root.</li>
+<li><a class="reference internal" href="vim/core/project.html#projectgrep"><span class="std std-ref">:ProjectGrep</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern …] -
 Issues a vimgrep starting at the root of the current project.</li>
-<li><a class="reference internal" href="vim/core/project.html#projectgrepadd"><span class="std std-ref">:ProjectGrepAdd</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+<li><a class="reference internal" href="vim/core/project.html#projectgrepadd"><span class="std std-ref">:ProjectGrepAdd</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern …] -
 Issues a vimgrepadd starting at the root of the current project.</li>
-<li><a class="reference internal" href="vim/core/project.html#projectlgrep"><span class="std std-ref">:ProjectLGrep</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+<li><a class="reference internal" href="vim/core/project.html#projectlgrep"><span class="std std-ref">:ProjectLGrep</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern …] -
 Issues a lvimgrep starting at the root of the current project.</li>
-<li><a class="reference internal" href="vim/core/project.html#projectlgrepadd"><span class="std std-ref">:ProjectLGrepAdd</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern ...] -
+<li><a class="reference internal" href="vim/core/project.html#projectlgrepadd"><span class="std std-ref">:ProjectLGrepAdd</span></a> /&lt;pattern&gt;/ file_pattern [file_pattern …] -
 Issues a lvimgrepadd starting at the root of the current project.</li>
 <li><a class="reference internal" href="vim/core/project.html#projecttodo"><span class="std std-ref">:ProjectTodo</span></a> -
 Searches project files for todo / fixme patterns and adds them to the
@@ -303,14 +300,14 @@ location list.</li>
 <h2>Android Commands<a class="headerlink" href="#android-commands" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="vim/java/android.html#androidreload"><span class="std std-ref">:AndroidReload</span></a> - Reloads the Android SDK environment in the
-running eclimd/eclipse instance. Useful if you've made changes to the SDK
+running eclimd/eclipse instance. Useful if you’ve made changes to the SDK
 outside of eclipse (installed a new target platform, etc).</li>
 </ul>
 </div>
 <div class="section" id="ant-commands">
 <h2>Ant Commands<a class="headerlink" href="#ant-commands" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="vim/java/ant.html#id1"><span class="std std-ref">:Ant</span></a> [&lt;target&gt; ...] - Execute ant from the current project.</li>
+<li><a class="reference internal" href="vim/java/ant.html#id1"><span class="std std-ref">:Ant</span></a> [&lt;target&gt; …] - Execute ant from the current project.</li>
 <li><a class="reference internal" href="vim/java/ant.html#antdoc"><span class="std std-ref">:AntDoc</span></a> [&lt;element&gt;] -
 Find and open the documentation for the element under the cursor or the
 element supplied as an argument.</li>
@@ -406,17 +403,17 @@ Search for javadocs.  Same usage as <strong>:JavaSearch</strong>.</li>
 <li><a class="reference internal" href="vim/java/javadoc.html#javadoccomment"><span class="std std-ref">:JavaDocComment</span></a> -
 Adds or updates the comments for the element under the cursor.</li>
 <li><a class="reference internal" href="vim/java/javadoc.html#javadocpreview"><span class="std std-ref">:JavaDocPreview</span></a> -
-Display the javadoc of the element under the cursor in vim's preview window.</li>
+Display the javadoc of the element under the cursor in vim’s preview window.</li>
 <li><a class="reference internal" href="vim/java/refactor.html#javarename"><span class="std std-ref">:JavaRename</span></a> [new_name] -
 Rename the element under the cursor.</li>
 <li><a class="reference internal" href="vim/java/refactor.html#javamove"><span class="std std-ref">:JavaMove</span></a> [new_package] -
 Move the current class/interface to another package.</li>
 <li><a class="reference internal" href="vim/java/java.html#java"><span class="std std-ref">:Java</span></a> -
-Executes the java using your project's main class.</li>
+Executes the java using your project’s main class.</li>
 <li><a class="reference internal" href="vim/java/java.html#javaclasspath"><span class="std std-ref">:JavaClasspath</span></a> [-d &lt;delim&gt;] -
-Echos the project's classpath delimited by the system path separator or the
+Echos the project’s classpath delimited by the system path separator or the
 supplied delimiter.</li>
-<li><a class="reference internal" href="vim/java/javadoc.html#javadoc"><span class="std std-ref">:Javadoc</span></a> [file, file, ...] -
+<li><a class="reference internal" href="vim/java/javadoc.html#javadoc"><span class="std std-ref">:Javadoc</span></a> [file, file, …] -
 Executes the javadoc utility against all or just the supplied source files.</li>
 <li><a class="reference internal" href="vim/java/java.html#javalistinstalls"><span class="std std-ref">:JavaListInstalls</span></a> - List known JDK/JRE installs.</li>
 <li><a class="reference internal" href="vim/java/format.html#javaformat"><span class="std std-ref">:JavaFormat</span></a> - Formats java source code.</li>
@@ -462,14 +459,14 @@ Validate the current log4j xml configuration file.</li>
 <div class="section" id="maven-commands">
 <h2>Maven Commands<a class="headerlink" href="#maven-commands" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="vim/java/maven.html#id1"><span class="std std-ref">:Maven</span></a> [&lt;goal&gt; ...] -
+<li><a class="reference internal" href="vim/java/maven.html#id1"><span class="std std-ref">:Maven</span></a> [&lt;goal&gt; …] -
 Execute maven 1.x from the current project.</li>
-<li><a class="reference internal" href="vim/java/maven.html#mvn"><span class="std std-ref">:Mvn</span></a> [&lt;goal&gt; ...] - Execute maven 2.x from the current project.</li>
+<li><a class="reference internal" href="vim/java/maven.html#mvn"><span class="std std-ref">:Mvn</span></a> [&lt;goal&gt; …] - Execute maven 2.x from the current project.</li>
 <li><a class="reference internal" href="vim/java/classpath.html#mavenrepo"><span class="std std-ref">:MavenRepo</span></a> -
-Sets the necessary MAVEN_REPO classpath variable for maven's (1.x) eclipse
+Sets the necessary MAVEN_REPO classpath variable for maven’s (1.x) eclipse
 support.</li>
 <li><a class="reference internal" href="vim/java/classpath.html#mvnrepo"><span class="std std-ref">:MvnRepo</span></a> -
-Sets the necessary M2_REPO classpath variable for maven's (2.x) eclipse
+Sets the necessary M2_REPO classpath variable for maven’s (2.x) eclipse
 support.</li>
 </ul>
 </div>
@@ -495,7 +492,7 @@ Find the element under the cursor or its references based on the current
 context in the file.</li>
 <li><a class="reference internal" href="vim/python/validate.html#validate-python"><span class="std std-ref">:Validate</span></a> - Validates the current file.</li>
 <li><a class="reference internal" href="vim/python/django.html#djangomanage"><span class="std std-ref">:DjangoManage</span></a> -
-Invokes django's manage.py from any file in the same directory as your
+Invokes django’s manage.py from any file in the same directory as your
 manage.py or in any of the child directories.</li>
 <li><a class="reference internal" href="vim/python/django.html#djangofind"><span class="std std-ref">:DjangoFind</span></a> -
 Available when editing a django html template file.  Finds tag/filter
@@ -548,10 +545,10 @@ Search for the definition of the element under the cursor.</li>
 <h2>Xml Commands<a class="headerlink" href="#xml-commands" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="vim/xml/index.html#dtddefinition"><span class="std std-ref">:DtdDefinition</span></a> [&lt;element&gt;] -
-Open the current xml file's dtd and jump to the element definition if
+Open the current xml file’s dtd and jump to the element definition if
 supplied.</li>
 <li><a class="reference internal" href="vim/xml/index.html#xsddefinition"><span class="std std-ref">:XsdDefinition</span></a> [&lt;element&gt;] -
-Open the current xml file's xsd and jump to the element definition if
+Open the current xml file’s xsd and jump to the element definition if
 supplied.</li>
 <li><a class="reference internal" href="vim/xml/index.html#validate-xml"><span class="std std-ref">:Validate</span></a> [&lt;file&gt;] -
 Validates the supplied xml file or the current file if none supplied.</li>
@@ -570,7 +567,7 @@ Validates the supplied xml file or the current file if none supplied.</li>
 <li><a class="reference internal" href="vim/core/locate.html#locatefile"><span class="std std-ref">:LocateFile</span></a> [file] -
 Locates a relative file and opens it.</li>
 <li><a class="reference internal" href="vim/core/util.html#tcd"><span class="std std-ref">:Tcd</span></a> dir -
-Like :lcd but sets the tab's local working directory.</li>
+Like :lcd but sets the tab’s local working directory.</li>
 <li><a class="reference internal" href="vim/core/util.html#difflastsaved"><span class="std std-ref">:DiffLastSaved</span></a> -
 Performs a diffsplit with the last saved version of the currently modifed
 file.</li>
@@ -628,9 +625,9 @@ Display a short description of the refactoring to be undone / redone.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

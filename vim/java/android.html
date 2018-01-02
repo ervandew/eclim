@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Android &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -207,7 +204,7 @@ you use the <code>android</code> nature instead:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_project</span> <span class="o">-</span><span class="n">n</span> <span class="n">android</span>
 </pre></div>
 </div>
-<p>This will result in a series of prompts for you to input your project's information:</p>
+<p>This will result in a series of prompts for you to input your project’s information:</p>
 <p><strong>Note:</strong> at any point in this process you can use Ctrl+C to cancel the project
 creation.</p>
 <ol class="arabic simple">
@@ -221,19 +218,19 @@ will need to either restart eclipse/eclimd or run the eclim supplied
 <li>Next you will be asked to supply a package name (Ex: <cite>com.mycompany.myapp</cite>).</li>
 <li>Then you will need to supply a name for your application.</li>
 <li>The next prompt will ask you if you are creating a library project or not.
-Most likely you are not, so type 'n' here to proceed.</li>
+Most likely you are not, so type ‘n’ here to proceed.</li>
 <li>Lastly, if you are not creating a library project, you will be asked whether
 or not you want to have a new android activity created for you and if so,
 you will be asked for the name of that activity.</li>
 </ol>
-<p>Once you've finished supplying the necessary information, your android project
+<p>Once you’ve finished supplying the necessary information, your android project
 will be created. An android project is simply a specialized java project, so
 you can now leverage all the eclim provided <a class="reference internal" href="index.html"><span class="doc">java functionality</span></a> while developing your app.</p>
 </div>
 <div class="section" id="commands">
 <h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <p id="androidreload"><strong>:AndroidReload</strong> - Reloads the Android SDK environment in the running
-eclimd/eclipse instance. Useful if you've made changes to the SDK outside of
+eclimd/eclipse instance. Useful if you’ve made changes to the SDK outside of
 eclipse (installed a new target platform, etc).</p>
 </div>
 <div class="section" id="configuration">
@@ -241,7 +238,7 @@ eclipse (installed a new target platform, etc).</p>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Eclim Settings</span></a></p>
 <ul class="simple" id="com-android-ide-eclipse-adt-sdk">
 <li><strong>com.android.ide.eclipse.adt.sdk</strong> -
-Sets the path to your system's android sdk install.</li>
+Sets the path to your system’s android sdk install.</li>
 </ul>
 </div>
 </div>
@@ -260,9 +257,9 @@ Sets the path to your system's android sdk install.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

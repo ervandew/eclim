@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Getting Started &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -202,14 +199,14 @@
 </ul>
 </div>
 </div>
-<p>Once you've <a class="reference internal" href="install.html"><span class="doc">installed</span></a> eclim, the next step is to create
+<p>Once you’ve <a class="reference internal" href="install.html"><span class="doc">installed</span></a> eclim, the next step is to create
 your first project after which you can then start writing code and
-familiarizing yourself with eclim's features.</p>
+familiarizing yourself with eclim’s features.</p>
 <p>First make sure eclimd is running (see the <a class="reference internal" href="eclimd.html"><span class="doc">eclimd docs</span></a> if you
 are unsure how to start eclimd).</p>
 <div class="section" id="creating-your-first-project">
 <span id="gettingstarted-create"></span><h2>Creating your first project<a class="headerlink" href="#creating-your-first-project" title="Permalink to this headline">¶</a></h2>
-<p>Once you've got eclimd running, open an instance of vim and create your project
+<p>Once you’ve got eclimd running, open an instance of vim and create your project
 like so:</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
@@ -236,11 +233,11 @@ the nature accordingly:</p>
 </div>
 <p>The path supplied to the <a class="reference internal" href="vim/core/project.html#projectcreate"><span class="std std-ref">:ProjectCreate</span></a> command will be
 the path to the root of your project.  This path may or may not exist.  If it
-does not exist it will be created for you.  After you've created your project,
-there will be a <code>.project</code> file added to your project's root along with
-another file where references to your project's source directories and any
+does not exist it will be created for you.  After you’ve created your project,
+there will be a <code>.project</code> file added to your project’s root along with
+another file where references to your project’s source directories and any
 third party libraries your project uses reside.  The name of this file will
-vary depending on your project's nature, but in all cases eclim will provide
+vary depending on your project’s nature, but in all cases eclim will provide
 you with commands to manage this file:</p>
 <ul class="simple">
 <li>java, android - <a class="reference internal" href="vim/java/classpath.html"><span class="doc">.classpath file</span></a></li>
@@ -248,7 +245,7 @@ you with commands to manage this file:</p>
 <li>c, c++ - <code>.cproject</code>, managed via the <a class="reference internal" href="vim/c/project.html#cprojectconfigs"><span class="std std-ref">:CProjectConfigs</span></a> command</li>
 <li>python - <a class="reference internal" href="vim/python/path.html"><span class="doc">.pydevproject file</span></a></li>
 </ul>
-<p>Once you've created your project you can use the <strong>:ProjectList</strong> command to
+<p>Once you’ve created your project you can use the <strong>:ProjectList</strong> command to
 list the available projects and you should see your newly created one in the
 list.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">my_project</span> <span class="o">-</span> <span class="nb">open</span>   <span class="o">-</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_project</span>
@@ -262,7 +259,7 @@ converted to underscores.</p>
 <div class="section" id="adding-project-source-directories">
 <h2>Adding project source directories<a class="headerlink" href="#adding-project-source-directories" title="Permalink to this headline">¶</a></h2>
 <p>Before you can start writing code, you will first need to create and register
-your project's source directories.  If you created your project from an
+your project’s source directories.  If you created your project from an
 existing code base, then this step may have been perform automatically for you,
 but you should validate the settings to be sure.</p>
 <p>We will use a java project in this example but the steps for other languages
@@ -308,7 +305,7 @@ provided by eclim.</p>
 features that eclim provides.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>Below we'll walk through a trivial java example, but some of the steps apply to
+<p>Below we’ll walk through a trivial java example, but some of the steps apply to
 all the languages that eclim supports, although the command names may differ a
 bit.  For additional docs on working with the language of your choice, please
 see the relevant section of the docs:</p>
@@ -323,7 +320,7 @@ see the relevant section of the docs:</p>
 </div>
 <p>Lets get started writing our first java application using eclim.</p>
 <ol class="arabic">
-<li><p class="first">First, navigate to your new project's source directory (src/java in this
+<li><p class="first">First, navigate to your new project’s source directory (src/java in this
 example) and create any necessary package directories:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ cd /path/to/my_project/src/java
 $ mkdir -p org/test/
@@ -347,7 +344,7 @@ $ mkdir -p org/test/
 </div>
 </li>
 <li><p class="first">You can start to use some of the core features now.  For example, lets add
-the following code to the main method so we can test eclim's source code
+the following code to the main method so we can test eclim’s source code
 validation:</p>
 <div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">System</span><span class="o">.</span>
 </pre></div>
@@ -357,8 +354,8 @@ margin of your file and when the cursor is on that line an error message is
 printed at the bottom of your vim window.  You can also run :lopen to view
 all the errors in the file at once.</p>
 </li>
-<li><p class="first">Now lets try out code completion.  Place your cursor on the '.' of 'System.'
-and start insert mode in vim using 'a', then follow the example below:</p>
+<li><p class="first">Now lets try out code completion.  Place your cursor on the ‘.’ of ‘System.’
+and start insert mode in vim using ‘a’, then follow the example below:</p>
 <div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">System</span><span class="o">.&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">x</span><span class="o">&gt;&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">u</span><span class="o">&gt;</span>             <span class="c1">// starts the completion mode</span>
 <span class="n">System</span><span class="o">.&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">n</span><span class="o">&gt;</span>                     <span class="c1">// cycle through the completion suggestions</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span>                          <span class="c1">// assuming you chose the &#39;out&#39; suggestion</span>
@@ -388,7 +385,7 @@ you use the <code>android</code> nature instead:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_project</span> <span class="o">-</span><span class="n">n</span> <span class="n">android</span>
 </pre></div>
 </div>
-<p>This will result in a series of prompts for you to input your project's information:</p>
+<p>This will result in a series of prompts for you to input your project’s information:</p>
 <p><strong>Note:</strong> at any point in this process you can use Ctrl+C to cancel the project
 creation.</p>
 <ol class="arabic simple">
@@ -402,34 +399,34 @@ will need to either restart eclipse/eclimd or run the eclim supplied
 <li>Next you will be asked to supply a package name (Ex: <cite>com.mycompany.myapp</cite>).</li>
 <li>Then you will need to supply a name for your application.</li>
 <li>The next prompt will ask you if you are creating a library project or not.
-Most likely you are not, so type 'n' here to proceed.</li>
+Most likely you are not, so type ‘n’ here to proceed.</li>
 <li>Lastly, if you are not creating a library project, you will be asked whether
 or not you want to have a new android activity created for you and if so,
 you will be asked for the name of that activity.</li>
 </ol>
-<p>Once you've finished supplying the necessary information, your android project
+<p>Once you’ve finished supplying the necessary information, your android project
 will be created. An android project is simply a specialized java project, so
 you can now leverage all the eclim provided <a class="reference internal" href="vim/java/index.html"><span class="doc">java functionality</span></a> while developing your app.</p>
 </div>
 <div class="section" id="maven-users">
 <span id="gettingstarted-maven"></span><h2>Maven Users<a class="headerlink" href="#maven-users" title="Permalink to this headline">¶</a></h2>
 <p>Creating your first project with maven can be accomplished using the same
-method as any other java project, or you can utilize some of maven's built in
+method as any other java project, or you can utilize some of maven’s built in
 features to get your project started.</p>
 <ol class="arabic">
-<li><p class="first">Run maven's generate archetype to create the project directory and samples:</p>
+<li><p class="first">Run maven’s generate archetype to create the project directory and samples:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ mvn archetype:generate
 </pre></div>
 </div>
 </li>
-<li><p class="first">Once you've created the initial project directory, cd into that directory
+<li><p class="first">Once you’ve created the initial project directory, cd into that directory
 and run the following command to generate the necessary eclipse files:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> &lt;project_dir&gt;
 $ mvn eclipse:eclipse
 </pre></div>
 </div>
 </li>
-<li><p class="first">Now you can start an instance of vim at the project's root directory and run
+<li><p class="first">Now you can start an instance of vim at the project’s root directory and run
 the following commands to:</p>
 <ul class="simple">
 <li>set the necessary eclipse classpath variable to point to your maven
@@ -460,9 +457,9 @@ repository.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

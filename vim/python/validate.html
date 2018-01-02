@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Python Validation &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -199,10 +196,10 @@
 </div>
 </div>
 <p>When editing a python file eclim will default to validating the file when it is
-written. Any errors will be added to the current window's location list (:help
-location-list) and their corresponding line number noted via Vim's sign
+written. Any errors will be added to the current window’s location list (:help
+location-list) and their corresponding line number noted via Vim’s sign
 functionality.</p>
-<p>If you don't want python files validated when saving them, you can set the
+<p>If you don’t want python files validated when saving them, you can set the
 g:EclimPythonValidate variable described in the configuration section below.</p>
 <p id="validate-python">Regardless of whether you have validation enabled upon saving or not, the
 command <strong>:Validate</strong> is available to manual validate the file.</p>
@@ -214,18 +211,18 @@ command <strong>:Validate</strong> is available to manual validate the file.</p>
 If set to 0, disables python validation when saving the file.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>When enabled, <a class="reference external" href="https://github.com/scrooloose/syntastic">syntastic</a> is disabled so that eclim and syntastic don't step on
-each other. If you'd like to use syntastic over eclim for validation, then
-simply disable eclim's validation.</p>
-<p>If you'd like to disable eclim's source code validation for all languages,
+<p>When enabled, <a class="reference external" href="https://github.com/scrooloose/syntastic">syntastic</a> is disabled so that eclim and syntastic don’t step on
+each other. If you’d like to use syntastic over eclim for validation, then
+simply disable eclim’s validation.</p>
+<p>If you’d like to disable eclim’s source code validation for all languages,
 eclim provides a global variable for that as well:</p>
 <div class="last highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimFileTypeValidate <span class="p">=</span> <span class="m">0</span>
 </pre></div>
 </div>
 </div>
 </li>
-<li><p class="first"><strong>g:EclimValidateSortResults</strong> (Default: 'occurrence') -
-If set to 'severity', the validation results will be sorted by severity
+<li><p class="first"><strong>g:EclimValidateSortResults</strong> (Default: ‘occurrence’) -
+If set to ‘severity’, the validation results will be sorted by severity
 (errors &gt; warnings &gt; info &gt; etc.)</p>
 </li>
 </ul>
@@ -246,9 +243,9 @@ If set to 'severity', the validation results will be sorted by severity
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

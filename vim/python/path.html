@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Python Interpreter / Paths &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -204,18 +201,18 @@ create a python (pydev) project:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectCreate <span class="nb">path</span><span class="sr">/to/</span>project <span class="p">-</span><span class="k">n</span> python
 </pre></div>
 </div>
-<p>If you haven't already configured a python interpreter, then you will be
+<p>If you haven’t already configured a python interpreter, then you will be
 prompted to do so when creating your first python project.
 When creating your project a <code>.pydevproject</code> file will be also be created.
 This file is used to define which interpreter to use for your project, the
-location of your project's python source files, and the location of any third
-party libraries your project requires (if not already on your project's
+location of your project’s python source files, and the location of any third
+party libraries your project requires (if not already on your project’s
 interpreter path).</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>When saving the .pydevproject file from within vim, eclim will update your
-project's configuration in memory or report any errors raised by pydev.</p>
-<p class="last">Also note that although the .pydevproject file is xml, pydev doesn't handle
+project’s configuration in memory or report any errors raised by pydev.</p>
+<p class="last">Also note that although the .pydevproject file is xml, pydev doesn’t handle
 stripping leading/trailing space or new lines from xml text values, so refrain
 from attempting to format this file and try to stick to using the commands
 below to configure your project.</p>
@@ -251,7 +248,7 @@ Command to list all interpreters configured with pydev.</li>
 <li><p class="first"><strong>:PythonInterpreter</strong> [&lt;interpreter_name or /path/to/interpreter&gt;]
 When invoked with no arguments this command will print out the path to the
 python interpreter currently set for your project. This command can also be
-use to set your project's interpreter by supplying either the name of an
+use to set your project’s interpreter by supplying either the name of an
 interpreter already configured with pydev (via <a class="reference internal" href="#pythoninterpreteradd"><span class="std std-ref">:PythonInterpreterAdd</span></a>), or the absolute path to an interpreter on your
 system.</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>PythonInterpreter python_2.<span class="m">7</span>
@@ -291,9 +288,9 @@ Add a new source entry which references a source directory in your project.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

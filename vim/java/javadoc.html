@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Javadoc Support &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -209,11 +206,11 @@ javadoc comments for the element under the cursor.</p>
 </div>
 <div class="section" id="viewing">
 <span id="javadocpreview"></span><h2>Viewing<a class="headerlink" href="#viewing" title="Permalink to this headline">¶</a></h2>
-<p>While editing java code, if you'd like to view the javadoc of the element under
-the cursor, you can run the <strong>:JavaDocPreview</strong> command which will open vim's
-preview window with the element's javadoc content. In the preview window any
+<p>While editing java code, if you’d like to view the javadoc of the element under
+the cursor, you can run the <strong>:JavaDocPreview</strong> command which will open vim’s
+preview window with the element’s javadoc content. In the preview window any
 links to classes, methods, etc. in the javadoc will be highlighted and you can
-view follow those links by hitting <code>&lt;cr&gt;</code> on the link. You can also use
+follow those links by hitting <code>&lt;cr&gt;</code> on the link. You can also use
 <code>&lt;c-o&gt;</code> to navigate back to the previous javadoc preview and <code>&lt;c-i&gt;</code> to
 navigate forward.</p>
 </div>
@@ -225,7 +222,7 @@ navigate forward.</p>
 <strong>:JavaSearch</strong>.</p>
 <p>The results will be displayed in a window and you can simply hit <code>&lt;cr&gt;</code> on an
 entry to open it using the browser you configured via <a class="reference internal" href="../core/eclim.html#g-eclimbrowser"><span class="xref std std-ref">g:EclimBrowser</span></a>.</p>
-<p>The locations of the javadocs are determined via your Eclipse project's
+<p>The locations of the javadocs are determined via your Eclipse project’s
 .classpath file.  For each library entry you can define a javadoc attribute that
 points to the base url of the javadoc (http, file, etc).</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;classpathentry</span> <span class="na">kind=</span><span class="s">&quot;lib&quot;</span> <span class="na">path=</span><span class="s">&quot;lib/hibernate-3.0.jar&quot;</span><span class="nt">&gt;</span>
@@ -235,18 +232,18 @@ points to the base url of the javadoc (http, file, etc).</p>
 <span class="nt">&lt;/classpathentry&gt;</span>
 </pre></div>
 </div>
-<p>If you would like to set the javadoc url for your project's source files, you
+<p>If you would like to set the javadoc url for your project’s source files, you
 will instead need to set the <code>org.eclipse.jdt.ui.project_javadoc_location</code>
 option via <a class="reference internal" href="../core/project.html#projectsettings"><span class="xref std std-ref">:ProjectSettings</span></a>. Also note that the javadocs for your source
 files are not generated automatically, so if you would like to use
-<strong>:JavaDocSearch</strong> to open your project's javadocs, you will first need to
+<strong>:JavaDocSearch</strong> to open your project’s javadocs, you will first need to
 generate those javadocs as described in the next section.</p>
 </div>
 <div class="section" id="executing-javadoc">
 <span id="javadoc"></span><h2>Executing javadoc<a class="headerlink" href="#executing-javadoc" title="Permalink to this headline">¶</a></h2>
-<p>To run the javadoc utility on your project's source code, you may use the
+<p>To run the javadoc utility on your project’s source code, you may use the
 <strong>:Javadoc</strong> command, which with no arguments will execute javadoc against all
-your project's source code (as specified by any optional settings described
+your project’s source code (as specified by any optional settings described
 below).</p>
 <p>If you wish to run javadoc only against one or more files, you can supply the
 project relative paths as arguments to the <strong>:Javadoc</strong> command and only those
@@ -275,7 +272,7 @@ separated list of project relative source directories which you want javadoc
 to be executed against.  When unset, all your configured source directories
 will be used.</li>
 <li><strong>org.eclipse.jdt.ui.project_javadoc_location</strong> -
-URL where your project's javadocs can be found.</li>
+URL where your project’s javadocs can be found.</li>
 </ul>
 </div>
 </div>
@@ -294,9 +291,9 @@ URL where your project's javadocs can be found.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

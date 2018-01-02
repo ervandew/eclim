@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Ant &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -206,19 +203,19 @@
 <div class="section" id="running">
 <h2>Running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h2>
 <p>For those that use Vim as an editor and ant as a build tool, is is common to set
-your Vim 'makeprg' option to execute ant so that you may navigate compilation
-errors via Vim's quickfix functionality.</p>
+your Vim ‘makeprg’ option to execute ant so that you may navigate compilation
+errors via Vim’s quickfix functionality.</p>
 <p>Eclim utilizes this same paradigm to provide users with ant execution
 functionality from any file without any of the setup required by Vim.</p>
 <p id="id1">Eclim provides the following command:</p>
-<p><strong>:Ant</strong> [&lt;target&gt; ...]</p>
+<p><strong>:Ant</strong> [&lt;target&gt; …]</p>
 <p>which performs the following steps:</p>
 <ul class="simple">
-<li>Saves any previous 'makeprg' and 'errorformat' option settings so that you can
+<li>Saves any previous ‘makeprg’ and ‘errorformat’ option settings so that you can
 define your own settings for the :make command.</li>
-<li>Sets 'makeprg' to execute ant with the -find option so that it will search for
+<li>Sets ‘makeprg’ to execute ant with the -find option so that it will search for
 your build.xml file in the current directory or in a parent directory.</li>
-<li>Sets 'errorformat' to recognize the following errors:<ul>
+<li>Sets ‘errorformat’ to recognize the following errors:<ul>
 <li>javac errors.</li>
 <li>javadoc errors.</li>
 <li>jasper jsp compilattion errors.</li>
@@ -227,15 +224,15 @@ your build.xml file in the current directory or in a parent directory.</li>
 </ul>
 </li>
 <li>Executes :make.</li>
-<li>Restores your previous 'makeprg' and 'errorformat' option settings.</li>
+<li>Restores your previous ‘makeprg’ and ‘errorformat’ option settings.</li>
 </ul>
 <p>Additionally, if <a class="reference internal" href="../core/eclim.html#g-eclimmakelcd"><span class="xref std std-ref">g:EclimMakeLCD</span></a> is enabled (which it is by default),
-then the execution of ant will be performed from the current buffer's project
-root directory, ensuring that ant's build file discovery method is performed
-from the buffer's working directory and not your own.</p>
+then the execution of ant will be performed from the current buffer’s project
+root directory, ensuring that ant’s build file discovery method is performed
+from the buffer’s working directory and not your own.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last"><strong>:Ant</strong> also supports use of '!' (:Ant!) just like :make does, which tells
+<p class="last"><strong>:Ant</strong> also supports use of ‘!’ (:Ant!) just like :make does, which tells
 Vim not to jump to the first error if one exists.</p>
 </div>
 <p>The <strong>:Ant</strong> command also has the added benefit of command completion.</p>
@@ -274,11 +271,11 @@ the same slow behavior when using Eclipse directly.</p>
 <div class="section" id="validation">
 <h2>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h2>
 <p>When editing an ant xml file eclim will default to validating the file when it
-is written.  Any errors will be added to the current window's location list
-(:help location-list) and their corresponding line number noted via Vim's sign
+is written.  Any errors will be added to the current window’s location list
+(:help location-list) and their corresponding line number noted via Vim’s sign
 functionality.</p>
-<p>Currently the Eclipse ant file validation isn't as robust as one might hope.  It
-doesn't validate that element attributes are correct, that child elements are
+<p>Currently the Eclipse ant file validation isn’t as robust as one might hope.  It
+doesn’t validate that element attributes are correct, that child elements are
 valid, etc., but it does perform the following:</p>
 <ul class="simple">
 <li>If a default target is specified, validate that it exists and that the target
@@ -325,7 +322,7 @@ name.</p>
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul id="g-eclimantcompileradditionalerrorformat">
-<li><p class="first"><strong>g:EclimAntCompilerAdditionalErrorFormat</strong> (Default: '') -
+<li><p class="first"><strong>g:EclimAntCompilerAdditionalErrorFormat</strong> (Default: ‘’) -
 Since there are many more ant tasks beyond javac, javadoc, etc., eclim
 provides this variable as a means to add error format information for
 any additional ant tasks that you may be using.</p>
@@ -345,8 +342,8 @@ has a better solution, please submit it.</p>
 </ul>
 <ul class="simple" id="g-eclimanterrorsenabled">
 <li><strong>g:EclimAntErrorsEnabled</strong> (Default: 0) -
-When non-zero, build file error messages will be added to vim's quickfix if
-encountered during <strong>:Ant</strong> invocations.  Disabled by default because it's
+When non-zero, build file error messages will be added to vim’s quickfix if
+encountered during <strong>:Ant</strong> invocations.  Disabled by default because it’s
 difficult to distinguish between actual issues with the build file (invalid
 property, task, etc.) and build failure messages which occur under normal
 usage (junit task failed due to test failure, javac failures due to compile
@@ -387,9 +384,9 @@ there (:help ftplugin-name).</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

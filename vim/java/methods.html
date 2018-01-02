@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Method Generation &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -216,7 +213,7 @@ or one that takes any selected fields as arguments.</p>
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>If you were to select the range containing the 'id' and 'name' fields and issue
+<p>If you were to select the range containing the ‘id’ and ‘name’ fields and issue
 <strong>:JavaConstructor</strong>, then you would end up with the following code.</p>
 <div class="highlight-java"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span>
 <span class="o">{</span>
@@ -236,13 +233,13 @@ or one that takes any selected fields as arguments.</p>
 </div>
 <p>If you issue the command with no fields selected, then a default empty
 constructor is created.</p>
-<p>When attempting to create an empty constructor, if the super class doesn't
+<p>When attempting to create an empty constructor, if the super class doesn’t
 define a default constructor, but instead has one or more constructors which
 takes arguments, then calling <strong>:JavaConstructor</strong> without a range will result
 in the creation of a constructor which overrides the super class constructor
-containing the least number of arguments. Although an empty constructor won't
+containing the least number of arguments. Although an empty constructor won’t
 pass code validation, you can force the creation of one in this case by
-suffixing the command with a '!':</p>
+suffixing the command with a ‘!’:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaConstructor<span class="p">!</span>
 </pre></div>
 </div>
@@ -267,7 +264,7 @@ the specified range.</li>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>If you would like to generate the indexed getter or setter then you can
-suffix the appropriate command above with '!' and if the property is an
+suffix the appropriate command above with ‘!’ and if the property is an
 array, an indexed accessor will be created.</p>
 <div class="last highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaGetSet<span class="p">!</span>
 </pre></div>
@@ -334,7 +331,7 @@ anonymous class.</p>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul class="simple" id="g-eclimjavaimplinsertatcursor">
 <li><strong>g:EclimJavaImplInsertAtCursor</strong> (Default: 0) -
-By default eclim will insert methods you've chosen after all the existing
+By default eclim will insert methods you’ve chosen after all the existing
 methods, but before any inner classes. If you enable this setting, then the
 methods will instead be inserted near where your cursor was when you first
 invoked <strong>:JavaImpl</strong>.</li>
@@ -348,7 +345,7 @@ To utilize this functionality you must first place the cursor on a global field
 (in the main source file class or within an inner class), and then invoke the
 <strong>:JavaDelegate</strong> command.</p>
 <p>In the following source, you can place the cursor anywhere starting from the
-first 'p' in private, to the trailing semicolon, and then invoke the
+first ‘p’ in private, to the trailing semicolon, and then invoke the
 <strong>:JavaDelegate</strong> command.</p>
 <div class="highlight-java"><div class="highlight"><pre><span></span><span class="kd">private</span> <span class="n">List</span> <span class="n">myList</span><span class="o">;</span>
 </pre></div>
@@ -403,9 +400,9 @@ delegate methods will be created for each method in that interface or class.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

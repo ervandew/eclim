@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Eclipse Classpath Editing &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -202,7 +199,7 @@
 </div>
 <p>Source code completion, searching, auto imports, all rely on a properly
 configured classpath.  When you first create a project, a <code>.classpath</code> file is
-created in the project's root directory.  If you created the project on an
+created in the project’s root directory.  If you created the project on an
 existing code-base, eclim will attempt to setup the <code>.classpath</code> file with any
 source code directories or libraries in the project.</p>
 <p>Regardless of the state of your project you will at some point need to update
@@ -215,17 +212,17 @@ and variables.</p>
 <p>All of the commands described below are only available while editing the
 <code>.classpath</code> file in vim.</p>
 <p>When you write the <code>.classpath</code> file, Vim will issue a command to the eclim
-server to update the project's classpath, and will report any errors via vim's
+server to update the project’s classpath, and will report any errors via vim’s
 location list (:help location-list).</p>
 <p class="last">In addition to directly editing the <code>.classpath</code> file, you may also use
-<a class="reference internal" href="#classpath-maven"><span class="std std-ref">maven's support</span></a> for maintaining the eclipse
+<a class="reference internal" href="#classpath-maven"><span class="std std-ref">maven’s support</span></a> for maintaining the eclipse
 classpath.  For users who use <a class="reference external" href="http://jayasoft.org/ivy">ivy</a>, eclim also provides a means to <a class="reference internal" href="#classpath-ivy"><span class="std std-ref">auto
 update the eclipse classpath</span></a> when saving changes to your
 ivy.xml.</p>
 </div>
 <ul id="newsrcentry-java">
 <li><p class="first"><strong>:NewSrcEntry</strong> &lt;dir&gt; -
-Adds a new entry for a source code directory relative to the project's root
+Adds a new entry for a source code directory relative to the project’s root
 directory.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;classpathentry</span> <span class="na">kind=</span><span class="s">&quot;src&quot;</span> <span class="na">path=</span><span class="s">&quot;src/java&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
@@ -276,7 +273,7 @@ created will include the <code>sourcepath</code> attribute:</p>
 </ul>
 <ul id="newvarentry-java">
 <li><p class="first"><strong>:NewVarEntry</strong> &lt;VAR/file&gt; [&lt;src_path&gt; &lt;javadoc_path&gt;] -
-Just like NewJarEntry except an Eclipse &quot;var&quot; entry is created.  When a jar
+Just like NewJarEntry except an Eclipse “var” entry is created.  When a jar
 entry references an absolute path, you should instead use a var entry.  The
 var entry allows you to define a base dir as a variable (ex. USER_HOME =
 /home/username), and then reference files relative to that variable.</p>
@@ -288,7 +285,7 @@ having a local copy with environment specific paths.</p>
 <p>To add new base classpath variables, you can edit
 <code>$ECLIPSE_HOME/plugins/org.eclim_version/classpath_variables.properties</code></p>
 <p>By default, a USER_HOME variable is created that defaults to the java System
-property &quot;user.home&quot; and you can add more as needed.</p>
+property “user.home” and you can add more as needed.</p>
 <p>This command supports command completion of Eclipse variable names as well as
 the files and directories beneath the path the variable represents.</p>
 <p>To manage the classpath variables, eclim also provides the following
@@ -310,8 +307,8 @@ Deletes the variable with the supplied name.</li>
 </ul>
 <div class="section" id="source-and-javadoc-location">
 <span id="classpath-src-javadocs"></span><h2>Source and Javadoc location<a class="headerlink" href="#source-and-javadoc-location" title="Permalink to this headline">¶</a></h2>
-<p>For your <code>var</code> and <code>lib</code> classpath entries, if you didn't do so when you
-created the entry, you can configure the location for that entry's source code
+<p>For your <code>var</code> and <code>lib</code> classpath entries, if you didn’t do so when you
+created the entry, you can configure the location for that entry’s source code
 and javadocs, like the example below, allowing you to <a class="reference internal" href="search.html#javasearch"><span class="std std-ref">jump to the source</span></a> or <a class="reference internal" href="javadoc.html#javadocsearch"><span class="std std-ref">lookup the docs</span></a> of classes, etc found
 in that library. Note that the javadoc location must be a url, whether it be on
 the local file system (file:, <a class="reference external" href="jar:file">jar:file</a>:) or remote (http:).</p>
@@ -327,7 +324,7 @@ the local file system (file:, <a class="reference external" href="jar:file">jar:
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your javadoc location is a jar in your workspace (in the curent project or
 another project), then the url must be in the form (where <code>&lt;project_name&gt;</code>
-is replaced with your project's name):</p>
+is replaced with your project’s name):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>jar:platform:/resource/&lt;project_name&gt;/path/to/javadoc.jar!/
 </pre></div>
 </div>
@@ -349,7 +346,7 @@ their online documentation for <a class="reference external" href="http://maven.
 </div>
 <span id="mvnrepo"></span><ul id="mavenrepo">
 <li><p class="first">Initial Setup</p>
-<p>To initialize maven's support for updating the eclipse classpath you first need
+<p>To initialize maven’s support for updating the eclipse classpath you first need
 to set the <code>M2_REPO</code> (or <code>MAVEN_REPO</code> for 1.x) classpath variable in the
 Eclipse workspace by executing the following command in vim:</p>
 <p>maven 2.x:</p>
@@ -396,8 +393,8 @@ vimrc:</p>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>This feature simply updates the entries in your project's <code>.classpath</code>
-file, it does not download any newly added jars. When you'd like maven to
+<p>This feature simply updates the entries in your project’s <code>.classpath</code>
+file, it does not download any newly added jars. When you’d like maven to
 download those new jars, you can run the following from the command line:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mvn</span> <span class="n">dependency</span><span class="p">:</span><span class="n">resolve</span>
 </pre></div>
@@ -421,7 +418,7 @@ differ in version will be updated, and any stale entries deleted.</p>
 <p>Before you can start utilizing the auto updating support, you must first set
 the location of your ivy repository (ivy cache).  This is the directory where
 ivy will download the dependencies to and where eclipse will then pick them
-up to be added to your project's classpath.</p>
+up to be added to your project’s classpath.</p>
 <p>To set the repository location you can use the <strong>:IvyRepo</strong> command which is
 made available when editing an ivy.xml file.</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>IvyRepo <span class="p">~</span><span class="sr">/.ivy2/</span>cache/
@@ -445,8 +442,8 @@ vimrc:</p>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>This feature will update your project's <code>.classpath</code> file accordingly, but
-it will not download any newly added jars. For that you'll need to have a
+<p>This feature will update your project’s <code>.classpath</code> file accordingly, but
+it will not download any newly added jars. For that you’ll need to have a
 target in your ant build file that will force ivy to download dependencies.
 Something like the example from the ivy docs:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">&quot;resolve&quot;</span> <span class="na">description=</span><span class="s">&quot;--&gt; retrieve dependencies with ivy&quot;</span><span class="nt">&gt;</span>
@@ -496,9 +493,9 @@ attribute notifying eclim that the entry should be preserved.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Automated Imports &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -213,7 +210,7 @@ no changes will occur.</li>
 </ul>
 <p id="javaimportorganize">In addition to adding imports one by one, you can also add them in bulk along
 with the removal of unused imports and the sorting and formating of all the
-file's import statements using the command:</p>
+file’s import statements using the command:</p>
 <p><strong>:JavaImportOrganize</strong></p>
 <div class="section" id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
@@ -222,10 +219,10 @@ file's import statements using the command:</p>
 <li><strong>org.eclipse.jdt.ui.importorder</strong> (Default: java;javax;org;com) -
 Semicolon separated list of package names which specify the sorting order for
 import statements.  This settings is the same setting used by the eclipse gui
-in the &quot;Organize Imports&quot; preference dialog.</li>
+in the “Organize Imports” preference dialog.</li>
 </ul>
 <ul class="simple" id="org-eclim-java-import-exclude">
-<li><strong>org.eclim.java.import.exclude</strong> (Default: [&quot;^com.sun..*&quot;, &quot;^sunw?..*&quot;]) -
+<li><strong>org.eclim.java.import.exclude</strong> (Default: [“^com.sun..*”, “^sunw?..*”]) -
 List of patterns to exclude from import results.</li>
 </ul>
 <ul class="simple" id="org-eclim-java-import-package-separation-level">
@@ -236,7 +233,7 @@ equality, where equal imports are grouped together and separated from other
 groups with a blank line.<ul>
 <li>-1: Use the entire package name. Only imports from the same full package
 are grouped together.</li>
-<li>0: Don't look at any package segments. All imports are grouped together
+<li>0: Don’t look at any package segments. All imports are grouped together
 with no spacing.</li>
 <li>n: Look at the first <cite>n</cite> segments of the package name.</li>
 </ul>
@@ -259,9 +256,9 @@ with no spacing.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

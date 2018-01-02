@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Locate File &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -225,15 +222,15 @@ portions of a path or traverse multiple directories.  You can mix * and **
 with standard perl compatible regex operators to construct your search
 pattern.</p>
 <p>If you prefer the more explicit patterns supported by the argument version of
-<strong>:LocateFile</strong> over the default &quot;fuzzy&quot; pattern supported by the completion
+<strong>:LocateFile</strong> over the default “fuzzy” pattern supported by the completion
 version of <strong>:LocateFile</strong>, then you can turn off the fuzzy matching support
 using the <strong>g:EclimLocateFileFuzzy</strong> variable described below.</p>
 <p>By default, all searching by both variants of this command is limited to the
 current project and any projects listed as dependencies, but you can widen
 the search scope to include all open projects by setting
-<strong>g:EclimLocateFileScope</strong> to 'workspace', which is the default scope when
+<strong>g:EclimLocateFileScope</strong> to ‘workspace’, which is the default scope when
 <strong>:LocateFile</strong> is executed outside of a project.</p>
-<p>In addition to the 'project' and 'workspace' scopes, <strong>:LocateFile</strong> also
+<p>In addition to the ‘project’ and ‘workspace’ scopes, <strong>:LocateFile</strong> also
 supports the following scopes:</p>
 <ul class="simple">
 <li>buffers: search listed buffers</li>
@@ -241,7 +238,7 @@ supports the following scopes:</p>
 </ul>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">For performance reasons, locating files in the 'project' and 'workspace'
+<p class="last">For performance reasons, locating files in the ‘project’ and ‘workspace’
 scopes depends on eclipse being aware of all your project files.  For the
 most part this is handled automatically as you create and edit files within
 vim.  However, actions you take outside of vim or eclipse (moving/removing
@@ -261,35 +258,35 @@ plugin as the fallback default:</p>
 <p><strong>Configuration</strong></p>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul class="simple" id="g-eclimlocatefiledefaultaction">
-<li><strong>g:EclimLocateFileDefaultAction</strong> (Default: 'split') -
+<li><strong>g:EclimLocateFileDefaultAction</strong> (Default: ‘split’) -
 Determines the command used to open the file when hitting &lt;enter&gt; on an entry
 in the locate file results.</li>
 </ul>
 <ul class="simple" id="g-eclimlocatefilescope">
-<li><strong>g:EclimLocateFileScope</strong> (Default: 'project') -
+<li><strong>g:EclimLocateFileScope</strong> (Default: ‘project’) -
 Determines the scope for which to search for files.<ul>
-<li>'project': search only the current project and its dependencies.</li>
-<li>'workspace': search the entire workspace (all open projects).</li>
-<li>'buffers': search listed buffers</li>
-<li>'quickfix': search the quickfix results</li>
-<li>'vcsmodified': search files reported by your vcs as modified or
+<li>‘project’: search only the current project and its dependencies.</li>
+<li>‘workspace’: search the entire workspace (all open projects).</li>
+<li>‘buffers’: search listed buffers</li>
+<li>‘quickfix’: search the quickfix results</li>
+<li>‘vcsmodified’: search files reported by your vcs as modified or
 untracked.</li>
 </ul>
 </li>
 </ul>
 <ul class="simple" id="g-eclimlocatefilefuzzy">
 <li><strong>g:EclimLocateFileFuzzy</strong> (Default: 1) -
-Determines whether or not 'fuzzy' searching will be used on the no argument
+Determines whether or not ‘fuzzy’ searching will be used on the no argument
 version of :LocateFile.</li>
 </ul>
 <ul class="simple" id="g-eclimlocatefilecaseinsensitive">
-<li><strong>g:EclimLocateFileCaseInsensitive</strong> (Default: 'lower') -
+<li><strong>g:EclimLocateFileCaseInsensitive</strong> (Default: ‘lower’) -
 Determines when case insensitive searching is performed.<ul>
-<li>'lower': when the search string is all lower case the search will be case
+<li>‘lower’: when the search string is all lower case the search will be case
 insensitive, but if one or more capital letters are present, then the
 search will be case sensitive.</li>
-<li>'always': searching will always be case insensitive.</li>
-<li>'never': searching will never be case insensitive.</li>
+<li>‘always’: searching will always be case insensitive.</li>
+<li>‘never’: searching will never be case insensitive.</li>
 </ul>
 </li>
 </ul>
@@ -319,9 +316,9 @@ ability from within Eclipse:</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

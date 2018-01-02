@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Java Refactoring &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -214,8 +211,8 @@ to rename various java elements.</p>
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>To rename the class from 'Foo' to 'Bar' you simply position the cursor over the
-class name 'Foo' and execute:</p>
+<p>To rename the class from ‘Foo’ to ‘Bar’ you simply position the cursor over the
+class name ‘Foo’ and execute:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaRename Bar
 </pre></div>
 </div>
@@ -235,13 +232,13 @@ open a scratch buffer with a list of changes to be made along with a link at
 the bottom to execute the refactoring.</p>
 <p>The contents of the preview window will vary depending on what you are
 renaming.</p>
-<p>If we are renaming 'Foo' to 'Bar' the contents would be like so:</p>
+<p>If we are renaming ‘Foo’ to ‘Bar’ the contents would be like so:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">other</span><span class="p">:</span> <span class="n">Rename</span> <span class="n">compilation</span> <span class="n">unit</span> <span class="s1">&#39;Foo.java&#39;</span> <span class="n">to</span> <span class="s1">&#39;Bar.java&#39;</span>
 
 <span class="o">|</span><span class="n">Execute</span> <span class="n">Refactoring</span><span class="o">|</span>
 </pre></div>
 </div>
-<p>If we are renaming the method 'bar' to 'foo', the contents would look like
+<p>If we are renaming the method ‘bar’ to ‘foo’, the contents would look like
 so:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">|</span><span class="n">diff</span><span class="o">|</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">someuser</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">test_java</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">org</span><span class="o">/</span><span class="n">foo</span><span class="o">/</span><span class="n">bar</span><span class="o">/</span><span class="n">Foo</span><span class="o">.</span><span class="n">java</span>
 
@@ -250,7 +247,7 @@ so:</p>
 </div>
 <p>If the first instance, there is not much to preview.  Since this particular
 class is not referenced anywhere else, the only operation eclipse will
-perform, is to rename the file from 'Foo.java' to 'Bar.java' which will also
+perform, is to rename the file from ‘Foo.java’ to ‘Bar.java’ which will also
 update the class name in that file.</p>
 <p>In the second instance eclipse provides a preview of the actual changes to
 the file what will be performed.  If the method were referenced elsewhere,
@@ -258,8 +255,8 @@ you would see an entry for each file that would be modified by the
 refactoring.  To actually for a vim diff split of the changes that will be
 performed, simple position the cursor on the diff entry and hit &lt;enter&gt;.</p>
 <p>Once you are satisfied with changes that eclipse will perform, you can then
-execute the refactoring by positioning the cursor over the &quot;|Execute
-Refactoring|&quot; link and hit &lt;enter&gt;.</p>
+execute the refactoring by positioning the cursor over the “|Execute
+Refactoring|” link and hit &lt;enter&gt;.</p>
 </li>
 <li><p class="first">cancel: Cancel the refactoring (Hitting enter without typing a choice or
 hitting Ctrl-C will also cancel the refactoring).</p>
@@ -269,11 +266,11 @@ hitting Ctrl-C will also cancel the refactoring).</p>
 <p>Renaming a package is performed just like renaming any other element.  However,
 the name you supply to the <strong>:JavaRename</strong> command must be the full package
 name that you are renaming the package to.  For example.  In sample java file
-above, if you place the cursor on the 'org' portion of the package declaration,
-you can rename 'org' to 'com' by running <code>:JavaRename com</code>.  If you want to
-rename the 'foo' package to 'baz' you can do so by running <code>:JavaRename
-org.baz</code>.  Note that if you were to only supply the name 'baz', the 'foo'
-package would be moved to the same level as 'org' and then renamed.</p>
+above, if you place the cursor on the ‘org’ portion of the package declaration,
+you can rename ‘org’ to ‘com’ by running <code>:JavaRename com</code>.  If you want to
+rename the ‘foo’ package to ‘baz’ you can do so by running <code>:JavaRename
+org.baz</code>.  Note that if you were to only supply the name ‘baz’, the ‘foo’
+package would be moved to the same level as ‘org’ and then renamed.</p>
 <div class="alert">
 <p class="alert-heading first admonition-title">Warning</p>
 <p class="last">When renaming a package, the associated directory will also be renamed in the
@@ -313,10 +310,10 @@ which provide the redo counterpart to the undo commands.</p>
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul class="simple" id="g-eclimrefactordifforientation">
-<li><strong>g:EclimRefactorDiffOrientation</strong> (Default: 'vertical') -
+<li><strong>g:EclimRefactorDiffOrientation</strong> (Default: ‘vertical’) -
 Specifies the orientation used when previewing a refactoring and performing a
 diff split between the current file contents and the changes to be performed
-by the refactoring.  Possible values include 'vertical' or 'horizontal'.</li>
+by the refactoring.  Possible values include ‘vertical’ or ‘horizontal’.</li>
 </ul>
 </div>
 </div>
@@ -335,9 +332,9 @@ by the refactoring.  Possible values include 'vertical' or 'horizontal'.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

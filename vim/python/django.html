@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Django &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -221,12 +218,12 @@ resulting output and set the proper file type.</p>
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul class="simple" id="g-eclimdjangoadmin">
-<li><strong>g:EclimDjangoAdmin</strong> (Default: 'django-admin.py') -
+<li><strong>g:EclimDjangoAdmin</strong> (Default: ‘django-admin.py’) -
 This setting specifies the location of your <code>django-admin.py</code> file. By
 default it will attempt to locate it in your system path, but you can
 optionally set an absolute path for eclim to use. Eclim currently only needs
 access to this script when running <code>:DjangoManage startproject &lt;project_name&gt;
-[destination]</code>. All other <strong>:DjangoManage</strong> commands will use your project's
+[destination]</code>. All other <strong>:DjangoManage</strong> commands will use your project’s
 <code>manage.py</code>.</li>
 </ul>
 </div>
@@ -310,7 +307,7 @@ python filter definition file.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">If on the tag/filter definition portion of of a 'load' tag, attempt to
+<li><p class="first">If on the tag/filter definition portion of of a ‘load’ tag, attempt to
 find the definition file.</p>
 <p>Ex.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="c1"># w/ cursor on &#39;mytags&#39; #}</span>
@@ -318,7 +315,7 @@ find the definition file.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">If on a reference to a template for ethier an 'extends' or 'include' tag,
+<li><p class="first">If on a reference to a template for ethier an ‘extends’ or ‘include’ tag,
 attempt to find that template file.</p>
 <p>Ex.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="c1"># w/ cursor on &#39;include/mytemplate.html&#39; #}</span>
@@ -326,7 +323,7 @@ attempt to find that template file.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">If on static file reference, as defined in a 'src' or 'href' attribute
+<li><p class="first">If on static file reference, as defined in a ‘src’ or ‘href’ attribute
 of an element, attempt to find that static file.</p>
 <p>Ex.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="c1"># w/ cursor on &#39;/css/my.css&#39; #}</span>
@@ -336,7 +333,7 @@ of an element, attempt to find that static file.</p>
 <p>Note: this functionality requires that
 <strong>g:EclimDjangoStaticPaths</strong> is set to a list of absolute
 or django project relative (relative to directory containing manage.py
-and settings.py) directories, though it will fallback to using eclim's locate
+and settings.py) directories, though it will fallback to using eclim’s locate
 file functionality.</p>
 <p>Ex.</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimDjangoStaticPaths <span class="p">=</span> [<span class="s2">&quot;../static/&quot;</span>]
@@ -365,14 +362,14 @@ body.</p>
   \ ]
 </pre></div>
 </div>
-<p>This setting is used for indentation of the custom tag's body, as well
+<p>This setting is used for indentation of the custom tag’s body, as well
 as arguments for proper matchit support, end tag completion, and
 syntax highlighting.</p>
 </li>
 </ul>
 <ul class="simple" id="g-htmldjangousertags">
 <li><strong>g:HtmlDjangoUserTags</strong> -
-This setting is a list of any non-body tags which don't require indentation or
+This setting is a list of any non-body tags which don’t require indentation or
 matchit support.  The items configured here will be used for syntax
 highlighting.</li>
 </ul>
@@ -421,7 +418,7 @@ of the tag.</p>
 </li>
 </ul>
 <ul class="simple" id="g-eclimdjangofindaction">
-<li><strong>g:EclimDjangoFindAction</strong> (Default: &quot;split&quot;) -
+<li><strong>g:EclimDjangoFindAction</strong> (Default: “split”) -
 For <strong>:DjangoFind</strong> and <strong>:DjangoTemplateOpen</strong>, used as the action to perform
 on the file found.</li>
 </ul>
@@ -442,9 +439,9 @@ on the file found.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

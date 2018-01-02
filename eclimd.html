@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>The Eclim Daemon &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -210,20 +207,17 @@
 headless eclipse server and communicating with that server inside of vim.
 Starting and stopping of the headless eclipse instance is detailed below.</p>
 <p id="eclimd-start"><strong>Starting eclimd</strong></p>
-<p><strong>Linux / Mac / BSD (and other unix based systems)</strong>:
-To start eclimd from linux, simply execute the eclimd script found in your
-eclipse root directory: $ECLIPSE_HOME/eclimd</p>
+<p>To start eclimd from linux, simply execute the eclimd script found in your
+eclipse root directory ($ECLIPSE_HOME/eclimd) or the path indicated at the end
+of the command line installer process.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">When starting the eclim daemon, you must start it as the same user who will
 be running vim.</p>
 </div>
-<p><strong>Windows</strong>: The easiest way to start eclimd in windows is to double click on
-the eclimd.bat file found in your eclipse root directory:
-%ECLIPSE_HOME%/eclimd.bat</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">Even though an eclipse gui is not started in eclim's headless mode, eclipse
+<p class="last">Even though an eclipse gui is not started in eclim’s headless mode, eclipse
 still requires a running X server to function.  To run eclimd on a truely
 headless server, please see the <a class="reference internal" href="install.html#install-headless"><span class="std std-ref">headless guide</span></a>.</p>
 </div>
@@ -264,7 +258,7 @@ running the eclim server inside of a headed eclipse instance.</p>
 <p>The eclim daemon inside of eclipse is implemented as an eclipse view which can
 be found via:</p>
 <p><span class="menuselection">Window ‣ Show View ‣ Other ‣ Eclim ‣ eclimd</span></p>
-<p>The view will be opened in a new tab in the same pane as the &quot;Problems&quot; tab, as
+<p>The view will be opened in a new tab in the same pane as the “Problems” tab, as
 shown below.</p>
 <img alt="_images/java_editor_eclim_view.png" src="_images/java_editor_eclim_view.png" />
 <div class="alert alert-info">
@@ -286,8 +280,8 @@ group.</p>
 <span id="gvim-embedded"></span><h2>Embedded gvim<a class="headerlink" href="#embedded-gvim" title="Permalink to this headline">¶</a></h2>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>Embedding is only supported on Windows and Unix systems (where gvim is
-compiled with the gtk gui).</p>
+<p>Embedding is only supported on Linux systems (where gvim is compiled with the
+gtk gui).</p>
 <p class="last">Embedding of macvim for OSX is not supported since macvim does not currently
 have the ability to be embedded like gvim. Macvim can still be used to open
 files from eclipse, but macvim will open as an external editor. Also note
@@ -308,7 +302,7 @@ completion, validation, searching, etc.) from the embedded gvim editor, you
 must have the <a class="reference internal" href="#eclimd-headed"><span class="std std-ref">eclimd view</span></a> open.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>If you'd like to have the embedded gvim editor as the default for one or more
+<p>If you’d like to have the embedded gvim editor as the default for one or more
 file types, you can configure it to be in your eclipse preferences:</p>
 <p class="last"><span class="menuselection">Window ‣ Preferences ‣ General ‣ Editors ‣ File Associations</span></p>
 </div>
@@ -316,8 +310,8 @@ file types, you can configure it to be in your eclipse preferences:</p>
 inside of eclipse, but in the event that it could not locate it, you can set
 the location and other settings via the vimplugin preferences:</p>
 <p><span class="menuselection">Window ‣ Preferences ‣ Vimplugin</span></p>
-<p>For MacVim users on OSX, the eclim installer will attempt to locate MacVim's
-mvim script on your path. If it's not found you can set the location of that
+<p>For MacVim users on OSX, the eclim installer will attempt to locate MacVim’s
+mvim script on your path. If it’s not found you can set the location of that
 script in the Vimplugin preferences:</p>
 <p><span class="menuselection">Eclipse ‣ Preferences ‣ Vimplugin</span></p>
 <div class="alert alert-info">
@@ -327,7 +321,7 @@ prior to using the eclim version.</p>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>Some users have reported issues with the embedded gvim's command line being
+<p>Some users have reported issues with the embedded gvim’s command line being
 cut off or possible rendering issues when scrolling through the file.  If you
 experience either of these issues, try adding the following to your vimrc
 file, which should hopefully resolve those problems:</p>
@@ -335,7 +329,7 @@ file, which should hopefully resolve those problems:</p>
 <span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span>T <span class="c">&quot; turn off toolbar</span>
 </pre></div>
 </div>
-<p>Additionally, some users have reported that gvim's left scrollbar may also
+<p>Additionally, some users have reported that gvim’s left scrollbar may also
 need to be disabled:</p>
 <div class="last highlight-vim"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span>L <span class="c">&quot; turn off left scrollbar</span>
 <span class="k">set</span> <span class="nb">guioptions</span><span class="p">-=</span><span class="k">l</span>
@@ -345,7 +339,7 @@ need to be disabled:</p>
 <p id="eclim-gvim-embedded-focus"><strong>Embedded gvim focus</strong></p>
 <p>In some windowing environments, the embedded gvim is treated more like a
 separate window. The result of this is that clicking the eclipse tab (or using
-tab focusing keyboard shortcuts) may focus that tab, but it won't focus the
+tab focusing keyboard shortcuts) may focus that tab, but it won’t focus the
 embedded gvim on that tab. Eclim adds a setting to vimplugin which when enabled,
 will attempt to simulate a click on the embedded gvim window to force it to
 focus:</p>
@@ -364,21 +358,21 @@ command and the key stroke is never sent to gvim.  If no key binding is
 found, then eclipse will pass the key stroke through to gvim.  What this
 means for you is that for any gvim key mappings that you use that have an
 eclipse key binding, they will not be evaluated inside of gvim.  So, if you
-encounter this issue, you'll need to remap the keys in vim or eclipse.  To
-remove the key binding from the eclipse side, simply open the &quot;Keys&quot;
+encounter this issue, you’ll need to remap the keys in vim or eclipse.  To
+remove the key binding from the eclipse side, simply open the “Keys”
 preferences page:</p>
 <p><span class="menuselection">Window ‣ Preferences ‣ General ‣ Keys</span></p>
 <p>Then find the entry in the list that corresponds with the key binding you
-want to remove, select it, and hit the &quot;Unbind Command&quot; button.</p>
+want to remove, select it, and hit the “Unbind Command” button.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>By default eclim will auto-remove a couple of the standard eclipse
 bindings whenever an embedded gvim editor has focus and then restore them
 with a non-gvim editor gains focus:</p>
 <ul class="last simple">
-<li>Ctrl+U: in eclipse this runs &quot;Execute&quot;, but in gvim this is needed to
+<li>Ctrl+U: in eclipse this runs “Execute”, but in gvim this is needed to
 run code completion (ex. ctrl-x ctrl-u).</li>
-<li>Ctrl+N: in eclipse this runs the &quot;New&quot; wizard, but in gvim this is also
+<li>Ctrl+N: in eclipse this runs the “New” wizard, but in gvim this is also
 needed as a part of code completion, to scroll through the results.</li>
 <li>Ctrl+V: in eclipse this pastes text from the clipboard (though not into
 gvim), but in gvim this is needed for column wise visual selections.</li>
@@ -477,8 +471,7 @@ context. In some cases you may be prompted for which workspace to use if one
 cannot be determined for you.</p>
 <p>Below are some different ways in which you can configure your eclimd instances:</p>
 <ol class="arabic">
-<li><p class="first">All Users: Supply the nailgun port and eclipse workspace path when starting
-eclimd:</p>
+<li><p class="first">Supply the nailgun port and eclipse workspace path when starting eclimd:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ eclimd -Dosgi.instance.area.default=@user.home/workspace1 -Dnailgun.server.port=9091
 $ eclimd -Dosgi.instance.area.default=@user.home/workspace2 -Dnailgun.server.port=9092
 </pre></div>
@@ -490,8 +483,8 @@ the -vmargs option before the list of jvm arguments):</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Linux, OSX, BSD Users: Specify the port and workspace in eclimrc files and
-start eclimd with the -f or --file argument:</p>
+<li><p class="first">Specify the port and workspace in eclimrc files and start eclimd with the -f
+or –file argument:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ vim ~/.eclimrc1
 osgi.instance.area.default=@user.home/workspace1
 nailgun.server.port=9091
@@ -506,30 +499,9 @@ $ eclimd --file ~/.eclimrc2
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">The -f/--file argument is not supported by eclipse so the above option is
+<p class="last">The -f/–file argument is not supported by eclipse so the above option is
 only available when using a headless eclimd instance.</p>
 </div>
-</li>
-<li><p class="first">Windows Users: Create Windows shortcuts:</p>
-<ul>
-<li><p class="first">In Windows Explorer, open your eclipse folder.</p>
-</li>
-<li><p class="first">Hold down the right mouse button and drag the eclimd.bat file to where
-you want the shortcut to exist (like your desktop) and release the
-right mouse button.</p>
-</li>
-<li><p class="first">Choose &quot;Create Shortcut(s) Here&quot;</p>
-</li>
-<li><p class="first">Right click the shortcut and choose &quot;Properties&quot;</p>
-</li>
-<li><div class="first line-block">
-<div class="line">On the &quot;Shortcut&quot; tab edit the &quot;Target:&quot; field and append:</div>
-<div class="line">-Dosgi.instance.area.default=&#64;user.home/workspace1 -Dnailgun.server.port=9091</div>
-</div>
-</li>
-<li><p class="first">Repeat this process for your other workspaces.</p>
-</li>
-</ul>
 </li>
 </ol>
 </div>
@@ -537,16 +509,11 @@ right mouse button.</p>
 <span id="eclimd-extdir"></span><h2>Hosting third party nailgun apps in eclimd<a class="headerlink" href="#hosting-third-party-nailgun-apps-in-eclimd" title="Permalink to this headline">¶</a></h2>
 <p>Since nailgun provides a simple way to alleviate the startup cost of the jvm,
 other projects utilize it as well.  However, running several nailgun servers
-isn't ideal, so eclim supports hosting other nailgun apps via an ext dir where
-you can drop in jar files which will be made available to eclim's nailgun
+isn’t ideal, so eclim supports hosting other nailgun apps via an ext dir where
+you can drop in jar files which will be made available to eclim’s nailgun
 server.</p>
 <p>The ext dir that eclim reads from is located in your vim files directory:</p>
-<p>Linux / BSD / OSX:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">~/.</span><span class="n">eclim</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">ext</span>
-</pre></div>
-</div>
-<p>Windows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$HOME/.eclim/resources/ext
 </pre></div>
 </div>
 </div>
@@ -566,9 +533,9 @@ server.</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

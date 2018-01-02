@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Eclim Changes Archive &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -41,7 +38,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -50,7 +47,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -248,7 +245,7 @@
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
 <li>1.7.13 and above will now support Eclipse 3.8 as well as 3.7.</li>
-<li>Fix <a class="reference internal" href="../vim/core/project.html#projectgrep"><span class="std std-ref">:ProjectGrep</span></a> and <a class="reference internal" href="../vim/core/project.html#projecttodo"><span class="std std-ref">:ProjectTodo</span></a> to search in all of the project's links as well.</li>
+<li>Fix <a class="reference internal" href="../vim/core/project.html#projectgrep"><span class="std std-ref">:ProjectGrep</span></a> and <a class="reference internal" href="../vim/core/project.html#projecttodo"><span class="std std-ref">:ProjectTodo</span></a> to search in all of the project’s links as well.</li>
 <li>Other minor bug fixes.</li>
 </ul>
 </dd>
@@ -264,7 +261,7 @@
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
 <li>Updated <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> and <a class="reference internal" href="../vim/core/project.html#projecttab"><span class="std std-ref">:ProjectTab</span></a> to support an arbitrary directory as an argument, allowing
-you to use the command for project's not managed by eclipse/eclim. :TreeTab
+you to use the command for project’s not managed by eclipse/eclim. :TreeTab
 has been removed since the update to :ProjectTab makes it redundant.</li>
 <li>Creation of projects in nested directories in the eclipse workspace (vs at
 the root of the workspace) is now properly supported through eclim.</li>
@@ -332,7 +329,7 @@ setting <a class="reference internal" href="../vim/java/import.html#org-eclim-ja
 <li>The vim option g:EclimJavaImportPackageSeparationLevel has been replaced
 with the eclim setting <a class="reference internal" href="../vim/java/import.html#org-eclim-java-import-package-separation-level"><span class="std std-ref">org.eclim.java.import.package_separation_level</span></a>.</li>
 <li>g:EclimJavaBeanInsertIndexed vim variable removed in favor of suffixing
-:JavaGetSet methods with '!'.</li>
+:JavaGetSet methods with ‘!’.</li>
 <li>:JavaCorrect, :JavaImpl, :JavaDelegate, :JavaConstructor, and :JUnitImpl
 all now perform their code manipulations using eclipse operations.</li>
 <li>Initial support added for running :JavaSearch commands from source file
@@ -344,14 +341,14 @@ results (library source files) not in a project.</li>
 command.</li>
 <li>Added the command <a class="reference internal" href="../vim/java/unittests.html#junitfindtest"><span class="std std-ref">:JUnitFindTest</span></a> to open the
 corresponding test for the current file.</li>
-<li>Removed :Javac command since eclipse's continuous incremental builds
+<li>Removed :Javac command since eclipse’s continuous incremental builds
 typically make the :Javac call a no op, and in cases where you need to
 induce compilation, <a class="reference internal" href="../vim/core/project.html#projectbuild"><span class="std std-ref">:ProjectBuild</span></a> does so in a
 language agnostic way.</li>
 <li>Added <a class="reference internal" href="../vim/java/refactor.html#javamove"><span class="std std-ref">:JavaMove</span></a> command to move a java source file from
 one package to another.</li>
 <li>Added <a class="reference internal" href="../vim/java/javadoc.html#javadocpreview"><span class="std std-ref">:JavaDocPreview</span></a> to display the javadoc of
-the element under the cursor in vim's preview window.</li>
+the element under the cursor in vim’s preview window.</li>
 </ul>
 </dd>
 </dl>
@@ -425,7 +422,7 @@ selections).</li>
 <dd><ul class="first last simple">
 <li>Updated eclimd script to always set the jvm architecture argument,
 preventing possible issue starting eclimd on OSX if the default
-architecture order of the java executable doesn't match the eclipse
+architecture order of the java executable doesn’t match the eclipse
 architecture.</li>
 </ul>
 </dd>
@@ -444,7 +441,7 @@ version of the file resulting in incorrect or no results.</li>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
 <li>Fixed inserted code from <a class="reference internal" href="../vim/java/validate.html#javacorrect"><span class="std std-ref">:JavaCorrect</span></a> when file
-format is 'dos'.</li>
+format is ‘dos’.</li>
 <li>Fixed off by one issue prevent several code correction suggestions from
 being suggested.</li>
 </ul>
@@ -458,7 +455,7 @@ importing a ruby project or adding the ruby nature to an existing project.</li>
 <dt>Vimplugin:</dt>
 <dd><ul class="first last simple">
 <li>Fixed executing of some operations when vim is currently in insert mode
-(opening new file from eclipse in a new external vim tab, using &quot;Save As&quot;
+(opening new file from eclipse in a new external vim tab, using “Save As”
 from eclipse, and jumping to a line number from the project tree etc.)</li>
 </ul>
 </dd>
@@ -478,7 +475,7 @@ from eclipse, and jumping to a line number from the project tree etc.)</li>
 </dd>
 <dt>Installer:</dt>
 <dd><ul class="first last simple">
-<li>Fixed install location of eclim's vim help files (broken in the previous
+<li>Fixed install location of eclim’s vim help files (broken in the previous
 release).</li>
 </ul>
 </dd>
@@ -496,7 +493,7 @@ release of eclim (2.2.0) will be built for Juno.</p>
 <dt>Installer:</dt>
 <dd><ul class="first last simple">
 <li>Added <a class="reference internal" href="../install.html#uninstall"><span class="std std-ref">uninstall</span></a> support to the eclim installer.</li>
-<li>Updated the installer to fully embrace eclipse's provisioning framework
+<li>Updated the installer to fully embrace eclipse’s provisioning framework
 (p2).</li>
 </ul>
 </dd>
@@ -514,7 +511,7 @@ binding scheme back to the default scheme.</li>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
 <li>Added support for importing the necessary type during code completion.</li>
-<li>Improved location of a project's main class for the <a class="reference internal" href="../vim/java/java.html#java"><span class="std std-ref">:Java</span></a>
+<li>Improved location of a project’s main class for the <a class="reference internal" href="../vim/java/java.html#java"><span class="std std-ref">:Java</span></a>
 command, when not explicitly set.</li>
 </ul>
 </dd>
@@ -557,7 +554,7 @@ command, when not explicitly set.</li>
 supplied project.</li>
 <li>Updated <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="std std-ref">:ProjectProblems</span></a> to support optional bang
 (<cite>:ProjectProblems!</cite>) to only show project errors.</li>
-<li>Updating eclipse's <a class="reference internal" href="../vim/core/history.html"><span class="doc">local history</span></a> when writing
+<li>Updating eclipse’s <a class="reference internal" href="../vim/core/history.html"><span class="doc">local history</span></a> when writing
 in vim is now only enabled by default when gvim is opened from the eclipse
 gui.</li>
 </ul>
@@ -688,7 +685,7 @@ dependencies by setting a larger heap space.</li>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/java/java.html#javaclasspath"><span class="std std-ref">:JavaClasspath</span></a> to echo the project's current
+<li>Added <a class="reference internal" href="../vim/java/java.html#javaclasspath"><span class="std std-ref">:JavaClasspath</span></a> to echo the project’s current
 classpath.</li>
 </ul>
 </dd>
@@ -701,8 +698,8 @@ classpath.</li>
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
 <li>Fixed to use %USERPROFILE% on windows to retrieve the user home (fixes
-several possible issues including &quot;Unable to determine your eclipse
-workspace&quot;).</li>
+several possible issues including “Unable to determine your eclipse
+workspace”).</li>
 <li>Various other bug fixes.</li>
 </ul>
 </dd>
@@ -710,7 +707,7 @@ workspace&quot;).</li>
 <dd><ul class="first last simple">
 <li>Added rudimentary auto generated menu items for gvim (can be disabled via
 <a class="reference internal" href="../vim/core/eclim.html#g-eclimmenus"><span class="std std-ref">g:EclimMenus</span></a>).</li>
-<li>Added support for displaying <a class="reference internal" href="../vim/core/project.html#projectinfo"><span class="std std-ref">project info</span></a> vim's
+<li>Added support for displaying <a class="reference internal" href="../vim/core/project.html#projectinfo"><span class="std std-ref">project info</span></a> vim’s
 status line
 (contributed by <a class="reference external" href="http://github.com/bwmcadams">Brendan W. McAdams</a>).</li>
 </ul>
@@ -761,7 +758,7 @@ definition/references lookup support broken out from eclim to
 <dd><ul class="first last simple">
 <li>Fix for <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="std std-ref">:ProjectProblems</span></a> command when any filters
 have been set from the eclipse gui.</li>
-<li>Merged in JRuby's improvements to nailgun's build scripts to increase
+<li>Merged in JRuby’s improvements to nailgun’s build scripts to increase
 compatibility with more platforms.</li>
 <li>Updated the installer and eclimd to not use the eclipse binary and instead
 run the launcher jar directly.  Removes the need to locate the binary which
@@ -866,7 +863,7 @@ and to better support various environments.</li>
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
 <li>Avoid possible gvim crashes when launched from the eclipse gui by disabling
-documentListen events if the current gvim version doesn't include the patch
+documentListen events if the current gvim version doesn’t include the patch
 which resolves the crash.</li>
 <li>Various bug fixes.</li>
 </ul>
@@ -966,11 +963,11 @@ in it.</li>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
 <li>Added full support for <a class="reference internal" href="../eclimd.html#eclimd-multiworkspace"><span class="std std-ref">running multiple eclimd instances</span></a>, each backed by a separate eclipse workspace.</li>
-<li>Added 'K' mapping to <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> to set the tree
+<li>Added ‘K’ mapping to <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> to set the tree
 root the either the project root of file system root depending on the
-context.  Added 'D' mapping to create a new directory and 'F' to open a new
-or existing file by name. Note: the 'H' mapping to set the tree root to the
-user's home directory has been changed to '~'.</li>
+context.  Added ‘D’ mapping to create a new directory and ‘F’ to open a new
+or existing file by name. Note: the ‘H’ mapping to set the tree root to the
+user’s home directory has been changed to ‘~’.</li>
 <li>Added setting to allow <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> instances to be
 shared across vim tabs.</li>
 <li>Updated :VcsWeb to support github, google code, and bitbucket.</li>
@@ -1007,14 +1004,14 @@ installed JDKs/JREs that eclipse is aware of.</li>
 <li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectrename"><span class="xref std std-ref">:ProjectRename</span></a> and <a class="reference internal" href="../vim/core/project.html#projectmove"><span class="xref std std-ref">:ProjectMove</span></a> commands to allow
 renaming and moving of projects.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="xref std std-ref">:ProjectProblems</span></a> command to populate vim's quickfix with a
+<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="xref std std-ref">:ProjectProblems</span></a> command to populate vim’s quickfix with a
 list of all eclipse build errors and warnings for the current and all
 related projects.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">To have problems reported for java projects created via eclim, you may
 need to recreate your java projects to ensure that the java builder is
-properly added.  As of eclim 1.5.2, eclim's java project creation now
+properly added.  As of eclim 1.5.2, eclim’s java project creation now
 adds the java builder.</p>
 </div>
 </li>
@@ -1035,7 +1032,7 @@ snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).</p>
 <a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span class="std std-ref">:JUnitImpl</span></a> to better support generics.</li>
 <li>Updated <a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span class="std std-ref">:JUnitImpl</span></a> to support junit 4 method
 signatures.</li>
-<li>Updated <a class="reference internal" href="../vim/java/import.html#javaimport"><span class="std std-ref">Automated Imports</span></a> and :JavaImportSort to honor eclipse's
+<li>Updated <a class="reference internal" href="../vim/java/import.html#javaimport"><span class="std std-ref">Automated Imports</span></a> and :JavaImportSort to honor eclipse’s
 import order preference and added the ability to edit that preference via
 <a class="reference internal" href="../vim/core/project.html#projectsettings"><span class="xref std std-ref">:ProjectSettings</span></a> and <strong>:EclimSettings</strong>.</li>
 <li>Added initial <a class="reference internal" href="../vim/java/refactor.html"><span class="doc">refactoring</span></a> support.</li>
@@ -1227,7 +1224,7 @@ line endings or multi-byte unicode characters.</li>
 </dd>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
-<li>Added integration with eclipse's
+<li>Added integration with eclipse’s
 <a class="reference internal" href="../vim/core/history.html"><span class="doc">local history</span></a> support.</li>
 </ul>
 </dd>
@@ -1252,7 +1249,7 @@ line endings or multi-byte unicode characters.</li>
 <dd><ul class="first last simple">
 <li><a class="reference internal" href="../vim/java/validate.html#checkstyle"><span class="std std-ref">:Checkstyle</span></a> command now creates a project
 classloader giving checkstyle access to any classes reachable via your
-project's .classpath file.</li>
+project’s .classpath file.</li>
 </ul>
 </dd>
 <dt>Eclim:</dt>
@@ -1299,8 +1296,8 @@ ticket numbers in :VcsLog.</li>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
 <li>Rewrote <a class="reference internal" href="../vim/core/locate.html"><span class="doc">:LocateFile*</span></a> commands to provide
-functionality similar to eclipse's &quot;Open Resource&quot; command or Textmate's
-&quot;Find in Project&quot;.</li>
+functionality similar to eclipse’s “Open Resource” command or Textmate’s
+“Find in Project”.</li>
 </ul>
 </dd>
 <dt>Python:</dt>
@@ -1415,7 +1412,7 @@ remove the annotations.</li>
 </dd>
 <dt>Vim:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/core/util.html#only"><span class="xref std std-ref">:Only</span></a> as a configurable alternative to vim's :only command.</li>
+<li>Added <a class="reference internal" href="../vim/core/util.html#only"><span class="xref std std-ref">:Only</span></a> as a configurable alternative to vim’s :only command.</li>
 <li>Added :OtherWorkingCopyDiff, :OtherWorkingCopyEdit,
 :OtherWorkingCopySplit, and :OtherWorkingCopyTabopen.</li>
 </ul>
@@ -1470,7 +1467,7 @@ to support cvs and hg where applicable.</li>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
 <li>Added <a class="reference internal" href="../vim/core/project.html#projectinfo"><span class="xref std std-ref">:ProjectInfo</span></a>.</li>
-<li>Added an eclim/after directory to vim's runtime path for any user scripts
+<li>Added an eclim/after directory to vim’s runtime path for any user scripts
 to be sourced after eclim.</li>
 </ul>
 </dd>
@@ -1532,7 +1529,7 @@ Requires the <a class="reference external" href="http://eclipse.org/pdt/">eclips
 </dd>
 <dt>Html / Xml:</dt>
 <dd><ul class="first last simple">
-<li>Added auto completion of end tags when typing '&lt;/'.
+<li>Added auto completion of end tags when typing ‘&lt;/’.
 This can be disabled by setting
 <strong>g:EclimSgmlCompleteEndTag</strong> to 0.</li>
 </ul>
@@ -1738,8 +1735,8 @@ plugin.</li>
 <dl class="docutils">
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
-<li>Vim scripts now account for possibly disruptive 'wildignore' option.</li>
-<li>On Windows, vim scripts account for users who have modified the 'shell'
+<li>Vim scripts now account for possibly disruptive ‘wildignore’ option.</li>
+<li>On Windows, vim scripts account for users who have modified the ‘shell’
 that vim uses, temporarily restoring the default.</li>
 <li>Reimplemented <strong>:EclimSettings</strong> and
 <strong>:ProjectSettings</strong> saving to be more fault tolerant.</li>
@@ -1789,8 +1786,8 @@ pre Vim 7 instances.</li>
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
 <li>Fixed issues when eclipse is installed in a directory containing a
-space, like &quot;Program Files&quot;.</li>
-<li>Fixed error when .classpath src dir is &quot;&quot; or &quot;.&quot;.</li>
+space, like “Program Files”.</li>
+<li>Fixed error when .classpath src dir is “” or “.”.</li>
 <li>Fixed error if taglist.vim is not installed.</li>
 <li>Fixed auto setting of jre source.</li>
 <li>Fixed couple java code completion issues.</li>
@@ -1823,10 +1820,10 @@ space, like &quot;Program Files&quot;.</li>
 <li><p class="first">Updated <a class="reference internal" href="../vim/java/classpath.html#classpath-ivy"><span class="std std-ref">ivy support</span></a> to behave more like maven.</p>
 </li>
 <li><p class="first">Added commands to ease setting of classpath repo variables for
-<a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span class="std std-ref">maven's</span></a> and <a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span class="std std-ref">mvn's</span></a> eclipse
+<a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span class="std std-ref">maven’s</span></a> and <a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span class="std std-ref">mvn’s</span></a> eclipse
 support.</p>
 </li>
-<li><p class="first">Added TestNG to ant compiler's error format.</p>
+<li><p class="first">Added TestNG to ant compiler’s error format.</p>
 </li>
 <li><p class="first">Added :JUnitExecute and <a class="reference internal" href="../vim/java/unittests.html#junitresult"><span class="std std-ref">:JUnitResult</span></a>.</p>
 </li>
@@ -1843,7 +1840,7 @@ support.</p>
 <li>Added <strong>:FindCommandDef</strong> and <strong>:FindCommandRef</strong>.</li>
 <li>Changed <strong>:FindFunctionVariableContext</strong> to <strong>:FindByContext</strong>.</li>
 <li>Added <strong>:Tabnew</strong> and <strong>:TabnewRelative</strong>.</li>
-<li><strong>:Split</strong> and <strong>:SplitRelative</strong> now support '*' and '**' wildcards.</li>
+<li><strong>:Split</strong> and <strong>:SplitRelative</strong> now support ‘*’ and ‘**’ wildcards.</li>
 </ul>
 </dd>
 </dl>
@@ -1885,7 +1882,7 @@ the current status of each project.</p>
 <li><p class="first">Added <a class="reference internal" href="../vim/java/search.html#javasearchcontext"><span class="std std-ref">:JavaSearchContext</span></a>.</p>
 </li>
 <li><p class="first">Added means to preserve manually added classpath entries when utilizing
-eclim's integration with ivy or maven dependency files.</p>
+eclim’s integration with ivy or maven dependency files.</p>
 </li>
 <li><p class="first">Updated <a class="reference internal" href="../vim/java/search.html#javasearch"><span class="std std-ref">:JavaSearch</span></a>
 to provide sensible defaults if command ommits various arguments. Also
@@ -1904,7 +1901,7 @@ maven 1.x and 2.x.</p>
 <li><p class="first">Added :MavenDependencySearch and :MvnDependencySearch
 for searching for and adding dependencies to your maven pom file.</p>
 </li>
-<li><p class="first">&lt;anchor id=&quot;upgrade_1.2.0&quot;/&gt;
+<li><p class="first">&lt;anchor id=”upgrade_1.2.0”/&gt;
 Re-organized eclim files within the vim runtime path.
 Based on suggestion by Marc Weber.</p>
 <div class="alert">
@@ -1912,7 +1909,7 @@ Based on suggestion by Marc Weber.</p>
 <p>This change will require you to remove all the old eclim vim plugins
 prior to installing the new set.  A comprehensive list of plugins to
 be deleted is provided
-&lt;a href=&quot;upgrade/resources/1.2.0/vim_plugin_list.txt&quot;&gt;here&lt;/a&gt;.</p>
+&lt;a href=”upgrade/resources/1.2.0/vim_plugin_list.txt”&gt;here&lt;/a&gt;.</p>
 <p>You may also use one of the following scripts to help automate the
 process.  Just download the appropriate file to the directory where
 you extracted the eclim vim plugins and execute it.  Please review the
@@ -1921,7 +1918,7 @@ Please report any issues as well.</p>
 <dl class="docutils">
 <dt><strong>*nix users</strong>:</dt>
 <dd><div class="first last line-block">
-<div class="line">&lt;a href=&quot;upgrade/resources/1.2.0/upgrade.sh&quot;&gt;upgrade.sh&lt;/a&gt;</div>
+<div class="line">&lt;a href=”upgrade/resources/1.2.0/upgrade.sh”&gt;upgrade.sh&lt;/a&gt;</div>
 <div class="line">Be sure to either make the file executable</div>
 <div class="line">$ chmod 755 upgrade.sh</div>
 <div class="line">or run via sh</div>
@@ -1930,7 +1927,7 @@ Please report any issues as well.</p>
 </dd>
 <dt><strong>Windows users</strong>:</dt>
 <dd><div class="first last line-block">
-<div class="line">&lt;a href=&quot;upgrade/resources/1.2.0/upgrade.bat&quot;&gt;upgrade.bat&lt;/a&gt;</div>
+<div class="line">&lt;a href=”upgrade/resources/1.2.0/upgrade.bat”&gt;upgrade.bat&lt;/a&gt;</div>
 <div class="line">Run via a command prompt so that you can monitor the output.</div>
 </div>
 </dd>
@@ -1974,7 +1971,7 @@ the completion.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">The original implementation of :JavaImportClean was written entirely in
-vim (didn't require eclim server).  To properly handle ignoring comments
+vim (didn’t require eclim server).  To properly handle ignoring comments
 when determining what imports are unused, this functionality had to be
 reimplemented with server side help.  However, the vim only version is
 preserved and will be invoked if the current file is not in an eclipse
@@ -1997,7 +1994,7 @@ documentation.</li>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Utilizing vim's new dictionary based completion results.</li>
+<li>Utilizing vim’s new dictionary based completion results.</li>
 <li>Added <a class="reference internal" href="../vim/java/methods.html#javaconstructor"><span class="std std-ref">:JavaConstructor</span></a>.</li>
 <li><a class="reference internal" href="../vim/java/methods.html#javaimpl"><span class="std std-ref">:JavaImpl</span></a> now supports overriding constructors.</li>
 <li>Added <a class="reference internal" href="../vim/java/javadoc.html#javadoccomment"><span class="std std-ref">:JavaDocComment</span></a>
@@ -2005,7 +2002,7 @@ command to add or update javadocs comment for the element under the
 cursor.</li>
 <li>Added <strong>:JavaRegex</strong> for testing java regular expressions.</li>
 <li>JDT classpath_variables.properties no longer requires system property
-placeholder to use '_' instead of '.'.</li>
+placeholder to use ‘_’ instead of ‘.’.</li>
 <li>Velocity templates broken up into more logical templates to ease
 customization.</li>
 <li><a class="reference internal" href="../vim/java/methods.html#javagetset"><span class="std std-ref">:JavaGetSet</span></a> now has variable to determine whether or
@@ -2021,11 +2018,11 @@ context.</li>
 <li>Added groovy script based ctags implementation for use with the vim taglist
 plugin.</li>
 <li>All of the functionality that previously placed results / errors into
-the quickfix window, now utilizes vim's new location list functionality.</li>
+the quickfix window, now utilizes vim’s new location list functionality.</li>
 <li>Added web lookup commands.</li>
 <li>Added vim script function / global variable searching.</li>
 <li>Added vim doc lookup.</li>
-<li>Various improvements to 'sign' support for marking errors, warnings,
+<li>Various improvements to ‘sign’ support for marking errors, warnings,
 etc.</li>
 </ul>
 </dd>
@@ -2049,8 +2046,8 @@ with no previews) are excluded.</li>
 <li>Java import command is now restricted to the current project.</li>
 <li>Java src file location (for almost all java commands) now uses the full
 path to find the file in eclipse rather than build the path from the
-file's package declaration and class name.  Fixes cases where the
-package name doesn't match up with the folder structure.</li>
+file’s package declaration and class name.  Fixes cases where the
+package name doesn’t match up with the folder structure.</li>
 <li>Xml validation errors that occur when no dtd is defined are filtered
 out (limitation of using xerces to support jdk 1.4).</li>
 <li>Relative xml entities are now resolved when validating an xml file.</li>
@@ -2109,7 +2106,7 @@ highlight varibles.</p>
 </li>
 <li><p class="first">Removed all default key mappings. See the suggested set of mappings.</p>
 </li>
-<li><p class="first">Now utilizing vim's autoload functionality to load functions on demand.</p>
+<li><p class="first">Now utilizing vim’s autoload functionality to load functions on demand.</p>
 <p>One vim file was moved as a result, so you should delete the old file
 when upgrading.</p>
 <div class="alert">
@@ -2129,7 +2126,7 @@ when upgrading.</p>
 <dl class="docutils">
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
-<li>Code completion, searching, etc fixed on files with fileformat == 'dos'.</li>
+<li>Code completion, searching, etc fixed on files with fileformat == ‘dos’.</li>
 <li>Several other minor fixes and enhancements.</li>
 </ul>
 </dd>
@@ -2150,7 +2147,7 @@ searching.</li>
 that do not have a corresponding source file attached.</li>
 <li>Added some handy abbreviations.</li>
 <li>Added validation of the .classpath file when saving.  Errors are then
-reported via vim's quickfix.</li>
+reported via vim’s quickfix.</li>
 </ul>
 </dd>
 <dt>Vim:</dt>
@@ -2212,9 +2209,9 @@ ftplugin/maven_project/eclim.vim
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

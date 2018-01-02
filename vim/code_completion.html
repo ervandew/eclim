@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Code Completion &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -41,7 +38,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -50,7 +47,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -196,12 +193,12 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>All the code completion functionality provided by eclim (ant, java, etc) makes
-use of the new &quot;User Defined Completion&quot; added to Vim 7.  To initiate code
+use of the new “User Defined Completion” added to Vim 7.  To initiate code
 completion enter insert mode and type <code>Ctrl-X Ctrl-U</code>.  By default Vim will
 open a popup if there is more than one completion.</p>
 <div class="alert alert-info" id="g-eclimcompletionmethod">
 <p class="alert-heading first admonition-title">Note</p>
-<p>If you would prefer to have eclim use vim's omni code completion instead, you
+<p>If you would prefer to have eclim use vim’s omni code completion instead, you
 can add the following to your vimrc:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">g</span><span class="p">:</span><span class="n">EclimCompletionMethod</span> <span class="o">=</span> <span class="s1">&#39;omnifunc&#39;</span>
 </pre></div>
@@ -212,7 +209,7 @@ can add the following to your vimrc:</p>
 <img alt="../_images/completion.png" src="../_images/completion.png" />
 <p>Once you have started the completion you can use <code>Ctrl-N</code> to proceed to the
 next match and <code>Ctrl-P</code> to move to the previous match.</p>
-<p>To find out more about Vim's insert completion execute the following from
+<p>To find out more about Vim’s insert completion execute the following from
 within Vim:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">h</span> <span class="n">ins</span><span class="o">-</span><span class="n">completion</span>
 </pre></div>
@@ -224,9 +221,9 @@ within Vim:</p>
 might want to check out one of the following plugins which can make completion
 usage less cumbersome:</p>
 <ul>
-<li><p class="first"><a class="reference external" href="https://github.com/ervandew/supertab">SuperTab</a>: This plugin's aim is to allow you to use <code>&lt;tab&gt;</code> for all your
+<li><p class="first"><a class="reference external" href="https://github.com/ervandew/supertab">SuperTab</a>: This plugin’s aim is to allow you to use <code>&lt;tab&gt;</code> for all your
 code completion needs.</p>
-<p>By default supertab will use vim's keyword completion on <code>&lt;tab&gt;</code>, so you
+<p>By default supertab will use vim’s keyword completion on <code>&lt;tab&gt;</code>, so you
 probably want to at least add the following setting to your vimrc:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:SuperTabDefaultCompletionType <span class="p">=</span> <span class="s1">&#39;context&#39;</span>
 </pre></div>
@@ -236,7 +233,7 @@ access a member of an object or class, in which case it will use your user
 completion method, such as eclim.</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bitbucket.org/ns9tks/vim-autocomplpop">AutoComplPop</a>: This plugin will automatically open the completion popup
-for you after you've typed a preconfigured number of characters.</p>
+for you after you’ve typed a preconfigured number of characters.</p>
 <p>AutoComplPop by default only supports triggering code completion for file types
 who have an omni completion that ships with vim, but you can configure it to
 support eclim code completion. Here is an example of some vim script you can
@@ -261,8 +258,8 @@ dot, but you can tweak this to your tastes):</p>
 <li><p class="first"><a class="reference external" href="https://github.com/Shougo/neocomplcache.vim">neocomplcache</a>: Another completion plugin which will automatically open the
 completion popup for you as you type. Configuring neocomplecache is a bit
 easier than AutoComplPop. You just need to tell eclim to register its
-completion to vim's omni complete, then force neocomplcache to use it. Here
-is an example for forcing the use of eclim's code completion for the java file
+completion to vim’s omni complete, then force neocomplcache to use it. Here
+is an example for forcing the use of eclim’s code completion for the java file
 type when you attempt to access an object/class member:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimCompletionMethod <span class="p">=</span> <span class="s1">&#39;omnifunc&#39;</span>
 
@@ -278,7 +275,7 @@ the completion popup for you and which also adds fuzzy matching of completion
 results. This plugin does have a compiled component to it so be sure to read
 their install docs thoroughly.</p>
 <p>Once installed, the only required configuration you should need is the
-following which tells eclim to register its completion to vim's omni complete
+following which tells eclim to register its completion to vim’s omni complete
 which YouCompleteMe will automatically detect and use:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimCompletionMethod <span class="p">=</span> <span class="s1">&#39;omnifunc&#39;</span>
 </pre></div>
@@ -302,9 +299,9 @@ which YouCompleteMe will automatically detect and use:</p>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

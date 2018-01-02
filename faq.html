@@ -1,24 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>FAQ / Troubleshooting &#8212; eclim (eclipse + vim)</title>
-    
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.7.0',
+        VERSION:     'v2.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,7 +40,7 @@
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
   </head>
-  <body role="document">
+  <body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -52,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.0</b></li>
+          <li><b class="navbar-text">v2.7.1</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -205,10 +202,10 @@
 </li>
 <li class="dropdown"><a class="subnav-toggle reference internal" href="#troubleshooting">Troubleshooting<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
 <li><a class="reference internal" href="#eclim-does-not-recognize-any-of-my-existing-projects">Eclim does not recognize any of my existing projects.</a></li>
-<li><a class="reference internal" href="#i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work">I'm editing a [java, python, php, etc] file and code completion doesn't work.</a></li>
-<li><a class="reference internal" href="#i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist">I'm editing a [java, python, php, etc] file and none of the file type commands exist.</a></li>
+<li><a class="reference internal" href="#i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work">I’m editing a [java, python, php, etc] file and code completion doesn’t work.</a></li>
+<li><a class="reference internal" href="#i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist">I’m editing a [java, python, php, etc] file and none of the file type commands exist.</a></li>
 <li><a class="reference internal" href="#code-validation-signs-are-showing-up-on-the-wrong-lines">Code validation signs are showing up on the wrong lines.</a></li>
-<li><a class="reference internal" href="#i-received-a-java-exception-while-executing-command-message">I received a java exception &quot;while executing command&quot; message.</a></li>
+<li><a class="reference internal" href="#i-received-a-java-exception-while-executing-command-message">I received a java exception “while executing command” message.</a></li>
 <li><a class="reference internal" href="#incompatible-plugins">Incompatible Plugins</a></li>
 </ul>
 </li>
@@ -232,46 +229,6 @@ directory.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ echo &quot;osgi.instance.area.default=@user.home/another_workspace&quot; &gt;&gt; ~/.eclimrc
 </pre></div>
 </div>
-<p id="eclimd-options-windows">For Windows users there are a couple alternatives to the unsupported
-.eclimrc:</p>
-<ol class="arabic">
-<li><p class="first">Your first option is to add a new environment variable:</p>
-<ul>
-<li><div class="first line-block">
-<div class="line">Windows 2000: <span class="menuselection">Control Panel ‣ System ‣ Advanced ‣ Environment Variables</span></div>
-<div class="line">Windows XP: <span class="menuselection">Control Panel ‣ Performance And Maintenance ‣ System ‣ Advanced ‣ Environment Variables</span></div>
-</div>
-</li>
-<li><div class="first line-block">
-<div class="line">Under &quot;User variables...&quot; click &quot;New...&quot;</div>
-<div class="line">Variable Name: ECLIMD_OPTS</div>
-<div class="line">Variable Value: -Dosgi.instance.area.default=&#64;user.home/another_workspace</div>
-</div>
-</li>
-<li><p class="first">Then you can start eclimd as normal (via the eclimd.bat file).</p>
-</li>
-</ul>
-</li>
-<li><p class="first">The second option is to create a shortcut to the eclimd.bat file:</p>
-<ul>
-<li><p class="first">In Windows Explorer, open your eclipse folder.</p>
-</li>
-<li><p class="first">Hold down the right mouse button and drag the eclimd.bat file to where
-you want the shortcut to exist (like your desktop) and release the
-right mouse button.</p>
-</li>
-<li><p class="first">Choose &quot;Create Shortcut(s) Here&quot;</p>
-</li>
-<li><p class="first">Right click the shortcut and choose &quot;Properties&quot;</p>
-</li>
-<li><div class="first line-block">
-<div class="line">On the &quot;Shortcut&quot; tab edit the &quot;Target:&quot; field and append:</div>
-<div class="line">-Dosgi.instance.area.default=&#64;user.home/another_workspace</div>
-</div>
-</li>
-</ul>
-</li>
-</ol>
 </div>
 <div class="section" id="how-can-i-configure-eclim-to-use-a-proxy">
 <span id="eclim-proxy"></span><h3>How can I configure eclim to use a proxy?<a class="headerlink" href="#how-can-i-configure-eclim-to-use-a-proxy" title="Permalink to this headline">¶</a></h3>
@@ -288,11 +245,8 @@ directory.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ echo -e &quot;http.proxyHost=my.proxy\nhttp.proxyPort=8080&quot; &gt;&gt; ~/.eclimrc
 </pre></div>
 </div>
-<p>If your proxy requires authentication, you'll need to supply the
+<p>If your proxy requires authentication, you’ll need to supply the
 <code>-Dhttp.proxyUser</code> and <code>-Dhttp.proxyPassword</code> properties as well.</p>
-<p>On Windows systems you can use the same steps
-<a class="reference internal" href="#eclimd-options-windows"><span class="std std-ref">described</span></a> above, for setting the workspace
-location, to also set the proxy settings.</p>
 </div>
 <div class="section" id="how-do-i-specify-jvm-memory-arguments-for-eclim-fix-outofmemory-errors">
 <span id="eclim-memory"></span><h3>How do I specify jvm memory arguments for eclim (fix OutOfMemory errors).<a class="headerlink" href="#how-do-i-specify-jvm-memory-arguments-for-eclim-fix-outofmemory-errors" title="Permalink to this headline">¶</a></h3>
@@ -311,9 +265,6 @@ a .eclimrc file in your home directory.</p>
 <span class="o">-</span><span class="n">Xmx256M</span>
 </pre></div>
 </div>
-<p>On Windows systems you can use the same steps
-<a class="reference internal" href="#eclimd-options-windows"><span class="std std-ref">described</span></a> above, for setting the workspace
-location, to also specify the jvm memory args.</p>
 </li>
 </ol>
 <p>If you are using the headed version of eclimd, then setting the jvm memory
@@ -335,20 +286,15 @@ can be found on the <a class="reference external" href="http://wiki.eclipse.org/
 according to your setup:</p>
 <ol class="arabic">
 <li><p class="first">Headless eclimd users on any unix variant (Linux, OSX, etc) can simply add
-the property your .eclimrc file in your home directory:</p>
+the following property to your .eclimrc file in your home directory:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># set the default file encoding</span>
 <span class="n">file</span><span class="o">.</span><span class="n">encoding</span><span class="o">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Headless eclimd users on Windows can add the system property (eg.
-<code>-Dfile.encoding=utf-8</code>) using the same steps
-<a class="reference internal" href="#eclimd-options-windows"><span class="std std-ref">described</span></a> above, for setting the workspace
-location.</p>
-</li>
 <li><p class="first">Headed eclimd users can add the system property (eg.
 <code>-Dfile.encoding=utf-8</code>) to your eclipse.ini file found in your eclipse
-install's root directory. Be sure to add the property on a new line after
+install’s root directory. Be sure to add the property on a new line after
 the <code>-vmargs</code> line:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="o">-</span><span class="n">vmargs</span>
@@ -365,7 +311,7 @@ the <code>-vmargs</code> line:</p>
 <span id="id1"></span><h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
 <p>The purpose of this guide is to serve as a means to help troubleshoot common
 issues encountered when getting start with eclim, or providing information if
-you've discovered a possible bug.</p>
+you’ve discovered a possible bug.</p>
 <p>The first thing to note is that as of eclim 1.6.1, errors raised by eclimd when
 executing an autocmd from vim, like validating a file on write, are no longer
 echoed as errors to the user. Instead these errors are logged and only
@@ -380,7 +326,7 @@ autocmd errors encountered will be printed (you may need to run :messages to see
 them all).</p>
 <p>Below are a series of sections broken up by the behavior (or lack of)
 experienced and the steps for diagnosing the cause of that behavior.</p>
-<p>If you can't find the answer to your question here, be sure to take a look at
+<p>If you can’t find the answer to your question here, be sure to take a look at
 the <a class="reference internal" href="#"><span class="doc">faq</span></a> to see if your question is answered there.</p>
 <div class="section" id="eclim-does-not-recognize-any-of-my-existing-projects">
 <span id="ts-workspace"></span><h3>Eclim does not recognize any of my existing projects.<a class="headerlink" href="#eclim-does-not-recognize-any-of-my-existing-projects" title="Permalink to this headline">¶</a></h3>
@@ -394,9 +340,9 @@ located in a non-default workspace location.</p>
 eclimd, please see the <a class="reference internal" href="#eclim-workspace"><span class="std std-ref">faq</span></a> devoted to this.</p>
 </div>
 <div class="section" id="i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work">
-<span id="ts-completion"></span><h3>I'm editing a [java, python, php, etc] file and code completion doesn't work.<a class="headerlink" href="#i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work" title="Permalink to this headline">¶</a></h3>
+<span id="ts-completion"></span><h3>I’m editing a [java, python, php, etc] file and code completion doesn’t work.<a class="headerlink" href="#i-m-editing-a-java-python-php-etc-file-and-code-completion-doesn-t-work" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">If you receive the message &quot;E764: Option 'completefunc' is not set&quot;, please
+<li><p class="first">If you receive the message “E764: Option ‘completefunc’ is not set”, please
 see the <a class="reference internal" href="#ts-ftplugin"><span class="std std-ref">file type section below</span></a>.</p>
 </li>
 <li><p class="first">Next step is to make sure that the current file is in an eclipse project by
@@ -410,7 +356,7 @@ the <a class="reference internal" href="#ts-workspace"><span class="std std-ref"
 <a class="reference internal" href="gettingstarted.html#gettingstarted-create"><span class="std std-ref">creating a new project</span></a>.</p>
 </li>
 <li><p class="first">If the correct project info is found, then try running the completion again,
-if it still doesn't return any results run the command:</p>
+if it still doesn’t return any results run the command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">messages</span>
 </pre></div>
 </div>
@@ -421,8 +367,8 @@ on <a class="reference internal" href="#ts-exception"><span class="std std-ref">
 </ul>
 </div>
 <div class="section" id="i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist">
-<span id="ts-ftplugin"></span><h3>I'm editing a [java, python, php, etc] file and none of the file type commands exist.<a class="headerlink" href="#i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist" title="Permalink to this headline">¶</a></h3>
-<p>This usually indicates that you don't have file type plugins enabled in vim.
+<span id="ts-ftplugin"></span><h3>I’m editing a [java, python, php, etc] file and none of the file type commands exist.<a class="headerlink" href="#i-m-editing-a-java-python-php-etc-file-and-none-of-the-file-type-commands-exist" title="Permalink to this headline">¶</a></h3>
+<p>This usually indicates that you don’t have file type plugins enabled in vim.
 To check you can run:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">EclimValidate</span>
 </pre></div>
@@ -437,16 +383,16 @@ directions on adding the following to your vimrc:</p>
 <span id="ts-signs-misplaced"></span><h3>Code validation signs are showing up on the wrong lines.<a class="headerlink" href="#code-validation-signs-are-showing-up-on-the-wrong-lines" title="Permalink to this headline">¶</a></h3>
 <p>This is most likely a result of eclipse being setup to use a different file
 encoding than vim, most likely cp1251 (windows-1251) vs utf-8.  You should be
-able to resolve this issue by <a class="reference internal" href="#eclim-encoding"><span class="std std-ref">setting eclipse's default encoding</span></a> accordingly.</p>
-<p>If you're unsure what encoding to use, try using utf-8.</p>
+able to resolve this issue by <a class="reference internal" href="#eclim-encoding"><span class="std std-ref">setting eclipse’s default encoding</span></a> accordingly.</p>
+<p>If you’re unsure what encoding to use, try using utf-8.</p>
 </div>
 <div class="section" id="i-received-a-java-exception-while-executing-command-message">
-<span id="ts-exception"></span><h3>I received a java exception &quot;while executing command&quot; message.<a class="headerlink" href="#i-received-a-java-exception-while-executing-command-message" title="Permalink to this headline">¶</a></h3>
+<span id="ts-exception"></span><h3>I received a java exception “while executing command” message.<a class="headerlink" href="#i-received-a-java-exception-while-executing-command-message" title="Permalink to this headline">¶</a></h3>
 <p>If you receive a java exception while performing some action in vim, it should
 also include a message indicating the issue.  However, if you receive something
-like a NullPointerException or some other exception which doesn't include a
+like a NullPointerException or some other exception which doesn’t include a
 helpful message, then you may have encountered a bug.</p>
-<p>Once you've encountered this type of issue, the first step it to get more
+<p>Once you’ve encountered this type of issue, the first step it to get more
 details which you can do by enabling eclim debugging in vim:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">let</span> <span class="k">g</span>:EclimLogLevel <span class="p">=</span> <span class="s1">&#39;trace&#39;</span>
 </pre></div>
@@ -459,7 +405,7 @@ trace:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">verbose</span> JavaSearch ...
 </pre></div>
 </div>
-<p>Once you've obtained the stack trace, the next step it to send it to the
+<p>Once you’ve obtained the stack trace, the next step it to send it to the
 <a class="reference external" href="http://groups.google.com/group/eclim-user">eclim-user</a> mailing list along with a description of what you were doing when
 the error occurred, as well as the OS you are on, and whether you were using
 eclimd headless or headed (inside of the eclipse gui).</p>
@@ -469,7 +415,7 @@ eclimd headless or headed (inside of the eclipse gui).</p>
 <p>There are some third party eclipse plugins which currently may interfere with
 eclim.  Below is a list of these known plugin incompatibilities.</p>
 <ul class="simple">
-<li><strong>Spring IDE</strong>: At least one user has reported that eclim's java validation
+<li><strong>Spring IDE</strong>: At least one user has reported that eclim’s java validation
 no longer works after installing the Spring IDE.</li>
 <li><strong>viPlugin</strong>: Attempting to open a file using the embedded gvim support
 fails if viPlugin is installed.  This issue has been reported on the
@@ -493,9 +439,9 @@ viPlugin site.</li>
       <a href="#">Back to top</a>
     </p>
     <p>
-        &copy; Copyright 2005 - 2012, Eric Van Dewoestine<br/>
-      Last updated on Jul 12, 2017<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.4
+        &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
+      Last updated on Jan 01, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
