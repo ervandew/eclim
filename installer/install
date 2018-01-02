@@ -433,9 +433,10 @@ def step_update_site(eclim, plugins):
 
       tree = ElementTree.parse(filepath)
       parents = {e: p for p in tree.iter() for e in p}
+      encoding = 'unicode' if sys.version_info[0] >= 3 else None
       for template in tree.findall('.//*[@template]'):
         template.attrib.pop('template')
-        text = ElementTree.tostring(template)
+        text = ElementTree.tostring(template, encoding=encoding)
         parent = parents.get(template)
         index = list(parent).index(template)
 
@@ -447,10 +448,11 @@ def step_update_site(eclim, plugins):
       # ElementTree.write doesn't seem to provide the ability to preserve the
       # original xml declaration lines, so we'll read those from the original
       # file and write them in the new file manually.
-      with open(filepath, 'r+') as xml:
+      # Note: the 'b' portion of 'rb+' is for python3 ElementTree.write
+      with open(filepath, 'rb+') as xml:
         declarations = []
         for line in xml.readlines():
-          if not line.startswith('<?'):
+          if not line.startswith(b'<?'):
             break
 
           declarations.append(line)
@@ -616,6 +618,11 @@ def execute(cmd, cwd=None):
   sys.stdout.flush()
   process = subprocess.Popen(cmd, cwd=cwd, shell=True, stdout=subprocess.PIPE)
   stdout, stderr = process.communicate()
+  if stdout:
+    stdout = stdout.decode()
+  if stderr:
+    stderr = stderr.decode()
+
   if process.returncode:
     print('abort: command failed.', file=sys.stderr)
     if stdout:
@@ -1010,7 +1017,7 @@ class Eclipse(object):
           '-repository', site,
           '-list',
         )
-        for line in stdout.decode().split('\n'):
+        for line in stdout.split('\n'):
           name, _, version = line.partition('=')
           if name.endswith('.feature.group'):
             name = name.replace('.feature.group', '')
