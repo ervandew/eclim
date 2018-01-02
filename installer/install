@@ -172,6 +172,8 @@ def step_eclipse(options):
 def step_vimfiles(options, uninstall=False):
   if options.vimfiles:
     vimfiles = options.vimfiles
+    if vimfiles == 'skip':
+      return vimfiles
     if vimfiles.startswith('~'):
       vimfiles = os.path.expanduser(vimfiles)
     if vimfiles and not os.access(vimfiles, os.W_OK):
