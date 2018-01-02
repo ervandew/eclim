@@ -1073,7 +1073,7 @@ class Eclipse(object):
         # loop.
         version = None
         for v in versions:
-          if v.version >= dependency.version:
+          if v >= dependency.version:
             version = v
             break
         actionable.append(DependencyAction(dependency, version, upgrade=True))
