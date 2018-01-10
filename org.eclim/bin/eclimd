@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2017  Eric Van Dewoestine
+# Copyright (C) 2005 - 2018  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,27 +40,50 @@ if [ "$1" = "-?" -o "$1" = "-h" -o "$1" = "--help" ] ; then
 fi
 
 if [ -z "$JAVA" ] ; then
-  JAVA=$(command -v java)
   if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/bin/java" ] ; then
       JAVA="$JAVA_HOME/bin/java"
     elif [ -x "$JAVA_HOME/jre/bin/java" ] ; then
       JAVA="$JAVA_HOME/jre/bin/java"
     fi
+  else
+    JAVA=$(command -v java)
   fi
-  JAVA_VERSION=$(
-    $JAVA -version 2>&1 |
-      grep version |
-      perl -pe 's|.*"[0-9]\.(.*)\..*".*|\1|'
-  )
-  # cast to an int
-  JAVA_VERSION=$(($JAVA_VERSION + 0))
 fi
 
 if [ -z "$JAVA" ] ; then
   echo "Unable to locate your java install."
   echo "Please set your JAVA_HOME environment variable or"
   echo "set JAVA to the location of your java executable."
+  exit 1
+fi
+
+# Note: as of java 9, the version string format has changed from something like
+# "1.8.0_144" in java 8 to just "9", or "9.1.1" in java 9
+# first pass just gets the full version, for all java versions
+JAVA_VERSION=$(
+  $JAVA -version 2>&1 |
+    grep version |
+    perl -pe 's|.*"([0-9].*)".*|\1|'
+)
+# finish parsing the version for java 8 and older (version starts with "1.")
+if [[ "$JAVA_VERSION" == 1.* ]] ; then
+  JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|1\.(.*)\..*|\1|')
+# finish parsing the version for java 9
+else
+  JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|([0-9]+)\..*|\1|')
+fi
+
+# cast to an int
+JAVA_VERSION=$(($JAVA_VERSION + 0))
+
+# validate minimum java version
+# Note: see install.bin as well
+JAVA_REQUIRED=8
+if [[ $JAVA_VERSION -lt $JAVA_REQUIRED ]] ; then
+  echo "JAVA_VERSION=$JAVA_VERSION"
+  echo "You must have at least java $JAVA_REQUIRED installed to run eclimd."
+  echo "Note: you can still target previous java versions on a per project basis."
   exit 1
 fi
 

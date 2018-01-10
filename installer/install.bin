@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2017  Eric Van Dewoestine
+# Copyright (C) 2017 - 2018  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,9 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 required=(
+  'java'
   'python'
   'make'
   'gcc'
+  'perl'
 )
 for requirement in ${required[@]} ; do
   if ! [ -x "$(command -v $requirement)" ] ; then
@@ -29,6 +31,31 @@ done
 
 if [ -n "$requirement_missing" ] ; then
   echo "abort: missing one or more requirements."
+  exit 1
+fi
+
+# Note: as of java 9, the version string format has changed from something like
+# "1.8.0_144" in java 8 to just "9", or "9.1.1" in java 9
+# first pass just gets the full version, for all java versions
+JAVA_VERSION=$(
+  java -version 2>&1 |
+    grep version |
+    perl -pe 's|.*"([0-9].*)".*|\1|'
+)
+# finish parsing the version for java 8 and older (version starts with "1.")
+if [[ "$JAVA_VERSION" == 1.* ]] ; then
+  JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|1\.(.*)\..*|\1|')
+# finish parsing the version for java 9
+else
+  JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|([0-9]+)\..*|\1|')
+fi
+
+# validate minimum java version
+# Note: see eclimd as well
+JAVA_REQUIRED=8
+if [[ $JAVA_VERSION -lt $JAVA_REQUIRED ]] ; then
+  echo "You must have at least java $JAVA_REQUIRED installed to run eclimd."
+  echo "Note: you can still target previous java versions on a per project basis."
   exit 1
 fi
 
