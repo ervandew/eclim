@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,6 +103,11 @@ target(name: 'init'){
   }else if (dotversion.exists()){ // only used by source distribution (tar.gz)
     version = dotversion.getText().trim()
     release = version
+  }else if (new File(".git/shallow").exists()){
+    fail('''
+      Abort:
+      Building eclim from a shallow git clone is not supported.
+    ''')
   }else{
     // set eclim version based on current repos state (most recent tag w/
     // possible suffix including number of revisions since that tag + last commit
