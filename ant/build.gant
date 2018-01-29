@@ -69,22 +69,26 @@ if (eclipseHome == '' || eclipseHome == '${env.ECLIM_ECLIPSE_HOME}'){
   }
   if (!eclipseDestDir.canWrite()){
     ant.echo('''
-    The chosen eclipse home directory is not writable. When building eclim as
+    The supplied eclipse home directory is not writable. When building eclim as
     a regular user against a root installed eclipse, you will need to set the
     eclipse.local property to your user local eclipse path located in your
-    user's .eclipse directory:
+    user's ~/.eclipse directory:
 
       $ ant \\
           -Declipse.home=/opt/eclipse \\
           -Declipse.local=$HOME/.eclipse/org.eclipse.platform_<version>
 
-    If that directory does not yet exist, then you can run the following to
-    initialize it:
+    If you don't have either of these directories yet:
+      - ~/.eclipse or
+      - ~/.eclipse/org.eclipse.platform_<version>
+    then you can run one of the following commands to create it:
 
+      $ /opt/eclipse/eclipse -debug -initialize
+        or
       $ ant -Declipse.home=/opt/eclipse eclipse.init
 
-    In both cases be sure to replace /opt/eclipse with the actual location of
-    your eclipse installation.
+    Note: Be sure to replace /opt/eclipse with the actual location of
+    your eclipse installation when running any of the commands above.
     ''')
     ant.fail(message: "Eclipse home directory is not writable: $eclipseDestDir")
   }
