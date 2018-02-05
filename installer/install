@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2017  Eric Van Dewoestine
+# Copyright (C) 2017 - 2018  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -567,8 +567,8 @@ def step_eclim_install(eclim, eclipse, plugins):
 
   # configure and build nailgun
   nailgun_dir = os.path.join(eclim_plugin_dir, 'nailgun')
-  execute(os.path.join(nailgun_dir, 'configure'), cwd=nailgun_dir)
-  execute('make', cwd=nailgun_dir)
+  execute([os.path.join(nailgun_dir, 'configure')], cwd=nailgun_dir)
+  execute(['make'], cwd=nailgun_dir)
   shutil.move(
     os.path.join(nailgun_dir, 'ng'),
     os.path.join(eclim_plugin_dir, 'bin'),
@@ -618,7 +618,7 @@ def report_bug():
 def execute(cmd, cwd=None):
   print('running: %s ... ' % cmd, end='')
   sys.stdout.flush()
-  process = subprocess.Popen(cmd, cwd=cwd, shell=True, stdout=subprocess.PIPE)
+  process = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE)
   stdout, stderr = process.communicate()
   if stdout:
     stdout = stdout.decode()
@@ -847,6 +847,8 @@ class Eclipse(object):
     if darwin:
       self.home = os.path.join(self.home, 'Contents', 'Eclipse')
 
+    terminal.debug('eclipse home:      %s', self.home)
+
     plugins = os.path.join(self.home, 'plugins')
     if os.path.exists(plugins):
       for name in os.listdir(plugins):
@@ -864,14 +866,14 @@ class Eclipse(object):
       else:
         possibles = [os.path.join(self.home, 'eclipse')]
         for exe in possibles:
-          if os.path.exists(exe):
+          if os.path.exists(exe) and os.path.isfile(exe):
             self.executable = exe
             break
 
     # check if features/plugins are stored outside of the eclipse home/local
     # (eg: ~/.p2/pool)
     ini = os.path.join(self.home, 'eclipse.ini')
-    terminal.debug('eclipse ini:      %s (exists: %s)', ini, os.path.exists(ini))
+    terminal.debug('eclipse ini:       %s (exists: %s)', ini, os.path.exists(ini))
     if os.path.exists(ini):
       with open(ini, 'r') as f:
         prev_line = None
@@ -885,8 +887,8 @@ class Eclipse(object):
             break
           prev_line = line
 
-    terminal.debug('eclipse p2pool:   %s', self.p2pool)
-    terminal.debug('eclipse launcher: %s', self.launcher)
+    terminal.debug('eclipse p2pool:    %s', self.p2pool)
+    terminal.debug('eclipse launcher:  %s', self.launcher)
     if not self.launcher:
       terminal.debug('eclipse executable: %s', self.executable)
 
@@ -928,18 +930,9 @@ class Eclipse(object):
 
     vmargs = self.proxy.jvmargs
     if self.launcher:
-      cmd = 'java %s -jar %s %s' % (
-        ' '.join(vmargs),
-        self.launcher,
-        ' '.join(args),
-      )
+      cmd = ['java'] + vmargs + ['-jar', self.launcher] + list(args)
     else:
-      cmd = '%s -nosplash %s -vmargs %s' % (
-        self.executable,
-        ' '.join(args),
-        ' '.join(vmargs),
-      )
-
+      cmd = [self.executable, '-nosplash'] + list(args) + ['-vmargs'] + vmargs
     stdout, stderr = execute(cmd)
     return stdout
 
