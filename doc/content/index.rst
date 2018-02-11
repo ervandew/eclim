@@ -123,6 +123,14 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Feb 11, 2018
+-------------
+
+The new eclim installer has been fixed to handle spaces in the eclipse path and
+eclimd has been fixed to run under java 9.
+
+- :ref:`Eclim 2.7.2 <2.7.2>`
+
 Jan 01, 2018
 -------------
 
