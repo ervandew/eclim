@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2018  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,6 +15,17 @@
 
 History of Changes
 ==================
+
+.. _2.7.2:
+
+2.7.2 (Feb. 11, 2018)
+---------------------
+
+Eclim:
+  - Installer fixed to handle spaces in the eclipse path.
+  - Eclimd fixed to run under java 9.
+
+| :gitlog:`Git Log (2.7.2) <2.7.1...2.7.2>`
 
 .. _2.7.1:
 

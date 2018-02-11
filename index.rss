@@ -5,6 +5,17 @@
 <link>http://eclim.org/index.html</link>
 <description>Latest news for eclim (eclipse + vim).</description>
 <item>
+<title>Feb 11, 2018</title>
+<link>http://eclim.org/index.html#feb-11-2018</link>
+<description><![CDATA[<p><p>The new eclim installer has been fixed to handle spaces in the eclipse path and
+eclimd has been fixed to run under java 9.</p>
+<ul class="simple">
+<li><a href="http://eclim.org/changes.html#id1"><span class="xref std std-ref">Eclim 2.7.2</span></a></li>
+</ul>
+</p>
+]]></description>
+</item>
+<item>
 <title>Jan 01, 2018</title>
 <link>http://eclim.org/index.html#jan-01-2018</link>
 <description><![CDATA[<p><p>Eclim has an all new installer that runs entirely on the command line and now
@@ -15,7 +26,7 @@ supports the new Eclipse directory layout used by the Eclipse GUI installer.</p>
 support Linux and OSX.</p>
 </div>
 <ul class="simple">
-<li><a href="http://eclim.org/changes.html#id1"><span class="xref std std-ref">Eclim 2.7.1</span></a></li>
+<li><a href="http://eclim.org/changes.html#id2"><span class="xref std std-ref">Eclim 2.7.1</span></a></li>
 </ul>
 </p>
 ]]></description>
@@ -25,157 +36,7 @@ support Linux and OSX.</p>
 <link>http://eclim.org/index.html#jul-12-2017</link>
 <description><![CDATA[<p><p>A new version of eclim is now available with support for Eclipse 4.7 (Oxygen).</p>
 <ul class="simple">
-<li><a href="http://eclim.org/changes.html#id2"><span class="xref std std-ref">Eclim 2.7.0</span></a></li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Jul 21, 2016</title>
-<link>http://eclim.org/index.html#jul-21-2016</link>
-<description><![CDATA[<p><p>A new version of eclim is now available with support for Eclipse 4.6 (Neon).</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id3"><span class="xref std std-ref">Eclim 2.6.0</span></a></li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Jul 25, 2015</title>
-<link>http://eclim.org/index.html#jul-25-2015</link>
-<description><![CDATA[<p><p>A new version of eclim is now available with support for Eclipse 4.5 (Mars).</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id4"><span class="xref std std-ref">Eclim 2.5.0</span></a></li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Jan 22, 2015</title>
-<link>http://eclim.org/index.html#jan-22-2015</link>
-<description><![CDATA[<p><p>The latest version of eclim is now available with scala support re-enabled, new
-groovy support, java debugging support, many bug fixes, and more.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id5"><span class="xref std std-ref">Eclim 2.4.1</span></a></li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Aug 24, 2014</title>
-<link>http://eclim.org/index.html#aug-24-2014</link>
-<description><![CDATA[<p><p>Eclim has <strong>finally</strong> been released with Eclipse Luna support. Please note
-however that scala support is disabled in this release. I tried waiting for a
-final release of ScalaIDE 4.0.0 for Luna, but I don't want to hold up the rest
-of eclim any longer. If you want to use eclim's scala support, you'll need to
-install the ScalaIDE 4.0.0 milestone and build eclim from the master git branch.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id6"><span class="xref std std-ref">Eclim 2.4.0</span></a></li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>May 07, 2014</title>
-<link>http://eclim.org/index.html#may-07-2014</link>
-<description><![CDATA[<p><p>Release of eclim for indigo users.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id7"><span class="xref std std-ref">Eclim 1.7.19</span></a></li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Apr. 12, 2014</title>
-<link>http://eclim.org/index.html#apr-12-2014</link>
-<description><![CDATA[<p><p>Eclim has been updated to fix an issue on Windows that could prevent many
-features from working.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id8"><span class="xref std std-ref">Eclim 2.3.4</span></a></li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Apr. 06, 2014</title>
-<link>http://eclim.org/index.html#apr-06-2014</link>
-<description><![CDATA[<p><p>This release includes many bug fixes and refinements as well as a rewrite of
-eclim's python support to utilize pydev instead of rope.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id9"><span class="xref std std-ref">Eclim 2.3.3</span></a></li>
-</ul>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p>Any exiting eclim python projects you have should be re-created with the new
-<code class="docutils literal"><span class="pre">python</span></code> nature:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">project</span> <span class="o">-</span><span class="n">n</span> <span class="n">python</span>
-</pre></div>
-</div>
-</div>
-</p>
-]]></description>
-</item>
-<item>
-<title>Sep. 12, 2013</title>
-<link>http://eclim.org/index.html#sep-12-2013</link>
-<description><![CDATA[<p><p>This release fixes the extraction of the necessary vim files when installing
-scala support.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id10"><span class="xref std std-ref">Eclim 2.3.2</span></a> for Eclipse 4.3 (Kepler).</li>
-<li><a href="http://eclim.org/changes.html#id11"><span class="xref std std-ref">Eclim 1.7.18</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Jul. 27, 2013</title>
-<link>http://eclim.org/index.html#jul-27-2013</link>
-<description><![CDATA[<p><p>The previous eclim installer for Kepler was still pointing at the Juno update
-site. This release remedies that.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id12"><span class="xref std std-ref">Eclim 2.3.1</span></a> for Eclipse 4.3 (Kepler).</li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Jul. 21, 2013</title>
-<link>http://eclim.org/index.html#jul-21-2013</link>
-<description><![CDATA[<p><p>The focus of this release is to bring eclim fully up to date with Eclipse Kepler
-support. The installer for eclim 2.3.0 now requires that you install against
-Kepler.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id13"><span class="xref std std-ref">Eclim 2.3.0</span></a> for Eclipse 4.3 (Kepler).</li>
-<li><a href="http://eclim.org/changes.html#id14"><span class="xref std std-ref">Eclim 1.7.17</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>Jul. 14, 2013</title>
-<link>http://eclim.org/index.html#jul-14-2013</link>
-<description><![CDATA[<p><p>This is primarily a bug fix release with a few new features. Unless some
-critical error is found, this will be the last release targeting Juno. The next
-release will likely target Kepler though this release should work fine on Kepler
-as well, with the exception of scala support which has not been tested. Indigo
-support will continue but will likely end with the release of Luna, possibly
-sooner.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id15"><span class="xref std std-ref">Eclim 2.2.7</span></a> for Eclipse 4.2 (Juno).</li>
-<li><a href="http://eclim.org/changes.html#id16"><span class="xref std std-ref">Eclim 1.7.16</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
-</ul>
-</p>
-]]></description>
-</item>
-<item>
-<title>May 18, 2013</title>
-<link>http://eclim.org/index.html#may-18-2013</link>
-<description><![CDATA[<p><p>Eclim has been updated to support the Android Development Toolkit version
-22.0.0, scala is now supported for both Juno and Indigo, and there are a few
-other improvements and many bug fixes.</p>
-<ul class="simple">
-<li><a href="http://eclim.org/changes.html#id17"><span class="xref std std-ref">Eclim 2.2.6</span></a> for Eclipse 4.2 (Juno).</li>
-<li><a href="http://eclim.org/changes.html#id18"><span class="xref std std-ref">Eclim 1.7.14</span></a> for Eclipse 3.7/3.8 (Indigo).</li>
+<li><a href="http://eclim.org/changes.html#id3"><span class="xref std std-ref">Eclim 2.7.0</span></a></li>
 </ul>
 </p>
 ]]></description>

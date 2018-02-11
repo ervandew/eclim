@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.7.1',
+        VERSION:     'v2.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.1</b></li>
+          <li><b class="navbar-text">v2.7.2</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -272,7 +272,7 @@ at least ‘ON’ for ‘detection’ and ‘plugin’, but if not, then update 
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
 <p>You can find the official eclim installer on eclim’s github <a class="reference external" href="https://github.com/ervandew/eclim/releases/">releases page</a>:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.1/eclim_2.7.1.bin">eclim_2.7.1.bin</a></li>
+<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.2/eclim_2.7.2.bin">eclim_2.7.2.bin</a></li>
 </ul>
 <div class="section" id="third-party-packages">
 <h3>Third Party Packages<a class="headerlink" href="#third-party-packages" title="Permalink to this headline">¶</a></h3>
@@ -304,10 +304,10 @@ environment:</p>
 installation procedure.</p>
 </div>
 <ul>
-<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.1/eclim_2.7.1.bin">eclim_2.7.1.bin</a></p>
+<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.2/eclim_2.7.2.bin">eclim_2.7.2.bin</a></p>
 </li>
 <li><p class="first"><strong>Next run the installer:</strong></p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin
 </pre></div>
 </div>
 <p>After the installer starts up, simply follow the steps to install eclim.</p>
@@ -371,12 +371,12 @@ you will receive the following message:</p>
 <span id="installer-proxy"></span><h4>Running The Installer Behind a Proxy<a class="headerlink" href="#running-the-installer-behind-a-proxy" title="Permalink to this headline">¶</a></h4>
 <p>If you are behind a proxy, you may need to run the installer like so (be sure
 to take a look at the related <a class="reference internal" href="faq.html#eclim-proxy"><span class="std std-ref">faq</span></a> as well):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin --proxy my.proxy:8080
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin --proxy my.proxy:8080
 </pre></div>
 </div>
 <p>If your proxy requires authentication, you’ll need to supply the username and
 password as well:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin --proxy myuser:mypass@my.proxy:8080
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin --proxy myuser:mypass@my.proxy:8080
 </pre></div>
 </div>
 </div>
@@ -389,7 +389,7 @@ necessary input it requires.</p>
 <p>Simply run the installer as shown
 below, supplying the location of your eclipse install, vim files location, and
 the plugins you wish to install:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin <span class="se">\</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin <span class="se">\</span>
   --yes <span class="se">\</span>
   --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
   --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
@@ -548,7 +548,7 @@ $ tar -zxf eclipse-&lt;version&gt;-linux-gtk.tar.gz
 </pre></div>
 </div>
 <p>Once eclipse is installed, you can then install eclim normally:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin
 </pre></div>
 </div>
 <p>The last step is to start Xvfb followed by eclimd:</p>
@@ -580,14 +580,14 @@ plugins along with all the files eclim adds to your .vim or vimfiles directory
 <div class="section" id="uninstall">
 <span id="id1"></span><h2>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline">¶</a></h2>
 <p>To uninstall eclim you can use the eclim installer like so:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin uninstall
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin uninstall
 </pre></div>
 </div>
 <div class="section" id="unattended-automated-uninstall">
 <span id="uninstall-automated"></span><h3>Unattended (automated) uninstall<a class="headerlink" href="#unattended-automated-uninstall" title="Permalink to this headline">¶</a></h3>
 <p>Like the installer, the uninstaller also supports an unattended uninstall. You
 just need to supply your eclipse and vim files directories:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.1.bin
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin
   --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
   --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
   uninstall
@@ -612,8 +612,8 @@ just need to supply your eclipse and vim files directories:</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Jan 01, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5
+      Last updated on Feb 11, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
