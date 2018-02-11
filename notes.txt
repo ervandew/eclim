@@ -531,6 +531,9 @@ NOTES {{{
        $ git push
        $ git push --tags
     2) create a release on github
+       https://github.com/ervandew/eclim/releases/
+       Title: Eclim <version> (for Eclipse <version>, <Name>)
+       Desc:  http://ervandew.github.io/eclim/changes.html
     3) update documentation website
        $ ant docs
        $ cd gh-pages
