@@ -587,6 +587,7 @@ target(name: 'docs'){
         include(name: '.git/**/*')
         include(name: '.gitignore')
         include(name: '.nojekyll')
+        include(name: 'CNAME')
       }
     }
   }
