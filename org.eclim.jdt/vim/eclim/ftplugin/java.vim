@@ -248,6 +248,10 @@ if !exists(":JavaDebug")
     \ :call eclim#java#debug#BreakpointRemove('<bang>')
 endif
 
+if !exists(":JavaOutline")
+	command -buffer -range JavaOutline :call eclim#java#outline#Outline()
+endif
+
 " }}}
 
 " vim:ft=vim:fdm=marker
