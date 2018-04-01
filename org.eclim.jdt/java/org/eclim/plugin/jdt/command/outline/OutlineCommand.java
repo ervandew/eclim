@@ -64,7 +64,7 @@ public class OutlineCommand extends AbstractCommand
 		List<OutlineNode> outlineNodes = new ArrayList<OutlineNode>();
 
 		for(IJavaElement javaElement : javaElements) {
-			if(javaElement instanceof IMember) {
+			if(!javaElement.getElementName().isEmpty() &&  javaElement instanceof IMember) {
 				outlineNodes.add(new OutlineNode(
 							OutlineUtil.getSignature((IMember)javaElement),
 							getMemberFilePosition((IMember)javaElement),
