@@ -50,7 +50,8 @@ public class OutlineCommand extends AbstractCommand
 			throws Exception
 	{
 		return extractOutlineFromElements(
-				JavaUtils.getCompilationUnit(
+				JavaUtils
+				.getCompilationUnit(
 					commandLine.getValue(Options.PROJECT_OPTION),
 					commandLine.getValue(Options.FILE_OPTION))
 				.getChildren());
