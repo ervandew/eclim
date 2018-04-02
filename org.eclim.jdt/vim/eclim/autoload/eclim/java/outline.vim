@@ -84,7 +84,7 @@ function! s:OutlineFormat(result, lines, info, indent) " {{{
 					\ 'line': child.position.line,
 					\ 'col': child.position.column
 					\ })
-		call s:OutlineFormat(child.childrens, a:lines, a:info, a:indent . "\t")
+		call s:OutlineFormat(child.children, a:lines, a:info, a:indent . "\t")
 	endfor
 endfunction " }}}
 

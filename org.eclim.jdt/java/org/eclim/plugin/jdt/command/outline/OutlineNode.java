@@ -29,13 +29,13 @@ public class OutlineNode
 {
 	private String name;
 	private Position position;
-	private List<OutlineNode> childrens;
+	private List<OutlineNode> children;
 
-	public OutlineNode(String name, Position position, List<OutlineNode> childrens)
+	public OutlineNode(String name, Position position, List<OutlineNode> children)
 	{
 		this.name = name;
 		this.position = position;
-		this.childrens = childrens;
+		this.children = children;
 	}
 
 	public String getName()
@@ -48,8 +48,8 @@ public class OutlineNode
 		return position;
 	}
 
-	public List<OutlineNode> getChildrens()
+	public List<OutlineNode> getChildren()
 	{
-		return childrens;
+		return children;
 	}
 }

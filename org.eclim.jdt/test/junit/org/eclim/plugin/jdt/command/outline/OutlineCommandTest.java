@@ -54,7 +54,7 @@ public class OutlineCommandTest
 		{
 			result
 			.append(indent + node.get("name") + "\n")
-			.append(resultOutput((List<Map<String, Object>>)node.get("childrens"), indent + "\t"));
+			.append(resultOutput((List<Map<String, Object>>)node.get("children"), indent + "\t"));
 		}
 		return result.toString();
 	}
