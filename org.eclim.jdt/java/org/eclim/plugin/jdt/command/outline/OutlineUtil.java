@@ -16,6 +16,8 @@
  */
 package org.eclim.plugin.jdt.command.outline;
 
+import org.eclim.util.file.Position;
+
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMember;
@@ -45,6 +47,16 @@ public class OutlineUtil
 				: member instanceof IMethod ? getSignature((IMethod)member)
 				: "")
 			.toString();
+	}
+
+	public static Position getMemberFilePosition(IMember member)
+			throws JavaModelException
+	{
+		return Position.fromOffset(
+				member.getResource().getLocation().toOSString().replace('\\', '/'),
+				null,
+				member.getNameRange().getOffset(),
+				member.getNameRange().getLength());
 	}
 
 	private static String getSignature(IType type)

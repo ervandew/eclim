@@ -28,8 +28,6 @@ import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
 
-import org.eclim.util.file.Position;
-
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.JavaModelException;
@@ -67,7 +65,7 @@ public class OutlineCommand extends AbstractCommand
 			if(!javaElement.getElementName().isEmpty() &&  javaElement instanceof IMember) {
 				outlineNodes.add(new OutlineNode(
 							OutlineUtil.getSignature((IMember)javaElement),
-							getMemberFilePosition((IMember)javaElement),
+							OutlineUtil.getMemberFilePosition((IMember)javaElement),
 							extractOutlineFromElements(((IMember)javaElement).getChildren())));
 			}
 		}
@@ -75,13 +73,4 @@ public class OutlineCommand extends AbstractCommand
 		return outlineNodes;
 	}
 
-	private Position getMemberFilePosition(IMember member)
-			throws JavaModelException
-	{
-		return Position.fromOffset(
-				member.getResource().getLocation().toOSString().replace('\\', '/'),
-				null,
-				member.getNameRange().getOffset(),
-				member.getNameRange().getLength());
-	}
 }
