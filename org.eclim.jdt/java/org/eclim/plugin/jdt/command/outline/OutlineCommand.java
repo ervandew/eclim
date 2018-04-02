@@ -41,7 +41,7 @@ import org.eclipse.jdt.core.JavaModelException;
 		name = "java_outline",
 		options =
 		"REQUIRED p project ARG," +
-		"REQUIRED f file ARG,"
+		"REQUIRED f file ARG"
 )
 public class OutlineCommand extends AbstractCommand
 {
