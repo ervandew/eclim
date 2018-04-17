@@ -21,92 +21,99 @@
 
 " Script Variables {{{
 let s:command_outline =
-			\ '-command java_outline -p "<project>" -f "<file>"'
+  \ '-command java_outline -p "<project>" -f "<file>"'
 " }}}
 
 function! eclim#java#outline#Outline() " {{{
-	if !eclim#project#util#IsCurrentFileInProject()
-		return
-	endif
+  if !eclim#project#util#IsCurrentFileInProject()
+    return
+  endif
 
-	call eclim#lang#SilentUpdate()
+  call eclim#lang#SilentUpdate()
 
-	let project = eclim#project#util#GetCurrentProjectName()
-	let file = eclim#project#util#GetProjectRelativeFilePath()
-	let command = s:command_outline
-	let command = substitute(command, '<project>', project, '')
-	let command = substitute(command, '<file>', file, '')
-	let result = eclim#Execute(command)
+  let project = eclim#project#util#GetCurrentProjectName()
+  let file = eclim#project#util#GetProjectRelativeFilePath()
+  let command = s:command_outline
+  let command = substitute(command, '<project>', project, '')
+  let command = substitute(command, '<file>', file, '')
+  let result = eclim#Execute(command)
 
-	if type(result) != g:LIST_TYPE
-		return
-	endif
+  if type(result) != g:LIST_TYPE
+    return
+  endif
 
-	if len(result) == 0
-		call eclim#util#Echo('No results found.')
-		return
-	endif
+  if len(result) == 0
+    call eclim#util#Echo('No results found.')
+    return
+  endif
 
-	let lines = []
-	let info = []
-	call s:OutlineFormat(result, lines, info, '')
-	call eclim#util#TempWindow('[Outline]', lines)
+  let lines = []
+  let info = []
+  call s:OutlineFormat(result, lines, info, '')
+  call eclim#util#TempWindow('[Outline]', lines)
 
-	set ft=java
-	" fold function calls into their parent
-	setlocal foldmethod=expr
-	setlocal foldexpr='>'.len(substitute(getline(v:lnum),'^\\(\\s*\\).*','\\1',''))/2
-	setlocal foldtext=substitute(getline(v:foldstart),'^\\(\\s*\\)\\s\\s','\\1+\ ','').':\ '.(v:foldend-v:foldstart+1).'\ lines'
+  set ft=java
+  " fold function calls into their parent
+  setlocal foldmethod=expr
+  setlocal foldexpr='>'.len(substitute(getline(v:lnum),'^\\(\\s*\\).*','\\1',''))/2
+  setlocal foldtext=substitute(getline(v:foldstart),'^\\(\\s*\\)\\s\\s','\\1+\ ','').':\ '.(v:foldend-v:foldstart+1).'\ lines'
 
-	setlocal modifiable noreadonly
-	call append(line('$'), ['', '" use ? to view help'])
-	setlocal nomodifiable readonly
-	syntax match Comment /^".*/
+  setlocal modifiable noreadonly
+  call append(line('$'), ['', '" use ? to view help'])
+  setlocal nomodifiable readonly
+  syntax match Comment /^".*/
 
-	let b:outline_info = info
+  let b:outline_info = info
 
-	nnoremap <buffer> <silent> <cr> :call <SID>Open(g:EclimJavaOutlineDefaultAction)<cr>
-	nnoremap <buffer> <silent> E :call <SID>Open('edit')<cr>
-	nnoremap <buffer> <silent> S :call <SID>Open('split')<cr>
-	nnoremap <buffer> <silent> T :call <SID>Open("tablast \| tabnew")<cr>
+  nnoremap <buffer> <silent> <cr> :call <SID>Open(g:EclimJavaOutlineDefaultAction)<cr>
+  nnoremap <buffer> <silent> E :call <SID>Open('edit')<cr>
+  nnoremap <buffer> <silent> S :call <SID>Open('split')<cr>
+  nnoremap <buffer> <silent> T :call <SID>Open("tablast \| tabnew")<cr>
 
-	" assign to buffer var to get around weird vim issue passing list containing
-	" a string w/ a '<' in it on execution of mapping.
-	let b:outline_help = ['<cr> - open file with default action']
-	nnoremap <buffer> <silent> ? :call eclim#help#BufferHelp(b:outline_help, 'vertical', 40)<cr>
+  " assign to buffer var to get around weird vim issue passing list containing
+  " a string w/ a '<' in it on execution of mapping.
+  let b:outline_help = [
+      \ '<cr> - open file with default action',
+      \ 'E - open with :edit',
+      \ 'S - open in a new split window',
+      \ 'T - open in a new tab',
+    \ ]
+  nnoremap <buffer> <silent> ? 
+    \ :call eclim#help#BufferHelp(b:outline_help, 'vertical', 40)<cr>
 endfunction " }}}
 
 function! s:OutlineFormat(result, lines, info, indent) " {{{
-	for child in a:result
-		call add(a:lines, a:indent . child.name)
-		call add(a:info, {
-					\ 'file': child.position.filename,
-					\ 'line': child.position.line,
-					\ 'col': child.position.column
-					\ })
-		call s:OutlineFormat(child.children, a:lines, a:info, a:indent . "\t")
-	endfor
+  for child in a:result
+    call add(a:lines, a:indent . child.name)
+    call add(a:info, {
+        \ 'file': child.position.filename,
+        \ 'line': child.position.line,
+        \ 'col': child.position.column
+      \ })
+    call s:OutlineFormat(child.children, a:lines, a:info, a:indent . "\t")
+  endfor
 endfunction " }}}
 
 function! s:Open(action) " {{{
-	let line = line('.')
-	if line > len(b:outline_info)
-		return
-	endif
+  let line = line('.')
+  if line > len(b:outline_info)
+    return
+  endif
 
-	let info = b:outline_info[line - 1]
-	if info.file != ''
-		" go to the buffer that initiated the outline
-		exec b:winnr . 'winc w'
+  let info = b:outline_info[line - 1]
+  if info.file != ''
+    " go to the buffer that initiated the outline
+    exec b:winnr . 'winc w'
 
-		let action = a:action
-		call eclim#util#GoToBufferWindowOrOpen(info.file, action, info.line, info.col)
+    let action = a:action
+    call eclim#util#GoToBufferWindowOrOpen(
+      \ info.file, action, info.line, info.col, 1)
 
-		" force any previous messge from else below to be cleared
-		echo ''
-	else
-		call eclim#util#Echo('No associated file was found.')
-	endif
+    " force any previous messge from else below to be cleared
+    echo ''
+  else
+    call eclim#util#Echo('No associated file was found.')
+  endif
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
