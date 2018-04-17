@@ -19,8 +19,8 @@ import subprocess
 
 from docutils import nodes
 from docutils.parsers.rst import directives
+from docutils.parsers.rst import Directive
 from sphinx.errors import SphinxError
-from sphinx.util.compat import Directive
 from sphinx.util.osutil import (
     ensuredir,
     ENOENT,
@@ -91,6 +91,7 @@ class UmlDirective(Directive):
         node = plantuml(self.block_text, **self.options)
         node['uml'] = umlcode
         node['incdir'] = os.path.dirname(relfn)
+        node['filename'] = os.path.split(relfn)[1]
 
         # XXX maybe this should be moved to _visit_plantuml functions. it
         # seems wrong to insert "figure" node by "plantuml" directive.
@@ -131,18 +132,30 @@ def generate_name(self, node, fileformat):
     else:
         return fname, os.path.join(self.builder.outdir, fname)
 
-_ARGS_BY_FILEFORMAT = {
-    'eps': '-teps'.split(),
-    'png': (),
-    'svg': '-tsvg'.split(),
-    }
+def _ntunquote(s):
+    if s.startswith('"') and s.endswith('"'):
+        return s[1:-1]
+    return s
 
-def generate_plantuml_args(self, fileformat):
-    if isinstance(self.builder.config.plantuml, (tuple, list)):
-        args = list(self.builder.config.plantuml)
+def _split_cmdargs(args):
+    if isinstance(args, (tuple, list)):
+        return list(args)
+    if os.name == 'nt':
+        return list(map(_ntunquote, shlex.split(args, posix=False)))
     else:
-        args = shlex.split(self.builder.config.plantuml)
-    args.extend('-pipe -charset utf-8'.split())
+        return shlex.split(args, posix=True)
+
+_ARGS_BY_FILEFORMAT = {
+    'eps': ['-teps'],
+    'png': [],
+    'svg': ['-tsvg'],
+    'txt': ['-ttxt'],
+}
+
+def generate_plantuml_args(self, node, fileformat):
+    args = _split_cmdargs(self.builder.config.plantuml)
+    args.extend(['-pipe', '-charset', 'utf-8'])
+    args.extend(['-filename', node['filename']])
     args.extend(_ARGS_BY_FILEFORMAT[fileformat])
     return args
 
@@ -155,7 +168,7 @@ def render_plantuml(self, node, fileformat):
     f = open(outfname, 'wb')
     try:
         try:
-            p = subprocess.Popen(generate_plantuml_args(self, fileformat),
+            p = subprocess.Popen(generate_plantuml_args(self, node, fileformat),
                                  stdout=f, stdin=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  cwd=absincdir)
@@ -171,8 +184,26 @@ def render_plantuml(self, node, fileformat):
     finally:
         f.close()
 
+def render_plantuml_inline(self, node, fileformat):
+    absincdir = os.path.join(self.builder.srcdir, node['incdir'])
+    try:
+        p = subprocess.Popen(generate_plantuml_args(self, node, fileformat),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             cwd=absincdir)
+    except OSError as err:
+        if err.errno != ENOENT:
+            raise
+        raise PlantUmlError('plantuml command %r cannot be run'
+                            % self.builder.config.plantuml)
+    sout, serr = p.communicate(node['uml'].encode('utf-8'))
+    if p.returncode != 0:
+        raise PlantUmlError('error while running plantuml\n\n%s' % serr)
+    return sout.decode('utf-8')
+
 def _get_png_tag(self, fnames, node):
-    refname, _outfname = fnames['png']
+    refname, outfname = fnames['png']
     alt = node.get('alt', node['uml'])
 
     # mimic StandaloneHTMLBuilder.post_process_images(). maybe we should
@@ -182,53 +213,35 @@ def _get_png_tag(self, fnames, node):
         return ('<img src="%s" alt="%s" />\n'
                 % (self.encode(refname), self.encode(alt)))
 
-    # Get sizes from the rendered image (defaults)
-    im = Image.open(_outfname)
-    im.load()
-    (fw, fh) = im.size
+    scale = node.get('scale', 100)
+    styles = []
 
-    # Regex to get value and units
+    # Width/Height
     vu = re.compile(r"(?P<value>\d+)\s*(?P<units>[a-zA-Z%]+)?")
-
-    # Width
-    if 'width' in node:
-        m = vu.match(node['width'])
+    for a in ['width', 'height']:
+        if a not in node:
+            continue
+        m = vu.match(node[a])
         if not m:
-            raise PlantUmlError('Invalid width')
-        else:
-            m = m.groupdict()
+            raise PlantUmlError('Invalid %s' % a)
+        m = m.groupdict()
         w = int(m['value'])
         wu = m['units'] if m['units'] else 'px'
-    else:
-        w = fw
-        wu = 'px'
+        styles.append('%s: %s%s' % (a, w * scale / 100, wu))
 
-    # Height
-    if 'height' in node:
-        m = vu.match(node['height'])
-        if not m:
-            raise PlantUmlError('Invalid height')
-        else:
-            m = m.groupdict()
-        h = int(m['value'])
-        hu = m['units'] if m['units'] else 'px'
-    else:
-        h = fh
-        hu = 'px'
+    # Add physical size to assist rendering (defaults)
+    if not styles:
+        im = Image.open(outfname)
+        im.load()
+        styles.extend('%s: %s%s' % (a, w * scale / 100, 'px')
+                      for a, w in zip(['width', 'height'], im.size))
 
-    # Scale
-    if 'scale' not in node:
-        node['scale'] = 100
-
-    return ('<a href="%s"><img src="%s" alt="%s" width="%s%s" height="%s%s"/>'
+    return ('<a href="%s"><img src="%s" alt="%s" style="%s"/>'
             '</a>\n'
             % (self.encode(refname),
                self.encode(refname),
                self.encode(alt),
-               self.encode(w * node['scale'] / 100),
-               self.encode(wu),
-               self.encode(h * node['scale'] / 100),
-               self.encode(hu)))
+               self.encode('; '.join(styles))))
 
 def _get_svg_style(fname):
     f = open(fname)
@@ -264,14 +277,16 @@ _KNOWN_HTML_FORMATS = {
     }
 
 def html_visit_plantuml(self, node):
+    fmt = self.builder.config.plantuml_output_format
+    if fmt == 'none':
+        raise nodes.SkipNode
     try:
-        format = self.builder.config.plantuml_output_format
         try:
-            fileformats, gettag = _KNOWN_HTML_FORMATS[format]
+            fileformats, gettag = _KNOWN_HTML_FORMATS[fmt]
         except KeyError:
             raise PlantUmlError(
                 'plantuml_output_format must be one of %s, but is %r'
-                % (', '.join(map(repr, _KNOWN_HTML_FORMATS)), format))
+                % (', '.join(map(repr, _KNOWN_HTML_FORMATS)), fmt))
         # fnames: {fileformat: (refname, outfname), ...}
         fnames = dict((e, render_plantuml(self, node, e))
                       for e in fileformats)
@@ -285,10 +300,7 @@ def html_visit_plantuml(self, node):
     raise nodes.SkipNode
 
 def _convert_eps_to_pdf(self, refname, fname):
-    if isinstance(self.builder.config.plantuml_epstopdf, (tuple, list)):
-        args = list(self.builder.config.plantuml_epstopdf)
-    else:
-        args = shlex.split(self.builder.config.plantuml_epstopdf)
+    args = _split_cmdargs(self.builder.config.plantuml_epstopdf)
     args.append(fname)
     try:
         try:
@@ -317,14 +329,16 @@ _KNOWN_LATEX_FORMATS = {
     }
 
 def latex_visit_plantuml(self, node):
+    fmt = self.builder.config.plantuml_latex_output_format
+    if fmt == 'none':
+        raise nodes.SkipNode
     try:
-        format = self.builder.config.plantuml_latex_output_format
         try:
-            fileformat, postproc = _KNOWN_LATEX_FORMATS[format]
+            fileformat, postproc = _KNOWN_LATEX_FORMATS[fmt]
         except KeyError:
             raise PlantUmlError(
                 'plantuml_latex_output_format must be one of %s, but is %r'
-                % (', '.join(map(repr, _KNOWN_LATEX_FORMATS)), format))
+                % (', '.join(map(repr, _KNOWN_LATEX_FORMATS)), fmt))
         refname, outfname = render_plantuml(self, node, fileformat)
         refname, outfname = postproc(self, refname, outfname)
     except PlantUmlError as err:
@@ -341,6 +355,18 @@ def latex_visit_plantuml(self, node):
 def latex_depart_plantuml(self, node):
     pass
 
+def text_visit_plantuml(self, node):
+    try:
+        text = render_plantuml_inline(self, node, 'txt')
+    except PlantUmlError as err:
+        self.builder.warn(str(err))
+        text = node['uml']  # fall back to uml text, which is still readable
+
+    self.new_state()
+    self.add_text(text)
+    self.end_state()
+    raise nodes.SkipNode
+
 def pdf_visit_plantuml(self, node):
     try:
         refname, outfname = render_plantuml(self, node, 'eps')
@@ -351,10 +377,20 @@ def pdf_visit_plantuml(self, node):
     rep = nodes.image(uri=outfname, alt=node.get('alt', node['uml']))
     node.parent.replace(node, rep)
 
+def unsupported_visit_plantuml(self, node):
+    self.builder.warn('plantuml: unsupported output format (node skipped)')
+    raise nodes.SkipNode
+
+_NODE_VISITORS = {
+    'html': (html_visit_plantuml, None),
+    'latex': (latex_visit_plantuml, latex_depart_plantuml),
+    'man': (unsupported_visit_plantuml, None),  # TODO
+    'texinfo': (unsupported_visit_plantuml, None),  # TODO
+    'text': (text_visit_plantuml, None),
+}
+
 def setup(app):
-    app.add_node(plantuml,
-                 html=(html_visit_plantuml, None),
-                 latex=(latex_visit_plantuml, latex_depart_plantuml))
+    app.add_node(plantuml, **_NODE_VISITORS)
     app.add_directive('uml', UmlDirective)
     app.add_config_value('plantuml', 'plantuml', 'html')
     app.add_config_value('plantuml_output_format', 'png', 'html')
