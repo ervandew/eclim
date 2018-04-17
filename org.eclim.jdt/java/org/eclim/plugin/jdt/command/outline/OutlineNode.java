@@ -27,29 +27,29 @@ import org.eclim.util.file.Position;
  */
 public class OutlineNode
 {
-	private String name;
-	private Position position;
-	private List<OutlineNode> children;
+  private String name;
+  private Position position;
+  private List<OutlineNode> children;
 
-	public OutlineNode(String name, Position position, List<OutlineNode> children)
-	{
-		this.name = name;
-		this.position = position;
-		this.children = children;
-	}
+  public OutlineNode(String name, Position position, List<OutlineNode> children)
+  {
+    this.name = name;
+    this.position = position;
+    this.children = children;
+  }
 
-	public String getName()
-	{
-		return name;
-	}
+  public String getName()
+  {
+    return name;
+  }
 
-	public Position getPosition()
-	{
-		return position;
-	}
+  public Position getPosition()
+  {
+    return position;
+  }
 
-	public List<OutlineNode> getChildren()
-	{
-		return children;
-	}
+  public List<OutlineNode> getChildren()
+  {
+    return children;
+  }
 }

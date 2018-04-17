@@ -32,31 +32,39 @@ import org.junit.Test;
  */
 public class OutlineCommandTest
 {
-	private static final String TEST_PROJECT = Jdt.TEST_PROJECT;
-	private static final String TEST_FILE = "src/org/eclim/test/outline/OutlineCommandExample.java";
-	private static final String expectedOutput = "+ class OutlineCommandExample\n";
-	
-	@Test
-	@SuppressWarnings("unchecked")
-	public void execute()
-			throws Exception
-	{
-		String[] arguments = {"java_outline", "-p", TEST_PROJECT, "-f", TEST_FILE};
-		List<Map<String, Object>> nodes = (List<Map<String, Object>>)Eclim.execute(arguments);
-		assertEquals(expectedOutput, resultOutput(nodes, ""));
-	}
-	
-	@SuppressWarnings("unchecked")
-	private String resultOutput(List<Map<String, Object>> nodes, String indent)
-	{
-		StringBuilder result = new StringBuilder();
-		for(Map<String, Object> node : nodes)
-		{
-			result
-			.append(indent + node.get("name") + "\n")
-			.append(resultOutput((List<Map<String, Object>>)node.get("children"), indent + "\t"));
-		}
-		return result.toString();
-	}
-	
+  private static final String TEST_PROJECT = Jdt.TEST_PROJECT;
+  private static final String TEST_FILE =
+    "src/org/eclim/test/outline/OutlineCommandExample.java";
+  private static final String expectedOutput =
+    "+ class OutlineCommandExample\n" +
+    "\t+ methodPublic() : void\n" +
+    "\t- methodPrivate() : void\n" +
+    "\t* methodProtected() : void\n";
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void execute()
+    throws Exception
+  {
+    String[] arguments = {"java_outline", "-p", TEST_PROJECT, "-f", TEST_FILE};
+    List<Map<String, Object>> nodes =
+      (List<Map<String, Object>>)Eclim.execute(arguments);
+    assertEquals(expectedOutput, resultOutput(nodes, ""));
+  }
+
+  @SuppressWarnings("unchecked")
+  private String resultOutput(List<Map<String, Object>> nodes, String indent)
+  {
+    StringBuilder result = new StringBuilder();
+    for(Map<String, Object> node : nodes)
+    {
+      result
+        .append(indent + node.get("name") + "\n")
+        .append(
+            resultOutput(
+              (List<Map<String, Object>>)node.get("children"),
+              indent + "\t"));
+    }
+    return result.toString();
+  }
 }

@@ -37,88 +37,90 @@ import org.eclipse.jdt.ui.JavaElementLabels;
  */
 public class OutlineUtil
 {
+  public static String getSignature(IMember member)
+    throws JavaModelException
+  {
+    return new StringBuilder()
+      .append(
+          member instanceof IType ? getSignature((IType)member) :
+          member instanceof IField ? getSignature((IField)member) :
+          member instanceof IMethod ? getSignature((IMethod)member) :
+          "")
+      .toString();
+  }
 
-	public static String getSignature(IMember member)
-			throws JavaModelException
-	{
-		return new StringBuilder()
-			.append(member instanceof IType ? getSignature((IType)member)
-				: member instanceof IField ? getSignature((IField)member)
-				: member instanceof IMethod ? getSignature((IMethod)member)
-				: "")
-			.toString();
-	}
+  public static Position getMemberFilePosition(IMember member)
+    throws JavaModelException
+  {
+    return Position.fromOffset(
+        member.getResource().getLocation().toOSString().replace('\\', '/'),
+        null,
+        member.getNameRange().getOffset(),
+        member.getNameRange().getLength());
+  }
 
-	public static Position getMemberFilePosition(IMember member)
-			throws JavaModelException
-	{
-		return Position.fromOffset(
-				member.getResource().getLocation().toOSString().replace('\\', '/'),
-				null,
-				member.getNameRange().getOffset(),
-				member.getNameRange().getLength());
-	}
+  private static String getSignature(IType type)
+    throws JavaModelException
+  {
+    return new StringBuilder()
+      .append(getFlags(type))
+      .append(" ")
+      .append(OutlineUtil.getTypeOfMember(type))
+      .append(" ")
+      .append(type.getElementName())
+      .toString();
+  }
 
-	private static String getSignature(IType type)
-			throws JavaModelException
-	{
-		return new StringBuilder()
-			.append(getFlags(type))
-			.append(" ")
-			.append(OutlineUtil.getTypeOfMember(type))
-			.append(" ")
-			.append(type.getElementName())
-			.toString();
-	}
+  private static String getSignature(IField field)
+    throws JavaModelException
+  {
+    return new StringBuilder()
+      .append(getFlags(field))
+      .append(" ")
+      .append(field.getElementName())
+      .append(" : ")
+      .append(Signature.toString(field.getTypeSignature()))
+      .toString();
+  }
 
-	private static String getSignature(IField field)
-			throws JavaModelException
-	{
-		return new StringBuilder()
-			.append(getFlags(field))
-			.append(" ")
-			.append(field.getElementName())
-			.append(" : ")
-			.append(Signature.toString(field.getTypeSignature()))
-			.toString();
-	}
+  private static String getSignature(IMethod method)
+    throws JavaModelException
+  {
+    return new StringBuilder()
+      .append(getFlags(method))
+      .append(" ")
+      .append(JavaElementLabels
+          .getTextLabel(
+              method,
+              AppearanceAwareLabelProvider.DEFAULT_TEXTFLAGS))
+      .toString();
+  }
 
-	private static String getSignature(IMethod method)
-			throws JavaModelException
-	{
-		return new StringBuilder()
-			.append(getFlags(method))
-			.append(" ")
-			.append(JavaElementLabels
-					.getTextLabel(
-							method,
-							AppearanceAwareLabelProvider.DEFAULT_TEXTFLAGS))
-			.toString();
-	}
+  private static String getFlags(IMember member)
+    throws JavaModelException
+  {
+    String flags = Flags.toString(member.getFlags());
+    return new StringBuilder()
+      .append(
+          flags.contains("public") ? "+" :
+          flags.contains("private") ? "-" :
+          flags.contains("protected") ? "*" :
+          "#")
+      .append(flags.contains("static") ? " static" : "")
+      .append(flags.contains("final") ? " final" : "")
+      .append(flags.contains("abstract") ? " abstract" : "")
+      .toString();
+  }
 
-	private static String getFlags(IMember member)
-			throws JavaModelException
-	{
-		String flags = Flags.toString(member.getFlags());
-		return new StringBuilder()
-			.append(flags.contains("public") ? "+"
-				: flags.contains("private") ? "-"
-				: flags.contains("protected") ? "*"
-				: "#")
-			.append(flags.contains("static") ? " static" : "")
-			.append(flags.contains("final") ? " final" : "")
-			.append(flags.contains("abstract") ? " abstract" : "")
-			.toString();
-	}
-
-	private static String getTypeOfMember(IType type)
-			throws JavaModelException
-	{
-		return new StringBuilder()
-			.append(type.isAnnotation() ? "annotation"
-				: type.isInterface() ? "interface"
-				: type.isEnum() ? "enum"
-				: "class")
-			.toString();
-	}
+  private static String getTypeOfMember(IType type)
+    throws JavaModelException
+  {
+    return new StringBuilder()
+      .append(
+          type.isAnnotation() ? "annotation" :
+          type.isInterface() ? "interface" :
+          type.isEnum() ? "enum" :
+          "class")
+      .toString();
+  }
 }

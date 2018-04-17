@@ -38,42 +38,43 @@ import org.eclipse.jdt.core.JavaModelException;
  * @author G0dj4ck4l
  */
 @Command(
-		name = "java_outline",
-		options =
-		"REQUIRED p project ARG," +
-		"REQUIRED f file ARG"
+  name = "java_outline",
+  options =
+    "REQUIRED p project ARG," +
+    "REQUIRED f file ARG"
 )
-public class OutlineCommand extends AbstractCommand
+public class OutlineCommand
+  extends AbstractCommand
 {
-	@Override
-	public Object execute(CommandLine commandLine)
-			throws Exception
-	{
-		return extractOutlineFromElements(
-				JavaUtils
-				.getCompilationUnit(
-					commandLine.getValue(Options.PROJECT_OPTION),
-					commandLine.getValue(Options.FILE_OPTION))
-				.getChildren());
-	}
+  @Override
+  public Object execute(CommandLine commandLine)
+    throws Exception
+  {
+    return extractOutlineFromElements(
+        JavaUtils
+        .getCompilationUnit(
+          commandLine.getValue(Options.PROJECT_OPTION),
+          commandLine.getValue(Options.FILE_OPTION))
+        .getChildren());
+  }
 
-	private List<OutlineNode> extractOutlineFromElements(IJavaElement[] javaElements)
-			throws JavaModelException
-	{
-		List<OutlineNode> outlineNodes = new ArrayList<OutlineNode>();
+  private List<OutlineNode> extractOutlineFromElements(
+      IJavaElement[] javaElements)
+    throws JavaModelException
+  {
+    List<OutlineNode> outlineNodes = new ArrayList<OutlineNode>();
 
-		for(IJavaElement javaElement : javaElements) {
-			if(javaElement instanceof IMember) {
-				if(!javaElement.getElementName().isEmpty()) {
-					outlineNodes.add(new OutlineNode(
-							OutlineUtil.getSignature((IMember)javaElement),
-							OutlineUtil.getMemberFilePosition((IMember)javaElement),
-							extractOutlineFromElements(((IMember)javaElement).getChildren())));
-				}
-			}
-		}
+    for(IJavaElement javaElement : javaElements) {
+      if(javaElement instanceof IMember) {
+        if(!javaElement.getElementName().isEmpty()) {
+          outlineNodes.add(new OutlineNode(
+              OutlineUtil.getSignature((IMember)javaElement),
+              OutlineUtil.getMemberFilePosition((IMember)javaElement),
+              extractOutlineFromElements(((IMember)javaElement).getChildren())));
+        }
+      }
+    }
 
-		return outlineNodes;
-	}
-
+    return outlineNodes;
+  }
 }
