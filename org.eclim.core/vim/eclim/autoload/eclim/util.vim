@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2017  Eric Van Dewoestine
+" Copyright (C) 2005 - 2018  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -549,12 +549,15 @@ function! eclim#util#GoToBufferWindowOrOpen(name, cmd, ...) " {{{
   " Optional args:
   "   line: the line number to jump to in the file
   "   column: the column number to jump to in the file
+  "   force: if 1, then execute the supplied command even if the file is already
+  "   open in a buffer.
 
   let name = eclim#util#EscapeBufferName(a:name)
   let line = a:0 ? a:1 : 0
-  let col = a:0 ? a:2 : 0
+  let col = a:0 > 1 ? a:2 : 0
+  let force = a:0 > 2 ? a:3 : 0
   let winnr = bufwinnr(bufnr('^' . name . '$'))
-  if winnr != -1
+  if winnr != -1 && (a:cmd == 'edit' || force == 0)
     if winnr != winnr()
       exec winnr . "winc w"
       call eclim#util#DelayedCommand('doautocmd WinEnter')
