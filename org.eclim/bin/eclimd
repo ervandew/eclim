@@ -207,17 +207,22 @@ build_vmargs(){
   fi
   if [ -n "$SWT" ] ; then
     if $(echo "$SWT" | grep -q "x86_64") ; then
+      ARCH_NAME="64-bit"
       ARCH=-d64
     else
+      ARCH_NAME="32-bit"
       ARCH=-d32
     fi
 
-    if ! $($JAVA $ARCH -version 2> /dev/null) ; then
+    if $($JAVA $ARCH -version 2> /dev/null) ; then
+      ECLIM_VMARGS=($ARCH "${ECLIM_VMARGS[@]}")
+    # as of jdk 10, oracle doesn't support the -d<arch> option, so fall back
+    # to checking version output
+    elif ! $($JAVA -version 2>&1 | grep -i "$ARCH_NAME" > /dev/null) ; then
       echo "Your jvm does not support the architecture required " \
-        "for the version of eclipse you have installed: $ARCH"
-      exit 1;
+        "for the version of eclipse you have installed: $ARCH ($ARCH_NAME)"
+      exit 1
     fi
-    ECLIM_VMARGS=($ARCH "${ECLIM_VMARGS[@]}")
   fi
 
   # add any eclipse vmargs not present
@@ -333,7 +338,7 @@ ARGS=(
 )
 
 if [ $BACKGROUND -eq 1 ]; then
-  CLASSPATH="" $JAVA "${ARGS[@]}" > /dev/null &
+  CLASSPATH="" $JAVA "${ARGS[@]}" &> /dev/null &
 else
   echo $JAVA -version
   $JAVA -version
