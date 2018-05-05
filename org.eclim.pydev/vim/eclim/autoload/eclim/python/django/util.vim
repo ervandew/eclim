@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2018  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -40,11 +40,11 @@ function! eclim#python#django#util#GetProjectPath(...) " {{{
   let manage_paths = split(globpath(root, '**/manage.py'), '\n')
 
   let dirs = []
-  for path in manage_paths
-    if path == ''
+  for manage_path in manage_paths
+    if manage_path == ''
       continue
     endif
-    let dir = fnamemodify(path, ":h")
+    let dir = fnamemodify(manage_path, ":h")
     if filereadable(dir . '/settings.py')
       call add(dirs, dir)
     else
@@ -63,7 +63,31 @@ function! eclim#python#django#util#GetProjectPath(...) " {{{
   endif
 
   let options = map(dirs, 'fnamemodify(v:val, ":p:h")')
-  if len(dirs) > 0
+  if len(dirs) > 1
+    " try to narrow it down to one result before falling back to prompting the
+    " user
+    let possibles = copy(dirs)
+    while 1
+      let index = 0
+      while index < len(possibles)
+        let dir = possibles[index]
+        if match(path, dir . '/') == 0
+          return dirs[index]
+        endif
+        let next = fnamemodify(dir, ':h')
+        if next == '/'
+          call remove(possibles, index)
+        else
+          let possibles[index] = next
+          let index += 1
+        endif
+      endwhile
+
+      if len(possibles) == 0
+        break
+      endif
+    endwhile
+
     let response = eclim#util#PromptList(
       \ 'Choose the location of your django project', dirs)
     if response == -1
