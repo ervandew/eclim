@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Eric Van Dewoestine
+ * Copyright (C) 2013 - 2018 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,25 +37,25 @@ import org.eclim.util.file.Position;
 import org.eclipse.core.resources.IProject;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextSelection;
+
+import org.python.pydev.ast.item_pointer.ItemPointer;
+
+import org.python.pydev.ast.refactoring.AbstractPyRefactoring;
+import org.python.pydev.ast.refactoring.IPyRefactoring2;
+import org.python.pydev.ast.refactoring.IPyRefactoring;
+import org.python.pydev.ast.refactoring.RefactoringRequest;
 
 import org.python.pydev.core.docutils.PySelection;
 
 import org.python.pydev.editor.PyEdit;
 
-import org.python.pydev.editor.model.ItemPointer;
-
-import org.python.pydev.editor.refactoring.AbstractPyRefactoring;
-import org.python.pydev.editor.refactoring.IPyRefactoring;
-import org.python.pydev.editor.refactoring.RefactoringRequest;
-
 import org.python.pydev.parser.visitors.scope.ASTEntry;
 
 import org.python.pydev.plugin.nature.PythonNature;
 
-import org.python.pydev.shared_core.structure.Tuple;
+import org.python.pydev.shared_core.string.CoreTextSelection;
 
-import com.python.pydev.refactoring.IPyRefactoring2;
+import org.python.pydev.shared_core.structure.Tuple;
 
 /**
  * Command to handle scala search requests.
@@ -93,7 +93,7 @@ public class SearchCommand
 
     PythonNature nature = PythonNature.getPythonNature(project);
     PySelection selection = new PySelection(
-        doc, new TextSelection(doc, offset, length));
+        doc, new CoreTextSelection(doc, offset, length));
 
     // needed for findAllOccurrences
     PyEdit pyEdit = new PyEdit(){

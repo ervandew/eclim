@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2017 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2018 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,15 +47,17 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import org.python.pydev.ast.interpreter_managers.InterpreterManagersAPI;
+
 import org.python.pydev.core.IGrammarVersionProvider;
 import org.python.pydev.core.IInterpreterInfo;
 import org.python.pydev.core.IInterpreterManager;
 import org.python.pydev.core.MisconfigurationException;
 import org.python.pydev.core.PythonNatureWithoutProjectException;
 
-import org.python.pydev.navigator.elements.ProjectConfigError;
+import org.python.pydev.navigator.ProjectInfoForPackageExplorer;
 
-import org.python.pydev.plugin.PydevPlugin;
+import org.python.pydev.navigator.elements.ProjectConfigError;
 
 import org.python.pydev.plugin.nature.PythonNature;
 
@@ -104,7 +106,8 @@ public class PydevProjectManager
 
       String pythonPath = project.getFullPath().toString();
       String interpreter = cli.getOptionValue("interpreter");
-      IInterpreterManager manager = PydevPlugin.getPythonInterpreterManager();
+      IInterpreterManager manager =
+        InterpreterManagersAPI.getPythonInterpreterManager();
       IInterpreterInfo info = manager.getInterpreterInfo(interpreter, null);
       if (info == null){
         throw new RuntimeException("Python interpreter not found: " + interpreter);
@@ -146,10 +149,13 @@ public class PydevProjectManager
 
     Tuple<List<ProjectConfigError>, IInterpreterInfo> configErrorsAndInfo = null;
     try{
-      configErrorsAndInfo = nature.getConfigErrorsAndInfo(project);
+      ProjectInfoForPackageExplorer info =
+        ProjectInfoForPackageExplorer.getProjectInfo(project);
+      configErrorsAndInfo = info.getConfigErrorsAndInfo(nature, project);
     }catch(PythonNatureWithoutProjectException pnwpe){
       throw new RuntimeException(pnwpe);
     }
+
     ArrayList<Error> errors = new ArrayList<Error>();
     for (ProjectConfigError e : configErrorsAndInfo.o1){
       String message = e.getLabel();

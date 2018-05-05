@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2013 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,23 +43,23 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.source.ISourceViewer;
 
 import org.python.pydev.core.IIndentPrefs;
+import org.python.pydev.core.IPySyntaxHighlightingAndCodeCompletionEditor;
 import org.python.pydev.core.IPythonNature;
 import org.python.pydev.core.MisconfigurationException;
 
 import org.python.pydev.core.docutils.PySelection;
 
-import org.python.pydev.editor.IPySyntaxHighlightingAndCodeCompletionEditor;
 import org.python.pydev.editor.PyEditConfigurationWithoutEditor;
 
 import org.python.pydev.editor.codecompletion.CompletionError;
 import org.python.pydev.editor.codecompletion.PyContentAssistant;
 import org.python.pydev.editor.codecompletion.PythonCompletionProcessor;
 
+import org.python.pydev.editor.codecompletion.proposals.CtxInsensitiveImportComplProposal;
+
 import org.python.pydev.plugin.nature.PythonNature;
 
 import org.python.pydev.ui.ColorAndStyleCache;
-
-import com.python.pydev.analysis.CtxInsensitiveImportComplProposal;
 
 /**
  * Command to perform python code completion.

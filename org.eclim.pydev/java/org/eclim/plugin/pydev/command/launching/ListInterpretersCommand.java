@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2018 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,10 +27,10 @@ import org.eclim.command.CommandLine;
 
 import org.eclim.plugin.core.command.AbstractCommand;
 
+import org.python.pydev.ast.interpreter_managers.InterpreterManagersAPI;
+
 import org.python.pydev.core.IInterpreterInfo;
 import org.python.pydev.core.IInterpreterManager;
-
-import org.python.pydev.plugin.PydevPlugin;
 
 /**
  * Command to list available python interpreters
@@ -48,7 +48,8 @@ public class ListInterpretersCommand
     ArrayList<HashMap<String,String>> results =
       new ArrayList<HashMap<String,String>>();
 
-    IInterpreterManager manager = PydevPlugin.getPythonInterpreterManager();
+    IInterpreterManager manager =
+      InterpreterManagersAPI.getPythonInterpreterManager();
     IInterpreterInfo[] interpreters = manager.getInterpreterInfos();
     for (IInterpreterInfo interpreter : interpreters){
       HashMap<String,String> result = new HashMap<String,String>();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2017
+ * Copyright (C) 2012 - 2018
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,13 +34,16 @@ import org.eclim.plugin.core.project.ProjectNatureFactory;
 
 import org.eclim.plugin.pydev.project.PydevProjectManager;
 
+import org.python.pydev.ast.codecompletion.revisited.CompletionCache;
+import org.python.pydev.ast.codecompletion.revisited.CompletionStateFactory;
+
 import org.python.pydev.core.ICodeCompletionASTManager;
 import org.python.pydev.core.ICompletionState;
 import org.python.pydev.core.IPythonNature;
 import org.python.pydev.core.IToken;
+import org.python.pydev.core.TokensList;
 
-import org.python.pydev.editor.codecompletion.revisited.CompletionCache;
-import org.python.pydev.editor.codecompletion.revisited.CompletionStateFactory;
+import org.python.pydev.core.preferences.PyDevCoreEditorPreferences;
 
 import org.python.pydev.editor.preferences.PydevEditorPrefs;
 
@@ -84,7 +87,7 @@ public class PluginResources
     PreferencesOptionHandler handler = new PreferencesOptionHandler(
         PythonNature.PYTHON_NATURE_ID, false);
     handler.addSupportedPreferences("org.python.pydev", new String[]{
-      PydevEditorPrefs.TAB_WIDTH,
+      PyDevCoreEditorPreferences.TAB_WIDTH,
     });
 
     new AnalysisPreferenceInitializer().initializeDefaultPreferences();
@@ -119,7 +122,7 @@ public class PluginResources
       ICodeCompletionASTManager manager = nature.getAstManager();
       if (manager != null){
         // this is the part that takes some time to complete
-        manager.getBuiltinCompletions(completionState, new ArrayList<IToken>());
+        manager.getBuiltinCompletions(completionState, new TokensList());
       }
     }
     logger.debug("finished loading python builtin completions.");

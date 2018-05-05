@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2014 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2018 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@ import org.eclim.util.file.FileUtils;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import org.python.pydev.ast.interpreter_managers.InterpreterManagersAPI;
+
 import org.python.pydev.core.IInterpreterInfo;
 import org.python.pydev.core.IInterpreterManager;
-
-import org.python.pydev.plugin.PydevPlugin;
 
 /**
  * Command to add a python interpreter.
@@ -54,7 +54,8 @@ public class AddInterpreterCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    IInterpreterManager manager = PydevPlugin.getPythonInterpreterManager();
+    IInterpreterManager manager =
+      InterpreterManagersAPI.getPythonInterpreterManager();
     IInterpreterInfo[] existing = manager.getInterpreterInfos();
     HashSet<String> skip = new HashSet<String>();
     for (IInterpreterInfo info : existing){

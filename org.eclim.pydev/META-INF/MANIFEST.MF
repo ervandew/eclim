@@ -16,10 +16,9 @@ Require-Bundle: org.eclim,
   org.eclipse.jface.text,
   org.eclipse.ui,
   org.python.pydev,
+  org.python.pydev.ast,
   org.python.pydev.core,
   org.python.pydev.parser,
   org.python.pydev.shared_core,
   org.python.pydev.shared_ui,
-  com.python.pydev,
-  com.python.pydev.analysis,
-  com.python.pydev.codecompletion
+  com.python.pydev.analysis

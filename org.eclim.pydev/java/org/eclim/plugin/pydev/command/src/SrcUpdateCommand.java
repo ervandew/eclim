@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,15 +48,20 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.eclipse.jface.text.IDocument;
 
+import org.python.pydev.ast.analysis.IAnalysisPreferences;
+
+import org.python.pydev.ast.analysis.messages.AbstractMessage;
+import org.python.pydev.ast.analysis.messages.IMessage;
+
+import org.python.pydev.ast.codecompletion.revisited.modules.AbstractModule;
+import org.python.pydev.ast.codecompletion.revisited.modules.SourceModule;
+import org.python.pydev.ast.codecompletion.revisited.modules.SourceToken;
+
+import org.python.pydev.ast.codecompletion.revisited.visitors.AbstractVisitor;
+
 import org.python.pydev.core.IIndentPrefs;
 
-import org.python.pydev.editor.autoedit.DefaultIndentPrefs;
-
-import org.python.pydev.editor.codecompletion.revisited.modules.AbstractModule;
-import org.python.pydev.editor.codecompletion.revisited.modules.SourceModule;
-import org.python.pydev.editor.codecompletion.revisited.modules.SourceToken;
-
-import org.python.pydev.editor.codecompletion.revisited.visitors.AbstractVisitor;
+import org.python.pydev.core.autoedit.DefaultIndentPrefs;
 
 import org.python.pydev.parser.jython.ParseException;
 import org.python.pydev.parser.jython.SimpleNode;
@@ -67,11 +72,7 @@ import org.python.pydev.parser.jython.ast.NameTok;
 import org.python.pydev.plugin.nature.PythonNature;
 
 import com.python.pydev.analysis.AnalysisPreferences;
-import com.python.pydev.analysis.IAnalysisPreferences;
 import com.python.pydev.analysis.OccurrencesAnalyzer;
-
-import com.python.pydev.analysis.messages.AbstractMessage;
-import com.python.pydev.analysis.messages.IMessage;
 
 /**
  * Command that updates the requested python src file.
