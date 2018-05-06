@@ -2,7 +2,7 @@
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
 <dependencies>
   <feature id="cdt">
-    <dependency id="org.eclipse.cdt" version="9.4.0">
+    <dependency id="org.eclipse.cdt" version="9.4.3">
       <site url="http://download.eclipse.org/releases/oxygen/"/>
     </dependency>
   </feature>
@@ -20,19 +20,19 @@
   </feature>
 
   <feature id="jdt">
-    <dependency id="org.eclipse.jdt" version="3.13.2">
+    <dependency id="org.eclipse.jdt" version="3.13.4">
       <site url="http://download.eclipse.org/releases/oxygen/"/>
     </dependency>
   </feature>
 
   <feature id="pdt">
-    <dependency id="org.eclipse.php" version="5.2.0">
+    <dependency id="org.eclipse.php" version="5.3.0">
       <site url="http://download.eclipse.org/releases/oxygen/"/>
     </dependency>
   </feature>
 
   <feature id="wst">
-    <dependency id="org.eclipse.wst.web_ui.feature" version="3.9.1">
+    <dependency id="org.eclipse.wst.web_ui.feature" version="3.9.2">
       <site url="http://download.eclipse.org/releases/oxygen/"/>
     </dependency>
   </feature>
@@ -45,7 +45,7 @@
 
   <feature id="groovy">
     <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.2">
-      <site url="http://dist.springsource.org/snapshot/GRECLIPSE/e4.7/"/>
+      <site url="http://dist.springsource.org/release/GRECLIPSE/e4.7"/>
     </dependency>
   </feature>
 
