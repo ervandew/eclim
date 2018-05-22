@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2018  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 if exists("current_compiler")
   finish
 endif
-let current_compiler = "eclim_maven"
+let current_compiler = "eclim_mvn"
 
 if !exists('g:EclimMvnCompilerAdditionalErrorFormat')
   let g:EclimMvnCompilerAdditionalErrorFormat = ''
@@ -33,22 +33,22 @@ endif
 
 CompilerSet makeprg=mvn\ $*
 
-" Lines 1 - 3: javac
-" Lines 4 - 7: javadoc
-" Lines 8 - 12: test failures
-"   second set handles the case where the test emits output.
+" Lines 1: javac
+" Lines 2 - 7: javadoc
+" Lines 8 - 9: test failures
+" Lines 10 - 12: test failures where test emits output
 exec 'CompilerSet errorformat=' .
-  \ '\%A%f:[%l\\,%c]\ %m,' .
-  \ '\%Csymbol%.%#:\ %m,' .
-  \ '\%Zlocation%.%#:\ %m,' .
-  \ '\%AEmbedded\ error:%.%#\ -\ %f:%l:\ %m,' .
-  \ '\%-Z\ %p^,' .
-  \ '\%A%f:%l:\ %m,' .
-  \ '\%-Z\ %p^,' .
+  \ '\[ERROR]\ %f:[%l\\,%c]\ %m,' .
+  \ '\%W[WARNING]\ %f:%l:\ %m,' .
+  \ '\%C[WARNING]%.%#,' .
+  \ '\%Z[WARNING]\ %p^,' .
+  \ '\%E[ERROR]\ %.%#\ -\ %f:%l:\ %m,' .
+  \ '\%C[ERROR]%.%#,' .
+  \ '\%Z[ERROR]\ %p^,' .
   \ '\%ARunning\ %f,' .
   \ '\%+ZTests\ run%.%#FAILURE!%.%#,' .
   \ '\%ARunning\ %f,' .
-  \ '\%C%.%#,' .
+  \ '\%-C%.%#,' .
   \ '\%+ZTests\ run%.%#FAILURE!%.%#,' .
   \ g:EclimMvnCompilerAdditionalErrorFormat .
   \ '\%-G%.%#'
