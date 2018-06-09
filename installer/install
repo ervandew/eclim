@@ -377,7 +377,7 @@ def step_dependencies(options, eclipse, plugins):
       if action.version:
         print('  [%s] %s, version %s, not found.' % (
           terminal.red('*'),
-          dependency.name,
+          action.dependency.name,
           action.version,
         ))
       else:
