@@ -29,6 +29,7 @@ import os
 import platform
 import re
 import readline
+import rlcompleter
 import shutil
 import stat
 import subprocess
@@ -716,7 +717,7 @@ class Completer(object):
     readline.set_completer_delims(delims)
 
     darwin = platform.system().lower() == 'darwin'
-    if darwin:
+    if darwin and 'libedit' in readline.__doc__:
       readline.parse_and_bind('bind -e')
       readline.parse_and_bind('bind \'\t\' rl_complete')
     else:
