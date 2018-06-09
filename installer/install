@@ -622,9 +622,9 @@ def execute(cmd, cwd=None):
   process = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE)
   stdout, stderr = process.communicate()
   if stdout:
-    stdout = stdout.decode()
+    stdout = stdout.decode('utf8')
   if stderr:
-    stderr = stderr.decode()
+    stderr = stderr.decode('utf8')
 
   if process.returncode:
     print('abort: command failed.', file=sys.stderr)
