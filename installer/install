@@ -216,7 +216,7 @@ def step_vimfiles(options, uninstall=False):
   return vimfiles
 
 def step_plugins(options, eclim):
-  plugins_by_id = {p.name: p for p in eclim.plugins()}
+  plugins_by_id = dict([(p.name, p) for p in eclim.plugins()])
   plugins = [
     {'id': 'jdt', 'name': 'Java Development', 'requires': None},
     {'id': 'wst', 'name': 'Web Development', 'requires': None},
@@ -228,10 +228,10 @@ def step_plugins(options, eclim):
     {'id': 'groovy', 'name': 'Groovy Development', 'requires': ['jdt']},
     {'id': 'adt', 'name': 'Android Development', 'requires': ['jdt', 'wst']},
   ]
-  names = {p['id']: p['name'] for p in plugins}
+  names = dict([(p['id'], p['name']) for p in plugins])
 
   if options.plugins:
-    requires_by_id = {p['id']: p['requires'] for p in plugins}
+    requires_by_id = dict([(p['id'], p['requires']) for p in plugins])
     result = []
     invalid = False
     for choice in options.plugins.split(','):
@@ -434,7 +434,7 @@ def step_update_site(eclim, plugins):
       filepath = os.path.join(path, filename)
 
       tree = ElementTree.parse(filepath)
-      parents = {e: p for p in tree.iter() for e in p}
+      parents = dict([(e, p) for p in tree.iter() for e in p])
       encoding = 'unicode' if sys.version_info[0] >= 3 else None
       for template in tree.findall('.//*[@template]'):
         template.attrib.pop('template')
@@ -1025,7 +1025,7 @@ class Eclipse(object):
     available = self.available(sites)
     installed = self.installed()
 
-    installed_by_name = {f.name: f for f in installed}
+    installed_by_name = dict([(f.name, f) for f in installed])
     available_by_name = collections.defaultdict(list)
     for feature in available:
       available_by_name[feature.name].append(feature)
