@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,14 @@
 package org.eclim.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -207,5 +209,26 @@ public class IOUtils
     StringWriter out = new StringWriter();
     copy(in, out);
     return out.toString();
+  }
+
+  /**
+   * Reads the contents from the supplied File and returns those contents
+   * as a byte array.
+   *
+   * @param file The File to read.
+   * @return The File contents as a byte[].
+   * @throws IOException If there is a problem reading the file.
+   */
+  public static byte[] toByteArray(File file)
+    throws IOException
+  {
+    RandomAccessFile r = new RandomAccessFile(file, "r");
+    try{
+      byte[] bytes = new byte[(int)r.length()];
+      r.readFully(bytes);
+      return bytes;
+    }finally{
+      r.close();
+    }
   }
 }
