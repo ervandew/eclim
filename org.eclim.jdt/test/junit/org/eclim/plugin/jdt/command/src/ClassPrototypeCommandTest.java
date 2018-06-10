@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,8 +44,9 @@ public class ClassPrototypeCommandTest
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
     String result = (String)Eclim.execute(new String[]{
-      "java_class_prototype", "-p", Jdt.TEST_PROJECT,
-      "-c", "org.eclim.test.src.TestPrototype"
+      "java_class_prototype",
+      "-p", Jdt.TEST_PROJECT,
+      "-c", "java.util.List",
     });
 
     File file = new File(result);
@@ -58,17 +59,11 @@ public class ClassPrototypeCommandTest
       String contents = IOUtils.toString(fin);
       System.out.println("Contents: \n" + contents);
 
-      assertTrue("Package declaration doesn't match.",
-          contents.indexOf("package org.eclim.test.src;") != -1);
-
       assertTrue("Class declaration doesn't match.",
-          contents.indexOf("public class TestPrototype") != -1);
+          contents.indexOf("public abstract interface java.util.List") != -1);
 
-      assertTrue("test method declaration doesn't match.",
-          contents.indexOf("public final void test ();") != -1);
-
-      assertTrue("testAnother method declaration doesn't match.",
-          contents.indexOf("public String testAnother (String blah)\n\t\tthrows Exception;") != -1);
+      assertTrue("add method declaration doesn't match.",
+          contents.indexOf("public abstract boolean add(java.lang.Object arg0);") != -1);
     }finally{
       IOUtils.closeQuietly(fin);
     }

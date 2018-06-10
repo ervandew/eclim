@@ -18,7 +18,6 @@ Export-Package: org.eclim.plugin.core.command,
   org.eclim.plugin.core.preference,
   org.eclim.plugin.core.project,
   org.eclim.plugin.core.util,
-  org.objectweb.asm,
   net.htmlparser.jericho
 Require-Bundle: org.eclim,
   org.eclipse.core.filebuffers,
