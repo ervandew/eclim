@@ -271,69 +271,15 @@ def step_plugins(options, eclim):
   chosen = []
   while not chosen:
     response = terminal.prompt('> ')
-    buf = None
-    invalid = []
-    index = -1
-    for part in re.split(r'(\d+)', response.strip()):
-      index += len(part)
-      part = part.strip()
-      if not part or part == ',':
-        continue
-
-      if part.isdigit():
-        if buf and buf.endswith('-'):
-          chosen.append('%s%s' % (buf, part))
-          buf = None
-        else:
-          if buf and buf.isdigit():
-            chosen.append(buf)
-          buf = part
-      elif buf and part == '-':
-        buf += part
-      elif part == ',':
-        if buf.isdigit():
-          chosen.append(buf)
-          buf = None
-        else:
-          invalid.append('Unexpected comma at index %s' % index)
-      else:
-        invalid.append('Unexpected character "%s" at index %s' % (part, index))
-
-    if buf:
-      if buf.isdigit():
-        chosen.append(buf)
-      else:
-        invalid.append('Trailing character "%s" at index %s' % (buf[-1], index))
-
-    index = 0
-    for choice in chosen[:]:
-      if '-' in choice:
-        start, _, end = choice.partition('-')
-        chosen.pop(index)
-        for c in range(int(start), int(end) + 1):
-          if c >= len(plugins):
-            invalid.append('Invalid choice: %s' % c)
-          chosen.insert(index, c)
-          index += 1
-      else:
-        choice = int(choice)
-        if choice >= len(plugins):
-          invalid.append('Invalid choice: %s' % choice)
-        chosen[index] = int(choice)
-        index += 1
-
+    chosen, invalid = _choose(plugins, response)
     if invalid:
       chosen = []
       for inv in invalid:
         print(inv)
-
-    chosen = set(chosen)
-    chosen = list(chosen)
-    chosen.sort()
+      continue
 
     result = []
-    for choice in chosen:
-      plugin = plugins[choice]
+    for plugin in chosen:
       requires = plugin.get('requires')
       if requires:
         for requirement in reversed(requires):
@@ -357,6 +303,66 @@ def step_plugins(options, eclim):
       return result
 
     chosen = []
+
+def _choose(choices, response):
+  chosen = []
+  invalid = []
+  index = -1
+  buf = None
+  for part in re.split(r'(\d+)', response.strip()):
+    index += len(part)
+    part = part.strip()
+    if not part or part == ',':
+      continue
+
+    if part.isdigit():
+      if buf and buf.endswith('-'):
+        chosen.append('%s%s' % (buf, part))
+        buf = None
+      else:
+        if buf and buf.isdigit():
+          chosen.append(buf)
+        buf = part
+    elif buf and part == '-':
+      buf += part
+    elif part == ',':
+      if buf.isdigit():
+        chosen.append(buf)
+        buf = None
+      else:
+        invalid.append('Unexpected comma at index %s' % index)
+    else:
+      invalid.append('Unexpected character "%s" at index %s' % (part, index))
+
+  if buf:
+    if buf.isdigit():
+      chosen.append(buf)
+    else:
+      invalid.append('Trailing character "%s" at index %s' % (buf[-1], index))
+
+  index = 0
+  for choice in chosen[:]:
+    if '-' in choice:
+      start, _, end = choice.partition('-')
+      chosen.pop(index)
+      for c in range(int(start), int(end) + 1):
+        if c >= len(choices):
+          invalid.append('Invalid choice: %s' % c)
+        chosen.insert(index, c)
+        index += 1
+    else:
+      choice = int(choice)
+      if choice >= len(choices):
+        invalid.append('Invalid choice: %s' % choice)
+      chosen[index] = int(choice)
+      index += 1
+
+  chosen = set(chosen)
+  chosen = list(chosen)
+  chosen.sort()
+  chosen = [choices[c] for c in chosen if c < len(choices)]
+
+  return chosen, invalid
 
 def step_dependencies(options, eclipse, plugins):
   eclipse.gc()
