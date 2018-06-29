@@ -23,6 +23,10 @@ target(name: 'org.eclim.pydev.build.vim'){
   // from org.eclim.wst, so add that file to our pydev plugin build since wst
   // is not a reqirement of pydev.
   copy(todir: '${build.vimfiles}/org.eclim.pydev'){
-    fileset(dir: 'org.eclim.wst/vim', includes: 'eclim/indent/html.vim')
+    fileset(dir: 'org.eclim.wst/vim'){
+      include(name: 'eclim/indent/html.vim')
+      include(name: 'eclim/indent/css.vim')
+      include(name: 'eclim/indent/javascript.vim')
+    }
   }
 }
