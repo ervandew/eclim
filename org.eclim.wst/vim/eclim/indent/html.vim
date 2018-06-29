@@ -28,6 +28,7 @@ if &indentexpr =~ 'EclimGetHtmlIndent' ||
 endif
 
 let b:disableOverride = 1
+runtime eclim/indent/indentanything.vim
 runtime! indent/javascript.vim
 runtime! indent/css.vim
 
