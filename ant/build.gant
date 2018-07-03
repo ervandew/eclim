@@ -1111,6 +1111,8 @@ junit = { pluginName ->
   ant.taskdef(name: 'junitreport', classpathref: 'junit',
       classname: 'org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator')
 
+  pattern = getVariable('test.pattern', '*Test')
+
   ant.mkdir(dir: "build/test/junit/results")
   ant.junit(printsummary: 'yes', failureproperty: 'junit.failed'){
     ant.classpath{
@@ -1123,7 +1125,7 @@ junit = { pluginName ->
     ant.batchtest(fork: 'yes', todir: "build/test/junit/results"){
       ant.fileset(
         dir: "build/test/junit/classes/${pluginName}",
-        includes: '**/*Test.class')
+        includes: "**/${pattern}.class")
     }
     ant.sysproperty(key: 'eclipse.home', value: '${eclipse}')
     ant.sysproperty(key: 'eclim.version', value: '${eclim.version}')
@@ -1140,13 +1142,15 @@ vunit = { pluginName ->
     ant.classpath{ant.fileset(dir: 'ant/lib', includes: 'vunit.jar')}
   }
 
+  pattern = getVariable('test.pattern', '*Test')
+
   ant.mkdir(dir: "build/test/vunit/results")
   ant.vunit(todir: "build/test/vunit/results",
       failureproperty: 'vunit.failed'){
     ant.sysproperty(key: 'g:TestEclimWorkspace', value: '${eclipse.workspace}/')
     ant.pathelement(path: '${vim.files}')
     ant.plugin(name: 'plugin/eclim.vim')
-    ant.fileset(dir: "${pluginName}/test/vunit", includes: '**/*Test.vim')
+    ant.fileset(dir: "${pluginName}/test/vunit", includes: "**/${pattern}.vim")
   }
 }
 
