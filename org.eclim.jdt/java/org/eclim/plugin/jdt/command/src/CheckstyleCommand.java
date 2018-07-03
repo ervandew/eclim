@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,21 +131,23 @@ public class CheckstyleCommand
 
     Configuration config = ConfigurationLoader.loadConfiguration(
         configFile, new PropertiesExpander(properties));
-
+    ClassLoader moduleClassLoader = new ProjectClassLoader(
+        JavaUtils.getJavaProject(project),
+        Checker.class.getClassLoader());
+    Checker checker = new Checker();
     CheckstyleListener listener = new CheckstyleListener();
 
-    List<File> files = new ArrayList<File>();
-    files.add(new File(ProjectUtils.getFilePath(project, file)));
+    try{
+      List<File> files = new ArrayList<File>();
+      files.add(new File(ProjectUtils.getFilePath(project, file)));
 
-    Checker checker = new Checker();
-    checker.setModuleClassLoader(new ProjectClassLoader(
-          JavaUtils.getJavaProject(project),
-          Checker.class.getClassLoader()));
-    checker.setClassloader(new ProjectClassLoader(
-          JavaUtils.getJavaProject(project)));
-    checker.configure(config);
-    checker.addListener(listener);
-    checker.process(files);
+      checker.setModuleClassLoader(moduleClassLoader);
+      checker.configure(config);
+      checker.addListener(listener);
+      checker.process(files);
+    }finally{
+      checker.destroy();
+    }
 
     return listener.getErrors();
   }

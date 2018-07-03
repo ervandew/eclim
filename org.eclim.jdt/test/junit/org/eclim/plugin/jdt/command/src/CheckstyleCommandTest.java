@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ public class CheckstyleCommandTest
         "java_checkstyle", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       });
 
-    assertEquals("Wrong number of results.", 4, results.size());
+    assertEquals("Wrong number of results.", 3, results.size());
 
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
@@ -64,23 +64,16 @@ public class CheckstyleCommandTest
     error = results.get(1);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
-        "[checkstyle] Redundant throws: 'TestException' is unchecked exception.");
-    assertEquals(error.get("line"), 6);
-    assertEquals(error.get("column"), 12);
+        "[checkstyle] '{' at column 21 should be on a new line.");
+    assertEquals(error.get("line"), 5);
+    assertEquals(error.get("column"), 21);
     assertEquals(error.get("warning"), true);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
-    assertEquals(error.get("message"), "[checkstyle] '{' should be on a new line.");
-    assertEquals(error.get("line"), 6);
-    assertEquals(error.get("column"), 26);
-    assertEquals(error.get("warning"), true);
-
-    error = results.get(3);
-    assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
         "[checkstyle] ',' is not followed by whitespace.");
-    assertEquals(error.get("line"), 9);
+    assertEquals(error.get("line"), 8);
     assertEquals(error.get("column"), 33);
     assertEquals(error.get("warning"), true);
   }

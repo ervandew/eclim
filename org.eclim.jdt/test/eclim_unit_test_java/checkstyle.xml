@@ -48,9 +48,5 @@
       <property name="option" value="same"/>
     </module>
 
-    <module name="RedundantThrows">
-      <property name="allowSubclasses" value="true"/>
-    </module>
-
   </module>
 </module>
