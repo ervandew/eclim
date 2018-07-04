@@ -1205,19 +1205,29 @@ versionToInt = { version ->
   return result
 }
 
+getEclimdPort = { ->
+  port = null
+  eclimrc = "${basedir}/org.eclim.core/test/eclimrc.test"
+  new File(eclimrc).eachLine { line ->
+    if (line.startsWith('nailgun.server.port')){
+      port = line.split('=')[1]
+    }
+  }
+  return port
+}
+
+getEclimCommand = { ->
+  return binding.getVariable('eclipse') + '/eclim'
+}
+
 eclim = { args, port=null, failonerror=true, dir=null ->
   if (port == null){
-    eclimrc = "${basedir}/org.eclim.core/test/eclimrc.test"
-    new File(eclimrc).eachLine { line ->
-      if (line.startsWith('nailgun.server.port')){
-        port = line.split('=')[1]
-      }
-    }
+    port = getEclimdPort()
   }
 
   try {
     if (dir == null){
-      eclimCmd = binding.getVariable('eclipse') + '/eclim'
+      eclimCmd = getEclimCommand()
     }else{
       eclimCmd = dir + '/eclim'
     }

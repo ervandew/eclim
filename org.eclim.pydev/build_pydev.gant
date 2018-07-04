@@ -1,7 +1,24 @@
+import groovy.json.JsonSlurper
+
 feature_pydev = 'org.python.pydev.feature'
 
 target(name: 'org.eclim.pydev.test'){
   depends('test.init')
+  cmd = getEclimCommand()
+  port = getEclimdPort()
+  cmd = "${cmd} --nailgun-port ${port} -command"
+
+  parser = new JsonSlurper()
+  interpreters = parser.parseText(
+    "${cmd} python_list_interpreters".execute().text)
+
+  if (!interpreters){
+    python = 'which python'.execute().text
+    if(python){
+      echo("add python interpreter: ${python}")
+      "${cmd} python_add_interpreter -p ${python}".execute()
+    }
+  }
   runTests('org.eclim.pydev'){
     createProject('org.eclim.pydev', 'eclim_unit_test_python')
   }
