@@ -192,7 +192,7 @@ def compareInstalled(dependencies, installed, available):
           prefix,
           terminal.green('*'),
           dependency.name,
-          dependency.version,
+          feature.version,
         ))
       else:
         if dependency.name in availableByName:
