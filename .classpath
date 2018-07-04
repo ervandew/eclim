@@ -21,7 +21,6 @@
   <classpathentry kind="src" path="org.eclim.dltkruby/test/junit"/>
   <classpathentry kind="src" path="org.eclim.groovy/java"/>
   <classpathentry kind="src" path="org.eclim.groovy/test/junit"/>
-  <classpathentry kind="src" path="org.eclim.installer/java"/>
   <classpathentry kind="src" path="org.eclim.jdt/java"/>
   <classpathentry kind="src" path="org.eclim.jdt/test/junit"/>
   <classpathentry kind="src" path="org.eclim.pdt/java"/>
