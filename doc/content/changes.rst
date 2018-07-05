@@ -16,6 +16,32 @@
 History of Changes
 ==================
 
+.. _2.8.0:
+
+2.8.0 (Jul. 05, 2018)
+---------------------
+
+Eclim:
+  - Eclim updated to supports, and requires, Eclipse 4.8 (Photon)
+  - Fix eclimd script for jdk 10
+  - Update the installer to be compatible with python 2.6
+  - Fix the installer on OSX when libedit is not installed.
+
+Java:
+  - Added a :ref:`:JavaOutline <:JavaOutline>` command which opens a buffer with
+    an outline of the current class.
+    |br| Thanks to g0dj4ck4l
+  - Updated checkstyle support to 8.11
+
+Python:
+  - Updated for pydev 6.4.3
+
+Groovy:
+  - Groovy support has been omitted from this release since the groovy eclipse
+    feature does not yet support Eclipse 4.8 (Photon).
+
+| :gitlog:`Git Log (2.8.0) <2.7.2...2.8.0>`
+
 .. _2.7.2:
 
 2.7.2 (Feb. 11, 2018)
