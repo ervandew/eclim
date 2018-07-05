@@ -123,6 +123,20 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Jul 05, 2018
+-------------
+
+A new version of eclim is now available with support for Eclipse 4.8 (Photon).
+This release also contains some fixes for the installer as well as other bug
+fixes.
+
+.. note::
+
+  Groovy support has been omitted from this release since the groove eclipse
+  feature does not yet support Eclipse 4.8 (Photon).
+
+- :ref:`Eclim 2.8.0 <2.8.0>`
+
 Feb 11, 2018
 -------------
 

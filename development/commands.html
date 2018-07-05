@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Commands &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
@@ -12,16 +13,7 @@
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'v2.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -39,8 +31,7 @@
 
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
-  </head>
-  <body>
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -49,7 +40,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.2</b></li>
+          <li><b class="navbar-text">v2.8.0</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -218,7 +209,7 @@ eclipse APIs expect character offsets):</p>
 each of which has <code>java</code> directory containing the java source code for that
 bundle.</p>
 </div>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.eclim.plugin.core.command.sample</span><span class="o">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.eclim.plugin.core.command.sample</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
 
@@ -273,7 +264,7 @@ bundle.</p>
 <p>When registering the command with the <code>&#64;Command</code> annotation, you give it a
 name and a comma separated list of options. Each option consists of 4 parts in
 the form of:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">REQUIRED</span><span class="o">|</span><span class="n">OPTIONAL</span> <span class="n">s</span> <span class="n">longname</span> <span class="n">ARG</span><span class="o">|</span><span class="n">NOARG</span><span class="o">|</span><span class="n">ANY</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REQUIRED</span><span class="o">|</span><span class="n">OPTIONAL</span> <span class="n">s</span> <span class="n">longname</span> <span class="n">ARG</span><span class="o">|</span><span class="n">NOARG</span><span class="o">|</span><span class="n">ANY</span>
 </pre></div>
 </div>
 <p>Where each part is defined as:</p>
@@ -310,7 +301,7 @@ update site which should include source bundles. Once you’ve extracted that
 file, you can tell this target to extract source bundles from a specified
 directory. Here is an example of extracting the source from an unpacked dltk
 update site:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
 </pre></div>
 </div>
 </li>
@@ -321,7 +312,7 @@ update site:</p>
 <p>Once you’ve created your command you then need to compile the code using eclim’s
 ant build file. After you’ve done that you can then start eclimd and execute
 your command from the command line to test it:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ eclim -pretty -command echo -p eclim -f org.eclim.core/plugin.properties -o 42 -e utf-8
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ eclim -pretty -command echo -p eclim -f org.eclim.core/plugin.properties -o 42 -e utf-8
 </pre></div>
 </div>
 <div class="alert alert-info">
@@ -331,7 +322,7 @@ every change by using eclim’s <code>reload</code> command which will reload al
 eclim’s plugin bundles with the exception of org.eclim.core (so unfortunately
 it won’t help with our example above if we put that command in the
 org.eclim.core bundle):</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span>$ eclim -command reload
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span>$ eclim -command reload
 </pre></div>
 </div>
 </div>
@@ -346,13 +337,13 @@ first defining a new vim command in
 <p class="last">If the command should only be available for a specific file type, then you’d
 put it in a <code>vim/eclim/ftplugin/somefiltetype.vim</code> file instead.</p>
 </div>
-<div class="highlight-vim"><div class="highlight"><pre><span></span>command EclimEcho :<span class="k">call</span> eclim#echo#Echo<span class="p">()</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>command EclimEcho :<span class="k">call</span> eclim#echo#Echo<span class="p">()</span>
 </pre></div>
 </div>
 <p>Now that we’ve created the command, we then need to define our
 <code>eclim#echo#Echo()</code> function accordingly in
 <code>org.eclim.core/vim/eclim/autoload/eclim/echo.vim</code>:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="c">&quot; Script Variables {{{</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="c">&quot; Script Variables {{{</span>
   <span class="k">let</span> s:echo_command <span class="p">=</span>
     \ <span class="s1">&#39;-command echo -p &quot;&lt;project&gt;&quot; -f &quot;&lt;file&gt;&quot; &#39;</span> .
     \ <span class="s1">&#39;-o &lt;offset&gt; -e &lt;encoding&gt;&#39;</span>
@@ -414,8 +405,8 @@ through its <code>META-INF/MANIFEST.MF</code>, etc.</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Feb 11, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6
+      Last updated on Jul 05, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

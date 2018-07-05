@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Download / Install &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
@@ -12,16 +13,7 @@
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     'v2.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -39,8 +31,7 @@
 
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
-  </head>
-  <body>
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -49,7 +40,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.2</b></li>
+          <li><b class="navbar-text">v2.8.0</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -229,7 +220,7 @@ following requirements.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.vim.org/download.php">Vim</a> 7.1 or greater</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://eclipse.org/downloads/index.php">Eclipse 4.7.x (Oxygen)</a></p>
+<li><p class="first"><a class="reference external" href="http://eclipse.org/downloads/index.php">Eclipse 4.8.x (Photon)</a></p>
 </li>
 <li><p class="first">python (2.7 or 3.x)</p>
 </li>
@@ -242,25 +233,25 @@ minimum set of vim options that must be enabled in your vimrc file (:h vimrc).</
 <li><p class="first"><strong>set nocompatible</strong></p>
 <p>Execute :h ‘compatible’ for more info.  You can confirm that
 compatibliity is turned off by executing the following in vim:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>echo &amp;<span class="nb">compatible</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>echo &amp;<span class="nb">compatible</span>
 </pre></div>
 </div>
 <p>Which should output ‘0’, but if not, then add the following to your ~/.vimrc
 files:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">nocompatible</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">nocompatible</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>filetype plugin on</strong></p>
 <p>Execute :h filetype-plugin-on for more info.  You can confirm
 that file type plugins are enabled by executing the following:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">filetype</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="k">filetype</span>
 </pre></div>
 </div>
 <p>Which should output ‘filetype detection:ON  plugin:ON indent:ON’, showing
 at least ‘ON’ for ‘detection’ and ‘plugin’, but if not, then update your
 ~/.vimrc to include:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">filetype</span> plugin indent <span class="k">on</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">filetype</span> plugin indent <span class="k">on</span>
 </pre></div>
 </div>
 </li>
@@ -272,7 +263,7 @@ at least ‘ON’ for ‘detection’ and ‘plugin’, but if not, then update 
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
 <p>You can find the official eclim installer on eclim’s github <a class="reference external" href="https://github.com/ervandew/eclim/releases/">releases page</a>:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.2/eclim_2.7.2.bin">eclim_2.7.2.bin</a></li>
+<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.8.0/eclim_2.8.0.bin">eclim_2.8.0.bin</a></li>
 </ul>
 <div class="section" id="third-party-packages">
 <h3>Third Party Packages<a class="headerlink" href="#third-party-packages" title="Permalink to this headline">¶</a></h3>
@@ -304,10 +295,10 @@ environment:</p>
 installation procedure.</p>
 </div>
 <ul>
-<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.7.2/eclim_2.7.2.bin">eclim_2.7.2.bin</a></p>
+<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.8.0/eclim_2.8.0.bin">eclim_2.8.0.bin</a></p>
 </li>
 <li><p class="first"><strong>Next run the installer:</strong></p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./eclim_2.8.0.bin
 </pre></div>
 </div>
 <p>After the installer starts up, simply follow the steps to install eclim.</p>
@@ -334,7 +325,7 @@ eclipse and open the eclimd view:</p>
 <li><p class="first">start the eclimd server.</p>
 <p>To start eclimd, simply execute the eclimd script found in your eclipse root
 directory (or the path specified at the end of the command line installer):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ $ECLIPSE_HOME/eclimd
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ $ECLIPSE_HOME/eclimd
 </pre></div>
 </div>
 </li>
@@ -361,7 +352,7 @@ issue on the <a class="reference external" href="http://groups.google.com/group/
 using the command <strong>:EclimValidate</strong>.  This will check
 various settings and options and report any problems. If all is ok
 you will receive the following message:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Result</span><span class="p">:</span> <span class="n">OK</span><span class="p">,</span> <span class="n">required</span> <span class="n">settings</span> <span class="n">are</span> <span class="n">valid</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Result</span><span class="p">:</span> <span class="n">OK</span><span class="p">,</span> <span class="n">required</span> <span class="n">settings</span> <span class="n">are</span> <span class="n">valid</span><span class="o">.</span>
 </pre></div>
 </div>
 </li>
@@ -371,12 +362,12 @@ you will receive the following message:</p>
 <span id="installer-proxy"></span><h4>Running The Installer Behind a Proxy<a class="headerlink" href="#running-the-installer-behind-a-proxy" title="Permalink to this headline">¶</a></h4>
 <p>If you are behind a proxy, you may need to run the installer like so (be sure
 to take a look at the related <a class="reference internal" href="faq.html#eclim-proxy"><span class="std std-ref">faq</span></a> as well):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin --proxy my.proxy:8080
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./eclim_2.8.0.bin --proxy my.proxy:8080
 </pre></div>
 </div>
 <p>If your proxy requires authentication, you’ll need to supply the username and
 password as well:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin --proxy myuser:mypass@my.proxy:8080
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./eclim_2.8.0.bin --proxy myuser:mypass@my.proxy:8080
 </pre></div>
 </div>
 </div>
@@ -389,7 +380,7 @@ necessary input it requires.</p>
 <p>Simply run the installer as shown
 below, supplying the location of your eclipse install, vim files location, and
 the plugins you wish to install:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin <span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./eclim_2.8.0.bin <span class="se">\</span>
   --yes <span class="se">\</span>
   --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
   --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
@@ -401,13 +392,13 @@ the plugins you wish to install:</p>
 <span id="install-source"></span><h3>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="check-out-the-code">
 <h4>1. Check out the code:<a class="headerlink" href="#check-out-the-code" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git://github.com/ervandew/eclim.git
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone git://github.com/ervandew/eclim.git
 </pre></div>
 </div>
 </div>
 <div class="section" id="build-eclim">
 <h4>2. Build eclim:<a class="headerlink" href="#build-eclim" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd eclim
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd eclim
 $ ant -Declipse.home=/your/eclipse/home/dir
 </pre></div>
 </div>
@@ -419,25 +410,25 @@ writable as root, you can supply the <code>eclipse.local</code> property to tell
 where your eclipse user local directory is located and eclimd will be
 installed there (make sure to replace <code>&lt;version&gt;</code> portion of the path below
 accordingly):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant \
     -Declipse.home=/opt/eclipse \
     -Declipse.local=$HOME/.eclipse/org.eclipse.platform_&lt;version&gt;
 </pre></div>
 </div>
 <p>If you do not yet have a <code>.eclipse</code> directory in your home directory, you
 can run either of the following commands to create it:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant -Declipse.home=/opt/eclipse eclipse.init
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant -Declipse.home=/opt/eclipse eclipse.init
 </pre></div>
 </div>
 <p>or</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span>$ /path/to/eclipse/eclipse -initialize
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span>$ /path/to/eclipse/eclipse -initialize
 </pre></div>
 </div>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your eclipse home path contains a space, be sure to quote it:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">ant</span> <span class="s2">&quot;-Declipse.home=C:/Program Files/eclipse&quot;</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">ant</span> <span class="s2">&quot;-Declipse.home=C:/Program Files/eclipse&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -445,7 +436,7 @@ can run either of the following commands to create it:</p>
 <p class="alert-heading first admonition-title">Note</p>
 <p>If your vimfiles directory is not located at the default location for your
 OS, then you can specify the location using the “vim.files” property:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant -Dvim.files=&lt;your vimfiles dir&gt;
 </pre></div>
 </div>
 </div>
@@ -453,7 +444,7 @@ OS, then you can specify the location using the “vim.files” property:</p>
 find what eclipse plugins are available. It will then use that list to determine
 which eclim features/plugins should be built and will output a list like the one
 below showing what will be built vs what will be skipped:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>[echo] ${eclipse}: /opt/eclipse
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[echo] ${eclipse}: /opt/eclipse
 [echo] # Skipping org.eclim.adt, missing com.android.ide.eclipse.adt
 [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
 [echo] # Skipping org.eclim.dltkruby, missing org.eclipse.dltk.ruby
@@ -472,7 +463,7 @@ eclipse feature that would be required to build those plugins.</p>
 properties, on the command line every time you build eclim, you can create a
 <code>user.properties</code> file at the eclim source root and put all your properties
 in there:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ vim user.properties
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim user.properties
 eclipse.home=/opt/eclipse
 eclipse.local=${user.home}/.eclipse/org.eclipse.platform_&lt;version&gt;
 vim.files=${user.home}/.vim/bundle/eclim
@@ -483,7 +474,7 @@ vim.files=${user.home}/.vim/bundle/eclim
 <p>The eclim vim help files, used by the <a class="reference internal" href="vim/core/eclim.html#eclimhelp"><span class="std std-ref">:EclimHelp</span></a> command,
 are not built by default. To build these you first need to install <a class="reference external" href="http://sphinx-doc.org">sphinx</a>,
 then run the following command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant vimdocs
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant vimdocs
 </pre></div>
 </div>
 <p>This target also supports the <code>vim.files</code> property if you want the docs
@@ -521,7 +512,7 @@ eclim:</p>
 <ul>
 <li><p class="first">Install a java jdk, xvfb, and the necessary build tools to compile eclim’s
 nailgun client during installation (make, gcc, etc).</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ sudo apt-get install openjdk-6-jdk xvfb build-essential
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install openjdk-6-jdk xvfb build-essential
 </pre></div>
 </div>
 </li>
@@ -543,16 +534,16 @@ choice.</p>
 installer. An archive can simply be extracted to install eclipse, but the
 eclipse installer (their default download) may require a gui to install.</p>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ wget &lt;eclipse_mirror&gt;/eclipse-&lt;version&gt;-linux-gtk.tar.gz
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wget &lt;eclipse_mirror&gt;/eclipse-&lt;version&gt;-linux-gtk.tar.gz
 $ tar -zxf eclipse-&lt;version&gt;-linux-gtk.tar.gz
 </pre></div>
 </div>
 <p>Once eclipse is installed, you can then install eclim normally:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./eclim_2.8.0.bin
 </pre></div>
 </div>
 <p>The last step is to start Xvfb followed by eclimd:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ Xvfb :1 -screen 0 1024x768x24 &amp;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ Xvfb :1 -screen 0 1024x768x24 &amp;
 $ DISPLAY=:1 ./eclipse/eclimd -b
 </pre></div>
 </div>
@@ -580,14 +571,14 @@ plugins along with all the files eclim adds to your .vim or vimfiles directory
 <div class="section" id="uninstall">
 <span id="id1"></span><h2>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline">¶</a></h2>
 <p>To uninstall eclim you can use the eclim installer like so:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin uninstall
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./eclim_2.8.0.bin uninstall
 </pre></div>
 </div>
 <div class="section" id="unattended-automated-uninstall">
 <span id="uninstall-automated"></span><h3>Unattended (automated) uninstall<a class="headerlink" href="#unattended-automated-uninstall" title="Permalink to this headline">¶</a></h3>
 <p>Like the installer, the uninstaller also supports an unattended uninstall. You
 just need to supply your eclipse and vim files directories:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.7.2.bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./eclim_2.8.0.bin
   --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
   --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
   uninstall
@@ -612,8 +603,8 @@ just need to supply your eclipse and vim files directories:</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Feb 11, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6
+      Last updated on Jul 05, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

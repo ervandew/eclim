@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Logging (log4j, etc) &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
@@ -12,16 +13,7 @@
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'v2.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -39,8 +31,7 @@
 
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
-  </head>
-  <body>
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -49,7 +40,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.2</b></li>
+          <li><b class="navbar-text">v2.8.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -218,7 +209,7 @@ provides the means to supply a custom template.  To utilize it, simply set the
 supplied to your template: <code>var</code>, which is the logger instance variable, and
 <code>class</code>, which is the class name of the current class you are implementing.</p>
 <p>Here is an example which eclim uses for its logger implementation:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.eclim.logging.Logger</span><span class="o">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.eclim.logging.Logger</span><span class="o">;</span>
 <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">$</span><span class="o">{</span><span class="n">var</span><span class="o">}</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">$</span><span class="o">{</span><span class="n">class</span><span class="o">}.</span><span class="na">class</span><span class="o">);</span>
 </pre></div>
 </div>
@@ -288,8 +279,8 @@ If set to 0, disables validation when saving the file.</li>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Feb 11, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6
+      Last updated on Jul 05, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

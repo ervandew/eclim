@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Java Refactoring &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
@@ -12,16 +13,7 @@
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'v2.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -39,8 +31,7 @@
 
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
-  </head>
-  <body>
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -49,7 +40,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.2</b></li>
+          <li><b class="navbar-text">v2.8.0</b></li>
           
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -203,7 +194,7 @@
 <p>The first refactoring that eclim supports is <strong>:JavaRename</strong>, which can be used
 to rename various java elements.</p>
 <p>Example:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.foo.bar</span><span class="o">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.foo.bar</span><span class="o">;</span>
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">bar</span><span class="o">(){</span>
@@ -213,11 +204,11 @@ to rename various java elements.</p>
 </div>
 <p>To rename the class from ‘Foo’ to ‘Bar’ you simply position the cursor over the
 class name ‘Foo’ and execute:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaRename Bar
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>JavaRename Bar
 </pre></div>
 </div>
 <p>The result of which will the following prompt:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Rename</span> <span class="s2">&quot;Foo&quot;</span> <span class="n">to</span> <span class="s2">&quot;Bar&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Rename</span> <span class="s2">&quot;Foo&quot;</span> <span class="n">to</span> <span class="s2">&quot;Bar&quot;</span>
 <span class="p">([</span><span class="n">e</span><span class="p">]</span><span class="n">xecute</span> <span class="o">/</span> <span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="n">review</span> <span class="o">/</span> <span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="n">ancel</span><span class="p">):</span>
 </pre></div>
 </div>
@@ -233,14 +224,14 @@ the bottom to execute the refactoring.</p>
 <p>The contents of the preview window will vary depending on what you are
 renaming.</p>
 <p>If we are renaming ‘Foo’ to ‘Bar’ the contents would be like so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">other</span><span class="p">:</span> <span class="n">Rename</span> <span class="n">compilation</span> <span class="n">unit</span> <span class="s1">&#39;Foo.java&#39;</span> <span class="n">to</span> <span class="s1">&#39;Bar.java&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">other</span><span class="p">:</span> <span class="n">Rename</span> <span class="n">compilation</span> <span class="n">unit</span> <span class="s1">&#39;Foo.java&#39;</span> <span class="n">to</span> <span class="s1">&#39;Bar.java&#39;</span>
 
 <span class="o">|</span><span class="n">Execute</span> <span class="n">Refactoring</span><span class="o">|</span>
 </pre></div>
 </div>
 <p>If we are renaming the method ‘bar’ to ‘foo’, the contents would look like
 so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">|</span><span class="n">diff</span><span class="o">|</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">someuser</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">test_java</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">org</span><span class="o">/</span><span class="n">foo</span><span class="o">/</span><span class="n">bar</span><span class="o">/</span><span class="n">Foo</span><span class="o">.</span><span class="n">java</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span><span class="n">diff</span><span class="o">|</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">someuser</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">test_java</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">org</span><span class="o">/</span><span class="n">foo</span><span class="o">/</span><span class="n">bar</span><span class="o">/</span><span class="n">Foo</span><span class="o">.</span><span class="n">java</span>
 
 <span class="o">|</span><span class="n">Execute</span> <span class="n">Refactoring</span><span class="o">|</span>
 </pre></div>
@@ -289,7 +280,7 @@ vim sessions that might be affected by the renaming of a package.</p>
 another using the <strong>:JavaMove</strong> command.</p>
 <p>In this example the current file would be moved from its current package to the
 package <code>org.foo</code>:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JavaMove org.foo
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>JavaMove org.foo
 </pre></div>
 </div>
 <p>Like the package renaming described in the previous section, the argument to
@@ -333,8 +324,8 @@ by the refactoring.  Possible values include ‘vertical’ or ‘horizontal’.
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Feb 11, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6
+      Last updated on Jul 05, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

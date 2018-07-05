@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>History of Changes &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
@@ -12,16 +13,7 @@
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     'v2.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -39,8 +31,7 @@
 
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
-  </head>
-  <body>
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -49,7 +40,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.2</b></li>
+          <li><b class="navbar-text">v2.8.0</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -191,6 +182,7 @@
 <div class="page-toc subnav navbar">
 <div class="navbar-inner">
 <ul class="nav">
+<li><a class="reference internal" href="#jul-05-2018">2.8.0 (Jul. 05, 2018)</a></li>
 <li><a class="reference internal" href="#feb-11-2018">2.7.2 (Feb. 11, 2018)</a></li>
 <li><a class="reference internal" href="#jan-01-2018">2.7.1 (Jan. 01, 2018)</a></li>
 <li><a class="reference internal" href="#jul-12-2017">2.7.0 (Jul. 12, 2017)</a></li>
@@ -209,8 +201,43 @@
 </ul>
 </div>
 </div>
+<div class="section" id="jul-05-2018">
+<span id="id1"></span><h2>2.8.0 (Jul. 05, 2018)<a class="headerlink" href="#jul-05-2018" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Eclim:</dt>
+<dd><ul class="first last simple">
+<li>Eclim updated to supports, and requires, Eclipse 4.8 (Photon)</li>
+<li>Fix eclimd script for jdk 10</li>
+<li>Update the installer to be compatible with python 2.6</li>
+<li>Fix the installer on OSX when libedit is not installed.</li>
+</ul>
+</dd>
+<dt>Java:</dt>
+<dd><ul class="first last simple">
+<li>Added a <a class="reference internal" href="vim/java/inspection.html#javaoutline"><span class="std std-ref">:JavaOutline</span></a> command which opens a buffer with
+an outline of the current class.
+<br/> Thanks to g0dj4ck4l</li>
+<li>Updated checkstyle support to 8.11</li>
+</ul>
+</dd>
+<dt>Python:</dt>
+<dd><ul class="first last simple">
+<li>Updated for pydev 6.4.3</li>
+</ul>
+</dd>
+<dt>Groovy:</dt>
+<dd><ul class="first last simple">
+<li>Groovy support has been omitted from this release since the groovy eclipse
+feature does not yet support Eclipse 4.8 (Photon).</li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ervandew/eclim/compare/2.7.2...2.8.0">Git Log (2.8.0)</a></div>
+</div>
+</div>
 <div class="section" id="feb-11-2018">
-<span id="id1"></span><h2>2.7.2 (Feb. 11, 2018)<a class="headerlink" href="#feb-11-2018" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>2.7.2 (Feb. 11, 2018)<a class="headerlink" href="#feb-11-2018" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
@@ -224,7 +251,7 @@
 </div>
 </div>
 <div class="section" id="jan-01-2018">
-<span id="id2"></span><h2>2.7.1 (Jan. 01, 2018)<a class="headerlink" href="#jan-01-2018" title="Permalink to this headline">¶</a></h2>
+<span id="id3"></span><h2>2.7.1 (Jan. 01, 2018)<a class="headerlink" href="#jan-01-2018" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
@@ -241,7 +268,7 @@ layouts, including the one from the eclipse GUI installer.</li>
 </div>
 </div>
 <div class="section" id="jul-12-2017">
-<span id="id3"></span><h2>2.7.0 (Jul. 12, 2017)<a class="headerlink" href="#jul-12-2017" title="Permalink to this headline">¶</a></h2>
+<span id="id4"></span><h2>2.7.0 (Jul. 12, 2017)<a class="headerlink" href="#jul-12-2017" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
@@ -254,7 +281,7 @@ layouts, including the one from the eclipse GUI installer.</li>
 </div>
 </div>
 <div class="section" id="jul-21-2016">
-<span id="id4"></span><h2>2.6.0 (Jul. 21, 2016)<a class="headerlink" href="#jul-21-2016" title="Permalink to this headline">¶</a></h2>
+<span id="id5"></span><h2>2.6.0 (Jul. 21, 2016)<a class="headerlink" href="#jul-21-2016" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
@@ -267,7 +294,7 @@ layouts, including the one from the eclipse GUI installer.</li>
 </div>
 </div>
 <div class="section" id="jul-25-2015">
-<span id="id5"></span><h2>2.5.0 (Jul. 25, 2015)<a class="headerlink" href="#jul-25-2015" title="Permalink to this headline">¶</a></h2>
+<span id="id6"></span><h2>2.5.0 (Jul. 25, 2015)<a class="headerlink" href="#jul-25-2015" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
@@ -280,7 +307,7 @@ layouts, including the one from the eclipse GUI installer.</li>
 </div>
 </div>
 <div class="section" id="jan-22-2015">
-<span id="id6"></span><h2>2.4.1 (Jan. 22, 2015)<a class="headerlink" href="#jan-22-2015" title="Permalink to this headline">¶</a></h2>
+<span id="id7"></span><h2>2.4.1 (Jan. 22, 2015)<a class="headerlink" href="#jan-22-2015" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Install:</dt>
 <dd><ul class="first last simple">
@@ -348,7 +375,7 @@ released.</li>
 </div>
 </div>
 <div class="section" id="aug-24-2014">
-<span id="id7"></span><h2>2.4.0 (Aug. 24, 2014)<a class="headerlink" href="#aug-24-2014" title="Permalink to this headline">¶</a></h2>
+<span id="id8"></span><h2>2.4.0 (Aug. 24, 2014)<a class="headerlink" href="#aug-24-2014" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Eclim:</dt>
 <dd><ul class="first last">
@@ -363,7 +390,7 @@ eclim’s vim client settings easier.</p>
 <li><p class="first">All eclim <code>make</code> based commands (:Ant, :Mvn, etc.) will now use <a class="reference external" href="https://github.com/tpope/vim-dispatch">dispatch</a>
 if available. If you would like to disable this behavior, add the following
 to your vimrc:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimMakeDispatchEnabled <span class="p">=</span> <span class="m">0</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimMakeDispatchEnabled <span class="p">=</span> <span class="m">0</span>
 </pre></div>
 </div>
 </li>
@@ -386,7 +413,7 @@ branch.</li>
 </div>
 </div>
 <div class="section" id="may-07-2014">
-<span id="id8"></span><h2>1.7.19 (May 07, 2014)<a class="headerlink" href="#may-07-2014" title="Permalink to this headline">¶</a></h2>
+<span id="id9"></span><h2>1.7.19 (May 07, 2014)<a class="headerlink" href="#may-07-2014" title="Permalink to this headline">¶</a></h2>
 <p>Indigo release which includes most of the changes from 2.3.3 and 2.3.4,
 excluding the new pydev support. This will most likely be the final eclim
 release for indigo.</p>
@@ -395,7 +422,7 @@ release for indigo.</p>
 </div>
 </div>
 <div class="section" id="apr-12-2014">
-<span id="id9"></span><h2>2.3.4 (Apr. 12, 2014)<a class="headerlink" href="#apr-12-2014" title="Permalink to this headline">¶</a></h2>
+<span id="id10"></span><h2>2.3.4 (Apr. 12, 2014)<a class="headerlink" href="#apr-12-2014" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Project:</dt>
 <dd><ul class="first last simple">
@@ -408,7 +435,7 @@ release for indigo.</p>
 </div>
 </div>
 <div class="section" id="apr-06-2014">
-<span id="id10"></span><h2>2.3.3 (Apr. 06, 2014)<a class="headerlink" href="#apr-06-2014" title="Permalink to this headline">¶</a></h2>
+<span id="id11"></span><h2>2.3.3 (Apr. 06, 2014)<a class="headerlink" href="#apr-06-2014" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Installer:</dt>
 <dd><ul class="first last simple">
@@ -471,7 +498,7 @@ correction suggestion.</li>
 <p class="alert-heading first admonition-title">Note</p>
 <p>Any exiting eclim python projects you have should be re-created with the
 new <code>python</code> nature:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">project</span> <span class="o">-</span><span class="n">n</span> <span class="n">python</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">project</span> <span class="o">-</span><span class="n">n</span> <span class="n">python</span>
 </pre></div>
 </div>
 </div>
@@ -496,7 +523,7 @@ missing dtd for non-english users.</li>
 </div>
 </div>
 <div class="section" id="sep-12-2013">
-<span id="id12"></span><span id="id11"></span><h2>2.3.2 / 1.7.18 (Sep. 12, 2013)<a class="headerlink" href="#sep-12-2013" title="Permalink to this headline">¶</a></h2>
+<span id="id13"></span><span id="id12"></span><h2>2.3.2 / 1.7.18 (Sep. 12, 2013)<a class="headerlink" href="#sep-12-2013" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Installer:</dt>
 <dd><ul class="first last simple">
@@ -515,7 +542,7 @@ missing dtd for non-english users.</li>
 </div>
 </div>
 <div class="section" id="jul-27-2013">
-<span id="id13"></span><h2>2.3.1 (Jul. 27, 2013)<a class="headerlink" href="#jul-27-2013" title="Permalink to this headline">¶</a></h2>
+<span id="id14"></span><h2>2.3.1 (Jul. 27, 2013)<a class="headerlink" href="#jul-27-2013" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Installer:</dt>
 <dd><ul class="first last simple">
@@ -528,7 +555,7 @@ missing dtd for non-english users.</li>
 </div>
 </div>
 <div class="section" id="jul-21-2013">
-<span id="id15"></span><span id="id14"></span><h2>2.3.0 / 1.7.17 (Jul. 21, 2013)<a class="headerlink" href="#jul-21-2013" title="Permalink to this headline">¶</a></h2>
+<span id="id16"></span><span id="id15"></span><h2>2.3.0 / 1.7.17 (Jul. 21, 2013)<a class="headerlink" href="#jul-21-2013" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Java:</dt>
 <dd><ul class="first last simple">
@@ -550,7 +577,7 @@ completion has changed in <strong>Kepler</strong> which may result in searching 
 completion not returning any results, both in eclim and in the standard
 eclipse php editor.  To fix this you’ll need to stop eclipse, remove the old
 index, and then restart:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span>$ rm -r &lt;your workspace&gt;/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span>$ rm -r &lt;your workspace&gt;/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
 </pre></div>
 </div>
 </div>
@@ -577,7 +604,7 @@ formatted result, honoring your <code>textwidth</code> and indent settings.</li>
 </div>
 </div>
 <div class="section" id="jul-14-2013">
-<span id="id17"></span><span id="id16"></span><h2>2.2.7 / 1.7.16 (Jul. 14, 2013)<a class="headerlink" href="#jul-14-2013" title="Permalink to this headline">¶</a></h2>
+<span id="id18"></span><span id="id17"></span><h2>2.2.7 / 1.7.16 (Jul. 14, 2013)<a class="headerlink" href="#jul-14-2013" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Java:</dt>
 <dd><ul class="first last simple">
@@ -597,7 +624,7 @@ changed in <strong>Kepler</strong> which may result in searching / code completi
 returning any results, both in eclim and in the standard eclipse php editor.
 To fix this you’ll need to stop eclipse, remove the old index, and then
 restart:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span>$ rm -r &lt;your workspace&gt;/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span>$ rm -r &lt;your workspace&gt;/.metadata/.plugins/org.eclipse.dltk.core.index.sql.h2/
 </pre></div>
 </div>
 </div>
@@ -647,7 +674,7 @@ basics for <a class="reference internal" href="development/plugins.html"><span c
 </div>
 </div>
 <div class="section" id="may-18-2013">
-<span id="id19"></span><span id="id18"></span><h2>2.2.6 / 1.7.14 (May 18, 2013)<a class="headerlink" href="#may-18-2013" title="Permalink to this headline">¶</a></h2>
+<span id="id20"></span><span id="id19"></span><h2>2.2.6 / 1.7.14 (May 18, 2013)<a class="headerlink" href="#may-18-2013" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
@@ -712,8 +739,8 @@ html validation).</li>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Feb 11, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6
+      Last updated on Jul 05, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

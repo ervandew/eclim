@@ -4,6 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Plugins &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
@@ -12,16 +13,7 @@
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'v2.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -39,8 +31,7 @@
 
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
-  </head>
-  <body>
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -49,7 +40,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.7.2</b></li>
+          <li><b class="navbar-text">v2.8.0</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -222,7 +213,7 @@ core aspects of what goes into the creation of a new eclim plugin.</p>
 <h2>Bootstrapping the plugin artifacts<a class="headerlink" href="#bootstrapping-the-plugin-artifacts" title="Permalink to this headline">¶</a></h2>
 <p>Eclim includes a set of templates to help you bootstrap a new plugin. To utilize
 them you can run the following ant target:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant plugin.create
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant plugin.create
 </pre></div>
 </div>
 <p>You will be prompted to enter a name for this plugin along with some guidelines
@@ -304,14 +295,14 @@ the nature, locate the fully qualified name in the <code>&lt;natures&gt;</code> 
 grep the plugin’s code for that name.</p>
 <p>Once you have the reference to the nature id, you can then create a public
 static variable called <code>NATURE</code>:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">NATURE</span> <span class="o">=</span> <span class="n">SomeClass</span><span class="o">.</span><span class="na">NATURE_ID</span><span class="o">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">NATURE</span> <span class="o">=</span> <span class="n">SomeClass</span><span class="o">.</span><span class="na">NATURE_ID</span><span class="o">;</span>
 </pre></div>
 </div>
 <p>You’ll be using this constant as the key to register features for project
 containing this nature, but first we’ll register a short alias for this nature
 since the actual nature id tends to be long and unstandardized, and we don’t
 want users to have to type it out when creating projects from eclim:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">ProjectNatureFactory</span><span class="o">.</span><span class="na">addNature</span><span class="o">(</span><span class="s">&quot;shortname&quot;</span><span class="o">,</span> <span class="n">NATURE</span><span class="o">);</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ProjectNatureFactory</span><span class="o">.</span><span class="na">addNature</span><span class="o">(</span><span class="s">&quot;shortname&quot;</span><span class="o">,</span> <span class="n">NATURE</span><span class="o">);</span>
 </pre></div>
 </div>
 </div>
@@ -352,14 +343,14 @@ update site which should include source bundles. Once you’ve extracted that
 file, you can tell this target to extract source bundles from a specified
 directory. Here is an example of extracting the source from an unpacked dltk
 update site:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
 </pre></div>
 </div>
 </li>
 </ul>
 <p>Once you’ve created your project manager, you then map it to your plugin’s
 nature inside of your <code>PluginResources.initialize</code> method like so:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">ProjectManagement</span><span class="o">.</span><span class="na">addProjectManager</span><span class="o">(</span><span class="n">NATURE</span><span class="o">,</span> <span class="k">new</span> <span class="n">SomeProjectManager</span><span class="o">());</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ProjectManagement</span><span class="o">.</span><span class="na">addProjectManager</span><span class="o">(</span><span class="n">NATURE</span><span class="o">,</span> <span class="k">new</span> <span class="n">SomeProjectManager</span><span class="o">());</span>
 </pre></div>
 </div>
 </div>
@@ -394,8 +385,8 @@ feel free to come back here and continue reading.</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Feb 11, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6
+      Last updated on Jul 05, 2018<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>

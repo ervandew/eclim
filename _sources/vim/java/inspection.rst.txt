@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2018  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -109,3 +109,38 @@ Configuration
 - **g:EclimJavaCallHierarchyDefaultAction** (defaults to 'split') -
   Determines the command used to open the file when hitting <enter> on an entry
   in the hierarchy buffer.
+
+.. _\:JavaOutline:
+
+Outline
+-------
+
+When viewing a java class or interface you can view an outline by issuing the
+command **:JavaOutline** which will open a temporary buffer.
+
+.. code-block:: java
+
+  + class OutlineCommand
+    + execute(CommandLine) : Object
+    - extractOutlineFromElements(IJavaElement[]) : List<OutlineNode>
+
+While you are in the buffer, you can jump to the element under the cursor using
+one of the following key bindings:
+
+- <cr> - open the type using the
+  (:ref:`default action <g:EclimJavaOutlineDefaultAction>`).
+- E - open the type via :edit
+- S - open the type via :split
+- T - open the type via :tabnew
+- ? - view help buffer
+
+Configuration
+^^^^^^^^^^^^^
+
+:doc:`Vim Settings </vim/settings>`
+
+.. _g\:EclimJavaOutlineDefaultAction:
+
+- **g:EclimJavaOutlineDefaultAction** (defaults to 'split') -
+  Determines the command used when hitting <enter> on the element under the
+  cursor.

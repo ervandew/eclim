@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2018  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -175,6 +175,8 @@ Java Commands
 - :ref:`:JavaCallHierarchy <:JavaCallHierarchy>` [-s <scope>] -
   Display the call hierarchy for the method under the cursor.
 - :ref:`:JavaHierarchy <:JavaHierarchy>` - View the type hierarchy tree.
+- :ref:`:JavaOutline <:JavaOutline>` - Open a buffer with an outline of the
+  current source file.
 - :ref:`:JavaImpl <:JavaImpl>` -
   View implementable / overridable methods from super classes and implemented
   interfaces.
