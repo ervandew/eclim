@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 import org.eclipse.jdt.core.refactoring.CompilationUnitChange;
 
-import org.eclipse.jdt.internal.corext.refactoring.util.JavaElementUtil;
+import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
 
 import org.eclipse.jdt.internal.ui.text.correction.AssistContext;
 import org.eclipse.jdt.internal.ui.text.correction.CorrectionMessages;
@@ -395,7 +395,7 @@ public class CodeCorrectCommand
             TextEdit groupingEdit =
               ImportUtils.importGroupingEdit(src, getPreferences());
             if (groupingEdit != null){
-              JavaElementUtil.applyEdit(src, groupingEdit, true, null);
+              JavaModelUtil.applyEdit(src, groupingEdit, true, null);
               if (src.isWorkingCopy()) {
                 src.commitWorkingCopy(false, null);
               }

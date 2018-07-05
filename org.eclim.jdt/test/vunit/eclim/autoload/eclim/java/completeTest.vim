@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2016  Eric Van Dewoestine
+" Copyright (C) 2005 - 2018  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -138,8 +138,10 @@ function! TestCodeCompleteLinkedResource() " {{{
   call cursor(10, 10)
   let results = eclim#java#complete#CodeComplete(0, '')
   call vunit#PeekRedir()
-  call vunit#AssertTrue(len(results) > 10, 'Not enough results (full complete).')
-  call vunit#AssertTrue(len(results) < 60, 'Too many results (full complete).')
+  call vunit#AssertTrue(len(results) > 10,
+    \ 'Not enough results (full complete): '. len(results))
+  call vunit#AssertTrue(len(results) < 70,
+    \ 'Too many results (full complete): '. len(results))
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
     \ 'Results does not contain add()')
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
@@ -151,8 +153,10 @@ function! TestCodeCompleteLinkedResource() " {{{
   let start = eclim#java#complete#CodeComplete(1, '')
   let results = eclim#java#complete#CodeComplete(0, 'a')
   call vunit#PeekRedir()
-  call vunit#AssertTrue(len(results) > 2, 'Not enough results (complete "a").')
-  call vunit#AssertTrue(len(results) < 10, 'Too many results (complete "a").')
+  call vunit#AssertTrue(len(results) > 2,
+    \ 'Not enough results (complete "a"): ' . len(results))
+  call vunit#AssertTrue(len(results) < 10,
+    \ 'Too many results (complete "a"): ' . len(results))
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
     \ 'Results does not contain add()')
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),

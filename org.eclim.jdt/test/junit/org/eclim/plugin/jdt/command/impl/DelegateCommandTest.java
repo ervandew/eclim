@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public class DelegateCommandTest
 
     List<Map<String,Object>> types =
       (List<Map<String,Object>>)result.get("superTypes");
-    assertEquals(1, types.size());
+    assertEquals(3, types.size());
 
     assertEquals("java.util", types.get(0).get("packageName"));
     assertEquals("interface List<Double>",

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,8 @@ import org.eclipse.jdt.internal.corext.dom.ASTNodes;
 
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 
-import org.eclipse.jdt.internal.corext.refactoring.util.JavaElementUtil;
+import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 
 import org.eclipse.jdt.internal.junit.JUnitCorePlugin;
@@ -273,7 +274,7 @@ public class JUnitImplCommand
         }
         edit.addChild(astRewrite.rewriteAST());
 
-        JavaElementUtil.applyEdit(src, edit, true, null);
+        JavaModelUtil.applyEdit(src, edit, true, null);
       }catch(Exception e){
         throw new RuntimeException(e);
       }
