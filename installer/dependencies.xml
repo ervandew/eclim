@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
-<dependencies>
+<dependencies eclipse-version="4.8" eclipse-name="photon">
   <feature id="cdt">
     <dependency id="org.eclipse.cdt" version="9.5.0">
       <site url="http://download.eclipse.org/releases/photon/"/>

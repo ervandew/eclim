@@ -1,4 +1,6 @@
 <!ELEMENT dependencies (feature+)>
+<!ATTLIST dependencies eclipse-version CDATA #REQUIRED>
+<!ATTLIST dependencies eclipse-name CDATA #REQUIRED>
 
 <!ELEMENT feature (dependency+)>
 <!ATTLIST feature id ID #REQUIRED>

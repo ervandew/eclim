@@ -546,9 +546,17 @@ target(name: 'docs'){
   echo(file: 'build/doc/site/google4c368e38cc6ac62e.html',
       'google-site-verification: google4c368e38cc6ac62e.html')
 
+  // load dependencies.xml so we can get the current required eclipse version
+  slurper = new XmlSlurper(true, false, true)
+  slurper.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, 'all')
+  dependencies = slurper.parse(new File('installer/dependencies.xml'))
+  version = dependencies.@'eclipse-version'
+  name = dependencies.@'eclipse-name'
+  echo("Eclipse Version: ${version} (${name})")
+
   replace(dir: 'build/doc/site', includes: '**/*.html'){
     replacefilter(token: 'eclim_release', value: '${eclim.release}')
-    replacefilter(token: 'eclipse_version', value: '${eclipse.version}')
+    replacefilter(token: 'eclipse_version', value: "${version} (${name})")
   }
 
   // support for google sitemap

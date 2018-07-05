@@ -102,7 +102,7 @@ def main():
 def install(options, eclim):
   print('Welcome to the installer for eclim %s.\n' % eclim.version)
 
-  eclipse = step_eclipse(options)
+  eclipse = step_eclipse(options, eclim)
   if not options.eclipse:
     print('')
 
@@ -125,7 +125,7 @@ def uninstall(options, eclim):
   print('eclipse and vimfiles locations where you currently have eclim ')
   print('installed.\n')
 
-  eclipse = step_eclipse(options)
+  eclipse = step_eclipse(options, eclim)
   print('')
 
   eclim.vimfiles = step_vimfiles(options, uninstall=True)
@@ -133,19 +133,35 @@ def uninstall(options, eclim):
 
   step_eclim_uninstall(eclim, eclipse, uninstall=True)
 
-def step_eclipse(options):
+def step_eclipse(options, eclim):
   proxy = Proxy(options.proxy)
+
+  path = os.path.join(eclim.home, 'dependencies.xml')
+  with open(path) as f:
+    dom = minidom.parse(f)
+    version = dom.documentElement.getAttribute('eclipse-version')
+    name = dom.documentElement.getAttribute('eclipse-name')
 
   if options.eclipse:
     home = options.eclipse
     if home.startswith('~'):
       home = os.path.expanduser(home)
     eclipse = Eclipse(home, proxy)
+
     if not eclipse.valid():
       print(
         'The eclipse launcher/executable could not be found in: %s' % home
       )
       sys.exit(1)
+
+    if not eclipse.valid_version(version):
+      print(
+        'Eclim requires eclipse version %s (%s), '
+        'but the eclipse version found is %s' %
+        (version, name, eclipse.version)
+      )
+      sys.exit(1)
+
     return eclipse
 
   darwin = platform.system().lower() == 'darwin'
@@ -163,8 +179,16 @@ def step_eclipse(options):
     home = terminal.prompt_directory()
     eclipse = Eclipse(home, proxy)
     if not eclipse.valid():
-      print(
+      terminal.error(
         'The eclipse launcher/executable could not be found in that directory.'
+      )
+      eclipse = None
+
+    if not eclipse.valid_version(version):
+      terminal.error(
+        'Eclim requires eclipse version %s (%s), '
+        'but the eclipse version found is %s' %
+        (version, name, eclipse.version)
       )
       eclipse = None
 
@@ -211,7 +235,7 @@ def step_vimfiles(options, uninstall=False):
       return vimfiles
 
     if vimfiles and not os.access(vimfiles, os.W_OK):
-      print('You do not appear to have write access to that directory.')
+      terminal.error('You do not appear to have write access to that directory.')
       vimfiles = None
 
   return vimfiles
@@ -238,7 +262,7 @@ def step_plugins(options, eclim):
     for choice in options.plugins.split(','):
       if choice not in requires_by_id:
         invalid = True
-        print('invalid plugin name: %s' % choice)
+        terminal.error('invalid plugin name: %s' % choice)
         continue
 
       requires = requires_by_id[choice]
@@ -275,7 +299,7 @@ def step_plugins(options, eclim):
     if invalid:
       chosen = []
       for inv in invalid:
-        print(inv)
+        terminal.error(inv)
       continue
 
     result = []
@@ -654,6 +678,9 @@ class Terminal(object):
         message = message % args
       print('debug: %s' % message)
 
+  def error(self, message):
+    print('[%s] %s' % (self.red('*'), message))
+
   def prompt(self, text, complete=False):
     completer = Completer()
     if complete:
@@ -843,6 +870,7 @@ class Eclipse(object):
     self.home = home
     self.proxy = proxy
 
+    self.version = None
     self.local = None
     self.p2pool = None
     self.launcher = None
@@ -894,6 +922,16 @@ class Eclipse(object):
             break
           prev_line = line
 
+    ini = os.path.join(self.home, 'configuration', 'config.ini')
+    terminal.debug('config ini:        %s (exists: %s)', ini, os.path.exists(ini))
+    if os.path.exists(ini):
+      with open(ini, 'r') as f:
+        for line in f.readlines():
+          if line.startswith('eclipse.buildId='):
+            version = line.split('=')[1]
+            self.version = version.rsplit('.', 1)[0]
+
+    terminal.debug('eclipse version:   %s', self.version)
     terminal.debug('eclipse p2pool:    %s', self.p2pool)
     terminal.debug('eclipse launcher:  %s', self.launcher)
     if not self.launcher:
@@ -901,6 +939,14 @@ class Eclipse(object):
 
   def valid(self):
     return self.launcher or self.executable
+
+  def valid_version(self, version):
+    expected = version.split('.')
+    actual = self.version.split('.')[:len(expected)]
+    for e, a in zip(expected, actual):
+      if int(a) < int(e):
+        return False
+    return True
 
   def _initialize(self):
     if not self.initialized and (self.launcher or self.executable):
