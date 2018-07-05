@@ -119,7 +119,7 @@ def compareDependenciesXml(dependencies, availableFeatures):
   print('\ndependencies.xml')
   for dependency in dependencies:
     if dependency.name not in availableByName:
-      print('  [\033[1;31m*\033[0m] %s not found at %s' % (
+      print('     [\033[1;31m*\033[0m] %s not found at %s' % (
         dependency.name, dependency.site
       ))
     else:
