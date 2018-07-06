@@ -47,10 +47,11 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ToolFactory;
 
 import org.eclipse.jdt.core.util.ClassFileBytesDisassembler;
-import org.eclipse.jdt.core.util.IClassFileDisassembler;
 import org.eclipse.jdt.core.util.IClassFileReader;
 
 import org.eclipse.jdt.internal.core.JrtPackageFragmentRoot;
+
+import org.eclipse.jdt.internal.core.util.Disassembler;
 
 /**
  * Command that creates a source prototype of the specified class.
@@ -175,8 +176,8 @@ public class ClassPrototypeCommand
           classFile, IClassFileReader.ALL);
     }
 
-    IClassFileDisassembler disassembler =
-      ToolFactory.createDefaultClassFileDisassembler();
+    Disassembler disassembler =
+      (Disassembler)ToolFactory.createDefaultClassFileBytesDisassembler();
     String contents = disassembler.disassemble(reader, "\n");
     writer.write(contents);
   }
