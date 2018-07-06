@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -601,7 +601,8 @@ public class JavaUtils
         length++;
       }
 
-      TextEdit edits = formatter.format(kind, contents, offset, length, 0, delimiter);
+      TextEdit edits = formatter.format(
+          kind, contents, offset, length, 0, delimiter);
       if (edits != null) {
         int oldLength = contents.length();
         Document document = new Document(contents);

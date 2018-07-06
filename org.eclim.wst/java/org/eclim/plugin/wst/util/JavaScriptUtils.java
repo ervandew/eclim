@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,8 @@ public class JavaScriptUtils
    * @param project The name of the project.
    * @return The project.
    */
-  public static IJavaScriptProject getJavaScriptProject(String project){
+  public static IJavaScriptProject getJavaScriptProject(String project)
+  {
     return getJavaScriptProject(ProjectUtils.getProject(project, true));
   }
 
@@ -55,7 +56,8 @@ public class JavaScriptUtils
    * @param project The IProject.
    * @return The javascript project.
    */
-  public static IJavaScriptProject getJavaScriptProject(IProject project){
+  public static IJavaScriptProject getJavaScriptProject(IProject project)
+  {
     if(ProjectUtils.getPath(project) == null){
       throw new IllegalArgumentException(
           Services.getMessage("project.location.null", project.getName()));
@@ -88,7 +90,8 @@ public class JavaScriptUtils
    * @param file The absolute path to the file.
    * @return The compilation unit or null if not found.
    */
-  public static IJavaScriptUnit getJavaScriptUnit(String project, String file){
+  public static IJavaScriptUnit getJavaScriptUnit(String project, String file)
+  {
     IJavaScriptProject javascriptProject = getJavaScriptProject(project);
     return getJavaScriptUnit(javascriptProject, file);
   }

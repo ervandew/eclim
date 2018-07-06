@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -304,7 +304,8 @@ public class ProjectUtils
       if (buffer == null) {
         //no existing file buffer..create one
         try{
-          manager.connect(location, LocationKind.LOCATION, new NullProgressMonitor());
+          manager.connect(
+              location, LocationKind.LOCATION, new NullProgressMonitor());
         }catch(CoreException ce){
           throw new RuntimeException(ce);
         }

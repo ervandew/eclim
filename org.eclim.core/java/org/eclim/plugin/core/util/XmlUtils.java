@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,7 +237,8 @@ public class XmlUtils
       parser.setProperty(
           "http://java.sun.com/xml/jaxp/properties/schemaSource", schema);
       parser.setProperty(
-          "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
+          "http://apache.org/xml/properties/schema/" +
+          "external-noNamespaceSchemaLocation",
           schema.replace('\\', '/'));
 
       filename = ProjectUtils.getFilePath(project, filename);

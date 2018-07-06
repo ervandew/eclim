@@ -64,9 +64,9 @@ import org.eclipse.jdt.internal.corext.dom.ASTNodes;
 
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 
-import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
-
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
+
+import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
 
 import org.eclipse.jdt.internal.junit.JUnitCorePlugin;
 import org.eclipse.jdt.internal.junit.Messages;

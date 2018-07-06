@@ -41,8 +41,8 @@ import org.eclipse.jface.text.IDocument;
 import org.python.pydev.ast.item_pointer.ItemPointer;
 
 import org.python.pydev.ast.refactoring.AbstractPyRefactoring;
-import org.python.pydev.ast.refactoring.IPyRefactoring2;
 import org.python.pydev.ast.refactoring.IPyRefactoring;
+import org.python.pydev.ast.refactoring.IPyRefactoring2;
 import org.python.pydev.ast.refactoring.RefactoringRequest;
 
 import org.python.pydev.core.docutils.PySelection;

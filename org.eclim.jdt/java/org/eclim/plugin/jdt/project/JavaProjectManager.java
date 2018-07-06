@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -256,7 +256,9 @@ public class JavaProjectManager
         }
 
         // dependencies on other projects
-        for (IClasspathEntry entry : createOrUpdateDependencies(javaProject, depends)){
+        IClasspathEntry[] entries =
+          createOrUpdateDependencies(javaProject, depends);
+        for (IClasspathEntry entry : entries){
           classpath.add(entry);
         }
 

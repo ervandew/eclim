@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -510,7 +510,8 @@ public class SearchCommand
 
             // see if source file exists at source path.
             FileSystemManager fsManager = VFS.getManager();
-            FileObject fileObject = fsManager.resolveFile(srcFile.replace("%", "%25"));
+            FileObject fileObject =
+              fsManager.resolveFile(srcFile.replace("%", "%25"));
             if(fileObject.exists()){
               file = srcFile;
 

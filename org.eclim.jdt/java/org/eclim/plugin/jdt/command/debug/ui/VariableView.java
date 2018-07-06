@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2018  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -233,7 +233,7 @@ public class VariableView
         }
       }
       if (!(var instanceof IJavaVariable)) {
-	  continue;
+        continue;
       }
 
       IJavaVariable jvar = (IJavaVariable) var;

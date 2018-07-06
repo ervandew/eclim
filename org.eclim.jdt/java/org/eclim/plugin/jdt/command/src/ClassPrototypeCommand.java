@@ -30,8 +30,6 @@ import org.eclim.annotation.Command;
 import org.eclim.command.CommandLine;
 import org.eclim.command.Options;
 
-import org.eclim.logging.Logger;
-
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.jdt.util.JavaUtils;
@@ -48,11 +46,11 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ToolFactory;
 
-import org.eclipse.jdt.internal.core.JrtPackageFragmentRoot;
-
 import org.eclipse.jdt.core.util.ClassFileBytesDisassembler;
 import org.eclipse.jdt.core.util.IClassFileDisassembler;
 import org.eclipse.jdt.core.util.IClassFileReader;
+
+import org.eclipse.jdt.internal.core.JrtPackageFragmentRoot;
 
 /**
  * Command that creates a source prototype of the specified class.
@@ -69,15 +67,6 @@ import org.eclipse.jdt.core.util.IClassFileReader;
 public class ClassPrototypeCommand
   extends AbstractCommand
 {
-  private static final Logger logger =
-    Logger.getLogger(ClassPrototypeCommand.class);
-
-  private static final String INDENT = "\t";
-  private static final String IMPORT_PATTERN = "(<.*>|\\[\\]|\\.[0-9])$";
-
-  private static final String OBJECT = "java/lang/Object";
-  private static final String ANNOTATION = "java/lang/annotation/Annotation";
-
   @Override
   public Object execute(CommandLine commandLine)
     throws Exception
