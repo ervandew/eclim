@@ -124,6 +124,8 @@ public class ClassPrototypeCommand
    *
    * @param file The path to the class file.
    * @param writer The writer to output the prototype to.
+   * @throws Exception any exception while attempting to construct the
+   * prototype.
    */
   protected void prototype(String file, Writer writer)
     throws Exception
@@ -143,6 +145,8 @@ public class ClassPrototypeCommand
    *
    * @param type The IType to create the prototype for.
    * @param writer The writer to output the prototype to.
+   * @throws Exception any exception while attempting to construct the
+   * prototype.
    */
   protected void prototype(IType type, Writer writer)
     throws Exception
