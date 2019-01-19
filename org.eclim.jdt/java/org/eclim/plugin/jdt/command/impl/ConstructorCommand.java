@@ -48,7 +48,7 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 import org.eclipse.jdt.internal.corext.codemanipulation.AddCustomConstructorOperation;
 import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationSettings;
-import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2;
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2Core;
 
 import org.eclipse.jdt.internal.corext.dom.ASTNodes;
 import org.eclipse.jdt.internal.corext.dom.Bindings;
@@ -194,7 +194,7 @@ public class ConstructorCommand
       constructor = Bindings.findMethodInType(
           binding, "Object", new ITypeBinding[0]);
     } else {
-      IMethodBinding[] bindings = StubUtility2
+      IMethodBinding[] bindings = StubUtility2Core
         .getVisibleConstructors(typeBinding, false, true);
       Arrays.sort(bindings, new Comparator<IMethodBinding>(){
         public int compare(IMethodBinding b1, IMethodBinding b2){

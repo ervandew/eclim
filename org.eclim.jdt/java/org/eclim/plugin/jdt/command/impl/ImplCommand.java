@@ -59,7 +59,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 
 import org.eclipse.jdt.internal.corext.codemanipulation.AddUnimplementedMethodsOperation;
-import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2;
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2Core;
 
 import org.eclipse.jdt.internal.corext.dom.ASTNodes;
 import org.eclipse.jdt.internal.corext.dom.Bindings;
@@ -317,7 +317,7 @@ public class ImplCommand
 
     IPackageBinding packageBinding = typeBinding.getPackage();
     IMethodBinding[] methods =
-      StubUtility2.getOverridableMethods(cu.getAST(), typeBinding, false);
+      StubUtility2Core.getOverridableMethods(cu.getAST(), typeBinding, false);
     ArrayList<IMethodBinding> overridable = new ArrayList<IMethodBinding>();
     for (IMethodBinding methodBinding : methods) {
       if (Bindings.isVisibleInHierarchy(methodBinding, packageBinding)){
