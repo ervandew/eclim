@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2019  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -77,6 +77,7 @@ function! eclim#common#buffers#Buffers(bang) " {{{
   nnoremap <silent> <buffer> V :call <SID>BufferOpen('vsplit')<cr>
   nnoremap <silent> <buffer> T :call <SID>BufferOpen('tablast \| tabnew')<cr>
   nnoremap <silent> <buffer> D :call <SID>BufferDelete()<cr>
+  nnoremap <silent> <buffer> O :call <SID>BufferOnly()<cr>
   nnoremap <silent> <buffer> R :Buffers<cr>
 
   " assign to buffer var to get around weird vim issue passing list containing
@@ -88,6 +89,7 @@ function! eclim#common#buffers#Buffers(bang) " {{{
       \ 'V - open in a new vertically split window',
       \ 'T - open in a new tab',
       \ 'D - delete the buffer',
+      \ 'O - delete all hidden buffers (analogous to :only)',
       \ 'R - refresh the buffer list',
     \ ]
   nnoremap <buffer> <silent> ?
@@ -315,6 +317,26 @@ function! s:BufferDelete() " {{{
   doautocmd BufDelete
   doautocmd BufEnter
   exec winnr . 'winc w'
+endfunction " }}}
+
+function! s:BufferOnly() " {{{
+  let line = len(b:eclim_buffers)
+  setlocal modifiable
+  setlocal noreadonly
+  for buffer in reverse(b:eclim_buffers[:])
+    if buffer.status !~ 'a'
+      noautocmd exec 'bd ' . buffer.bufnr
+      exec line . ',' . line . 'delete _'
+      call remove(b:eclim_buffers, line - 1)
+    endif
+    let line -= 1
+  endfor
+  setlocal nomodifiable
+  setlocal readonly
+
+  " make sure the autocmds are executed in the following order
+  silent doautocmd BufDelete
+  silent doautocmd BufEnter
 endfunction " }}}
 
 function! s:BufferEntryToLine(buffer, filelength) " {{{

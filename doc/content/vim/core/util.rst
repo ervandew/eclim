@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2019  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -81,6 +81,8 @@ general purpose commands that are useful in and outside the scope of eclim.
   - **V** (shift-v) - Open the file with 'vsplit'.
   - **T** (shift-t) - Open the file with 'tabnew'.
   - **D** (shift-d) - Deletes the buffer and removes it from the list.
+  - **O** (shift-o) - Delete all hidden buffers and remove them from the list
+    (analogous to :only).
   - **\?** - View the help buffer.
 
   In addition to the above mappings you can also use <return> to execute the
