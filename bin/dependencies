@@ -101,7 +101,9 @@ def getEclipseHome(eclim):
     branch_home = props.get('eclipse.home.%s' % branch)
     eclipse_home = props.get('eclipse.home')
     if branch_home or eclipse_home:
-      return props.get('eclipse.home.%s' % branch, props.get('eclipse.home'))
+      home = props.get('eclipse.home.%s' % branch, props.get('eclipse.home'))
+      home = home.replace('${user.home}', os.environ.get('HOME'))
+      return home
 
   if 'ECLIM_ECLIPSE_HOME' in os.environ:
     return os.environ['ECLIM_ECLIPSE_HOME']
