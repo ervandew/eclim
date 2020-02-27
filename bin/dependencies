@@ -38,8 +38,10 @@ def main():
   path = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
   module = os.path.join(path, 'installer', 'install')
   try:
+    import importlib.machinery
     import importlib.util
-    spec = importlib.util.spec_from_file_location('install', module)
+    loader = importlib.machinery.SourceFileLoader('install', module)
+    spec = importlib.util.spec_from_loader('install', loader)
     install = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(install)
   except ImportError:
