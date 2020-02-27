@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,8 +62,9 @@ public class Preferences
   public static final String PROJECT_COPYRIGHT_PREFERENCE =
     "org.eclim.project.copyright";
 
+  public static final String CORE = "core";
+
   private static final String NODE_NAME = "org.eclim";
-  private static final String CORE = "core";
   private static final String GLOBAL = "_global_";
 
   private static Preferences instance = new Preferences();

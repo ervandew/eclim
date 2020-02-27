@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@ import org.eclim.Services;
 import org.eclim.plugin.AbstractPluginResources;
 
 import org.eclim.plugin.core.preference.PreferenceFactory;
+import org.eclim.plugin.core.preference.Preferences;
+import org.eclim.plugin.core.preference.PreferencesOptionHandler;
 
 /**
  * Implementation of AbstractPluginResources.
@@ -41,11 +43,24 @@ public class PluginResources
   {
     super.initialize(name);
 
-    PreferenceFactory.addPreferences("core",
+    PreferenceFactory.addPreferences(Preferences.CORE,
       "General org.eclim.user.name\n" +
       "General org.eclim.user.email\n" +
       "General/Project org.eclim.project.version 1.0\n" +
       "General/Project org.eclim.project.copyright"
+    );
+
+    PreferencesOptionHandler handler = new PreferencesOptionHandler(
+      Preferences.CORE, false);
+    handler.addSupportedPreferences(
+      "org.eclipse.recommenders.news.rcp",
+      new String[]{
+        "newsEnabled",
+      }
+    );
+    Preferences.addOptionHandler(handler);
+    PreferenceFactory.addOptions(Preferences.CORE,
+      "General org.eclipse.recommenders.news.rcp.newsEnabled ^(true|false)"
     );
   }
 

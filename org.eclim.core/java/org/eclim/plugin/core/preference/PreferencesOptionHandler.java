@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * OptionHandler which works uses IEclipsePreferences as the back end.
+ * OptionHandler which uses IEclipsePreferences as the back end.
  *
  * @author Eric Van Dewoestine
  */
