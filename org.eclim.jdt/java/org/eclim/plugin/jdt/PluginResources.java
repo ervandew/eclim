@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ public class PluginResources
     );
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,
-      "JDT org.eclipse.jdt.core.compiler.source 1\\.[3-8]\n" +
+      "JDT org.eclipse.jdt.core.compiler.source ^(1\\.[3-8]|9|10)$\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+\n" +
       "JDT/Javadoc " + JavaUI.ID_PLUGIN + ".project_javadoc_location\n" +
       "JDT/CodeComplete " +
