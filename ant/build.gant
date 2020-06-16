@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -920,10 +920,10 @@ def initPlugins(){
   names = []
   features = []
 
-  pluginWhiteList = []
-  pluginWhiteListStr = getVariable('plugin.whitelist')
-  if (pluginWhiteListStr) {
-    pluginWhiteList += pluginWhiteListStr.tokenize(',')
+  pluginAllowList = []
+  pluginAllowListStr = getVariable('plugin.allowlist')
+  if (pluginAllowListStr) {
+    pluginAllowList += pluginAllowListStr.tokenize(',')
   }
 
   defaults = ['org.eclim', 'org.eclim.core', 'org.eclim.vimplugin']
@@ -966,8 +966,8 @@ def initPlugins(){
   new File('.').eachDirMatch(~/org\.eclim\.\w*/){ dir ->
     name = dir.getName()
     if (!defaults.contains(name)){
-      if (pluginWhiteList.size() > 0 && !pluginWhiteList.contains(name)) {
-        ant.echo("# Skipping ${name} since it's not in whitelist")
+      if (pluginAllowList.size() > 0 && !pluginAllowList.contains(name)) {
+        ant.echo("# Skipping ${name} since it's not in allowlist")
         return
       }
       pluginInclude(name)
