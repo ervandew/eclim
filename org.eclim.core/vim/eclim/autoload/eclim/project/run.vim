@@ -37,7 +37,7 @@ let s:flag_project_run_force = ' -c'
   " Requiring python is gross, but it's the only way to append to
   "  a buffer that isn't visible, and that is surely required
 function! s:append(bufno, type, line) " {{{
-  if !has('python')
+  if !has('python') && !has('python3')
     return
   endif
 
