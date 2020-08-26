@@ -85,7 +85,7 @@ function! eclim#project#run#ProjectRun(...) " {{{
     return
   endif
 
-  if !has('python')
+  if !has('python') && !has('python3')
     call eclim#util#EchoError(':ProjectRun requires python support')
     return
   endif
@@ -244,7 +244,7 @@ function! eclim#project#run#onPrepareOutput(projectName, configName, launchId) "
 endfunction " }}}
 
 function! eclim#project#run#onOutput(bufnum, type, line) " {{{
-  if has('python')
+  if has('python') || has('python3')
     if "terminated" == a:type
       call s:append(a:bufnum, "out", "<terminated>")
     else
