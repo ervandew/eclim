@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2017  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ function! eclim#client#nailgun#Execute(instance, command, ...) " {{{
   let exec = a:0 ? a:1 : 0
 
   if !exec
-    if g:EclimNailgunClient == 'python' && has('python')
+    if g:EclimNailgunClient == 'python' && has('python3')
       return eclim#client#python#nailgun#Execute(a:instance.port, a:command)
     endif
   endif

@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ function! eclim#client#python#nailgun#Execute(port, command)
 
   let begin = localtime()
   try
-python << PYTHONEOF
+python3 << PYTHONEOF
 command = vim.eval('a:command')
 (retcode, result) = client.send(command)
 vim.command('let retcode = %i' % retcode)
@@ -55,7 +55,7 @@ endfunction " }}}
 " (useful to manual recover from errors in the python_if)
 function! eclim#client#python#nailgun#Reconnect(port)
   call s:InitClient(a:port)
-python << PYTHONEOF
+python3 << PYTHONEOF
 client.reconnect()
 PYTHONEOF
 endfunction " }}}
@@ -64,7 +64,7 @@ endfunction " }}}
 " Updates the in runtime value of the keepAlive flag.
 function! eclim#client#python#nailgun#SetKeepAlive(port, value)
   call s:InitClient(a:port)
-python << PYTHONEOF
+python3 << PYTHONEOF
 client.keepAlive = int(vim.eval('a:value'))
 PYTHONEOF
 endfunction " }}}
@@ -74,7 +74,7 @@ endfunction " }}}
 function! eclim#client#python#nailgun#GetKeepAlive(port)
   call s:InitClient(a:port)
   let result = 0
-python << PYTHONEOF
+python3 << PYTHONEOF
 vim.command("let result = %s" % client.keepAlive)
 PYTHONEOF
   return result
@@ -85,7 +85,7 @@ endfunction " }}}
 function! eclim#client#python#nailgun#GetReconnectCounter(port)
   call s:InitClient(a:port)
   let result = 0
-python << PYTHONEOF
+python3 << PYTHONEOF
 vim.command("let result = %d" % client.reconnectCounter)
 PYTHONEOF
   return result
@@ -94,8 +94,8 @@ endfunction " }}}
 " s:InitClient(port) {{{
 " Initializes the python interface to the nailgun server.
 function! s:InitClient(port)
-python << PYTHONEOF
-if not vars().has_key('clients'):
+python3 << PYTHONEOF
+if 'clients' not in vars():
   import sys, vim
   sys.path.append(vim.eval('s:python_dir'))
   import nailgun
@@ -103,7 +103,7 @@ if not vars().has_key('clients'):
   clients = {}
 
 port = int(vim.eval('a:port'))
-if not clients.has_key(port):
+if port not in clients:
   clients[port] = nailgun.Nailgun(
     port=port,
     keepAlive=vim.eval('g:EclimNailgunKeepAlive'),

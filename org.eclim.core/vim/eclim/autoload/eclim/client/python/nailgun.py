@@ -1,5 +1,5 @@
 """
-Copyright (C) 2005 - 2017  Eric Van Dewoestine
+Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,12 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @author: Anton Sharonov
 @author: Eric Van Dewoestine
 """
+import io
 import socket
-
-try:
-  from cStringIO import StringIO
-except:
-  from StringIO import StringIO
 
 class Nailgun(object):
   """
@@ -53,17 +49,17 @@ class Nailgun(object):
           return (retcode, result)
 
     if not self.isConnected(): # Only for keepAlive
-      return (-1, "connect: ERROR - socket is not connected (nailgun.py)")
+      return (-1, 'connect: ERROR - socket is not connected (nailgun.py)')
 
     try: # outer try for pre python 2.5 support.
       try:
         for arg in self.parseArgs(cmdline):
-          self.sendChunk("A", arg)
+          self.sendChunk('A', arg)
 
         if self.keepAlive:
-          self.sendChunk("K")
+          self.sendChunk('K')
 
-        self.sendChunk("C", "org.eclim.command.Main")
+        self.sendChunk('C', 'org.eclim.command.Main')
 
         (retcode, result) = self.processResponse()
         if self.keepAlive and retcode:
@@ -71,7 +67,7 @@ class Nailgun(object):
           self.reconnect()
 
         return (retcode, result)
-      except socket.error, ex:
+      except socket.error as ex:
         args = ex.args
         if len(args) > 1:
           retcode, msg = args[0], args[1]
@@ -97,7 +93,7 @@ class Nailgun(object):
     try:
       sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       sock.connect(('localhost', port))
-    except socket.error, ex:
+    except socket.error as ex:
       args = ex.args
       if len(args) > 1:
         retcode, msg = args[0], args[1]
@@ -152,53 +148,55 @@ class Nailgun(object):
     """
     Sends a nailgun 'chunk' to the server.
     """
-    #print("sendChunk " + chunkType + " " + text)
+    #print('sendChunk:', chunkType, text)
     length = len(text)
-    str = "%c%c%c%c%c" % (
-        (length / (65536*256)) % 256,
-        (length / 65536) % 256,
-        (length / 256) % 256,
-        length % 256,
-        chunkType)
-    nbytes = self.socket.sendall(str)
-    nbytes = self.socket.sendall(text)
+    chunk = '%c%c%c%c%c' % (
+      int(length / (65536*256)) % 256,
+      int(length / 65536) % 256,
+      int(length / 256) % 256,
+      length % 256,
+      chunkType,
+    )
+    nbytes = self.socket.sendall(chunk.encode('utf8'))
+    nbytes = self.socket.sendall(text.encode('utf8'))
 
   def processResponse(self):
-    result = StringIO()
+    result = io.BytesIO()
     exit = 0
     exitFlag = 1 # expecting 1 times exit chunk
     while exitFlag > 0:
       answer = self.recvBlocked(5)
       if len(answer) < 5:
-        print("error: socket closed unexpectedly\n")
+        print('error: socket closed unexpectedly\n')
         return None
-      lenPayload = ord(answer[0]) * 65536 * 256 \
-        + ord(answer[1]) * 65536 \
-        + ord(answer[2]) * 256 \
-        + ord(answer[3])
-      #print("lenPayload detected : %d" % lenPayload)
-      chunkType = answer[4]
-      if chunkType == "1":
+      lenPayload = \
+        answer[0] * 65536 * 256 + \
+        answer[1] * 65536 + \
+        answer[2] * 256 + \
+        answer[3]
+      #print('lenPayload detected : %d' % lenPayload)
+      chunkType = chr(answer[4])
+      if chunkType == '1':
         # STDOUT
         result.write(self.recvToFD(1, answer, lenPayload))
-      elif chunkType == "2":
+      elif chunkType == '2':
         # STDERR
         result.write(self.recvToFD(2, answer, lenPayload))
-      elif chunkType == "X":
+      elif chunkType == 'X':
         exitFlag = exitFlag - 1
         exit = int(self.recvToFD(2, answer, lenPayload))
       else:
-        print("error: unknown chunk type = %d\n" % chunkType)
+        print('error: unknown chunk type = %d\n' % chunkType)
         exitFlag = 0
 
-    return [exit, result.getvalue()]
+    return [exit, result.getvalue().decode('utf8')]
 
   def recvBlocked(self, lenPayload):
     """
     Receives until all data is read - necessary because usual recv sometimes
     returns with number of bytes read less then asked.
     """
-    received = ""
+    received = b''
     while (len(received) < lenPayload):
       received = received + self.socket.recv(lenPayload - len(received))
     return received

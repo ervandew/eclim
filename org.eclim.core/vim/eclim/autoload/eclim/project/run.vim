@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2017  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ let s:flag_project_run_force = ' -c'
   " Requiring python is gross, but it's the only way to append to
   "  a buffer that isn't visible, and that is surely required
 function! s:append(bufno, type, line) " {{{
-  if !has('python')
+  if !has('python3')
     return
   endif
 
@@ -46,7 +46,7 @@ function! s:append(bufno, type, line) " {{{
   let ltype = a:type
   let lines = split(a:line, '\r', 1)
 
-py << PYEOF
+python3 << PYEOF
 import vim
 bufnr = int(vim.eval('bufnr')) # NB int() is crucial
 buf = vim.buffers[bufnr]
@@ -85,7 +85,7 @@ function! eclim#project#run#ProjectRun(...) " {{{
     return
   endif
 
-  if !has('python')
+  if !has('python3')
     call eclim#util#EchoError(':ProjectRun requires python support')
     return
   endif
@@ -244,7 +244,7 @@ function! eclim#project#run#onPrepareOutput(projectName, configName, launchId) "
 endfunction " }}}
 
 function! eclim#project#run#onOutput(bufnum, type, line) " {{{
-  if has('python')
+  if has('python3')
     if "terminated" == a:type
       call s:append(a:bufnum, "out", "<terminated>")
     else
