@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2018  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,14 +95,6 @@ Project Commands
 - :ref:`:Todo <:Todo>` -
   Searches the current file for todo / fixme patterns and adds them to the
   location list.
-
-
-Android Commands
------------------
-
-- :ref:`:AndroidReload <:AndroidReload>` - Reloads the Android SDK environment in the
-  running eclimd/eclipse instance. Useful if you've made changes to the SDK
-  outside of eclipse (installed a new target platform, etc).
 
 
 Ant Commands

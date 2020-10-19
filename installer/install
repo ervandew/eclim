@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2017 - 2018  Eric Van Dewoestine
+# Copyright (C) 2017 - 2020  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -251,7 +251,6 @@ def step_plugins(options, eclim):
     {'id': 'pydev', 'name': 'Python Development', 'requires': None},
     {'id': 'sdt', 'name': 'Scala Development', 'requires': ['jdt']},
     {'id': 'groovy', 'name': 'Groovy Development', 'requires': ['jdt']},
-    {'id': 'adt', 'name': 'Android Development', 'requires': ['jdt', 'wst']},
   ]
   names = dict([(p['id'], p['name']) for p in plugins])
 

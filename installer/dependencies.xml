@@ -37,12 +37,6 @@
     </dependency>
   </feature>
 
-  <feature id="adt">
-    <dependency id="com.android.ide.eclipse.adt.feature" version="23.0.7">
-      <site url="https://dl-ssl.google.com/android/eclipse/"/>
-    </dependency>
-  </feature>
-
   <feature id="groovy" status="unreleased">
     <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.2">
       <site url="http://dist.springsource.org/release/GRECLIPSE/e4.7"/>

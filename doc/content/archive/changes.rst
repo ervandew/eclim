@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -148,8 +148,7 @@ Documentation:
   - Improved the translation of the docs to vim help files.
 
 Android:
-  - Eclim now has support for :ref:`creating android projects
-    <gettingstarted-android>`.
+  - Eclim now has support for creating android projects.
 
 Java:
   - Fixed searching for JDK classes on OSX.

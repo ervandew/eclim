@@ -1,4 +1,4 @@
-.. Copyright (C) 2013  Eric Van Dewoestine
+.. Copyright (C) 2013 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -121,7 +121,6 @@ some examples that should give you an idea of where to look:
   - org.eclipse.cdt.core.CCProjectNature.CC_NATURE_ID
 
 - **dltkruby:** org.eclipse.dltk.ruby.core.RubyNature.NATURE_ID
-- **adt:** com.android.ide.eclipse.adt.AdtConstants.NATURE_DEFAULT
 
 One way to find it is to open up the ``.project`` file in a project containing
 the nature, locate the fully qualified name in the ``<natures>`` section, then

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,11 +118,6 @@ public class SearchCommand
 
   private static final Pattern INNER_CLASS =
     Pattern.compile("(.*?)(\\w+\\$)(\\w.*)");
-
-  protected static final String ANDROID_NATURE =
-    "com.android.ide.eclipse.adt.AndroidNature";
-  private static final Pattern ANDROID_JDK_URL =
-    Pattern.compile(".*android\\.jar!java.*");
 
   /**
    * Key used for results that don't belong to any user specified sort key.
@@ -482,14 +477,6 @@ public class SearchCommand
         }
 
         try{
-          // android injects its jdk classes, so filter those out if the project
-          // doesn't have the android nature.
-          if (ANDROID_JDK_URL.matcher(file).matches() &&
-              project != null && !project.hasNature(ANDROID_NATURE))
-          {
-            return null;
-          }
-
           // if a source path attachment exists, use it.
           IPath srcPath = root.getSourceAttachmentPath();
           if(srcPath != null){

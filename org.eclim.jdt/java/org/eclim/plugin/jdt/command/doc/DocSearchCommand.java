@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,8 +70,6 @@ public class DocSearchCommand
 {
   private static final Pattern JAR_URL = Pattern.compile(
       "^jar:(file|platform):.*\\.jar!/.*", Pattern.CASE_INSENSITIVE);
-  private static final Pattern ANDROID_JDK_URL = Pattern.compile(
-      ".*android.*?/reference/java.*", Pattern.CASE_INSENSITIVE);
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -113,14 +111,6 @@ public class DocSearchCommand
 
       URL url = JavaUI.getJavadocLocation(element, true);
       if(url == null){
-        continue;
-      }
-
-      // android injects its own docs, so filter those out if the project doesn't
-      // have the android nature.
-      if (ANDROID_JDK_URL.matcher(url.toString()).matches() &&
-          !project.hasNature(ANDROID_NATURE))
-      {
         continue;
       }
 

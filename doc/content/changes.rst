@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2018  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,6 +15,14 @@
 
 History of Changes
 ==================
+
+.. _x.x.x:
+
+x.x.x (Xxx. xx, 2020)
+---------------------
+
+Android:
+  - Android support removed since google stopped supporting eclipse years ago.
 
 .. _2.8.0:
 

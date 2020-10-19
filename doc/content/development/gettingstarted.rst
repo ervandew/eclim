@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,7 +93,6 @@ below showing what will be built vs what will be skipped:
 ::
 
   [echo] ${eclipse}: /opt/eclipse
-  [echo] # Skipping org.eclim.adt, missing com.android.ide.eclipse.adt
   [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
   [echo] # Skipping org.eclim.dltkruby, missing org.eclipse.dltk.ruby
   [echo] # Skipping org.eclim.pdt, missing org.eclipse.php

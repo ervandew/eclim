@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2014  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,14 +31,6 @@ Creating your first project
 Once you've got eclimd running, open an instance of vim and create your project
 like so:
 
-.. note::
-
-  **Android Users:** the :ref:`android section <gettingstarted-android>` below
-  contains additional info regarding the creation of android projects.
-
-  **Maven Users:** you may refer to the :ref:`maven section
-  <gettingstarted-maven>` below for an alternate way to create a java project.
-
 ::
 
   :ProjectCreate /path/to/my_project -n java
@@ -49,7 +41,6 @@ the nature accordingly:
 
 ::
 
-  :ProjectCreate /path/to/my_java_project -n android
   :ProjectCreate /path/to/my_c_project -n c
   :ProjectCreate /path/to/my_cpp_project -n c++
   :ProjectCreate /path/to/my_groovy_project -n groovy
@@ -68,7 +59,7 @@ third party libraries your project uses reside.  The name of this file will
 vary depending on your project's nature, but in all cases eclim will provide
 you with commands to manage this file:
 
-* java, android - :doc:`.classpath file </vim/java/classpath>`
+* java - :doc:`.classpath file </vim/java/classpath>`
 * php, ruby - :doc:`.buildpath file </vim/dltk/buildpath>`
 * c, c++ - ``.cproject``, managed via the :ref:`:CProjectConfigs
   <:CProjectConfigs>` command
@@ -99,7 +90,7 @@ We will use a java project in this example but the steps for other languages
 are very similar.  Please see the relevant docs for your language for more
 details:
 
-* :doc:`java and android </vim/java/classpath>`
+* :doc:`java </vim/java/classpath>`
 * :doc:`php and ruby </vim/dltk/buildpath>`
 * :ref:`c and c++ <:CProjectConfigs>`
 * :doc:`python </vim/python/path>`
@@ -230,15 +221,6 @@ Lets get started writing our first java application using eclim.
 This only scratches the surface on the number of :doc:`java features
 </vim/java/index>` that eclim provides, but hopefully this example was enough to
 get you started.
-
-.. _gettingstarted-android:
-
-Android Users
--------------
-
-.. include:: /vim/java/android.rst
-   :start-after: begin-project
-   :end-before: end-project
 
 .. _gettingstarted-maven:
 
