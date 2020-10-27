@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2018  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -174,7 +174,7 @@ Sep. 09, 2012
 -------------
 
 | :ref:`Eclim 1.7.9 <1.7.9>` for Eclipse 3.7 (Indigo) is now available.
-| This release adds initial support for :doc:`scala </vim/scala/index>`.
+| This release adds initial support for scala.
 
 Please note that the `Scala IDE <http://scala-ide.org>`_ , which eclim uses to
 provide scala support, is not yet available for Eclipse 4.2 (Juno), so eclim's

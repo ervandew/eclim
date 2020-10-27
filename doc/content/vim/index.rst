@@ -41,5 +41,4 @@ Supported Languages
    javascript/index
    php/index
    python/index
-   scala/index
    xml/index

@@ -248,7 +248,6 @@ def step_plugins(options, eclim):
     {'id': 'cdt', 'name': 'C/C++ Development', 'requires': None},
     {'id': 'pdt', 'name': 'Php Development', 'requires': ['dltk', 'wst']},
     {'id': 'pydev', 'name': 'Python Development', 'requires': None},
-    {'id': 'sdt', 'name': 'Scala Development', 'requires': ['jdt']},
   ]
   names = dict([(p['id'], p['name']) for p in plugins])
 

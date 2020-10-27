@@ -128,9 +128,8 @@ Java:
 ---------------------
 
 Scala:
-  - Add support for scala :doc:`code completion </vim/scala/complete>`,
-    :doc:`code validation </vim/scala/validate>`, and :doc:`element definition
-    searches </vim/scala/search>`.
+  - Add support for scala code completion, code validation, and element
+    definition searches.
 
 :gitlog:`Git Log (1.7.9) <1.7.8...1.7.9>`
 

@@ -46,7 +46,6 @@ the nature accordingly:
   :ProjectCreate /path/to/my_java_project -n java
   :ProjectCreate /path/to/my_php_project -n php
   :ProjectCreate /path/to/my_python_project -n python
-  :ProjectCreate /path/to/my_scala_project -n scala
 
 The path supplied to the :ref:`:ProjectCreate <:ProjectCreate>` command will be
 the path to the root of your project.  This path may or may not exist.  If it

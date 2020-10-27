@@ -30,6 +30,12 @@ Ruby:
 Groovy:
   - Groovy support removed due to limited functionality/usage.
 
+Scala:
+  - Scala support removed due to limited maintenance and better options
+    available (Metals_ supports LSP + Vim).
+
+.. _Metals: https://scalameta.org/metals/
+
 .. _2.8.0:
 
 2.8.0 (Jul. 05, 2018)
@@ -273,7 +279,7 @@ Python:
 
 Scala:
   - Disabled use of temp files which could cause some validation errors.
-  - Added support for :ref:`automated imports <:ScalaImport>`.
+  - Added support for automated imports.
 
 Xml:
   - Fixed validation of xml files with no dtd/schema to not raise errors on

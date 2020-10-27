@@ -407,7 +407,6 @@ target(name: 'dist'){
   pluginNames.each(){ name ->
     zip(destfile: '${build.plugins}/' + name + '_${eclim.version}/src.zip'){
       fileset(dir: "${name}/java", includes: '**/*', erroronmissingdir: false)
-      fileset(dir: "${name}/scala", includes: '**/*', erroronmissingdir: false)
     }
 
     // run plugin specific gant target
@@ -1035,7 +1034,7 @@ def plugin(name){
 
   ant.copy(todir: pluginPath){
     ant.fileset(dir: "${name}",
-        includes: '**/*', excludes: '*.gant,java/**,scala/**,vim/**,test/**')
+        includes: '**/*', excludes: '*.gant,java/**,vim/**,test/**')
   }
 
   ant.replace(dir: pluginPath,

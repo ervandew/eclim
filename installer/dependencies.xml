@@ -36,10 +36,4 @@
       <site url="http://pydev.org/updates"/>
     </dependency>
   </feature>
-
-  <feature id="sdt">
-    <dependency id="org.scala-ide.sdt.feature" version="4.7.0">
-      <site url="http://download.scala-ide.org/sdk/lithium/e47/scala212/stable/site"/>
-    </dependency>
-  </feature>
 </dependencies>

@@ -99,7 +99,6 @@ below showing what will be built vs what will be skipped:
   [echo]   org.eclim.cdt
   [echo]   org.eclim.jdt
   [echo]   org.eclim.pydev
-  [echo]   org.eclim.sdt
   [echo]   org.eclim.wst
 
 In this case we can see that four eclim plugins will be skipped along with the

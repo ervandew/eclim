@@ -477,12 +477,6 @@ TODO {{{
     - jython?
   }}}
 
-  Scala {{{
-    - vim files for scala
-      https://github.com/scala/scala-dist/tree/master/tool-support/src/vim
-      https://lampsvn.epfl.ch/trac/scala/browser/scala-tool-support/trunk/src/vim
-  }}}
-
   SQL {{{
     - sql pretty print
 

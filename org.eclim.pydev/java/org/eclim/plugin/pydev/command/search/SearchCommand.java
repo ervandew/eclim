@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2018 Eric Van Dewoestine
+ * Copyright (C) 2013 - 2020 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ import org.python.pydev.shared_core.string.CoreTextSelection;
 import org.python.pydev.shared_core.structure.Tuple;
 
 /**
- * Command to handle scala search requests.
+ * Command to handle python search requests.
  *
  * @author Eric Van Dewoestine
  */

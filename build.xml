@@ -82,10 +82,6 @@
     <antcall target="gant"> <param name="target" value="org.eclim.pydev.test"/> </antcall>
   </target>
 
-  <target name="test.sdt">
-    <antcall target="gant"> <param name="target" value="org.eclim.sdt.test"/> </antcall>
-  </target>
-
   <target name="dist" depends="clean">
     <antcall target="gant"> <param name="target" value="dist"/> </antcall>
   </target>
