@@ -1,4 +1,4 @@
-.. Copyright (C) 2012  Eric Van Dewoestine
+.. Copyright (C) 2012 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ When reporting a bug, please include the following information:
   * Linux users: please indicate whether you installed eclipse via your
     distro's package manager or not, and if not, please indicate what
     distribution of eclipse you are using ("Eclipse Classic", "Eclipse IDE for
-    C/C++ Developers", some other eclipse bundle).
+    Java Developers", some other eclipse bundle).
 
 .. _issue tracker: http://github.com/ervandew/eclim/issues
 

@@ -379,7 +379,7 @@ I'd also like to announce the #eclim channel on freenode.
 
 | :ref:`Eclim 1.4.6 <1.4.6>` is now available.
 | The major highlight of this release is support for c/c++ using the
-  `eclipse cdt`_ plugin.
+  eclipse cdt plugin.
 
 2009-04-04
 -----------
@@ -664,7 +664,6 @@ interface.  Going forward, I want to move more of that functionality
 into Vim.
 
 .. _eclipse: http://eclipse.org
-.. _eclipse cdt: http://eclipse.org/cdt/
 .. _eclipse dltk: http://eclipse.org/dltk/
 .. _eclipse wst: http://eclipse.org/webtools/
 .. _formic: http://github.com/ervandew/formic/

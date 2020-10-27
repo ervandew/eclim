@@ -115,10 +115,6 @@ You'll first need to find out where the plugin's nature id is defined. Here are
 some examples that should give you an idea of where to look:
 
 - **jdt:** org.eclipse.jdt.core.JavaCore.NATURE_ID
-- **cdt:**
-
-  - org.eclipse.cdt.core.CProjectNature.CNATURE_ID
-  - org.eclipse.cdt.core.CCProjectNature.CC_NATURE_ID
 
 One way to find it is to open up the ``.project`` file in a project containing
 the nature, locate the fully qualified name in the ``<natures>`` section, then

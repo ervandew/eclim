@@ -24,6 +24,9 @@ x.x.x (Xxx. xx, 2020)
 Android:
   - Android support removed since google stopped supporting eclipse years ago.
 
+C/C++:
+  - C/C++ support removed.
+
 Ruby:
   - Ruby support removed since it was very limited and better options exist.
 
@@ -433,7 +436,7 @@ Android:
   - Updated for ADT 22.0.0
 
 C/C++:
-  - :ref:`:CCallHierarchy <:CCallHierarchy>` now support showing callee tree.
+  - :CCallHierarchy now support showing callee tree.
 
 Java:
   - :ref:`:JavaImpl <:JavaImpl>` now supports anonymous inner classes and will

@@ -96,7 +96,6 @@ below showing what will be built vs what will be skipped:
   [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
   [echo] # Skipping org.eclim.pdt, missing org.eclipse.php
   [echo] Plugins:
-  [echo]   org.eclim.cdt
   [echo]   org.eclim.jdt
   [echo]   org.eclim.pydev
   [echo]   org.eclim.wst

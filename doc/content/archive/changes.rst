@@ -187,8 +187,8 @@ C/C++:
     finish before returning focus to the user.
   - Fixed auto selecting of the tool chain when creating C/C++ projects from
     eclim.
-  - Fixed :ref:`:CCallHierarchy <:CCallHierarchy>` from possibly using a cached
-    version of the file resulting in incorrect or no results.
+  - Fixed :CCallHierarchy from possibly using a cached version of the file
+    resulting in incorrect or no results.
 
 Java:
   - Fixed inserted code from :ref:`:JavaCorrect <:JavaCorrect>` when file
@@ -618,11 +618,10 @@ Common:
   - Updated :VcsWeb to support github, google code, and bitbucket.
 
 C/C++:
-  - Improved :ref:`:CSearchContext <:CSearchContext>` to search for declaration
-    when on a definition, allowing you to jump back and forth between
-    declaration and definition.
-  - Added :ref:`:CCallHierarchy <:CCallHierarchy>` to display the call
-    hierarchy for the function or method under the cursor.
+  - Improved :CSearchContext to search for declaration when on a definition,
+    allowing you to jump back and forth between declaration and definition.
+  - Added :CCallHierarchy to display the call hierarchy for the function or
+    method under the cursor.
 
 Java:
   - Added :ref:`:JavaListInstalls <:JavaListInstalls>` to list all the
@@ -690,9 +689,8 @@ Eclipse:
 Eclim:
   - Added initial support for linked folders in eclipse projects.
   - Added new g:EclimValidateSortResults setting to support sorting
-    validation results (:doc:`java </vim/java/validate>`, :doc:`c/c++
-    </vim/c/validate>`, :doc:`php </vim/php/validate>`, etc.) by priority
-    (errors > warnings > etc.).
+    validation results (:doc:`java </vim/java/validate>`, c/c++, :doc:`php
+    </vim/php/validate>`, etc.) by priority (errors > warnings > etc.).
 
 C/C++:
   - Fixed :CSearch results on Windows platforms.
@@ -791,11 +789,8 @@ Bug Fixes:
   - Various bug fixes.
 
 C/C++:
-  - Added c/c++ support for
-    :doc:`code completion </vim/c/complete>`,
-    :doc:`searching </vim/c/search>`, and
-    :doc:`validation </vim/c/validate>`.
-    Requires the `eclipse cdt`_ plugin.
+  - Added c/c++ support for code completion, searching, and validation.
+    Requires the eclipse cdt plugin.
 
 Java:
   - Added command to run :ref:`java <:Java>`.
@@ -1585,7 +1580,6 @@ Eclim:
 
 `Git Log (1.0.0) <https://github.com/ervandew/eclim/commits/1.0.0>`_
 
-.. _eclipse cdt: http://eclipse.org/cdt/
 .. _eclipse pdt: http://eclipse.org/pdt/
 .. _eclipse wst: http://eclipse.org/webtools/main.php
 .. _jsl: http://www.javascriptlint.com/

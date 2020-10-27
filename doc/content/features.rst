@@ -27,12 +27,6 @@ Eclipse Projects
 - Easily manage Eclipse .classpath files (support for maven and ivy).
 - Quickly and easily manage settings globally or on a project basis.
 
-C/C++
--------------------------
-- Context sensitive code completion.
-- Searching.
-- Source code validation.
-
 Css
 -------------------------
 - Context sensitive code completion.

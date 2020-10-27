@@ -107,20 +107,6 @@ Ant Commands
 - :ref:`:Validate <:Validate_ant>` - Validate the current ant build file.
 
 
-C/C++ Commands
------------------
-
-- :ref:`:Validate <:Validate_c>` - Validate the current file.
-- :ref:`:CSearch <:CSearch>` [-p <pattern> -t <type> -s <scope> -x <context>] -
-  Search for classes, functions, methods, macros, etc.
-- :ref:`:CSearchContext <:CSearchContext>` -
-  Find the element under the cursor based on its context.
-- :ref:`:CProjectConfigs <:CProjectConfigs>` [project] -
-  Open a temp buffer to view/modify the current projects cdt configurations.
-- :ref:`:CCallHierarchy <:CCallHierarchy>` -
-  Display the call hierarchy for the function or method under the cursor.
-
-
 Css Commands
 -----------------
 

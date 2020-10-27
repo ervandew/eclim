@@ -35,7 +35,6 @@ Supported Languages
 .. toctree::
    :maxdepth: 1
 
-   c/index
    html/index
    java/index
    javascript/index

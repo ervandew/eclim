@@ -41,8 +41,6 @@ the nature accordingly:
 
 ::
 
-  :ProjectCreate /path/to/my_c_project -n c
-  :ProjectCreate /path/to/my_cpp_project -n c++
   :ProjectCreate /path/to/my_java_project -n java
   :ProjectCreate /path/to/my_php_project -n php
   :ProjectCreate /path/to/my_python_project -n python
@@ -58,8 +56,6 @@ you with commands to manage this file:
 
 * java - :doc:`.classpath file </vim/java/classpath>`
 * php - :doc:`.buildpath file </vim/dltk/buildpath>`
-* c, c++ - ``.cproject``, managed via the :ref:`:CProjectConfigs
-  <:CProjectConfigs>` command
 * python - :doc:`.pydevproject file </vim/python/path>`
 
 Once you've created your project you can use the **:ProjectList** command to
@@ -89,7 +85,6 @@ details:
 
 * :doc:`java </vim/java/classpath>`
 * :doc:`php </vim/dltk/buildpath>`
-* :ref:`c and c++ <:CProjectConfigs>`
 * :doc:`python </vim/python/path>`
 
 For the purpose of this example we will assume that you will store your source
@@ -144,7 +139,6 @@ features that eclim provides.
    bit.  For additional docs on working with the language of your choice, please
    see the relevant section of the docs:
 
-   - :doc:`c/c++ </vim/c/index>`
    - :doc:`java </vim/java/index>`
    - :doc:`php </vim/php/index>`
    - :doc:`python </vim/python/index>`

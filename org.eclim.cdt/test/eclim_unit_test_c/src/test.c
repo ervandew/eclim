@@ -1,2 +1,0 @@
-void testFunction(void) {
-}

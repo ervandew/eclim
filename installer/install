@@ -245,7 +245,6 @@ def step_plugins(options, eclim):
   plugins = [
     {'id': 'jdt', 'name': 'Java Development', 'requires': None},
     {'id': 'wst', 'name': 'Web Development', 'requires': None},
-    {'id': 'cdt', 'name': 'C/C++ Development', 'requires': None},
     {'id': 'pdt', 'name': 'Php Development', 'requires': ['dltk', 'wst']},
     {'id': 'pydev', 'name': 'Python Development', 'requires': None},
   ]
@@ -284,7 +283,7 @@ def step_plugins(options, eclim):
   print('Type the number for each feature you want to install:')
   print('  Ex (Java and Python): 0 5')
   print('  Ex (Java and Python): 0,5')
-  print('  Ex (Java, Web, and C/C++): 0-2')
+  print('  Ex (Java, Web): 0-1')
   for i, plugin in enumerate(plugins):
     print('%s) %s' % (i, plugin['name']))
 

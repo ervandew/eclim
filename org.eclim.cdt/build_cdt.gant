@@ -1,8 +1,0 @@
-feature_cdt = 'org.eclipse.cdt'
-
-target(name: 'org.eclim.cdt.test'){
-  depends('test.init')
-  runTests('org.eclim.cdt'){
-    createProject('org.eclim.cdt', 'eclim_unit_test_c')
-  }
-}
