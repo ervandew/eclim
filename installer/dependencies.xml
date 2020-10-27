@@ -13,12 +13,6 @@
     </dependency>
   </feature>
 
-  <feature id="dltkruby">
-    <dependency id="org.eclipse.dltk.ruby" version="5.9.0">
-      <site url="http://download.eclipse.org/releases/photon/"/>
-    </dependency>
-  </feature>
-
   <feature id="jdt">
     <dependency id="org.eclipse.jdt" version="3.14.0">
       <site url="http://download.eclipse.org/releases/photon/"/>

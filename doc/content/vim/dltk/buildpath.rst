@@ -1,6 +1,6 @@
 :orphan:
 
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,11 +19,10 @@
 
 Source code completion, searching, and other features make use of the
 `eclipse dltk's <http://eclipse.org/dltk/>`_ .buildpath to locate resources.
-When you first create a dltk project (currently :doc:`php </vim/php/index>` or
-:doc:`ruby </vim/ruby/index>`), a ``.buildpath`` file is created in the
-project's root directory.  If your project depends on any source files located
-outside your project or in another project, then you'll need to edit your
-.buildpath accordingly.
+When you first create a dltk project (currently :doc:`php </vim/php/index>`), a
+``.buildpath`` file is created in the project's root directory.  If your project
+depends on any source files located outside your project or in another project,
+then you'll need to edit your .buildpath accordingly.
 
 To help you do this, eclim provides several commands to ease the creation of
 new build path entries and variables, all of which are made available when

@@ -278,17 +278,6 @@ TODO {{{
   }}}
 
   Java {{{
-    Android {{{
-      http://s.android.com/source/index.html
-      https://android.googlesource.com/platform/sdk
-      $ git clone https://android.googlesource.com/platform/sdk android-sdk/src
-      $ cd android-sdk/src
-      $ git co android_sdk-adt_<version>
-      $ cd eclipse/plugins/com.android.ide.eclipse.adt/src/com/android/ide/eclipse/adt
-
-      - completion in android resource files (AndroidManifest.xml, etc)
-    }}}
-
     - replace eclim import filters with
       Preferences > Java > Appearance > Type Filters
 
@@ -495,11 +484,6 @@ TODO {{{
       - refactor -> rename: Alt+Shift+R
 
     - jython?
-  }}}
-
-  Ruby {{{
-    - switch to aptana
-      - http://www.aptana.com/
   }}}
 
   Scala {{{
@@ -719,32 +703,6 @@ NOTES {{{
     $ ./gradlew :gant:test
     $ ./gradlew :gant:jar
 
-  }}}
-
-  Android {{{
-    adt source:
-      $ git clone https://android.googlesource.com/platform/sdk android-sdk
-      $ cd android-sdk/eclipse/plugins
-
-    Arch packages:
-      android-sdk
-      android-sdk-build-tools
-      android-sdk-platform-tools
-      android-platform-<version>
-  }}}
-
-  Ruby {{{
-    Builtins are gathered using:
-    org.eclipse.dltk.ruby.launching_<version>.jar/scripts/builtin.rb
-
-    Completion of builtins not working for ruby 2.0?
-      $ ruby builtin.rb
-      builtin.rb:648:in `sort': comparison of Class with Class failed (ArgumentError)
-              from builtin.rb:648:in `process_all'
-              from builtin.rb:702:in `<main>'
-
-      I submitted a bug w/ a potential fix:
-      https://bugs.eclipse.org/bugs/show_bug.cgi?id=408386
   }}}
 
 }}}

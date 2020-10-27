@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2005 - 2017  Eric Van Dewoestine
+  Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -64,10 +64,6 @@
 
   <target name="test.cdt">
     <antcall target="gant"> <param name="target" value="org.eclim.cdt.test"/> </antcall>
-  </target>
-
-  <target name="test.dltkruby">
-    <antcall target="gant"> <param name="target" value="org.eclim.dltkruby.test"/> </antcall>
   </target>
 
   <target name="test.jdt">

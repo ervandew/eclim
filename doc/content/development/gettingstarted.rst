@@ -94,7 +94,6 @@ below showing what will be built vs what will be skipped:
 
   [echo] ${eclipse}: /opt/eclipse
   [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
-  [echo] # Skipping org.eclim.dltkruby, missing org.eclipse.dltk.ruby
   [echo] # Skipping org.eclim.pdt, missing org.eclipse.php
   [echo] Plugins:
   [echo]   org.eclim.cdt

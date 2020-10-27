@@ -94,12 +94,6 @@ Python
 - Regular expression testing.
 - Django functionality.
 
-Ruby
--------------------------
-- Context sensitive code completion.
-- Searching.
-- Source code validation.
-
 Vim Script
 -------------------------
 - Find user defined command, function, or global variable declarations /

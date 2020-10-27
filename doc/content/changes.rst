@@ -24,6 +24,9 @@ x.x.x (Xxx. xx, 2020)
 Android:
   - Android support removed since google stopped supporting eclipse years ago.
 
+Ruby:
+  - Ruby support removed since it was very limited and better options exist.
+
 .. _2.8.0:
 
 2.8.0 (Jul. 05, 2018)

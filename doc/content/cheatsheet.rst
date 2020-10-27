@@ -304,23 +304,6 @@ Python Commands
   context of the text under the cursor.
 
 
-Ruby Commands
------------------
-
-- :ref:`:RubySearch <:RubySearch>`
-  [-p <pattern> -t <type> -s <scope> -x <context>] -
-  Search for modules, classes, methods, etc.
-- :ref:`:RubySearchContext <:RubySearchContext>` -
-  Find the element under the cursor based on its context.
-- :ref:`:Validate <:Validate_ruby>` - Manually runs source code validation.
-- :ref:`:RubyInterpreterAdd <:RubyInterpreterAdd>` [-n <name>] <path> -
-  Add a ruby interpreter.
-- :ref:`:RubyInterpreterRemove <:RubyInterpreterRemove>` <path> -
-  Remove a ruby interpreter.
-- :ref:`:RubyInterpreterList <:RubyInterpreterList>`  -
-  List the available ruby interpreters.
-
-
 Scala Commands
 -----------------
 

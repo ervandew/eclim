@@ -47,7 +47,6 @@ the nature accordingly:
   :ProjectCreate /path/to/my_java_project -n java
   :ProjectCreate /path/to/my_php_project -n php
   :ProjectCreate /path/to/my_python_project -n python
-  :ProjectCreate /path/to/my_ruby_project -n ruby
   :ProjectCreate /path/to/my_scala_project -n scala
 
 The path supplied to the :ref:`:ProjectCreate <:ProjectCreate>` command will be
@@ -60,7 +59,7 @@ vary depending on your project's nature, but in all cases eclim will provide
 you with commands to manage this file:
 
 * java - :doc:`.classpath file </vim/java/classpath>`
-* php, ruby - :doc:`.buildpath file </vim/dltk/buildpath>`
+* php - :doc:`.buildpath file </vim/dltk/buildpath>`
 * c, c++ - ``.cproject``, managed via the :ref:`:CProjectConfigs
   <:CProjectConfigs>` command
 * python - :doc:`.pydevproject file </vim/python/path>`
@@ -91,7 +90,7 @@ are very similar.  Please see the relevant docs for your language for more
 details:
 
 * :doc:`java </vim/java/classpath>`
-* :doc:`php and ruby </vim/dltk/buildpath>`
+* :doc:`php </vim/dltk/buildpath>`
 * :ref:`c and c++ <:CProjectConfigs>`
 * :doc:`python </vim/python/path>`
 
@@ -151,7 +150,6 @@ features that eclim provides.
    - :doc:`java </vim/java/index>`
    - :doc:`php </vim/php/index>`
    - :doc:`python </vim/python/index>`
-   - :doc:`ruby </vim/ruby/index>`
    - :doc:`etc. <vim/index>`
 
 Lets get started writing our first java application using eclim.

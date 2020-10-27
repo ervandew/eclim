@@ -728,10 +728,7 @@ Eclipse:
   - Eclim now requires the latest version of eclipse (Galileo, 3.5.x).
 
 Ruby:
-  - Added ruby support for
-    :doc:`code completion </vim/ruby/complete>`,
-    :doc:`searching </vim/ruby/search>`, and
-    :doc:`validation </vim/ruby/validate>`.
+  - Added ruby support for code completion, searching, and validation.
 
 Java:
   - Added ability to configure java indentation globally via

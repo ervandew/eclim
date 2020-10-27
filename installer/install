@@ -246,7 +246,6 @@ def step_plugins(options, eclim):
     {'id': 'jdt', 'name': 'Java Development', 'requires': None},
     {'id': 'wst', 'name': 'Web Development', 'requires': None},
     {'id': 'cdt', 'name': 'C/C++ Development', 'requires': None},
-    {'id': 'dltkruby', 'name': 'Ruby Development', 'requires': ['dltk']},
     {'id': 'pdt', 'name': 'Php Development', 'requires': ['dltk', 'wst']},
     {'id': 'pydev', 'name': 'Python Development', 'requires': None},
     {'id': 'sdt', 'name': 'Scala Development', 'requires': ['jdt']},
