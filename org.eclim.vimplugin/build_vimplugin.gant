@@ -1,8 +1,0 @@
-target(name: 'org.eclim.vimplugin.build.eclipse'){
-  // jar up the vimplugin class files
-  jar(jarfile: '${build.plugins}/org.eclim.vimplugin_${eclim.version}/eclim.vimplugin.jar',
-      update: true){
-    fileset(dir: '${build.classes}/org.eclim.vimplugin', includes: '**/*')
-    fileset(dir: 'org.eclim.vimplugin/java', includes: '**/*', excludes: '**/*.java')
-  }
-}

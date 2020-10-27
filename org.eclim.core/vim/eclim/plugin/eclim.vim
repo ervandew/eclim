@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2017  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -205,7 +205,7 @@ call eclim#AddVimSetting(
   \ '\(0\|1\)')
 
 call eclim#AddVimSetting(
-  \ 'Core/:History', 'g:EclimKeepLocalHistory', exists('g:vimplugin_running'),
+  \ 'Core/:History', 'g:EclimKeepLocalHistory', 0,
   \ 'Whether or not to update the eclipse local history for project files.',
   \ '\(0\|1\)')
 call eclim#AddVimSetting(

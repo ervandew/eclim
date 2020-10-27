@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,12 +101,6 @@ shown below.
 
 .. image:: images/screenshots/eclipse/java_editor_eclim_view.png
 
-.. note::
-
-  By default, if you open an instance of gvim from within eclipse, the eclimd
-  view will be opened for you if necessary.  This behavior is configurable via
-  the Vimplugin preferences.
-
 **Stopping eclimd**
 
 As long as the eclimd tab is open then the eclim daemon will be running.
@@ -117,171 +111,6 @@ daemon will not start until the tab is forced to display itself. In other
 words, the daemon will not start until the eclimd tab is the active tab in that
 group.
 
-
-.. _gvim-embedded:
-
-Embedded gvim
--------------
-
-.. note::
-  Embedding is only supported on Linux systems (where gvim is compiled with the
-  gtk gui).
-
-  Embedding of macvim for OSX is not supported since macvim does not currently
-  have the ability to be embedded like gvim. Macvim can still be used to open
-  files from eclipse, but macvim will open as an external editor. Also note
-  that macvim snapshots 56 through 63 contain a
-  `bug <https://github.com/b4winckler/macvim/pull/22>`_ where opening a file
-  from eclipse will open an instance of macvim, but the file will not be loaded
-  into that instance.
-
-Another feature provided by eclim for those who prefer to work inside of the
-eclipse gui, is the embedding of gvim inside of eclipse.  This feature is
-provided by an eclim local fork of `vimplugin`_.  The feature adds a new editor
-to eclipse which allows you to open files in gvim by right clicking the file
-name in the eclipse tree and then selecting:
-
-:menuselection:`Open With --> Vim`
-
-.. image:: images/screenshots/eclipse/gvim_eclim_view.png
-
-Please note that if you want to use supported eclipse features (code
-completion, validation, searching, etc.) from the embedded gvim editor, you
-must have the :ref:`eclimd view <eclimd-headed>` open.
-
-.. note::
-  If you'd like to have the embedded gvim editor as the default for one or more
-  file types, you can configure it to be in your eclipse preferences:
-
-  :menuselection:`Window --> Preferences --> General --> Editors --> File Associations`
-
-The eclim installer should take care of locating your gvim installation for use
-inside of eclipse, but in the event that it could not locate it, you can set
-the location and other settings via the vimplugin preferences:
-
-:menuselection:`Window --> Preferences --> Vimplugin`
-
-For MacVim users on OSX, the eclim installer will attempt to locate MacVim's
-mvim script on your path. If it's not found you can set the location of that
-script in the Vimplugin preferences:
-
-:menuselection:`Eclipse --> Preferences --> Vimplugin`
-
-.. note::
-  If you have a non-eclim version of vimplugin installed you should remove it
-  prior to using the eclim version.
-
-.. note::
-  Some users have reported issues with the embedded gvim's command line being
-  cut off or possible rendering issues when scrolling through the file.  If you
-  experience either of these issues, try adding the following to your vimrc
-  file, which should hopefully resolve those problems:
-
-  .. code-block:: vim
-
-    set guioptions-=m " turn off menu bar
-    set guioptions-=T " turn off toolbar
-
-  Additionally, some users have reported that gvim's left scrollbar may also
-  need to be disabled:
-
-  .. code-block:: vim
-
-    set guioptions-=L " turn off left scrollbar
-    set guioptions-=l
-
-.. _eclim-gvim-embedded-focus:
-
-**Embedded gvim focus**
-
-In some windowing environments, the embedded gvim is treated more like a
-separate window. The result of this is that clicking the eclipse tab (or using
-tab focusing keyboard shortcuts) may focus that tab, but it won't focus the
-embedded gvim on that tab. Eclim adds a setting to vimplugin which when enabled,
-will attempt to simulate a click on the embedded gvim window to force it to
-focus:
-
-:menuselection:`Window --> Preferences --> Vimplugin --> Force gvim focus via
-automated click`
-
-.. _eclim-gvim-embedded-shortcuts:
-
-**Eclipse/Vim key shortcuts in embedded gvim**
-
-Depending on your OS and windowing system, when the embedded gvim has focus,
-you will fall into one of two groups:
-
-1. In the first group of users, all key presses are received by eclipse prior
-   to sending them to gvim.
-
-   For this group, when typing a possible key shortcut (ctrl-n for example),
-   eclipse will first evaluate that key stroke to see if there are any eclipse
-   key bindings registered.  If there are, then eclipse will run the associated
-   command and the key stroke is never sent to gvim.  If no key binding is
-   found, then eclipse will pass the key stroke through to gvim.  What this
-   means for you is that for any gvim key mappings that you use that have an
-   eclipse key binding, they will not be evaluated inside of gvim.  So, if you
-   encounter this issue, you'll need to remap the keys in vim or eclipse.  To
-   remove the key binding from the eclipse side, simply open the "Keys"
-   preferences page:
-
-   :menuselection:`Window --> Preferences --> General --> Keys`
-
-   Then find the entry in the list that corresponds with the key binding you
-   want to remove, select it, and hit the "Unbind Command" button.
-
-   .. note::
-     By default eclim will auto-remove a couple of the standard eclipse
-     bindings whenever an embedded gvim editor has focus and then restore them
-     with a non-gvim editor gains focus:
-
-     - Ctrl+U: in eclipse this runs "Execute", but in gvim this is needed to
-       run code completion (ex. ctrl-x ctrl-u).
-     - Ctrl+N: in eclipse this runs the "New" wizard, but in gvim this is also
-       needed as a part of code completion, to scroll through the results.
-     - Ctrl+V: in eclipse this pastes text from the clipboard (though not into
-       gvim), but in gvim this is needed for column wise visual selections.
-     - Ctrl+W: in eclipse this closes a tab, but in gvim this is needed to
-       switch windows (ex. ctrl-w j).
-     - Ctrl+X: in eclipse this cuts a selection to the clipboard, but in gvim
-       this is needed to start various insert completions (ex. ctrl-x ctrl-u).
-     - Delete: prevent the eclipse delete key binding from suppressing delete
-       attempts in the embedded gvim.
-
-.. _FeedKeys:
-
-2. In the second group, all key presses are received by gvim and not evaluated
-   at all by eclipse.
-
-   For this group of users, you may have an eclipse key shortcut that you like
-   to use (Shift+Ctrl+R for example), but when you hit that key combination, it
-   will be evaluated by gvim instead of eclipse.  To remedy this situation,
-   eclim provides a means to map eclipse shortcuts inside of gvim.  To register
-   a shortcut, simply add your mappings to your vimrc, gvimrc, or other standard
-   gvim file like so:
-
-   .. code-block:: vim
-
-     " maps Ctrl-F6 to eclipse's Ctrl-F6 key binding (switch editors)
-     nmap <silent> <c-f6> :call eclim#vimplugin#FeedKeys('Ctrl+F6')<cr>
-
-     " maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
-     nmap <silent> <c-f7> :call eclim#vimplugin#FeedKeys('Ctrl+F7')<cr>
-
-     " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
-     nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
-
-     " maps Ctrl-M to eclipse's Ctrl-M binding to maximize the editor
-     nmap <silent> <c-m> :call eclim#vimplugin#FeedKeys('Ctrl+M', 1)<cr>
-
-   The value supplied to the ``FeedKeys`` function must be an eclipse
-   compatible key binding string as found in:
-
-   :menuselection:`Windows --> Preferences --> General --> Keys`
-
-   Be sure to notice the extra argument to the FeedKeys function in the last
-   mapping. Supplying 1 as the arg will result in the refocusing of gvim after
-   the eclipse key binding has been executed.
 
 .. _eclimrc:
 
@@ -405,4 +234,3 @@ The ext dir that eclim reads from is located in your vim files directory:
   ~/.eclim/resources/ext
 
 .. _eclim user: http://groups.google.com/group/eclim-user
-.. _vimplugin: http://vimplugin.org

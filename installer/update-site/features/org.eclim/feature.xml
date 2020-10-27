@@ -28,11 +28,6 @@
       unpack="false"/>
 
   <plugin
-      id="org.eclim.vimplugin"
-      version="${eclim.version}"
-      unpack="true"/>
-
-  <plugin
       id="org.eclim.${name}"
       version="${eclim.version}"
       unpack="false"

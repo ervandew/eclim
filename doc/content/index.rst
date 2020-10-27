@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2018  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ integrated with your favorite editor. Eclim provides an integration with Vim_,
 but :doc:`third party clients </relatedprojects>` have been created to add eclim
 support to other editors as well (emacs, sublime text 2, textmate).
 
-There are three primary usage scenarios in which eclim is designed to be used:
+There are two primary usage scenarios in which eclim is designed to be used:
 
 .. image:: images/diagrams/use_cases.png
 
@@ -60,22 +60,6 @@ There are three primary usage scenarios in which eclim is designed to be used:
    any features not provided by eclim.  In this case you can run the eclim
    server inside of the eclipse gui and then interact with it via external vim
    instances just like the first scenario.
-
-#. The :ref:`last scenario <gvim-embedded>` is for those who wish to use the
-   eclipse interface full time, but want to use gvim as an embedded eclipse
-   editor. Just like the previous use case, the eclim server is run inside of
-   the eclipse gui and the embedded gvim will interact with it just like
-   external vim instances would. This feature is only support Linux systems
-   (where gvim is compiled with the gtk gui).
-
-   .. note::
-
-     Please be aware that the embedded vim does not behave like a standard
-     eclipse editor. It's a separate program (vim) embedded into eclipse, so
-     eclipse features are provided by eclim's vim plugins and not the usual
-     eclipse key bindings, context menus, etc. For those that just want vim like
-     key bindings in their eclipse editors, vrapper_ is an excellent alternative
-     which provides exactly that.
 
 Eclim is released under the GPLv3_.
 

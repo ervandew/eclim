@@ -34,6 +34,10 @@ Scala:
   - Scala support removed due to limited maintenance and better options
     available (Metals_ supports LSP + Vim).
 
+Vimplugin:
+  - Support for using an embededded vim instance within the eclipse gui has been
+    removed.
+
 .. _Metals: https://scalameta.org/metals/
 
 .. _2.8.0:

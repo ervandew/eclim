@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <!--
-  Copyright (C) 2005 - 2012  Eric Van Dewoestine
+  Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -39,16 +39,6 @@
         allowMultiple="false">
       <description>
         Starts the eclim daemon and displays its logging output.
-      </description>
-    </view>
-    <view id="org.eclim.eclipse.ui.VimpluginDebugView"
-        allowMultiple="false"
-        category="org.eclim.category"
-        class="org.eclim.eclipse.ui.VimpluginDebugView"
-        icon="resources/images/vim.gif"
-        name="Vimplugin Debug Console">
-      <description>
-        Allows you to view debugging output from vimplugin.
       </description>
     </view>
   </extension>

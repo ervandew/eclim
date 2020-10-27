@@ -305,11 +305,6 @@ target(name: 'deploy.eclipse'){
 
   replace(file: '${eclim.plugins}/org.eclim_${eclim.version}/plugin.properties',
       token: '$${vim.files}', value: '${vim.files}')
-  replace(dir: '${eclim.plugins}/org.eclim.vimplugin_${eclim.version}',
-      includes: 'plugin.properties'){
-    replacefilter(token: '$${eclim.gvim}', value: '${eclim.gvim}')
-    replacefilter(token: '$${eclim.gvim.embed}', value: '${eclim.gvim.embed}')
-  }
 
   // precautionary forcing of bundles.info to have the correct bundle versions
   // I don't like this one bit, it's hacky as all hell. Hopefully one day
@@ -925,7 +920,7 @@ def initPlugins(){
     pluginAllowList += pluginAllowListStr.tokenize(',')
   }
 
-  defaults = ['org.eclim', 'org.eclim.core', 'org.eclim.vimplugin']
+  defaults = ['org.eclim', 'org.eclim.core']
   defaults.each{ name -> pluginInclude(name)}
 
   // find all the available eclipse features

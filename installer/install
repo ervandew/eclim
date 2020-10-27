@@ -614,7 +614,7 @@ def step_eclim_install(eclim, eclipse, plugins):
   if eclim.vimfiles != 'skip':
     # install vimfiles for selected eclim plugins
     vim_plugins = os.path.join(eclim.home, 'vim-plugins')
-    for name in ['core', 'vimplugin'] + [p.name for p in plugins]:
+    for name in ['core'] + [p.name for p in plugins]:
       plugin_name = 'org.eclim.%s' % name
       root = os.path.join(vim_plugins, plugin_name)
       for path, _, filenames in os.walk(root):

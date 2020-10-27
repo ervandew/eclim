@@ -26,10 +26,6 @@
         version="${eclim.version}"/>
     <artifact
         classifier="osgi.bundle"
-        id="org.eclim.vimplugin"
-        version="${eclim.version}"/>
-    <artifact
-        classifier="osgi.bundle"
         id="org.eclim.${name}"
         version="${eclim.version}"
         template="true"/>

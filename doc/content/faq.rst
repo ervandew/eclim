@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -295,9 +295,6 @@ eclim.  Below is a list of these known plugin incompatibilities.
 
 - **Spring IDE**: At least one user has reported that eclim's java validation
   no longer works after installing the Spring IDE.
-- **viPlugin**: Attempting to open a file using the embedded gvim support
-  fails if viPlugin is installed.  This issue has been reported on the
-  viPlugin site.
 
 
 .. _eclipse wiki: http://wiki.eclipse.org/Eclipse.ini

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <!--
-  Copyright (C) 2005 - 2012  Eric Van Dewoestine
+  Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -52,27 +52,12 @@
     </layout>
   </appender>
 
-  <!--
-    - Vimplugin debug view appender.
-    -->
-  <appender name="vimplugin_console" class="org.eclim.logging.log4j.ViewAppender">
-    <param name="View" value="org.eclim.eclipse.ui.VimpluginDebugView"/>
-    <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
-    </layout>
-  </appender>
-
   <logger name="org.apache.commons.vfs">
     <level value="warn"/>
   </logger>
 
   <logger name="org.eclim">
     <level value="info"/>
-  </logger>
-
-  <logger name="org.vimplugin" additivity="false">
-    <level value="debug"/>
-    <appender-ref ref="vimplugin_console"/>
   </logger>
 
   <root>

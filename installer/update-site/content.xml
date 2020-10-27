@@ -40,10 +40,6 @@
             range="${eclim.version}"/>
         <required
             namespace="org.eclipse.equinox.p2.iu"
-            name="org.eclim.vimplugin"
-            range="${eclim.version}"/>
-        <required
-            namespace="org.eclipse.equinox.p2.iu"
             name="org.eclim.${name}"
             range="${eclim.version}"
             template="true"/>
@@ -147,43 +143,6 @@
         <artifact
             classifier="osgi.bundle"
             id="org.eclim.core"
-            version="${eclim.version}"/>
-      </artifacts>
-      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
-      <touchpointData>
-        <instructions>
-          <instruction key="zipped">true</instruction>
-        </instructions>
-      </touchpointData>
-    </unit>
-
-    <unit id="org.eclim.vimplugin" version="${eclim.version}">
-      <update id="org.eclim.vimplugin" range="[0.0.0,${eclim.version})" severity="0"/>
-      <properties>
-        <property name="org.eclipse.equinox.p2.name" value="Eclim Embedded Vim Plugin"/>
-      </properties>
-      <provides>
-        <provided
-            namespace="org.eclipse.equinox.p2.iu"
-            name="org.eclim.vimplugin"
-            version="${eclim.version}"/>
-        <provided
-            namespace="osgi.bundle"
-            name="org.eclim.vimplugin"
-            version="${eclim.version}"/>
-        <provided
-            namespace="org.eclipse.equinox.p2.eclipse.type"
-            name="bundle"
-            version="1.0.0"/>
-      </provides>
-      <requires>
-        <required namespace="osgi.bundle" name="org.eclim" range="${eclim.version}"/>
-        <required namespace="osgi.bundle" name="org.eclim.core" range="${eclim.version}"/>
-      </requires>
-      <artifacts>
-        <artifact
-            classifier="osgi.bundle"
-            id="org.eclim.vimplugin"
             version="${eclim.version}"/>
       </artifacts>
       <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>

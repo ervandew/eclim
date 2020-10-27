@@ -547,8 +547,7 @@ Eclim:
   - Added initial support for using eclim via vim in cygwin.
   - The eclimd log file has been moved to: <workspace>/.metadata/.log.eclimd
   - Added support for specifying that gvim should be refocused after executing
-    an eclipse keybinding from vim using :ref:`eclim#vimplugin#FeedKeys
-    <FeedKeys>`.
+    an eclipse keybinding from vim using eclim#vimplugin#FeedKeys.
   - Moved user local eclim resources (templates, taglist scripts, etc) from
     ${vimfiles}/eclim/resources to ~/.eclim/resources.
 
@@ -842,7 +841,7 @@ Java:
 
 Eclim:
   - Added the ability to run :ref:`eclimd inside of eclipse <eclimd-headed>`.
-  - Added support for :ref:`embedding gvim inside of eclipse <gvim-embedded>`.
+  - Added support for embedding gvim inside of eclipse.
   - eclimd start scripts now available in the eclipse home.
   - Consolidated the various **:LocateFile\*** commands into a single
     :doc:`:LocateFile </vim/core/locate>` command with a new setting to specify
