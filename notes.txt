@@ -256,15 +256,6 @@ TODO {{{
     http://erlide.org/
   }}}
 
-  Groovy {{{
-    - http://groovy.codehaus.org/Eclipse+Plugin
-
-    - can we leverage the groovy ast to provide some simple functionality (like
-      rudimentary validation)?
-
-    - taglist support
-  }}}
-
   Haskell {{{
     http://eclipsefp.sourceforge.net/
   }}}

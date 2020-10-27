@@ -982,12 +982,6 @@ def initPlugins(){
   ant.echo("Plugins:")
   names.sort()
   names.each{ name -> ant.echo("  ${name}") }
-  // FIXME: hack to move jdt above groovy. Better solution would be to scan the
-  // plugin manifests to determine the ordering.
-  if (names.contains("org.eclim.jdt")){
-    names.remove("org.eclim.jdt")
-    names.add(0, "org.eclim.jdt")
-  }
   return defaults + names
 }
 

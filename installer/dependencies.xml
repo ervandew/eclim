@@ -31,12 +31,6 @@
     </dependency>
   </feature>
 
-  <feature id="groovy" status="unreleased">
-    <dependency id="org.codehaus.groovy.eclipse.feature" version="2.9.2">
-      <site url="http://dist.springsource.org/release/GRECLIPSE/e4.7"/>
-    </dependency>
-  </feature>
-
   <feature id="pydev">
     <dependency id="org.python.pydev.feature" version="6.4.3">
       <site url="http://pydev.org/updates"/>

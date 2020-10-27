@@ -27,6 +27,9 @@ Android:
 Ruby:
   - Ruby support removed since it was very limited and better options exist.
 
+Groovy:
+  - Groovy support removed due to limited functionality/usage.
+
 .. _2.8.0:
 
 2.8.0 (Jul. 05, 2018)
@@ -148,8 +151,7 @@ Java:
     |br| Thanks to Kannan Rajah
 
 Groovy:
-  - Added support for groovy :doc:`validation </vim/groovy/validate>` and
-    :doc:`code completion </vim/groovy/complete>`.
+  - Added support for groovy validation and code completion.
     |br| Thanks to Yves Zoundi
 
 Python:

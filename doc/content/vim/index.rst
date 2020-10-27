@@ -37,7 +37,6 @@ Supported Languages
 
    c/index
    html/index
-   groovy/index
    java/index
    javascript/index
    php/index

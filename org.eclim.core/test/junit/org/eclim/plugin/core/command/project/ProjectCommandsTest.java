@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -198,12 +198,6 @@ public class ProjectCommandsTest
     assertEquals(1, results.size());
 
     List natures = (List)results.get(0).get("natures");
-
-    // groovy plugin seems to be forcing its nature on the project when
-    // installed.
-    if (natures.size() == 2 && natures.get(0).equals("groovy")){
-      natures.remove(0);
-    }
 
     assertEquals(1, natures.size());
     assertEquals("java", natures.get(0));

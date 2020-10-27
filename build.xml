@@ -78,14 +78,6 @@
     <antcall target="gant"> <param name="target" value="org.eclim.wst.test"/> </antcall>
   </target>
 
-  <target name="test.adt">
-    <antcall target="gant"> <param name="target" value="org.eclim.adt.test"/> </antcall>
-  </target>
-
-  <target name="test.groovy">
-    <antcall target="gant"> <param name="target" value="org.eclim.groovy.test"/> </antcall>
-  </target>
-
   <target name="test.pydev">
     <antcall target="gant"> <param name="target" value="org.eclim.pydev.test"/> </antcall>
   </target>

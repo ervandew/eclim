@@ -141,12 +141,6 @@ Html Commands
   Opens the current file in your configured browser.
 
 
-Groovy Commands
------------------
-
-- :ref:`:Validate <:Validate_groovy>` - Validate the current file.
-
-
 Ivy Commands
 -----------------
 
