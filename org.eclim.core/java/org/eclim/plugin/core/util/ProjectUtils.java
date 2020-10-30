@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -285,10 +285,6 @@ public class ProjectUtils
    */
   public static IDocument getDocument(IProject project, String file)
   {
-    // using IFile would ensure that ifile.getProject() (used by at least pdt
-    // internally) would result in the proper project reference, but seems to
-    // break ant code completion and validation.
-    //IFile thefile = getFile(project, file);
     File thefile = new File(getFilePath(project, file));
     if(!thefile.exists()){
       return null;

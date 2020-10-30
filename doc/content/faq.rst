@@ -189,7 +189,7 @@ eclimd, please see the :ref:`faq <eclim_workspace>` devoted to this.
 
 .. _ts_completion:
 
-I'm editing a [java, python, php, etc] file and code completion doesn't work.
+I'm editing a [java, python, etc] file and code completion doesn't work.
 -----------------------------------------------------------------------------
 
 - If you receive the message "E764: Option 'completefunc' is not set", please
@@ -221,7 +221,7 @@ I'm editing a [java, python, php, etc] file and code completion doesn't work.
 
 .. _ts_ftplugin:
 
-I'm editing a [java, python, php, etc] file and none of the file type commands exist.
+I'm editing a [java, python, etc] file and none of the file type commands exist.
 -------------------------------------------------------------------------------------
 
 This usually indicates that you don't have file type plugins enabled in vim.

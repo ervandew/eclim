@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
 <dependencies eclipse-version="4.8" eclipse-name="photon">
-  <feature id="dltk">
-    <dependency id="org.eclipse.dltk.core" version="5.9.0">
-      <site url="http://download.eclipse.org/releases/photon/"/>
-    </dependency>
-  </feature>
-
   <feature id="jdt">
     <dependency id="org.eclipse.jdt" version="3.14.0">
-      <site url="http://download.eclipse.org/releases/photon/"/>
-    </dependency>
-  </feature>
-
-  <feature id="pdt">
-    <dependency id="org.eclipse.php" version="6.0.0">
       <site url="http://download.eclipse.org/releases/photon/"/>
     </dependency>
   </feature>

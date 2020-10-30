@@ -93,11 +93,9 @@ below showing what will be built vs what will be skipped:
 ::
 
   [echo] ${eclipse}: /opt/eclipse
-  [echo] # Skipping org.eclim.dltk, missing org.eclipse.dltk.core
-  [echo] # Skipping org.eclim.pdt, missing org.eclipse.php
+  [echo] # Skipping org.eclim.pydev, missing org.eclipse.dltk.core
   [echo] Plugins:
   [echo]   org.eclim.jdt
-  [echo]   org.eclim.pydev
   [echo]   org.eclim.wst
 
 In this case we can see that four eclim plugins will be skipped along with the

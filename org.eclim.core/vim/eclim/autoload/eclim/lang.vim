@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2017  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -339,10 +339,6 @@ function! eclim#lang#SilentUpdate(...) " {{{
   "         (default is to not create a temp file)
   "   temp_write: when constructing a temp file path, whether or not to write
   "               the current file's contents to that path (default is to do so)
-
-  " i couldn't reproduce the issue, but at least one person experienced the
-  " cursor moving on update and breaking code completion:
-  " http://sourceforge.net/tracker/index.php?func=detail&aid=1995319&group_id=145869&atid=763323
   let pos = getpos('.')
   silent let file = eclim#project#util#GetProjectRelativeFilePath()
   if file != ''

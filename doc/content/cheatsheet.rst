@@ -245,17 +245,6 @@ Maven Commands
   support.
 
 
-Php Commands
------------------
-
-- :ref:`:PhpSearch <:PhpSearch>`
-  [-p <pattern> -t <type> -s <scope> -x <context>] -
-  Search for classes, methods, and constants.
-- :ref:`:PhpSearchContext <:PhpSearchContext>` -
-  Find the element under the cursor based on its context.
-- :ref:`:Validate <:Validate_php>` - Manually runs source code validation.
-
-
 Python Commands
 -----------------
 

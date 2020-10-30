@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -176,8 +176,7 @@ public class ProjectManagement
     // calling refresh for those project created against an existing code base.
     // performing a preemptive refresh prevents ProjectUtils.getFile
     // (IFile.refreshLocal) from kicking off a rebuild workspace job, which in
-    // turn can cause issues with pdt select and completion engines
-    // (See PhpUtils.waitOnBuild).
+    // turn can cause issues with some select and completion engines
     refresh(project, commandLine, false);
 
     for (int ii = 0; ii < natures.size(); ii++){

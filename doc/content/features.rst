@@ -74,12 +74,6 @@ JavaScript
 -------------------------
 - File validation using jsl_.
 
-Php
--------------------------
-- Context sensitive code completion.
-- Searching.
-- Source code validation.
-
 Python
 -------------------------
 - Context sensitive code completion.

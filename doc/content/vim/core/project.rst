@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2015  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ Vim's command line completion to complete the project name.
     name.  If omitted, eclim will use the last segment of the project's
     path, with any spaces replaced with underscores, as the project name.
   - **-n**: Required argument which specifies a space
-    separated list of project natures (java, php, etc.) to add to the
+    separated list of project natures (java, etc.) to add to the
     project.  If you want to create a project with no natures, you can
     use the word "none" here.
 
@@ -54,8 +54,8 @@ Vim's command line completion to complete the project name.
 
     .. code-block:: vim
 
-      :ProjectCreate ~/workspace/test -n p<tab>
-      :ProjectCreate ~/workspace/test -n php
+      :ProjectCreate ~/workspace/test -n j<tab>
+      :ProjectCreate ~/workspace/test -n java
 
   - **-d**: Optional argument used to specify a space
     separated list of project names which the project you're creating
@@ -67,7 +67,6 @@ Vim's command line completion to complete the project name.
 
     :ProjectCreate ~/projects/a_project -n java
     :ProjectCreate ~/projects/a_project -n java -d another_project yet_another_project
-    :ProjectCreate ~/projects/a_project -n java php -p My\ Project\ Name
 
 .. _\:ProjectImport:
 
@@ -558,7 +557,7 @@ Vim's command line completion to complete the project name.
 
     .. code-block:: vim
 
-      let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
+      let g:EclimTodoSearchExtensions = ['java', 'py', 'jsp', 'xml', 'html']
 
     Defines a list of file extensions that will be searched for the todo / fixme
     entries.

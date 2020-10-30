@@ -79,7 +79,7 @@ def main():
   parser.add_option(
     '--plugins',
     dest='plugins',
-    help='Comma separated list of eclim plugins to install (eg. jdt,pydev,pdt).',
+    help='Comma separated list of eclim plugins to install (eg. jdt,pydev).',
   )
 
   options, args = parser.parse_args(sys.argv[1:])
@@ -245,7 +245,6 @@ def step_plugins(options, eclim):
   plugins = [
     {'id': 'jdt', 'name': 'Java Development', 'requires': None},
     {'id': 'wst', 'name': 'Web Development', 'requires': None},
-    {'id': 'pdt', 'name': 'Php Development', 'requires': ['dltk', 'wst']},
     {'id': 'pydev', 'name': 'Python Development', 'requires': None},
   ]
   names = dict([(p['id'], p['name']) for p in plugins])

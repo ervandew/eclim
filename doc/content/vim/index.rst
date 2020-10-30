@@ -38,6 +38,5 @@ Supported Languages
    html/index
    java/index
    javascript/index
-   php/index
    python/index
    xml/index

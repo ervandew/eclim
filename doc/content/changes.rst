@@ -21,26 +21,29 @@ History of Changes
 x.x.x (Xxx. xx, 2020)
 ---------------------
 
-Android:
-  - Android support removed since google stopped supporting eclipse years ago.
+Removals:
+  .. note::
 
-C/C++:
-  - C/C++ support removed.
+    Since eclim's inception 15 years ago, some better alternatives have been
+    created, especially in the last 2-5 years. The creation of the `Language
+    Server Protocol`_ in particular provides the means for IDEs, etc to expose
+    their functionality to editors like vim. So instead of trying to solely
+    maintain all of eclim's features, I've decided to strip out much of the
+    stuff I don't use and refer people to actively maintained projects that
+    hopefully have the time and resources to keep their features current and
+    expand on them. So below I've listed several plugins/features that have been
+    removed from eclim.
 
-Ruby:
-  - Ruby support removed since it was very limited and better options exist.
+  - Android: google stopped supporting eclipse years ago.
+  - C/C++
+  - Php
+  - Ruby
+  - Groovy
+  - Scala: Metals_ looks like a good alternative that supports LSP + Vim.
+  - Vimplugin: this was never part of eclim's goal, just seemed like something
+    that was easy enough to include at the time.
 
-Groovy:
-  - Groovy support removed due to limited functionality/usage.
-
-Scala:
-  - Scala support removed due to limited maintenance and better options
-    available (Metals_ supports LSP + Vim).
-
-Vimplugin:
-  - Support for using an embededded vim instance within the eclipse gui has been
-    removed.
-
+.. _Language Server Protocol: https://langserver.org/
 .. _Metals: https://scalameta.org/metals/
 
 .. _2.8.0:
@@ -444,8 +447,7 @@ Java:
 
 Php:
   - Eclim will no longer run php files through html validation by default (see
-    the :doc:`Php Validation </vim/php/validate>` doc for settings to enable
-    html validation).
+    the Php Validation doc for settings to enable html validation).
 
 Scala:
   - Scala support updated for Scala IDE 3.0.0.

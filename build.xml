@@ -66,10 +66,6 @@
     <antcall target="gant"> <param name="target" value="org.eclim.jdt.test"/> </antcall>
   </target>
 
-  <target name="test.pdt">
-    <antcall target="gant"> <param name="target" value="org.eclim.pdt.test"/> </antcall>
-  </target>
-
   <target name="test.wst">
     <antcall target="gant"> <param name="target" value="org.eclim.wst.test"/> </antcall>
   </target>

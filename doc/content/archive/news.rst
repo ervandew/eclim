@@ -353,7 +353,7 @@ I'd also like to announce the #eclim channel on freenode.
 
     Eclim now **requires** Eclipse 3.5.
 
-* Ruby support has been added using the `eclipse dltk`_.
+* Ruby support has been added using the eclipse dltk.
 
 2009-06-14
 -----------
@@ -664,7 +664,6 @@ interface.  Going forward, I want to move more of that functionality
 into Vim.
 
 .. _eclipse: http://eclipse.org
-.. _eclipse dltk: http://eclipse.org/dltk/
 .. _eclipse wst: http://eclipse.org/webtools/
 .. _formic: http://github.com/ervandew/formic/
 .. _nailgun: http://www.martiansoftware.com/nailgun/

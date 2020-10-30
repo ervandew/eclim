@@ -689,8 +689,8 @@ Eclipse:
 Eclim:
   - Added initial support for linked folders in eclipse projects.
   - Added new g:EclimValidateSortResults setting to support sorting
-    validation results (:doc:`java </vim/java/validate>`, c/c++, :doc:`php
-    </vim/php/validate>`, etc.) by priority (errors > warnings > etc.).
+    validation results (:doc:`java </vim/java/validate>`, c/c++, php, etc.) by
+    priority (errors > warnings > etc.).
 
 C/C++:
   - Fixed :CSearch results on Windows platforms.
@@ -844,8 +844,7 @@ Eclim:
     other means.
 
 Php:
-  - Restored :doc:`php support </vim/php/index>` via the new `eclipse pdt`_
-    2.0.
+  - Restored php support via the new eclipse pdt 2.0.
 
 Vcs:
   - Added option to set the split orientation (horizontal or vertical) used
@@ -1011,11 +1010,8 @@ Installer:
   - Fixed some issues with running the installer on the icedtea jvm.
 
 Php:
-  - Added php support for
-    :doc:`code completion </vim/php/complete>`,
-    :doc:`searching </vim/php/search>`, and
-    :doc:`validation </vim/php/validate>`.
-    Requires the `eclipse pdt`_ plugin.
+  - Added php support for code completion, searching, and validation.
+    Requires the eclipse pdt plugin.
 
 :gitlog:`Git Log (1.3.4) <1.3.3...1.3.4>`
 
@@ -1580,7 +1576,6 @@ Eclim:
 
 `Git Log (1.0.0) <https://github.com/ervandew/eclim/commits/1.0.0>`_
 
-.. _eclipse pdt: http://eclipse.org/pdt/
 .. _eclipse wst: http://eclipse.org/webtools/main.php
 .. _jsl: http://www.javascriptlint.com/
 .. _pyflakes: http://www.divmod.org/trac/wiki/DivmodPyflakes

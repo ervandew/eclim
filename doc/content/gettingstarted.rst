@@ -42,7 +42,6 @@ the nature accordingly:
 ::
 
   :ProjectCreate /path/to/my_java_project -n java
-  :ProjectCreate /path/to/my_php_project -n php
   :ProjectCreate /path/to/my_python_project -n python
 
 The path supplied to the :ref:`:ProjectCreate <:ProjectCreate>` command will be
@@ -55,7 +54,6 @@ vary depending on your project's nature, but in all cases eclim will provide
 you with commands to manage this file:
 
 * java - :doc:`.classpath file </vim/java/classpath>`
-* php - :doc:`.buildpath file </vim/dltk/buildpath>`
 * python - :doc:`.pydevproject file </vim/python/path>`
 
 Once you've created your project you can use the **:ProjectList** command to
@@ -84,7 +82,6 @@ are very similar.  Please see the relevant docs for your language for more
 details:
 
 * :doc:`java </vim/java/classpath>`
-* :doc:`php </vim/dltk/buildpath>`
 * :doc:`python </vim/python/path>`
 
 For the purpose of this example we will assume that you will store your source
@@ -140,7 +137,6 @@ features that eclim provides.
    see the relevant section of the docs:
 
    - :doc:`java </vim/java/index>`
-   - :doc:`php </vim/php/index>`
    - :doc:`python </vim/python/index>`
    - :doc:`etc. <vim/index>`
 
