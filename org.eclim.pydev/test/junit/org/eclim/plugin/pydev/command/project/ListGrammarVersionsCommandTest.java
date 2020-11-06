@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,12 +44,10 @@ public class ListGrammarVersionsCommandTest
       Eclim.execute(new String[]{
         "python_list_grammars", "-p", Pydev.TEST_PROJECT,
       });
-    assertEquals(results.get(0), "2.1");
-    assertEquals(results.get(1), "2.2");
-    assertEquals(results.get(2), "2.3");
-    assertEquals(results.get(3), "2.4");
-    assertEquals(results.get(4), "2.5");
-    assertEquals(results.get(5), "2.6");
-    assertEquals(results.get(6), "2.7");
+
+    assertTrue(results.size() > 2);
+    for(String result : results){
+      assertTrue(result.startsWith("2.") || result.startsWith("3."));
+    }
   }
 }

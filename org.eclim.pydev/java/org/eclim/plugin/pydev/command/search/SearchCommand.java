@@ -116,7 +116,7 @@ public class SearchCommand
       PythonNature pythonNature = PythonNature.getPythonNature(project);
       pythonNature.rebuildPath();
 
-      request.fillInitialNameAndOffset();
+      request.fillActivationTokenAndQualifier();
       IPyRefactoring2 pyRefactoring = (IPyRefactoring2)
         AbstractPyRefactoring.getPyRefactoring();
       Map<Tuple<String,File>, HashSet<ASTEntry>> refs =

@@ -14,7 +14,7 @@
   </feature>
 
   <feature id="pydev">
-    <dependency id="org.python.pydev.feature" version="6.4.3">
+    <dependency id="org.python.pydev.feature" version="8.0.0">
       <site url="http://pydev.org/updates"/>
     </dependency>
   </feature>
