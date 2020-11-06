@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@ package org.eclim.plugin.wst.command.complete;
 
 import java.io.IOException;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclim.command.CommandLine;
 
 import org.eclim.eclipse.EclimPlugin;
@@ -30,6 +32,9 @@ import org.eclipse.core.resources.IFile;
 
 import org.eclipse.core.runtime.CoreException;
 
+import org.eclipse.jface.text.BadLocationException;
+
+import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
@@ -38,6 +43,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+
+import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
 
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 
@@ -53,19 +60,14 @@ public abstract class WstCodeCompleteCommand
   protected ICompletionProposal[] getCompletionProposals(
       CommandLine commandLine, String project, String file, int offset)
   {
-    IContentAssistProcessor processor =
-      getContentAssistProcessor(commandLine, project, file);
-
     IFile ifile = ProjectUtils.getFile(
         ProjectUtils.getProject(project, true), file);
 
     IStructuredModel model = null;
     try{
       model = StructuredModelManager.getModelManager().getModelForRead(ifile);
-    }catch(IOException ioe){
-      throw new RuntimeException(ioe);
-    }catch(CoreException ce){
-      throw new RuntimeException(ce);
+    }catch(CoreException|IOException e){
+      throw new RuntimeException(e);
     }
 
     if (model != null){
@@ -82,14 +84,67 @@ public abstract class WstCodeCompleteCommand
         }
       };
       viewer.setDocument(model.getStructuredDocument());
-      // note: non-zero length can break html completion.
-      viewer.setSelectedRange(offset, 0);
 
-      ICompletionProposal[] proposals =
-        processor.computeCompletionProposals(viewer, offset);
-      model.releaseFromRead();
-      return proposals;
+      Class<? extends StructuredTextViewerConfiguration> configClass =
+        getViewerConfigurationClass();
+
+      try{
+        StructuredTextViewerConfiguration configuration =
+          configClass.getDeclaredConstructor().newInstance();
+
+        ContentAssistant assistant = (ContentAssistant)
+          configuration.getContentAssistant(viewer);
+
+        viewer.configure(configuration);
+        // note: non-zero length can break html completion.
+        viewer.setSelectedRange(offset, 0);
+
+        String partitionType = viewer.getDocument().getPartition(offset).getType();
+        IContentAssistProcessor processor =
+          assistant.getContentAssistProcessor(partitionType);
+
+        ICompletionProposal[] proposals =
+          processor.computeCompletionProposals(viewer, offset);
+
+        model.releaseFromRead();
+
+        return proposals;
+      }catch(
+          BadLocationException|
+          IllegalAccessException|
+          InstantiationException|
+          InvocationTargetException|
+          NoSuchMethodException ex)
+      {
+        throw new RuntimeException(ex);
+      }
     }
     return new ICompletionProposal[0];
+  }
+
+  /**
+   * Gets the StructuredTextViewerConfiguration class to use.
+   *
+   * @return The Class of type StructuredTextViewerConfiguration.
+   */
+  protected Class<? extends StructuredTextViewerConfiguration>
+    getViewerConfigurationClass()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  protected boolean acceptProposal(ICompletionProposal proposal)
+  {
+    // with language server installed, eclipse returns completions of type
+    // org.eclipse.lsp4e.operations.completion.LSCompletionProposal, which for
+    // some reason are less context aware, so filter those out and just return
+    // the wst completions.
+    // TODO: figure out if there is a way to prevent lsp completions in the
+    // first place.
+    if (proposal.getClass().getName().indexOf("lsp4e") != -1){
+      return false;
+    }
+    return true;
   }
 }

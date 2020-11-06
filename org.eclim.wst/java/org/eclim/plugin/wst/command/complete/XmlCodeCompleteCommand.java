@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,13 @@ import java.util.ArrayList;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.CommandLine;
-
 import org.eclim.plugin.core.command.complete.CodeCompleteResult;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
-import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
+import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
+
+import org.eclipse.wst.xml.ui.StructuredTextViewerConfigurationXML;
 
 /**
  * Command to handle xml code completion requests.
@@ -52,15 +51,19 @@ public class XmlCodeCompleteCommand
   }
 
   @Override
-  protected IContentAssistProcessor getContentAssistProcessor(
-      CommandLine commandLine, String project, String file)
+  protected Class<? extends StructuredTextViewerConfiguration>
+    getViewerConfigurationClass()
   {
-    return new XMLContentAssistProcessor();
+    return StructuredTextViewerConfigurationXML.class;
   }
 
   @Override
   protected boolean acceptProposal(ICompletionProposal proposal)
   {
+    if (!super.acceptProposal(proposal)){
+      return false;
+    }
+
     String display = proposal.getDisplayString();
     return !display.toLowerCase().startsWith("close with") &&
       !display.toLowerCase().startsWith("end with") &&

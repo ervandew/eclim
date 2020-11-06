@@ -8,8 +8,8 @@
   </feature>
 
   <feature id="wst">
-    <dependency id="org.eclipse.wst.web_ui.feature" version="3.10.0">
-      <site url="http://download.eclipse.org/releases/photon/"/>
+    <dependency id="org.eclipse.wst.web_ui.feature" version="3.19.0">
+      <site url="http://download.eclipse.org/releases/2020-09/"/>
     </dependency>
   </feature>
 

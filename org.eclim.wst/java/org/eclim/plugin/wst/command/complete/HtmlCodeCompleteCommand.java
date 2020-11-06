@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,11 @@ package org.eclim.plugin.wst.command.complete;
 
 import org.eclim.annotation.Command;
 
-import org.eclim.command.CommandLine;
-
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 
-import org.eclipse.jface.text.templates.TemplateProposal;
+import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
 
-import org.eclipse.wst.html.ui.internal.contentassist.HTMLContentAssistProcessor;
+import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
 
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 
@@ -46,18 +43,19 @@ public class HtmlCodeCompleteCommand
   extends WstCodeCompleteCommand
 {
   @Override
-  protected IContentAssistProcessor getContentAssistProcessor(
-      CommandLine commandLine, String project, String file)
+  protected Class<? extends StructuredTextViewerConfiguration>
+    getViewerConfigurationClass()
   {
-    return new HTMLContentAssistProcessor();
+    return StructuredTextViewerConfigurationHTML.class;
   }
 
   @Override
   protected boolean acceptProposal(ICompletionProposal proposal)
   {
-    if (proposal instanceof TemplateProposal){
+    if (!super.acceptProposal(proposal)){
       return false;
     }
+
     String display = proposal.getDisplayString();
     return
       !display.toLowerCase().startsWith("close with") &&

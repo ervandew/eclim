@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -41,27 +41,6 @@ function! TestCompleteXsd()
   echo string(results)
   call vunit#AssertEquals(len(results), 1, 'Wrong number of results.')
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'unique'.*"),
-    \ 'Results does not contain xs:unique')
-endfunction " }}}
-
-" TestCompleteWsdl() {{{
-function! TestCompleteWsdl()
-  edit! wsdl/GoogleSearch.wsdl
-  call vunit#PeekRedir()
-
-  call cursor(14, 13)
-  let start = eclim#xml#complete#CodeComplete(1, '')
-  call vunit#AssertEquals(11, start, 'Wrong starting column.')
-
-  let results = eclim#xml#complete#CodeComplete(0, '')
-  call vunit#PeekRedir()
-  echo string(results)
-  call vunit#AssertEquals(3, len(results), 'Wrong number of results.')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'annotation'.*"),
-    \ 'Results does not contain xs:unique')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'attribute'.*"),
-    \ 'Results does not contain xs:unique')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'attributeGroup'.*"),
     \ 'Results does not contain xs:unique')
 endfunction " }}}
 

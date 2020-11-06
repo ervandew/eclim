@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,10 @@ import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 
 import org.eclipse.wst.jsdt.core.compiler.IProblem;
 
+import org.eclipse.wst.jsdt.internal.core.BecomeWorkingCopyOperation;
+
 /**
- * Command that updates teh requested javascript src file.
+ * Command that updates the requested javascript src file.
  *
  * @author Eric Van Dewoestine
  */
@@ -74,7 +76,13 @@ public class JavaScriptSrcUpdateCommand
       ProblemRequestor requestor = new ProblemRequestor();
       try{
         workingCopy.discardWorkingCopy();
-        workingCopy.becomeWorkingCopy(requestor, null);
+        // deprecated, so do what the non-deprecated version does, just using
+        // our ProblemRequestor instead of the working copy owner.
+        //workingCopy.becomeWorkingCopy(requestor, null);
+        BecomeWorkingCopyOperation operation = new BecomeWorkingCopyOperation(
+            (org.eclipse.wst.jsdt.internal.core.CompilationUnit)workingCopy,
+            requestor);
+        operation.runOperation(null);
       }finally{
         workingCopy.discardWorkingCopy();
       }

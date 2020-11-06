@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import static org.junit.Assert.*;
 public class XmlCodeCompleteCommandTest
 {
   private static final String TEST_FILE_XSD = "xsd/test.xsd";
-  private static final String TEST_FILE_WSDL = "wsdl/GoogleSearch.wsdl";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -58,28 +57,5 @@ public class XmlCodeCompleteCommandTest
     assertEquals(result.get("info"),
         "<p><b>Element : </b>unique</p><dl><p><b>Content Model : </b>" +
         "((annotation?), (selector, field+))</p>");
-  }
-
-  @Test
-  @SuppressWarnings("unchecked")
-  public void completeWsdl()
-  {
-    assertTrue("Project doesn't exist.",
-        Eclim.projectExists(Wst.TEST_PROJECT));
-
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
-      Eclim.execute(new String[]{
-        "xml_complete", "-p", Wst.TEST_PROJECT,
-        "-f", TEST_FILE_WSDL, "-o", "516", "-e", "utf-8"
-      });
-
-    assertEquals("Wrong number of errors.", 3, results.size());
-
-    Map<String,Object> result = results.get(0);
-    assertEquals(result.get("completion"), "xsd:annotation");
-    assertEquals(result.get("menu"), "");
-    assertEquals(result.get("info"),
-        "<p><b>Element : </b>annotation</p><dl><p><b>Content Model : </b>" +
-        "(appinfo | documentation)*</p>");
   }
 }

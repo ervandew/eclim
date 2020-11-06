@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,36 +16,11 @@
  */
 package org.eclim.plugin.wst.command.complete;
 
-import java.io.IOException;
-
 import org.eclim.annotation.Command;
 
-import org.eclim.command.CommandLine;
+import org.eclipse.wst.css.ui.StructuredTextViewerConfigurationCSS;
 
-import org.eclim.eclipse.EclimPlugin;
-
-import org.eclim.plugin.core.command.complete.AbstractCodeCompleteCommand;
-
-import org.eclim.plugin.core.util.ProjectUtils;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-
-import org.eclipse.core.runtime.CoreException;
-
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-
-import org.eclipse.jface.text.source.ISourceViewer;
-
-import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
-
-import org.eclipse.wst.sse.core.StructuredModelManager;
-
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-
-import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
+import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
 
 /**
  * Command to handle css code completion requests.
@@ -63,46 +38,10 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 public class CssCodeCompleteCommand
   extends WstCodeCompleteCommand
 {
-  private static StructuredTextViewer viewer;
-
   @Override
-  protected IContentAssistProcessor getContentAssistProcessor(
-      CommandLine commandLine, String project, String file)
+  protected Class<? extends StructuredTextViewerConfiguration>
+    getViewerConfigurationClass()
   {
-    return new CSSContentAssistProcessor();
-  }
-
-  @Override
-  protected ISourceViewer getTextViewer(
-      CommandLine commandLine, String project, String file)
-  {
-    IFile ifile = ProjectUtils.getFile(
-        ProjectUtils.getProject(project, true), file);
-    try{
-      ifile.refreshLocal(IResource.DEPTH_INFINITE, null);
-    }catch(CoreException ce){
-      throw new RuntimeException(ce);
-    }
-
-    IStructuredModel model = null;
-    try{
-      model = StructuredModelManager.getModelManager().getModelForRead(ifile);
-    }catch(IOException ioe){
-      throw new RuntimeException(ioe);
-    }catch(CoreException ce){
-      throw new RuntimeException(ce);
-    }
-
-    if (viewer == null) {
-      viewer = new StructuredTextViewer(
-          EclimPlugin.getShell(), null, null, false, 0){
-        protected void createControl(Composite parent, int styles)
-        {
-          // no-op to prevent possible deadlock in native method on windows.
-        }
-      };
-    }
-    viewer.setDocument(model.getStructuredDocument());
-    return viewer;
+    return StructuredTextViewerConfigurationCSS.class;
   }
 }
