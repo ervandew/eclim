@@ -290,7 +290,6 @@ Xml Commands
   supplied.
 - :ref:`:Validate <:Validate_xml>` [<file>] -
   Validates the supplied xml file or the current file if none supplied.
-- :ref:`:XmlFormat <:XmlFormat>` - Reformats the current xml file.
 
 
 Xsd Commands

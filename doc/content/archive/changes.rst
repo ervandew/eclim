@@ -1224,7 +1224,7 @@ Java:
   - Fixed junit support to handle execution via maven 1.x and 2.x.
 
 Xml:
-  - Added command :ref:`:XmlFormat <:XmlFormat>` to reformat a xml file.
+  - Added command :XmlFormat to reformat a xml file.
 
 :gitlog:`Git Log (1.2.3) <1.2.2...1.2.3>`
 

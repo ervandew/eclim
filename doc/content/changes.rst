@@ -359,8 +359,8 @@ Scala:
     version of Scala IDE 3.0.0.
 
 Xml:
-  - :ref:`:XmlFormat <:XmlFormat>` now uses the DOM3 APIs to improve the
-    formatted result, honoring your ``textwidth`` and indent settings.
+  - XmlFormat now uses the DOM3 APIs to improve the formatted result, honoring
+    your ``textwidth`` and indent settings.
 
 | :gitlog:`Git Log (2.3.0) <2.2.7...2.3.0>`
 | :gitlog:`Git Log (1.7.17) <1.7.16...1.7.17>`

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -40,11 +40,6 @@ if !exists(":Validate")
     \ :call eclim#xml#definition#DtdDefinition('<args>')
   command -nargs=? -buffer XsdDefinition
     \ :call eclim#xml#definition#XsdDefinition('<args>')
-endif
-
-if !exists(":XmlFormat")
-  "command -buffer -range XmlFormat :call eclim#xml#format#Format(<line1>, <line2>)
-  command -buffer XmlFormat :call eclim#xml#format#Format()
 endif
 
 " }}}

@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2013  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -105,27 +105,6 @@ Validate the supplied file or the current file if no file name provided.
 If eclimd is not currently running, and the xmllint command is available,
 eclim will validate the xml file using that.  Eclim will never use xmllint
 when saving the file with g:EclimXmlValidate enabled.
-
-.. _\:XmlFormat:
-
-Format
-------
-
-On occasion you may encounter some xml content that is unformatted (like raw
-content from a web service).
-
-.. code-block:: xml
-
-  <blah><foo>one</foo><bar>two</bar></blah>
-
-Executing **:XmlFormat** will reformat the current xml file like so\:
-
-.. code-block:: xml
-
-  <blah>
-    <foo>one</foo>
-    <bar>two</bar>
-  </blah>
 
 Configuration
 --------------
