@@ -45,18 +45,18 @@ public class CodeCompleteCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> results = (Map<String,Object>)
+    Map<String, Object> results = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "184", "-e", "utf-8", "-l", "standard"
+        "-o", "184", "-e", "utf-8", "-l", "standard",
       });
-    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+    List<Map<String, Object>> completions = (List<Map<String, Object>>)
       results.get("completions");
 
     assertTrue("Wrong number of completions.", completions.size() > 30);
 
-    Map<String,Object> result = completions.get(0);
+    Map<String, Object> result = completions.get(0);
     assertEquals(result.get("completion"), "add(");
     assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");
@@ -76,13 +76,13 @@ public class CodeCompleteCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> results = (Map<String,Object>)
+    Map<String, Object> results = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "266", "-e", "utf-8", "-l", "standard"
+        "-o", "266", "-e", "utf-8", "-l", "standard",
       });
-    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+    List<Map<String, Object>> completions = (List<Map<String, Object>>)
       results.get("completions");
 
     // as of eclipse neon (4.6), any method containing the prefix anywhere in
@@ -90,7 +90,7 @@ public class CodeCompleteCommandTest
     // prefixed versions at the top.
     assertEquals("Wrong number of completions.", 30, completions.size());
 
-    Map<String,Object> result = completions.get(0);
+    Map<String, Object> result = completions.get(0);
     assertEquals(result.get("completion"), "add(");
     assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");
@@ -107,13 +107,13 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completionMissingImport()
   {
-    Map<String,Object> results = (Map<String,Object>)
+    Map<String, Object> results = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "371", "-e", "utf-8", "-l", "standard"
+        "-o", "371", "-e", "utf-8", "-l", "standard",
       });
-    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+    List<Map<String, Object>> completions = (List<Map<String, Object>>)
       results.get("completions");
 
     assertEquals("Wrong number of completions.", 0, completions.size());
@@ -123,7 +123,7 @@ public class CodeCompleteCommandTest
     assertEquals("Wrong imports", imports, results.get("imports"));
 
     assertTrue("Missing key 'error'", results.containsKey("error"));
-    Map<String,Object> error = (Map<String,Object>)results.get("error");
+    Map<String, Object> error = (Map<String, Object>)results.get("error");
     assertEquals("Wrong error message",
         "Map cannot be resolved to a type", error.get("message"));
   }
@@ -132,13 +132,13 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completionMissingImportStatic()
   {
-    Map<String,Object> results = (Map<String,Object>)
+    Map<String, Object> results = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_complete", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "436", "-e", "utf-8", "-l", "standard"
+        "-o", "436", "-e", "utf-8", "-l", "standard",
       });
-    List<Map<String,Object>> completions = (List<Map<String,Object>>)
+    List<Map<String, Object>> completions = (List<Map<String, Object>>)
       results.get("completions");
 
     assertEquals("Wrong number of completions.", 0, completions.size());
@@ -148,7 +148,7 @@ public class CodeCompleteCommandTest
     assertEquals("Wrong imports", imports, results.get("imports"));
 
     assertTrue("Missing key 'error'", results.containsKey("error"));
-    Map<String,Object> error = (Map<String,Object>)results.get("error");
+    Map<String, Object> error = (Map<String, Object>)results.get("error");
     assertEquals("Wrong error message",
         "Component cannot be resolved to a variable", error.get("message"));
   }

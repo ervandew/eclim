@@ -119,9 +119,9 @@ public class SearchCommand
       request.fillActivationTokenAndQualifier();
       IPyRefactoring2 pyRefactoring = (IPyRefactoring2)
         AbstractPyRefactoring.getPyRefactoring();
-      Map<Tuple<String,File>, HashSet<ASTEntry>> refs =
+      Map<Tuple<String, File>, HashSet<ASTEntry>> refs =
         pyRefactoring.findAllOccurrences(request);
-      for (Tuple<String,File> tuple : refs.keySet()){
+      for (Tuple<String, File> tuple : refs.keySet()){
         for (ASTEntry entry : refs.get(tuple)){
           Position position = Position.fromLineColumn(
             tuple.o2.toString().replace('\\', '/'),

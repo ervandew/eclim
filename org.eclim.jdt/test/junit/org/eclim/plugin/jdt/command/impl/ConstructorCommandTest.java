@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class ConstructorCommandTest
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_ENUM_FILE, "-o", "1", "-e", "utf-8"
+      "-f", TEST_ENUM_FILE, "-o", "1", "-e", "utf-8",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_ENUM_FILE);
@@ -72,7 +72,7 @@ public class ConstructorCommandTest
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-e", "utf-8", "-r", "[\"id\", \"name\"]"
+      "-o", "1", "-e", "utf-8", "-r", "[\"id\", \"name\"]",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -91,7 +91,7 @@ public class ConstructorCommandTest
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "207", "-e", "utf-8"
+      "-f", TEST_FILE, "-o", "207", "-e", "utf-8",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -110,7 +110,7 @@ public class ConstructorCommandTest
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "207", "-e", "utf-8", "-r", "[\"subName\"]"
+      "-f", TEST_FILE, "-o", "207", "-e", "utf-8", "-r", "[\"subName\"]",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -131,13 +131,15 @@ public class ConstructorCommandTest
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_ENUM_FILE, "-o", "1", "-e", "utf-8", "-r", "[\"number\"]"
+      "-f", TEST_ENUM_FILE, "-o", "1", "-e", "utf-8", "-r", "[\"number\"]",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_ENUM_FILE);
     assertTrue("Constructor not found.",
-        Pattern.compile("^\\s+TestConstructorEnum\\(int number\\)", Pattern.MULTILINE)
-        .matcher(contents).find());
+        Pattern.compile(
+          "^\\s+TestConstructorEnum\\(int number\\)",
+          Pattern.MULTILINE
+        ).matcher(contents).find());
   }
 
   @Test
@@ -150,11 +152,12 @@ public class ConstructorCommandTest
 
     String result = (String)Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "198", "-e", "utf-8", "-r", "[\"number\"]"
+      "-f", TEST_FILE, "-o", "198", "-e", "utf-8", "-r", "[\"number\"]",
     });
 
     assertEquals(
-        "Anonymous classes cannot contain explicitly declared constructors.", result);
+        "Anonymous classes cannot contain explicitly declared constructors.",
+        result);
   }
 
   @Test
@@ -168,7 +171,7 @@ public class ConstructorCommandTest
     // now test the subclass constructors
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_CHILD_FILE, "-o", "1", "-e", "utf-8", "-s"
+      "-f", TEST_CHILD_FILE, "-o", "1", "-e", "utf-8", "-s",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_CHILD_FILE);
@@ -180,7 +183,7 @@ public class ConstructorCommandTest
 
     Eclim.execute(new String[]{
       "java_constructor", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_CHILD_FILE, "-o", "1", "-e", "utf-8", "-s", "-r", "[\"names\"]"
+      "-f", TEST_CHILD_FILE, "-o", "1", "-e", "utf-8", "-s", "-r", "[\"names\"]",
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_CHILD_FILE);

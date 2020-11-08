@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,12 +45,12 @@ public class ListInterpretersCommandTest
     assertTrue("Python project doesn't exist.",
         Eclim.projectExists(Pydev.TEST_PROJECT));
 
-    List<Map<String,String>> results = (List<Map<String,String>>)
+    List<Map<String, String>> results = (List<Map<String, String>>)
       Eclim.execute(new String[]{"python_list_interpreters"});
 
     assertTrue(results.size() > 0);
 
-    Map<String,String> result = results.get(0);
+    Map<String, String> result = results.get(0);
     assertTrue(result.containsKey("name"));
     assertTrue(result.containsKey("version"));
     assertTrue(result.containsKey("path"));
@@ -63,13 +63,13 @@ public class ListInterpretersCommandTest
     assertTrue("Python project doesn't exist.",
         Eclim.projectExists(Pydev.TEST_PROJECT));
 
-    List<Map<String,String>> results = (List<Map<String,String>>)
+    List<Map<String, String>> results = (List<Map<String, String>>)
       Eclim.execute(new String[]{"python_list_interpreters"});
 
     int size = results.size();
     assertTrue(size > 0);
 
-    Map<String,String> result = results.get(0);
+    Map<String, String> result = results.get(0);
     assertTrue(result.containsKey("name"));
     assertTrue(result.containsKey("version"));
     assertTrue(result.containsKey("path"));
@@ -79,17 +79,17 @@ public class ListInterpretersCommandTest
 
     // remove it
     Eclim.execute(new String[]{
-      "python_remove_interpreter", "-p", path
+      "python_remove_interpreter", "-p", path,
     });
-    results = (List<Map<String,String>>)
+    results = (List<Map<String, String>>)
       Eclim.execute(new String[]{"python_list_interpreters"});
     assertEquals(results.size(), size - 1);
 
     // re-add it
     Eclim.execute(new String[]{
-      "python_add_interpreter", "-p", path, "-n", name
+      "python_add_interpreter", "-p", path, "-n", name,
     });
-    results = (List<Map<String,String>>)
+    results = (List<Map<String, String>>)
       Eclim.execute(new String[]{"python_list_interpreters"});
     assertEquals(results.size(), size);
     assertEquals(results.get(0), result);

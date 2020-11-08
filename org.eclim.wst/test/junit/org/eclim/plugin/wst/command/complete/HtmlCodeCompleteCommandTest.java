@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@ package org.eclim.plugin.wst.command.complete;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.Eclim;
 
@@ -45,15 +43,15 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "152", "-e", "utf-8"
+        "-o", "152", "-e", "utf-8",
       });
 
     assertEquals("Wrong number of errors.", 2, results.size());
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertEquals(result.get("completion"), "href=\"");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"),
@@ -67,15 +65,15 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "141", "-e", "utf-8"
+        "-o", "141", "-e", "utf-8",
       });
 
     assertEquals("Wrong number of errors.", 7, results.size());
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertEquals(result.get("completion"), "h1");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"), "<p>A top-level heading</p>");
@@ -93,15 +91,15 @@ public class HtmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "html_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "131", "-e", "utf-8"
+        "-o", "131", "-e", "utf-8",
       });
 
     assertEquals("Wrong number of errors.", 8, results.size());
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertEquals(result.get("completion"), "font");
 
     result = results.get(1);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -599,8 +599,8 @@ public class XmlUtils
     private String lastPath;
 
     // cache missing sources to avoiding hitting the same url repeatedly
-    private static HashMap<String,IOException> missingSources =
-      new HashMap<String,IOException>();
+    private static HashMap<String, IOException> missingSources =
+      new HashMap<String, IOException>();
 
     /**
      * Constructs a new instance.

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ public class MoveCommandTest
     throws Exception
   {
     String p = Eclim.resolveFile(Jdt.TEST_PROJECT, "");
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_refactor_move", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-n", "org.eclim.test.refactoring.move.p3"
+        "-f", TEST_FILE, "-n", "org.eclim.test.refactoring.move.p3",
       });
     assertTrue(result.containsKey("errors"));
     List<String> errors = (List<String>)result.get("errors");
@@ -55,13 +55,13 @@ public class MoveCommandTest
         "'org.eclim.test.refactoring.move.p3' already contains a 'TestMove.java'.",
         errors.get(0));
 
-    List<Map<String,String>> results = (List<Map<String,String>>)
+    List<Map<String, String>> results = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_refactor_move", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-n", "org.eclim.test.refactoring.move.p2"
+        "-f", TEST_FILE, "-n", "org.eclim.test.refactoring.move.p2",
       });
-    Map<String,String> file = results.get(0);
-    Map<String,String> move = results.get(1);
+    Map<String, String> file = results.get(0);
+    Map<String, String> move = results.get(1);
     if (file.get("file") == null){
       file = results.get(1);
       move = results.get(0);
@@ -73,7 +73,7 @@ public class MoveCommandTest
     assertEquals(p + "src/org/eclim/test/refactoring/move/p2/TestMove.java",
         move.get("to"));
 
-    results = (List<Map<String,String>>)
+    results = (List<Map<String, String>>)
       Eclim.execute(new String[]{"refactor_undo"});
     file = results.get(0);
     move = results.get(1);

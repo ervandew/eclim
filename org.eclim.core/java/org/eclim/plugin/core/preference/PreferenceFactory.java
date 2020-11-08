@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ public class PreferenceFactory
                   String[].class,
                   pattern.length() != 0 ? new RegexValidator(pattern) : null));
           }else if (jsonObjectMatcher.matches()){
-            Map<String,String> map = new HashMap<String,String>();
+            Map<String, String> map = new HashMap<String, String>();
             preference.setValidator(new JsonValidator(map.getClass(), null));
           }else{
             preference.setValidator(new RegexValidator(attrs[3]));

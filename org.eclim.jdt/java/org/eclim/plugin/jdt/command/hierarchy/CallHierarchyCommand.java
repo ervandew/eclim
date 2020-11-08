@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ public class CallHierarchyCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    HashMap<String,Object> result  = new HashMap<String, Object>();
+    HashMap<String, Object> result  = new HashMap<String, Object>();
 
     String project = commandLine.getValue(Options.PROJECT_OPTION);
     String file = commandLine.getValue(Options.FILE_OPTION);
@@ -135,14 +135,14 @@ public class CallHierarchyCommand
     return result;
   }
 
-  private ArrayList<HashMap<String,Object>> formatRoots(
+  private ArrayList<HashMap<String, Object>> formatRoots(
       MethodWrapper[] roots,
       Comparator<MethodWrapper> comparator,
       boolean callees)
     throws Exception
   {
-    ArrayList<HashMap<String,Object>> results =
-      new ArrayList<HashMap<String,Object>>();
+    ArrayList<HashMap<String, Object>> results =
+      new ArrayList<HashMap<String, Object>>();
 
     if (comparator != null) {
       Arrays.sort(roots, comparator);
@@ -169,7 +169,7 @@ public class CallHierarchyCommand
         JavaElementLabels.P_COMPRESSED);
     CallLocation location = root.getMethodCall().getFirstCallLocation();
 
-    HashMap<String,Object> result = new HashMap<String, Object>();
+    HashMap<String, Object> result = new HashMap<String, Object>();
     result.put("name", memberName);
 
     if (location != null) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ public class CssCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "css_complete", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
-        "-o", "52", "-e", "utf-8"
+        "-o", "52", "-e", "utf-8",
       });
 
     assertEquals("Wrong number of errors.", 8, results.size());

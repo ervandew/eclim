@@ -97,7 +97,7 @@ public abstract class AbstractRefactorCommand
           return previewChange(change, commandLine.getValue("d"));
         }
 
-        HashMap<String,Object> preview = new HashMap<String,Object>();
+        HashMap<String, Object> preview = new HashMap<String, Object>();
         String previewOpt = "-" + PREVIEW_OPTION;
         String[] args = commandLine.getArgs();
         StringBuffer apply = new StringBuffer();
@@ -150,7 +150,7 @@ public abstract class AbstractRefactorCommand
         workspace.removeResourceChangeListener(rcl);
       }
     }catch(RefactorException re){
-      HashMap<String,List<String>> result = new HashMap<String,List<String>>();
+      HashMap<String, List<String>> result = new HashMap<String, List<String>>();
       List<String> errors = new ArrayList<String>();
 
       if (re.getMessage() != null){
@@ -183,17 +183,17 @@ public abstract class AbstractRefactorCommand
    */
   public abstract Refactor createRefactoring(CommandLine commandLine);
 
-  private ArrayList<HashMap<String,String>> previewChanges(Change change)
+  private ArrayList<HashMap<String, String>> previewChanges(Change change)
   {
-    ArrayList<HashMap<String,String>> results =
-      new ArrayList<HashMap<String,String>>();
+    ArrayList<HashMap<String, String>> results =
+      new ArrayList<HashMap<String, String>>();
 
     if (change instanceof CompositeChange){
       for (Change c : ((CompositeChange)change).getChildren()){
         results.addAll(previewChanges(c));
       }
     }else{
-      HashMap<String,String> result = new HashMap<String,String>();
+      HashMap<String, String> result = new HashMap<String, String>();
       if (change instanceof TextFileChange){
         TextFileChange text = (TextFileChange)change;
         result.put("type", "diff");

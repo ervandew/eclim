@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,17 +47,17 @@ public class DelegateCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_delegate", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "120", "-e", "utf-8"
+        "-o", "120", "-e", "utf-8",
       });
 
     assertEquals("org.eclim.test.impl.TestDelegate.list", result.get("type"));
 
-    List<Map<String,Object>> types =
-      (List<Map<String,Object>>)result.get("superTypes");
+    List<Map<String, Object>> types =
+      (List<Map<String, Object>>)result.get("superTypes");
     assertEquals(3, types.size());
 
     assertEquals("java.util", types.get(0).get("packageName"));
@@ -69,12 +69,12 @@ public class DelegateCommandTest
     assertTrue(methods.contains("public abstract Iterator<Double> iterator()"));
     assertTrue(methods.contains("public abstract boolean add(Double)"));
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_delegate", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE, "-o", "120", "-e", "utf-8",
         "-v", "org.eclim.test.impl.TestDelegate.list",
-        "-s", "java.util.List", "-m", "[\"add(Double)\", \"iterator()\"]"
+        "-s", "java.util.List", "-m", "[\"add(Double)\", \"iterator()\"]",
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -87,8 +87,8 @@ public class DelegateCommandTest
           "\\s+return list.iterator\\(\\);")
         .matcher(contents).find());
 
-    types = (List<Map<String,Object>>)result.get("superTypes");
-    methods = new HashSet<String>( (List<String>)types.get(0).get("methods"));
+    types = (List<Map<String, Object>>)result.get("superTypes");
+    methods = new HashSet<String>((List<String>)types.get(0).get("methods"));
     assertFalse(methods.contains("public abstract Iterator<Double> iterator()"));
     assertFalse(methods.contains("public abstract boolean add(Double)"));
   }

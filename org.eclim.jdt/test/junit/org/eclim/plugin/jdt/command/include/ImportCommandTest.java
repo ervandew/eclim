@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ public class ImportCommandTest
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertFalse(listImport.matcher(file).find());
 
-    Map<String,Object> position = (Map<String,Object>)Eclim.execute(new String[]{
+    Map<String, Object> position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "72", "-e", "utf-8", "-t", "java.util.List",
     });
@@ -82,7 +82,7 @@ public class ImportCommandTest
     assertEquals(7, position.get("line"));
     assertEquals(14, position.get("column"));
 
-    position = (Map<String,Object>)Eclim.execute(new String[]{
+    position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "98", "-e", "utf-8",
     });
@@ -99,7 +99,7 @@ public class ImportCommandTest
     assertEquals(9, position.get("line"));
     assertEquals(16, position.get("column"));
 
-    position = (Map<String,Object>)Eclim.execute(new String[]{
+    position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "166", "-e", "utf-8",
     });
@@ -118,7 +118,7 @@ public class ImportCommandTest
     assertEquals(11, position.get("line"));
     assertEquals(11, position.get("column"));
 
-    position = (Map<String,Object>)Eclim.execute(new String[]{
+    position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "220", "-e", "utf-8",
     });
@@ -140,7 +140,7 @@ public class ImportCommandTest
     assertEquals(14, position.get("line"));
     assertEquals(11, position.get("column"));
 
-    position = (Map<String,Object>)Eclim.execute(new String[]{
+    position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "280", "-e", "utf-8",
     });

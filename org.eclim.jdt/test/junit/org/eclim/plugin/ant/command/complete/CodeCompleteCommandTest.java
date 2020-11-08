@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2016  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,14 +40,14 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completeProperty()
   {
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "ant_complete", "-p", Ant.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "220", "-e", "utf-8"
+        "-o", "220", "-e", "utf-8",
       });
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertEquals(result.get("completion"), "test.ant.property");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"), "Test Value");
@@ -57,11 +57,11 @@ public class CodeCompleteCommandTest
   @SuppressWarnings("unchecked")
   public void completeTarget()
   {
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "ant_complete", "-p", Ant.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "234", "-e", "utf-8"
+        "-o", "234", "-e", "utf-8",
       });
 
     assertEquals("Wrong number of results.", 8, results.size());

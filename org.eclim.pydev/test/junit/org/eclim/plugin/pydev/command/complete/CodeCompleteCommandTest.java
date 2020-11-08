@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ public class CodeCompleteCommandTest
     assertTrue("Python project doesn't exist.",
         Eclim.projectExists(Pydev.TEST_PROJECT));
 
-    List<Map<String,String>> results = (List<Map<String,String>>)
+    List<Map<String, String>> results = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "python_complete", "-p", Pydev.TEST_PROJECT,
         "-f", TEST_FILE, "-o", "32", "-e", "utf-8",
@@ -59,7 +59,7 @@ public class CodeCompleteCommandTest
     assertEquals(results.get(4).get("completion"), "functions");
     assertEquals(results.get(5).get("completion"), "objects");
 
-    Map<String,String> result = results.get(6);
+    Map<String, String> result = results.get(6);
     assertEquals(result.get("completion"), "Test1");
     assertTrue(result.get("info").startsWith("class Test1(object):"));
 
@@ -79,7 +79,7 @@ public class CodeCompleteCommandTest
     assertTrue("Python project doesn't exist.",
         Eclim.projectExists(Pydev.TEST_PROJECT));
 
-    List<Map<String,String>> results = (List<Map<String,String>>)
+    List<Map<String, String>> results = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "python_complete", "-p", Pydev.TEST_PROJECT,
         "-f", TEST_FILE, "-o", "33", "-e", "utf-8",
@@ -87,7 +87,7 @@ public class CodeCompleteCommandTest
 
     assertEquals(results.size(), 3);
 
-    Map<String,String> result = results.get(0);
+    Map<String, String> result = results.get(0);
     assertEquals(result.get("completion"), "test1()");
     assertTrue(result.get("info").startsWith("def test1():"));
 

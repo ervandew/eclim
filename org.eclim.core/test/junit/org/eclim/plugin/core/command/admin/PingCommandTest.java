@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class PingCommandTest
   @SuppressWarnings("unchecked")
   public void execute()
   {
-    Map<String,String> result = (Map<String,String>)
+    Map<String, String> result = (Map<String, String>)
         Eclim.execute(new String[]{"ping"});
     assertEquals("Unexpected result",
         System.getProperty("eclim.version"), result.get("eclim"));

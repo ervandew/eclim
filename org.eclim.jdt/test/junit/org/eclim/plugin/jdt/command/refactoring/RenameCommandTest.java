@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ public class RenameCommandTest
     assertTrue("print of 'FOO' not found", tn2Contents.indexOf(
           "System.out.println(FOO);") > 0);
 
-    Map<String,Object> preview = (Map<String,Object>)
+    Map<String, Object> preview = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
@@ -76,8 +76,8 @@ public class RenameCommandTest
         "-p \"eclim_unit_test_java\" " +
         "-f \"src/org/eclim/test/refactoring/rename/n1/TestN1.java\" " +
         "-n \"BAR\" -o \"98\" -l \"3\" -e \"utf-8\"", preview.get("apply"));
-    List<Map<String,String>> changes =
-      (List<Map<String,String>>)preview.get("changes");
+    List<Map<String, String>> changes =
+      (List<Map<String, String>>)preview.get("changes");
     assertEquals(2, changes.size());
     assertEquals("diff", changes.get(0).get("type"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
@@ -98,7 +98,7 @@ public class RenameCommandTest
         tn2Contents.replaceAll("FOO", "BAR"), diff);
 
     // rename
-    List<Map<String,String>> result = (List<Map<String,String>>)
+    List<Map<String, String>> result = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
@@ -148,7 +148,7 @@ public class RenameCommandTest
           "test.testMethod()") > 0);
 
     // preview
-    Map<String,Object> preview = (Map<String,Object>)
+    Map<String, Object> preview = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
@@ -159,8 +159,8 @@ public class RenameCommandTest
         "-p \"eclim_unit_test_java\" " +
         "-f \"src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\" " +
         "-n \"testRename\" -o \"310\" -l \"10\" -e \"utf-8\"", preview.get("apply"));
-    List<Map<String,String>> changes =
-      (List<Map<String,String>>)preview.get("changes");
+    List<Map<String, String>> changes =
+      (List<Map<String, String>>)preview.get("changes");
     assertEquals(2, changes.size());
     assertEquals("diff", changes.get(0).get("type"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
@@ -181,7 +181,7 @@ public class RenameCommandTest
         tn1Contents.replaceAll("testMethod", "testRename"), diff);
 
     // rename
-    List<Map<String,String>> result = (List<Map<String,String>>)
+    List<Map<String, String>> result = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
@@ -231,7 +231,7 @@ public class RenameCommandTest
           "import org.eclim.test.refactoring.rename.n1.TestN1;") > 0);
 
     // preview
-    Map<String,Object> preview = (Map<String,Object>)
+    Map<String, Object> preview = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
@@ -242,8 +242,8 @@ public class RenameCommandTest
         "-p \"eclim_unit_test_java\" " +
         "-f \"src/org/eclim/test/refactoring/rename/n1/TestN1.java\" " +
         "-n \"TestR1\" -o \"60\" -l \"6\" -e \"utf-8\"", preview.get("apply"));
-    List<Map<String,String>> changes =
-      (List<Map<String,String>>)preview.get("changes");
+    List<Map<String, String>> changes =
+      (List<Map<String, String>>)preview.get("changes");
     assertEquals(2, changes.size());
     assertEquals("diff", changes.get(0).get("type"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
@@ -264,7 +264,7 @@ public class RenameCommandTest
         tn2Contents.replaceAll("TestN1", "TestR1"), diff);
 
     // rename
-    List<Map<String,String>> result = (List<Map<String,String>>)
+    List<Map<String, String>> result = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/TestN1.java",
@@ -295,7 +295,7 @@ public class RenameCommandTest
         tn2Contents.replaceAll("TestN1", "TestR1"), tn2NewContents);
 
     // rename it back
-    result = (List<Map<String,String>>)
+    result = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/TestR1.java",
@@ -337,11 +337,12 @@ public class RenameCommandTest
           "package org.eclim.test.refactoring.rename.n1.n2;") != -1);
 
     // preview
-    Map<String,Object> preview = (Map<String,Object>)
+    Map<String, Object> preview = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-        "-n", "org.eclim.test.refactoring.rename.r1", "-o", "42", "-l", "2", "-e", "utf-8", "-v",
+        "-n", "org.eclim.test.refactoring.rename.r1",
+        "-o", "42", "-l", "2", "-e", "utf-8", "-v",
       });
     assertEquals(
         "-command \"java_refactor_rename\" " +
@@ -349,8 +350,8 @@ public class RenameCommandTest
         "-f \"src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java\" " +
         "-n \"org.eclim.test.refactoring.rename.r1\" " +
         "-o \"42\" -l \"2\" -e \"utf-8\"", preview.get("apply"));
-    List<Map<String,String>> changes =
-      (List<Map<String,String>>)preview.get("changes");
+    List<Map<String, String>> changes =
+      (List<Map<String, String>>)preview.get("changes");
     assertEquals(2, changes.size());
     assertEquals("diff", changes.get(0).get("type"));
     assertEquals(p + "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
@@ -365,7 +366,8 @@ public class RenameCommandTest
     String diff = (String)Eclim.execute(new String[]{
       "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
       "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
-      "-n", "org.eclim.test.refactoring.rename.r1", "-o", "42", "-l", "2", "-e", "utf-8", "-v",
+      "-n", "org.eclim.test.refactoring.rename.r1",
+      "-o", "42", "-l", "2", "-e", "utf-8", "-v",
       "-d", Eclim.resolveFile(Jdt.TEST_PROJECT,
       "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java"),
     });
@@ -373,7 +375,7 @@ public class RenameCommandTest
         tn2Contents.replaceAll("n1\\.TestN1", "r1.TestN1"), diff);
 
     // rename
-    List<Map<String,String>> result = (List<Map<String,String>>)
+    List<Map<String, String>> result = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/n1/n2/TestN2.java",
@@ -413,7 +415,7 @@ public class RenameCommandTest
         tn2Contents.replaceAll("n1", "r1"), tn2NewContents);
 
     // rename it back
-    result = (List<Map<String,String>>)
+    result = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_refactor_rename", "-p", Jdt.TEST_PROJECT,
         "-f", "src/org/eclim/test/refactoring/rename/r1/n2/TestN2.java",

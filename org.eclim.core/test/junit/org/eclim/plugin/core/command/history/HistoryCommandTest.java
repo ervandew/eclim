@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,13 +54,13 @@ public class HistoryCommandTest
     throws Exception
   {
     String result = (String)Eclim.execute(new String[]{
-      "history_clear", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      "history_clear", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
     });
     assertEquals(result, "History Cleared.");
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
-        "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+        "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
       });
     assertEquals(0, results.size());
 
@@ -68,10 +68,10 @@ public class HistoryCommandTest
         Eclim.fileToString(Eclim.TEST_PROJECT, TEST_FILE), "line 1\n");
 
     Eclim.execute(new String[]{
-      "history_add", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      "history_add", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
     });
     Eclim.execute(new String[]{
-      "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
     });
 
     BufferedWriter out = null;
@@ -87,28 +87,31 @@ public class HistoryCommandTest
     }
 
     Eclim.execute(new String[]{
-      "history_add", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      "history_add", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
     });
     Eclim.execute(new String[]{
-      "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+      "project_refresh_file", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
     });
 
-    results = (List<Map<String,Object>>)
+    results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
-        "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+        "history_list", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
       });
 
     assertEquals(2, results.size());
 
-    for (Map<String,Object> entry : results){
-      assertTrue(ENTRY_TIMESTAMP.matcher(entry.get("timestamp").toString()).matches());
-      assertTrue(ENTRY_DATETIME.matcher(entry.get("datetime").toString()).matches());
-      assertTrue(ENTRY_DELTA.matcher(entry.get("delta").toString()).matches());
+    for (Map<String, Object> entry : results){
+      assertTrue(
+          ENTRY_TIMESTAMP.matcher(entry.get("timestamp").toString()).matches());
+      assertTrue(
+          ENTRY_DATETIME.matcher(entry.get("datetime").toString()).matches());
+      assertTrue(
+          ENTRY_DELTA.matcher(entry.get("delta").toString()).matches());
     }
 
     result = (String)Eclim.execute(new String[]{
       "history_revision", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
-      "-r", results.get(1).get("timestamp").toString()
+      "-r", results.get(1).get("timestamp").toString(),
     });
     assertEquals("Wrong result.", result, "line 1\n");
   }

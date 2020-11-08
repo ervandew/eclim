@@ -368,7 +368,7 @@ public class Preferences
    * @param name The name of the option/preference.
    * @return The Map value or null if not found
    */
-  public Map<String,String> getMapValue(String name)
+  public Map<String, String> getMapValue(String name)
   {
     return getMapValue(null, name);
   }
@@ -381,14 +381,14 @@ public class Preferences
    * @return The Map value or and empty array if not found.
    */
   @SuppressWarnings("unchecked")
-  public Map<String,String> getMapValue(IProject project, String name)
+  public Map<String, String> getMapValue(IProject project, String name)
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
-      return (Map<String,String>)new Gson().fromJson(
-          value, new TypeToken<Map<String,String>>(){}.getType());
+      return (Map<String, String>)new Gson().fromJson(
+          value, new TypeToken<Map<String, String>>(){}.getType());
     }
-    return new HashMap<String,String>();
+    return new HashMap<String, String>();
   }
 
   /**

@@ -620,7 +620,7 @@ target(name: 'vimdocs'){
 
 target(name: 'checkstyle'){
   path(id: 'checkstyle-classpath'){
-    fileset(dir: 'ant/lib/', includes: 'checkstyle-*.jar')
+    fileset(dir: 'org.eclim.jdt/lib/', includes: 'checkstyle-*.jar')
     pathelement(path: '${build.classes}/checkstyle')
   }
   mkdir(dir: '${build.classes}/checkstyle')
@@ -635,20 +635,6 @@ target(name: 'checkstyle'){
     compilerarg(value: '-Xlint:-options')
   }
 
-  // ant may contain an antlr jar that is incompatible w/ checkstyle, but
-  // checkstyle doesn't support forking of it's own, so we have to use the java
-  // task to ensure that ant's antlr jar doesn't get loaded.
-  //taskdef(resource: 'checkstyletask.properties', classpathref: 'checkstyle-classpath')
-  //checkstyle(config: 'ant/checkstyle.xml'){
-  //  pluginNames.each(){ name ->
-  //    if (new File("${name}/java").exists()){
-  //      fileset(dir: "${name}/java",
-  //        includes: 'org/eclim/**/*.java',
-  //        excludes: 'org/eclim/util/file/BufferedReader.java')
-  //      //property(key: 'checkstyle.cache.file', file: 'build/temp/checkstyle/cache')
-  //    }
-  //  }
-  //}
   java(
       classname: 'com.puppycrawl.tools.checkstyle.Main',
       classpathref: 'checkstyle-classpath'){
@@ -656,8 +642,10 @@ target(name: 'checkstyle'){
     arg(value: "ant/checkstyle.xml")
     pluginNames.each(){ name ->
       if (new File("${name}/java").exists()){
-        arg(value: '-r')
         arg(value: "${name}/java")
+      }
+      if (new File("${name}/test/junit").exists()){
+        arg(value: "${name}/test/junit")
       }
     }
   }

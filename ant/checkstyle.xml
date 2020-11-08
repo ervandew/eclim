@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC
- "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
- "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+  "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+  "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
   <property name="severity" value="warning"/>
 
-  <module name="SuppressionCommentFilter"/>
   <module name="SuppressionFilter">
     <property name="file" value="ant/checkstyle-suppressions.xml"/>
   </module>
+  <module name="LineLength">
+    <property name="max" value="85"/>
+    <property name="ignorePattern" value="^(\s*\* (@see )?[^ ]+|^import\b.*|\s*// [^ ].*)$"/>
+  </module>
   <module name="FileTabCharacter"/>
+
   <module name="TreeWalker">
     <property name="tabWidth" value="2" />
 
-    <module name="FileContentsHolder"/>
+    <module name="SuppressionCommentFilter"/>
     <module name="ArrayTrailingComma"/>
     <module name="ArrayTypeStyle"/>
-    <module name="AvoidStarImport"/>
+    <module name="AvoidStarImport">
+      <property name="allowStaticMemberImports" value="true"/>
+    </module>
     <module name="DeclarationOrder">
       <property name="ignoreModifiers" value="true"/>
     </module>
@@ -30,12 +36,16 @@
     </module>
     <module name="EmptyStatement"/>
     <module name="GenericWhitespace"/>
-    <module name="ImportOrder">
+    <!--
+      as of checkstyle 8.3, 'separated=true' returns warnings for any blank
+      space on imports that have the same root package name ('java', 'org', etc)
+    -->
+    <!--module name="org.eclim.checkstyle.ImportOrderCheck">
       <property name="groups" value="/^javax?\./,org"/>
       <property name="ordered" value="true"/>
       <property name="separated" value="true"/>
       <property name="option" value="above"/>
-    </module>
+    </module-->
     <module name="org.eclim.checkstyle.LeftCurly">
       <property name="option" value="nl"/>
       <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, CTOR_DEF, METHOD_DEF"/>
@@ -47,10 +57,6 @@
           LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY,
           LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_SYNCHRONIZED,
           LITERAL_TRY, LITERAL_WHILE"/>
-    </module>
-    <module name="LineLength">
-      <property name="max" value="85"/>
-      <property name="ignorePattern" value="^(\s*\* (@see )?[^ ]+|^import\b.*|\s*// [^ ].*)$"/>
     </module>
     <module name="MethodParamPad">
       <property name="tokens" value="METHOD_CALL, METHOD_DEF, SUPER_CTOR_CALL"/>
@@ -73,8 +79,8 @@
     <module name="RightCurly">
       <property name="option" value="same"/>
     </module>
-    <module name="org.eclim.checkstyle.ThrowsClause"/>
-    <module name="org.eclim.checkstyle.WhitespaceAfter">
+    <module name="org.eclim.checkstyle.ThrowsClauseCheck"/>
+    <module name="WhitespaceAfter">
       <property name="tokens" value="COMMA, SEMI"/>
     </module>
     <module name="WhitespaceAround">

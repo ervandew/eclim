@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public class SrcFindCommandTest
 
     String result = (String)Eclim.execute(new String[]{
       "java_src_find", "-p", Jdt.TEST_PROJECT,
-      "-c", "org.eclim.test.src.TestPrototype"
+      "-c", "org.eclim.test.src.TestPrototype",
     });
 
     assertEquals("Wrong result.",
@@ -50,7 +50,7 @@ public class SrcFindCommandTest
 
     result = (String)Eclim.execute(new String[]{
       "java_src_find", "-p", Jdt.TEST_PROJECT,
-      "-c", "org.eclim.test.src.TestProotype"
+      "-c", "org.eclim.test.src.TestProotype",
     });
 
     assertEquals("Wrong result.", "", result);

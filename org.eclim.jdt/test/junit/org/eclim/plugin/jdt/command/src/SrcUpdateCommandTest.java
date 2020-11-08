@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  */
 public class SrcUpdateCommandTest
 {
-  private static final String TEST_FILE=
+  private static final String TEST_FILE =
     "src/org/eclim/test/src/TestSrc.java";
 
   @Test
@@ -44,16 +44,16 @@ public class SrcUpdateCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
-        "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE, "-v"
+        "java_src_update", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE, "-v",
       });
 
     assertEquals("Wrong number of errors.", 3, results.size());
 
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
-    Map<String,Object> error = results.get(0);
+    Map<String, Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertTrue(((String)error.get("message")).indexOf("List is a raw type") != -1);
     assertEquals(error.get("line"), 10);
@@ -62,14 +62,16 @@ public class SrcUpdateCommandTest
 
     error = results.get(1);
     assertEquals(error.get("filename"), file);
-    assertTrue(((String)error.get("message")).indexOf("ArrayList is a raw type") != -1);
+    assertTrue(
+        ((String)error.get("message")).indexOf("ArrayList is a raw type") != -1);
     assertEquals(error.get("line"), 10);
     assertEquals(error.get("column"), 21);
     assertEquals(error.get("warning"), true);
 
     error = results.get(2);
     assertEquals(error.get("filename"), file);
-    assertTrue(((String)error.get("message")).indexOf("The method a() is undefined") != -1);
+    assertTrue(
+        ((String)error.get("message")).indexOf("The method a() is undefined") != -1);
     assertEquals(error.get("line"), 11);
     assertEquals(error.get("column"), 10);
     assertEquals(error.get("warning"), false);

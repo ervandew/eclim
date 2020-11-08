@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public class SettingsUpdateCommand
       JsonObject obj = (JsonObject)parser.next();
 
       Preferences preferences = getPreferences();
-      for (Map.Entry<String,JsonElement> entry : obj.entrySet()){
+      for (Map.Entry<String, JsonElement> entry : obj.entrySet()){
         String name = entry.getKey();
         String value = entry.getValue().getAsString();
         try{

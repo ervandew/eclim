@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,22 +44,23 @@ public class HierarchyCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_hierarchy", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-o", "1", "-e", "utf-8"
+        "-f", TEST_FILE, "-o", "1", "-e", "utf-8",
       });
 
     assertEquals(result.get("name"), "public class TestHierarchy");
     assertEquals(result.get("qualified"), "org.eclim.test.hierarchy.TestHierarchy");
 
-    List<Map<String,Object>> children = (List<Map<String,Object>>)
+    List<Map<String, Object>> children = (List<Map<String, Object>>)
       result.get("children");
-    Map<String,Object> child = children.get(0);
+    Map<String, Object> child = children.get(0);
     assertEquals(child.get("name"), "public class Component");
     assertEquals(child.get("qualified"), "java.awt.Component");
 
-    List<Map<String,Object>> subChildren = (List<Map<String,Object>>)child.get("children");
+    List<Map<String, Object>> subChildren =
+      (List<Map<String, Object>>)child.get("children");
     child = subChildren.get(0);
     assertEquals(child.get("name"), "public interface ImageObserver");
     assertEquals(child.get("qualified"), "java.awt.image.ImageObserver");
@@ -84,7 +85,7 @@ public class HierarchyCommandTest
     assertEquals(child.get("name"), "public interface PropertyChangeListener");
     assertEquals(child.get("qualified"), "java.beans.PropertyChangeListener");
 
-    children = (List<Map<String,Object>>)child.get("children");
+    children = (List<Map<String, Object>>)child.get("children");
     child = children.get(0);
     assertEquals(child.get("name"), "public interface EventListener");
     assertEquals(child.get("qualified"), "java.util.EventListener");
@@ -95,18 +96,18 @@ public class HierarchyCommandTest
   @SuppressWarnings("unchecked")
   public void testNested()
   {
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_hierarchy", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-o", "967", "-e", "utf-8"
+        "-f", TEST_FILE, "-o", "967", "-e", "utf-8",
       });
 
     assertEquals(result.get("name"), "class TestHierarchy.TestNested");
     assertEquals(result.get("qualified"), "org.eclim.test.hierarchy.TestHierarchy");
 
-    List<Map<String,Object>> children = (List<Map<String,Object>>)
-      result.get("children");
-    Map<String,Object> child = children.get(0);
+    List<Map<String, Object>> children =
+      (List<Map<String, Object>>)result.get("children");
+    Map<String, Object> child = children.get(0);
     assertEquals(child.get("name"), "public interface Comparable");
     assertEquals(child.get("qualified"), "java.lang.Comparable");
     assertEquals(((List<Object>)child.get("children")).size(), 0);
@@ -115,16 +116,16 @@ public class HierarchyCommandTest
     assertEquals(child.get("name"), "public interface PropertyChangeListener");
     assertEquals(child.get("qualified"), "java.beans.PropertyChangeListener");
 
-    children = (List<Map<String,Object>>)child.get("children");
+    children = (List<Map<String, Object>>)child.get("children");
     child = children.get(0);
     assertEquals(child.get("name"), "public interface EventListener");
     assertEquals(child.get("qualified"), "java.util.EventListener");
     assertEquals(((List<Object>)child.get("children")).size(), 0);
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_hierarchy", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE, "-o", "1075", "-e", "utf-8"
+        "-f", TEST_FILE, "-o", "1075", "-e", "utf-8",
       });
 
     assertEquals(result.get("name"), "class TestHierarchy.Test");

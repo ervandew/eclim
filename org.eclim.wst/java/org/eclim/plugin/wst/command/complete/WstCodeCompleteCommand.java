@@ -66,7 +66,7 @@ public abstract class WstCodeCompleteCommand
     IStructuredModel model = null;
     try{
       model = StructuredModelManager.getModelManager().getModelForRead(ifile);
-    }catch(CoreException|IOException e){
+    }catch(CoreException | IOException e){
       throw new RuntimeException(e);
     }
 
@@ -110,10 +110,10 @@ public abstract class WstCodeCompleteCommand
 
         return proposals;
       }catch(
-          BadLocationException|
-          IllegalAccessException|
-          InstantiationException|
-          InvocationTargetException|
+          BadLocationException |
+          IllegalAccessException |
+          InstantiationException |
+          InvocationTargetException |
           NoSuchMethodException ex)
       {
         throw new RuntimeException(ex);

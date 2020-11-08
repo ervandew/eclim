@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public class JUnitTestsCommandTest
 
     List<String> results = (List<String>)
       Eclim.execute(new String[]{
-        "java_junit_tests", "-p", Jdt.TEST_PROJECT
+        "java_junit_tests", "-p", Jdt.TEST_PROJECT,
       });
 
     // remove for consistency since the vunit test adds the imports that makes

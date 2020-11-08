@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public class CommentCommandTest
 
     Eclim.execute(new String[]{
       "javadoc_comment", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "58", "-e", "utf-8"
+      "-f", TEST_FILE, "-o", "58", "-e", "utf-8",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -85,7 +85,7 @@ public class CommentCommandTest
 
     Eclim.execute(new String[]{
       "javadoc_comment", "-p", Jdt.TEST_PROJECT,
-      "-f", TEST_FILE, "-o", "158", "-e", "utf-8"
+      "-f", TEST_FILE, "-o", "158", "-e", "utf-8",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);

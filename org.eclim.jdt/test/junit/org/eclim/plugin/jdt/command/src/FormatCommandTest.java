@@ -72,7 +72,7 @@ public class FormatCommandTest
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-h", "109", "-t", "146", "-e", "utf-8"
+      "-h", "109", "-t", "146", "-e", "utf-8",
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -91,7 +91,7 @@ public class FormatCommandTest
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-h", "150", "-t", "200", "-e", "utf-8"
+      "-h", "150", "-t", "200", "-e", "utf-8",
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -116,7 +116,7 @@ public class FormatCommandTest
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-h", "0", "-t", "207", "-e", "utf-8"
+      "-h", "0", "-t", "207", "-e", "utf-8",
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);

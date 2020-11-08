@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,9 @@ public class JUnitCommandTest
 
     String[] lines = StringUtils.split(result, '\n');
     assertEquals("Testsuite: org.eclim.test.junit.run.FooTest", lines[1]);
-    assertTrue(lines[3], lines[3].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
+    assertTrue(
+        lines[3],
+        lines[3].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
 
     String[] results = new String[lines.length - 4];
     System.arraycopy(lines, 4, results, 0, results.length);
@@ -99,11 +101,15 @@ public class JUnitCommandTest
 
     String[] lines = StringUtils.split(result, '\n');
     assertEquals("Testsuite: org.eclim.test.junit.run.BarTest", lines[1]);
-    assertTrue(lines[3], lines[3].startsWith("Tests run: 1, Failures: 0, Errors: 0"));
+    assertTrue(
+        lines[3],
+        lines[3].startsWith("Tests run: 1, Failures: 0, Errors: 0"));
     assertTrue(lines[4], lines[4].startsWith("Testcase: bar took "));
 
     assertEquals("Testsuite: org.eclim.test.junit.run.FooTest", lines[6]);
-    assertTrue(lines[8], lines[8].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
+    assertTrue(
+        lines[8],
+        lines[8].startsWith("Tests run: 3, Failures: 0, Errors: 0"));
     String[] results = new String[lines.length - 9];
     System.arraycopy(lines, 9, results, 0, results.length);
     Arrays.sort(results);

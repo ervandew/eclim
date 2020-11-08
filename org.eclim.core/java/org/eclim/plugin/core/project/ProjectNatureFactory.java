@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,8 +42,8 @@ public class ProjectNatureFactory
 
   public static String NONE = "none";
 
-  private static Map<String,String[]> natureAliases =
-    new HashMap<String,String[]>();
+  private static Map<String, String[]> natureAliases =
+    new HashMap<String, String[]>();
 
   /**
    * Registers a project nature.
@@ -84,7 +84,7 @@ public class ProjectNatureFactory
    *
    * @return Map of aliases.
    */
-  public static Map<String,String[]> getNatureAliasesMap()
+  public static Map<String, String[]> getNatureAliasesMap()
   {
     return Collections.unmodifiableMap(natureAliases);
   }

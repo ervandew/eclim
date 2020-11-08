@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,15 +49,15 @@ public class JUnitImplCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_junit_impl", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       });
 
     assertEquals("org.eclim.test.junit.SomeClassTest", result.get("type"));
 
-    List<Map<String,Object>> types =
-      (List<Map<String,Object>>)result.get("superTypes");
+    List<Map<String, Object>> types =
+      (List<Map<String, Object>>)result.get("superTypes");
     assertEquals(3, types.size());
 
     assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));
@@ -68,13 +68,13 @@ public class JUnitImplCommandTest
     assertTrue(methods.contains("public void aMethod(String)"));
     assertTrue(methods.contains("public void anotherMethod(int)"));
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_junit_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
         "-t", "org.eclim.test.junit.SomeClassTest",
         "-s", "org.eclim.test.junit.SomeClass",
-        "-m", "[\"aMethod(String)\"]"
+        "-m", "[\"aMethod(String)\"]",
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -82,7 +82,7 @@ public class JUnitImplCommandTest
         Pattern.compile("@Test\n\\s+public void aMethod\\(\\)")
         .matcher(contents).find());
 
-    types = (List<Map<String,Object>>)result.get("superTypes");
+    types = (List<Map<String, Object>>)result.get("superTypes");
 
     assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));
     assertEquals("class SomeClass", types.get(0).get("signature"));
@@ -99,15 +99,15 @@ public class JUnitImplCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_junit_impl", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE_DIFF_PACK,
       });
 
     assertEquals("org.eclim.test.junit.tests.Testme", result.get("type"));
 
-    List<Map<String,Object>> types =
-      (List<Map<String,Object>>)result.get("superTypes");
+    List<Map<String, Object>> types =
+      (List<Map<String, Object>>)result.get("superTypes");
     assertEquals(2, types.size());
 
     assertEquals("org.eclim.test.junit", types.get(0).get("packageName"));

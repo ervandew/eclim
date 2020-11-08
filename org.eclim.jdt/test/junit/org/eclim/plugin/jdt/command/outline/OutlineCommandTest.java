@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,8 +56,7 @@ public class OutlineCommandTest
   private String resultOutput(List<Map<String, Object>> nodes, String indent)
   {
     StringBuilder result = new StringBuilder();
-    for(Map<String, Object> node : nodes)
-    {
+    for(Map<String, Object> node : nodes){
       result
         .append(indent + node.get("name") + "\n")
         .append(

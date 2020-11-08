@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  */
 public class SrcUpdateCommandTest
 {
-  private static final String TEST_FILE=
+  private static final String TEST_FILE =
     "test/validate/test_validate.py";
 
   @Test
@@ -44,16 +44,16 @@ public class SrcUpdateCommandTest
     assertTrue("Python project doesn't exist.",
         Eclim.projectExists(Pydev.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
-        "python_src_update", "-p", Pydev.TEST_PROJECT, "-f", TEST_FILE, "-v"
+        "python_src_update", "-p", Pydev.TEST_PROJECT, "-f", TEST_FILE, "-v",
       });
 
     assertEquals("Wrong number of errors.", 2, results.size());
 
     String file = Eclim.resolveFile(Pydev.TEST_PROJECT, TEST_FILE);
 
-    Map<String,Object> error = results.get(0);
+    Map<String, Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"), "Unused import: common");
     assertEquals(error.get("line"), 1);

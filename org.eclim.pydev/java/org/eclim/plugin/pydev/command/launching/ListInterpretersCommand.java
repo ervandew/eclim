@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2018 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,22 +45,22 @@ public class ListInterpretersCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    ArrayList<HashMap<String,String>> results =
-      new ArrayList<HashMap<String,String>>();
+    ArrayList<HashMap<String, String>> results =
+      new ArrayList<HashMap<String, String>>();
 
     IInterpreterManager manager =
       InterpreterManagersAPI.getPythonInterpreterManager();
     IInterpreterInfo[] interpreters = manager.getInterpreterInfos();
     for (IInterpreterInfo interpreter : interpreters){
-      HashMap<String,String> result = new HashMap<String,String>();
+      HashMap<String, String> result = new HashMap<String, String>();
       results.add(result);
       result.put("name", interpreter.getName());
       result.put("version", interpreter.getVersion());
       result.put("path", interpreter.getExecutableOrJar());
     }
 
-    Collections.sort(results, new Comparator<HashMap<String,String>>(){
-      public int compare(HashMap<String,String> o1, HashMap<String,String> o2){
+    Collections.sort(results, new Comparator<HashMap<String, String>>(){
+      public int compare(HashMap<String, String> o1, HashMap<String, String> o2){
         return o1.get("name").compareTo(o2.get("name"));
       }
     });

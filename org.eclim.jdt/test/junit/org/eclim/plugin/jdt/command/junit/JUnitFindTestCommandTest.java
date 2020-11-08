@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class JUnitFindTestCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)Eclim.execute(new String[]{
+    Map<String, Object> result = (Map<String, Object>)Eclim.execute(new String[]{
       "java_junit_find_test", "-p", Jdt.TEST_PROJECT,
       "-f", CLASS, "-o", "0", "-e", "utf-8",
     });
@@ -54,7 +54,7 @@ public class JUnitFindTestCommandTest
     assertEquals(7, result.get("line"));
     assertEquals(1, result.get("column"));
 
-    result = (Map<String,Object>)Eclim.execute(new String[]{
+    result = (Map<String, Object>)Eclim.execute(new String[]{
       "java_junit_find_test", "-p", Jdt.TEST_PROJECT,
       "-f", CLASS, "-o", "70", "-e", "utf-8",
     });
@@ -63,7 +63,7 @@ public class JUnitFindTestCommandTest
     assertEquals(9, result.get("line"));
     assertEquals(3, result.get("column"));
 
-    result = (Map<String,Object>)Eclim.execute(new String[]{
+    result = (Map<String, Object>)Eclim.execute(new String[]{
       "java_junit_find_test", "-p", Jdt.TEST_PROJECT,
       "-f", CLASS, "-o", "163", "-e", "utf-8",
     });
@@ -80,7 +80,7 @@ public class JUnitFindTestCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)Eclim.execute(new String[]{
+    Map<String, Object> result = (Map<String, Object>)Eclim.execute(new String[]{
       "java_junit_find_test", "-p", Jdt.TEST_PROJECT,
       "-f", TEST, "-o", "0", "-e", "utf-8",
     });
@@ -89,7 +89,7 @@ public class JUnitFindTestCommandTest
     assertEquals(3, result.get("line"));
     assertEquals(1, result.get("column"));
 
-    result = (Map<String,Object>)Eclim.execute(new String[]{
+    result = (Map<String, Object>)Eclim.execute(new String[]{
       "java_junit_find_test", "-p", Jdt.TEST_PROJECT,
       "-f", TEST, "-o", "178", "-e", "utf-8",
     });
@@ -98,7 +98,7 @@ public class JUnitFindTestCommandTest
     assertEquals(5, result.get("line"));
     assertEquals(3, result.get("column"));
 
-    result = (Map<String,Object>)Eclim.execute(new String[]{
+    result = (Map<String, Object>)Eclim.execute(new String[]{
       "java_junit_find_test", "-p", Jdt.TEST_PROJECT,
       "-f", TEST, "-o", "374", "-e", "utf-8",
     });

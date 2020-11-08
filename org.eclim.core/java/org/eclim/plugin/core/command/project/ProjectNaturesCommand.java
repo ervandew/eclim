@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,8 +52,8 @@ public class ProjectNaturesCommand
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
 
-    ArrayList<HashMap<String,Object>> results =
-      new ArrayList<HashMap<String,Object>>();
+    ArrayList<HashMap<String, Object>> results =
+      new ArrayList<HashMap<String, Object>>();
 
     // list all projects.
     if(name == null){
@@ -65,7 +65,7 @@ public class ProjectNaturesCommand
           if (aliases.length == 0){
             aliases = new String[]{"none"};
           }
-          HashMap<String,Object> result = new HashMap<String,Object>();
+          HashMap<String, Object> result = new HashMap<String, Object>();
           result.put("name", project.getName());
           result.put("natures", aliases);
           results.add(result);
@@ -78,7 +78,7 @@ public class ProjectNaturesCommand
       if (aliases.length == 0){
         aliases = new String[]{"none"};
       }
-      HashMap<String,Object> result = new HashMap<String,Object>();
+      HashMap<String, Object> result = new HashMap<String, Object>();
       result.put("name", name);
       result.put("natures", aliases);
       results.add(result);

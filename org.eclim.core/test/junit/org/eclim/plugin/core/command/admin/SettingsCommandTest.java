@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,11 +41,11 @@ public class SettingsCommandTest
   public void execute()
     throws Exception
   {
-    List<Map<String,String>> results = (List<Map<String,String>>)
+    List<Map<String, String>> results = (List<Map<String, String>>)
       Eclim.execute(new String[]{"settings"});
 
-    HashMap<String,String> properties = new HashMap<String,String>();
-    for (Map<String,String> result : results){
+    HashMap<String, String> properties = new HashMap<String, String>();
+    for (Map<String, String> result : results){
       properties.put(result.get("name"), result.get("value"));
     }
 

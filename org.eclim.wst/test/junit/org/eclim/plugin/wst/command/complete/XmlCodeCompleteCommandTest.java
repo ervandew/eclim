@@ -43,15 +43,15 @@ public class XmlCodeCompleteCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "xml_complete", "-p", Wst.TEST_PROJECT,
-        "-f", TEST_FILE_XSD, "-o", "584", "-e", "utf-8"
+        "-f", TEST_FILE_XSD, "-o", "584", "-e", "utf-8",
       });
 
     assertEquals("Wrong number of results.", 1, results.size());
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertEquals(result.get("completion"), "xs:unique");
     assertEquals(result.get("menu"), "");
     assertEquals(result.get("info"),

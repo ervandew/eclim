@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,17 +40,17 @@ public class ValidateCommandTest
   @SuppressWarnings("unchecked")
   public void validateXmlErrors()
   {
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "log4j_validate", "-p", Jdt.TEST_PROJECT,
-        "-f", TEST_FILE
+        "-f", TEST_FILE,
     });
 
     assertEquals("Wrong number of results", 6, results.size());
 
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
-    Map<String,Object> error = results.get(0);
+    Map<String, Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
         "Element type \"pram\" must be declared.");

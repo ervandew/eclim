@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,8 +63,7 @@ public class TargetsCommand
     AntProjectNode projectNode = model.getProjectNode(true);
     Project antProject = projectNode.getProject();
 
-    @SuppressWarnings("unchecked")
-    Map<String,Target> targets = antProject.getTargets();
+    Map<String, Target> targets = antProject.getTargets();
     for (String target : targets.keySet()){
       if(target.trim().length() > 0){
         results.add(target);

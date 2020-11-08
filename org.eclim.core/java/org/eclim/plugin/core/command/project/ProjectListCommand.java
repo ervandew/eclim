@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,11 +63,11 @@ public class ProjectListCommand
       projects = (IProject[])filtered.toArray(new IProject[filtered.size()]);
     }
 
-    ArrayList<HashMap<String,Object>> results =
-      new ArrayList<HashMap<String,Object>>();
+    ArrayList<HashMap<String, Object>> results =
+      new ArrayList<HashMap<String, Object>>();
     for(IProject project : projects){
       if(project.exists()){
-        HashMap<String,Object> result = new HashMap<String,Object>();
+        HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("name", project.getName());
         result.put("path", ProjectUtils.getPath(project));
         result.put("open", project.isOpen());

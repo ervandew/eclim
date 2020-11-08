@@ -47,7 +47,7 @@ public class ProjectCommandsTest
       Eclim.execute(new String[]{
         "project_create",
         "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT,
-        "-n", "java"
+        "-n", "java",
       });
     }
   }
@@ -79,7 +79,7 @@ public class ProjectCommandsTest
     Eclim.execute(new String[]{
       "project_create",
       "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_CREATE,
-      "-n", "java"
+      "-n", "java",
     });
 
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT_CREATE));
@@ -173,7 +173,7 @@ public class ProjectCommandsTest
     Eclim.execute(new String[]{
       "project_create",
       "-f", Eclim.getWorkspace() + "/" + TEST_PROJECT_IMPORT,
-      "-n", "java"
+      "-n", "java",
     });
 
     assertTrue("Project not created.", Eclim.projectExists(TEST_PROJECT_IMPORT));
@@ -191,7 +191,7 @@ public class ProjectCommandsTest
 
     assertTrue("Project not imported.", Eclim.projectExists(TEST_PROJECT_IMPORT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "project_natures", "-p", TEST_PROJECT_IMPORT,
       });
@@ -219,10 +219,10 @@ public class ProjectCommandsTest
   @SuppressWarnings("unchecked")
   private boolean projectOpen()
   {
-    List<Map<String,Object>> projects = (List<Map<String,Object>>)
+    List<Map<String, Object>> projects = (List<Map<String, Object>>)
       Eclim.execute(new String[]{"project_list"});
 
-    for (Map<String,Object> project : projects){
+    for (Map<String, Object> project : projects){
       if (project.get("name").equals(TEST_PROJECT) &&
           project.get("open").equals(Boolean.TRUE))
       {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,12 +61,12 @@ public class ProjectsCommand
   public Object execute(CommandLine commandLine)
     throws Exception
   {
-    ArrayList<HashMap<String,Object>> results =
-      new ArrayList<HashMap<String,Object>>();
+    ArrayList<HashMap<String, Object>> results =
+      new ArrayList<HashMap<String, Object>>();
     IWorkspace workspace = ResourcesPlugin.getWorkspace();
     IProject[] projects = workspace.getRoot().getProjects();
     for (IProject project : projects){
-      HashMap<String,Object> info = new HashMap<String,Object>();
+      HashMap<String, Object> info = new HashMap<String, Object>();
       info.put("name", project.getName());
 
       if (project.isOpen()){
@@ -90,7 +90,7 @@ public class ProjectsCommand
       }
 
       if (project.isOpen()){
-        HashMap<String,String> links = new HashMap<String,String>();
+        HashMap<String, String> links = new HashMap<String, String>();
         if (new File(projectPath).exists()){
           // don't open/close projects due to the impact on performance
           /*boolean close = false;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,10 +71,10 @@ public class ClasspathVariableCommandsTest
   @SuppressWarnings("unchecked")
   private boolean variableExists()
   {
-    List<Map<String,String>> list = (List<Map<String,String>>)
+    List<Map<String, String>> list = (List<Map<String, String>>)
       Eclim.execute(new String[]{"java_classpath_variables"});
 
-    Map<String,String> var = new HashMap<String,String>();
+    Map<String, String> var = new HashMap<String, String>();
     var.put("name", TEST_VARIABLE);
     var.put("path", TEST_PATH);
     return list.contains(var);

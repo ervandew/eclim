@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,20 +44,20 @@ public class SearchCommandTest
     assertTrue("Python project doesn't exist.",
         Eclim.projectExists(Pydev.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "python_search", "-n", Pydev.TEST_PROJECT,
         "-f", TEST_FILE,
         "-o", "17", "-l", "6", "-e", "utf-8",
       });
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertEquals(result.get("filename"),
         Eclim.resolveFile(Pydev.TEST_PROJECT, "test/common/__init__.py"));
     assertEquals(result.get("line"), 1);
     assertEquals(result.get("column"), 1);
 
-    results = (List<Map<String,Object>>)
+    results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "python_search", "-n", Pydev.TEST_PROJECT,
         "-f", TEST_FILE,
@@ -70,7 +70,7 @@ public class SearchCommandTest
     assertEquals(result.get("line"), 3);
     assertEquals(result.get("column"), 7);
 
-    results = (List<Map<String,Object>>)
+    results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "python_search", "-n", Pydev.TEST_PROJECT,
         "-f", TEST_FILE,

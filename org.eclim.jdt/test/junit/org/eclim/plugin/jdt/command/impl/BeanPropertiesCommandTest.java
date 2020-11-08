@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class BeanPropertiesCommandTest
     Eclim.execute(new String[]{
       "java_bean_properties", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-e", "utf-8", "-t", "getter", "-r", "name"
+      "-o", "1", "-e", "utf-8", "-t", "getter", "-r", "name",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -62,7 +62,7 @@ public class BeanPropertiesCommandTest
     Eclim.execute(new String[]{
       "java_bean_properties", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-e", "utf-8", "-t", "setter", "-r", "name"
+      "-o", "1", "-e", "utf-8", "-t", "setter", "-r", "name",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -80,7 +80,7 @@ public class BeanPropertiesCommandTest
     Eclim.execute(new String[]{
       "java_bean_properties", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-e", "utf-8", "-t", "getter_setter", "-r", "valid"
+      "-o", "1", "-e", "utf-8", "-t", "getter_setter", "-r", "valid",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -100,14 +100,16 @@ public class BeanPropertiesCommandTest
     Eclim.execute(new String[]{
       "java_bean_properties", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-o", "1", "-e", "utf-8", "-t", "getter_setter", "-r", "ids", "-i"
+      "-o", "1", "-e", "utf-8", "-t", "getter_setter", "-r", "ids", "-i",
     });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue("Getter not found.",
         Pattern.compile("public int\\[\\] getIds\\(\\)").matcher(contents).find());
     assertTrue("Getter index not found.",
-        Pattern.compile("public int getIds\\(int index\\)").matcher(contents).find());
+        Pattern.compile("public int getIds\\(int index\\)")
+          .matcher(contents)
+          .find());
     assertTrue("Setter not found.",
         Pattern.compile("public void setIds\\(int\\[\\] ids\\)")
         .matcher(contents).find());

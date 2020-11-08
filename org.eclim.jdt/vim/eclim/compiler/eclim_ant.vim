@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -58,6 +58,10 @@ exec 'CompilerSet errorformat=' .
   \ '\%-G%.%#[javadoc]\ Note:%.%#,' .
   \ '\%-G%.%#[javadoc]\ javadoc:%.%#,' .
   \ '\%.%#[javadoc]\ %f:\ %m,' .
+  \ '\%.%#[checkstyle]\ %f:%l:%c:\ %m,' .
+  \ '\%.%#[checkstyle]\ %f:%l:\ %m,' .
+  \ '\%.%#[java]\ [WARN]\ %f:%l:%c:\ %m,' .
+  \ '\%.%#[java]\ [WARN]\ %f:%l:\ %m,' .
   \ '\%.%#[java]\ org\.apache\.jasper\.JasperException:\ file:%f(%l\\,%c)\ %m,' .
   \ '\%.%#[java]\ %f:%l:%c:\ %m,' .
   \ '\%.%#[java]\ %f:%l:\ %m,' .
@@ -69,8 +73,6 @@ exec 'CompilerSet errorformat=' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
   \ '\%+A%.%#[cactus]\ %.%#Errors:\ %[%^0]%.%#\ Time\ elapsed:\ %.%#,' .
   \ '\%-Z%.%#[cactus]\ Test\ %f\ FAILED,' .
-  \ '\%.%#[checkstyle]\ %f:%l:%c:\ %m,' .
-  \ '\%.%#[checkstyle]\ %f:%l:\ %m,' .
   \ '\%E%.%#[scalac]\ %f:%l:\ error:\ %m,' .
   \ '\%-Z%.%#[scalac]\ %p^,' .
   \ '\%W%.%#[scalac]\ %f:%l:\ warning:\ %m,' .

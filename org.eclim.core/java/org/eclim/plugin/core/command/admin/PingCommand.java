@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import org.osgi.framework.Bundle;
 public class PingCommand
   extends AbstractCommand
 {
-  private HashMap<String,String> versions;
+  private HashMap<String, String> versions;
 
   @Override
   public Object execute(CommandLine commandLine)
@@ -51,7 +51,7 @@ public class PingCommand
     if(versions == null){
       PluginResources resources = Services.getPluginResources("org.eclim");
 
-      versions = new HashMap<String,String>();
+      versions = new HashMap<String, String>();
       versions.put("eclim", resources.getProperty("pluginVersion"));
       versions.put("eclipse", getVersion());
     }

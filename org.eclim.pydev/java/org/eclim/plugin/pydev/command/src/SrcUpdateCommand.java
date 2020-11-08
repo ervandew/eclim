@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ public class SrcUpdateCommand
 
       //Map<String,String> builtins = Preferences.getInstance()
       //  .getMapValue(project, "org.eclim.python.builtins");
-      HashMap<Integer,Set<String>> ignores = new HashMap<Integer,Set<String>>();
+      HashMap<Integer, Set<String>> ignores = new HashMap<Integer, Set<String>>();
       ignores.put(
           IAnalysisPreferences.TYPE_UNRESOLVED_IMPORT,
           prefs.getSetValue(project, "org.eclim.python.ignore.unresolved.imports"));

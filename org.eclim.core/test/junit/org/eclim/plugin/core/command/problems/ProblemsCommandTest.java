@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,10 +39,10 @@ public class ProblemsCommandTest
   public void execute()
   {
     List<Object> results = (List<Object>)Eclim.execute(new String[]{
-      "problems", "-p", TEST_PROJECT
+      "problems", "-p", TEST_PROJECT,
     });
 
-    HashMap<String,Object> error = new HashMap<String,Object>();
+    HashMap<String, Object> error = new HashMap<String, Object>();
     error.put("message", "ArrayList cannot be resolved to a type");
     error.put("filename",
         Eclim.getWorkspace() + "/" + TEST_PROJECT + "/src/org/eclim/test/Test.java");

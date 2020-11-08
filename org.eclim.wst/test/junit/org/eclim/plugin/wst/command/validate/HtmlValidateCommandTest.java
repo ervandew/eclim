@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,16 +43,16 @@ public class HtmlValidateCommandTest
     assertTrue("Project doesn't exist.",
         Eclim.projectExists(Wst.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
-        "html_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE
+        "html_validate", "-p", Wst.TEST_PROJECT, "-f", TEST_FILE,
       });
 
     assertEquals("Wrong number of errors.", 3, results.size());
 
     String file = Eclim.resolveFile(Wst.TEST_PROJECT, TEST_FILE);
 
-    Map<String,Object> error = results.get(0);
+    Map<String, Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertTrue(((String)error.get("message"))
         .indexOf("<h> is not recognized!") != -1);

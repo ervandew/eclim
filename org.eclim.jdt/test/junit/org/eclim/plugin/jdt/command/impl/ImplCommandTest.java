@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,17 +57,17 @@ public class ImplCommandTest
 
     modifies(Jdt.TEST_PROJECT, TEST_FILE);
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "83", "-e", "utf-8"
+        "-o", "83", "-e", "utf-8",
       });
 
     assertEquals("org.eclim.test.impl.TestImpl", result.get("type"));
 
-    List<Map<String,Object>> superTypes =
-      (List<Map<String,Object>>)result.get("superTypes");
+    List<Map<String, Object>> superTypes =
+      (List<Map<String, Object>>)result.get("superTypes");
     assertEquals(4, superTypes.size());
 
     assertEquals("java.util", superTypes.get(1).get("packageName"));
@@ -78,7 +78,8 @@ public class ImplCommandTest
     assertTrue(methods.contains("public void clear()"));
     assertTrue(methods.contains("public Set<Entry<Integer,String>> entrySet()"));
     assertTrue(methods.contains(
-          "public void putAll(java.util.Map\u003c? extends Integer,? extends String\u003e)"));
+          "public void putAll(" +
+          "java.util.Map\u003c? extends Integer,? extends String\u003e)"));
 
     assertEquals("java.util", superTypes.get(3).get("packageName"));
     assertEquals("interface Comparator<String>",
@@ -86,12 +87,12 @@ public class ImplCommandTest
     methods = new HashSet<String>((List<String>)superTypes.get(3).get("methods"));
     assertTrue(methods.contains("public abstract int compare(String,String)"));
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
         "-t", "org.eclim.test.impl.TestImpl",
-        "-s", "java.util.HashMap", "-m", "[\"putAll(java.util.Map)\"]"
+        "-s", "java.util.HashMap", "-m", "[\"putAll(java.util.Map)\"]",
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -100,12 +101,15 @@ public class ImplCommandTest
           "public void putAll\\(Map<\\? extends Integer, \\? extends String> m\\)")
         .matcher(contents).find());
 
-    superTypes = (List<Map<String,Object>>)result.get("superTypes");
+    superTypes = (List<Map<String, Object>>)result.get("superTypes");
     assertEquals("java.util", superTypes.get(0).get("packageName"));
-    assertEquals("class HashMap<Integer,String>", superTypes.get(0).get("signature"));
+    assertEquals(
+        "class HashMap<Integer,String>",
+        superTypes.get(0).get("signature"));
     methods = new HashSet<String>((List<String>)superTypes.get(0).get("methods"));
     assertFalse(methods.contains(
-          "public void putAll(java.util.Map\u003c? extends Integer,? extends String\u003e)"));
+          "public void putAll(" +
+          "java.util.Map\u003c? extends Integer,? extends String\u003e)"));
   }
 
   @Test
@@ -123,20 +127,20 @@ public class ImplCommandTest
       "java_impl", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
       "-t", "org.eclim.test.impl.TestImpl",
-      "-s", "java.util.HashMap", "-m", "[\"put(Integer,String)\"]"
+      "-s", "java.util.HashMap", "-m", "[\"put(Integer,String)\"]",
     });
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_SUB_FILE,
-        "-o", "30", "-e", "utf-8"
+        "-o", "30", "-e", "utf-8",
       });
 
     assertEquals("org.eclim.test.impl.TestSubImpl", result.get("type"));
 
-    List<Map<String,Object>> superTypes =
-      (List<Map<String,Object>>)result.get("superTypes");
+    List<Map<String, Object>> superTypes =
+      (List<Map<String, Object>>)result.get("superTypes");
 
     assertEquals("org.eclim.test.impl", superTypes.get(0).get("packageName"));
     assertEquals("class TestImpl", superTypes.get(0).get("signature"));
@@ -144,12 +148,12 @@ public class ImplCommandTest
         (List<String>)superTypes.get(0).get("methods"));
     assertTrue(methods.contains("public String put(Integer,String)"));
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_SUB_FILE,
         "-t", "org.eclim.test.impl.TestSubImpl",
-        "-s", "org.eclim.test.impl.TestImpl", "-m", "[\"put(Integer,String)\"]"
+        "-s", "org.eclim.test.impl.TestImpl", "-m", "[\"put(Integer,String)\"]",
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_SUB_FILE);
@@ -157,9 +161,11 @@ public class ImplCommandTest
         Pattern.compile("public String put\\(Integer key, String value\\)")
         .matcher(contents).find());
 
-    superTypes = (List<Map<String,Object>>)result.get("superTypes");
+    superTypes = (List<Map<String, Object>>)result.get("superTypes");
     assertEquals("java.util", superTypes.get(1).get("packageName"));
-    assertEquals("class HashMap<Integer,String>", superTypes.get(0).get("signature"));
+    assertEquals(
+        "class HashMap<Integer,String>",
+        superTypes.get(0).get("signature"));
     methods = new HashSet<String>((List<String>)superTypes.get(0).get("methods"));
     assertFalse(methods.contains("public String put(Integer,String)"));
 
@@ -169,7 +175,7 @@ public class ImplCommandTest
     methods = new HashSet<String>((List<String>)superTypes.get(3).get("methods"));
     assertTrue(methods.contains("public abstract int compare(String,String)"));
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_SUB_FILE,
@@ -182,7 +188,7 @@ public class ImplCommandTest
         Pattern.compile("public int compare\\(String o1, String o2\\)")
         .matcher(contents).find());
 
-    superTypes = (List<Map<String,Object>>)result.get("superTypes");
+    superTypes = (List<Map<String, Object>>)result.get("superTypes");
     assertEquals(3, superTypes.size());
   }
 
@@ -195,17 +201,17 @@ public class ImplCommandTest
 
     modifies(Jdt.TEST_PROJECT, TEST_NESTED_FILE);
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_NESTED_FILE,
-        "-o", "104", "-e", "utf-8"
+        "-o", "104", "-e", "utf-8",
       });
 
     assertEquals("org.eclim.test.impl.TestNestedImpl", result.get("type"));
 
-    List<Map<String,Object>> superTypes =
-      (List<Map<String,Object>>)result.get("superTypes");
+    List<Map<String, Object>> superTypes =
+      (List<Map<String, Object>>)result.get("superTypes");
 
     assertEquals("java.util", superTypes.get(1).get("packageName"));
     assertEquals("interface Map.Entry", superTypes.get(1).get("signature"));
@@ -213,12 +219,12 @@ public class ImplCommandTest
         (List<String>)superTypes.get(1).get("methods"));
     assertTrue(methods.contains("public abstract Object setValue(Object)"));
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_NESTED_FILE,
         "-t", "org.eclim.test.impl.TestNestedImpl",
-        "-s", "java.util.Map.Entry", "-m", "[\"setValue(Object)\"]"
+        "-s", "java.util.Map.Entry", "-m", "[\"setValue(Object)\"]",
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_NESTED_FILE);
@@ -236,30 +242,32 @@ public class ImplCommandTest
 
     modifies(Jdt.TEST_PROJECT, TEST_ANONYMOUS_FILE);
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_ANONYMOUS_FILE,
-        "-o", "140", "-e", "utf-8"
+        "-o", "140", "-e", "utf-8",
       });
 
     assertEquals("org.eclim.test.impl.TestAnonymousImpl$1", result.get("type"));
 
-    List<Map<String,Object>> superTypes =
-      (List<Map<String,Object>>)result.get("superTypes");
+    List<Map<String, Object>> superTypes =
+      (List<Map<String, Object>>)result.get("superTypes");
 
     assertEquals("java.util", superTypes.get(1).get("packageName"));
-    assertEquals("interface Map.Entry<Object,Object>", superTypes.get(1).get("signature"));
+    assertEquals(
+        "interface Map.Entry<Object,Object>",
+        superTypes.get(1).get("signature"));
     HashSet<String> methods = new HashSet<String>(
         (List<String>)superTypes.get(1).get("methods"));
     assertTrue(methods.contains("public abstract Object setValue(Object)"));
 
-    result = (Map<String,Object>)
+    result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_impl", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_ANONYMOUS_FILE,
         "-t", "org.eclim.test.impl.TestAnonymousImpl$1",
-        "-s", "java.util.Map.Entry", "-m", "[\"setValue(Object)\"]"
+        "-s", "java.util.Map.Entry", "-m", "[\"setValue(Object)\"]",
       });
 
     String contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_ANONYMOUS_FILE);

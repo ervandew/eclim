@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class ProjectInfoCommand
       String workspace = ResourcesPlugin
         .getWorkspace().getRoot().getRawLocation().toOSString().replace('\\', '/');
 
-      HashMap<String,Object> info = new HashMap<String,Object>();
+      HashMap<String, Object> info = new HashMap<String, Object>();
       info.put("name", name);
       info.put("path", ProjectUtils.getPath(project));
       info.put("workspace", workspace);

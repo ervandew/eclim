@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ public class ImportOrganizeCommandTest
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertFalse(listImport.matcher(file).find());
 
-    Map<String,Object> position = (Map<String,Object>)Eclim.execute(new String[]{
+    Map<String, Object> position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import_organize", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       "-o", "185", "-e", "utf-8", "-t", "java.util.Map.Entry,java.util.List",
     });

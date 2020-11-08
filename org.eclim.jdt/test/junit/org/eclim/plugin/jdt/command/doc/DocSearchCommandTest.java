@@ -47,7 +47,7 @@ public class DocSearchCommandTest
       Eclim.execute(new String[]{
         "java_docsearch", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "68", "-e", "utf-8", "-l", "4", "-x", "declarations"
+        "-o", "68", "-e", "utf-8", "-l", "4", "-x", "declarations",
       });
 
     normalize(results);
@@ -67,7 +67,7 @@ public class DocSearchCommandTest
       Eclim.execute(new String[]{
         "java_docsearch", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-p", "ArrayList"
+        "-p", "ArrayList",
       });
 
     normalize(results);
@@ -90,7 +90,7 @@ public class DocSearchCommandTest
       Eclim.execute(new String[]{
         "java_docsearch", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-p", "currentTime%2A", "-t", "method"
+        "-p", "currentTime%2A", "-t", "method",
       });
 
     normalize(results);

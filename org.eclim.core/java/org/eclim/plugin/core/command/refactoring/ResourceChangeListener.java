@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,9 +85,9 @@ public class ResourceChangeListener
    *
    * @return The list of changed files.
    */
-  public List<Map<String,String>> getChangedFiles()
+  public List<Map<String, String>> getChangedFiles()
   {
-    List<Map<String,String>> results = new ArrayList<Map<String,String>>();
+    List<Map<String, String>> results = new ArrayList<Map<String, String>>();
     HashSet<String> seen = new HashSet<String>();
 
     for (IResourceDelta delta : getResourceDeltas()){
@@ -97,7 +97,7 @@ public class ResourceChangeListener
         continue;
       }
 
-      HashMap<String,String> result = new HashMap<String,String>();
+      HashMap<String, String> result = new HashMap<String, String>();
 
       IResource resource = delta.getResource();
       IPath location = resource.getLocation();

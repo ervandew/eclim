@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ public class CodeCorrectCommand
       return apply(src, proposal);
     }
 
-    HashMap<String,Object> result = new HashMap<String,Object>();
+    HashMap<String, Object> result = new HashMap<String, Object>();
     result.put("message", problem.getMessage());
     result.put("offset", problem.getSourceStart());
     result.put("corrections", getCorrections(proposals));
@@ -327,7 +327,7 @@ public class CodeCorrectCommand
             errors.add(message);
           }
         }
-        HashMap<String,List<String>> result = new HashMap<String,List<String>>();
+        HashMap<String, List<String>> result = new HashMap<String, List<String>>();
         result.put("errors", errors);
         return result;
       }

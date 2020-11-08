@@ -42,8 +42,8 @@ public class PreferencesOptionHandler
 {
   private String natureId;
   private boolean supportsProjectScope;
-  private HashMap<String,HashSet<String>> supportedPreferences =
-    new HashMap<String,HashSet<String>>();
+  private HashMap<String, HashSet<String>> supportedPreferences =
+    new HashMap<String, HashSet<String>>();
 
   /**
    * Constructs a new handler for the supplied nature id with support for
@@ -106,21 +106,21 @@ public class PreferencesOptionHandler
   }
 
   @Override
-  public Map<String,String> getValues()
+  public Map<String, String> getValues()
   {
     return getValues(InstanceScope.INSTANCE);
   }
 
   @Override
-  public Map<String,String> getValues(IProject project)
+  public Map<String, String> getValues(IProject project)
   {
     return getValues(supportsProjectScope ?
         new ProjectScope(project) : InstanceScope.INSTANCE);
   }
 
-  private Map<String,String> getValues(IScopeContext scope)
+  private Map<String, String> getValues(IScopeContext scope)
   {
-    Map<String, String> values = new HashMap<String,String>();
+    Map<String, String> values = new HashMap<String, String>();
 
     for (String qualifier : supportedPreferences.keySet()){
       IEclipsePreferences prefs = scope.getNode(qualifier);

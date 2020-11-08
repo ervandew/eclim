@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2013  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,8 +68,8 @@ public class EclimClasspathInitializer
   private static final Logger logger =
     Logger.getLogger(EclimClasspathInitializer.class);
 
-  private Map<IPath,Map<String,String>> docJars =
-    new HashMap<IPath,Map<String,String>>();
+  private Map<IPath, Map<String, String>> docJars =
+    new HashMap<IPath, Map<String, String>>();
   private Set<String> platformNames = new HashSet<String>();
   {
     platformNames.add("org.eclipse.ant");
@@ -124,7 +124,7 @@ public class EclimClasspathInitializer
               FileInputStream fin = null;
               try{
                 fin = new FileInputStream(manifest);
-                HashMap<String,String> headers = new HashMap<String,String>();
+                HashMap<String, String> headers = new HashMap<String, String>();
                 ManifestElement.parseBundleManifest(fin, headers);
                 bundleNames.addAll(
                   getBundleNamesFromHeader(headers, "Require-Bundle"));
@@ -224,7 +224,7 @@ public class EclimClasspathInitializer
   }
 
   private List<String> getBundleNamesFromHeader(
-      HashMap<String,String> headers, String header)
+      HashMap<String, String> headers, String header)
   {
     ArrayList<String> names = new ArrayList<String>();
     String bundles = headers.get(header);
@@ -286,7 +286,7 @@ public class EclimClasspathInitializer
 
     final IPath dir = path.uptoSegment(path.segmentCount() - 1);
     if (!docJars.containsKey(dir)){
-      docJars.put(dir, new HashMap<String,String>());
+      docJars.put(dir, new HashMap<String, String>());
       dir.toFile().list(new FilenameFilter(){
         public boolean accept(File path, String name){
           if (name.endsWith(".jar") && name.indexOf(".doc.isv_") != -1){
@@ -300,7 +300,7 @@ public class EclimClasspathInitializer
     }
 
     String url = null;
-    Map<String,String> jars = docJars.get(dir);
+    Map<String, String> jars = docJars.get(dir);
     String shortName = StringUtils.join(
         StringUtils.split(name, ".", 4), ".", 0, 3);
     if (jars.containsKey(shortName)){

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,8 +62,9 @@ public class ClassPrototypeCommandTest
       assertTrue("Class declaration doesn't match.",
           contents.indexOf("public abstract interface java.util.List") != -1);
 
-      assertTrue("add method declaration doesn't match.",
-          contents.indexOf("public abstract boolean add(java.lang.Object arg0);") != -1);
+      int index = contents.indexOf(
+          "public abstract boolean add(java.lang.Object arg0);");
+      assertTrue("add method declaration doesn't match.", index != -1);
     }finally{
       IOUtils.closeQuietly(fin);
     }

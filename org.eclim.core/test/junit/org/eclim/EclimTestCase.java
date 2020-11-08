@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2014 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,14 +36,14 @@ import org.junit.After;
  */
 public class EclimTestCase
 {
-  private HashMap<String,String> modified = new HashMap<String,String>();
+  private HashMap<String, String> modified = new HashMap<String, String>();
 
   @After
   public void resetModified()
     throws Exception
   {
     List<String> projects = new ArrayList<String>();
-    for (Map.Entry<String,String> entry : modified.entrySet()){
+    for (Map.Entry<String, String> entry : modified.entrySet()){
       String[] parts = StringUtils.split(entry.getKey(), '|');
       String project = parts[0];
       String file = parts[1];

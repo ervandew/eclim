@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,16 +46,16 @@ public class SearchCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_search", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-p", "NPE", "-s", "project"
+        "-p", "NPE", "-s", "project",
       });
 
     assertEquals("Wrong number of results.", 2, results.size());
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertTrue(((String)result.get("filename"))
         .endsWith("/java/lang/NullPointerException.java"));
     assertEquals(result.get("message"), "java.lang.NullPointerException");
@@ -77,14 +77,14 @@ public class SearchCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_search", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-o", "180", "-e", "utf-8", "-l", "4"
+        "-o", "180", "-e", "utf-8", "-l", "4",
       });
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertTrue(((String)result.get("filename"))
         .endsWith("/org/eclim/test/search/TestSearch.java"));
     assertEquals(result.get("message"), "org.eclim.test.search.TestSearch#list");
@@ -99,16 +99,16 @@ public class SearchCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_search", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-p", "org.eclim.test.search.TestSearch%2A"
+        "-p", "org.eclim.test.search.TestSearch%2A",
       });
 
     assertEquals("Wrong number of results.", 3, results.size());
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertTrue(((String)result.get("filename"))
         .endsWith("src/org/eclim/test/search/TestSearch.java"));
     assertEquals(result.get("message"), "org.eclim.test.search.TestSearch");
@@ -137,11 +137,11 @@ public class SearchCommandTest
       "-v", "[\"test\", \"src\"]",
     });
 
-    results = (List<Map<String,Object>>)
+    results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_search", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-p", "org.eclim.test.search.TestSearch%2A"
+        "-p", "org.eclim.test.search.TestSearch%2A",
       });
 
     assertEquals("Wrong number of results.", 3, results.size());
@@ -175,11 +175,11 @@ public class SearchCommandTest
       "-v", "[\"src\", \"test\"]",
     });
 
-    results = (List<Map<String,Object>>)
+    results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_search", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-p", "org.eclim.test.search.TestSearch%2A"
+        "-p", "org.eclim.test.search.TestSearch%2A",
       });
 
     assertEquals("Wrong number of results.", 3, results.size());
@@ -213,14 +213,14 @@ public class SearchCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_search", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-p", "TestSearch.list", "-t", "field"
+        "-p", "TestSearch.list", "-t", "field",
       });
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertTrue(((String)result.get("filename"))
         .endsWith("/org/eclim/test/search/TestSearch.java"));
     assertEquals(result.get("message"), "org.eclim.test.search.TestSearch#list");
@@ -235,16 +235,16 @@ public class SearchCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_search", "-n", Jdt.TEST_PROJECT,
         "-f", TEST_FILE_IMPLEMENTORS,
         "-x", "implementors",
-        "-o", "173", "-e", "utf-8", "-l", "4"
+        "-o", "173", "-e", "utf-8", "-l", "4",
       });
     assertEquals(results.size(), 2);
 
-    Map<String,Object> result = results.get(0);
+    Map<String, Object> result = results.get(0);
     assertTrue(((String)result.get("filename"))
         .endsWith("/org/eclim/test/search/implementors/TestImplementor1.java"));
     assertEquals(result.get("message"),

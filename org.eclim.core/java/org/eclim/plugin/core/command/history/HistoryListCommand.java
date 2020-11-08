@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,10 +80,10 @@ public class HistoryListCommand
       }
     });
 
-    ArrayList<HashMap<String,Object>> results =
-      new ArrayList<HashMap<String,Object>>();
+    ArrayList<HashMap<String, Object>> results =
+      new ArrayList<HashMap<String, Object>>();
     for (IFileRevision revision : revisions){
-      HashMap<String,Object> result = new HashMap<String,Object>();
+      HashMap<String, Object> result = new HashMap<String, Object>();
       result.put("timestamp", String.valueOf(revision.getTimestamp()));
       result.put("datetime",
           DATE_FORMATTER.format(new Date(revision.getTimestamp())));

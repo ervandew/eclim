@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,16 +38,16 @@ public class ValidateCommandTest
   @SuppressWarnings("unchecked")
   public void execute()
   {
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
-        "xml_validate", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE
+        "xml_validate", "-p", Eclim.TEST_PROJECT, "-f", TEST_FILE,
       });
 
     assertEquals("Wrong number of errors.", 2, results.size());
 
     String file = Eclim.resolveFile(Eclim.TEST_PROJECT, TEST_FILE);
 
-    Map<String,Object> error = results.get(0);
+    Map<String, Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertTrue(((String)error.get("message"))
         .indexOf("The content of element type \"bar\" is incomplete") != -1);

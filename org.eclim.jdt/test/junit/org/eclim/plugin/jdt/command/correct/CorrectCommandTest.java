@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,23 +55,25 @@ public class CorrectCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_correct", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-l", "5", "-o", "74", "-e", "utf-8"
+        "-l", "5", "-o", "74", "-e", "utf-8",
       });
 
     assertEquals("ArrayList cannot be resolved to a type", result.get("message"));
     assertEquals(70, result.get("offset"));
 
-    List<Map<String,Object>> results =
-      (List<Map<String,Object>>)result.get("corrections");
+    List<Map<String, Object>> results =
+      (List<Map<String, Object>>)result.get("corrections");
     assertEquals(0, results.get(0).get("index"));
-    assertEquals("Import 'ArrayList' (java.util)", results.get(0).get("description"));
+    assertEquals(
+        "Import 'ArrayList' (java.util)",
+        results.get(0).get("description"));
 
     int apply = -1;
-    for(Map<String,Object> r : results){
+    for(Map<String, Object> r : results){
       if (r.get("description").equals("Import 'ArrayList' (java.util)")){
         apply = ((Integer)r.get("index")).intValue();
         break;
@@ -79,11 +81,11 @@ public class CorrectCommandTest
     }
     assertTrue("Missing expected suggestion.", apply > -1);
 
-    List<Map<String,String>> changes = (List<Map<String,String>>)
+    List<Map<String, String>> changes = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_correct", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE,
-        "-l", "5", "-o", "74", "-e", "utf-8", "-a", String.valueOf(apply)
+        "-l", "5", "-o", "74", "-e", "utf-8", "-a", String.valueOf(apply),
       });
 
     assertEquals(1, changes.size());
@@ -105,11 +107,11 @@ public class CorrectCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Map<String,Object> result = (Map<String,Object>)
+    Map<String, Object> result = (Map<String, Object>)
       Eclim.execute(new String[]{
         "java_correct", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE_PACKAGE,
-        "-l", "1", "-o", "0", "-e", "utf-8"
+        "-l", "1", "-o", "0", "-e", "utf-8",
       });
 
     assertEquals(
@@ -117,8 +119,8 @@ public class CorrectCommandTest
         "package \"org.eclim.test.correct\"",
         result.get("message"));
 
-    List<Map<String,Object>> results =
-      (List<Map<String,Object>>)result.get("corrections");
+    List<Map<String, Object>> results =
+      (List<Map<String, Object>>)result.get("corrections");
     assertEquals(
         "Change package declaration to 'org.eclim.test.correct'",
         results.get(1).get("description"));
@@ -126,11 +128,11 @@ public class CorrectCommandTest
         "...\npackage org.eclim.test.correct;\n...\n",
         results.get(1).get("preview"));
 
-    List<Map<String,String>> changes = (List<Map<String,String>>)
+    List<Map<String, String>> changes = (List<Map<String, String>>)
       Eclim.execute(new String[]{
         "java_correct", "-p", Jdt.TEST_PROJECT,
         "-f", TEST_FILE_PACKAGE,
-        "-l", "1", "-o", "0", "-e", "utf-8", "-a", "1"
+        "-l", "1", "-o", "0", "-e", "utf-8", "-a", "1",
       });
 
     assertEquals(1, changes.size());

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,15 +120,15 @@ public class GetElementDocCommand
       return info.getHtml();
     }
 
-    ArrayList<HashMap<String,String>> links =
-      new ArrayList<HashMap<String,String>>();
+    ArrayList<HashMap<String, String>> links =
+      new ArrayList<HashMap<String, String>>();
     Matcher matcher = LINKS.matcher(info.getHtml());
     StringBuffer buffer = new StringBuffer();
     int index = 0;
     while (matcher.find()){
       String href = matcher.group(2);
       String text = matcher.group(3);
-      HashMap<String,String> link = new HashMap<String,String>();
+      HashMap<String, String> link = new HashMap<String, String>();
       link.put("href", href);
       link.put("text", text);
       links.add(link);
@@ -146,7 +146,7 @@ public class GetElementDocCommand
     // compact excessive spacing between sig and doc.
     result = result.replaceFirst("\n\n\n", "\n\n");
 
-    HashMap<String,Object> response = new HashMap<String,Object>();
+    HashMap<String, Object> response = new HashMap<String, Object>();
     response.put("text", result);
     response.put("links", links);
     return response;

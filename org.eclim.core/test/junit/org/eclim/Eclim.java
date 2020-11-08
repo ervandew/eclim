@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,8 +196,8 @@ public class Eclim
 
     // Map
     }else if(json.isJsonObject()){
-      HashMap<String,Object> type = new HashMap<String,Object>();
-      for(Map.Entry<String,JsonElement> entry : json.getAsJsonObject().entrySet()){
+      HashMap<String, Object> type = new HashMap<String, Object>();
+      for(Map.Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()){
         type.put(entry.getKey(), toType(entry.getValue()));
       }
       return type;
@@ -214,7 +214,8 @@ public class Eclim
   public static String getWorkspace()
   {
     if(workspace == null){
-      workspace = ((String)execute(new String[]{"workspace_dir"})).replace('\\', '/');
+      workspace = ((String)execute(new String[]{"workspace_dir"}));
+      workspace = workspace.replace('\\', '/');
     }
     return workspace;
   }
@@ -230,7 +231,7 @@ public class Eclim
   {
     Object result = execute(new String[]{"project_info", "-p", name});
     if (result instanceof Map) {
-      Map<String,String> info = (Map<String,String>)result;
+      Map<String, String> info = (Map<String, String>)result;
       if (info.containsKey("path")){
         return info.get("path");
       }

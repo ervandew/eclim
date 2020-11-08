@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ public class CheckstyleCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    List<Map<String,Object>> results = (List<Map<String,Object>>)
+    List<Map<String, Object>> results = (List<Map<String, Object>>)
       Eclim.execute(new String[]{
         "java_checkstyle", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
       });
@@ -53,7 +53,7 @@ public class CheckstyleCommandTest
 
     String file = Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE);
 
-    Map<String,Object> error = results.get(0);
+    Map<String, Object> error = results.get(0);
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
         "[checkstyle] '(' is not preceded with whitespace.");
@@ -74,7 +74,7 @@ public class CheckstyleCommandTest
     assertEquals(error.get("message"),
         "[checkstyle] ',' is not followed by whitespace.");
     assertEquals(error.get("line"), 8);
-    assertEquals(error.get("column"), 33);
+    assertEquals(error.get("column"), 32);
     assertEquals(error.get("warning"), true);
   }
 }

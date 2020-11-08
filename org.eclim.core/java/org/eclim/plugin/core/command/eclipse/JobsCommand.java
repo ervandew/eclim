@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,11 +55,11 @@ public class JobsCommand
     IJobManager manager = Job.getJobManager();
     Job[] jobs = manager.find(family);
 
-    ArrayList<HashMap<String,String>> results =
-      new ArrayList<HashMap<String,String>>();
+    ArrayList<HashMap<String, String>> results =
+      new ArrayList<HashMap<String, String>>();
 
     for (Job job : jobs){
-      HashMap<String,String> result = new HashMap<String,String>();
+      HashMap<String, String> result = new HashMap<String, String>();
       result.put("job", job.toString());
       result.put("status", getStatus(job));
       results.add(result);

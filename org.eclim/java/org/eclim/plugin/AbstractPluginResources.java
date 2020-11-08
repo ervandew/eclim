@@ -100,9 +100,9 @@ public abstract class AbstractPluginResources
     try{
       return cc.getDeclaredConstructor().newInstance();
     }catch(
-        IllegalAccessException|
-        InstantiationException|
-        InvocationTargetException|
+        IllegalAccessException |
+        InstantiationException |
+        InvocationTargetException |
         NoSuchMethodException e)
     {
       throw new RuntimeException(e);
