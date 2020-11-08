@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2005 - 2018  Eric Van Dewoestine
+# Copyright (C) 2005 - 2020  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,58 +39,45 @@ if [ "$1" = "-?" -o "$1" = "-h" -o "$1" = "--help" ] ; then
   exit 0
 fi
 
-if [ -z "$JAVA" ] ; then
-  if [ -n "$JAVA_HOME" ] ; then
-    if [ -x "$JAVA_HOME/bin/java" ] ; then
-      JAVA="$JAVA_HOME/bin/java"
-    elif [ -x "$JAVA_HOME/jre/bin/java" ] ; then
-      JAVA="$JAVA_HOME/jre/bin/java"
+resolve_java(){
+  if [ -z "$JAVA" ] ; then
+    if [ -n "$JAVA_HOME" ] ; then
+      if [ -x "$JAVA_HOME/bin/java" ] ; then
+        JAVA="$JAVA_HOME/bin/java"
+      elif [ -x "$JAVA_HOME/jre/bin/java" ] ; then
+        JAVA="$JAVA_HOME/jre/bin/java"
+      fi
+    else
+      JAVA=$(command -v java)
     fi
-  else
-    JAVA=$(command -v java)
   fi
-fi
 
-if [ -z "$JAVA" ] ; then
-  echo "Unable to locate your java install."
-  echo "Please set your JAVA_HOME environment variable or"
-  echo "set JAVA to the location of your java executable."
-  exit 1
-fi
+  if [ -z "$JAVA" ] ; then
+    echo "Unable to locate your java install."
+    echo "Please set your JAVA_HOME environment variable or"
+    echo "set JAVA to the location of your java executable."
+    exit 1
+  fi
 
-# Note: as of java 9, the version string format has changed from something like
-# "1.8.0_144" in java 8 to just "9", or "9.1.1" in java 9
-# first pass just gets the full version, for all java versions
-JAVA_VERSION=$(
-  $JAVA -version 2>&1 |
-    grep version |
-    perl -pe 's|.*"([0-9].*)".*|\1|'
-)
-# finish parsing the version for java 8 and older (version starts with "1.")
-if [[ "$JAVA_VERSION" == 1.* ]] ; then
-  JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|1\.(.*)\..*|\1|')
-# finish parsing the version for java 9
-else
-  JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|([0-9]+)\..*|\1|')
-fi
+  # Note: as of java 9, the version string format has changed from something like
+  # "1.8.0_144" in java 8 to just "9", or "9.1.1" in java 9
+  # first pass just gets the full version, for all java versions
+  JAVA_VERSION=$(
+    $JAVA -version 2>&1 |
+      grep version |
+      perl -pe 's|.*"([0-9].*)".*|\1|'
+  )
+  # finish parsing the version for java 8 and older (version starts with "1.")
+  if [[ "$JAVA_VERSION" == 1.* ]] ; then
+    JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|1\.(.*)\..*|\1|')
+  # finish parsing the version for java 9 and newer
+  else
+    JAVA_VERSION=$(echo $JAVA_VERSION | perl -pe 's|([0-9]+)\..*|\1|')
+  fi
 
-# cast to an int
-JAVA_VERSION=$(($JAVA_VERSION + 0))
-
-# validate minimum java version
-# Note: see install.bin as well
-JAVA_REQUIRED=8
-if [[ $JAVA_VERSION -lt $JAVA_REQUIRED ]] ; then
-  echo "JAVA_VERSION=$JAVA_VERSION"
-  echo "You must have at least java $JAVA_REQUIRED installed to run eclimd."
-  echo "Note: you can still target previous java versions on a per project basis."
-  exit 1
-fi
-
-DARWIN=false
-if $(uname -a | grep -iq "darwin") ; then
-  DARWIN=true
-fi
+  # cast to an int
+  JAVA_VERSION=$(($JAVA_VERSION + 0))
+}
 
 ##
 # Set ECLIM_HOME to eclim's home directory.
@@ -145,6 +132,33 @@ resolve_eclipse_launcher(){
 
   if [ ! -e "$ECLIPSE_LAUNCHER" ]; then
     echo "Unable to locate the eclipse launcher jar." 1>&2
+    exit 1
+  fi
+}
+
+validate_java_version(){
+  eclipse_ini=$ECLIM_ECLIPSE_HOME/eclipse.ini
+  if [ ! -f $eclipse_ini ] ; then
+    echo "Unable to locate eclipse.ini at $ECLIM_ECLIPSE_HOME"
+    exit 1
+  fi
+
+  required=$(cat $eclipse_ini | grep requiredJavaVersion | head -1 | perl -pe 's|.*=||')
+  # java 8 or older
+  if [[ "$required" == 1.* ]] ; then
+    required=$(echo $required | perl -pe 's|1\.(.*)\..*|\1|')
+  # java 9 or newer
+  else
+    required=$(echo $required | perl -pe 's|([0-9]+)\..*|\1|')
+  fi
+  # cast to an int
+  required=$(($required + 0))
+
+  # Note: see install.bin as well
+  if [[ $JAVA_VERSION -lt $required ]] ; then
+    echo "JAVA_VERSION=$JAVA_VERSION"
+    echo "You must have at least java $required installed to run eclimd."
+    echo "Note: you can still target older java versions on a per project basis."
     exit 1
   fi
 }
@@ -316,9 +330,16 @@ while true ; do
   esac
 done
 
+resolve_java
 resolve_eclim_home
 resolve_eclipse_home
 resolve_eclipse_launcher
+validate_java_version
+
+DARWIN=false
+if $(uname -a | grep -iq "darwin") ; then
+  DARWIN=true
+fi
 
 declare -a ECLIM_VMARGS=("$@")
 build_vmargs
