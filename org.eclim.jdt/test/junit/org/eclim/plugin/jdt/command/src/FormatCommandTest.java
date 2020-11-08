@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ public class FormatCommandTest
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents.replace("\t", "  "), '\n');
     assertEquals("Result line format incorrect.",
-        "    System.out.println(\"test formatting\");", lines[6]);
+        "  System.out.println(\"test formatting\");", lines[6]);
 
     // range of lines
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
@@ -96,10 +96,10 @@ public class FormatCommandTest
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     lines = StringUtils.split(contents.replace("\t", "  "), '\n');
-    assertEquals("Result line 1 format incorrect.", "    if (true) {", lines[7]);
+    assertEquals("Result line 1 format incorrect.", "  if (true) {", lines[7]);
     assertEquals("Result line 2 format incorrect.",
-        "      System.out.println(\"test format if\");", lines[8]);
-    assertEquals("Result line 3 format incorrect.", "    }", lines[9]);
+        "    System.out.println(\"test format if\");", lines[8]);
+    assertEquals("Result line 3 format incorrect.", "  }", lines[9]);
 
     // whole file
     assertTrue("Java project doesn't exist.",
@@ -116,14 +116,24 @@ public class FormatCommandTest
     Eclim.execute(new String[]{
       "java_format", "-p", Jdt.TEST_PROJECT,
       "-f", TEST_FILE,
-      "-h", "0", "-t", "211", "-e", "utf-8"
+      "-h", "0", "-t", "207", "-e", "utf-8"
     });
 
     contents = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    lines = StringUtils.split(contents.replace("\t", "  "), '\n');
-    assertEquals("Result line 1 format incorrect.",
-        "  public void main(String[] args) throws Exception {", lines[2]);
-    assertEquals("Result line 1 format incorrect.",
-        "    System.out.println(\"test formatting\");", lines[3]);
+    contents = contents.replace("\t", "  ");
+    assertEquals(
+        "Incorrect result",
+        contents,
+        "package org.eclim.test.format;\n" +
+        "\n" +
+        "public class TestFormat {\n" +
+        "  public void main(String[] args) throws Exception {\n" +
+        "    System.out.println(\"test formatting\");\n" +
+        "    if (true) {\n" +
+        "      System.out.println(\"test format if\");\n" +
+        "    }\n" +
+        "  }\n" +
+        "}\n"
+    );
   }
 }

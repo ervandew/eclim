@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ public class CodeCompleteCommandTest
     // as of eclipse neon (4.6), any method containing the prefix anywhere in
     // the method name ('a' in this case) is returned as a proposal, with the
     // prefixed versions at the top.
-    assertEquals("Wrong number of completions.", 29, completions.size());
+    assertEquals("Wrong number of completions.", 30, completions.size());
 
     Map<String,Object> result = completions.get(0);
     assertEquals(result.get("completion"), "add(");

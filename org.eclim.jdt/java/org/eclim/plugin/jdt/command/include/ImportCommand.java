@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,18 +45,19 @@ import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.NodeFinder;
 
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
-
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite.ImportRewriteContext;
+
+import org.eclipse.jdt.core.manipulation.SharedASTProviderCore;
+
 import org.eclipse.jdt.core.search.TypeNameMatch;
+
+import org.eclipse.jdt.internal.core.manipulation.StubUtility;
 
 import org.eclipse.jdt.internal.corext.codemanipulation.AddImportsOperation;
 import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationMessages;
 import org.eclipse.jdt.internal.corext.codemanipulation.ContextSensitiveImportRewriteContext;
-import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
 
 import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
-
-import org.eclipse.jdt.ui.SharedASTProvider;
 
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -93,8 +94,8 @@ public class ImportCommand
     TextEdit edits = null;
     int oldLength = src.getBuffer().getLength();
     if (type != null){
-      CompilationUnit astRoot = SharedASTProvider
-        .getAST(src, SharedASTProvider.WAIT_YES, null);
+      CompilationUnit astRoot = SharedASTProviderCore
+        .getAST(src, SharedASTProviderCore.WAIT_YES, null);
 
       edits = new MultiTextEdit();
       ImportRewrite importRewrite = StubUtility.createImportRewrite(astRoot, true);
@@ -148,8 +149,8 @@ public class ImportCommand
           src.getJavaProject().getProject(),
           "org.eclim.java.import.package_separation_level");
     String lineDelim = src.findRecommendedLineSeparator();
-    CompilationUnit astRoot = SharedASTProvider
-      .getAST(src, SharedASTProvider.WAIT_YES, null);
+    CompilationUnit astRoot = SharedASTProviderCore
+      .getAST(src, SharedASTProviderCore.WAIT_YES, null);
     ASTNode node = NodeFinder.perform(astRoot, offset, 1);
     MultiTextEdit edit = new MultiTextEdit();
     if (node != null && node.getNodeType() == ASTNode.IMPORT_DECLARATION){

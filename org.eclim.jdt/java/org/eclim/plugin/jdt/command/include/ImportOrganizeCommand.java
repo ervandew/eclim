@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import org.eclipse.jdt.core.manipulation.OrganizeImportsOperation;
+import org.eclipse.jdt.core.manipulation.SharedASTProviderCore;
 
 import org.eclipse.jdt.core.search.TypeNameMatch;
 
@@ -51,8 +52,6 @@ import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationSettings;
 import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
 
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesSettings;
-
-import org.eclipse.jdt.ui.SharedASTProvider;
 
 import org.eclipse.text.edits.TextEdit;
 
@@ -86,8 +85,8 @@ public class ImportOrganizeCommand
     ICompilationUnit src = JavaUtils.getCompilationUnit(projectName, file);
     IProject project = src.getJavaProject().getProject();
     int oldLength = src.getBuffer().getLength();
-    CompilationUnit astRoot = SharedASTProvider
-      .getAST(src, SharedASTProvider.WAIT_YES, null);
+    CompilationUnit astRoot = SharedASTProviderCore
+      .getAST(src, SharedASTProviderCore.WAIT_YES, null);
 
     String[] typeNames = types != null ? StringUtils.split(types, ',') : null;
     ChooseImports query = new ChooseImports(project, typeNames);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 
-import org.eclipse.jdt.ui.SharedASTProvider;
+import org.eclipse.jdt.core.manipulation.SharedASTProviderCore;
 
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -107,8 +107,8 @@ public class ImportUtils
     int separationLevel = preferences.getIntValue(
           src.getJavaProject().getProject(),
           "org.eclim.java.import.package_separation_level");
-    CompilationUnit astRoot = SharedASTProvider
-      .getAST(src, SharedASTProvider.WAIT_YES, null);
+    CompilationUnit astRoot = SharedASTProviderCore
+      .getAST(src, SharedASTProviderCore.WAIT_YES, null);
 
     @SuppressWarnings("unchecked")
     List<ImportDeclaration> imports = astRoot.imports();

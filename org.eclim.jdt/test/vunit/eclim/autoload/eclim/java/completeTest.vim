@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2018  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ function! TestCodeCompleteMissingImport() " {{{
   call cursor(10, 11)
   let start = eclim#java#complete#CodeComplete(1, '')
   call vunit#AssertEquals(9, start, 'Wrong starting column.')
-  let g:EclimTestPromptQueue = [1] " choose java.util.List
+  let g:EclimTestPromptQueue = [0] " choose java.util.List
   let result = eclim#java#complete#CodeComplete(0, '')
   call vunit#AssertTrue(result, -1, 'Wrong completion result.')
   call vunit#AssertTrue(search('^import java\.util\.List;', 'n'),
@@ -140,7 +140,7 @@ function! TestCodeCompleteLinkedResource() " {{{
   call vunit#PeekRedir()
   call vunit#AssertTrue(len(results) > 10,
     \ 'Not enough results (full complete): '. len(results))
-  call vunit#AssertTrue(len(results) < 70,
+  call vunit#AssertTrue(len(results) < 100,
     \ 'Too many results (full complete): '. len(results))
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
     \ 'Results does not contain add()')

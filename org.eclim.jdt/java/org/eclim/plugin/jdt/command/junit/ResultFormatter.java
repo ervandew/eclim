@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,6 @@ import org.apache.tools.ant.BuildException;
 
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
 import org.apache.tools.ant.taskdefs.optional.junit.PlainJUnitResultFormatter;
-
-import org.apache.tools.ant.util.StringUtils;
 
 /**
  * Custom junit formatter intended to be be easier to read than the default
@@ -58,12 +56,13 @@ public class ResultFormatter
       nameDelim.append('-');
     }
     StringBuffer sb = new StringBuffer();
-    sb.append(StringUtils.LINE_SEP);
-    sb.append("-----------").append(nameDelim).append(StringUtils.LINE_SEP);
+    String newline = System.lineSeparator();
+    sb.append(newline);
+    sb.append("-----------").append(nameDelim).append(newline);
     sb.append("Testsuite: ");
     sb.append(name);
-    sb.append(StringUtils.LINE_SEP);
-    sb.append("-----------").append(nameDelim).append(StringUtils.LINE_SEP);
+    sb.append(newline);
+    sb.append("-----------").append(nameDelim).append(newline);
     try {
       out.write(sb.toString().getBytes());
       out.flush();

@@ -30,11 +30,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
-
-import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.Services;
 
@@ -59,10 +58,12 @@ import org.eclipse.core.resources.IResource;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jdt.core.ICodeAssist;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IModuleDescription;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
@@ -71,6 +72,10 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
+
+import org.eclipse.jdt.internal.compiler.util.SuffixConstants;
+
+import org.eclipse.jdt.internal.core.BinaryModule;
 
 /**
  * Command to handle java search requests.
@@ -427,7 +432,7 @@ public class SearchCommand
   protected boolean isJarArchive(IPath path)
   {
     String ext = path.getFileExtension();
-    return ext != null && ext.toLowerCase().matches("^(jar|zip)$");
+    return ext != null && ext.toLowerCase().matches("^(jar|jmod|zip)$");
   }
 
   /**
@@ -458,7 +463,9 @@ public class SearchCommand
         IPath path = null;
         IPackageFragmentRoot root = (IPackageFragmentRoot)
           parent.getParent().getParent();
+        IModuleDescription module = root.getModuleDescription();
         resource = root.getResource();
+
         if (resource != null){
           if (resource.getType() == IResource.PROJECT){
             path = ProjectUtils.getIPath((IProject)resource);
@@ -467,11 +474,27 @@ public class SearchCommand
           }
         }else{
           path = root.getPath();
+          // workaround for system modules that would otherwise return
+          // JAVA_HOME/lib/jrt-fs.jar as the path
+          if (module != null && module.isSystemModule()){
+            String modulePath = FileUtils.concat(
+                SystemUtils.JAVA_HOME,
+                "jmods",
+                module.getElementName() + ".jmod");
+            if (new File(modulePath).exists()){
+              path = new Path(modulePath);
+            }
+          }
         }
 
         String classFile = elementName.replace('.', File.separatorChar);
         if (isJarArchive(path)){
-          file = "jar:file://" + path.toOSString() + '!' + classFile + ".class";
+          String jarPrefix = "jar:file://" + path.toOSString() + '!';
+          if (path.getFileExtension().toLowerCase().equals("jmod")){
+            file = jarPrefix + "classes/" + classFile + ".class";
+          }else{
+            file = jarPrefix + classFile + ".class";
+          }
         }else{
           file = path.toOSString() + '/' + classFile + ".class";
         }
@@ -492,24 +515,34 @@ public class SearchCommand
             }else{
               rootPath = srcPath.toOSString();
             }
-            String srcFile = FileUtils.toUrl(
-                rootPath + File.separator + classFile + ".java");
 
-            // see if source file exists at source path.
+            List<String> srcPaths = new ArrayList<String>();
+            String javaFile = classFile + ".java";
+            srcPaths.add(javaFile);
+            // jdk sources on OSX may be under "src/" in the archive (using for
+            // all operating systems just in case)
+            srcPaths.add("src" + File.separator + javaFile);
+
+            // if the class belongs to a module, add module prefixed path to our
+            // list of paths to search.
+            if (module != null){
+              String moduleName = module.getElementName();
+              javaFile = moduleName + File.separator + javaFile;
+              srcPaths.add(0, javaFile);
+              srcPaths.add("src" + File.separator + javaFile);
+            }
+
             FileSystemManager fsManager = VFS.getManager();
-            FileObject fileObject =
-              fsManager.resolveFile(srcFile.replace("%", "%25"));
-            if(fileObject.exists()){
-              file = srcFile;
+            for (String filePath : srcPaths){
+              String srcFile = FileUtils.toUrl(
+                  rootPath + File.separator + filePath);
 
-            // jdk sources on osx are under a "src/" dir in the jar
-            }else if (Os.isFamily(Os.FAMILY_MAC)){
-              srcFile = FileUtils.toUrl(
-                  rootPath + File.separator + "src" +
-                  File.separator + classFile + ".java");
-              fileObject = fsManager.resolveFile(srcFile.replace("%", "%25"));
+              // see if source file exists at source path.
+              FileObject fileObject =
+                fsManager.resolveFile(srcFile.replace("%", "%25"));
               if(fileObject.exists()){
                 file = srcFile;
+                break;
               }
             }
           }

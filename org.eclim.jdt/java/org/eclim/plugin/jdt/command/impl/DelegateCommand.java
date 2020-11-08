@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.internal.corext.codemanipulation.AddDelegateMethodsOperation;
 import org.eclipse.jdt.internal.corext.codemanipulation.AddDelegateMethodsOperation.DelegateEntry;
 import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationSettings;
-import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2;
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2Core;
 
 import org.eclipse.jdt.internal.corext.dom.ASTNodes;
 
@@ -221,7 +221,7 @@ public class DelegateCommand
       throw new RuntimeException(ce);
     }
     DelegateEntry[] entries =
-      StubUtility2.getDelegatableMethods(typeBinding);
+      StubUtility2Core.getDelegatableMethods(typeBinding);
     ArrayList<DelegateEntry> delegatable = new ArrayList<DelegateEntry>();
     for (DelegateEntry entry : entries) {
       if (entry.field.equals(variable)){

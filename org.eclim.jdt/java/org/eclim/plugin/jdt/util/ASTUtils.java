@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,8 @@ public class ASTUtils
 {
   private static final Logger logger = Logger.getLogger(ASTUtils.class);
 
+  private static final int JLS_LATEST = AST.JLS14;
+
   private ASTUtils ()
   {
   }
@@ -77,7 +79,7 @@ public class ASTUtils
   public static CompilationUnit getCompilationUnit(
       ICompilationUnit src, boolean recordModifications)
   {
-    ASTParser parser = ASTParser.newParser(AST.JLS4);
+    ASTParser parser = ASTParser.newParser(JLS_LATEST);
     parser.setSource(src);
     CompilationUnit cu = (CompilationUnit)parser.createAST(null);
     if(recordModifications){
@@ -95,7 +97,7 @@ public class ASTUtils
    */
   public static CompilationUnit getCompilationUnit(IClassFile clazz)
   {
-    ASTParser parser = ASTParser.newParser(AST.JLS4);
+    ASTParser parser = ASTParser.newParser(JLS_LATEST);
     parser.setSource(clazz);
     return (CompilationUnit)parser.createAST(null);
   }

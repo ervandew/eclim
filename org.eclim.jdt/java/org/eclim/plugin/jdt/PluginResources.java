@@ -17,18 +17,10 @@
 package org.eclim.plugin.jdt;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.InputStream;
 
 import java.util.HashMap;
 import java.util.Properties;
-
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang.SystemUtils;
-
-import org.apache.tools.ant.taskdefs.condition.Os;
 
 import org.eclim.Services;
 
@@ -49,16 +41,10 @@ import org.eclim.plugin.jdt.project.JavaProjectManager;
 import org.eclim.util.IOUtils;
 import org.eclim.util.StringUtils;
 
-import org.eclim.util.file.FileUtils;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 import org.eclipse.jdt.core.JavaCore;
-
-import org.eclipse.jdt.launching.IVMInstall;
-import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.LibraryLocation;
 
 import org.eclipse.jdt.ui.JavaUI;
 
@@ -84,15 +70,6 @@ public class PluginResources
   private static final Logger logger = Logger.getLogger(PluginResources.class);
 
   private static final String VARIABLES = "resources/classpath_variables";
-  private static final String[] SRC_LOCATIONS = {
-    "src.zip",
-    "share/src.zip",
-    SystemUtils.JAVA_HOME.replace('\\', '/') + "/src.jar",
-    SystemUtils.JAVA_HOME.replace('\\', '/') + "/src.zip",
-    SystemUtils.JAVA_HOME.replace('\\', '/') + "/share/src.zip",
-    SystemUtils.JAVA_HOME.replace('\\', '/') + "/../src.zip",
-    SystemUtils.JAVA_HOME.replace('\\', '/') + "/../share/src.zip",
-  };
 
   @Override
   public void initialize(String name)
@@ -102,7 +79,6 @@ public class PluginResources
     logger.debug("Initializing java environment");
 
     // initialize variables.
-    initializeJreSrc();
     initializeVars(VARIABLES);
 
     Preferences.addOptionHandler("org.eclipse.jdt", new OptionHandler());
@@ -151,82 +127,6 @@ public class PluginResources
   protected String getBundleBaseName()
   {
     return "org/eclim/plugin/jdt/messages";
-  }
-
-  /**
-   * Performs additional logic to locate jre src zip file in alternate locations
-   * not checked by eclipse.
-   */
-  protected void initializeJreSrc()
-  {
-    String jarName = Os.isFamily(Os.FAMILY_MAC) ? "classes.jar" : "rt.jar";
-    // doing a straight JavaCore.setClasspathVariable() doesn't work, so we need
-    // to modify the library path of the default vm install.
-    try{
-      IVMInstall vm = JavaRuntime.getDefaultVMInstall();
-      LibraryLocation[] locations = JavaRuntime.getLibraryLocations(vm);
-      LibraryLocation[] newLocations = new LibraryLocation[locations.length];
-      for(int ii = 0; ii < locations.length; ii++){
-        IPath libraryPath = locations[ii].getSystemLibraryPath();
-
-        // eclipse didn't find src.zip, so search other known locations.
-        if (libraryPath.lastSegment().equals(jarName) &&
-            (locations[ii].getSystemLibrarySourcePath().isEmpty() ||
-             !locations[ii].getSystemLibrarySourcePath().toFile().exists()))
-        {
-          IPath jreSrc = null;
-
-          logger.debug("Attempting to locate jre src.zip for JAVA_HOME: {}",
-              SystemUtils.JAVA_HOME);
-          for (int jj = 0; jj < SRC_LOCATIONS.length; jj++){
-            String location = SRC_LOCATIONS[jj];
-
-            // absolute path
-            if (location.startsWith("/") ||
-                location.indexOf(':') != -1)
-            {
-              jreSrc = new Path(location);
-
-            // relative path
-            }else{
-              jreSrc = libraryPath.removeLastSegments(3).append(location);
-            }
-
-            logger.debug("Trying location: {}", jreSrc);
-            if(jreSrc.toFile().exists()){
-              break;
-            }
-          }
-
-          // jre src found.
-          if(jreSrc.toFile().exists()){
-            logger.info("Setting '{}' to '{}'",
-                JavaRuntime.JRESRC_VARIABLE, jreSrc);
-            newLocations[ii] = new LibraryLocation(
-                locations[ii].getSystemLibraryPath(),
-                jreSrc,
-                locations[ii].getPackageRootPath(),
-                locations[ii].getJavadocLocation());
-
-          // jre src not found.
-          }else{
-            logger.debug(
-                "Unable to locate jre src.zip for JAVA_HOME: " +
-                SystemUtils.JAVA_HOME);
-            newLocations[ii] = new LibraryLocation(
-                locations[ii].getSystemLibraryPath(),
-                Path.EMPTY,
-                locations[ii].getPackageRootPath(),
-                locations[ii].getJavadocLocation());
-          }
-        }else{
-          newLocations[ii] = locations[ii];
-        }
-      }
-      vm.setLibraryLocations(newLocations);
-    }catch(Exception e){
-      logger.error("", e);
-    }
   }
 
   /**

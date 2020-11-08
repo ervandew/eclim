@@ -2,8 +2,8 @@
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
 <dependencies eclipse-version="4.8" eclipse-name="photon">
   <feature id="jdt">
-    <dependency id="org.eclipse.jdt" version="3.14.0">
-      <site url="http://download.eclipse.org/releases/photon/"/>
+    <dependency id="org.eclipse.jdt" version="3.18.500">
+      <site url="http://download.eclipse.org/releases/2020-09/"/>
     </dependency>
   </feature>
 

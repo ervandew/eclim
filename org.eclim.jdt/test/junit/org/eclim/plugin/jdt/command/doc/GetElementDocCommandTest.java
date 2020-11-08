@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2016  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,7 +120,7 @@ public class GetElementDocCommandTest
       index = 2;
       assertEquals(
           "\n\t- |java.awt.List[0]|" +
-          "\n\t- |com.sun.xml.internal.bind.v2.schemagen.xmlschema.List[1]|" +
+          "\n\t- |com.sun.tools.javac.util.List[1]|" +
           "\n\t- |java.util.List[2]|",
           result.get("text"));
       List<Map<String,String>> links =
@@ -135,7 +135,7 @@ public class GetElementDocCommandTest
       assertEquals(
           "\n\t- |java.awt.List[0]|" +
           "\n\t- |java.util.List[1]|" +
-          "\n\t- |com.sun.xml.internal.bind.v2.schemagen.xmlschema.List[2]|",
+          "\n\t- |com.sun.tools.javac.util.List[2]|",
           result.get("text"));
       List<Map<String,String>> links =
         (List<Map<String,String>>)result.get("links");
@@ -170,7 +170,6 @@ public class GetElementDocCommandTest
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void htmlFlag(){
     String results = (String)
       Eclim.execute(new String[]{

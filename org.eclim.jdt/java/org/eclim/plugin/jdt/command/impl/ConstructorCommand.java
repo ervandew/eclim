@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,9 +46,11 @@ import org.eclipse.jdt.core.dom.Modifier;
 
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 
+import org.eclipse.jdt.core.manipulation.SharedASTProviderCore;
+
 import org.eclipse.jdt.internal.corext.codemanipulation.AddCustomConstructorOperation;
 import org.eclipse.jdt.internal.corext.codemanipulation.CodeGenerationSettings;
-import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2;
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility2Core;
 
 import org.eclipse.jdt.internal.corext.dom.ASTNodes;
 import org.eclipse.jdt.internal.corext.dom.Bindings;
@@ -58,8 +60,6 @@ import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.ui.actions.ActionMessages;
 
 import org.eclipse.jdt.internal.ui.preferences.JavaPreferencesSettings;
-
-import org.eclipse.jdt.ui.SharedASTProvider;
 
 import org.eclipse.text.edits.TextEdit;
 
@@ -100,8 +100,8 @@ public class ConstructorCommand
     ICompilationUnit src = JavaUtils.getCompilationUnit(project, file);
     IType type = TypeUtils.getType(src, offset);
 
-    CompilationUnit cu = SharedASTProvider
-      .getAST(src, SharedASTProvider.WAIT_YES, null);
+    CompilationUnit cu = SharedASTProviderCore
+      .getAST(src, SharedASTProviderCore.WAIT_YES, null);
     ITypeBinding typeBinding = ASTNodes.getTypeBinding(cu, type);
     if (typeBinding.isAnonymous()) {
       return ActionMessages
@@ -194,7 +194,7 @@ public class ConstructorCommand
       constructor = Bindings.findMethodInType(
           binding, "Object", new ITypeBinding[0]);
     } else {
-      IMethodBinding[] bindings = StubUtility2
+      IMethodBinding[] bindings = StubUtility2Core
         .getVisibleConstructors(typeBinding, false, true);
       Arrays.sort(bindings, new Comparator<IMethodBinding>(){
         public int compare(IMethodBinding b1, IMethodBinding b2){

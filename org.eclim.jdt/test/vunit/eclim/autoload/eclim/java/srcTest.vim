@@ -2,7 +2,7 @@
 "
 " License: " {{{
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -170,14 +170,14 @@ function! TestJavaFormatOneLine() " {{{
 
   call vunit#AssertEquals(getline(8),
     \ 'System.out.println("test formatting");',
-    \ 'Intial line incorrect.')
+    \ 'Initial line incorrect.')
 
   call cursor(8, 1)
   JavaFormat
   call vunit#PeekRedir()
 
   call vunit#AssertEquals(getline(8),
-    \ '    System.out.println("test formatting");',
+    \ '  System.out.println("test formatting");',
     \ 'Result line incorrect.')
 endfunction " }}}
 
@@ -187,30 +187,30 @@ function! TestJavaFormatRange() " {{{
 
   call vunit#AssertEquals(getline(9),
     \ 'if(true){',
-    \ 'Intial line 1 incorrect.')
+    \ 'Initial line 9 incorrect.')
 
   call vunit#AssertEquals(getline(10),
     \ 'System.out.println("test format if");',
-    \ 'Intial line 2 incorrect.')
+    \ 'Initial line 10 incorrect.')
 
   call vunit#AssertEquals(getline(11),
     \ '}',
-    \ 'Intial line 3 incorrect.')
+    \ 'Initial line 11 incorrect.')
 
   9,11JavaFormat
   call vunit#PeekRedir()
 
   call vunit#AssertEquals(getline(9),
-    \ '    if (true) {',
-    \ 'Result line 1 incorrect.')
+    \ '  if (true) {',
+    \ 'Result line 9 incorrect.')
 
   call vunit#AssertEquals(getline(10),
-    \ '      System.out.println("test format if");',
-    \ 'Result line 2 incorrect.')
+    \ '    System.out.println("test format if");',
+    \ 'Result line 10 incorrect.')
 
   call vunit#AssertEquals(getline(11),
-    \ '    }',
-    \ 'Result line 3 incorrect.')
+    \ '  }',
+    \ 'Result line 11 incorrect.')
 endfunction " }}}
 
 function! TestJavaFormatWholeFile() " {{{
@@ -219,22 +219,29 @@ function! TestJavaFormatWholeFile() " {{{
 
   call vunit#AssertEquals(getline(4),
     \ 'public',
-    \ 'Intial line 1 incorrect.')
+    \ 'Initial line 4 incorrect.')
 
   call vunit#AssertEquals(getline(5),
     \ 'void main(String[] args)',
-    \ 'Intial line 2 incorrect.')
+    \ 'Initial line 5 incorrect.')
 
   call vunit#AssertEquals(getline(6),
     \ 'throws Exception',
-    \ 'Intial line 3 incorrect.')
+    \ 'Initial line 6 incorrect.')
 
   %JavaFormat
   call vunit#PeekRedir()
 
-  call vunit#AssertEquals(getline(4),
-    \ '  public void main(String[] args) throws Exception {',
-    \ 'Result line 1 incorrect.')
+  call vunit#AssertEquals(getline(1), 'package org.eclim.test.format;')
+  call vunit#AssertEquals(getline(2), '')
+  call vunit#AssertEquals(getline(3), 'public class TestFormatVUnit {')
+  call vunit#AssertEquals(getline(4), '  public void main(String[] args) throws Exception {')
+  call vunit#AssertEquals(getline(5), '    System.out.println("test formatting");')
+  call vunit#AssertEquals(getline(6), '    if (true) {')
+  call vunit#AssertEquals(getline(7), '      System.out.println("test format if");')
+  call vunit#AssertEquals(getline(8), '    }')
+  call vunit#AssertEquals(getline(9), '  }')
+  call vunit#AssertEquals(getline(10), '}')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
