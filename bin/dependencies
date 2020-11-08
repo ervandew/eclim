@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2005 - 2018  Eric Van Dewoestine
+# Copyright (C) 2005 - 2020  Eric Van Dewoestine
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -68,8 +68,8 @@ def main():
   if actionable:
     print('Choose which dependencies you would like to install/upgrade')
     print('by typing the number for each dependency:')
-    print('  Ex 0 3')
-    print('  Ex 0,3')
+    print('  Ex 0 1')
+    print('  Ex 0,1')
     print('  Ex 0-2')
     chosen = []
     while not chosen:
