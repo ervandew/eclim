@@ -18,7 +18,7 @@ package org.eclim.plugin.jdt.command.src;
 
 import java.io.FileWriter;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.eclim.Eclim;
 

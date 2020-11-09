@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,9 @@
  */
 package org.eclim.plugin.jdt.command.classpath;
 
-import org.apache.commons.lang.SystemUtils;
+import java.io.File;
+
+import org.apache.commons.lang3.SystemUtils;
 
 import org.eclim.annotation.Command;
 
@@ -52,7 +54,7 @@ public class ClasspathCommand
   {
     String name = commandLine.getValue(Options.PROJECT_OPTION);
     String delim = commandLine.getValue(
-        Options.DELIMETER_OPTION, SystemUtils.PATH_SEPARATOR);
+        Options.DELIMETER_OPTION, File.pathSeparator);
     IJavaProject javaProject = JavaUtils.getJavaProject(name);
 
     String[] paths = ClasspathUtils.getClasspath(javaProject);

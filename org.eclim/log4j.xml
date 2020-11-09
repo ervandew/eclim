@@ -52,7 +52,7 @@
     </layout>
   </appender>
 
-  <logger name="org.apache.commons.vfs">
+  <logger name="org.apache.commons.vfs2">
     <level value="warn"/>
   </logger>
 

@@ -16,7 +16,7 @@
  */
 package org.eclim.eclipse.ui;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.eclim.eclipse.EclimPlugin;
 

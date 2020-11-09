@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.eclim.Services;
 
@@ -118,18 +117,18 @@ public class Options
   private static org.apache.commons.cli.Options coreOptions =
       new org.apache.commons.cli.Options();
   static {
-    coreOptions.addOption(OptionBuilder.withArgName(COMMAND_OPTION)
-        .isRequired(true)
+    coreOptions.addOption(Option.builder(COMMAND_OPTION)
+        .required()
         .hasArg()
-        .withDescription(Services.getMessage("command.description"))
-        .create(COMMAND_OPTION));
-    coreOptions.addOption(OptionBuilder.withArgName(PRETTY_OPTION)
-        .withDescription(Services.getMessage("pretty.description"))
-        .create(PRETTY_OPTION));
-    coreOptions.addOption(OptionBuilder.withArgName(EDITOR_OPTION)
+        .desc(Services.getMessage("command.description"))
+        .build());
+    coreOptions.addOption(Option.builder(PRETTY_OPTION)
+        .desc(Services.getMessage("pretty.description"))
+        .build());
+    coreOptions.addOption(Option.builder(EDITOR_OPTION)
         .hasArg()
-        .withDescription(Services.getMessage("editor.description"))
-        .create(EDITOR_OPTION));
+        .desc(Services.getMessage("editor.description"))
+        .build());
   }
 
   protected org.apache.commons.cli.Options options =
@@ -187,7 +186,7 @@ public class Options
       }
     }
 
-    CommandLineParser parser = new GnuParser();
+    CommandLineParser parser = new DefaultParser();
     try{
       return new CommandLine(command, parser.parse(options, args), args);
     }catch(ParseException pe){
@@ -230,16 +229,17 @@ public class Options
     //if(parts.length == 1 && ANY.equals(parts[0])){
     //}
 
+    Option.Builder builder = Option.builder(parts[1]);
     if(REQUIRED.equals(parts[0])){
-      OptionBuilder.isRequired();
+      builder.required();
     }
     if(ARG.equals(parts[3])){
-      OptionBuilder.hasArg();
-      //OptionBuilder.withArgName(parts[2]);
+      builder.hasArg();
+      //builder.argName(parts[2]);
     }else if(ANY.equals(parts[3])){
-      OptionBuilder.hasOptionalArgs();
+      builder.hasArgs();
     }
-    OptionBuilder.withLongOpt(parts[2]);
-    return OptionBuilder.create(parts[1]);
+    builder.longOpt(parts[2]);
+    return builder.build();
   }
 }

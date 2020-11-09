@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2011  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ import java.util.Map;
  * @author Eric Van Dewoestine
  */
 public class StringUtils
-  extends org.apache.commons.lang.StringUtils
+  extends org.apache.commons.lang3.StringUtils
 {
   private static final String PLACEHOLDER_PREFIX = "${";
   private static final String PLACEHOLDER_SUFFIX = "}";

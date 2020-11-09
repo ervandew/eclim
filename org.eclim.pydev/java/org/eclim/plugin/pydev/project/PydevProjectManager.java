@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2018 Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020 Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
 import org.eclim.command.CommandLine;
@@ -82,10 +82,10 @@ public class PydevProjectManager
   public void create(IProject project, CommandLine commandLine)
   {
     String[] args = commandLine.getValues(Options.ARGS_OPTION);
-    GnuParser parser = new GnuParser();
+    DefaultParser parser = new DefaultParser();
     org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
     options.addOption(
-        OptionBuilder.hasArg().isRequired().withLongOpt("interpreter").create());
+        Option.builder().hasArg().required().longOpt("interpreter").build());
     org.apache.commons.cli.CommandLine cli = null;
     try{
       cli = parser.parse(options, args);

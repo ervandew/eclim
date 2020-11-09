@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.apache.commons.cli.Option;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Container for the supplied command line options.
