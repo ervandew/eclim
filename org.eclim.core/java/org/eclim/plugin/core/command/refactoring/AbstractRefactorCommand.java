@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -81,14 +81,14 @@ public abstract class AbstractRefactorCommand
       Refactoring refactoring = refactor.refactoring;
 
       RefactoringStatus status = refactoring.checkAllConditions(
-          new SubProgressMonitor(monitor, 4));
+          SubMonitor.convert(monitor, 4));
       int stopSeverity = RefactoringCore.getConditionCheckingFailedSeverity();
       if (status.getSeverity() >= stopSeverity) {
         throw new RefactorException(status);
       }
 
-      Change change = refactoring.createChange(new SubProgressMonitor(monitor, 2));
-      change.initializeValidationData(new SubProgressMonitor(monitor, 1));
+      Change change = refactoring.createChange(SubMonitor.convert(monitor, 2));
+      change.initializeValidationData(SubMonitor.convert(monitor, 1));
 
       // preview
       if (commandLine.hasOption(PREVIEW_OPTION)){
@@ -144,7 +144,7 @@ public abstract class AbstractRefactorCommand
         changeOperation.setUndoManager(
             RefactoringCore.getUndoManager(), change.getName());
 
-        changeOperation.run(new SubProgressMonitor(monitor, 4));
+        changeOperation.run(SubMonitor.convert(monitor, 4));
         return rcl.getChangedFiles();
       }finally{
         workspace.removeResourceChangeListener(rcl);

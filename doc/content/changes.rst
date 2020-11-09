@@ -21,6 +21,10 @@ History of Changes
 x.x.x (Xxx. xx, 2020)
 ---------------------
 
+Eclim:
+  - Eclim updated for Eclipse 4.17 (2020-09), so java 11 or newer is also
+    required.
+
 Removals:
   .. note::
 

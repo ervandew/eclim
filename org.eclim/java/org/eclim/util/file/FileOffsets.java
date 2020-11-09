@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ public class FileOffsets
       reader = new BufferedReader(new InputStreamReader(in));
 
       ArrayList<Integer> lines = new ArrayList<Integer>();
-      lines.add(new Integer(0));
+      lines.add(Integer.valueOf(0));
       ArrayList<String> byteLines = new ArrayList<String>();
       byteLines.add(null);
 
@@ -103,7 +103,7 @@ public class FileOffsets
       String line = null;
       while((line = reader.readLine()) != null){
         offset += line.length();
-        lines.add(new Integer(offset));
+        lines.add(Integer.valueOf(offset));
         if (line.length() != line.getBytes().length){
           byteLines.add(line);
         }else{

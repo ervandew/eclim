@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@ package org.eclim.plugin;
 
 import java.io.File;
 import java.io.InputStream;
+
+import java.lang.reflect.InvocationTargetException;
 
 import java.net.URL;
 
@@ -96,11 +98,14 @@ public abstract class AbstractPluginResources
     }
     Class<? extends Command> cc = commands.get(name);
     try{
-      return cc.newInstance();
-    }catch(IllegalAccessException iae){
-      throw new RuntimeException(iae);
-    }catch(InstantiationException ie){
-      throw new RuntimeException(ie);
+      return cc.getDeclaredConstructor().newInstance();
+    }catch(
+        IllegalAccessException|
+        InstantiationException|
+        InvocationTargetException|
+        NoSuchMethodException e)
+    {
+      throw new RuntimeException(e);
     }
   }
 

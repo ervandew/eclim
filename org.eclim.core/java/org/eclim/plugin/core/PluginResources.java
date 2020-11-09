@@ -50,7 +50,9 @@ public class PluginResources
       "General/Project org.eclim.project.copyright"
     );
 
-    PreferencesOptionHandler handler = new PreferencesOptionHandler(
+    // FIXME: Eclipse may have smartly removed this annoying feature, so remove
+    // this block if the nagging dialog never shows up.
+    /*PreferencesOptionHandler handler = new PreferencesOptionHandler(
       Preferences.CORE, false);
     handler.addSupportedPreferences(
       "org.eclipse.recommenders.news.rcp",
@@ -61,7 +63,7 @@ public class PluginResources
     Preferences.addOptionHandler(handler);
     PreferenceFactory.addOptions(Preferences.CORE,
       "General org.eclipse.recommenders.news.rcp.newsEnabled ^(true|false)"
-    );
+    );*/
   }
 
   @Override

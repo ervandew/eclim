@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@ import org.eclipse.ui.IWorkbenchWindow;
  *
  * @author Eric Van Dewoestine
  */
-@SuppressWarnings("rawtypes")
 public class EclimEditorSite
   implements IEditorSite
 {
@@ -125,21 +124,19 @@ public class EclimEditorSite
   }
 
   @Override
-  @SuppressWarnings("unchecked")
-  public Object getAdapter(Class arg0)
+  public <T> T getAdapter(Class<T> arg0)
   {
     return null;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
-  public Object getService(Class arg0)
+  public <T> T getService(Class<T> arg0)
   {
     return null;
   }
 
   @Override
-  public boolean hasService(Class arg0)
+  public boolean hasService(Class<?> arg0)
   {
     return false;
   }
