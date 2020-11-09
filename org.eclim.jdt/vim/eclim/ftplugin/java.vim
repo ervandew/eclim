@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2015  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -226,30 +226,8 @@ if !exists(":Checkstyle")
   command -nargs=0 -buffer Checkstyle :call eclim#java#src#Checkstyle()
 endif
 
-if !exists(":JavaDebug")
-  command -nargs=* -buffer JavaDebugStart
-    \ :call eclim#java#debug#DebugStart(<f-args>)
-  command -nargs=0 -buffer JavaDebugStop :call eclim#java#debug#DebugStop()
-  command -nargs=0 -buffer JavaDebugStatus :call eclim#java#debug#Status()
-  command -nargs=+ -buffer JavaDebugStep :call eclim#java#debug#Step(<f-args>)
-
-  command -nargs=0 -buffer JavaDebugThreadSuspendAll
-    \ :call eclim#java#debug#DebugThreadSuspendAll()
-  command -nargs=0 -buffer JavaDebugThreadResume
-    \ :call eclim#java#debug#DebugThreadResume()
-  command -nargs=0 -buffer JavaDebugThreadResumeAll
-    \ :call eclim#java#debug#DebugThreadResumeAll()
-
-  command -nargs=0 -buffer -bang JavaDebugBreakpointToggle
-    \ :call eclim#java#debug#BreakpointToggle('<bang>')
-  command -nargs=0 -buffer -bang JavaDebugBreakpointsList
-    \ :call eclim#java#debug#BreakpointsList('<bang>')
-  command -nargs=0 -buffer -bang JavaDebugBreakpointRemove
-    \ :call eclim#java#debug#BreakpointRemove('<bang>')
-endif
-
 if !exists(":JavaOutline")
-	command -buffer -range JavaOutline :call eclim#java#outline#Outline()
+  command -buffer -range JavaOutline :call eclim#java#outline#Outline()
 endif
 
 " }}}

@@ -70,12 +70,6 @@ call eclim#AddVimSetting(
 call eclim#AddVimSetting(
   \ 'Core/Projects', 'g:EclimProjectProblemsQuickFixOpen', 'botright copen',
   \ 'Sets the vim command used to open the :ProjectProblems quickfix window.')
-
-call eclim#AddVimSetting(
-  \ 'Core/Projects', 'g:EclimTerminateLaunchOnBufferClosed', 1,
-  \ 'Automatically terminate a running launch started by :ProjectRun' .
-  \ ' when the buffer is closed by eg :q.',
-  \ '\(0\|1\)')
 " }}}
 
 " Auto Commands {{{
@@ -215,13 +209,6 @@ if !exists(":Todo")
 endif
 if !exists(":ProjectTodo")
   command -nargs=0 ProjectTodo :call eclim#project#util#ProjectTodo()
-endif
-
-if !exists(":ProjectRun")
-  " TODO I *guess* we could support cross-project and autocomplete
-  command -nargs=0 ProjectRunList :call eclim#project#run#ProjectRunList()
-  command -nargs=? -bang ProjectRun 
-      \ :call eclim#project#run#ProjectRun('<args>', '<bang>')
 endif
 " }}}
 

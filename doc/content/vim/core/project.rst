@@ -286,35 +286,6 @@ Vim's command line completion to complete the project name.
 
   Builds the current or supplied project.
 
-.. _\:ProjectRun:
-
-- **:ProjectRun** [<launch_config_name>]
-
-  Runs an eclipse launch configuration. When no launch configuration name is
-  supplied, the first available launch configuration will be used.
-
-  Before you can run this command, you must first start vim with the
-  ``--servername`` argument (eclimd currently sends the process stdout and
-  stderr to vim using vim's remote invocation support):
-
-  ::
-
-    $ vim --servername run ...
-
-  When your launch configuration is executed, a temporary buffer will be opened
-  in vim to display any output. When you close this window the launch
-  configuration process will be terminated. You can also terminate the process
-  from within the temporary output buffer by running the ``:Terminate`` command
-  (only available from that window). Also note that if you close vim, any
-  running launch configurations will be terminated.
-
-.. _\:ProjectRunList:
-
-- **:ProjectRunList**
-
-  Print a list of available eclipse launch configurations for the current
-  project.
-
 .. _\:ProjectCD:
 
 - **:ProjectCD**

@@ -2,7 +2,7 @@
 "
 " License: {{{
 "
-" Copyright (C) 2005 - 2018  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -110,30 +110,6 @@
   call eclim#AddVimSetting(
     \ 'Lang/Java', 'g:EclimJavaOutlineDefaultAction', 'edit',
     \ 'Sets the command to use when opening an entry from the java outline buffer.')
-
-  " Debugger settings {{{
-  call eclim#AddVimSetting(
-    \ 'Lang/Java', 'g:EclimJavaDebugLineHighlight', 'DebugBreak',
-    \ 'Highlight group to use for showing the current line being debugged.')
-
-  call eclim#AddVimSetting(
-    \ 'Lang/Java', 'g:EclimJavaDebugLineSignText', '•',
-    \ 'Text to use on sign column for showing the current line being debugged.')
-
-  call eclim#AddVimSetting(
-    \ 'Lang/Java', 'g:EclimJavaDebugStatusWinOrientation', 'vertical',
-    \ 'Sets the orientation for the splits inside the debug status windows; ' .
-    \ 'if they should be tiled vertically or horizontally.')
-
-  call eclim#AddVimSetting(
-    \ 'Lang/Java', 'g:EclimJavaDebugStatusWinWidth', 50,
-    \ 'Sets the window width for the splits inside the debug status window. ' .
-    \ 'This is only applicable when the orientation is horizontal.')
-
-  call eclim#AddVimSetting(
-    \ 'Lang/Java', 'g:EclimJavaDebugStatusWinHeight', 10,
-    \ 'Sets the window height for the splits inside the debug status window. ' .
-    \ 'This is only applicable when the orientation is vertical.')
   " }}}
 " }}}
 

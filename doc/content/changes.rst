@@ -146,15 +146,15 @@ Eclim:
     may be setting signs on the same lines as eclim.
 
 Project:
-  - Added a :ref:`:ProjectRun <:ProjectRun>` command to invoke your project's
-    eclipse run configuration.
+  - Added a :ProjectRun command to invoke your project's eclipse run
+    configuration.
     |br| Thanks to Daniel Leong
   - Added :ref:`:ProjectImportDiscover <:ProjectImportDiscover>` to bulk import
     projects from a common parent directory.
     |br| Thanks to Kannan Rajah
 
 Java:
-  - Added support for :doc:`java debugging </vim/java/debug>`.
+  - Added support for java debugging.
     |br| Thanks to Kannan Rajah
   - Added a :ref:`:JavaNew <:JavaNew>` command to create new classes,
     interfaces, etc in your project.
