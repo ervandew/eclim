@@ -16,8 +16,9 @@
  */
 import javax.xml.XMLConstants
 
-import groovy.json.JsonSlurper
 import groovy.util.XmlSlurper
+
+import com.google.gson.JsonParser
 
 import org.apache.tools.ant.BuildException
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -254,11 +255,11 @@ target(name: 'deploy.eclipse'){
     instances = new File(binding.getVariable('user.home') + '/.eclim/.eclimd_instances')
     if (instances.exists()){
       eclipse = binding.getVariable('eclipse')
-      parser = new JsonSlurper()
       instances.eachLine { line ->
-        json = parser.parseText(line)
-        port = json.port
-        echo("#  shutdown: ${json.workspace}:${json.port}")
+        json = JsonParser.parseString(line)
+        port = json.get('port').getAsInt()
+        workspace = json.get('workspace').getAsString()
+        echo("#  shutdown: ${workspace}:${port}")
         eclim('-command shutdown',
           port=port, failonerror=false, dir=existing.toString() + '/bin')
       }

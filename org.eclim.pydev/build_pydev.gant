@@ -1,4 +1,4 @@
-import groovy.json.JsonSlurper
+import com.google.gson.Gson
 
 feature_pydev = 'org.python.pydev.feature'
 
@@ -8,9 +8,8 @@ target(name: 'org.eclim.pydev.test'){
   port = getEclimdPort()
   cmd = "${cmd} --nailgun-port ${port} -command"
 
-  parser = new JsonSlurper()
-  interpreters = parser.parseText(
-    "${cmd} python_list_interpreters".execute().text)
+  result = "${cmd} python_list_interpreters".execute().text
+  interpreters = new Gson().fromJson(result, List<Map<String, String>>.class)
 
   if (!interpreters){
     python = 'which python'.execute().text

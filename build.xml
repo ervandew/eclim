@@ -126,7 +126,7 @@
 
     <taskdef name="gant" classname="org.codehaus.gant.ant.Gant">
       <classpath>
-        <fileset dir="ant/lib" includes="*.jar"/>
+        <fileset dir="ant/lib" includes="**/*.jar"/>
         <fileset dir="org.eclim" includes="lib/*.jar"/>
       </classpath>
     </taskdef>

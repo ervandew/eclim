@@ -25,8 +25,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.tools.ant.taskdefs.condition.Os;
-
 import org.eclim.util.CommandExecutor;
 import org.eclim.util.IOUtils;
 
@@ -51,8 +49,6 @@ public class Eclim
   private static final String PORT = System.getProperty("eclimd.port");
   private static final String PRETTY = "-pretty";
   private static final String COMMAND = "-command";
-
-  private static final JsonParser JSON_PARSER = new JsonParser();
 
   private static String workspace;
 
@@ -157,7 +153,7 @@ public class Eclim
       result = "\"\"";
     }
     try{
-      return toType(JSON_PARSER.parse(result));
+      return toType(JsonParser.parseString(result));
     }catch(JsonSyntaxException jse){
       if(!failOnError){
         return result;

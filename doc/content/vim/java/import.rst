@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2012  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ Configuration
 
 .. _org.eclim.java.import.exclude:
 
-- **org.eclim.java.import.exclude** (Default: ["^com\.sun\..*", "^sunw\?\..*"]) -
+- **org.eclim.java.import.exclude** (Default: ["^com\.sun\..*", "^sunw?\..*"]) -
   List of patterns to exclude from import results.
 
 .. _org.eclim.java.import.package_separation_level:

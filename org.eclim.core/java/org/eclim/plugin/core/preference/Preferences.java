@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -66,6 +67,8 @@ public class Preferences
 
   private static final String NODE_NAME = "org.eclim";
   private static final String GLOBAL = "_global_";
+
+  private static Gson gson = new GsonBuilder().setLenient().create();
 
   private static Preferences instance = new Preferences();
   private static Map<String, OptionHandler> optionHandlers =
@@ -328,7 +331,10 @@ public class Preferences
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
-      return new Gson().fromJson(value, String[].class);
+      // somewhere between gson 1.7.1 and 2.8.6 it became stupidily strict on
+      // back slashes in values.
+      value = value.replace("\\", "\\\\");
+      return gson.fromJson(value, String[].class);
     }
     return ArrayUtils.EMPTY_STRING_ARRAY;
   }
@@ -356,7 +362,9 @@ public class Preferences
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
-      return (Set<String>)new Gson().fromJson(
+      // more gson being overly strict on back slashes
+      value = value.replace("\\", "\\\\");
+      return (Set<String>)gson.fromJson(
           value, new TypeToken<Set<String>>(){}.getType());
     }
     return new HashSet<String>();
@@ -385,7 +393,9 @@ public class Preferences
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
-      return (Map<String, String>)new Gson().fromJson(
+      // more gson being overly strict on back slashes
+      value = value.replace("\\", "\\\\");
+      return (Map<String, String>)gson.fromJson(
           value, new TypeToken<Map<String, String>>(){}.getType());
     }
     return new HashMap<String, String>();

@@ -91,7 +91,7 @@ public class PluginResources
       "JDT org.eclim.java.logging.template logger.gst\n" +
       "JDT org.eclim.java.import.package_separation_level 1 (-1|\\d+)\n" +
       "JDT org.eclim.java.import.exclude " +
-        "[\"^com\\.sun\\..*\",\"^sunw\\?\\..*\"] JSON[]\n" +
+        "[\"^com\\.sun\\..*\",\"^sunw?\\..*\"] JSON[]\n" +
       "JDT org.eclim.java.format.strip_trialing_whitespace true (true|false)\n" +
       "JDT org.eclim.java.checkstyle.config\n" +
       "JDT org.eclim.java.checkstyle.properties\n" +
@@ -111,7 +111,7 @@ public class PluginResources
     );
     // Indentation settings found in DefaultCodeFormatterConstants
     PreferenceFactory.addOptions(NATURE,
-      "JDT org.eclipse.jdt.core.compiler.source ^(1\\.[3-8]|9|10)$\n" +
+      "JDT org.eclipse.jdt.core.compiler.source ^(1\\.[3-8]|9|1[0-5])$\n" +
       "JDT org.eclipse.jdt.ui.importorder [a-zA-Z0-9_.#;]+\n" +
       "JDT/Javadoc " + JavaUI.ID_PLUGIN + ".project_javadoc_location\n" +
       "JDT/CodeComplete " +

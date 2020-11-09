@@ -19,6 +19,10 @@ package org.eclim.plugin.core.command.project;
 import java.io.File;
 import java.io.FileReader;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +51,7 @@ import org.eclipse.core.resources.IProject;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonStreamParser;
+import com.google.gson.JsonParser;
 
 /**
  * Command to update a project.
@@ -102,13 +106,15 @@ public class ProjectUpdateCommand
     throws Exception
   {
     FileReader in = null;
-    File file = new File(settings);
+    Path file = Paths.get(settings);
     ArrayList<Error> errors = new ArrayList<Error>();
     try{
-      in = new FileReader(file);
-      JsonStreamParser parser = new JsonStreamParser(in);
-      JsonObject obj = (JsonObject)parser.next();
+      String content = Files.readString(file);
+      // somewhere between gson 1.7.1 and 2.8.6 it became stupidily strict on
+      // back slashes in values.
+      content = content.replace("\\", "\\\\");
 
+      JsonObject obj = (JsonObject)JsonParser.parseString(content);
       Preferences preferences = getPreferences();
       for (Map.Entry<String, JsonElement> entry : obj.entrySet()){
         String name = entry.getKey();
@@ -122,7 +128,7 @@ public class ProjectUpdateCommand
     }finally{
       IOUtils.closeQuietly(in);
       try{
-        file.delete();
+        file.toFile().delete();
       }catch(Exception e){
         logger.warn("Error deleting project settings temp file: " + file, e);
       }
