@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2013 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -217,8 +217,7 @@ public class CodeCompleteCommand
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public Object getAdapter(Class adapter)
+    public <T> T getAdapter(Class<T> arg0)
     {
       return null;
     }
