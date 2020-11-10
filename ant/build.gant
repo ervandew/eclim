@@ -998,6 +998,7 @@ def plugin(name){
   if (new File("${name}/java").exists()){
     compile("${name}/java", '${build.classes}/' + name, failonerror=true){
       compilerarg(value: '-Xlint:-options')
+      //compilerarg(value: '-Xlint:unchecked')
       include(name: "**/*.java")
       classpath{fileset(dir: '${build.plugins}', includes: 'org.eclim*/eclim*.jar')}
     }
