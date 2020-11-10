@@ -10,16 +10,9 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>org.scala-ide.sdt.core.scalabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.scala-ide.sdt.core.scalanature</nature>
-        <nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
 	</natures>
 </projectDescription>
