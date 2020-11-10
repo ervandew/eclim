@@ -79,7 +79,6 @@ exec 'CompilerSet errorformat=' .
   \ '\%-Z%.%#[scalac]\ %p^,' .
   \ '\%A%.%#[scalac]\ %f:%l:\ %m,' .
   \ '\%-Z%.%#[scalac]\ %p^,' .
-  \ '\%+A%.%#eclim\ testng:\ %f:%m,' .
   \ '\%.%#\ ERROR\ %.%#\ line\ %l\ in\ file:\ %.%f%.:\ %m,' .
   \ g:EclimAntCompilerAdditionalErrorFormat .
   \ '\%.%#[exec]\ %f:%l:%c:\ %m,' .

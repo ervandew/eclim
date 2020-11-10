@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2017  Eric Van Dewoestine
+" Copyright (C) 2005 - 2020  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,10 +28,6 @@
   let s:entry_match{'junit'} = 'Tests run:'
   let s:entry_text_replace{'junit'} = '.*[junit] '
   let s:entry_text_with{'junit'} = ''
-
-  let s:entry_match{'testng'} = 'eclim testng:'
-  let s:entry_text_replace{'testng'} = '.*eclim testng: .\{-}:'
-  let s:entry_text_with{'testng'} = ''
 
   let s:open_console = 'Open jconsole'
   let s:view_info = 'View Info'
@@ -56,7 +52,7 @@ function! eclim#java#tools#MakeWithJavaBuildTool(compiler, bang, args) " {{{
   augroup eclim_make_java_test
     autocmd!
     autocmd QuickFixCmdPost make
-      \ call eclim#java#tools#ResolveQuickfixResults(['junit', 'testng'])
+      \ call eclim#java#tools#ResolveQuickfixResults(['junit'])
   augroup END
 
   try

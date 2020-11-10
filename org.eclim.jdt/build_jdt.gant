@@ -7,23 +7,6 @@ target(name: 'org.eclim.jdt.classpath'){
   }
 }
 
-target(name: 'org.eclim.jdt.build.eclipse'){
-  // build the eclim testng listener
-  mkdir(dir: '${build.classes}/testng')
-  javac(
-      destdir: '${build.classes}/testng',
-      srcdir: 'ant/ext/testng',
-      debug: 'on', optimize: false,
-      target: '1.8', source: '1.8',
-      failonerror: true,
-      includeantruntime: false){
-    classpath{fileset(dir: 'ant/lib', includes: 'testng-*.jar')}
-  }
-  jar(jarfile: '${build.plugins}/org.eclim.jdt_${eclim.version}/eclim-testng.jar'){
-    fileset(dir: '${build.classes}/testng', includes: '**/*')
-  }
-}
-
 target(name: 'org.eclim.jdt.test'){
   depends('test.init')
   runTests('org.eclim.jdt'){
