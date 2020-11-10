@@ -4,6 +4,7 @@
 /.ant-targets-build.xml
 /.cache
 /.ropeproject
+/.tmux-status
 /build
 /gh-pages
 /installer/installc
