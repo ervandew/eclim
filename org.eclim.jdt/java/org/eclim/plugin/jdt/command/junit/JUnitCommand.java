@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2014  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -254,6 +254,10 @@ public class JUnitCommand
     classpath.createPathElement().setPath(pathName + "/lib/ant.jar");
     classpath.createPathElement().setPath(pathName + "/lib/ant-junit.jar");
     classpath.createPathElement().setPath(pathName + "/lib/ant-junit4.jar");
+
+    bundle = Platform.getBundle("org.hamcrest.core");
+    pathName = FileLocator.getBundleFile(bundle).getPath();
+    classpath.createPathElement().setPath(pathName);
 
     bundle = Platform.getBundle("org.eclim.jdt");
     pathName = FileLocator.getBundleFile(bundle).getPath();

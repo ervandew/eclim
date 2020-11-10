@@ -1090,7 +1090,7 @@ junit = { pluginName ->
   }
 
   ant.path(id: 'junit'){
-    ant.fileset(dir: 'ant/lib', includes: 'junit-*.jar')
+    ant.fileset(dir: 'ant/lib/junit', includes: '*.jar')
   }
   ant.taskdef(name: 'junit', classpathref: 'junit',
       classname: 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTask')

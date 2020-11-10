@@ -1,6 +1,7 @@
 feature_jdt = 'org.eclipse.jdt'
 
 target(name: 'org.eclim.jdt.classpath'){
+  fileset(dir: 'ant/lib/junit', includes: 'junit-*.jar')
   pluginClasspath{
     include(name: 'dropins/**/plugins/org.eclipse.jdt.debug_*/*.jar')
     include(name: 'plugins/org.eclipse.jdt.debug_*/*.jar')
@@ -21,7 +22,7 @@ target(name: 'org.eclim.jdt.test'){
 
     mkdir(dir: '${eclipse.workspace}/eclim_unit_test_java/lib')
     copy(tofile: '${eclipse.workspace}/eclim_unit_test_java/lib/junit.jar'){
-      fileset(dir: 'ant/lib', includes: 'junit-*.jar')
+      fileset(dir: 'ant/lib/junit', includes: 'junit-*.jar')
     }
     eclim('-command project_update -p eclim_unit_test_java')
   }
