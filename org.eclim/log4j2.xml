@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (C) 2005 - 2020  Eric Van Dewoestine
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<Configuration packages="org.eclim.logging.log4j">
+  <Appenders>
+    <Console name="stdout" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d %-5p [%c] %m%n"/>
+    </Console>
+
+    <RollingFile
+        name="file"
+        fileName="${sys:eclimd.workspace}/eclimd.log"
+        filePattern="0"
+        append="true">
+      <PatternLayout pattern="%d %-5p [%c] %m%n"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="2 MB"/>
+      </Policies>
+    </RollingFile>
+
+    <EclipseView name="gui" view="org.eclim.eclipse.ui.EclimdView">
+      <PatternLayout pattern="%d %m%n"/>
+    </EclipseView>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="org.apache.commons.vfs2" level="warn"/>
+    <Logger name="org.eclim" level="info"/>
+
+    <Root level="info">
+      <AppenderRef ref="stdout"/>
+      <AppenderRef ref="file"/>
+      <AppenderRef ref="gui"/>
+    </Root>
+  </Loggers>
+</Configuration>

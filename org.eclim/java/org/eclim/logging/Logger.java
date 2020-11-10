@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2018  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ public class Logger
 
   private org.slf4j.Logger logger;
 
-  private Logger (org.slf4j.Logger logger)
+  private Logger(org.slf4j.Logger logger)
   {
     this.logger = logger;
   }

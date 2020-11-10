@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2015  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2020  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+
+import org.apache.logging.log4j.core.config.Configurator;
 
 import org.eclim.logging.Logger;
 
@@ -72,7 +74,7 @@ public class EclimApplication
 
     if (System.getProperty("org.eclim.debug") != null){
       logger.info("Enabing debug logging for org.eclim...");
-      LogManager.getLogger("org.eclim").setLevel(Level.DEBUG);
+      Configurator.setLevel("org.eclim", Level.DEBUG);
     }
 
     Map args = context.getArguments();
