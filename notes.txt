@@ -504,6 +504,8 @@ NOTES {{{
        Title: Eclim <version> (for Eclipse <version>, <Name>)
        Desc:  http://ervandew.github.io/eclim/changes.html
     3) update documentation website
+       # ensure installer/dependencies.xml has correct eclipse version info
+       # ensure docs/content/install.rst has correct java version info
        $ ant docs
        $ cd gh-pages
        $ git a 0-n
