@@ -491,6 +491,8 @@ def step_update_site(eclim, plugins):
         tree.write(xml)
 
 def step_eclim_uninstall(eclim, eclipse, uninstall=False):
+  eclipse_dir = eclipse.local or eclipse.home
+
   eclim_feature = eclipse.installed(feature_name='org.eclim')
   if eclim_feature:
     print('\nUninstalling eclim (%s)...' % eclim_feature.version)
@@ -520,13 +522,22 @@ def step_eclim_uninstall(eclim, eclipse, uninstall=False):
     )
     eclipse.gc()
 
-  elif uninstall:
-    print('No eclim feature was found in your eclipse installation.')
+  else:
+    if uninstall:
+      print('No eclim feature was found in your eclipse installation.')
 
-  eclipse_dir = eclipse.local or eclipse.home
-  eclimd_symlink = os.path.join(eclipse_dir, 'eclimd')
-  if os.path.lexists(eclimd_symlink):
-    os.unlink(eclimd_symlink)
+    # remove any org.eclim plugins installed by building from source
+    plugins = os.path.join(eclipse_dir, 'plugins')
+    if os.path.exists(plugins):
+      for plugin in os.listdir(plugins):
+        if plugin.startswith('org.eclim'):
+          print('Removing eclim plugin:', plugin)
+          shutil.rmtree(os.path.join(plugins, plugin))
+
+  for eclim_symlink in ['eclim', 'eclimd']:
+    symlink = os.path.join(eclipse_dir, eclim_symlink)
+    if os.path.lexists(symlink):
+      os.unlink(symlink)
 
   if eclim.vimfiles != 'skip':
     eclim_dot_vim = os.path.join(eclim.vimfiles, 'plugin', 'eclim.vim')
