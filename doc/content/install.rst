@@ -287,7 +287,7 @@ When starting Xvfb you may receive some errors regarding font paths and
 possibly dbus and hal, but as long as Xvfb continues to run, you should be
 able to ignore these errors.
 
-The first time you start eclimd you may want to omit the 'start' argument so
+The first time you start eclimd you may want to omit the '-b' argument so
 that you can see the output on the console to ensure that eclimd starts
 correctly.
 
