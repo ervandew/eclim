@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,13 +91,13 @@ public class CodeCompleteCommandTest
     assertEquals("Wrong number of completions.", 30, completions.size());
 
     Map<String, Object> result = completions.get(0);
-    assertEquals(result.get("completion"), "add(");
+    assertEquals(result.get("completion"), "add");
     assertEquals(result.get("menu"), "add(int index, Object element) : void - List");
     assertEquals(result.get("info"), "add(int index, Object element) : void - List");
     assertEquals(result.get("type"), "f");
 
     result = completions.get(3);
-    assertEquals(result.get("completion"), "addAll(");
+    assertEquals(result.get("completion"), "addAll");
     assertEquals(result.get("menu"), "addAll(Collection c) : boolean - List");
     assertEquals(result.get("info"), "addAll(Collection c) : boolean - List");
     assertEquals(result.get("type"), "f");

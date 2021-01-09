@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2021  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@ History of Changes
 
 .. _x.x.x:
 
-x.x.x (Xxx. xx, 2020)
+x.x.x (Xxx. xx, 2021)
 ---------------------
 
 Eclim:
-  - Eclim updated for Eclipse 4.17 (2020-09), so java 11 or newer is also
+  - Eclim updated for Eclipse 4.18 (2020-12), so java 11 or newer is also
     required.
 
 Removals:

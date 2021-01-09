@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2020  Eric Van Dewoestine
+" Copyright (C) 2005 - 2021  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -79,9 +79,9 @@ function! TestCodeComplete() " {{{
   call vunit#PeekRedir()
   echom 'Results: ' . string(results)
   call vunit#AssertTrue(len(results) > 1, 'Not enough results.')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add'.*"),
     \ 'Narrowed results does not contain add()')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll'.*"),
     \ 'Narrowed results does not contain addAll()')
 
   for result in results
@@ -146,8 +146,6 @@ function! TestCodeCompleteLinkedResource() " {{{
     \ 'Results does not contain add()')
   call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
     \ 'Results does not contain addAll()')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'clear()'.*"),
-    \ 'Results does not contain clear()')
 
   call cursor(16, 10)
   let start = eclim#java#complete#CodeComplete(1, '')
@@ -157,12 +155,10 @@ function! TestCodeCompleteLinkedResource() " {{{
     \ 'Not enough results (complete "a"): ' . len(results))
   call vunit#AssertTrue(len(results) < 10,
     \ 'Too many results (complete "a"): ' . len(results))
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add('.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'add'.*"),
     \ 'Results does not contain add()')
-  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll('.*"),
+  call vunit#AssertTrue(eclim#util#ListContains(results, ".*'addAll'.*"),
     \ 'Results does not contain addAll()')
-  call vunit#AssertFalse(eclim#util#ListContains(results, ".*'clear()'.*"),
-    \ 'Results contain clear()')
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

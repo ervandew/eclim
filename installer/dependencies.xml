@@ -2,19 +2,19 @@
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
 <dependencies eclipse-version="4.8" eclipse-name="photon">
   <feature id="jdt">
-    <dependency id="org.eclipse.jdt" version="3.18.500">
-      <site url="http://download.eclipse.org/releases/2020-09/"/>
+    <dependency id="org.eclipse.jdt" version="3.18.600">
+      <site url="http://download.eclipse.org/releases/2020-12/"/>
     </dependency>
   </feature>
 
   <feature id="wst">
-    <dependency id="org.eclipse.wst.web_ui.feature" version="3.19.0">
-      <site url="http://download.eclipse.org/releases/2020-09/"/>
+    <dependency id="org.eclipse.wst.web_ui.feature" version="3.20.0">
+      <site url="http://download.eclipse.org/releases/2020-12/"/>
     </dependency>
   </feature>
 
   <feature id="pydev">
-    <dependency id="org.python.pydev.feature" version="8.0.0">
+    <dependency id="org.python.pydev.feature" version="8.1.0">
       <site url="http://pydev.org/updates"/>
     </dependency>
   </feature>
