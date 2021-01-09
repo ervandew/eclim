@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2020  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2021  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -106,6 +106,18 @@ What's New?
    :title: Eclim: What's New
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
+
+Jan 09, 2021
+-------------
+
+A new version of eclim is now available with support for Eclipse 4.18 (2020-12).
+
+.. note::
+
+  Several features have been removed from eclim. Please see the release notes
+  for details.
+
+- :ref:`Eclim 2.18.0 <2.18.0>`
 
 Jul 05, 2018
 -------------

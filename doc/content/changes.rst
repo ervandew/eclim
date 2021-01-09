@@ -16,10 +16,10 @@
 History of Changes
 ==================
 
-.. _x.x.x:
+.. _2.18.0:
 
-x.x.x (Xxx. xx, 2021)
----------------------
+2.18.0 (Jan. 09, 2021)
+----------------------
 
 Eclim:
   - Eclim updated for Eclipse 4.18 (2020-12), so java 11 or newer is also
