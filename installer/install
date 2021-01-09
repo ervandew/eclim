@@ -572,11 +572,12 @@ def step_eclim_install(eclim, eclipse, plugins):
   )
 
   nailgun_configure = os.path.join(eclim_plugin_dir, 'nailgun', 'configure')
+  eclim_bin = os.path.join(eclim_plugin_dir, 'bin', 'eclim')
   eclimd_bin = os.path.join(eclim_plugin_dir, 'bin', 'eclimd')
   executables = [
     nailgun_configure,
     eclimd_bin,
-    os.path.join(eclim_plugin_dir, 'bin', 'eclim'),
+    eclim_bin,
   ]
   for executable in executables:
     if not os.path.exists(executable):
@@ -610,14 +611,19 @@ def step_eclim_install(eclim, eclipse, plugins):
     os.path.join(eclim_plugin_dir, 'bin'),
   )
 
-  # create a symlink for eclimd
+  # create eclim/eclimd symlinks
   eclipse_dir = eclipse.local or eclipse.home
+  for path, eclim_symlink in [(eclim_bin, 'eclim'), (eclimd_bin, 'eclimd')]:
+    symlink = os.path.join(eclipse_dir, eclim_symlink)
+    try:
+      os.symlink(path, symlink)
+    except OSError as ex:
+      terminal.debug('unable to create %s symlink: %s', eclim_symlink, str(ex))
+
   eclimd_symlink = os.path.join(eclipse_dir, 'eclimd')
-  try:
-    os.symlink(eclimd_bin, eclimd_symlink)
+  if os.path.exists(eclimd_symlink):
     eclimd = eclimd_symlink
-  except OSError as ex:
-    terminal.debug('unable to create eclimd symlink: %s', str(ex))
+  else:
     eclimd = eclimd_bin
 
   if eclim.vimfiles != 'skip':
