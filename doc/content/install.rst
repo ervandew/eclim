@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2017  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2021  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@ Requirements
 Before beginning the installation, first confirm that you have met the
 following requirements.
 
-- `Java Development Kit`_ 1.8 or greater
+- `Java Development Kit`_ 11 or greater
 - `Vim`_ 7.1 or greater
 - `Eclipse eclipse_version`_
-- python (2.7 or 3.x)
+- python 3.x
 - make
 - gcc
 

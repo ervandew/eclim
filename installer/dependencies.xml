@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dependencies SYSTEM "dependencies.dtd">
-<dependencies eclipse-version="4.8" eclipse-name="photon">
+<dependencies eclipse-version="4.18" eclipse-name="2020-12">
   <feature id="jdt">
     <dependency id="org.eclipse.jdt" version="3.18.600">
       <site url="http://download.eclipse.org/releases/2020-12/"/>
