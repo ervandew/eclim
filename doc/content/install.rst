@@ -74,15 +74,6 @@ You can find the official eclim installer on eclim's github `releases page`_:
 
 .. _releases page: https://github.com/ervandew/eclim/releases/
 
-Third Party Packages
---------------------
-
-As an alternative to the official installer, there are also some packages
-maintained by third parties:
-
-- **Arch:** `aur (eclim) <https://aur.archlinux.org/packages/eclim/>`_,
-  `aur (eclim-git) <https://aur.archlinux.org/packages/eclim-git/>`_
-
 Installing / Upgrading
 ======================
 
