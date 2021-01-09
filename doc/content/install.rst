@@ -127,10 +127,6 @@ eclipse and open the eclimd view:
 
 :menuselection:`Window --> Show View --> Other --> Eclim --> eclimd`
 
-By default the eclimd view will also be auto opened when you open a file using:
-
-:menuselection:`Open With --> Vim`
-
 If you plan on using eclim without the eclipse gui, then:
 
 - start the eclimd server.
