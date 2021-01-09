@@ -1,19 +1,29 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Eclim Changes Archive &#8212; eclim (eclipse + vim)</title>
+    
+    <title>Eclim Changes Archive &mdash; eclim (eclipse + vim)</title>
+    
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'v2.18.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -22,14 +32,14 @@
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.scrollspy.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="eclim (eclipse + vim)" href="../index.html" />
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
-  </head><body>
+  </head>
+  <body role="document">
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -38,107 +48,147 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.8.0</b></li>
+          <li><b class="navbar-text">v2.18.0</b></li>
           
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../vim/index.html">Documentation</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/util.html">Utility Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/c/index.html">C/C++</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/project.html">C/C++ Project Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/complete.html">C/C++ Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/validate.html">C/C++ Validation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/search.html">C/C++ Search</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/c/inspection.html">C/C++ Code Inspection</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a></li>
-<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/groovy/index.html">Groovy</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/groovy/complete.html">Groovy Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/groovy/validate.html">Groovy Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/debug.html">Java Debugging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/android.html">Android</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a></li>
-<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/php/index.html">Php</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/php/buildpath.html">Php Build Path</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/php/complete.html">Php Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/php/validate.html">Php Validation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/php/search.html">Php Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/ruby/index.html">Ruby</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/buildpath.html">Ruby Interpreters / Build Path</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/complete.html">Ruby Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/validate.html">Ruby Validation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/ruby/search.html">Ruby Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/scala/index.html">Scala</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/scala/complete.html">Scala Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/scala/validate.html">Scala Validation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/scala/search.html">Scala Search</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/scala/import.html">Automated Imports</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../development/index.html">Development Docs</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../development/gettingstarted.html">Developers Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/gettingstarted.html">Developers Guide</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../development/architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../development/commands.html">Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../development/plugins.html">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/commands.html">Commands</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/plugins.html">Plugins</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a><ul class="simple">
+</ul>
+</li>
 </ul>
 
 </li>
@@ -236,7 +286,7 @@
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
 <li>1.7.13 and above will now support Eclipse 3.8 as well as 3.7.</li>
-<li>Fix <a class="reference internal" href="../vim/core/project.html#projectgrep"><span class="std std-ref">:ProjectGrep</span></a> and <a class="reference internal" href="../vim/core/project.html#projecttodo"><span class="std std-ref">:ProjectTodo</span></a> to search in all of the project’s links as well.</li>
+<li>Fix <a class="reference internal" href="../vim/core/project.html#projectgrep"><span>:ProjectGrep</span></a> and <a class="reference internal" href="../vim/core/project.html#projecttodo"><span>:ProjectTodo</span></a> to search in all of the project's links as well.</li>
 <li>Other minor bug fixes.</li>
 </ul>
 </dd>
@@ -251,8 +301,8 @@
 <dl class="docutils">
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
-<li>Updated <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> and <a class="reference internal" href="../vim/core/project.html#projecttab"><span class="std std-ref">:ProjectTab</span></a> to support an arbitrary directory as an argument, allowing
-you to use the command for project’s not managed by eclipse/eclim. :TreeTab
+<li>Updated <a class="reference internal" href="../vim/core/project.html#projecttree"><span>:ProjectTree</span></a> and <a class="reference internal" href="../vim/core/project.html#projecttab"><span>:ProjectTab</span></a> to support an arbitrary directory as an argument, allowing
+you to use the command for project's not managed by eclipse/eclim. :TreeTab
 has been removed since the update to :ProjectTab makes it redundant.</li>
 <li>Creation of projects in nested directories in the eclipse workspace (vs at
 the root of the workspace) is now properly supported through eclim.</li>
@@ -314,32 +364,32 @@ create/refresh and call hierarchy).</li>
 <dd><ul class="first last simple">
 <li>:JavaImportSort, :JavaImportClean, and :JavaImportMissing all removed in
 favor of a new command which performs the functionality of all three:
-<a class="reference internal" href="../vim/java/import.html#javaimportorganize"><span class="std std-ref">:JavaImportOrganize</span></a></li>
+<a class="reference internal" href="../vim/java/import.html#javaimportorganize"><span>:JavaImportOrganize</span></a></li>
 <li>The vim option g:EclimJavaImportExclude has been replaced with the eclim
-setting <a class="reference internal" href="../vim/java/import.html#org-eclim-java-import-exclude"><span class="std std-ref">org.eclim.java.import.exclude</span></a>.</li>
+setting <a class="reference internal" href="../vim/java/import.html#org-eclim-java-import-exclude"><span>org.eclim.java.import.exclude</span></a>.</li>
 <li>The vim option g:EclimJavaImportPackageSeparationLevel has been replaced
-with the eclim setting <a class="reference internal" href="../vim/java/import.html#org-eclim-java-import-package-separation-level"><span class="std std-ref">org.eclim.java.import.package_separation_level</span></a>.</li>
+with the eclim setting <a class="reference internal" href="../vim/java/import.html#org-eclim-java-import-package-separation-level"><span>org.eclim.java.import.package_separation_level</span></a>.</li>
 <li>g:EclimJavaBeanInsertIndexed vim variable removed in favor of suffixing
-:JavaGetSet methods with ‘!’.</li>
+:JavaGetSet methods with '!'.</li>
 <li>:JavaCorrect, :JavaImpl, :JavaDelegate, :JavaConstructor, and :JUnitImpl
 all now perform their code manipulations using eclipse operations.</li>
 <li>Initial support added for running :JavaSearch commands from source file
 results (library source files) not in a project.</li>
 <li>g:EclimJavaCheckstyleOnSave replaced with the eclim setting
-<a class="reference internal" href="../vim/java/validate.html#org-eclim-java-checkstyle-onvalidate"><span class="std std-ref">org.eclim.java.checkstyle.onvalidate</span></a>.</li>
+<a class="reference internal" href="../vim/java/validate.html#org-eclim-java-checkstyle-onvalidate"><span>org.eclim.java.checkstyle.onvalidate</span></a>.</li>
 <li>g:EclimJavaSrcValidate renamed to g:EclimJavaValidate.</li>
-<li>:JUnitExecute replaced with a new and improved <a class="reference internal" href="../vim/java/unittests.html#junit"><span class="std std-ref">:JUnit</span></a>
+<li>:JUnitExecute replaced with a new and improved <a class="reference internal" href="../vim/java/unittests.html#junit"><span>:JUnit</span></a>
 command.</li>
-<li>Added the command <a class="reference internal" href="../vim/java/unittests.html#junitfindtest"><span class="std std-ref">:JUnitFindTest</span></a> to open the
+<li>Added the command <a class="reference internal" href="../vim/java/unittests.html#junitfindtest"><span>:JUnitFindTest</span></a> to open the
 corresponding test for the current file.</li>
-<li>Removed :Javac command since eclipse’s continuous incremental builds
+<li>Removed :Javac command since eclipse's continuous incremental builds
 typically make the :Javac call a no op, and in cases where you need to
-induce compilation, <a class="reference internal" href="../vim/core/project.html#projectbuild"><span class="std std-ref">:ProjectBuild</span></a> does so in a
+induce compilation, <a class="reference internal" href="../vim/core/project.html#projectbuild"><span>:ProjectBuild</span></a> does so in a
 language agnostic way.</li>
-<li>Added <a class="reference internal" href="../vim/java/refactor.html#javamove"><span class="std std-ref">:JavaMove</span></a> command to move a java source file from
+<li>Added <a class="reference internal" href="../vim/java/refactor.html#javamove"><span>:JavaMove</span></a> command to move a java source file from
 one package to another.</li>
-<li>Added <a class="reference internal" href="../vim/java/javadoc.html#javadocpreview"><span class="std std-ref">:JavaDocPreview</span></a> to display the javadoc of
-the element under the cursor in vim’s preview window.</li>
+<li>Added <a class="reference internal" href="../vim/java/javadoc.html#javadocpreview"><span>:JavaDocPreview</span></a> to display the javadoc of
+the element under the cursor in vim's preview window.</li>
 </ul>
 </dd>
 </dl>
@@ -353,9 +403,8 @@ the element under the cursor in vim’s preview window.</li>
 <dl class="docutils">
 <dt>Scala:</dt>
 <dd><ul class="first last simple">
-<li>Add support for scala <a class="reference internal" href="../vim/scala/complete.html"><span class="doc">code completion</span></a>,
-<a class="reference internal" href="../vim/scala/validate.html"><span class="doc">code validation</span></a>, and <a class="reference internal" href="../vim/scala/search.html"><span class="doc">element definition
-searches</span></a>.</li>
+<li>Add support for scala code completion, code validation, and element
+definition searches.</li>
 </ul>
 </dd>
 </dl>
@@ -375,7 +424,7 @@ make them easier to find and make the docs less sprawling.</li>
 </dd>
 <dt>Android:</dt>
 <dd><ul class="first last simple">
-<li>Eclim now has support for <a class="reference internal" href="../gettingstarted.html#gettingstarted-android"><span class="std std-ref">creating android projects</span></a>.</li>
+<li>Eclim now has support for creating android projects.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
@@ -413,7 +462,7 @@ selections).</li>
 <dd><ul class="first last simple">
 <li>Updated eclimd script to always set the jvm architecture argument,
 preventing possible issue starting eclimd on OSX if the default
-architecture order of the java executable doesn’t match the eclipse
+architecture order of the java executable doesn't match the eclipse
 architecture.</li>
 </ul>
 </dd>
@@ -421,18 +470,18 @@ architecture.</li>
 <dd><ul class="first last simple">
 <li>Semantic errors are now included in the validation results.</li>
 <li>Added folding support to C/C++ call hierarchy buffer.</li>
-<li><a class="reference internal" href="../vim/core/project.html#projectrefresh"><span class="std std-ref">:ProjectRefresh</span></a> now waits on the C/C++ indexer to
+<li><a class="reference internal" href="../vim/core/project.html#projectrefresh"><span>:ProjectRefresh</span></a> now waits on the C/C++ indexer to
 finish before returning focus to the user.</li>
 <li>Fixed auto selecting of the tool chain when creating C/C++ projects from
 eclim.</li>
-<li>Fixed <a class="reference internal" href="../vim/c/inspection.html#ccallhierarchy"><span class="std std-ref">:CCallHierarchy</span></a> from possibly using a cached
-version of the file resulting in incorrect or no results.</li>
+<li>Fixed :CCallHierarchy from possibly using a cached version of the file
+resulting in incorrect or no results.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Fixed inserted code from <a class="reference internal" href="../vim/java/validate.html#javacorrect"><span class="std std-ref">:JavaCorrect</span></a> when file
-format is ‘dos’.</li>
+<li>Fixed inserted code from <a class="reference internal" href="../vim/java/validate.html#javacorrect"><span>:JavaCorrect</span></a> when file
+format is 'dos'.</li>
 <li>Fixed off by one issue prevent several code correction suggestions from
 being suggested.</li>
 </ul>
@@ -446,7 +495,7 @@ importing a ruby project or adding the ruby nature to an existing project.</li>
 <dt>Vimplugin:</dt>
 <dd><ul class="first last simple">
 <li>Fixed executing of some operations when vim is currently in insert mode
-(opening new file from eclipse in a new external vim tab, using “Save As”
+(opening new file from eclipse in a new external vim tab, using &quot;Save As&quot;
 from eclipse, and jumping to a line number from the project tree etc.)</li>
 </ul>
 </dd>
@@ -466,7 +515,7 @@ from eclipse, and jumping to a line number from the project tree etc.)</li>
 </dd>
 <dt>Installer:</dt>
 <dd><ul class="first last simple">
-<li>Fixed install location of eclim’s vim help files (broken in the previous
+<li>Fixed install location of eclim's vim help files (broken in the previous
 release).</li>
 </ul>
 </dd>
@@ -483,14 +532,14 @@ release of eclim (2.2.0) will be built for Juno.</p>
 <dl class="docutils">
 <dt>Installer:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../install.html#uninstall"><span class="std std-ref">uninstall</span></a> support to the eclim installer.</li>
-<li>Updated the installer to fully embrace eclipse’s provisioning framework
+<li>Added <a class="reference internal" href="../install.html#uninstall"><span>uninstall</span></a> support to the eclim installer.</li>
+<li>Updated the installer to fully embrace eclipse's provisioning framework
 (p2).</li>
 </ul>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/core/project.html#projecttreetoggle"><span class="std std-ref">:ProjectTreeToggle</span></a>.</li>
+<li>Added <a class="reference internal" href="../vim/core/project.html#projecttreetoggle"><span>:ProjectTreeToggle</span></a>.</li>
 </ul>
 </dd>
 <dt>Vimplugin</dt>
@@ -502,7 +551,7 @@ binding scheme back to the default scheme.</li>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
 <li>Added support for importing the necessary type during code completion.</li>
-<li>Improved location of a project’s main class for the <a class="reference internal" href="../vim/java/java.html#java"><span class="std std-ref">:Java</span></a>
+<li>Improved location of a project's main class for the <a class="reference internal" href="../vim/java/java.html#java"><span>:Java</span></a>
 command, when not explicitly set.</li>
 </ul>
 </dd>
@@ -541,11 +590,11 @@ command, when not explicitly set.</li>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/core/project.html#projectbuild"><span class="std std-ref">:ProjectBuild</span></a> to build the current or
+<li>Added <a class="reference internal" href="../vim/core/project.html#projectbuild"><span>:ProjectBuild</span></a> to build the current or
 supplied project.</li>
-<li>Updated <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="std std-ref">:ProjectProblems</span></a> to support optional bang
+<li>Updated <a class="reference internal" href="../vim/core/project.html#projectproblems"><span>:ProjectProblems</span></a> to support optional bang
 (<cite>:ProjectProblems!</cite>) to only show project errors.</li>
-<li>Updating eclipse’s <a class="reference internal" href="../vim/core/history.html"><span class="doc">local history</span></a> when writing
+<li>Updating eclipse's <a class="reference internal" href="../vim/core/history.html"><em>local history</em></a> when writing
 in vim is now only enabled by default when gvim is opened from the eclipse
 gui.</li>
 </ul>
@@ -558,13 +607,13 @@ gui.</li>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
 <li>Added project settings for specifying default jvm args for
-<a class="reference internal" href="../vim/java/java.html#java"><span class="std std-ref">:Java</span></a> and default args for :Javac.</li>
+<a class="reference internal" href="../vim/java/java.html#java"><span>:Java</span></a> and default args for :Javac.</li>
 <li>Code inserted by
-<a class="reference internal" href="../vim/java/methods.html#javaconstructor"><span class="std std-ref">:JavaConstructor</span></a>,
-<a class="reference internal" href="../vim/java/methods.html#javagetset"><span class="std std-ref">:JavaGetSet</span></a>,
-<a class="reference internal" href="../vim/java/methods.html#javaimpl"><span class="std std-ref">:JavaImpl</span></a>,
-<a class="reference internal" href="../vim/java/methods.html#javadelegate"><span class="std std-ref">:JavaDelegate</span></a>, and
-<a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span class="std std-ref">:JUnitImpl</span></a>
+<a class="reference internal" href="../vim/java/methods.html#javaconstructor"><span>:JavaConstructor</span></a>,
+<a class="reference internal" href="../vim/java/methods.html#javagetset"><span>:JavaGetSet</span></a>,
+<a class="reference internal" href="../vim/java/methods.html#javaimpl"><span>:JavaImpl</span></a>,
+<a class="reference internal" href="../vim/java/methods.html#javadelegate"><span>:JavaDelegate</span></a>, and
+<a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span>:JUnitImpl</span></a>
 is now formatted according to the eclipse code formatter settings
 configured from the eclipse gui.</li>
 </ul>
@@ -572,7 +621,7 @@ configured from the eclipse gui.</li>
 <dt>Maven:</dt>
 <dd><ul class="first last simple">
 <li>Now when saving your pom.xml file your .classpath will be
-<a class="reference internal" href="../vim/java/classpath.html#classpath-maven-pom"><span class="std std-ref">auto updated</span></a> with the dependencies found in
+<a class="reference internal" href="../vim/java/classpath.html#classpath-maven-pom"><span>auto updated</span></a> with the dependencies found in
 your pom.xml.</li>
 </ul>
 </dd>
@@ -676,7 +725,7 @@ dependencies by setting a larger heap space.</li>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/java/java.html#javaclasspath"><span class="std std-ref">:JavaClasspath</span></a> to echo the project’s current
+<li>Added <a class="reference internal" href="../vim/java/java.html#javaclasspath"><span>:JavaClasspath</span></a> to echo the project's current
 classpath.</li>
 </ul>
 </dd>
@@ -689,16 +738,16 @@ classpath.</li>
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
 <li>Fixed to use %USERPROFILE% on windows to retrieve the user home (fixes
-several possible issues including “Unable to determine your eclipse
-workspace”).</li>
+several possible issues including &quot;Unable to determine your eclipse
+workspace&quot;).</li>
 <li>Various other bug fixes.</li>
 </ul>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
 <li>Added rudimentary auto generated menu items for gvim (can be disabled via
-<a class="reference internal" href="../vim/core/eclim.html#g-eclimmenus"><span class="std std-ref">g:EclimMenus</span></a>).</li>
-<li>Added support for displaying <a class="reference internal" href="../vim/core/project.html#projectinfo"><span class="std std-ref">project info</span></a> vim’s
+<a class="reference internal" href="../vim/core/eclim.html#g-eclimmenus"><span>g:EclimMenus</span></a>).</li>
+<li>Added support for displaying <a class="reference internal" href="../vim/core/project.html#projectinfo"><span>project info</span></a> vim's
 status line
 (contributed by <a class="reference external" href="http://github.com/bwmcadams">Brendan W. McAdams</a>).</li>
 </ul>
@@ -747,9 +796,9 @@ definition/references lookup support broken out from eclim to
 <dl class="docutils">
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
-<li>Fix for <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="std std-ref">:ProjectProblems</span></a> command when any filters
+<li>Fix for <a class="reference internal" href="../vim/core/project.html#projectproblems"><span>:ProjectProblems</span></a> command when any filters
 have been set from the eclipse gui.</li>
-<li>Merged in JRuby’s improvements to nailgun’s build scripts to increase
+<li>Merged in JRuby's improvements to nailgun's build scripts to increase
 compatibility with more platforms.</li>
 <li>Updated the installer and eclimd to not use the eclipse binary and instead
 run the launcher jar directly.  Removes the need to locate the binary which
@@ -766,10 +815,10 @@ instances on the same workspace.</li>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last">
-<li><p class="first">Added a :TreeTab command like <a class="reference internal" href="../vim/core/project.html#projecttab"><span class="std std-ref">:ProjectTab</span></a> but for any
+<li><p class="first">Added a :TreeTab command like <a class="reference internal" href="../vim/core/project.html#projecttab"><span>:ProjectTab</span></a> but for any
 arbitrary directory.</p>
 </li>
-<li><p class="first">Added a <a class="reference internal" href="../vim/core/util.html#bufferstoggle"><span class="std std-ref">:BuffersToggle</span></a> command to toggle whether
+<li><p class="first">Added a <a class="reference internal" href="../vim/core/util.html#bufferstoggle"><span>:BuffersToggle</span></a> command to toggle whether
 the eclim buffers windows is open or closed.</p>
 </li>
 <li><p class="first">Refactored Vcs support, including a new :VcsLog layout.</p>
@@ -810,7 +859,7 @@ the eclim buffers windows is open or closed.</p>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
-<li><a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> now supports eclipse resource links.</li>
+<li><a class="reference internal" href="../vim/core/project.html#projecttree"><span>:ProjectTree</span></a> now supports eclipse resource links.</li>
 </ul>
 </dd>
 </dl>
@@ -854,16 +903,16 @@ and to better support various environments.</li>
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
 <li>Avoid possible gvim crashes when launched from the eclipse gui by disabling
-documentListen events if the current gvim version doesn’t include the patch
+documentListen events if the current gvim version doesn't include the patch
 which resolves the crash.</li>
 <li>Various bug fixes.</li>
 </ul>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
-<li>Added a <a class="reference internal" href="../vim/core/project.html#projecttab"><span class="std std-ref">:ProjectTab</span></a> command providing the ability to
+<li>Added a <a class="reference internal" href="../vim/core/project.html#projecttab"><span>:ProjectTab</span></a> command providing the ability to
 work on one or more projects each with a dedicated vim tab.</li>
-<li>Added a <a class="reference internal" href="../vim/core/util.html#tcd"><span class="std std-ref">:Tcd</span></a> command to mimic :lcd but local to the tab
+<li>Added a <a class="reference internal" href="../vim/core/util.html#tcd"><span>:Tcd</span></a> command to mimic :lcd but local to the tab
 instead of the window.</li>
 <li>Added branch info to the footer of the project tree when using mercurial or
 git.</li>
@@ -871,7 +920,7 @@ git.</li>
 </dd>
 <dt>Install:</dt>
 <dd><ul class="first last simple">
-<li>Added support for <a class="reference internal" href="../install.html#installer-automated"><span class="std std-ref">automated installs</span></a>.</li>
+<li>Added support for <a class="reference internal" href="../install.html#installer-automated"><span>automated installs</span></a>.</li>
 </ul>
 </dd>
 <dt>Eclim:</dt>
@@ -881,7 +930,7 @@ git.</li>
 <li><p class="first">The eclimd log file has been moved to: &lt;workspace&gt;/.metadata/.log.eclimd</p>
 </li>
 <li><p class="first">Added support for specifying that gvim should be refocused after executing
-an eclipse keybinding from vim using <a class="reference internal" href="../eclimd.html#feedkeys"><span class="std std-ref">eclim#vimplugin#FeedKeys</span></a>.</p>
+an eclipse keybinding from vim using eclim#vimplugin#FeedKeys.</p>
 </li>
 <li><p class="first">Moved user local eclim resources (templates, taglist scripts, etc) from
 ${vimfiles}/eclim/resources to ~/.eclim/resources.</p>
@@ -920,14 +969,14 @@ in it.</li>
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
 <li>Fixed eclim client on OSX.</li>
-<li>Fixed backspace key in the <a class="reference internal" href="../vim/core/locate.html#locatefile"><span class="std std-ref">:LocateFile</span></a> buffer.</li>
+<li>Fixed backspace key in the <a class="reference internal" href="../vim/core/locate.html#locatefile"><span>:LocateFile</span></a> buffer.</li>
 </ul>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
-<li>Added support for interactively switching scopes from the <a class="reference internal" href="../vim/core/locate.html#locatefile"><span class="std std-ref">:LocateFile</span></a> buffer.</li>
+<li>Added support for interactively switching scopes from the <a class="reference internal" href="../vim/core/locate.html#locatefile"><span>:LocateFile</span></a> buffer.</li>
 <li>Added new search scopes (buffers, quickfix, vcsmodified) to
-<a class="reference internal" href="../vim/core/locate.html#locatefile"><span class="std std-ref">:LocateFile</span></a>.</li>
+<a class="reference internal" href="../vim/core/locate.html#locatefile"><span>:LocateFile</span></a>.</li>
 </ul>
 </dd>
 </dl>
@@ -948,34 +997,33 @@ in it.</li>
 </dd>
 <dt>Docs:</dt>
 <dd><ul class="first last simple">
-<li>Added a guide on <a class="reference internal" href="../install.html#install-headless"><span class="std std-ref">running eclim on a headless server</span></a>.</li>
+<li>Added a guide on <a class="reference internal" href="../install.html#install-headless"><span>running eclim on a headless server</span></a>.</li>
 </ul>
 </dd>
 <dt>Common:</dt>
 <dd><ul class="first last simple">
-<li>Added full support for <a class="reference internal" href="../eclimd.html#eclimd-multiworkspace"><span class="std std-ref">running multiple eclimd instances</span></a>, each backed by a separate eclipse workspace.</li>
-<li>Added ‘K’ mapping to <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> to set the tree
+<li>Added full support for <a class="reference internal" href="../eclimd.html#eclimd-multiworkspace"><span>running multiple eclimd instances</span></a>, each backed by a separate eclipse workspace.</li>
+<li>Added 'K' mapping to <a class="reference internal" href="../vim/core/project.html#projecttree"><span>:ProjectTree</span></a> to set the tree
 root the either the project root of file system root depending on the
-context.  Added ‘D’ mapping to create a new directory and ‘F’ to open a new
-or existing file by name. Note: the ‘H’ mapping to set the tree root to the
-user’s home directory has been changed to ‘~’.</li>
-<li>Added setting to allow <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> instances to be
+context.  Added 'D' mapping to create a new directory and 'F' to open a new
+or existing file by name. Note: the 'H' mapping to set the tree root to the
+user's home directory has been changed to '~'.</li>
+<li>Added setting to allow <a class="reference internal" href="../vim/core/project.html#projecttree"><span>:ProjectTree</span></a> instances to be
 shared across vim tabs.</li>
 <li>Updated :VcsWeb to support github, google code, and bitbucket.</li>
 </ul>
 </dd>
 <dt>C/C++:</dt>
 <dd><ul class="first last simple">
-<li>Improved <a class="reference internal" href="../vim/c/search.html#csearchcontext"><span class="std std-ref">:CSearchContext</span></a> to search for declaration
-when on a definition, allowing you to jump back and forth between
-declaration and definition.</li>
-<li>Added <a class="reference internal" href="../vim/c/inspection.html#ccallhierarchy"><span class="std std-ref">:CCallHierarchy</span></a> to display the call
-hierarchy for the function or method under the cursor.</li>
+<li>Improved :CSearchContext to search for declaration when on a definition,
+allowing you to jump back and forth between declaration and definition.</li>
+<li>Added :CCallHierarchy to display the call hierarchy for the function or
+method under the cursor.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/java/java.html#javalistinstalls"><span class="std std-ref">:JavaListInstalls</span></a> to list all the
+<li>Added <a class="reference internal" href="../vim/java/java.html#javalistinstalls"><span>:JavaListInstalls</span></a> to list all the
 installed JDKs/JREs that eclipse is aware of.</li>
 </ul>
 </dd>
@@ -995,14 +1043,14 @@ installed JDKs/JREs that eclipse is aware of.</li>
 <li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectrename"><span class="xref std std-ref">:ProjectRename</span></a> and <a class="reference internal" href="../vim/core/project.html#projectmove"><span class="xref std std-ref">:ProjectMove</span></a> commands to allow
 renaming and moving of projects.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="xref std std-ref">:ProjectProblems</span></a> command to populate vim’s quickfix with a
+<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectproblems"><span class="xref std std-ref">:ProjectProblems</span></a> command to populate vim's quickfix with a
 list of all eclipse build errors and warnings for the current and all
 related projects.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">To have problems reported for java projects created via eclim, you may
 need to recreate your java projects to ensure that the java builder is
-properly added.  As of eclim 1.5.2, eclim’s java project creation now
+properly added.  As of eclim 1.5.2, eclim's java project creation now
 adds the java builder.</p>
 </div>
 </li>
@@ -1013,20 +1061,20 @@ history diffs while navigating the history stack.</p>
 snippets plugins available on vim.org (snipMate, snippetsEmu, etc.).</p>
 </li>
 <li><p class="first">Added support for hosting third party nailgun apps in eclim via an
-<a class="reference internal" href="../eclimd.html#eclimd-extdir"><span class="std std-ref">ext dir</span></a>.</p>
+<a class="reference internal" href="../eclimd.html#eclimd-extdir"><span>ext dir</span></a>.</p>
 </li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Updated <a class="reference internal" href="../vim/java/methods.html#javaimpl"><span class="std std-ref">Override / Impl</span></a>, <a class="reference internal" href="../vim/java/methods.html#javadelegate"><span class="std std-ref">Delegate Methods</span></a>, and
-<a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span class="std std-ref">:JUnitImpl</span></a> to better support generics.</li>
-<li>Updated <a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span class="std std-ref">:JUnitImpl</span></a> to support junit 4 method
+<li>Updated <a class="reference internal" href="../vim/java/methods.html#javaimpl"><span>Override / Impl</span></a>, <a class="reference internal" href="../vim/java/methods.html#javadelegate"><span>Delegate Methods</span></a>, and
+<a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span>:JUnitImpl</span></a> to better support generics.</li>
+<li>Updated <a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span>:JUnitImpl</span></a> to support junit 4 method
 signatures.</li>
-<li>Updated <a class="reference internal" href="../vim/java/import.html#javaimport"><span class="std std-ref">Automated Imports</span></a> and :JavaImportSort to honor eclipse’s
+<li>Updated <a class="reference internal" href="../vim/java/import.html#javaimport"><span>Automated Imports</span></a> and :JavaImportSort to honor eclipse's
 import order preference and added the ability to edit that preference via
 <a class="reference internal" href="../vim/core/project.html#projectsettings"><span class="xref std std-ref">:ProjectSettings</span></a> and <strong>:EclimSettings</strong>.</li>
-<li>Added initial <a class="reference internal" href="../vim/java/refactor.html"><span class="doc">refactoring</span></a> support.</li>
+<li>Added initial <a class="reference internal" href="../vim/java/refactor.html"><em>refactoring</em></a> support.</li>
 </ul>
 </dd>
 </dl>
@@ -1056,8 +1104,8 @@ open.</li>
 <dd><ul class="first last simple">
 <li>Added initial support for linked folders in eclipse projects.</li>
 <li>Added new g:EclimValidateSortResults setting to support sorting
-validation results (<a class="reference internal" href="../vim/java/validate.html"><span class="doc">java</span></a>, <a class="reference internal" href="../vim/c/validate.html"><span class="doc">c/c++</span></a>, <a class="reference internal" href="../vim/php/validate.html"><span class="doc">php</span></a>, etc.) by priority
-(errors &gt; warnings &gt; etc.).</li>
+validation results (<a class="reference internal" href="../vim/java/validate.html"><em>java</em></a>, c/c++, php, etc.) by
+priority (errors &gt; warnings &gt; etc.).</li>
 </ul>
 </dd>
 <dt>C/C++:</dt>
@@ -1100,10 +1148,7 @@ may have added.</p>
 </dd>
 <dt>Ruby:</dt>
 <dd><ul class="first last simple">
-<li>Added ruby support for
-<a class="reference internal" href="../vim/ruby/complete.html"><span class="doc">code completion</span></a>,
-<a class="reference internal" href="../vim/ruby/search.html"><span class="doc">searching</span></a>, and
-<a class="reference internal" href="../vim/ruby/validate.html"><span class="doc">validation</span></a>.</li>
+<li>Added ruby support for code completion, searching, and validation.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
@@ -1184,18 +1229,15 @@ common gvim bindings (ctrl-w, ctrl-u).</li>
 </dd>
 <dt>C/C++:</dt>
 <dd><ul class="first last simple">
-<li>Added c/c++ support for
-<a class="reference internal" href="../vim/c/complete.html"><span class="doc">code completion</span></a>,
-<a class="reference internal" href="../vim/c/search.html"><span class="doc">searching</span></a>, and
-<a class="reference internal" href="../vim/c/validate.html"><span class="doc">validation</span></a>.
-Requires the <a class="reference external" href="http://eclipse.org/cdt/">eclipse cdt</a> plugin.</li>
+<li>Added c/c++ support for code completion, searching, and validation.
+Requires the eclipse cdt plugin.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Added command to run <a class="reference internal" href="../vim/java/java.html#java"><span class="std std-ref">java</span></a>.</li>
+<li>Added command to run <a class="reference internal" href="../vim/java/java.html#java"><span>java</span></a>.</li>
 <li>Added command to run javac.</li>
-<li>Added command to run <a class="reference internal" href="../vim/java/javadoc.html#javadoc"><span class="std std-ref">javadoc</span></a>.</li>
+<li>Added command to run <a class="reference internal" href="../vim/java/javadoc.html#javadoc"><span>javadoc</span></a>.</li>
 </ul>
 </dd>
 </dl>
@@ -1215,13 +1257,13 @@ line endings or multi-byte unicode characters.</li>
 </dd>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
-<li>Added integration with eclipse’s
-<a class="reference internal" href="../vim/core/history.html"><span class="doc">local history</span></a> support.</li>
+<li>Added integration with eclipse's
+<a class="reference internal" href="../vim/core/history.html"><em>local history</em></a> support.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Added command to view <a class="reference internal" href="../vim/java/inspection.html#javahierarchy"><span class="std std-ref">type hierarchy</span></a>.</li>
+<li>Added command to view <a class="reference internal" href="../vim/java/inspection.html#javahierarchy"><span>type hierarchy</span></a>.</li>
 <li>Added command to import all undefined types.</li>
 </ul>
 </dd>
@@ -1238,26 +1280,25 @@ line endings or multi-byte unicode characters.</li>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li><a class="reference internal" href="../vim/java/validate.html#checkstyle"><span class="std std-ref">:Checkstyle</span></a> command now creates a project
+<li><a class="reference internal" href="../vim/java/validate.html#checkstyle"><span>:Checkstyle</span></a> command now creates a project
 classloader giving checkstyle access to any classes reachable via your
-project’s .classpath file.</li>
+project's .classpath file.</li>
 </ul>
 </dd>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
-<li>Added the ability to run <a class="reference internal" href="../eclimd.html#eclimd-headed"><span class="std std-ref">eclimd inside of eclipse</span></a>.</li>
-<li>Added support for <a class="reference internal" href="../eclimd.html#gvim-embedded"><span class="std std-ref">embedding gvim inside of eclipse</span></a>.</li>
+<li>Added the ability to run <a class="reference internal" href="../eclimd.html#eclimd-headed"><span>eclimd inside of eclipse</span></a>.</li>
+<li>Added support for embedding gvim inside of eclipse.</li>
 <li>eclimd start scripts now available in the eclipse home.</li>
 <li>Consolidated the various <strong>:LocateFile*</strong> commands into a single
-<a class="reference internal" href="../vim/core/locate.html"><span class="doc">:LocateFile</span></a> command with a new setting to specify
+<a class="reference internal" href="../vim/core/locate.html"><em>:LocateFile</em></a> command with a new setting to specify
 the default means to open a result and various key bindings for opening via
 other means.</li>
 </ul>
 </dd>
 <dt>Php:</dt>
 <dd><ul class="first last simple">
-<li>Restored <a class="reference internal" href="../vim/php/index.html"><span class="doc">php support</span></a> via the new <a class="reference external" href="http://eclipse.org/pdt/">eclipse pdt</a>
-2.0.</li>
+<li>Restored php support via the new eclipse pdt 2.0.</li>
 </ul>
 </dd>
 <dt>Vcs:</dt>
@@ -1286,15 +1327,15 @@ ticket numbers in :VcsLog.</li>
 </dd>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
-<li>Rewrote <a class="reference internal" href="../vim/core/locate.html"><span class="doc">:LocateFile*</span></a> commands to provide
-functionality similar to eclipse’s “Open Resource” command or Textmate’s
-“Find in Project”.</li>
+<li>Rewrote <a class="reference internal" href="../vim/core/locate.html"><em>:LocateFile*</em></a> commands to provide
+functionality similar to eclipse's &quot;Open Resource&quot; command or Textmate's
+&quot;Find in Project&quot;.</li>
 </ul>
 </dd>
 <dt>Python:</dt>
 <dd><ul class="first last simple">
-<li>Added support for <a class="reference internal" href="../vim/python/complete.html"><span class="doc">code completion</span></a>.</li>
-<li>Added support for <a class="reference internal" href="../vim/python/search.html"><span class="doc">finding an element definition</span></a>.</li>
+<li>Added support for <a class="reference internal" href="../vim/python/complete.html"><em>code completion</em></a>.</li>
+<li>Added support for <a class="reference internal" href="../vim/python/search.html"><em>finding an element definition</em></a>.</li>
 <li>Improved :PyLint support.</li>
 </ul>
 </dd>
@@ -1342,7 +1383,7 @@ disable, and then re-enable, communication with eclimd.</li>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
 <li>Added <a class="reference internal" href="../vim/java/format.html#javaformat"><span class="xref std std-ref">:JavaFormat</span></a> command contributed by Anton Sharonov.</li>
-<li>Added <a class="reference internal" href="../vim/java/validate.html#checkstyle"><span class="std std-ref">Checkstyle</span></a> support.</li>
+<li>Added <a class="reference internal" href="../vim/java/validate.html#checkstyle"><span>Checkstyle</span></a> support.</li>
 </ul>
 </dd>
 </dl>
@@ -1382,7 +1423,7 @@ system.</li>
 </dd>
 <dt>Django:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/python/django.html#htmldjango"><span class="std std-ref">end tag completion</span></a> support for django templates.</li>
+<li>Added <a class="reference internal" href="../vim/python/django.html#htmldjango"><span>end tag completion</span></a> support for django templates.</li>
 </ul>
 </dd>
 <dt>Php:</dt>
@@ -1403,7 +1444,7 @@ remove the annotations.</li>
 </dd>
 <dt>Vim:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/core/util.html#only"><span class="xref std std-ref">:Only</span></a> as a configurable alternative to vim’s :only command.</li>
+<li>Added <a class="reference internal" href="../vim/core/util.html#only"><span class="xref std std-ref">:Only</span></a> as a configurable alternative to vim's :only command.</li>
 <li>Added :OtherWorkingCopyDiff, :OtherWorkingCopyEdit,
 :OtherWorkingCopySplit, and :OtherWorkingCopyTabopen.</li>
 </ul>
@@ -1458,7 +1499,7 @@ to support cvs and hg where applicable.</li>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
 <li>Added <a class="reference internal" href="../vim/core/project.html#projectinfo"><span class="xref std std-ref">:ProjectInfo</span></a>.</li>
-<li>Added an eclim/after directory to vim’s runtime path for any user scripts
+<li>Added an eclim/after directory to vim's runtime path for any user scripts
 to be sourced after eclim.</li>
 </ul>
 </dd>
@@ -1471,11 +1512,8 @@ install location for plugins.</li>
 </dd>
 <dt>Php:</dt>
 <dd><ul class="first last simple">
-<li>Added php support for
-<a class="reference internal" href="../vim/php/complete.html"><span class="doc">code completion</span></a>,
-<a class="reference internal" href="../vim/php/search.html"><span class="doc">searching</span></a>, and
-<a class="reference internal" href="../vim/php/validate.html"><span class="doc">validation</span></a>.
-Requires the <a class="reference external" href="http://eclipse.org/pdt/">eclipse pdt</a> plugin.</li>
+<li>Added php support for code completion, searching, and validation.
+Requires the eclipse pdt plugin.</li>
 </ul>
 </dd>
 </dl>
@@ -1510,7 +1548,7 @@ Requires the <a class="reference external" href="http://eclipse.org/pdt/">eclips
 </dd>
 <dt>Css:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/html/index.html#css"><span class="std std-ref">css validation</span></a>.</li>
+<li>Added <a class="reference internal" href="../vim/html/index.html#css"><span>css validation</span></a>.</li>
 </ul>
 </dd>
 <dt>Html:</dt>
@@ -1520,7 +1558,7 @@ Requires the <a class="reference external" href="http://eclipse.org/pdt/">eclips
 </dd>
 <dt>Html / Xml:</dt>
 <dd><ul class="first last simple">
-<li>Added auto completion of end tags when typing ‘&lt;/’.
+<li>Added auto completion of end tags when typing '&lt;/'.
 This can be disabled by setting
 <strong>g:EclimSgmlCompleteEndTag</strong> to 0.</li>
 </ul>
@@ -1534,18 +1572,18 @@ line individually.</li>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Updated the <a class="reference internal" href="../vim/java/logging.html"><span class="doc">java logger</span></a> functionality to support
+<li>Updated the <a class="reference internal" href="../vim/java/logging.html"><em>java logger</em></a> functionality to support
 a custom logger template.</li>
 </ul>
 </dd>
 <dt>Javascript:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/javascript/index.html"><span class="doc">javascript validation</span></a> using <a class="reference external" href="http://www.javascriptlint.com/">jsl</a>.</li>
+<li>Added <a class="reference internal" href="../vim/javascript/index.html"><em>javascript validation</em></a> using <a class="reference external" href="http://www.javascriptlint.com/">jsl</a>.</li>
 </ul>
 </dd>
 <dt>Python:</dt>
 <dd><ul class="first last simple">
-<li>Added basic <a class="reference internal" href="../vim/python/validate.html"><span class="doc">python validation</span></a> using <a class="reference external" href="http://www.divmod.org/trac/wiki/DivmodPyflakes">pyflakes</a>
+<li>Added basic <a class="reference internal" href="../vim/python/validate.html"><em>python validation</em></a> using <a class="reference external" href="http://www.divmod.org/trac/wiki/DivmodPyflakes">pyflakes</a>
 and the python compiler.</li>
 <li>Added support for <a class="reference external" href="http://www.logilab.org/857">pylint</a> using new :PyLint command.</li>
 </ul>
@@ -1634,7 +1672,7 @@ text / message field matching one of the patterns.  The main intention
 of this new variable is to allow you to filter out validation errors /
 warnings per file type, that you wish to ignore.</p>
 <p>Example which I have in my .vim/ftplugin/html/html.vim file:</p>
-<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">b</span>:EclimLocationListFilter <span class="p">=</span> [
+<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">b</span>:EclimLocationListFilter <span class="p">=</span> [
     \ <span class="s1">&#39;&lt;table&gt; lacks &quot;summary&quot; attribute&#39;</span>
   \ ]
 </pre></div>
@@ -1644,26 +1682,26 @@ warnings per file type, that you wish to ignore.</p>
 </dd>
 <dt>Css:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/html/index.html#css"><span class="std std-ref">css code completion</span></a>.  Requires the <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a>
+<li>Added <a class="reference internal" href="../vim/html/index.html#css"><span>css code completion</span></a>.  Requires the <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a>
 plugin.</li>
 </ul>
 </dd>
 <dt>Dtd:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/xml/index.html#dtd"><span class="std std-ref">dtd validation</span></a>.  Requires the <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a> plugin.</li>
+<li>Added <a class="reference internal" href="../vim/xml/index.html#dtd"><span>dtd validation</span></a>.  Requires the <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a> plugin.</li>
 </ul>
 </dd>
 <dt>Html:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/html/index.html"><span class="doc">html code completion</span></a>.  Requires the
+<li>Added <a class="reference internal" href="../vim/html/index.html"><em>html code completion</em></a>.  Requires the
 <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a> plugin.</li>
-<li>Added <a class="reference internal" href="../vim/html/index.html"><span class="doc">html validation</span></a>.  Requires the
+<li>Added <a class="reference internal" href="../vim/html/index.html"><em>html validation</em></a>.  Requires the
 <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a> plugin.</li>
 </ul>
 </dd>
 <dt>Log4j:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/java/logging.html#log4j"><span class="std std-ref">log4j xml file validation</span></a>.</li>
+<li>Added <a class="reference internal" href="../vim/java/logging.html#log4j"><span>log4j xml file validation</span></a>.</li>
 </ul>
 </dd>
 <dt>Python:</dt>
@@ -1674,7 +1712,7 @@ plugin.</li>
 <dt>Django:</dt>
 <dd><ul class="first last simple">
 <li>Added
-<a class="reference internal" href="../vim/python/django.html#djangomanage"><span class="std std-ref">Django manage.py</span></a>,
+<a class="reference internal" href="../vim/python/django.html#djangomanage"><span>Django manage.py</span></a>,
 <a class="reference internal" href="../vim/python/django.html#djangofind"><span class="xref std std-ref">:DjangoFind</span></a>,
 <a class="reference internal" href="../vim/python/django.html#djangotemplateopen"><span class="xref std std-ref">:DjangoTemplateOpen</span></a>,
 <a class="reference internal" href="../vim/python/django.html#djangoviewopen"><span class="xref std std-ref">:DjangoViewOpen</span></a>, and
@@ -1683,7 +1721,7 @@ plugin.</li>
 </dd>
 <dt>WebXml:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/java/webxml.html"><span class="doc">web.xml file validation</span></a>.</li>
+<li>Added <a class="reference internal" href="../vim/java/webxml.html"><em>web.xml file validation</em></a>.</li>
 </ul>
 </dd>
 <dt>Vim:</dt>
@@ -1708,13 +1746,13 @@ plugin.</li>
 </dd>
 <dt>Xsd:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/xml/index.html#xsd"><span class="std std-ref">xsd validation</span></a>.  Requires the
+<li>Added <a class="reference internal" href="../vim/xml/index.html#xsd"><span>xsd validation</span></a>.  Requires the
 <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a> plugin.</li>
 </ul>
 </dd>
 <dt>Xml:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/xml/index.html"><span class="doc">xml code completion</span></a>.  Requires the
+<li>Added <a class="reference internal" href="../vim/xml/index.html"><em>xml code completion</em></a>.  Requires the
 <a class="reference external" href="http://eclipse.org/webtools/main.php">eclipse wst</a> plugin.</li>
 </ul>
 </dd>
@@ -1726,8 +1764,8 @@ plugin.</li>
 <dl class="docutils">
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
-<li>Vim scripts now account for possibly disruptive ‘wildignore’ option.</li>
-<li>On Windows, vim scripts account for users who have modified the ‘shell’
+<li>Vim scripts now account for possibly disruptive 'wildignore' option.</li>
+<li>On Windows, vim scripts account for users who have modified the 'shell'
 that vim uses, temporarily restoring the default.</li>
 <li>Reimplemented <strong>:EclimSettings</strong> and
 <strong>:ProjectSettings</strong> saving to be more fault tolerant.</li>
@@ -1750,7 +1788,7 @@ clashing with other vim plugins.</li>
 </dd>
 <dt>Xml:</dt>
 <dd><ul class="first last simple">
-<li>Added command <a class="reference internal" href="../vim/xml/index.html#xmlformat"><span class="std std-ref">:XmlFormat</span></a> to reformat a xml file.</li>
+<li>Added command :XmlFormat to reformat a xml file.</li>
 </ul>
 </dd>
 </dl>
@@ -1777,8 +1815,8 @@ pre Vim 7 instances.</li>
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
 <li>Fixed issues when eclipse is installed in a directory containing a
-space, like “Program Files”.</li>
-<li>Fixed error when .classpath src dir is “” or “.”.</li>
+space, like &quot;Program Files&quot;.</li>
+<li>Fixed error when .classpath src dir is &quot;&quot; or &quot;.&quot;.</li>
 <li>Fixed error if taglist.vim is not installed.</li>
 <li>Fixed auto setting of jre source.</li>
 <li>Fixed couple java code completion issues.</li>
@@ -1792,38 +1830,38 @@ space, like “Program Files”.</li>
 </dd>
 <dt>Eclim:</dt>
 <dd><ul class="first last simple">
-<li>Added support for <a class="reference internal" href="../eclimd.html#eclimrc"><span class="std std-ref">~/.eclimrc</span></a> on unix platforms.</li>
+<li>Added support for <a class="reference internal" href="../eclimd.html#eclimrc"><span>~/.eclimrc</span></a> on unix platforms.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last">
-<li><p class="first">Added <a class="reference internal" href="../vim/java/classpath.html#variablelist"><span class="std std-ref">:VariableList</span></a>,
-<a class="reference internal" href="../vim/java/classpath.html#variablecreate"><span class="std std-ref">:VariableCreate</span></a> and
-<a class="reference internal" href="../vim/java/classpath.html#variabledelete"><span class="std std-ref">:VariableDelete</span></a>.</p>
+<li><p class="first">Added <a class="reference internal" href="../vim/java/classpath.html#variablelist"><span>:VariableList</span></a>,
+<a class="reference internal" href="../vim/java/classpath.html#variablecreate"><span>:VariableCreate</span></a> and
+<a class="reference internal" href="../vim/java/classpath.html#variabledelete"><span>:VariableDelete</span></a>.</p>
 </li>
 <li><div class="first line-block">
 <div class="line">Added camel case searching support:</div>
-<div class="line"><a class="reference internal" href="../vim/java/search.html#javasearch"><span class="std std-ref">JavaSearch</span></a> NPE</div>
+<div class="line"><a class="reference internal" href="../vim/java/search.html#javasearch"><span>JavaSearch</span></a> NPE</div>
 </div>
 </li>
 <li><p class="first">Removed the preference &lt;code&gt;org.eclim.java.library.root&lt;/code&gt;.</p>
 </li>
-<li><p class="first">Updated <a class="reference internal" href="../vim/java/classpath.html#classpath-ivy"><span class="std std-ref">ivy support</span></a> to behave more like maven.</p>
+<li><p class="first">Updated <a class="reference internal" href="../vim/java/classpath.html#classpath-ivy"><span>ivy support</span></a> to behave more like maven.</p>
 </li>
 <li><p class="first">Added commands to ease setting of classpath repo variables for
-<a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span class="std std-ref">maven’s</span></a> and <a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span class="std std-ref">mvn’s</span></a> eclipse
+<a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span>maven's</span></a> and <a class="reference internal" href="../vim/java/classpath.html#classpath-maven"><span>mvn's</span></a> eclipse
 support.</p>
 </li>
-<li><p class="first">Added TestNG to ant compiler’s error format.</p>
+<li><p class="first">Added TestNG to ant compiler's error format.</p>
 </li>
-<li><p class="first">Added :JUnitExecute and <a class="reference internal" href="../vim/java/unittests.html#junitresult"><span class="std std-ref">:JUnitResult</span></a>.</p>
+<li><p class="first">Added :JUnitExecute and <a class="reference internal" href="../vim/java/unittests.html#junitresult"><span>:JUnitResult</span></a>.</p>
 </li>
 </ul>
 </dd>
 <dt>Xml:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/xml/index.html#dtddefinition"><span class="std std-ref">:DtdDefinition</span></a> and
-<a class="reference internal" href="../vim/xml/index.html#xsddefinition"><span class="std std-ref">:XsdDefinition</span></a>.</li>
+<li>Added <a class="reference internal" href="../vim/xml/index.html#dtddefinition"><span>:DtdDefinition</span></a> and
+<a class="reference internal" href="../vim/xml/index.html#xsddefinition"><span>:XsdDefinition</span></a>.</li>
 </ul>
 </dd>
 <dt>Vim:</dt>
@@ -1831,7 +1869,7 @@ support.</p>
 <li>Added <strong>:FindCommandDef</strong> and <strong>:FindCommandRef</strong>.</li>
 <li>Changed <strong>:FindFunctionVariableContext</strong> to <strong>:FindByContext</strong>.</li>
 <li>Added <strong>:Tabnew</strong> and <strong>:TabnewRelative</strong>.</li>
-<li><strong>:Split</strong> and <strong>:SplitRelative</strong> now support ‘*’ and ‘**’ wildcards.</li>
+<li><strong>:Split</strong> and <strong>:SplitRelative</strong> now support '*' and '**' wildcards.</li>
 </ul>
 </dd>
 </dl>
@@ -1860,39 +1898,39 @@ workspace.</li>
 </dd>
 <dt>Eclim:</dt>
 <dd><ul class="first last">
-<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectrefresh"><span class="std std-ref">:ProjectRefresh</span></a>.</p>
+<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectrefresh"><span>:ProjectRefresh</span></a>.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectopen"><span class="std std-ref">:ProjectOpen</span></a>, <a class="reference internal" href="../vim/core/project.html#projectclose"><span class="std std-ref">:ProjectClose</span></a>, and updated <a class="reference internal" href="../vim/core/project.html#projectlist"><span class="std std-ref">:ProjectList</span></a> to show
+<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectopen"><span>:ProjectOpen</span></a>, <a class="reference internal" href="../vim/core/project.html#projectclose"><span>:ProjectClose</span></a>, and updated <a class="reference internal" href="../vim/core/project.html#projectlist"><span>:ProjectList</span></a> to show
 the current status of each project.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projecttree"><span class="std std-ref">:ProjectTree</span></a> and
-<a class="reference internal" href="../vim/core/project.html#projectstree"><span class="std std-ref">:ProjectsTree</span></a>.</p>
+<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projecttree"><span>:ProjectTree</span></a> and
+<a class="reference internal" href="../vim/core/project.html#projectstree"><span>:ProjectsTree</span></a>.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectcd"><span class="std std-ref">:ProjectCD</span></a> and <a class="reference internal" href="../vim/core/project.html#projectlcd"><span class="std std-ref">:ProjectLCD</span></a>.</p>
+<li><p class="first">Added <a class="reference internal" href="../vim/core/project.html#projectcd"><span>:ProjectCD</span></a> and <a class="reference internal" href="../vim/core/project.html#projectlcd"><span>:ProjectLCD</span></a>.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/java/search.html#javasearchcontext"><span class="std std-ref">:JavaSearchContext</span></a>.</p>
+<li><p class="first">Added <a class="reference internal" href="../vim/java/search.html#javasearchcontext"><span>:JavaSearchContext</span></a>.</p>
 </li>
 <li><p class="first">Added means to preserve manually added classpath entries when utilizing
-eclim’s integration with ivy or maven dependency files.</p>
+eclim's integration with ivy or maven dependency files.</p>
 </li>
-<li><p class="first">Updated <a class="reference internal" href="../vim/java/search.html#javasearch"><span class="std std-ref">:JavaSearch</span></a>
+<li><p class="first">Updated <a class="reference internal" href="../vim/java/search.html#javasearch"><span>:JavaSearch</span></a>
 to provide sensible defaults if command ommits various arguments. Also
 added support for supplying only a pattern to the
 <strong>:JavaSearch</strong> command which will result in a search for
 all types (classes, enums, interfaces) that match that pattern.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/java/java.html#jps"><span class="std std-ref">:Jps</span></a> for viewing java process info.</p>
+<li><p class="first">Added <a class="reference internal" href="../vim/java/java.html#jps"><span>:Jps</span></a> for viewing java process info.</p>
 </li>
 <li><p class="first">Removed support for auto update of .classpath upon writing of maven
 project.xml in favor of new maven support.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="../vim/java/maven.html#id1"><span class="std std-ref">:Maven</span></a> and <a class="reference internal" href="../vim/java/maven.html#mvn"><span class="std std-ref">:Mvn</span></a> commands for executing
+<li><p class="first">Added <a class="reference internal" href="../vim/java/maven.html#id1"><span>:Maven</span></a> and <a class="reference internal" href="../vim/java/maven.html#mvn"><span>:Mvn</span></a> commands for executing
 maven 1.x and 2.x.</p>
 </li>
 <li><p class="first">Added :MavenDependencySearch and :MvnDependencySearch
 for searching for and adding dependencies to your maven pom file.</p>
 </li>
-<li><p class="first">&lt;anchor id=”upgrade_1.2.0”/&gt;
+<li><p class="first">&lt;anchor id=&quot;upgrade_1.2.0&quot;/&gt;
 Re-organized eclim files within the vim runtime path.
 Based on suggestion by Marc Weber.</p>
 <div class="alert">
@@ -1900,7 +1938,7 @@ Based on suggestion by Marc Weber.</p>
 <p>This change will require you to remove all the old eclim vim plugins
 prior to installing the new set.  A comprehensive list of plugins to
 be deleted is provided
-&lt;a href=”upgrade/resources/1.2.0/vim_plugin_list.txt”&gt;here&lt;/a&gt;.</p>
+&lt;a href=&quot;upgrade/resources/1.2.0/vim_plugin_list.txt&quot;&gt;here&lt;/a&gt;.</p>
 <p>You may also use one of the following scripts to help automate the
 process.  Just download the appropriate file to the directory where
 you extracted the eclim vim plugins and execute it.  Please review the
@@ -1909,7 +1947,7 @@ Please report any issues as well.</p>
 <dl class="docutils">
 <dt><strong>*nix users</strong>:</dt>
 <dd><div class="first last line-block">
-<div class="line">&lt;a href=”upgrade/resources/1.2.0/upgrade.sh”&gt;upgrade.sh&lt;/a&gt;</div>
+<div class="line">&lt;a href=&quot;upgrade/resources/1.2.0/upgrade.sh&quot;&gt;upgrade.sh&lt;/a&gt;</div>
 <div class="line">Be sure to either make the file executable</div>
 <div class="line">$ chmod 755 upgrade.sh</div>
 <div class="line">or run via sh</div>
@@ -1918,7 +1956,7 @@ Please report any issues as well.</p>
 </dd>
 <dt><strong>Windows users</strong>:</dt>
 <dd><div class="first last line-block">
-<div class="line">&lt;a href=”upgrade/resources/1.2.0/upgrade.bat”&gt;upgrade.bat&lt;/a&gt;</div>
+<div class="line">&lt;a href=&quot;upgrade/resources/1.2.0/upgrade.bat&quot;&gt;upgrade.bat&lt;/a&gt;</div>
 <div class="line">Run via a command prompt so that you can monitor the output.</div>
 </div>
 </dd>
@@ -1962,7 +2000,7 @@ the completion.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">The original implementation of :JavaImportClean was written entirely in
-vim (didn’t require eclim server).  To properly handle ignoring comments
+vim (didn't require eclim server).  To properly handle ignoring comments
 when determining what imports are unused, this functionality had to be
 reimplemented with server side help.  However, the vim only version is
 preserved and will be invoked if the current file is not in an eclipse
@@ -1975,31 +2013,31 @@ project.</p>
 </dd>
 <dt>Ant:</dt>
 <dd><ul class="first last simple">
-<li>Added <a class="reference internal" href="../vim/java/ant.html#id1"><span class="std std-ref">:Ant</span></a> command
+<li>Added <a class="reference internal" href="../vim/java/ant.html#id1"><span>:Ant</span></a> command
 to allow execution of ant from any file.</li>
-<li>Added <a class="reference internal" href="../vim/java/ant.html"><span class="doc">ant code completion</span></a>.</li>
-<li>Added <a class="reference internal" href="../vim/java/ant.html"><span class="doc">ant file validation</span></a>.</li>
-<li>Added <a class="reference internal" href="../vim/java/ant.html#antdoc"><span class="std std-ref">:AntDoc</span></a> command to quickly find ant type / task
+<li>Added <a class="reference internal" href="../vim/java/ant.html"><em>ant code completion</em></a>.</li>
+<li>Added <a class="reference internal" href="../vim/java/ant.html"><em>ant file validation</em></a>.</li>
+<li>Added <a class="reference internal" href="../vim/java/ant.html#antdoc"><span>:AntDoc</span></a> command to quickly find ant type / task
 documentation.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li>Utilizing vim’s new dictionary based completion results.</li>
-<li>Added <a class="reference internal" href="../vim/java/methods.html#javaconstructor"><span class="std std-ref">:JavaConstructor</span></a>.</li>
-<li><a class="reference internal" href="../vim/java/methods.html#javaimpl"><span class="std std-ref">:JavaImpl</span></a> now supports overriding constructors.</li>
-<li>Added <a class="reference internal" href="../vim/java/javadoc.html#javadoccomment"><span class="std std-ref">:JavaDocComment</span></a>
+<li>Utilizing vim's new dictionary based completion results.</li>
+<li>Added <a class="reference internal" href="../vim/java/methods.html#javaconstructor"><span>:JavaConstructor</span></a>.</li>
+<li><a class="reference internal" href="../vim/java/methods.html#javaimpl"><span>:JavaImpl</span></a> now supports overriding constructors.</li>
+<li>Added <a class="reference internal" href="../vim/java/javadoc.html#javadoccomment"><span>:JavaDocComment</span></a>
 command to add or update javadocs comment for the element under the
 cursor.</li>
 <li>Added <strong>:JavaRegex</strong> for testing java regular expressions.</li>
 <li>JDT classpath_variables.properties no longer requires system property
-placeholder to use ‘_’ instead of ‘.’.</li>
+placeholder to use '_' instead of '.'.</li>
 <li>Velocity templates broken up into more logical templates to ease
 customization.</li>
-<li><a class="reference internal" href="../vim/java/methods.html#javagetset"><span class="std std-ref">:JavaGetSet</span></a> now has variable to determine whether or
+<li><a class="reference internal" href="../vim/java/methods.html#javagetset"><span>:JavaGetSet</span></a> now has variable to determine whether or
 not to add indexed getters and setters.</li>
 <li>Removed preference org.eclim.java.validation.ignore.warnings in favor of
-new <a class="reference internal" href="../vim/core/eclim.html#g-eclimsignlevel"><span class="std std-ref">g:EclimSignLevel</span></a>.</li>
+new <a class="reference internal" href="../vim/core/eclim.html#g-eclimsignlevel"><span>g:EclimSignLevel</span></a>.</li>
 </ul>
 </dd>
 <dt>Vim:</dt>
@@ -2009,11 +2047,11 @@ context.</li>
 <li>Added groovy script based ctags implementation for use with the vim taglist
 plugin.</li>
 <li>All of the functionality that previously placed results / errors into
-the quickfix window, now utilizes vim’s new location list functionality.</li>
+the quickfix window, now utilizes vim's new location list functionality.</li>
 <li>Added web lookup commands.</li>
 <li>Added vim script function / global variable searching.</li>
 <li>Added vim doc lookup.</li>
-<li>Various improvements to ‘sign’ support for marking errors, warnings,
+<li>Various improvements to 'sign' support for marking errors, warnings,
 etc.</li>
 </ul>
 </dd>
@@ -2037,22 +2075,22 @@ with no previews) are excluded.</li>
 <li>Java import command is now restricted to the current project.</li>
 <li>Java src file location (for almost all java commands) now uses the full
 path to find the file in eclipse rather than build the path from the
-file’s package declaration and class name.  Fixes cases where the
-package name doesn’t match up with the folder structure.</li>
+file's package declaration and class name.  Fixes cases where the
+package name doesn't match up with the folder structure.</li>
 <li>Xml validation errors that occur when no dtd is defined are filtered
 out (limitation of using xerces to support jdk 1.4).</li>
 <li>Relative xml entities are now resolved when validating an xml file.</li>
 <li>Fixed logging template code for slf4j.</li>
 <li>Fixed possible error when removing signs for marking errors / warnings
 for the current file.</li>
-<li>Fixed <a class="reference internal" href="../vim/java/import.html#javaimport"><span class="std std-ref">:JavaImport</span></a> to not import classes that are in
+<li>Fixed <a class="reference internal" href="../vim/java/import.html#javaimport"><span>:JavaImport</span></a> to not import classes that are in
 the same package as the current file.</li>
 <li>Fixed java source validation to clear out the quickfix results when all
 errors have been fixed.</li>
-<li>Fixed <a class="reference internal" href="../vim/java/methods.html#javaimpl"><span class="std std-ref">:JavaImpl</span></a> to get the interfaces of superclass
+<li>Fixed <a class="reference internal" href="../vim/java/methods.html#javaimpl"><span>:JavaImpl</span></a> to get the interfaces of superclass
 lineage in addition to directly implemented interfaces of the current
 class.</li>
-<li>When adding methods from the resulting buffer of <a class="reference internal" href="../vim/java/methods.html#javaimpl"><span class="std std-ref">:JavaImpl</span></a> or <a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span class="std std-ref">:JUnitImpl</span></a>, if the target class was an
+<li>When adding methods from the resulting buffer of <a class="reference internal" href="../vim/java/methods.html#javaimpl"><span>:JavaImpl</span></a> or <a class="reference internal" href="../vim/java/unittests.html#junitimpl"><span>:JUnitImpl</span></a>, if the target class was an
 inner class of the src file, then the methods were being added to the outer
 class instead of the inner class.</li>
 <li>Fixed javadoc search results to restore &lt;enter&gt; as mapping to open
@@ -2092,12 +2130,12 @@ validation.</li>
 the current cursor line.</p>
 </li>
 <li><p class="first">Removed global variables g:EclimDebug and g:EclimEchoHighlight in favor
-of new <a class="reference internal" href="../vim/core/eclim.html#g-eclimloglevel"><span class="std std-ref">g:EclimLogLevel</span></a> and the corresponding
+of new <a class="reference internal" href="../vim/core/eclim.html#g-eclimloglevel"><span>g:EclimLogLevel</span></a> and the corresponding
 highlight varibles.</p>
 </li>
 <li><p class="first">Removed all default key mappings. See the suggested set of mappings.</p>
 </li>
-<li><p class="first">Now utilizing vim’s autoload functionality to load functions on demand.</p>
+<li><p class="first">Now utilizing vim's autoload functionality to load functions on demand.</p>
 <p>One vim file was moved as a result, so you should delete the old file
 when upgrading.</p>
 <div class="alert">
@@ -2117,20 +2155,20 @@ when upgrading.</p>
 <dl class="docutils">
 <dt>Bug Fixes:</dt>
 <dd><ul class="first last simple">
-<li>Code completion, searching, etc fixed on files with fileformat == ‘dos’.</li>
+<li>Code completion, searching, etc fixed on files with fileformat == 'dos'.</li>
 <li>Several other minor fixes and enhancements.</li>
 </ul>
 </dd>
 <dt>Java:</dt>
 <dd><ul class="first last simple">
-<li><a class="reference internal" href="../vim/java/validate.html"><span class="doc">Source validation</span></a>.</li>
-<li><a class="reference internal" href="../vim/java/javadoc.html"><span class="doc">Javadoc</span></a> viewing.</li>
-<li><a class="reference internal" href="../vim/java/methods.html#javaimpl"><span class="std std-ref">Override/Impl</span></a> stub generation.</li>
-<li><a class="reference internal" href="../vim/java/methods.html#javagetset"><span class="std std-ref">Bean getter/setter</span></a> generation.</li>
-<li><a class="reference internal" href="../vim/java/unittests.html"><span class="doc">Junit</span></a> test method stub generation.</li>
-<li><a class="reference internal" href="../vim/java/search.html"><span class="doc">Alternate searching</span></a> in code bases outside of an
+<li><a class="reference internal" href="../vim/java/validate.html"><em>Source validation</em></a>.</li>
+<li><a class="reference internal" href="../vim/java/javadoc.html"><em>Javadoc</em></a> viewing.</li>
+<li><a class="reference internal" href="../vim/java/methods.html#javaimpl"><span>Override/Impl</span></a> stub generation.</li>
+<li><a class="reference internal" href="../vim/java/methods.html#javagetset"><span>Bean getter/setter</span></a> generation.</li>
+<li><a class="reference internal" href="../vim/java/unittests.html"><em>Junit</em></a> test method stub generation.</li>
+<li><a class="reference internal" href="../vim/java/search.html"><em>Alternate searching</em></a> in code bases outside of an
 eclipse project.</li>
-<li><a class="reference internal" href="../vim/java/validate.html#javacorrect"><span class="std std-ref">Code correction</span></a> via eclipse
+<li><a class="reference internal" href="../vim/java/validate.html#javacorrect"><span>Code correction</span></a> via eclipse
 quickfix functionality.</li>
 <li>Support for viewing source files located in archives (zip, jar) when
 searching.</li>
@@ -2138,7 +2176,7 @@ searching.</li>
 that do not have a corresponding source file attached.</li>
 <li>Added some handy abbreviations.</li>
 <li>Added validation of the .classpath file when saving.  Errors are then
-reported via vim’s quickfix.</li>
+reported via vim's quickfix.</li>
 </ul>
 </dd>
 <dt>Vim:</dt>
@@ -2167,7 +2205,7 @@ ftplugin/maven_project/eclim.vim
 </dd>
 <dt>Xml:</dt>
 <dd><ul class="first last simple">
-<li><a class="reference internal" href="../vim/xml/index.html#xml-validation"><span class="std std-ref">Xml validation</span></a>.</li>
+<li><a class="reference internal" href="../vim/xml/index.html#xml-validation"><span>Xml validation</span></a>.</li>
 </ul>
 </dd>
 </dl>
@@ -2195,14 +2233,14 @@ ftplugin/maven_project/eclim.vim
   <div class="container">
     <p class="pull-right">
       
-  <a href="../_sources/archive/changes.rst.txt"
+  <a href="../_sources/archive/changes.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Jul 05, 2018<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.7.4
+      Last updated on Jan 09, 2021<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
