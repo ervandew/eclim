@@ -233,10 +233,7 @@
 <div class="navbar-inner">
 <ul class="nav">
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="dropdown"><a class="subnav-toggle reference internal" href="#download">Download<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
-<li><a class="reference internal" href="#third-party-packages">Third Party Packages</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#download">Download</a></li>
 <li class="dropdown"><a class="subnav-toggle reference internal" href="#installing-upgrading">Installing / Upgrading<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
 <li class="dropdown"><a class="subnav-toggle reference internal" href="#interactive-command-line-installer">Interactive Command Line Installer<b class="dropdown-toggle caret" data-toggle="dropdown"></b></a><ul class="dropdown-menu">
 <li><a class="reference internal" href="#step-1-run-the-installer">Step 1: Run the installer</a></li>
@@ -315,15 +312,6 @@ at least 'ON' for 'detection' and 'plugin', but if not, then update your
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.18.0/eclim_2.18.0.bin">eclim_2.18.0.bin</a></li>
 </ul>
-<div class="section" id="third-party-packages">
-<h3>Third Party Packages<a class="headerlink" href="#third-party-packages" title="Permalink to this headline">¶</a></h3>
-<p>As an alternative to the official installer, there are also some packages
-maintained by third parties:</p>
-<ul class="simple">
-<li><strong>Arch:</strong> <a class="reference external" href="https://aur.archlinux.org/packages/eclim/">aur (eclim)</a>,
-<a class="reference external" href="https://aur.archlinux.org/packages/eclim-git/">aur (eclim-git)</a></li>
-</ul>
-</div>
 </div>
 <div class="section" id="installing-upgrading">
 <h2>Installing / Upgrading<a class="headerlink" href="#installing-upgrading" title="Permalink to this headline">¶</a></h2>
@@ -368,8 +356,6 @@ daemon will depend on how you intend to use eclim.</p>
 <p>If you plan on using eclim along with the eclipse gui, then simply start
 eclipse and open the eclimd view:</p>
 <p><span class="menuselection">Window ‣ Show View ‣ Other ‣ Eclim ‣ eclimd</span></p>
-<p>By default the eclimd view will also be auto opened when you open a file using:</p>
-<p><span class="menuselection">Open With ‣ Vim</span></p>
 <p>If you plan on using eclim without the eclipse gui, then:</p>
 <ul>
 <li><p class="first">start the eclimd server.</p>
@@ -594,7 +580,7 @@ $ DISPLAY=:1 ./eclipse/eclimd -b
 <p>When starting Xvfb you may receive some errors regarding font paths and
 possibly dbus and hal, but as long as Xvfb continues to run, you should be
 able to ignore these errors.</p>
-<p>The first time you start eclimd you may want to omit the 'start' argument so
+<p>The first time you start eclimd you may want to omit the '-b' argument so
 that you can see the output on the console to ensure that eclimd starts
 correctly.</p>
 <div class="alert alert-info">
