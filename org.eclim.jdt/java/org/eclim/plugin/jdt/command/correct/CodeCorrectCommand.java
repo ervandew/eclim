@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -203,8 +203,17 @@ public class CodeCorrectCommand
     AssistContext context = new AssistContext(
         src, problem.getSourceStart(), length);
 
-    IProblemLocation[] locations =
-      new IProblemLocation[]{new ProblemLocation(problem)};
+    IProblemLocation location;
+    switch(problem.getID()){
+      case IProblem.MissingSerialVersion:
+        location = new
+          org.eclipse.jdt.internal.ui.text.correction.ProblemLocation(problem);
+        break;
+      default:
+        location = new ProblemLocation(problem);
+    }
+
+    IProblemLocation[] locations = new IProblemLocation[]{location};
     IQuickFixProcessor[] processors = JavaUtils.getQuickFixProcessors(src);
     for(int ii = 0; ii < processors.length; ii++){
       if (processors[ii] != null &&

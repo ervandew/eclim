@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,9 @@ public class CorrectCommandTest
 
   private static final String TEST_FILE_PACKAGE =
     "src/org/eclim/test/correct/TestCorrectPackage.java";
+
+  private static final String TEST_FILE_SERIALIZABLE =
+    "src/org/eclim/test/correct/TestCorrectSerializable.java";
 
   @Test
   @SuppressWarnings("unchecked")
@@ -143,5 +146,59 @@ public class CorrectCommandTest
     String file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE_PACKAGE);
     String[] lines = StringUtils.split(file, '\n');
     assertEquals("Incorrect package", "package org.eclim.test.correct;", lines[0]);
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void serialVersionUIDMissing()
+  {
+    modifies(Jdt.TEST_PROJECT, TEST_FILE_SERIALIZABLE);
+
+    assertTrue("Java project doesn't exist.",
+        Eclim.projectExists(Jdt.TEST_PROJECT));
+
+    Map<String, Object> result = (Map<String, Object>)
+      Eclim.execute(new String[]{
+        "java_correct", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE_SERIALIZABLE,
+        "-l", "5", "-o", "63", "-e", "utf-8",
+      });
+
+    assertEquals(
+        "The serializable class TestCorrectSerializable does not declare a " +
+        "static final serialVersionUID field of type long",
+        result.get("message"));
+
+    List<Map<String, Object>> results =
+      (List<Map<String, Object>>)result.get("corrections");
+    assertEquals(4, results.size());
+    assertEquals(
+        "Add default serial version ID",
+        results.get(0).get("description"));
+    assertEquals(
+        "Add generated serial version ID",
+        results.get(1).get("description"));
+
+    List<Map<String, String>> changes = (List<Map<String, String>>)
+      Eclim.execute(new String[]{
+        "java_correct", "-p", Jdt.TEST_PROJECT,
+        "-f", TEST_FILE_SERIALIZABLE,
+        "-l", "5", "-o", "0", "-e", "utf-8", "-a", "0",
+      });
+
+    assertEquals(1, changes.size());
+    assertEquals(
+        Eclim.resolveFile(Jdt.TEST_PROJECT, TEST_FILE_SERIALIZABLE),
+        changes.get(0).get("file"));
+
+    String file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE_SERIALIZABLE);
+    String[] lines = StringUtils.split(file, '\n');
+    for (String line : lines){
+      System.out.println(line);
+    }
+    assertEquals(
+        "serialVersionID not added",
+        "\tprivate static final long serialVersionUID = 1L;",
+        lines[8]);
   }
 }
