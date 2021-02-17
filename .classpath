@@ -2,8 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclim.ECLIM_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="ant/lib/junit-4.9.jar"/>
-	<classpathentry kind="lib" path="ant/lib/testng-5.1-jdk15.jar"/>
+	<classpathentry kind="lib" path="ant/lib/junit/junit-4.13.1.jar"/>
 	<classpathentry kind="src" path="org.eclim/java"/>
 	<classpathentry kind="src" path="org.eclim.core/java"/>
 	<classpathentry kind="src" path="org.eclim.core/test/junit"/>
