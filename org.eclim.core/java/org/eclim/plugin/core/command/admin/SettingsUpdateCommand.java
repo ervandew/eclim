@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,8 @@
 package org.eclim.plugin.core.command.admin;
 
 import java.io.File;
-import java.io.FileReader;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 import org.eclim.Services;
 
@@ -35,12 +33,6 @@ import org.eclim.logging.Logger;
 import org.eclim.plugin.core.command.AbstractCommand;
 
 import org.eclim.plugin.core.preference.Preferences;
-
-import org.eclim.util.IOUtils;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonStreamParser;
 
 /**
  * Command to update global settings.
@@ -60,26 +52,12 @@ public class SettingsUpdateCommand
   {
     String settings = commandLine.getValue(Options.SETTINGS_OPTION);
 
-    FileReader in = null;
+    Preferences preferences = getPreferences();
     File file = new File(settings);
-    ArrayList<Error> errors = new ArrayList<Error>();
+    List<Error> errors;
     try{
-      in = new FileReader(file);
-      JsonStreamParser parser = new JsonStreamParser(in);
-      JsonObject obj = (JsonObject)parser.next();
-
-      Preferences preferences = getPreferences();
-      for (Map.Entry<String, JsonElement> entry : obj.entrySet()){
-        String name = entry.getKey();
-        String value = entry.getValue().getAsString();
-        try{
-          preferences.setValue(name, value);
-        }catch(IllegalArgumentException iae){
-          errors.add(new Error(iae.getMessage(), null, 0, 0));
-        }
-      }
+      errors = preferences.setValues(file);
     }finally{
-      IOUtils.closeQuietly(in);
       try{
         file.delete();
       }catch(Exception e){

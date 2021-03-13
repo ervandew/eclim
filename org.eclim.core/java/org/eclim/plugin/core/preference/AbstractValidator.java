@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2021  Eric Van Dewoestine
+ * Copyright (C) 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,14 @@
  */
 package org.eclim.plugin.core.preference;
 
-import org.eclim.Services;
-
 /**
- * Option validator that validates options using regex.
- *
- * @author Eric Van Dewoestine
+ * Abstract base class for Validator implementations.
  */
-public class RegexValidator
-  extends AbstractValidator
+public abstract class AbstractValidator
+  implements Validator
 {
-  private String regex;
-
-  public RegexValidator(String regex)
-  {
-    this.regex = regex;
-  }
-
   @Override
-  public boolean isValid(Object value)
-  {
-    return value != null && ((String)value).matches(regex);
-  }
-
-  @Override
-  public String getMessage(String name, Object value)
-  {
-    return Services.getMessage("setting.invalid.regex", value, regex);
+  public OptionInstance optionInstance(Option option, String value){
+    return new OptionInstance(option, value);
   }
 }

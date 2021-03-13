@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import org.eclipse.core.resources.IProject;
  *
  * @author Eric Van Dewoestine
  */
-@Command(name = "project_settings", options = "OPTIONAL p project ARG")
+@Command(name = "project_settings", options = "REQUIRED p project ARG")
 public class ProjectSettingsCommand
   extends AbstractCommand
 {

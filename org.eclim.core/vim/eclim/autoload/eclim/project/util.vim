@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2020  Eric Van Dewoestine
+" Copyright (C) 2005 - 2021  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -672,7 +672,12 @@ function! eclim#project#util#ProjectSettings(project) " {{{
     endif
     let description = split(setting.description, '\n')
     let content += map(description, "'\t# ' . v:val")
-    call add(content, "\t" . setting.name . '=' . setting.value)
+    let value = setting.value
+    if type(value) == g:LIST_TYPE
+      let value = json_encode(value)
+      let value = substitute(value, '\\\\', '\\', 'g')
+    endif
+    call add(content, "\t" . setting.name . '=' . value)
   endfor
   if path != ''
     call add(content, '# }')

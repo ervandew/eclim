@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ public class PreferenceFactory
         preference.setNature(nature);
         preference.setPath(attrs[0]);
         preference.setName(attrs[1]);
-        preference.setDefaultValue(attrs[2]);
+        String defaultValue = attrs[2];
         if (attrs[3] != null && !attrs[3].trim().equals(StringUtils.EMPTY)){
           Matcher jsonArrayMatcher = JSON_ARRAY.matcher(attrs[3]);
           Matcher jsonObjectMatcher = JSON_OBJECT.matcher(attrs[3]);
@@ -99,6 +99,10 @@ public class PreferenceFactory
             preference.setValidator(new JsonValidator(
                   String[].class,
                   pattern.length() != 0 ? new RegexValidator(pattern) : null));
+
+            // escape chars in json require additional escaping at the storage
+            // level, but don't force plugin writers to deal with this burden
+            defaultValue = defaultValue.replace("\\", "\\\\");
           }else if (jsonObjectMatcher.matches()){
             Map<String, String> map = new HashMap<String, String>();
             preference.setValidator(new JsonValidator(map.getClass(), null));
@@ -106,6 +110,7 @@ public class PreferenceFactory
             preference.setValidator(new RegexValidator(attrs[3]));
           }
         }
+        preference.setDefaultValue(defaultValue);
 
         preferences.addPreference(preference);
       }

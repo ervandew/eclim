@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,14 @@
  */
 package org.eclim.plugin.core.preference;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,7 +31,11 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import org.eclim.Services;
 
+import org.eclim.command.Error;
+
 import org.eclim.logging.Logger;
+
+import org.eclim.util.IOUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
@@ -41,6 +50,10 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonStreamParser;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -331,9 +344,6 @@ public class Preferences
   {
     String value = getValues(project).get(name);
     if (value != null && value.trim().length() != 0){
-      // somewhere between gson 1.7.1 and 2.8.6 it became stupidily strict on
-      // back slashes in values.
-      value = value.replace("\\", "\\\\");
       return gson.fromJson(value, String[].class);
     }
     return ArrayUtils.EMPTY_STRING_ARRAY;
@@ -475,7 +485,13 @@ public class Preferences
               project == null ||
               project.getNature(nature) != null)
           {
-            OptionInstance instance = new OptionInstance(option, value);
+            OptionInstance instance;
+            Validator validator = option.getValidator();
+            if (validator != null){
+              instance = validator.optionInstance(option, value);
+            }else{
+              instance = new OptionInstance(option, value);
+            }
             results.add(instance);
           }
         }
@@ -583,6 +599,59 @@ public class Preferences
       throw new RuntimeException(bse);
     }
     preferenceValues.clear();
+  }
+
+  /**
+   * Set values using the supplied json file.
+   *
+   * @param file The file containing a json dict of name / value pairs.
+   *
+   * @throws FileNotFoundException If the supplied file doesn't exist.
+   */
+  public List<Error> setValues(File file)
+    throws FileNotFoundException
+  {
+    return setValues(null, file);
+  }
+
+  /**
+   * Set values using the supplied json file.
+   *
+   * @param project The project to set the values for or null for global.
+   * @param file The file containing a json dict of name / value pairs.
+   *
+   * @throws FileNotFoundException If the supplied file doesn't exist.
+   */
+  public List<Error> setValues(IProject project, File file)
+    throws FileNotFoundException
+  {
+    FileReader in = null;
+    ArrayList<Error> errors = new ArrayList<Error>();
+    try{
+      in = new FileReader(file);
+      JsonStreamParser parser = new JsonStreamParser(in);
+      JsonObject obj = (JsonObject)parser.next();
+      Gson gson = new Gson();
+
+      for (Map.Entry<String, JsonElement> entry : obj.entrySet()){
+        String name = entry.getKey();
+        JsonElement element = entry.getValue();
+        String value;
+        if (element instanceof JsonArray){
+          value = gson.toJson(element);
+        }else{
+          value = element.getAsString();
+        }
+        try{
+          setValue(project, name, value);
+        }catch(IllegalArgumentException iae){
+          errors.add(new Error(iae.getMessage(), null, 0, 0));
+        }
+      }
+    }finally{
+      IOUtils.closeQuietly(in);
+    }
+    return errors;
   }
 
   /**

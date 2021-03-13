@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2017  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ package org.eclim.plugin.core.preference;
 public class OptionInstance
   extends Option
 {
-  private String value;
+  private Object value;
 
   /**
    * Constructs a new instance.
@@ -32,7 +32,7 @@ public class OptionInstance
    * @param option The option.
    * @param value The option value.
    */
-  public OptionInstance (Option option, String value)
+  public OptionInstance(Option option, Object value)
   {
     this.value = value;
     setPath(option.getPath());
@@ -49,9 +49,9 @@ public class OptionInstance
   /**
    * Get value.
    *
-   * @return value as String.
+   * @return the option value.
    */
-  public String getValue()
+  public Object getValue()
   {
     return this.value;
   }

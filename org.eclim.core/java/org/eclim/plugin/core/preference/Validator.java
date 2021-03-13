@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ public interface Validator
    * Determines if the supplied option value is valid or not.
    *
    * @param value the option value.
+   *
    * @return true if valid, false otherwise.
    */
   public boolean isValid(Object value);
@@ -36,7 +37,18 @@ public interface Validator
    *
    * @param name the option name.
    * @param value the option value.
+   *
    * @return the message to display to the user.
    */
   public String getMessage(String name, Object value);
+
+  /**
+   * Construct an OptionInstance for the supplied Option and value.
+   *
+   * @param option Option instance.
+   * @param value The option value.
+   *
+   * @return An OptionInstance
+   */
+  public OptionInstance optionInstance(Option option, String value);
 }

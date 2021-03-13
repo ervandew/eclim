@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 - 2012  Eric Van Dewoestine
+ * Copyright (C) 2011 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,11 @@
  */
 package org.eclim.plugin.core.preference;
 
+import org.eclim.logging.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * Option validator that validates that the option value is valid json.
@@ -27,6 +30,8 @@ import com.google.gson.JsonParseException;
 public class JsonValidator
   implements Validator
 {
+  private static final Logger logger = Logger.getLogger(JsonValidator.class);
+
   private static final Gson GSON = new Gson();
 
   private Class<?> type;
@@ -82,5 +87,17 @@ public class JsonValidator
       }
     }
     return null;
+  }
+
+  @Override
+  public OptionInstance optionInstance(Option option, String value)
+  {
+    try{
+      Object result = GSON.fromJson(value, type);
+      return new OptionInstance(option, result);
+    }catch(JsonSyntaxException jse){
+      logger.error("Malformed json for option: " + option.getName(), jse);
+      return new OptionInstance(option, value);
+    }
   }
 }

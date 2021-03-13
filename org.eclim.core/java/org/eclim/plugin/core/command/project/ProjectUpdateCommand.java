@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,8 @@
 package org.eclim.plugin.core.command.project;
 
 import java.io.File;
-import java.io.FileReader;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclim.Services;
 
@@ -45,13 +38,7 @@ import org.eclim.plugin.core.project.ProjectManagement;
 
 import org.eclim.plugin.core.util.ProjectUtils;
 
-import org.eclim.util.IOUtils;
-
 import org.eclipse.core.resources.IProject;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 /**
  * Command to update a project.
@@ -100,35 +87,20 @@ public class ProjectUpdateCommand
    *
    * @param project The project.
    * @param settings The temp settings file.
+   *
    * @return List of errors or an empty List if none.
    */
   private List<Error> updateSettings(IProject project, String settings)
     throws Exception
   {
-    FileReader in = null;
-    Path file = Paths.get(settings);
-    ArrayList<Error> errors = new ArrayList<Error>();
+    Preferences preferences = getPreferences();
+    File file = new File(settings);
+    List<Error> errors;
     try{
-      String content = Files.readString(file);
-      // somewhere between gson 1.7.1 and 2.8.6 it became stupidily strict on
-      // back slashes in values.
-      content = content.replace("\\", "\\\\");
-
-      JsonObject obj = (JsonObject)JsonParser.parseString(content);
-      Preferences preferences = getPreferences();
-      for (Map.Entry<String, JsonElement> entry : obj.entrySet()){
-        String name = entry.getKey();
-        String value = entry.getValue().getAsString();
-        try{
-          preferences.setValue(project, name, value);
-        }catch(IllegalArgumentException iae){
-          errors.add(new Error(iae.getMessage(), null, 0, 0));
-        }
-      }
+      errors = preferences.setValues(project, file);
     }finally{
-      IOUtils.closeQuietly(in);
       try{
-        file.toFile().delete();
+        file.delete();
       }catch(Exception e){
         logger.warn("Error deleting project settings temp file: " + file, e);
       }
