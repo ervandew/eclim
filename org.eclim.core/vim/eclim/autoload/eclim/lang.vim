@@ -359,7 +359,7 @@ function! eclim#lang#SilentUpdate(...) " {{{
           endif
         endif
       else
-        if a:0 < 2 || a:2
+        if (a:0 < 2 || a:2) && &modified
           silent noautocmd write
         endif
       endif
