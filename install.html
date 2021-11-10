@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     'v2.18.0',
+        VERSION:     'v2.21.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -50,7 +50,7 @@
         <span class="navbar-text pull-left"></span>
         <ul class="nav">
           <li class="divider-vertical"></li>
-          <li><b class="navbar-text">v2.18.0</b></li>
+          <li><b class="navbar-text">v2.21.0</b></li>
           
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
@@ -267,7 +267,7 @@ following requirements.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.vim.org/download.php">Vim</a> 7.1 or greater</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://eclipse.org/downloads/index.php">Eclipse 4.18 (2020-12)</a></p>
+<li><p class="first"><a class="reference external" href="http://eclipse.org/downloads/index.php">Eclipse 4.21 (2021-09)</a></p>
 </li>
 <li><p class="first">python 3.x</p>
 </li>
@@ -310,7 +310,7 @@ at least 'ON' for 'detection' and 'plugin', but if not, then update your
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
 <p>You can find the official eclim installer on eclim's github <a class="reference external" href="https://github.com/ervandew/eclim/releases/">releases page</a>:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.18.0/eclim_2.18.0.bin">eclim_2.18.0.bin</a></li>
+<li><a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.21.0/eclim_2.21.0.bin">eclim_2.21.0.bin</a></li>
 </ul>
 </div>
 <div class="section" id="installing-upgrading">
@@ -333,15 +333,25 @@ environment:</p>
 installation procedure.</p>
 </div>
 <ul>
-<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.18.0/eclim_2.18.0.bin">eclim_2.18.0.bin</a></p>
+<li><p class="first"><strong>First download the installer:</strong>  <a class="reference external" href="https://github.com/ervandew/eclim/releases/download/2.21.0/eclim_2.21.0.bin">eclim_2.21.0.bin</a></p>
 </li>
 <li><p class="first"><strong>Next run the installer:</strong></p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.18.0.bin
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.21.0.bin
 </pre></div>
 </div>
 <p>After the installer starts up, simply follow the steps to install eclim.</p>
 <p>If your machine is behind a proxy, take a look at the instructions for
 <a class="reference internal" href="#installer-proxy"><span>running the installer behind a proxy</span></a>.</p>
+<div class="alert alert-info">
+<p class="alert-heading first admonition-title">Note</p>
+<p>For some versions of eclipse you may see some SLF4J output like so during the
+install, which can be safely ignored:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span>SLF4J: Failed to load class &quot;org.slf4j.impl.StaticLoggerBinder&quot;.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+</pre></div>
+</div>
+</div>
 </li>
 </ul>
 </div>
@@ -398,12 +408,12 @@ you will receive the following message:</p>
 <span id="installer-proxy"></span><h4>Running The Installer Behind a Proxy<a class="headerlink" href="#running-the-installer-behind-a-proxy" title="Permalink to this headline">¶</a></h4>
 <p>If you are behind a proxy, you may need to run the installer like so (be sure
 to take a look at the related <a class="reference internal" href="faq.html#eclim-proxy"><span>faq</span></a> as well):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.18.0.bin --proxy my.proxy:8080
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.21.0.bin --proxy my.proxy:8080
 </pre></div>
 </div>
 <p>If your proxy requires authentication, you'll need to supply the username and
 password as well:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.18.0.bin --proxy myuser:mypass@my.proxy:8080
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.21.0.bin --proxy myuser:mypass@my.proxy:8080
 </pre></div>
 </div>
 </div>
@@ -416,7 +426,7 @@ necessary input it requires.</p>
 <p>Simply run the installer as shown
 below, supplying the location of your eclipse install, vim files location, and
 the plugins you wish to install:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.18.0.bin <span class="se">\</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.21.0.bin <span class="se">\</span>
   --yes <span class="se">\</span>
   --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
   --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
@@ -569,7 +579,7 @@ $ tar -zxf eclipse-&lt;version&gt;-linux-gtk.tar.gz
 </pre></div>
 </div>
 <p>Once eclipse is installed, you can then install eclim normally:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.18.0.bin
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.21.0.bin
 </pre></div>
 </div>
 <p>The last step is to start Xvfb followed by eclimd:</p>
@@ -601,14 +611,14 @@ plugins along with all the files eclim adds to your .vim or vimfiles directory
 <div class="section" id="uninstall">
 <span id="id1"></span><h2>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline">¶</a></h2>
 <p>To uninstall eclim you can use the eclim installer like so:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.18.0.bin uninstall
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.21.0.bin uninstall
 </pre></div>
 </div>
 <div class="section" id="unattended-automated-uninstall">
 <span id="uninstall-automated"></span><h3>Unattended (automated) uninstall<a class="headerlink" href="#unattended-automated-uninstall" title="Permalink to this headline">¶</a></h3>
 <p>Like the installer, the uninstaller also supports an unattended uninstall. You
 just need to supply your eclipse and vim files directories:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.18.0.bin
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ ./eclim_2.21.0.bin
   --eclipse<span class="o">=</span>/opt/eclipse <span class="se">\</span>
   --vimfiles<span class="o">=</span><span class="nv">$HOME</span>/.vim <span class="se">\</span>
   uninstall
@@ -633,7 +643,7 @@ just need to supply your eclipse and vim files directories:</p>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Jan 09, 2021<br/>
+      Last updated on Nov 10, 2021<br/>
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>

@@ -5,6 +5,16 @@
 <link>http://eclim.org/index.html</link>
 <description>Latest news for eclim (eclipse + vim).</description>
 <item>
+<title>Nov 10, 2021</title>
+<link>http://eclim.org/index.html#nov-10-2021</link>
+<description><![CDATA[<p><p>A new version of eclim is now available with support for Eclipse 4.21 (2021-09).</p>
+<ul class="simple">
+<li><a href="http://eclim.org/changes.html#id1"><span class="xref std std-ref">Eclim 2.21.0</span></a></li>
+</ul>
+</p>
+]]></description>
+</item>
+<item>
 <title>Jan 09, 2021</title>
 <link>http://eclim.org/index.html#jan-09-2021</link>
 <description><![CDATA[<p><p>A new version of eclim is now available with support for Eclipse 4.18 (2020-12).</p>
@@ -14,7 +24,7 @@
 for details.</p>
 </div>
 <ul class="simple">
-<li><a href="http://eclim.org/changes.html#id1"><span class="xref std std-ref">Eclim 2.18.0</span></a></li>
+<li><a href="http://eclim.org/changes.html#id2"><span class="xref std std-ref">Eclim 2.18.0</span></a></li>
 </ul>
 </p>
 ]]></description>
@@ -31,7 +41,7 @@ fixes.</p>
 feature does not yet support Eclipse 4.8 (Photon).</p>
 </div>
 <ul class="simple">
-<li><a href="http://eclim.org/changes.html#id2"><span class="xref std std-ref">Eclim 2.8.0</span></a></li>
+<li><a href="http://eclim.org/changes.html#id3"><span class="xref std std-ref">Eclim 2.8.0</span></a></li>
 </ul>
 </p>
 ]]></description>
@@ -42,7 +52,7 @@ feature does not yet support Eclipse 4.8 (Photon).</p>
 <description><![CDATA[<p><p>The new eclim installer has been fixed to handle spaces in the eclipse path and
 eclimd has been fixed to run under java 9.</p>
 <ul class="simple">
-<li><a href="http://eclim.org/changes.html#id3"><span class="xref std std-ref">Eclim 2.7.2</span></a></li>
+<li><a href="http://eclim.org/changes.html#id4"><span class="xref std std-ref">Eclim 2.7.2</span></a></li>
 </ul>
 </p>
 ]]></description>
@@ -58,7 +68,7 @@ supports the new Eclipse directory layout used by the Eclipse GUI installer.</p>
 support Linux and OSX.</p>
 </div>
 <ul class="simple">
-<li><a href="http://eclim.org/changes.html#id4"><span class="xref std std-ref">Eclim 2.7.1</span></a></li>
+<li><a href="http://eclim.org/changes.html#id5"><span class="xref std std-ref">Eclim 2.7.1</span></a></li>
 </ul>
 </p>
 ]]></description>
@@ -68,7 +78,7 @@ support Linux and OSX.</p>
 <link>http://eclim.org/index.html#jul-12-2017</link>
 <description><![CDATA[<p><p>A new version of eclim is now available with support for Eclipse 4.7 (Oxygen).</p>
 <ul class="simple">
-<li><a href="http://eclim.org/changes.html#id5"><span class="xref std std-ref">Eclim 2.7.0</span></a></li>
+<li><a href="http://eclim.org/changes.html#id6"><span class="xref std std-ref">Eclim 2.7.0</span></a></li>
 </ul>
 </p>
 ]]></description>

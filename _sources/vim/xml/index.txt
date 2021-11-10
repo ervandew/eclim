@@ -99,8 +99,8 @@ following command is still available for validating xml files on demand.
 
 .. _\:Validate_xml:
 
-**:Validate** [<file>] -
-Validate the supplied file or the current file if no file name provided.
+**:Validate** -
+Validate the the current file.
 
 If eclimd is not currently running, and the xmllint command is available,
 eclim will validate the xml file using that.  Eclim will never use xmllint

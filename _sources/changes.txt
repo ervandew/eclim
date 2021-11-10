@@ -16,6 +16,27 @@
 History of Changes
 ==================
 
+.. _2.21.0:
+
+2.21.0 (Nov. 10, 2021)
+----------------------
+
+Eclim:
+  - Eclim updated to support, and now requires, Eclipse 4.21 (2021-09)
+  - Fix json errors saving workspace/project settings for some setting values
+    (eg. import exclusion patterns).
+  - Some small install/uninstall improvements.
+
+Java:
+  - Fix code completion for vim 8.2.2489 or later.
+  - Fix :JavaCorrect error for Serializable class missing serialVersionUID.
+
+Xml:
+  - Fix :Validate command definition for vim 8.2.3140 and later. Thanks to
+    sideshowbarker.
+
+| :gitlog:`Git Log (2.21.0) <2.18.0...2.21.0>`
+
 .. _2.18.0:
 
 2.18.0 (Jan. 09, 2021)
@@ -47,6 +68,8 @@ Removals:
   - Vimplugin: this was never part of eclim's goal, just seemed like something
     that was easy enough to include at the time.
 
+| :gitlog:`Git Log (2.18.0) <2.8.0...2.18.0>`
+
 .. _Language Server Protocol: https://langserver.org/
 .. _Metals: https://scalameta.org/metals/
 
@@ -56,7 +79,7 @@ Removals:
 ---------------------
 
 Eclim:
-  - Eclim updated to supports, and requires, Eclipse 4.8 (Photon)
+  - Eclim updated to support, and requires, Eclipse 4.8 (Photon)
   - Fix eclimd script for jdk 10
   - Update the installer to be compatible with python 2.6
   - Fix the installer on OSX when libedit is not installed.
