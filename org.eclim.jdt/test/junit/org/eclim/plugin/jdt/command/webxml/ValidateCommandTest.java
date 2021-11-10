@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public class ValidateCommandTest
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
         "Class 'foo.bar.Listener' not found in project 'eclim_unit_test_java'.");
-    assertEquals(error.get("line"), 12);
+    assertEquals(error.get("line"), 13);
     assertEquals(error.get("column"), 1);
     assertEquals(error.get("warning"), false);
 
@@ -62,7 +62,7 @@ public class ValidateCommandTest
     assertEquals(error.get("message"),
         "Class 'org.apache.solr.servlet.SolrServlet' " +
         "not found in project 'eclim_unit_test_java'.");
-    assertEquals(error.get("line"), 22);
+    assertEquals(error.get("line"), 23);
     assertEquals(error.get("column"), 1);
     assertEquals(error.get("warning"), false);
 
@@ -70,7 +70,7 @@ public class ValidateCommandTest
     assertEquals(error.get("filename"), file);
     assertEquals(error.get("message"),
         "No servlet definition with name 'pong' defined.");
-    assertEquals(error.get("line"), 32);
+    assertEquals(error.get("line"), 33);
     assertEquals(error.get("column"), 1);
     assertEquals(error.get("warning"), false);
   }

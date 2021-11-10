@@ -9,13 +9,12 @@ import java.util.Set;
 
 public class TestImportOrganizeVUnit
 {
-  private List list = new ArrayList();
+  private Entry entry;
   private Pattern pattern;
   private JComponent jcomponent;
   private JTree jtree;
   private SynchronousQueue queue;
   private JList jlist;
-  private AWTError awterror;
   private Map map = new HashMap();
   private TestBean testbean;
   private String FOOBAR = FOO + BAR;

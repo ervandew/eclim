@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ public class DocSearchCommandTest
     normalize(results);
     assertEquals(results.get(0),
         "https://docs.oracle.com/en/java/javase/${version}/docs/api/java.base/" +
-        "java/lang/System.html#currentTimeMillis--");
+        "java/lang/System.html#currentTimeMillis()");
   }
 
   private void normalize(List<String> results)

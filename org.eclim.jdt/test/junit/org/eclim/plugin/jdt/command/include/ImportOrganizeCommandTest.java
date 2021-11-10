@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2012 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,22 +64,18 @@ public class ImportOrganizeCommandTest
         "-o", "185", "-e", "utf-8",
       });
 
-    assertEquals(2, results.size());
+    assertEquals(1, results.size());
     List<String> entries = results.get(0);
     assertEquals("java.security.KeyStore.Entry", entries.get(0));
     assertEquals("java.util.Map.Entry", entries.get(1));
     assertEquals("javax.swing.RowFilter.Entry", entries.get(2));
-
-    List<String> lists = results.get(1);
-    assertEquals("java.awt.List", lists.get(0));
-    assertEquals("java.util.List", lists.get(1));
 
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertFalse(listImport.matcher(file).find());
 
     Map<String, Object> position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import_organize", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "185", "-e", "utf-8", "-t", "java.util.Map.Entry,java.util.List",
+      "-o", "185", "-e", "utf-8", "-t", "java.util.Map.Entry",
     });
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     assertTrue(listImport.matcher(file).find());

@@ -107,6 +107,13 @@ What's New?
    :description: Latest news for eclim (eclipse + vim).
    :end-before: end-rss
 
+Nov 10, 2021
+-------------
+
+A new version of eclim is now available with support for Eclipse 4.21 (2021-09).
+
+- :ref:`Eclim 2.21.0 <2.21.0>`
+
 Jan 09, 2021
 -------------
 

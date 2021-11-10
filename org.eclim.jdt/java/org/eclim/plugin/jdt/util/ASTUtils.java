@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ public class ASTUtils
 {
   private static final Logger logger = Logger.getLogger(ASTUtils.class);
 
-  private static final int JLS_LATEST = AST.JLS14;
+  private static final int JLS_LATEST = AST.JLS16;
 
   private ASTUtils ()
   {

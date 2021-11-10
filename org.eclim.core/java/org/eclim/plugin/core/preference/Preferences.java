@@ -606,6 +606,8 @@ public class Preferences
    *
    * @param file The file containing a json dict of name / value pairs.
    *
+   * @return List of any errors attempting to set the values.
+   *
    * @throws FileNotFoundException If the supplied file doesn't exist.
    */
   public List<Error> setValues(File file)
@@ -619,6 +621,8 @@ public class Preferences
    *
    * @param project The project to set the values for or null for global.
    * @param file The file containing a json dict of name / value pairs.
+   *
+   * @return List of any errors attempting to set the values.
    *
    * @throws FileNotFoundException If the supplied file doesn't exist.
    */

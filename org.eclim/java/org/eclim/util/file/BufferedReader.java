@@ -52,10 +52,6 @@ package org.eclim.util.file;
 import java.io.IOException;
 import java.io.Reader;
 
-import java.lang.reflect.Field;
-
-import org.eclim.logging.Logger;
-
 /* Written using "Java Class Libraries", 2nd edition, plus online
  * API docs for JDK 1.2 beta from http://www.javasoft.com.
  * Status:  Believed complete and correct.
@@ -77,8 +73,6 @@ import org.eclim.logging.Logger;
  */
 public class BufferedReader extends Reader
 {
-  private static final Logger logger = Logger.getLogger(BufferedReader.class);
-
   Reader in;
   char[] buffer;
   /* Index of current read position.  Must be >= 0 and <= limit. */
@@ -135,27 +129,10 @@ public class BufferedReader extends Reader
    */
   public BufferedReader(Reader in, int size)
   {
-    // eclim: Reader.lock is protected, so we have to obtain it via reflection.
-    super(getDeclaredField(Reader.class, in, "lock"));
     if (size <= 0)
       throw new IllegalArgumentException("Illegal buffer size: " + size);
     this.in = in;
     buffer = new char[size];
-  }
-
-  // eclim: new static method used to obtain a field via reflection.
-  private static Object getDeclaredField(Class<?> clazz, Object instance, String fieldName)
-  {
-    try{
-      Field field = clazz.getDeclaredField(fieldName);
-      field.setAccessible(true);
-      return field.get(instance);
-    }catch(IllegalAccessException iae){
-      logger.error("Error constructing BufferedReader", iae);
-    }catch(NoSuchFieldException nsfe){
-      logger.error("Error constructing BufferedReader", nsfe);
-    }
-    throw new RuntimeException("Unable to access the reader's lock");
   }
 
   /**

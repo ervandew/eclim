@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005 - 2020  Eric Van Dewoestine
+ * Copyright (C) 2005 - 2021  Eric Van Dewoestine
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,119 +55,120 @@ public class ImportCommandTest
     assertTrue("Java project doesn't exist.",
         Eclim.projectExists(Jdt.TEST_PROJECT));
 
-    Pattern listImport = Pattern.compile("import java\\.util\\.List;");
+    Pattern entryImport = Pattern.compile("import java\\.util\\.Map\\.Entry;");
     String file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    assertFalse(listImport.matcher(file).find());
+    assertFalse(entryImport.matcher(file).find());
 
     List<String> results = (List<String>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "72", "-e", "utf-8",
+      "-o", "73", "-e", "utf-8",
     });
 
-    assertEquals(2, results.size());
-    assertEquals("java.awt.List", results.get(0));
-    assertEquals("java.util.List", results.get(1));
+    assertEquals(3, results.size());
+    assertEquals("java.security.KeyStore.Entry", results.get(0));
+    assertEquals("java.util.Map.Entry", results.get(1));
+    assertEquals("javax.swing.RowFilter.Entry", results.get(2));
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    assertFalse(listImport.matcher(file).find());
+    assertFalse(entryImport.matcher(file).find());
 
     Map<String, Object> position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "72", "-e", "utf-8", "-t", "java.util.List",
+      "-o", "72", "-e", "utf-8", "-t", "java.util.Map.Entry",
     });
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
-    Matcher listMatcher = listImport.matcher(file);
-    assertTrue(listMatcher.find());
-    assertEquals(33, listMatcher.start());
-    assertEquals(96, position.get("offset"));
+    Matcher entryMatcher = entryImport.matcher(file);
+    assertTrue(entryMatcher.find());
+    assertEquals(33, entryMatcher.start());
+    assertEquals(101, position.get("offset"));
     assertEquals(7, position.get("line"));
     assertEquals(14, position.get("column"));
 
     position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "98", "-e", "utf-8",
+      "-o", "111", "-e", "utf-8",
     });
     Pattern callableImport =
       Pattern.compile("import java\\.util\\.concurrent\\.Callable;");
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     Matcher callableMatcher = callableImport.matcher(file);
-    listMatcher = listImport.matcher(file);
-    assertTrue(listMatcher.find());
+    entryMatcher = entryImport.matcher(file);
+    assertTrue(entryMatcher.find());
     assertTrue(callableMatcher.find());
-    assertEquals(33, listMatcher.start());
-    assertEquals(57, callableMatcher.start());
-    assertEquals(137, position.get("offset"));
+    assertEquals(33, entryMatcher.start());
+    assertEquals(62, callableMatcher.start());
+    assertEquals(150, position.get("offset"));
     assertEquals(9, position.get("line"));
-    assertEquals(16, position.get("column"));
+    assertEquals(24, position.get("column"));
 
     position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "166", "-e", "utf-8",
+      "-o", "179", "-e", "utf-8",
     });
     Pattern mapImport = Pattern.compile("import java\\.util\\.Map;");
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     Matcher mapMatcher = mapImport.matcher(file);
-    listMatcher = listImport.matcher(file);
+    entryMatcher = entryImport.matcher(file);
     callableMatcher = callableImport.matcher(file);
-    assertTrue(listMatcher.find());
+    assertTrue(entryMatcher.find());
     assertTrue(mapMatcher.find());
     assertTrue(callableMatcher.find());
-    assertEquals(33, listMatcher.start());
-    assertEquals(56, mapMatcher.start());
-    assertEquals(79, callableMatcher.start());
-    assertEquals(188, position.get("offset"));
+    assertEquals(55, entryMatcher.start());
+    assertEquals(33, mapMatcher.start());
+    assertEquals(84, callableMatcher.start());
+    assertEquals(201, position.get("offset"));
     assertEquals(11, position.get("line"));
     assertEquals(11, position.get("column"));
 
     position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "220", "-e", "utf-8",
+      "-o", "233", "-e", "utf-8",
     });
     Pattern patternImport = Pattern.compile("import java\\.util\\.regex\\.Pattern;");
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     Matcher patternMatcher = patternImport.matcher(file);
-    listMatcher = listImport.matcher(file);
+    entryMatcher = entryImport.matcher(file);
     mapMatcher = mapImport.matcher(file);
     callableMatcher = callableImport.matcher(file);
-    assertTrue(listMatcher.find());
+    assertTrue(entryMatcher.find());
     assertTrue(mapMatcher.find());
     assertTrue(callableMatcher.find());
     assertTrue(patternMatcher.find());
-    assertEquals(33, listMatcher.start());
-    assertEquals(56, mapMatcher.start());
-    assertEquals(79, callableMatcher.start());
-    assertEquals(118, patternMatcher.start());
-    assertEquals(253, position.get("offset"));
+    assertEquals(55, entryMatcher.start());
+    assertEquals(33, mapMatcher.start());
+    assertEquals(84, callableMatcher.start());
+    assertEquals(123, patternMatcher.start());
+    assertEquals(266, position.get("offset"));
     assertEquals(14, position.get("line"));
     assertEquals(11, position.get("column"));
 
     position = (Map<String, Object>)Eclim.execute(new String[]{
       "java_import", "-p", Jdt.TEST_PROJECT, "-f", TEST_FILE,
-      "-o", "280", "-e", "utf-8",
+      "-o", "293", "-e", "utf-8",
     });
     Pattern fileImport = Pattern.compile("import java\\.io\\.File;");
     file = Eclim.fileToString(Jdt.TEST_PROJECT, TEST_FILE);
     Matcher fileMatcher = fileImport.matcher(file);
-    listMatcher = listImport.matcher(file);
+    entryMatcher = entryImport.matcher(file);
     mapMatcher = mapImport.matcher(file);
     callableMatcher = callableImport.matcher(file);
     patternMatcher = patternImport.matcher(file);
     assertTrue(fileMatcher.find());
-    assertTrue(listMatcher.find());
+    assertTrue(entryMatcher.find());
     assertTrue(mapMatcher.find());
     assertTrue(callableMatcher.find());
     assertTrue(patternMatcher.find());
     assertEquals(33, fileMatcher.start());
-    assertEquals(55, listMatcher.start());
-    assertEquals(78, mapMatcher.start());
-    assertEquals(101, callableMatcher.start());
-    assertEquals(140, patternMatcher.start());
-    assertEquals(302, position.get("offset"));
+    assertEquals(77, entryMatcher.start());
+    assertEquals(55, mapMatcher.start());
+    assertEquals(106, callableMatcher.start());
+    assertEquals(145, patternMatcher.start());
+    assertEquals(315, position.get("offset"));
     assertEquals(17, position.get("line"));
     assertEquals(11, position.get("column"));
 
     Pattern classDecl = Pattern.compile("public class TestImport");
     Matcher classMatcher = classDecl.matcher(file);
     assertTrue(classMatcher.find());
-    assertEquals(173, classMatcher.start());
+    assertEquals(178, classMatcher.start());
   }
 }

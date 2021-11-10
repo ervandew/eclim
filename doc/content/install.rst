@@ -111,6 +111,17 @@ Step 1: Run the installer
   If your machine is behind a proxy, take a look at the instructions for
   :ref:`running the installer behind a proxy <installer-proxy>`.
 
+  .. note::
+
+    For some versions of eclipse you may see some SLF4J output like so during the
+    install, which can be safely ignored:
+
+    ::
+
+      SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+      SLF4J: Defaulting to no-operation (NOP) logger implementation
+      SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+
 Step 2: Test the installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
