@@ -220,7 +220,7 @@ build_vmargs(){
     fi
   fi
   if [ -n "$SWT" ] ; then
-    if $(echo "$SWT" | grep -q "x86_64") ; then
+    if $(echo "$SWT" | grep -q "x86_64\|aarch64") ; then
       ARCH_NAME="64-bit"
       ARCH=-d64
     else
