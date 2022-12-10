@@ -1,38 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Getting Started &mdash; eclim (eclipse + vim)</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Getting Started &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     'v2.21.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/jquery.ba-hashchange.js"></script>
-    <script type="text/javascript" src="_static/jquery.hoverscroll.js"></script>
-    <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <script type="text/javascript" src="_static/bootstrap.scrollspy.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="index.html" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/jquery.ba-hashchange.js"></script>
+    <script src="_static/jquery.hoverscroll.js"></script>
+    <script src="_static/bootstrap.js"></script>
+    <script src="_static/bootstrap.scrollspy.js"></script>
+    <script src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Help" href="gettinghelp.html" />
     <link rel="prev" title="Download / Install" href="install.html" />
   
@@ -40,8 +32,7 @@
 
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -55,142 +46,66 @@
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="vim/index.html">Documentation</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/util.html">Utility Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="development/index.html">Development Docs</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development/architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -228,7 +143,7 @@
       
       
   <div class="section" id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h1>
 <div class="page-toc subnav navbar">
 <div class="navbar-inner">
 <ul class="nav">
@@ -239,41 +154,41 @@
 </ul>
 </div>
 </div>
-<p>Once you've <a class="reference internal" href="install.html"><em>installed</em></a> eclim, the next step is to create
+<p>Once you’ve <a class="reference internal" href="install.html"><span class="doc">installed</span></a> eclim, the next step is to create
 your first project after which you can then start writing code and
-familiarizing yourself with eclim's features.</p>
-<p>First make sure eclimd is running (see the <a class="reference internal" href="eclimd.html"><em>eclimd docs</em></a> if you
+familiarizing yourself with eclim’s features.</p>
+<p>First make sure eclimd is running (see the <a class="reference internal" href="eclimd.html"><span class="doc">eclimd docs</span></a> if you
 are unsure how to start eclimd).</p>
 <div class="section" id="creating-your-first-project">
-<span id="gettingstarted-create"></span><h2>Creating your first project<a class="headerlink" href="#creating-your-first-project" title="Permalink to this headline">¶</a></h2>
-<p>Once you've got eclimd running, open an instance of vim and create your project
+<span id="gettingstarted-create"></span><h2>Creating your first project<a class="headerlink" href="#creating-your-first-project" title="Permalink to this heading">¶</a></h2>
+<p>Once you’ve got eclimd running, open an instance of vim and create your project
 like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>:ProjectCreate /path/to/my_project -n java
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_project</span> <span class="o">-</span><span class="n">n</span> <span class="n">java</span>
 </pre></div>
 </div>
 <p>This example creates a project with a java nature (-n java), but the same
 method can be used to create a project for other languages by simply changing
 the nature accordingly:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>:ProjectCreate /path/to/my_java_project -n java
-:ProjectCreate /path/to/my_python_project -n python
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_java_project</span> <span class="o">-</span><span class="n">n</span> <span class="n">java</span>
+<span class="p">:</span><span class="n">ProjectCreate</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_python_project</span> <span class="o">-</span><span class="n">n</span> <span class="n">python</span>
 </pre></div>
 </div>
-<p>The path supplied to the <a class="reference internal" href="vim/core/project.html#projectcreate"><span>:ProjectCreate</span></a> command will be
+<p>The path supplied to the <a class="reference internal" href="vim/core/project.html#projectcreate"><span class="std std-ref">:ProjectCreate</span></a> command will be
 the path to the root of your project.  This path may or may not exist.  If it
-does not exist it will be created for you.  After you've created your project,
-there will be a <code>.project</code> file added to your project's root along with
-another file where references to your project's source directories and any
+does not exist it will be created for you.  After you’ve created your project,
+there will be a <code>.project</code> file added to your project’s root along with
+another file where references to your project’s source directories and any
 third party libraries your project uses reside.  The name of this file will
-vary depending on your project's nature, but in all cases eclim will provide
+vary depending on your project’s nature, but in all cases eclim will provide
 you with commands to manage this file:</p>
 <ul class="simple">
-<li>java - <a class="reference internal" href="vim/java/classpath.html"><em>.classpath file</em></a></li>
-<li>python - <a class="reference internal" href="vim/python/path.html"><em>.pydevproject file</em></a></li>
+<li>java - <a class="reference internal" href="vim/java/classpath.html"><span class="doc">.classpath file</span></a></li>
+<li>python - <a class="reference internal" href="vim/python/path.html"><span class="doc">.pydevproject file</span></a></li>
 </ul>
-<p>Once you've created your project you can use the <strong>:ProjectList</strong> command to
+<p>Once you’ve created your project you can use the <strong>:ProjectList</strong> command to
 list the available projects and you should see your newly created one in the
 list.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>my_project - open   - /path/to/my_project
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_project</span> <span class="o">-</span> <span class="nb">open</span>   <span class="o">-</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_project</span>
 </pre></div>
 </div>
 <p>The <strong>:ProjectList</strong> result is in the form of <code>projectName - (open|closed) -
@@ -282,35 +197,35 @@ used for the project name.  If that element contains any spaces, these will be
 converted to underscores.</p>
 </div>
 <div class="section" id="adding-project-source-directories">
-<h2>Adding project source directories<a class="headerlink" href="#adding-project-source-directories" title="Permalink to this headline">¶</a></h2>
+<h2>Adding project source directories<a class="headerlink" href="#adding-project-source-directories" title="Permalink to this heading">¶</a></h2>
 <p>Before you can start writing code, you will first need to create and register
-your project's source directories.  If you created your project from an
+your project’s source directories.  If you created your project from an
 existing code base, then this step may have been perform automatically for you,
 but you should validate the settings to be sure.</p>
 <p>We will use a java project in this example but the steps for other languages
 are very similar.  Please see the relevant docs for your language for more
 details:</p>
 <ul class="simple">
-<li><a class="reference internal" href="vim/java/classpath.html"><em>java</em></a></li>
-<li><a class="reference internal" href="vim/python/path.html"><em>python</em></a></li>
+<li><a class="reference internal" href="vim/java/classpath.html"><span class="doc">java</span></a></li>
+<li><a class="reference internal" href="vim/python/path.html"><span class="doc">python</span></a></li>
 </ul>
 <p>For the purpose of this example we will assume that you will store your source
 files at:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>/path/to/my_project/src/java
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_project</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">java</span>
 </pre></div>
 </div>
 <p>So, given that location, you will need to open the file
 /path/to/my_project/.classpath in Vim.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>vim /path/to/my_project/.classpath
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_project</span><span class="o">/.</span><span class="n">classpath</span>
 </pre></div>
 </div>
 <p>To add the source directory simply execute the following</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>NewSrcEntry src/java
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>NewSrcEntry src/java
 </pre></div>
 </div>
 <p>This will add the necessary entry to the end of your .classpath file.  The
 contents of this file should now look something like this:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;classpath&gt;</span>
   <span class="nt">&lt;classpathentry</span> <span class="na">kind=</span><span class="s">&quot;con&quot;</span> <span class="na">path=</span><span class="s">&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot;</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;classpathentry</span> <span class="na">kind=</span><span class="s">&quot;output&quot;</span> <span class="na">path=</span><span class="s">&quot;bin&quot;</span><span class="nt">/&gt;</span>
@@ -319,54 +234,54 @@ contents of this file should now look something like this:</p>
 </pre></div>
 </div>
 <p>Now that your source directory is setup, you can proceed to edit java files in
-that directory and make use of the <a class="reference internal" href="vim/java/index.html"><em>java functionality</em></a>
+that directory and make use of the <a class="reference internal" href="vim/java/index.html"><span class="doc">java functionality</span></a>
 provided by eclim.</p>
 </div>
 <div class="section" id="writing-code-in-your-new-project">
-<span id="gettingstarted-coding"></span><h2>Writing code in your new project<a class="headerlink" href="#writing-code-in-your-new-project" title="Permalink to this headline">¶</a></h2>
+<span id="gettingstarted-coding"></span><h2>Writing code in your new project<a class="headerlink" href="#writing-code-in-your-new-project" title="Permalink to this heading">¶</a></h2>
 <p>Now that you have a project created, you can start writing code and utilize the
 features that eclim provides.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p>Below we'll walk through a trivial java example, but some of the steps apply to
+<p>Below we’ll walk through a trivial java example, but some of the steps apply to
 all the languages that eclim supports, although the command names may differ a
 bit.  For additional docs on working with the language of your choice, please
 see the relevant section of the docs:</p>
 <ul class="last simple">
-<li><a class="reference internal" href="vim/java/index.html"><em>java</em></a></li>
-<li><a class="reference internal" href="vim/python/index.html"><em>python</em></a></li>
-<li><a class="reference internal" href="vim/index.html"><em>etc.</em></a></li>
+<li><a class="reference internal" href="vim/java/index.html"><span class="doc">java</span></a></li>
+<li><a class="reference internal" href="vim/python/index.html"><span class="doc">python</span></a></li>
+<li><a class="reference internal" href="vim/index.html"><span class="doc">etc.</span></a></li>
 </ul>
 </div>
 <p>Lets get started writing our first java application using eclim.</p>
 <ol class="arabic">
-<li><p class="first">First, navigate to your new project's source directory (src/java in this
+<li><p class="first">First, navigate to your new project’s source directory (src/java in this
 example) and create any necessary package directories:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ cd /path/to/my_project/src/java
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd /path/to/my_project/src/java
 $ mkdir -p org/test/
 </pre></div>
 </div>
 </li>
 <li><p class="first">Then start editing your first java source file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ vim org/test/TestMain.java
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ vim org/test/TestMain.java
 </pre></div>
 </div>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.test</span><span class="p">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">org.test</span><span class="p">;</span><span class="w"></span>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestMain</span>
-<span class="p">{</span>
-  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span>
-  <span class="p">{</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TestMain</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span><span class="w"></span>
 
-  <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">You can start to use some of the core features now.  For example, lets add
-the following code to the main method so we can test eclim's source code
+the following code to the main method so we can test eclim’s source code
 validation:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">System</span><span class="p">.</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">System</span><span class="p">.</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Then save the file and note that an error marker is placed in the left
@@ -374,56 +289,56 @@ margin of your file and when the cursor is on that line an error message is
 printed at the bottom of your vim window.  You can also run :lopen to view
 all the errors in the file at once.</p>
 </li>
-<li><p class="first">Now lets try out code completion.  Place your cursor on the '.' of 'System.'
-and start insert mode in vim using 'a', then follow the example below:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">System</span><span class="p">.</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">x</span><span class="o">&gt;&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">u</span><span class="o">&gt;</span>             <span class="c1">// starts the completion mode</span>
-<span class="n">System</span><span class="p">.</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">n</span><span class="o">&gt;</span>                     <span class="c1">// cycle through the completion suggestions</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span>                          <span class="c1">// assuming you chose the &#39;out&#39; suggestion</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">p</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">x</span><span class="o">&gt;&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">u</span><span class="o">&gt;</span>        <span class="c1">// now start completion again</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">p</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">n</span><span class="o">&gt;</span>                <span class="c1">// hit &lt;ctrl-n&gt; until you get &#39;println&#39;</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span>
-<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">);</span>  <span class="c1">// finish up the example code.</span>
+<li><p class="first">Now lets try out code completion.  Place your cursor on the ‘.’ of ‘System.’
+and start insert mode in vim using ‘a’, then follow the example below:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">System</span><span class="p">.</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">x</span><span class="o">&gt;&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">u</span><span class="o">&gt;</span><span class="w">             </span><span class="c1">// starts the completion mode</span><span class="w"></span>
+<span class="n">System</span><span class="p">.</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">n</span><span class="o">&gt;</span><span class="w">                     </span><span class="c1">// cycle through the completion suggestions</span><span class="w"></span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="w">                          </span><span class="c1">// assuming you chose the &#39;out&#39; suggestion</span><span class="w"></span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">p</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">x</span><span class="o">&gt;&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">u</span><span class="o">&gt;</span><span class="w">        </span><span class="c1">// now start completion again</span><span class="w"></span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">p</span><span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">n</span><span class="o">&gt;</span><span class="w">                </span><span class="c1">// hit &lt;ctrl-n&gt; until you get &#39;println&#39;</span><span class="w"></span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="w"></span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// finish up the example code.</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">After saving the file you should have no more validation errors, so now we
 can run the code like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>:Java
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">Java</span>
 </pre></div>
 </div>
 <p>After running the :Java command in vim you should now see your output in a
 new split window.</p>
 </li>
 </ol>
-<p>This only scratches the surface on the number of <a class="reference internal" href="vim/java/index.html"><em>java features</em></a> that eclim provides, but hopefully this example was enough to
+<p>This only scratches the surface on the number of <a class="reference internal" href="vim/java/index.html"><span class="doc">java features</span></a> that eclim provides, but hopefully this example was enough to
 get you started.</p>
 </div>
 <div class="section" id="maven-users">
-<span id="gettingstarted-maven"></span><h2>Maven Users<a class="headerlink" href="#maven-users" title="Permalink to this headline">¶</a></h2>
+<span id="gettingstarted-maven"></span><h2>Maven Users<a class="headerlink" href="#maven-users" title="Permalink to this heading">¶</a></h2>
 <p>Creating your first project with maven can be accomplished using the same
-method as any other java project, or you can utilize some of maven's built in
+method as any other java project, or you can utilize some of maven’s built in
 features to get your project started.</p>
 <ol class="arabic">
-<li><p class="first">Run maven's generate archetype to create the project directory and samples:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ mvn archetype:generate
+<li><p class="first">Run maven’s generate archetype to create the project directory and samples:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mvn archetype:generate
 </pre></div>
 </div>
 </li>
-<li><p class="first">Once you've created the initial project directory, cd into that directory
+<li><p class="first">Once you’ve created the initial project directory, cd into that directory
 and run the following command to generate the necessary eclipse files:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> &lt;project_dir&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> &lt;project_dir&gt;
 $ mvn eclipse:eclipse
 </pre></div>
 </div>
 </li>
-<li><p class="first">Now you can start an instance of vim at the project's root directory and run
+<li><p class="first">Now you can start an instance of vim at the project’s root directory and run
 the following commands to:</p>
 <ul class="simple">
 <li>set the necessary eclipse classpath variable to point to your maven
 repository.</li>
 <li>import your new project into eclipse.</li>
 </ul>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ vim
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ vim
 :MvnRepo
 :ProjectImport /path/to/new/project
 </pre></div>
@@ -442,28 +357,26 @@ repository.</li>
   <div class="container">
     <p class="pull-right">
       
-  <a href="_sources/gettingstarted.txt"
+  <a href="_sources/gettingstarted.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Nov 10, 2021<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Dec 09, 2022<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 5.3.0
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
   </div>
 </footer>
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-575508-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLXB6990G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ERLXB6990G');
   </script>
 
   </body>

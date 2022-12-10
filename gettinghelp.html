@@ -1,38 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Getting Help &mdash; eclim (eclipse + vim)</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Getting Help &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     'v2.21.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/jquery.ba-hashchange.js"></script>
-    <script type="text/javascript" src="_static/jquery.hoverscroll.js"></script>
-    <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <script type="text/javascript" src="_static/bootstrap.scrollspy.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="index.html" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/jquery.ba-hashchange.js"></script>
+    <script src="_static/jquery.hoverscroll.js"></script>
+    <script src="_static/bootstrap.js"></script>
+    <script src="_static/bootstrap.scrollspy.js"></script>
+    <script src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Documentation" href="vim/index.html" />
     <link rel="prev" title="Getting Started" href="gettingstarted.html" />
   
@@ -40,8 +32,7 @@
 
   <link rel="stylesheet" type="text/css" href="_static/docs.css" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -55,142 +46,66 @@
             <li class="dropdown">
   <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Getting Help</a></li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="vim/index.html">Documentation</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/core/util.html">Utility Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="vim/java/classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="vim/python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vim/python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="vim/python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="vim/python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="vim/xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="development/index.html">Development Docs</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="development/gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development/architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="development/commands.html">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -228,7 +143,7 @@
       
       
   <div class="section" id="getting-help">
-<h1>Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h1>
+<h1>Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this heading">¶</a></h1>
 <div class="page-toc subnav navbar">
 <div class="navbar-inner">
 <ul class="nav">
@@ -239,7 +154,7 @@
 </div>
 </div>
 <div class="section" id="mailing-lists">
-<h2>Mailing Lists<a class="headerlink" href="#mailing-lists" title="Permalink to this headline">¶</a></h2>
+<h2>Mailing Lists<a class="headerlink" href="#mailing-lists" title="Permalink to this heading">¶</a></h2>
 <p>If at any time you have any questions or feedback, feel free to post to one of
 the eclim mailing lists:</p>
 <ul class="simple">
@@ -249,19 +164,19 @@ troubleshooting, etc.</li>
 </ul>
 </div>
 <div class="section" id="irc-eclim-on-freenode-net">
-<h2>IRC (#eclim on freenode.net)<a class="headerlink" href="#irc-eclim-on-freenode-net" title="Permalink to this headline">¶</a></h2>
+<h2>IRC (#eclim on freenode.net)<a class="headerlink" href="#irc-eclim-on-freenode-net" title="Permalink to this heading">¶</a></h2>
 <p>If you would like to get help or ask questions on IRC, then feel free to join
 #eclim on freenode.net. Please note that I (Eric Van Dewoestine, ervandew on
 irc) try to stay in the channel as much as possible, but I might not be
-available to answer questions immediately. It's also worth noting that I live
+available to answer questions immediately. It’s also worth noting that I live
 in California, so if you are in Europe, Asia, or some other timezone whose
-normal waking hours don't overlap well with mine, then you may be better off
+normal waking hours don’t overlap well with mine, then you may be better off
 getting help using one of the mailing lists above.</p>
 </div>
 <div class="section" id="reporting-bugs">
-<h2>Reporting Bugs<a class="headerlink" href="#reporting-bugs" title="Permalink to this headline">¶</a></h2>
-<p>If you've found a bug please report the issue to either the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim-dev</a>
-mailing list or create a new issue on eclim's github <a class="reference external" href="http://github.com/ervandew/eclim/issues">issue tracker</a>.</p>
+<h2>Reporting Bugs<a class="headerlink" href="#reporting-bugs" title="Permalink to this heading">¶</a></h2>
+<p>If you’ve found a bug please report the issue to either the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim-dev</a>
+mailing list or create a new issue on eclim’s github <a class="reference external" href="http://github.com/ervandew/eclim/issues">issue tracker</a>.</p>
 <p>When reporting a bug, please include the following information:</p>
 <ul class="simple">
 <li><strong>What OS are you on?</strong><ul>
@@ -270,9 +185,9 @@ mailing list or create a new issue on eclim's github <a class="reference externa
 </li>
 <li><strong>What version of eclim, vim, and eclipse are you using?</strong><ul>
 <li>Linux users: please indicate whether you installed eclipse via your
-distro's package manager or not, and if not, please indicate what
-distribution of eclipse you are using (&quot;Eclipse Classic&quot;, &quot;Eclipse IDE for
-Java Developers&quot;, some other eclipse bundle).</li>
+distro’s package manager or not, and if not, please indicate what
+distribution of eclipse you are using (“Eclipse Classic”, “Eclipse IDE for
+Java Developers”, some other eclipse bundle).</li>
 </ul>
 </li>
 </ul>
@@ -288,28 +203,26 @@ Java Developers&quot;, some other eclipse bundle).</li>
   <div class="container">
     <p class="pull-right">
       
-  <a href="_sources/gettinghelp.txt"
+  <a href="_sources/gettinghelp.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Nov 10, 2021<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Dec 09, 2022<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 5.3.0
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
   </div>
 </footer>
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-575508-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLXB6990G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ERLXB6990G');
   </script>
 
   </body>

@@ -1,39 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Eclipse Project Management &mdash; eclim (eclipse + vim)</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eclipse Project Management &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'v2.21.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.ba-hashchange.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.hoverscroll.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap.scrollspy.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="../../index.html" />
-    <link rel="up" title="Core Functionality" href="index.html" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/jquery.ba-hashchange.js"></script>
+    <script src="../../_static/jquery.hoverscroll.js"></script>
+    <script src="../../_static/bootstrap.js"></script>
+    <script src="../../_static/bootstrap.scrollspy.js"></script>
+    <script src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Eclipse Local History" href="history.html" />
     <link rel="prev" title="Eclim Manage / Config" href="eclim.html" />
   
@@ -41,8 +32,7 @@
 
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -56,142 +46,66 @@
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="../index.html">Documentation</a><ul class="current dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 current dropdown-submenu active"><a class="reference internal" href="index.html">Core Functionality</a><ul class="current dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3 current active"><a class="current reference internal" href="">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="eclim.html">Eclim Manage / Config</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Eclipse Project Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util.html">Utility Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../java/classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../java/webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../java/validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../../development/index.html">Development Docs</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../development/architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -229,48 +143,48 @@
       
       
   <div class="section" id="eclipse-project-management">
-<h1>Eclipse Project Management<a class="headerlink" href="#eclipse-project-management" title="Permalink to this headline">¶</a></h1>
+<h1>Eclipse Project Management<a class="headerlink" href="#eclipse-project-management" title="Permalink to this heading">¶</a></h1>
 <p>The core concept in most IDEs is the that of a project, and Eclipse is no
 different.  Since a project must exist before you can perform any of the more
 interesting tasks, eclim provides a set of commands to create and manage
 projects from within Vim.</p>
 <p>For the commands below that accept a project name as an argument, you may use
-Vim's command line completion to complete the project name.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectSettings a_p<span class="p">&lt;</span>Tab<span class="p">&gt;</span>
+Vim’s command line completion to complete the project name.</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectSettings a_p<span class="p">&lt;</span>Tab<span class="p">&gt;</span>
 <span class="p">:</span>ProjectSettings a_project
 </pre></div>
 </div>
 <ul id="projectcreate">
 <li><p class="first"><strong>:ProjectCreate</strong>
 &lt;folder&gt; [-p &lt;project_name&gt;]
--n &lt;nature&gt; ...
-[-d &lt;project_dependency&gt; ...]</p>
+-n &lt;nature&gt; …
+[-d &lt;project_dependency&gt; …]</p>
 <ul>
 <li><p class="first"><strong>-p</strong>: Optional argument used to specify the project
-name.  If omitted, eclim will use the last segment of the project's
+name.  If omitted, eclim will use the last segment of the project’s
 path, with any spaces replaced with underscores, as the project name.</p>
 </li>
 <li><p class="first"><strong>-n</strong>: Required argument which specifies a space
 separated list of project natures (java, etc.) to add to the
 project.  If you want to create a project with no natures, you can
-use the word &quot;none&quot; here.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/workspace/</span>test <span class="p">-</span><span class="k">n</span> none
+use the word “none” here.</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/workspace/</span>test <span class="p">-</span><span class="k">n</span> none
 </pre></div>
 </div>
 <p>Note that eclim supports command completion of available nature
 names.</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/workspace/</span>test <span class="p">-</span><span class="k">n</span> <span class="k">j</span><span class="p">&lt;</span><span class="k">tab</span><span class="p">&gt;</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/workspace/</span>test <span class="p">-</span><span class="k">n</span> <span class="k">j</span><span class="p">&lt;</span><span class="k">tab</span><span class="p">&gt;</span>
 <span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/workspace/</span>test <span class="p">-</span><span class="k">n</span> java
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>-d</strong>: Optional argument used to specify a space
-separated list of project names which the project you're creating
+separated list of project names which the project you’re creating
 depends on.</p>
 </li>
 </ul>
 <p><strong>Some Examples</strong></p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/projects/</span>a_project <span class="p">-</span><span class="k">n</span> java
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/projects/</span>a_project <span class="p">-</span><span class="k">n</span> java
 <span class="p">:</span>ProjectCreate <span class="p">~</span><span class="sr">/projects/</span>a_project <span class="p">-</span><span class="k">n</span> java <span class="p">-</span><span class="k">d</span> another_project yet_another_project
 </pre></div>
 </div>
@@ -281,7 +195,7 @@ depends on.</p>
 <p>If you have an existing eclipse project folder which does not exist as a
 project in your current workspace, you can import that project using this
 command:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectImport <span class="p">~</span><span class="sr">/workspace/</span>some_project
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectImport <span class="p">~</span><span class="sr">/workspace/</span>some_project
 </pre></div>
 </div>
 </li>
@@ -289,10 +203,10 @@ command:</p>
 <ul id="projectimportdiscover">
 <li><p class="first"><strong>:ProjectImportDiscover</strong> &lt;folder&gt;</p>
 <p>If you have several existing eclipse projects within a parent directory that
-you'd like to import, you can do so using this command, which scans the
+you’d like to import, you can do so using this command, which scans the
 supplied folder for all <code>.project</code> files and imports the corresponding
 project into your current workspace:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectImport <span class="p">~</span><span class="sr">/some/</span>parent/<span class="k">dir</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>ProjectImport <span class="p">~</span><span class="sr">/some/</span>parent/<span class="k">dir</span>
 </pre></div>
 </div>
 </li>
@@ -304,7 +218,7 @@ project into your current workspace:</p>
 </ul>
 <ul id="projectsettings">
 <li><p class="first"><strong>:ProjectSettings</strong> [&lt;project&gt;]</p>
-<p>Opens a window with the project's available settings. If a project name is
+<p>Opens a window with the project’s available settings. If a project name is
 supplied with this command, then the settings for that project are opened.  If
 no project name is supplied, and the current file is in a project directory,
 then the settings for the current project will be opened.</p>
@@ -312,7 +226,7 @@ then the settings for the current project will be opened.</p>
 simply writing the file in the usual Vim manner (:w). The format of the
 buffer is in the standard properties file format as supported by java, so all
 the same rules apply when editing. You can refer to the
-<a class="reference internal" href="../settings.html"><em>settings</em></a> documentation for a description of the
+<a class="reference internal" href="../settings.html"><span class="doc">settings</span></a> documentation for a description of the
 available settings.</p>
 </li>
 </ul>
@@ -340,7 +254,7 @@ move the current project to.</p>
 <div class="alert">
 <p class="alert-heading first admonition-title">Warning</p>
 <p class="last"><strong>:ProjectMove</strong>, and possibly <strong>:ProjectRename</strong>, will result in the
-renaming of your project's directory in the underlying file system.  Eclim
+renaming of your project’s directory in the underlying file system.  Eclim
 will do its best to reload any files that have moved as a result of the
 directory renaming and adjust your current working directory if necessary,
 but only for the current vim session.  If you have other vim sessions open
@@ -353,14 +267,14 @@ the moving or renaming of a project.</p>
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">When open files have moved as a result of <strong>:ProjectMove</strong> or
 <strong>:ProjectRename</strong>, eclim will reload those files in the current session, but
-it must do so via an :edit, which means that vim's undo tree will be lost.
+it must do so via an :edit, which means that vim’s undo tree will be lost.
 However, you will still have access to the eclipse
-<a class="reference internal" href="history.html"><em>history</em></a>.</p>
+<a class="reference internal" href="history.html"><span class="doc">history</span></a>.</p>
 </div>
 </li>
 </ul>
 <ul id="projectrefresh">
-<li><p class="first"><strong>:ProjectRefresh</strong> [&lt;project&gt; &lt;project&gt; ...]</p>
+<li><p class="first"><strong>:ProjectRefresh</strong> [&lt;project&gt; &lt;project&gt; …]</p>
 <p>Refreshes the supplied list of named projects by synchronizing each project
 against the current files on disk. If no projects names are supplied, refresh
 the current project. Useful when files may have been added, removed, or
@@ -376,15 +290,15 @@ subversion, etc).</p>
 <ul id="projectinfo">
 <li><p class="first"><strong>:ProjectInfo</strong> [&lt;project&gt;]</p>
 <p>Echo info about the current or supplied project.</p>
-<p id="g-eclimprojectstatusline">Eclim supports displaying info about the current project in vim's status line
+<p id="g-eclimprojectstatusline">Eclim supports displaying info about the current project in vim’s status line
 by adding a call to <code>eclim#project#util#ProjectStatusLine()</code> to your
 statusline option:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">statusline</span><span class="p">=</span>%<span class="p">&lt;</span>%<span class="k">f</span>\ %M\ %<span class="k">h</span>%<span class="k">r</span>%<span class="p">=</span>%<span class="m">-10</span>.<span class="p">(</span>%<span class="k">l</span><span class="p">,</span>%<span class="k">c</span>%V\ %{eclim#project#util#ProjectStatusLine<span class="p">()</span>}%<span class="p">)</span>\ %P
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nb">statusline</span><span class="p">=</span>%<span class="p">&lt;</span>%<span class="k">f</span>\ %M\ %<span class="k">h</span>%<span class="k">r</span>%<span class="p">=</span>%<span class="m">-10</span>.<span class="p">(</span>%<span class="k">l</span><span class="p">,</span>%<span class="k">c</span>%V\ %{eclim#project#util#ProjectStatusLine<span class="p">()</span>}%<span class="p">)</span>\ %P
 </pre></div>
 </div>
 <p>By default, this will just include the project name, but you can customize the
 output by setting g:EclimProjectStatusLine:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimProjectStatusLine <span class="p">=</span> <span class="s1">&#39;eclim(p=${name}, n=${natures})&#39;</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimProjectStatusLine <span class="p">=</span> <span class="s1">&#39;eclim(p=${name}, n=${natures})&#39;</span>
 </pre></div>
 </div>
 </li>
@@ -408,38 +322,38 @@ project name specified.</p>
 </li>
 </ul>
 <ul id="projectnatureadd">
-<li><p class="first"><strong>:ProjectNatureAdd</strong> &lt;project&gt; [&lt;nature&gt; ...]</p>
+<li><p class="first"><strong>:ProjectNatureAdd</strong> &lt;project&gt; [&lt;nature&gt; …]</p>
 <p>Adds one or more natures to a project. Supports command line completion of
 nature names.</p>
 </li>
 </ul>
 <ul id="projectnatureremove">
-<li><p class="first"><strong>:ProjectNatureRemove</strong> &lt;project&gt; [&lt;nature&gt; ...]</p>
+<li><p class="first"><strong>:ProjectNatureRemove</strong> &lt;project&gt; [&lt;nature&gt; …]</p>
 <p>Removes one or more natures from a project. Supports command line
 completion of nature names.</p>
 </li>
 </ul>
 <ul id="projectproblems">
 <li><p class="first"><strong>:ProjectProblems[!]</strong> [&lt;project&gt;]
-Populates vim's quickfix with a list of all eclipse build errors and warnings
+Populates vim’s quickfix with a list of all eclipse build errors and warnings
 for the current, or specific project, and all related projects.  Very
-similar to eclipse's &quot;Problems&quot; view.  By default, if the current quickfix
+similar to eclipse’s “Problems” view.  By default, if the current quickfix
 list represents a problems list, then as you save source files this list will
 be updated accordingly.</p>
-<p>Appending '!' limits the problem results to just errors.</p>
+<p>Appending ‘!’ limits the problem results to just errors.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">Problems are only reported for those projects that have an associated
 builder in their .project file.  If a project is not reporting errors,
 first check that a proper builder is present in the .project file.  For
 java projects created via eclim prior to eclim 1.5.2, the java builder may
-be missing, so you'll need to recreate the project, at which time eclim
+be missing, so you’ll need to recreate the project, at which time eclim
 will add the java builder.</p>
 </div>
 <p><strong>Configuration</strong></p>
-<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul id="g-eclimquickfixopen">
-<li><p class="first"><strong>g:EclimQuickFixOpen</strong> (Default: 'botright copen')</p>
+<li><p class="first"><strong>g:EclimQuickFixOpen</strong> (Default: ‘botright copen’)</p>
 <p>Specifies the command used to open the quickfix window when executing the
 :ref`:ProjectProblems` command.</p>
 </li>
@@ -466,19 +380,19 @@ problems list.</p>
 <ul id="projectcd">
 <li><p class="first"><strong>:ProjectCD</strong></p>
 <p>Changes the global current working directory to the root directory of the
-current file's project (executes a :cd).</p>
+current file’s project (executes a :cd).</p>
 </li>
 </ul>
 <ul id="projectlcd">
 <li><p class="first"><strong>:ProjectLCD</strong></p>
 <p>Changes the current working directory of the current window to the root
-directory of the current file's project (executes a :lcd).</p>
+directory of the current file’s project (executes a :lcd).</p>
 </li>
 </ul>
 <ul id="projecttree">
 <li><div class="first line-block">
-<div class="line"><strong>:ProjectTree</strong> [&lt;project&gt; &lt;project&gt; ...]</div>
-<div class="line"><strong>:ProjectTree</strong> &lt;dir&gt; [&lt;dir&gt; &lt;project&gt; ...]</div>
+<div class="line"><strong>:ProjectTree</strong> [&lt;project&gt; &lt;project&gt; …]</div>
+<div class="line"><strong>:ProjectTree</strong> &lt;dir&gt; [&lt;dir&gt; &lt;project&gt; …]</div>
 </div>
 <p>Opens a window containing a navigable tree for the root directory of one or
 more projects.  If no arguments are supplied, the resulting tree is for the
@@ -486,14 +400,14 @@ current project.  Otherwise, the tree contains multiple root nodes, one for
 each project root directory. The command also supports one or more arbitrary
 directories as arguments as well should you want to open a tree for a project
 not managed by eclim/eclipse (Note: the last part of the path will be used as
-the project's name).</p>
+the project’s name).</p>
 <p><strong>Available key mappings in project tree window.</strong></p>
 <ul class="simple">
 <li><strong>&lt;cr&gt;</strong> -
 Toggles expansion / collapsing of a directory, or executes the first
 available action for a file.</li>
 <li><strong>E</strong> -
-Opens the current file using 'edit' in the content window.</li>
+Opens the current file using ‘edit’ in the content window.</li>
 <li><strong>S</strong> -
 Opens the current file in a new split.</li>
 <li><strong>|</strong> (pipe) -
@@ -513,7 +427,7 @@ system.</li>
 <li><strong>A</strong> -
 Toggles whether or not hidden files are displayed in the tree.</li>
 <li><strong>~</strong> -
-Changes the root node to the current user's home directory.</li>
+Changes the root node to the current user’s home directory.</li>
 <li><strong>C</strong> -
 Changes the root node to the directory under cursor.</li>
 <li><strong>B</strong> -
@@ -537,7 +451,7 @@ directory path in the tree where this mapping was executed.</li>
 <li><strong>?</strong> - View the help buffer</li>
 </ul>
 <p><strong>Configuration</strong></p>
-<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul id="g-eclimprojecttreeautoopen">
 <li><p class="first"><strong>g:EclimProjectTreeAutoOpen</strong> (Default: 0)</p>
 <p>When non 0, a project tree window will be auto opened for new Vim
@@ -546,9 +460,9 @@ project.</p>
 </li>
 </ul>
 <ul id="g-eclimprojecttreeautoopenprojects">
-<li><p class="first"><strong>g:EclimProjectTreeAutoOpenProjects</strong> (Default: ['CURRENT'])</p>
+<li><p class="first"><strong>g:EclimProjectTreeAutoOpenProjects</strong> (Default: [‘CURRENT’])</p>
 <p>List of project names that will be in the project tree when it is auto
-opened.  The special name 'CURRENT' represents the current project of
+opened.  The special name ‘CURRENT’ represents the current project of
 the file being loaded in Vim when the tree is auto opened.</p>
 </li>
 </ul>
@@ -574,7 +488,7 @@ several tabs all with the same state (with the exception of folds).</p>
 <ul id="g-eclimprojecttreeactions">
 <li><p class="first"><strong>g:EclimProjectTreeActions</strong></p>
 <p>Default:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimProjectTreeActions <span class="p">=</span> [
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimProjectTreeActions <span class="p">=</span> [
     \ {<span class="s1">&#39;pattern&#39;</span>: <span class="s1">&#39;.*&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;Split&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span>: <span class="s1">&#39;split&#39;</span>}<span class="p">,</span>
     \ {<span class="s1">&#39;pattern&#39;</span>: <span class="s1">&#39;.*&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;Tab&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span>: <span class="s1">&#39;tabnew&#39;</span>}<span class="p">,</span>
     \ {<span class="s1">&#39;pattern&#39;</span>: <span class="s1">&#39;.*&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;Edit&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span>: <span class="s1">&#39;edit&#39;</span>}<span class="p">,</span>
@@ -588,8 +502,8 @@ list is used as the default (&lt;cr&gt;).</p>
 </ul>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">ProjectTree honors vim's 'wildignore' option by filtering out files
-matching those patterns from the tree. The 'A' mapping will toggle the
+<p class="last">ProjectTree honors vim’s ‘wildignore’ option by filtering out files
+matching those patterns from the tree. The ‘A’ mapping will toggle the
 display of those files along with other hidden files and directories.</p>
 </div>
 </li>
@@ -615,9 +529,9 @@ on multiple projects within a single vim instance where each project is
 isolated to its own tab. The command also supports an arbitrary directory as
 an argument instead of a project name should you want to open a tab for a
 project not managed by eclim/eclipse (Note: the last part of the path will be
-used as the project's name).</p>
+used as the project’s name).</p>
 <p><strong>Configuration</strong></p>
-<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul id="g-eclimprojecttabtreeautoopen">
 <li><p class="first"><strong>g:EclimProjectTabTreeAutoOpen</strong> (Default: 1)</p>
 <p>When non 0, the project tree window will be auto opened on the newly created tab.</p>
@@ -626,24 +540,24 @@ used as the project's name).</p>
 </li>
 </ul>
 <ul id="projectgrep">
-<li><p class="first"><strong>:ProjectGrep</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; ...]</p>
+<li><p class="first"><strong>:ProjectGrep</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; …]</p>
 <p>Executes vimgrep using the supplied arguments from the root of the
 current project allowing you to run a project wide grep from any file
 within the project.</p>
 </li>
 </ul>
 <ul id="projectgrepadd">
-<li><p class="first"><strong>:ProjectGrepAdd</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; ...]</p>
+<li><p class="first"><strong>:ProjectGrepAdd</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; …]</p>
 <p>Just like <strong>:ProjectGrep</strong> but using vimgrepadd instead.</p>
 </li>
 </ul>
 <ul id="projectlgrep">
-<li><p class="first"><strong>:ProjectLGrep</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; ...]</p>
+<li><p class="first"><strong>:ProjectLGrep</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; …]</p>
 <p>Just like <strong>:ProjectGrep</strong> but using lvimgrep instead.</p>
 </li>
 </ul>
 <ul id="projectlgrepadd">
-<li><p class="first"><strong>:ProjectLGrepAdd</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; ...]</p>
+<li><p class="first"><strong>:ProjectLGrepAdd</strong> /&lt;pattern&gt;/ &lt;file_pattern&gt; [&lt;file_pattern&gt; …]</p>
 <p>Just like <strong>:ProjectGrep</strong> but using lvimgrepadd instead.</p>
 </li>
 </ul>
@@ -659,11 +573,11 @@ location list.</p>
 <li><p class="first"><strong>:Todo</strong></p>
 <p>Just like :ProjectTodo, but limits the searching to the current file.</p>
 <p><strong>Configuration</strong></p>
-<p><a class="reference internal" href="../settings.html"><em>Vim Settings</em></a></p>
+<p><a class="reference internal" href="../settings.html"><span class="doc">Vim Settings</span></a></p>
 <ul id="g-eclimtodosearchpattern">
 <li><p class="first"><strong>g:EclimTodoSearchPattern</strong></p>
 <p>Default:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimTodoSearchPattern <span class="p">=</span> <span class="s1">&#39;\(\&lt;fixme\&gt;\|\&lt;todo\&gt;\)\c&#39;</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimTodoSearchPattern <span class="p">=</span> <span class="s1">&#39;\(\&lt;fixme\&gt;\|\&lt;todo\&gt;\)\c&#39;</span>
 </pre></div>
 </div>
 <p>Defines the regex pattern used to identify todo or fixme entries.</p>
@@ -672,7 +586,7 @@ location list.</p>
 <ul id="g-eclimtodosearchextensions">
 <li><p class="first"><strong>g:EclimTodoSearchExtensions</strong></p>
 <p>Default:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimTodoSearchExtensions <span class="p">=</span> [<span class="s1">&#39;java&#39;</span><span class="p">,</span> <span class="s1">&#39;py&#39;</span><span class="p">,</span> <span class="s1">&#39;jsp&#39;</span><span class="p">,</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span>]
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="k">let</span> <span class="k">g</span>:EclimTodoSearchExtensions <span class="p">=</span> [<span class="s1">&#39;java&#39;</span><span class="p">,</span> <span class="s1">&#39;py&#39;</span><span class="p">,</span> <span class="s1">&#39;jsp&#39;</span><span class="p">,</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span>]
 </pre></div>
 </div>
 <p>Defines a list of file extensions that will be searched for the todo / fixme
@@ -692,28 +606,26 @@ entries.</p>
   <div class="container">
     <p class="pull-right">
       
-  <a href="../../_sources/vim/core/project.txt"
+  <a href="../../_sources/vim/core/project.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Nov 10, 2021<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Dec 09, 2022<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 5.3.0
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
   </div>
 </footer>
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-575508-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLXB6990G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ERLXB6990G');
   </script>
 
   </body>

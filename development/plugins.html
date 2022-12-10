@@ -1,39 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Plugins &mdash; eclim (eclipse + vim)</title>
-    
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plugins &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'v2.21.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/jquery.ba-hashchange.js"></script>
-    <script type="text/javascript" src="../_static/jquery.hoverscroll.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap.scrollspy.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="../index.html" />
-    <link rel="up" title="Development Docs" href="index.html" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/jquery.ba-hashchange.js"></script>
+    <script src="../_static/jquery.hoverscroll.js"></script>
+    <script src="../_static/bootstrap.js"></script>
+    <script src="../_static/bootstrap.scrollspy.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Building the eclim installer" href="installer.html" />
     <link rel="prev" title="Commands" href="commands.html" />
   
@@ -41,8 +32,7 @@
 
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -56,142 +46,66 @@
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../vim/index.html">Documentation</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/util.html">Utility Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="index.html">Development Docs</a><ul class="current dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="commands.html">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -229,7 +143,7 @@
       
       
   <div class="section" id="plugins">
-<h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
+<h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this heading">¶</a></h1>
 <div class="page-toc subnav navbar">
 <div class="navbar-inner">
 <ul class="nav">
@@ -251,7 +165,7 @@
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p class="last">This guide is a work in progress. If in the process of writing a new plugin
-you find anything here that is unclear or missing, please don't hesitate to
+you find anything here that is unclear or missing, please don’t hesitate to
 post to the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim-dev</a> mailing list with questions, suggestions, etc.</p>
 </div>
 <p>To allow eclim to support different languages, eclim is broken up into eclipse
@@ -261,28 +175,28 @@ eclipse install to determine which features are available and will add the
 corresponding eclim plugins to expose those features. This page documents the
 core aspects of what goes into the creation of a new eclim plugin.</p>
 <div class="section" id="bootstrapping-the-plugin-artifacts">
-<h2>Bootstrapping the plugin artifacts<a class="headerlink" href="#bootstrapping-the-plugin-artifacts" title="Permalink to this headline">¶</a></h2>
+<h2>Bootstrapping the plugin artifacts<a class="headerlink" href="#bootstrapping-the-plugin-artifacts" title="Permalink to this heading">¶</a></h2>
 <p>Eclim includes a set of templates to help you bootstrap a new plugin. To utilize
 them you can run the following ant target:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant plugin.create
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant plugin.create
 </pre></div>
 </div>
 <p>You will be prompted to enter a name for this plugin along with some guidelines
 on choosing an appropriate name.</p>
-<p>Once you've chosen a name, the plugin's directory structure will be created and
-populated with bare bones version of the required artifacts. Eclim's
-<code>build.xml</code> file will also be updated to include a target to the new plugin's
+<p>Once you’ve chosen a name, the plugin’s directory structure will be created and
+populated with bare bones version of the required artifacts. Eclim’s
+<code>build.xml</code> file will also be updated to include a target to the new plugin’s
 unit test target.</p>
 </div>
 <div class="section" id="updating-the-initial-artifacts">
-<h2>Updating the initial artifacts<a class="headerlink" href="#updating-the-initial-artifacts" title="Permalink to this headline">¶</a></h2>
-<p>After you've bootstrapped your plugin, you can now start updating the generated
+<h2>Updating the initial artifacts<a class="headerlink" href="#updating-the-initial-artifacts" title="Permalink to this heading">¶</a></h2>
+<p>After you’ve bootstrapped your plugin, you can now start updating the generated
 artifacts:</p>
 <div class="section" id="build-plugin-name-gant">
-<h3>build_&lt;plugin_name&gt;.gant<a class="headerlink" href="#build-plugin-name-gant" title="Permalink to this headline">¶</a></h3>
-<p>The first file you'll need to modify is a gant file for your plugin. The main
+<h3>build_&lt;plugin_name&gt;.gant<a class="headerlink" href="#build-plugin-name-gant" title="Permalink to this heading">¶</a></h3>
+<p>The first file you’ll need to modify is a gant file for your plugin. The main
 eclim build.gant script will load this file during the build process to
-determine what the plugin's eclipse dependency is, so it knows whether it can be
+determine what the plugin’s eclipse dependency is, so it knows whether it can be
 built against the target eclipse install. So the first thing we need to do is to
 fill in that information by updating the <code>feature_&lt;plugin_name&gt;</code> variable with
 the name of the eclipse feature that this plugin depends on. For example, the
@@ -290,69 +204,69 @@ eclim jdt plugin has this set to <code>'org.eclipse.jdt'</code>. The build scrip
 look in the <code>features</code> directory of your eclipse install (including the
 <code>dropins</code> and your user local eclipse dir if set), to find this feature, so
 the value you set, must be found in one of those locations (the version suffixes
-will be removed from the features in order to match it against the value you've
+will be removed from the features in order to match it against the value you’ve
 set).</p>
-<p>You'll also notice that there is a unit test target in the gant file. You can
+<p>You’ll also notice that there is a unit test target in the gant file. You can
 ignore that for now.</p>
 </div>
 <div class="section" id="meta-inf-manifest-mf">
-<h3>META-INF/MANIFEST.MF<a class="headerlink" href="#meta-inf-manifest-mf" title="Permalink to this headline">¶</a></h3>
-<p>The next file to note is the plugin's <code>META-INF/MANIFEST.MF</code>. This is the file
+<h3>META-INF/MANIFEST.MF<a class="headerlink" href="#meta-inf-manifest-mf" title="Permalink to this heading">¶</a></h3>
+<p>The next file to note is the plugin’s <code>META-INF/MANIFEST.MF</code>. This is the file
 that eclipse will use to determine how to load the bundle and what to include in
 its classpath. The only part of this file that you should edit is the
 <code>Require-Bundle:</code> section. This is a comma separated list of bundles (or
 plugins) which this bundle depends on. When this bundle is loaded only those
 bundles listed here will be available in the classpath. So when you start
-running commands you've written later, if you receive a
+running commands you’ve written later, if you receive a
 <code>ClassNotFoundException</code>, that is likely due to the bundle containing that
-class not being listed in your plugin's <code>Require-Bundle:</code> list. At this point
-you probably don't know yet what bundles you need to add to this list. When you
-start writing commands for your plugin, you'll have to find out which bundles
+class not being listed in your plugin’s <code>Require-Bundle:</code> list. At this point
+you probably don’t know yet what bundles you need to add to this list. When you
+start writing commands for your plugin, you’ll have to find out which bundles
 contain the classes imported from the eclipse plugin you are integrating with,
-and you'll need to add those bundles accordingly.</p>
-<p>It's also worth noting that eclim provides a custom classpath container which
+and you’ll need to add those bundles accordingly.</p>
+<p>It’s also worth noting that eclim provides a custom classpath container which
 scans the manifest of each eclim plugin and loads the required bundles of each
 into the classpath. So when adding new bundles, if you want validation, search,
-code completion, etc to work with classes from those new bundles, you'll have to
+code completion, etc to work with classes from those new bundles, you’ll have to
 restart the eclim daemon. While restarting can be annoying, this is generally
 better than having to add/remove entries from the <code>.classpath</code> file or
 worrying about one user having different bundle version numbers from another.</p>
 </div>
 <div class="section" id="pluginresources-java">
-<h3>PluginResources.java<a class="headerlink" href="#pluginresources-java" title="Permalink to this headline">¶</a></h3>
-<p>At this point you'll typically need to start customizing your plugin's
+<h3>PluginResources.java<a class="headerlink" href="#pluginresources-java" title="Permalink to this heading">¶</a></h3>
+<p>At this point you’ll typically need to start customizing your plugin’s
 <code>org.eclim.&lt;name&gt;/java/org/eclim/plugin/&lt;name&gt;/PluginResources.java</code> file.
 Here is where you will map a short alias to the project nature, or natures, of
 the plugin you are integrating with, register a project manager for initializing
-project's for this plugin, register any plugin settings that users can
-configure, etc. You'll be doing all this inside of the <code>initialize</code> method
+project’s for this plugin, register any plugin settings that users can
+configure, etc. You’ll be doing all this inside of the <code>initialize</code> method
 which has been generated for you.</p>
 <div class="section" id="project-nature">
-<h4>Project Nature<a class="headerlink" href="#project-nature" title="Permalink to this headline">¶</a></h4>
-<p>You'll first need to find out where the plugin's nature id is defined. Here are
+<h4>Project Nature<a class="headerlink" href="#project-nature" title="Permalink to this heading">¶</a></h4>
+<p>You’ll first need to find out where the plugin’s nature id is defined. Here are
 some examples that should give you an idea of where to look:</p>
 <ul class="simple">
 <li><strong>jdt:</strong> org.eclipse.jdt.core.JavaCore.NATURE_ID</li>
 </ul>
 <p>One way to find it is to open up the <code>.project</code> file in a project containing
 the nature, locate the fully qualified name in the <code>&lt;natures&gt;</code> section, then
-grep the plugin's code for that name.</p>
+grep the plugin’s code for that name.</p>
 <p>Once you have the reference to the nature id, you can then create a public
 static variable called <code>NATURE</code>:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">NATURE</span> <span class="o">=</span> <span class="n">SomeClass</span><span class="p">.</span><span class="na">NATURE_ID</span><span class="p">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">NATURE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SomeClass</span><span class="p">.</span><span class="na">NATURE_ID</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
-<p>You'll be using this constant as the key to register features for project
-containing this nature, but first we'll register a short alias for this nature
-since the actual nature id tends to be long and unstandardized, and we don't
+<p>You’ll be using this constant as the key to register features for project
+containing this nature, but first we’ll register a short alias for this nature
+since the actual nature id tends to be long and unstandardized, and we don’t
 want users to have to type it out when creating projects from eclim:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">ProjectNatureFactory</span><span class="p">.</span><span class="na">addNature</span><span class="p">(</span><span class="s">&quot;shortname&quot;</span><span class="p">,</span> <span class="n">NATURE</span><span class="p">);</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ProjectNatureFactory</span><span class="p">.</span><span class="na">addNature</span><span class="p">(</span><span class="s">&quot;shortname&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">NATURE</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="project-manager">
-<h4>Project Manager<a class="headerlink" href="#project-manager" title="Permalink to this headline">¶</a></h4>
-<p>The next thing you'll probably need to do is to create a project manager for
+<h4>Project Manager<a class="headerlink" href="#project-manager" title="Permalink to this heading">¶</a></h4>
+<p>The next thing you’ll probably need to do is to create a project manager for
 your project
 (<code>org.eclim.&lt;name&gt;/java/org/eclim/plugin/&lt;name&gt;/project/SomeProjectManager.java</code>).
 The project manager is responsible for performing any post create, update,
@@ -361,54 +275,54 @@ include things such as creating an initial classpath/buildpath, validate the
 classpath/buildpath on update, forcing a full update of the search index on
 refresh, or any number of other things.</p>
 <p>Overriding the <code>create</code> method will almost certainly be necessary, but the
-logic you'll need here varies widely.  Finding what you'll need is a matter of
-digging through the parent plugin's source code, typically looking for the
+logic you’ll need here varies widely.  Finding what you’ll need is a matter of
+digging through the parent plugin’s source code, typically looking for the
 project creation wizard class, to see what it does to create a project of this
 nature and later comparing the created artifacts from your code against those of
 a project created from the eclipse gui. This can be a difficult hurdle to get
-past for someone doing this the first time, so please don't be shy about asking
+past for someone doing this the first time, so please don’t be shy about asking
 for help on the <a class="reference external" href="http://groups.google.com/group/eclim-dev">eclim-dev</a> mailing list.</p>
 <p>Eclim does provide a couple ant tasks to at least help you to quickly extract
 any docs and source code found in your eclipse install:</p>
 <ul>
 <li><p class="first"><strong>eclipse.doc:</strong> This target will extract any doc jars from your eclipse
-install to a 'doc' directory in your eclipse home (or user local eclipse
+install to a ‘doc’ directory in your eclipse home (or user local eclipse
 home).</p>
 </li>
 <li><p class="first"><strong>eclipse.src:</strong> This target will extract any src jars from your eclipse
-install to a 'src' directory in your eclipse home (or user local eclipse
+install to a ‘src’ directory in your eclipse home (or user local eclipse
 home). If you download the sdk version of eclipse then the jdt and all the
 core eclipse source will be available. Some other plugins provide sdk versions
 which include the source code and this target can extract those as well, but
-some plugins don't seem to have this option when installing via eclipse's
+some plugins don’t seem to have this option when installing via eclipse’s
 update manager (and may not include the source when installed from a system
 package manager). For those you can often download a zip version of their
-update site which should include source bundles. Once you've extracted that
+update site which should include source bundles. Once you’ve extracted that
 file, you can tell this target to extract source bundles from a specified
 directory. Here is an example of extracting the source from an unpacked dltk
 update site:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
 </pre></div>
 </div>
 </li>
 </ul>
-<p>Once you've created your project manager, you then map it to your plugin's
+<p>Once you’ve created your project manager, you then map it to your plugin’s
 nature inside of your <code>PluginResources.initialize</code> method like so:</p>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">ProjectManagement</span><span class="p">.</span><span class="na">addProjectManager</span><span class="p">(</span><span class="n">NATURE</span><span class="p">,</span> <span class="k">new</span> <span class="n">SomeProjectManager</span><span class="p">());</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ProjectManagement</span><span class="p">.</span><span class="na">addProjectManager</span><span class="p">(</span><span class="n">NATURE</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SomeProjectManager</span><span class="p">());</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="project-settings">
-<h4>Project Settings<a class="headerlink" href="#project-settings" title="Permalink to this headline">¶</a></h4>
+<h4>Project Settings<a class="headerlink" href="#project-settings" title="Permalink to this heading">¶</a></h4>
 <p>At this point you should have the minimum of what is needed for a new plugin.
-Hopefully you can now create new projects with your plugin's defined nature.
-The next step would be to start adding <a class="reference internal" href="commands.html"><em>commands</em></a>
+Hopefully you can now create new projects with your plugin’s defined nature.
+The next step would be to start adding <a class="reference internal" href="commands.html"><span class="doc">commands</span></a>
 to provide validation, code completion, etc. The remaining items in this list
 are not required to continue. They provide you with the ability to setup your
-own preferences or to expose the parent plugin's defined preferences inside of
-vim. When you've come to the point that you need to work with preferences, then
+own preferences or to expose the parent plugin’s defined preferences inside of
+vim. When you’ve come to the point that you need to work with preferences, then
 feel free to come back here and continue reading.</p>
-<p><strong>To Be Continued...</strong></p>
+<p><strong>To Be Continued…</strong></p>
 </div>
 </div>
 </div>
@@ -423,28 +337,26 @@ feel free to come back here and continue reading.</p>
   <div class="container">
     <p class="pull-right">
       
-  <a href="../_sources/development/plugins.txt"
+  <a href="../_sources/development/plugins.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Nov 10, 2021<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Dec 09, 2022<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 5.3.0
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
   </div>
 </footer>
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-575508-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLXB6990G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ERLXB6990G');
   </script>
 
   </body>

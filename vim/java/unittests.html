@@ -1,39 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Unit Tests &mdash; eclim (eclipse + vim)</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unit Tests &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'v2.21.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.ba-hashchange.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.hoverscroll.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap.scrollspy.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="../../index.html" />
-    <link rel="up" title="Java" href="index.html" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/jquery.ba-hashchange.js"></script>
+    <script src="../../_static/jquery.hoverscroll.js"></script>
+    <script src="../../_static/bootstrap.js"></script>
+    <script src="../../_static/bootstrap.scrollspy.js"></script>
+    <script src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Logging (log4j, etc)" href="logging.html" />
     <link rel="prev" title="Method Generation" href="methods.html" />
   
@@ -41,8 +32,7 @@
 
   <link rel="stylesheet" type="text/css" href="../../_static/docs.css" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -56,142 +46,66 @@
             <li class="dropdown">
   <a href="../../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="../index.html">Documentation</a><ul class="current dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../core/util.html">Utility Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../html/index.html">Html / Css</a></li>
 <li class="toctree-l2 current dropdown-submenu active"><a class="reference internal" href="index.html">Java</a><ul class="current dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="methods.html">Method Generation</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3 current active"><a class="current reference internal" href="">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../../development/index.html">Development Docs</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../development/architecture.html">Architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/commands.html">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development/plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../development/installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -229,7 +143,7 @@
       
       
   <div class="section" id="unit-tests">
-<h1>Unit Tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h1>
+<h1>Unit Tests<a class="headerlink" href="#unit-tests" title="Permalink to this heading">¶</a></h1>
 <div class="page-toc subnav navbar">
 <div class="navbar-inner">
 <ul class="nav">
@@ -245,22 +159,22 @@
 </div>
 </div>
 <div class="section" id="junit">
-<span id="id1"></span><h2>JUnit<a class="headerlink" href="#junit" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>JUnit<a class="headerlink" href="#junit" title="Permalink to this heading">¶</a></h2>
 <div class="section" id="executing-tests">
-<h3>Executing tests.<a class="headerlink" href="#executing-tests" title="Permalink to this headline">¶</a></h3>
-<p>Eclim's <strong>:JUnit</strong> command allows you to execute individual test or individual
+<h3>Executing tests.<a class="headerlink" href="#executing-tests" title="Permalink to this heading">¶</a></h3>
+<p>Eclim’s <strong>:JUnit</strong> command allows you to execute individual test or individual
 methods from your tests.</p>
-<p>If you'd like to run a particular test you can do so by supplying the fully
-qualified class name of the test to run (you can use vim's tab completion here
+<p>If you’d like to run a particular test you can do so by supplying the fully
+qualified class name of the test to run (you can use vim’s tab completion here
 to alleviate having to type the full name):</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit org.test.MyTest
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit org.test.MyTest
 </pre></div>
 </div>
 <p>Another way is to simply run <strong>:JUnit</strong> with no arguments and let it decide
 what to run based on the current context of the cursor:</p>
 <ul class="simple">
 <li>If you have a junit test file open and the cursor is not inside one of the
-test methods, then all of the current file's test methods will be executed.</li>
+test methods, then all of the current file’s test methods will be executed.</li>
 <li>If the cursor is on or inside of a test method, then just that method will be
 run.</li>
 <li>If you have a regular class open and run <strong>:JUnit</strong>, eclim will attempt to
@@ -269,25 +183,25 @@ locate the corresponding test and run it.</li>
 attempt to locate the test and then locate the corresponding test method for
 the current method in that test and run just that test method.</li>
 </ul>
-<p>If you'd like to run all tests for the current file, regardless of whether the
-cursor is on a method or not, you can do so by running <strong>:JUnit</strong> with the '%'
+<p>If you’d like to run all tests for the current file, regardless of whether the
+cursor is on a method or not, you can do so by running <strong>:JUnit</strong> with the ‘%’
 argument:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit %
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit %
 </pre></div>
 </div>
-<p>For cases where you'd like to run all your unit tests you can run <strong>:JUnit</strong>
-with the '*' argument and eclim will locate all your test files and run them:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit *
+<p>For cases where you’d like to run all your unit tests you can run <strong>:JUnit</strong>
+with the ‘*’ argument and eclim will locate all your test files and run them:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit *
 </pre></div>
 </div>
 <p>You can also pass in an ant compatible <a class="reference external" href="http://ant.apache.org/manual/dirtasks.html#patterns">pattern</a> to match the tests
-you'd like to run:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit **<span class="sr">/tests/</span>*Test
+you’d like to run:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>JUnit **<span class="sr">/tests/</span>*Test
 </pre></div>
 </div>
 </div>
 <div class="section" id="find-the-test-for-the-current-source-file">
-<span id="junitfindtest"></span><h3>Find the test for the current source file.<a class="headerlink" href="#find-the-test-for-the-current-source-file" title="Permalink to this headline">¶</a></h3>
+<span id="junitfindtest"></span><h3>Find the test for the current source file.<a class="headerlink" href="#find-the-test-for-the-current-source-file" title="Permalink to this heading">¶</a></h3>
 <p>When editing a java file, if you would like to open the corresponding test, you
 can issue the command <strong>:JUnitFindTest</strong>. When the cursor is on a method in
 your source file this command will also try to find the corresponding test
@@ -296,29 +210,29 @@ method within the test file.</p>
 corresponding class that is being tested.</p>
 </div>
 <div class="section" id="opening-test-results-run-from-you-build-tool">
-<span id="junitresult"></span><h3>Opening test results run from you build tool.<a class="headerlink" href="#opening-test-results-run-from-you-build-tool" title="Permalink to this headline">¶</a></h3>
+<span id="junitresult"></span><h3>Opening test results run from you build tool.<a class="headerlink" href="#opening-test-results-run-from-you-build-tool" title="Permalink to this heading">¶</a></h3>
 <p>If you are running your unit tests from a build tool like ant or maven, then
 you most likely are writing those results to a directory in your project. If so
-then you can set the <a class="reference internal" href="#org-eclim-java-junit-output-dir"><span>org.eclim.java.junit.output_dir</span></a> setting to that location which then allows
+then you can set the <a class="reference internal" href="#org-eclim-java-junit-output-dir"><span class="std std-ref">org.eclim.java.junit.output_dir</span></a> setting to that location which then allows
 you to use the command <strong>:JUnitResult</strong> to locate and opening the result file
 for the currently open test or the test supplied as an argument.</p>
 </div>
 <div class="section" id="generating-test-method-stubs">
-<span id="junitimpl"></span><h3>Generating test method stubs.<a class="headerlink" href="#generating-test-method-stubs" title="Permalink to this headline">¶</a></h3>
+<span id="junitimpl"></span><h3>Generating test method stubs.<a class="headerlink" href="#generating-test-method-stubs" title="Permalink to this heading">¶</a></h3>
 <p>While editing junit files, eclim provides functionality to generate test method
-stubs similar to the <a class="reference internal" href="methods.html#javaimpl"><span>method override / impl</span></a>
+stubs similar to the <a class="reference internal" href="methods.html#javaimpl"><span class="std std-ref">method override / impl</span></a>
 functionality provided for non-test-case classes.  The only difference is that
 instead of <strong>:JavaImpl</strong>, you use <strong>:JUnitImpl</strong> to open the window of possible
 methods to implement.</p>
 <p>To determine what class the current test is for, eclim expects that the
 standard naming convention for tests is followed, where the test has the same
-fully qualified class name as the target class with a 'Test' suffix.</p>
+fully qualified class name as the target class with a ‘Test’ suffix.</p>
 <p>So for the test <code>org.foo.bar.BazTest</code>, the exepected class being tested would
 be <code>org.foo.bar.Baz</code>.</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">Eclim also supports tests with a 'Test' prefix instead of a suffix and in
-the case of neither a 'Test' prefix or suffix, it will search for a class of
+<p class="last">Eclim also supports tests with a ‘Test’ prefix instead of a suffix and in
+the case of neither a ‘Test’ prefix or suffix, it will search for a class of
 the same name in a different package should you perhaps use a package
 convention for your tests rather than a class name convention.</p>
 </div>
@@ -330,13 +244,13 @@ the hierarchy for the class being tested, then the corresponding test method
 stub will be inserted, otherwise a regular overriding stub will be generated.</p>
 </div>
 <div class="section" id="configuration">
-<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="../settings.html"><em>Eclim Settings</em></a></p>
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference internal" href="../settings.html"><span class="doc">Eclim Settings</span></a></p>
 <ul id="org-eclim-java-junit-output-dir">
 <li><p class="first"><strong>org.eclim.java.junit.output_dir</strong> -
 Defines the project relative location of the junit test results.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.output_dir</span><span class="o">=</span><span class="s">build/test/results</span>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.output_dir</span><span class="o">=</span><span class="s">build/test/results</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -346,7 +260,7 @@ Defines the project relative location of the junit test results.</p>
 Json formatted list of strings to supply as args to the jvm when forking to
 run unit tests.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.jvmargs</span><span class="o">=</span><span class="s">[&quot;-Xmx512m&quot;]</span>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.jvmargs</span><span class="o">=</span><span class="s">[&quot;-Xmx512m&quot;]</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -356,7 +270,7 @@ run unit tests.</p>
 Json formatted list of strings to supply as system properties to the jvm when
 forking to run unit tests.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.sysprops</span><span class="o">=</span><span class="s">[&quot;file.encoding=UTF8&quot;, &quot;foo.bar=baz&quot;]</span>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.sysprops</span><span class="o">=</span><span class="s">[&quot;file.encoding=UTF8&quot;, &quot;foo.bar=baz&quot;]</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -366,7 +280,7 @@ forking to run unit tests.</p>
 Json formatted list of strings to supply as environment variables to the jvm
 when forking to run unit tests.</p>
 <p>Ex.</p>
-<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.envvars</span><span class="o">=</span><span class="s">[&quot;FOO=bar&quot;]</span>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">org.eclim.java.junit.envvars</span><span class="o">=</span><span class="s">[&quot;FOO=bar&quot;]</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -384,28 +298,26 @@ when forking to run unit tests.</p>
   <div class="container">
     <p class="pull-right">
       
-  <a href="../../_sources/vim/java/unittests.txt"
+  <a href="../../_sources/vim/java/unittests.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Nov 10, 2021<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Dec 09, 2022<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 5.3.0
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
   </div>
 </footer>
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-575508-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLXB6990G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ERLXB6990G');
   </script>
 
   </body>

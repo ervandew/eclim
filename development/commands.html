@@ -1,39 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Commands &mdash; eclim (eclipse + vim)</title>
-    
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commands &#8212; eclim (eclipse + vim)</title>
     <link rel="stylesheet" href="../_static/jquery.hoverscroll.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-responsive.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'v2.21.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/jquery.ba-hashchange.js"></script>
-    <script type="text/javascript" src="../_static/jquery.hoverscroll.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap.scrollspy.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="eclim (eclipse + vim)" href="../index.html" />
-    <link rel="up" title="Development Docs" href="index.html" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/jquery.ba-hashchange.js"></script>
+    <script src="../_static/jquery.hoverscroll.js"></script>
+    <script src="../_static/bootstrap.js"></script>
+    <script src="../_static/bootstrap.scrollspy.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Plugins" href="plugins.html" />
     <link rel="prev" title="Architecture" href="architecture.html" />
   
@@ -41,8 +32,7 @@
 
   <link rel="stylesheet" type="text/css" href="../_static/docs.css" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
   <div id="navbar" class="navbar navbar-inverse no-js">
     <div class="navbar-inner">
@@ -56,142 +46,66 @@
             <li class="dropdown">
   <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">Contents <b class="caret"></b></a>
   <ul class="current dropdown-menu">
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Download / Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gettinghelp.html">Getting Help</a></li>
 <li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="../vim/index.html">Documentation</a><ul class="dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../eclimd.html">The Eclim Daemon</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/core/index.html">Core Functionality</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/eclim.html">Eclim Manage / Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/project.html">Eclipse Project Management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/core/history.html">Eclipse Local History</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/locate.html">Locate File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/core/util.html">Utility Commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/html/index.html">Html / Css</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/java/index.html">Java</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/classpath.html">Eclipse Classpath Editing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/validate.html">Java Validation / Correction</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/complete.html">Java Code Completion</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/search.html">Java Search</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/java.html">Java / Jps</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/javadoc.html">Javadoc Support</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/format.html">Java Source Code Formatting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/refactor.html">Java Refactoring</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/inspection.html">Java Code Inspection</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/import.html">Automated Imports</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/types.html">Type Creation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/methods.html">Method Generation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/unittests.html">Unit Tests</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/logging.html">Logging (log4j, etc)</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/ant.html">Ant</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/maven.html">Maven</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/java/webxml.html">WEB-INF/web.xml</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/javascript/index.html">Javascript</a></li>
 <li class="toctree-l2 dropdown-submenu"><a class="reference internal" href="../vim/python/index.html">Python</a><ul class="dropdown-menu">
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/path.html">Python Interpreter / Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/validate.html">Python Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../vim/python/complete.html">Python Code Completion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a><ul class="simple">
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/search.html">Python Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../vim/python/django.html">Django</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../vim/xml/index.html">Xml / Dtd / Xsd</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current dropdown-submenu active"><a class="reference internal" href="index.html">Development Docs</a><ul class="current dropdown-menu">
-<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Developers Guide</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.html">Developers Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="">Commands</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installer.html">Building the eclim installer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ / Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">History of Changes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../relatedprojects.html">Related Projects</a></li>
 </ul>
 
 </li>
@@ -229,7 +143,7 @@
       
       
   <div class="section" id="commands">
-<h1>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h1>
+<h1>Commands<a class="headerlink" href="#commands" title="Permalink to this heading">¶</a></h1>
 <div class="page-toc subnav navbar">
 <div class="navbar-inner">
 <ul class="nav">
@@ -244,78 +158,78 @@ command on the daemon which handles calling the appropriate eclipse APIs and
 returning a result back to the client. This page will walk you through creating
 a simple command to familiarize you with the process.</p>
 <div class="section" id="creating-a-command">
-<h2>Creating a Command<a class="headerlink" href="#creating-a-command" title="Permalink to this headline">¶</a></h2>
+<h2>Creating a Command<a class="headerlink" href="#creating-a-command" title="Permalink to this heading">¶</a></h2>
 <p>Commands are simple classes which extend <code>AbstractCommand</code> and are registered
 using the <code>&#64;Command</code> annotation. They then define an <code>execute</code> method which
 can return any object that can be serialized appropriately using <a class="reference external" href="http://code.google.com/p/google-gson/">gson</a>.</p>
 <p>Here is an example of a trivial command which returns a map of the arguments it
 was supplied, with the supplied project and file paths converted to absolute
-paths and the file byte offset converted to a character offset (eclim's vim
+paths and the file byte offset converted to a character offset (eclim’s vim
 function <code>eclim#util#GetOffset()</code> returns the offset in bytes since getting a
 character offset in vim with multi byte characters is less reliable, but most
 eclipse APIs expect character offsets):</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">Eclim's source code is grouped by bundles (org.eclim, org.eclim.core, etc),
+<p class="last">Eclim’s source code is grouped by bundles (org.eclim, org.eclim.core, etc),
 each of which has <code>java</code> directory containing the java source code for that
 bundle.</p>
 </div>
-<div class="highlight-java"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.eclim.plugin.core.command.sample</span><span class="p">;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nn">org.eclim.plugin.core.command.sample</span><span class="p">;</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.HashMap</span><span class="p">;</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="nn">org.eclim.annotation.Command</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.eclim.annotation.Command</span><span class="p">;</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="nn">org.eclim.command.CommandLine</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">org.eclim.command.Options</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.eclim.command.CommandLine</span><span class="p">;</span><span class="w"></span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.eclim.command.Options</span><span class="p">;</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="nn">org.eclim.plugin.core.command.AbstractCommand</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.eclim.plugin.core.command.AbstractCommand</span><span class="p">;</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="nn">org.eclim.plugin.core.util.ProjectUtils</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.eclim.plugin.core.util.ProjectUtils</span><span class="p">;</span><span class="w"></span>
 
-<span class="kn">import</span> <span class="nn">org.eclipse.core.resources.IProject</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.eclipse.core.resources.IProject</span><span class="p">;</span><span class="w"></span>
 
-<span class="nd">@Command</span><span class="p">(</span>
-  <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;echo&quot;</span><span class="p">,</span>
-  <span class="n">options</span> <span class="o">=</span>
-    <span class="s">&quot;REQUIRED p project ARG,&quot;</span> <span class="o">+</span>
-    <span class="s">&quot;REQUIRED f file ARG,&quot;</span> <span class="o">+</span>
-    <span class="s">&quot;REQUIRED o offset ARG,&quot;</span> <span class="o">+</span>
-    <span class="s">&quot;OPTIONAL e encoding ARG&quot;</span>
-<span class="p">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EchoCommand</span>
-  <span class="kd">extends</span> <span class="n">AbstractCommand</span>
-<span class="p">{</span>
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="n">Object</span> <span class="nf">execute</span><span class="p">(</span><span class="n">CommandLine</span> <span class="n">commandLine</span><span class="p">)</span>
-    <span class="kd">throws</span> <span class="n">Exception</span>
-  <span class="p">{</span>
-    <span class="n">String</span> <span class="n">projectName</span> <span class="o">=</span> <span class="n">commandLine</span><span class="p">.</span><span class="na">getValue</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">PROJECT_OPTION</span><span class="p">);</span>
-    <span class="n">String</span> <span class="n">file</span> <span class="o">=</span> <span class="n">commandLine</span><span class="p">.</span><span class="na">getValue</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">FILE_OPTION</span><span class="p">);</span>
+<span class="nd">@Command</span><span class="p">(</span><span class="w"></span>
+<span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;echo&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;REQUIRED p project ARG,&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;REQUIRED f file ARG,&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;REQUIRED o offset ARG,&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;OPTIONAL e encoding ARG&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EchoCommand</span><span class="w"></span>
+<span class="w">  </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractCommand</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nd">@Override</span><span class="w"></span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="n">CommandLine</span><span class="w"> </span><span class="n">commandLine</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">projectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">commandLine</span><span class="p">.</span><span class="na">getValue</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">PROJECT_OPTION</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">commandLine</span><span class="p">.</span><span class="na">getValue</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">FILE_OPTION</span><span class="p">);</span><span class="w"></span>
 
-    <span class="n">IProject</span> <span class="n">project</span> <span class="o">=</span> <span class="n">ProjectUtils</span><span class="p">.</span><span class="na">getProject</span><span class="p">(</span><span class="n">projectName</span><span class="p">);</span>
+<span class="w">    </span><span class="n">IProject</span><span class="w"> </span><span class="n">project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ProjectUtils</span><span class="p">.</span><span class="na">getProject</span><span class="p">(</span><span class="n">projectName</span><span class="p">);</span><span class="w"></span>
 
-    <span class="c1">// translates client supplied byte offset to a character offset using the</span>
-    <span class="c1">// &#39;project&#39;, &#39;file&#39;, &#39;offset&#39;, and &#39;encoding&#39; command line args.</span>
-    <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">getOffset</span><span class="p">(</span><span class="n">commandLine</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// translates client supplied byte offset to a character offset using the</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// &#39;project&#39;, &#39;file&#39;, &#39;offset&#39;, and &#39;encoding&#39; command line args.</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getOffset</span><span class="p">(</span><span class="n">commandLine</span><span class="p">);</span><span class="w"></span>
 
-    <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="p">();</span>
-    <span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;project&quot;</span><span class="p">,</span> <span class="n">ProjectUtils</span><span class="p">.</span><span class="na">getPath</span><span class="p">(</span><span class="n">project</span><span class="p">));</span>
-    <span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;file&quot;</span><span class="p">,</span> <span class="n">ProjectUtils</span><span class="p">.</span><span class="na">getFilePath</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">file</span><span class="p">));</span>
-    <span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;offset&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">commandLine</span><span class="p">.</span><span class="na">hasOption</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">ENCODING_OPTION</span><span class="p">)){</span>
-      <span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;encoding&quot;</span><span class="p">,</span> <span class="n">commandLine</span><span class="p">.</span><span class="na">getValue</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">ENCODING_OPTION</span><span class="p">));</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">Object</span><span class="o">&gt;</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;project&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ProjectUtils</span><span class="p">.</span><span class="na">getPath</span><span class="p">(</span><span class="n">project</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;file&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ProjectUtils</span><span class="p">.</span><span class="na">getFilePath</span><span class="p">(</span><span class="n">project</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;offset&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">offset</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">commandLine</span><span class="p">.</span><span class="na">hasOption</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">ENCODING_OPTION</span><span class="p">)){</span><span class="w"></span>
+<span class="w">      </span><span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;encoding&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">commandLine</span><span class="p">.</span><span class="na">getValue</span><span class="p">(</span><span class="n">Options</span><span class="p">.</span><span class="na">ENCODING_OPTION</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>When registering the command with the <code>&#64;Command</code> annotation, you give it a
 name and a comma separated list of options. Each option consists of 4 parts in
 the form of:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>REQUIRED|OPTIONAL s longname ARG|NOARG|ANY
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REQUIRED</span><span class="o">|</span><span class="n">OPTIONAL</span> <span class="n">s</span> <span class="n">longname</span> <span class="n">ARG</span><span class="o">|</span><span class="n">NOARG</span><span class="o">|</span><span class="n">ANY</span>
 </pre></div>
 </div>
 <p>Where each part is defined as:</p>
@@ -328,73 +242,73 @@ of additional arguments. In the case of <code>ANY</code>, you should only have o
 option with that value and when running the command from the command line,
 that option should be supplied last.</li>
 </ol>
-<p>That should give you the basics on what's involved with creating a new command,
+<p>That should give you the basics on what’s involved with creating a new command,
 but the biggest hurdle for creating most commands is locating and deciphering
 the eclipse API calls that are necessary to implement the feature you want.
-Unfortunately most of the eclipse code that you'll need to hook into will most
-likely have little to no documentation so you're going to have to dig through
+Unfortunately most of the eclipse code that you’ll need to hook into will most
+likely have little to no documentation so you’re going to have to dig through
 the eclipse code. Eclim does provide a couple ant tasks to at least help you to
 quickly extract any docs or source code found in your eclipse install:</p>
 <ul>
 <li><p class="first"><strong>eclipse.doc:</strong> This target will extract any doc jars from your eclipse
-install to a 'doc' directory in your eclipse home (or user local eclipse
+install to a ‘doc’ directory in your eclipse home (or user local eclipse
 home).</p>
 </li>
 <li><p class="first"><strong>eclipse.src:</strong> This target will extract any src jars from your eclipse
-install to a 'src' directory in your eclipse home (or user local eclipse
+install to a ‘src’ directory in your eclipse home (or user local eclipse
 home). If you download the sdk version of eclipse then the jdt and all the
 core eclipse source will be available. Some other plugins provide sdk versions
 which include the source code and this target can extract those as well, but
-some plugins don't seem to have this option when installing via eclipse's
+some plugins don’t seem to have this option when installing via eclipse’s
 update manager (and may not include the source when installed from a system
 package manager). For those you can often download a zip version of their
-update site which should include source bundles. Once you've extracted that
+update site which should include source bundles. Once you’ve extracted that
 file, you can tell this target to extract source bundles from a specified
 directory. Here is an example of extracting the source from an unpacked dltk
 update site:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ant -Dsrc.dir=/home/ervandew/downloads/dltk-core-5.0.0/plugins eclipse.src
 </pre></div>
 </div>
 </li>
 </ul>
 </div>
 <div class="section" id="running-a-command">
-<h2>Running a Command<a class="headerlink" href="#running-a-command" title="Permalink to this headline">¶</a></h2>
-<p>Once you've created your command you then need to compile the code using eclim's
-ant build file. After you've done that you can then start eclimd and execute
+<h2>Running a Command<a class="headerlink" href="#running-a-command" title="Permalink to this heading">¶</a></h2>
+<p>Once you’ve created your command you then need to compile the code using eclim’s
+ant build file. After you’ve done that you can then start eclimd and execute
 your command from the command line to test it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ eclim -pretty -command echo -p eclim -f org.eclim.core/plugin.properties -o 42 -e utf-8
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ eclim -pretty -command echo -p eclim -f org.eclim.core/plugin.properties -o 42 -e utf-8
 </pre></div>
 </div>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
 <p>As you are developing your commands, you can avoid restarting eclimd after
-every change by using eclim's <code>reload</code> command which will reload all of
-eclim's plugin bundles with the exception of org.eclim.core (so unfortunately
-it won't help with our example above if we put that command in the
+every change by using eclim’s <code>reload</code> command which will reload all of
+eclim’s plugin bundles with the exception of org.eclim.core (so unfortunately
+it won’t help with our example above if we put that command in the
 org.eclim.core bundle):</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>$ eclim -command reload
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span>$ eclim -command reload
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="adding-to-vim">
-<h2>Adding to Vim<a class="headerlink" href="#adding-to-vim" title="Permalink to this headline">¶</a></h2>
+<h2>Adding to Vim<a class="headerlink" href="#adding-to-vim" title="Permalink to this heading">¶</a></h2>
 <p>Continuing with our <code>echo</code> command example, we can add the command to vim by
 first defining a new vim command in
 <code>org.eclim.core/vim/eclim/plugin/eclim.vim</code>:</p>
 <div class="alert alert-info">
 <p class="alert-heading first admonition-title">Note</p>
-<p class="last">If the command should only be available for a specific file type, then you'd
+<p class="last">If the command should only be available for a specific file type, then you’d
 put it in a <code>vim/eclim/ftplugin/somefiltetype.vim</code> file instead.</p>
 </div>
-<div class="highlight-vim"><div class="highlight"><pre><span></span>command EclimEcho :<span class="k">call</span> eclim#echo#Echo<span class="p">()</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>command EclimEcho :<span class="k">call</span> eclim#echo#Echo<span class="p">()</span>
 </pre></div>
 </div>
-<p>Now that we've created the command, we then need to define our
+<p>Now that we’ve created the command, we then need to define our
 <code>eclim#echo#Echo()</code> function accordingly in
 <code>org.eclim.core/vim/eclim/autoload/eclim/echo.vim</code>:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span></span><span class="c">&quot; Script Variables {{{</span>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="c">&quot; Script Variables {{{</span>
   <span class="k">let</span> s:echo_command <span class="p">=</span>
     \ <span class="s1">&#39;-command echo -p &quot;&lt;project&gt;&quot; -f &quot;&lt;file&gt;&quot; &#39;</span> .
     \ <span class="s1">&#39;-o &lt;offset&gt; -e &lt;encoding&gt;&#39;</span>
@@ -428,15 +342,15 @@ put it in a <code>vim/eclim/ftplugin/somefiltetype.vim</code> file instead.</p>
 <span class="k">endfunction</span> <span class="c">&quot; }}}</span>
 </pre></div>
 </div>
-<p>And that's all there is to it. After re-building eclim, restarting eclimd, and
+<p>And that’s all there is to it. After re-building eclim, restarting eclimd, and
 restarting vim, you can now execute the command <code>:EclimEcho</code> to see the
 response printed in vim.</p>
 <p>Now that you know the basics, you can explore the many existing eclim commands
 found in the eclim source code to see detailed examples of how to access various
 eclipse features to expose them for use in vim or the editor of your choice.</p>
-<p>You should also take a look at the eclim <a class="reference internal" href="plugins.html"><em>Plugins</em></a>
+<p>You should also take a look at the eclim <a class="reference internal" href="plugins.html"><span class="doc">Plugins</span></a>
 documentation which documents how to create a new eclim plugin, including
-information on adding new eclim settings, managing the plugin's dependencies
+information on adding new eclim settings, managing the plugin’s dependencies
 through its <code>META-INF/MANIFEST.MF</code>, etc.</p>
 </div>
 </div>
@@ -450,28 +364,26 @@ through its <code>META-INF/MANIFEST.MF</code>, etc.</p>
   <div class="container">
     <p class="pull-right">
       
-  <a href="../_sources/development/commands.txt"
+  <a href="../_sources/development/commands.rst.txt"
          rel="nofollow">Source</a> /
       <a href="#">Back to top</a>
     </p>
     <p>
         &copy; Copyright 2005 - 2017, Eric Van Dewoestine<br/>
-      Last updated on Nov 10, 2021<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1
+      Last updated on Dec 09, 2022<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 5.3.0
       with the <a href="https://github.com/ervandew/sphinx-bootstrap-theme">Bootstrap Theme</a>
       <br/>
     </p>
   </div>
 </footer>
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-575508-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ERLXB6990G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ERLXB6990G');
   </script>
 
   </body>
