@@ -33,11 +33,9 @@ extensions = [
   'plantuml',
   'eclim.sphinx.include',
   'eclim.sphinx.vimdoc',
-  'eclim.sphinx.rss',
 ]
 
 plantuml = 'java -jar %s/extension/plantuml.jar' % os.path.dirname(path)
-rss_baseurl = 'http://eclim.org'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['../template']

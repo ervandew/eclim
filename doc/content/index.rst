@@ -1,4 +1,4 @@
-.. Copyright (C) 2005 - 2021  Eric Van Dewoestine
+.. Copyright (C) 2005 - 2022  Eric Van Dewoestine
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,15 +97,6 @@ How do I report a bug?
 ===========
 What's New?
 ===========
-
-.. image:: images/rss.png
-   :target: index.rss
-   :alt: Rss Feed for What's New
-
-.. rss::
-   :title: Eclim: What's New
-   :description: Latest news for eclim (eclipse + vim).
-   :end-before: end-rss
 
 Nov 10, 2021
 -------------
