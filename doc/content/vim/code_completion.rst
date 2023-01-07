@@ -88,7 +88,7 @@ usage less cumbersome:
 
     let g:acp_behaviorJavaEclimLength = 3
     function MeetsForJavaEclim(context)
-      return g:acp_behaviorJavaEclimLength >= 0 &&
+      return g:acp_behaviorJavaEclimLength >= 0 && exists(":Java") &&
             \ a:context =~ '\k\.\k\{' . g:acp_behaviorJavaEclimLength . ',}$'
     endfunction
     let g:acp_behavior = {
