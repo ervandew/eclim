@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2020  Eric Van Dewoestine
+" Copyright (C) 2005 - 2021  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ if exists("b:current_syntax")
 endif
 
 runtime! syntax/jinja.vim
+unlet b:current_syntax
 runtime! syntax/html.vim
 
 let b:current_syntax = "htmljinja"
