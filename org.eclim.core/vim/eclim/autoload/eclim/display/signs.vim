@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2014  Eric Van Dewoestine
+" Copyright (C) 2005 - 2024  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -361,6 +361,7 @@ function! eclim#display#signs#QuickFixCmdPost() " {{{
   " Force 'make' results to be of type error if no type set.
   if expand('<amatch>') == 'make'
     let newentries = []
+    let what = getqflist({'all': 1})
     for entry in getqflist()
       if entry['type'] == ''
         let entry['type'] = 'e'
@@ -368,6 +369,7 @@ function! eclim#display#signs#QuickFixCmdPost() " {{{
       call add(newentries, entry)
     endfor
     call setqflist(newentries, 'r')
+    call setqflist([], 'r', what)
   endif
   call eclim#display#signs#Update()
   redraw!
