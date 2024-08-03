@@ -16,6 +16,17 @@
 Welcome to Eclim on GitHub
 ==========================
 
+.. note::
+
+   (Aug. 03, 2024)
+
+   Eclim has reached its end of life. The Language Server Protocol (LSP) and
+   the various implementations are mature enough that eclim has become
+   unnecessary.
+
+   It has been a great run (nearly 20yrs!) and I'm grateful for everyone that
+   helped out, from bug reports to patches, it's been awesome.
+
 .. _overview:
 
 ==================
