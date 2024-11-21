@@ -91,10 +91,6 @@ endif
 
 " Options {{{
 
-let b:endwise_addition = '{% end& %}'
-let b:endwise_words = 'block,if,while,for'
-let b:endwise_syngroups = 'djangoStatement'
-
 " }}}
 
 " vim:ft=vim:fdm=marker
